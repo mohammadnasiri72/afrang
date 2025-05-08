@@ -1,0 +1,721 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Yekan";
+  src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("truetype");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Yekan";
+  src: url("./../../public/font/YekanBakhFaNum-Light.woff") format("truetype");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Yekan";
+  src: url("./../../public/font/YekanBakhFaNum-Regular.woff") format("truetype");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Yekan";
+  src: url("./../../public/font/YekanBakhFaNum-Medium.woff") format("truetype");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Yekan";
+  src: url("./../../public/font/YekanBakhFaNum-Heavy.woff") format("truetype");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "YekanPersianNum";
+  src: url("./../../public/font/YekanBakhFaNum-Fat.woff") format("truetype");
+  font-weight: 800;
+}
+@font-face {
+  font-family: "YekanPersianNum";
+  src: url("./../../public/font/YekanBakhFaNum-Bold.woff") format("truetype");
+  font-weight: 900;
+}
+@font-face {
+  font-family: "Morabba";
+  src: url("./../../public/font/Morabba.ttf") format("truetype");
+  font-weight: normal;
+}
+body {
+  direction: rtl !important;
+  font-family: Yekan;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 23px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.logo-text {
+  font-family: Morabba !important;
+  margin-right: 10px;
+  font-size: 15px;
+}
+
+.slider-container {
+  cursor: grab;
+}
+
+.slider-container.dragging {
+  cursor: grabbing;
+}
+.slider-container2 {
+  cursor: grab;
+}
+
+.slider-container2.dragging {
+  cursor: grabbing;
+}
+
+.slider-container .slick-dots {
+  position: absolute;
+  z-index: 500;
+  left: 100%;
+  top: 0;
+  transform: translateX(-50px);
+  display: flex !important;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  height: 256px;
+}
+
+.slider-container .slick-dots li button:before {
+  font-size: 0px !important;
+}
+
+.slider-container .slick-dots li.slick-active button:before {
+  margin-top: -5px !important;
+}
+.slider-container .slick-dots li button:before {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: 0.4s;
+}
+
+.slider-container .slick-dots li.slick-active button:before {
+  width: 10px !important;
+  height: 20px !important;
+  border-radius: 10px;
+  background-color: #d1182b;
+}
+
+.slider-container2 .slick-dots {
+  position: absolute;
+  z-index: 56;
+  left: 0;
+  bottom: 20px;
+  display: flex !important;
+  align-items: start;
+  justify-content: center;
+}
+
+.slider-container2 .slick-dots li.slick-active {
+  margin-right: 0px !important;
+  transition: 0.4s;
+}
+.slider-container2 .slick-dots li button:before {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50%;
+  background-color: #fff !important;
+  transition: 0.4s;
+  font-size: 0px !important;
+}
+.slider-container2 .slick-dots li {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50%;
+  background-color: #fff !important;
+  transition: 0.4s;
+  font-size: 0px !important;
+}
+
+.slider-container2 .slick-dots li.slick-active button:before {
+  width: 25px !important;
+  height: 8px !important;
+  border-radius: 10px;
+  background-color: #d1182b !important;
+}
+.slider-container2 .slick-dots li.slick-active {
+  width: 25px !important;
+  height: 8px !important;
+  border-radius: 10px;
+  background-color: #d1182b !important;
+}
+
+.box-slider-CameraAccessories {
+  background-image: url("./../../public/images/gallery/bg-pattern.png");
+}
+
+.title-newProduct:after,
+.title-newProduct:before {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 94%;
+  background-color: #d1182b;
+  right: 0;
+  bottom: -10px;
+}
+.title-newProduct:before {
+  left: 0;
+  right: auto;
+  width: 4%;
+}
+.title-SecondHand:after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 94%;
+  background-color: #40768c;
+  right: 0;
+  bottom: -10px;
+}
+.title-SecondHand:before {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 94%;
+  background-color: #18d1be;
+  right: 0;
+  bottom: -10px;
+}
+.title-SecondHand:before {
+  left: 0;
+  right: auto;
+  width: 4%;
+}
+
+.secondHand-sec {
+  padding-top: 50px;
+  background: rgb(246, 246, 246);
+  background: linear-gradient(
+    0deg,
+    rgba(246, 246, 246, 1) 25%,
+    rgba(217, 217, 217, 1) 100%
+  );
+}
+.footer {
+  background: linear-gradient(
+    0deg,
+    rgba(217, 217, 217, 1) 5%,
+    rgba(246, 246, 246, 1) 100%
+  );
+}
+
+.animation-Navbar {
+  animation: slideDown 0.5s ease forwards;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.custom-menu .ant-menu-item {
+  border-bottom: 1px dotted #ccc; /* خط نقطه‌چین زیر هر آیتم */
+}
+
+.custom-menu .ant-menu-item:last-child {
+  border-bottom: none; /* حذف خط زیر آیتم آخر */
+}
+
+.custom-menu .ant-menu-submenu {
+  border-bottom: 1px dotted #ccc; /* خط نقطه‌چین زیر زیرمجموعه‌ها */
+}
+.custom-menu .ant-menu-item:hover {
+  background-color: #ffc2c8 !important; /* رنگ پس‌زمینه هنگام هاور */
+  color: #000 !important; /* رنگ متن هنگام هاور */
+}
+.custom-menu .ant-menu-item-selected {
+  background-color: #d1182b !important; /* تغییر رنگ پس‌زمینه آیتم انتخاب شده */
+  color: white !important; /* تغییر رنگ متن */
+  border-radius: 8px; /* گوشه‌های گرد برای آیتم انتخاب شده */
+}
+.custom-menu .ant-menu-item-selected:hover {
+  background-color: #d1182b !important; /* تغییر رنگ پس‌زمینه آیتم انتخاب شده */
+  color: white !important; /* تغییر رنگ متن */
+}
+/* .custom-menu .ant-menu-submenu-selected {
+  color: #d1182b !important; 
+} */
+.custom-menu .ant-menu-submenu-selected {
+  color: #d1182b !important; /* تغییر رنگ متن */
+}
+
+.custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: #d1182b !important; /* رنگ متن سفید */
+}
+.custom-menu .ant-menu-submenu .ant-menu {
+  padding-right: 20px; /* انتقال زیرمجموعه‌ها به سمت راست */
+}
+@media (min-width: 640px) {
+  .mySwiperProduct .swiper-pagination {
+    display: none !important; /* مخفی کردن Pagination */
+  }
+}
+@media (min-width: 640px) {
+  .mySwiperProduct2 .swiper-pagination {
+    display: none !important; /* مخفی کردن Pagination */
+  }
+}
+@media (min-width: 640px) {
+  .mySwiperSupport .swiper-pagination {
+    display: none !important; /* مخفی کردن Pagination */
+  }
+}
+
+/* نمایش Pagination در موبایل */
+@media (max-width: 640px) {
+  .mySwiperProduct .swiper-pagination {
+    display: block !important; /* نمایش Pagination */
+  }
+}
+@media (max-width: 640px) {
+  .mySwiperProduct2 .swiper-pagination {
+    display: block !important; /* نمایش Pagination */
+  }
+}
+@media (max-width: 640px) {
+  .mySwiperSupport .swiper-pagination {
+    display: block !important; /* نمایش Pagination */
+  }
+}
+
+/* استایل عمومی بولت‌ها */
+.mySwiperProduct .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #555; /* رنگ پیش‌فرض */
+  border-radius: 50%; /* حالت دایره‌ای */
+  margin: 0 5px; /* فاصله بین بولت‌ها */
+  transition: 0.5s;
+}
+.mySwiperProduct2 .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #555; /* رنگ پیش‌فرض */
+  border-radius: 50%; /* حالت دایره‌ای */
+  margin: 0 5px; /* فاصله بین بولت‌ها */
+  transition: 0.5s;
+}
+.mySwiperSupport .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #555; /* رنگ پیش‌فرض */
+  border-radius: 50%; /* حالت دایره‌ای */
+  margin: 0 5px; /* فاصله بین بولت‌ها */
+  transition: 0.5s;
+}
+
+/* بولت فعال */
+.mySwiperProduct .swiper-pagination-bullet-active {
+  background: #d1182b;
+  border-radius: 10px;
+  width: 20px;
+}
+.mySwiperProduct2 .swiper-pagination-bullet-active {
+  background: #40768c;
+  border-radius: 10px;
+  width: 20px;
+}
+.mySwiperSupport .swiper-pagination-bullet-active {
+  background: #fff;
+  border-radius: 10px;
+  width: 20px;
+}
+.mySwiperProduct {
+  padding-bottom: 50px !important;
+}
+.mySwiperProduct2 {
+  padding-bottom: 50px !important;
+}
+
+@media (max-width: 640px) {
+  .mySwiperSupport {
+    padding-bottom: 50px !important;
+  }
+}
+
+.mySwiperCamera .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  margin: 0 5px;
+  transition: 0.5s;
+}
+
+.mySwiperCamera .swiper-pagination-bullet-active {
+  background: #fff;
+  border-radius: 10px;
+  width: 20px;
+}
+.mySwiperCamera {
+  padding-bottom: 50px !important;
+}
+
+.SegmentedBlog .ant-segmented-item-selected {
+  background-color: #d1182b !important; /* رنگ تب انتخاب‌شده */
+  color: white !important; /* رنگ متن تب انتخاب‌شده */
+  border-radius: 6px;
+}
+
+.SegmentedBlog .ant-segmented-thumb {
+  background-color: #d1182b !important; /* تغییر رنگ پس‌زمینه تب فعال */
+}
+.SegmentedBlog .ant-segmented-item {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-right: 5px;
+  margin-left: 5px;
+  width: 100%;
+}
+.SegmentedContact .ant-segmented-item-selected {
+  background-color: #d1182b !important; /* رنگ تب انتخاب‌شده */
+  color: white !important; /* رنگ متن تب انتخاب‌شده */
+  border-radius: 6px;
+}
+
+.SegmentedContact .ant-segmented-thumb {
+  background-color: #d1182b !important; /* تغییر رنگ پس‌زمینه تب فعال */
+}
+.SegmentedContact .ant-segmented-item {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-right: 5px;
+  margin-left: 5px;
+  width: 100%;
+}
+.SegmentedContact .ant-segmented {
+  background-color: #dedede;
+  width: 600px;
+}
+.SegmentedCard .ant-segmented-item:hover {
+  color: blue !important;
+}
+.SegmentedCard .ant-segmented-item-selected:hover {
+  color: #d1182b !important;
+}
+.SegmentedCard .ant-segmented-item-selected {
+  background-color: #fff !important; /* رنگ تب انتخاب‌شده */
+  color: #d1182b !important; /* رنگ متن تب انتخاب‌شده */
+  border-radius: 6px;
+}
+
+.SegmentedCard .ant-segmented-thumb {
+  background-color: #fff !important; /* تغییر رنگ پس‌زمینه تب فعال */
+}
+.SegmentedCard .ant-segmented-item {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 0px;
+  margin-left: 0px;
+  width: 100%;
+  font-weight: 600 !important;
+  font-size: 18px;
+  /* transition: 0.4s; */
+}
+
+.SegmentedCard .ant-segmented {
+  background-color: #ebebeb;
+}
+
+.SegmentedProduct .ant-segmented-item-selected:hover {
+  color: #d1182b !important;
+}
+.SegmentedProduct .ant-segmented-item-selected {
+  background-color: #fff !important; /* رنگ تب انتخاب‌شده */
+  color: #d1182b !important; /* رنگ متن تب انتخاب‌شده */
+  border-radius: 6px;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+  transition: 0.4s;
+}
+
+.SegmentedProduct .ant-segmented-thumb {
+  background-color: #fff !important; /* تغییر رنگ پس‌زمینه تب فعال */
+  font-weight: 900 !important;
+}
+.SegmentedProduct .ant-segmented-item {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 20px !important;
+  margin-left: 20px !important;
+  width: 100%;
+  font-weight: 600 !important;
+  font-size: 14px;
+  /* transition: 0.4s; */
+}
+
+.SegmentedProduct .ant-segmented {
+  background-color: #ebebeb;
+ 
+}
+
+
+
+.custom-select .ant-select-selector {
+  border: none !important; /* حذف بوردر */
+  background-color: #f0f0f0 !important; /* تغییر پس‌زمینه */
+  border-radius: 8px !important; /* شعاع گوشه‌ها */
+  outline: none !important;
+  padding: 15px !important; /* بهبود فاصله‌ها */
+  box-shadow: none !important; /* حذف سایه هنگام فوکوس */
+  box-shadow: none;
+  font-size: 13px !important;
+}
+.order-select .ant-select-selector {
+  border: 1px solid #0005 !important; /* حذف بوردر */
+  background-color: #fff !important; /* تغییر پس‌زمینه */
+  border-radius: 12px !important; /* شعاع گوشه‌ها */
+  outline: none !important;
+  padding-inline: 20px !important;
+  padding-block: 24px !important;
+  box-shadow: none !important; /* حذف سایه هنگام فوکوس */
+  box-shadow: none;
+}
+.order-select-err .ant-select-selector {
+  border: 1px solid #f00 !important; /* حذف بوردر */
+  background-color: #fff !important; /* تغییر پس‌زمینه */
+  border-radius: 12px !important; /* شعاع گوشه‌ها */
+  outline: none !important;
+  padding-inline: 20px !important;
+  padding-block: 24px !important;
+  box-shadow: none !important; /* حذف سایه هنگام فوکوس */
+  box-shadow: none;
+}
+.custom-selectContact .ant-select-selector {
+  border: none !important; /* حذف بوردر */
+  background-color: #f0f0f0 !important; /* تغییر پس‌زمینه */
+  border-radius: 8px !important; /* شعاع گوشه‌ها */
+  outline: none !important;
+  padding: 15px !important; /* بهبود فاصله‌ها */
+  box-shadow: none !important; /* حذف سایه هنگام فوکوس */
+  box-shadow: none;
+  font-size: 13px !important;
+  height: 48px !important;
+  margin-top: -4px !important;
+}
+.custom-select-productDetails .ant-select-selector {
+  border-color: #3331 !important;
+  outline: none !important;
+  padding: 15px !important; /* بهبود فاصله‌ها */
+  box-shadow: none !important; /* حذف سایه هنگام فوکوس */
+  box-shadow: none;
+  font-size: 13px !important;
+  height: 48px !important;
+  margin-top: -4px !important;
+}
+.custom-select-productDetails .ant-select-item {
+  background-color: #f9f9f9 !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+.custom-select-productDetails .ant-select-item-option-selected {
+  background-color: #f3f3f3 !important;
+}
+.custom-select-productDetails .ant-select-item-option-active {
+  background-color: #f3f3f3 !important;
+}
+
+.ant-select-item-option {
+  border-top: 1px solid #ccc;
+  width: 100%;
+  padding: 10px !important;
+}
+.ant-select-item-option[title="مرتب سازی بر اساس"] {
+  border-top: none;
+  border-radius: 0 !important;
+}
+.ant-select-dropdown {
+  padding: 0 !important;
+}
+.ant-select-item {
+  border-radius: 0 !important; /* حذف border-radius */
+}
+
+.header_top .layer_on {
+  position: absolute;
+  background-color: #f155327a;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.rotateico {
+  transition: 0.4s !important;
+  font-size: 16px !important;
+  rotate: 180deg !important;
+  color: #40768c !important;
+}
+.ico {
+  transition: 0.4s !important;
+  font-size: 16px !important;
+  rotate: 0deg !important;
+  color: #40768c !important;
+}
+
+.ant-switch-checked {
+  background-color: #40768c !important; /* رنگ دلخواه شما */
+}
+
+.slider-productDetails .swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.slider-productDetails .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-productDetails .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-productDetails .swiper {
+  width: 100%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slider-productDetails .swiper-slide {
+  background-size: cover;
+  background-position: center;
+}
+
+.slider-productDetails .mySwiper2 {
+  height: 80%;
+  width: 100%;
+}
+
+.slider-productDetails .mySwiper {
+  height: 20%;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
+
+.slider-productDetails .mySwiper .swiper-slide {
+  width: 25%;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.slider-productDetails .mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.slider-productDetails .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes circleAnimate {
+  0% {
+    opacity: 1;
+    width: 0;
+    height: 0;
+  }
+  80% {
+    opacity: 0.5;
+    width: 500px;
+    height: 500px;
+  }
+  100% {
+    opacity: 0;
+    width: 500px;
+    height: 500px;
+  }
+}
+.circle-animate {
+  animation: circleAnimate 1s ease-in-out;
+}
+
+.box-circl:hover .circl{
+  animation: circleAnimate 1s ease-in-out;
+}
+
+
+
+
+
+
+
+
+/* انیمیشن برای منوی آبشاری */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.absolute {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* استایل‌های دکمه پروفایل */
+button:hover .w-10 {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* استایل‌های آیتم‌های منو */
+.py-1 a {
+  transition: background-color 0.15s ease;
+}
+
+/* استایل برای موبایل */
+@media (max-width: 768px) {
+  .hidden.md\:inline {
+    display: none;
+  }
+}
+
+.white-spin .ant-spin-dot i {
+  background-color: #fff;
+}
+.red-spin .ant-spin-dot i {
+  background-color: #f00;
+}
