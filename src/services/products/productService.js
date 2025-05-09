@@ -1,6 +1,13 @@
 import { mainDomain, mainDomainImg } from "@/utils/mainDomain";
 import axios from "axios";
 
+// تابع استخراج شناسه محصول از URL
+export const extractProductId = (url) => {
+  if (!url) return null;
+  const match = url.match(/\/product\/(\d+)/);
+  return match ? Number(match[1]) : null;
+};
+
 export const getProducts = async (
   page = 1,
   pageSize = 20,
@@ -65,7 +72,14 @@ export const getProducts = async (
 };
 export const getProductId = async (id) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Product/${id}`);
+    // اگر id یک URL است، شناسه را از آن استخراج می‌کنیم
+    const productId = typeof id === 'string' && id.includes('/product/') ? extractProductId(id) : id;
+    
+    if (!productId) {
+      throw new Error('شناسه محصول نامعتبر است');
+    }
+
+    const response = await axios.get(`${mainDomain}/api/Product/${productId}`);
 
     if (response.data && typeof response.data === "object") {
       const item = response.data;

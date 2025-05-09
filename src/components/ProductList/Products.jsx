@@ -4,29 +4,26 @@ import Timer from "./Timer";
 import Link from "next/link";
 import PriceProduct from "./PriceProduct";
 import ExpandableText from "../Product/ExpandableText";
+import AddToCartButton from "./AddToCartButton";
 
 function Products({ products, layout = "list" }) {
-  console.log(products);
-  
   const ProductCard = ({ product }) => (
     <div className="bg-white rounded-lg relative z-50">
       <div className="flex w-full flex-wrap">
         <div className="p-3 md:w-1/3 w-full">
-        <Link href={product.url}>
-          <img
-            className="w-full h-full object-cover rounded-lg"
-            src={product.img}
-            alt={product.title}
-          />
-        </Link>
+          <Link href={product.url}>
+            <img
+              className="w-full h-full object-cover rounded-lg"
+              src={product.img}
+              alt={product.title}
+            />
+          </Link>
         </div>
         <div className="p-5 md:w-1/3 w-full">
           <h5 className="font-semibold text-lg">{product.title}</h5>
-          {/* <ExpandableText product={product} /> */}
         </div>
         <div className="md:w-1/3 w-full bg-[#f9f9f9] px-8">
           <div className="flex flex-col w-full h-full">
-           
             <PriceProduct product={product}/>
             <div className="flex items-center py-2">
               <img src="/images/icons/benchmark.png" alt="" />
@@ -46,13 +43,7 @@ function Products({ products, layout = "list" }) {
             )}
             {product.canAddCart && (
               <div className="mt-2 flex flex-col gap-2">
-                <button className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm">
-                  <FaCartShopping className="" />
-                  <span className="">افزودن به سبد خرید</span>
-                </button>
-                {/* {product.discount > 0 && (
-                  <Timer targetDate={product.timeDiscount} />
-                )} */}
+                <AddToCartButton product={product} />
               </div>
             )}
           </div>
@@ -106,14 +97,9 @@ function Products({ products, layout = "list" }) {
             <FaEye />
             <span>مشاهده جزئیات</span>
           </Link>
-          { product.canAddCart && (
-            <button className="w-full flex items-center justify-center gap-2 bg-[#d1182b] text-white py-2 rounded-sm hover:bg-[#40768c] transition-colors cursor-pointer">
-              <FaCartShopping />
-              <span>افزودن به سبد خرید</span>
-            </button>
-          )}
-        
-          {!product.canAddCart && (
+          {product.canAddCart ? (
+            <AddToCartButton product={product} />
+          ) : (
             <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">
               <FaCartShopping />
               <span>موجود نیست</span>
