@@ -9,6 +9,12 @@ import supportBoxReducer from './slice/supportBox'
 import settingsReducer from './slice/settings'
 import Cookies from "js-cookie";
 import cartReducer from './slices/cartSlice';
+import paymentReducer from "./slices/paymentSlice";
+import addressReducer from './slices/addressSlice';
+import shippingReducer from './slices/shippingSlice';
+import legalIdReducer from './slices/legalIdSlice';
+import paymentWayReducer from './slices/paymentWaySlice';
+import discountReducer from './slices/discountSlice';
 
 const loadUserFromCookie = () => {
   try {
@@ -30,12 +36,19 @@ export const store = configureStore({
     socialNetworks: socialNetworksReducer,
     supportBox: supportBoxReducer,
     settings: settingsReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    payment: paymentReducer,
+    address: addressReducer,
+    shipping: shippingReducer,
+    legalId: legalIdReducer,
+    paymentWay: paymentWayReducer,
+    discount: discountReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
       immutableCheck: false,
+      thunk: true
     }),
   preloadedState: {
     user: {

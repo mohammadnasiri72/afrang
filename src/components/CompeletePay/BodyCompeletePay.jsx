@@ -7,15 +7,22 @@ import { useDispatch, useSelector } from "react-redux";
 import BoxAddress from "./BoxAddress";
 import ShowProductBasket from "./ShowProductBasket";
 import WaySend from "./WaySend";
+import BoxLegal from "./BoxLegal";
+import { setSelectedAddress } from '@/redux/slices/addressSlice';
+import { setSelectedShipping } from '@/redux/slices/shippingSlice';
+import { setSelectedLegal } from '@/redux/slices/legalIdSlice';
 
-function BodyCompeletePay() {
+export default function BodyCompeletePay() {
   const dispatch = useDispatch();
   const [addressList, setAddressList] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState({});
   const [waySendList, setWaySendList] = useState({});
   const isRequestedAddress = useRef(false);
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
+  
+  const selectedAddress = useSelector((state) => state.address.selectedAddress);
+  const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
+  const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
 
   useEffect(() => {
     if (!items || items.length === 0) {
@@ -31,8 +38,11 @@ function BodyCompeletePay() {
 
       if (items) {
         setAddressList(items);
-
-        setSelectedAddress(items[0] ? items[0] : {});
+        if (items.length === 1) {
+          dispatch(setSelectedAddress(items[0]));
+        } else {
+          dispatch(setSelectedAddress(null));
+        }
       }
     } catch (error) { }
   };
@@ -45,43 +55,56 @@ function BodyCompeletePay() {
   // get WaySend
   const WaySendFu = async () => {
     try {
-      const items = await getWaySend(selectedAddress?.provinceId, token);
-
-      if (items) {
-        setWaySendList(items);
+      if (selectedAddress?.provinceId) {
+        const items = await getWaySend(selectedAddress.provinceId, token);
+        if (items) {
+          setWaySendList(items);
+        }
       }
     } catch (error) { }
   };
   useEffect(() => {
-    if (selectedAddress.provinceId) {
+    if (selectedAddress?.provinceId) {
       WaySendFu();
     }
   }, [selectedAddress]);
 
+  const handleLegalChange = (legal) => {
+    dispatch(setSelectedLegal(legal));
+  };
+
+  const handleShippingChange = (shipping) => {
+    dispatch(setSelectedShipping(shipping));
+  };
+
+  const handleAddressSelect = (address) => {
+    dispatch(setSelectedAddress(address));
+  };
+
   return (
-    <>
-      <div className="lg:w-3/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
-
-        <div>
-          <BoxAddress
-            addressList={addressList}
-            getAddressFu={getAddressFu}
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
-          />
-        </div>
-
-        <div className="mt-5">
-          <WaySend waySendList={waySendList} />
-        </div>
-
-
-        <div className="mt-5">
-          <ShowProductBasket items={items} />
-        </div>
+    <div className="lg:w-3/4 w-full lg:pl-5">
+      <div className="bg-white rounded-[12px] p-4">
+        <BoxLegal />
       </div>
-    </>
+      <div className="mt-5">
+        <BoxAddress
+          addressList={addressList}
+          getAddressFu={getAddressFu}
+          selectedAddress={selectedAddress}
+          setSelectedAddress={handleAddressSelect}
+          onAddressDelete={() => setWaySendList({ shippingWays: [] })}
+        />
+      </div>
+      <div className="mt-4">
+        <WaySend
+          waySendList={waySendList}
+          selectedShipping={selectedShipping}
+          setSelectedShipping={handleShippingChange}
+        />
+      </div>
+      <div className="mt-5">
+        <ShowProductBasket items={items} />
+      </div>
+    </div>
   );
 }
-
-export default BodyCompeletePay;

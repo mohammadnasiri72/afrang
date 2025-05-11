@@ -1,4 +1,3 @@
-import { setUser } from "@/redux/slice/user";
 import { authServiceStatic } from "@/services/Auth/authService";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
@@ -6,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
 function LoginStatic({ setStateLogin , from}) {
@@ -16,7 +14,6 @@ function LoginStatic({ setStateLogin , from}) {
   const [errors, setErrors] = useState({});
 
 
-  const dispatch = useDispatch();
 
   const router = useRouter();
   // import sweet alert 2
@@ -67,7 +64,6 @@ function LoginStatic({ setStateLogin , from}) {
       const res = await authServiceStatic.login(username, password);
       const userData = res.data;
       Cookies.set("user", JSON.stringify(userData));
-      dispatch(setUser(userData));
       if (!from) {
         router.push("/");
         

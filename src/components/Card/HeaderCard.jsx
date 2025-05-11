@@ -10,6 +10,7 @@ function HeaderCard() {
   const { items } = useSelector((state) => state.cart);
   const pathname = usePathname();
   const isCompletePayPage = pathname.includes("compeletePay");
+  const isCompletePayment = pathname.includes("payment");
 
   return (
     <>
@@ -50,14 +51,15 @@ function HeaderCard() {
               {
                 title: "تکمیل خرید",
                 description: "اطلاعات ارسال",
-                status: isCompletePayPage ? "process" : "wait",
-                icon: <FaCreditCard className={`text-2xl ${isCompletePayPage ? "text-red-600" : ""}`} />,
+                status: isCompletePayment ? "finish" : isCompletePayPage ? "process" : "wait",
+
+                icon: <FaCreditCard className={`text-2xl ${isCompletePayPage || isCompletePayment ? "text-red-600" : ""}`} />,
               },
               {
                 title: "پرداخت",
                 description: "ورود به درگاه بانکی",
-                status: "wait",
-                icon: <FaTruck className="text-2xl" />,
+                status: isCompletePayment ? "process" : "wait",
+                icon: <FaTruck className={`text-2xl ${ isCompletePayment ? "text-red-600" : ""}`} />,
               },
             ]}
           />

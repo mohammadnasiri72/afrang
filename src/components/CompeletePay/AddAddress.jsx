@@ -203,11 +203,11 @@ function AddAddress({ getAddressFu, id }) {
   return (
     <>
       {id ? (
-        <div className="w-auto">
-          <div className="w-full">
+        <div className="flex justify-end items-center gap-3 border-t border-gray-100">
+          <div className="w-[100px]">
             <button
               onClick={showModal}
-              className={`text-center text-[#fff] w-full rounded-[5px] bg-[#1677ff] block font-[600] p-2 cursor-pointer `}
+              className="text-center text-[#fff] w-full rounded-[5px] bg-[#1e88e5] block font-[600] p-2 cursor-pointer"
             >
               <div className="flex items-center justify-center">
                 <MdEditSquare />

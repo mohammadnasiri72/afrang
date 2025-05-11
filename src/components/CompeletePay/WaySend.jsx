@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { mainDomainImg } from "@/utils/mainDomain";
 
-function WaySend({ waySendList }) {
-  const [selectedWay, setSelectedWay] = useState(null);
+function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   const defaultImage = "/images/shipping-default.png";
 
   useEffect(() => {
-    if (waySendList.shippingWays && waySendList.shippingWays.length > 0) {
-      setSelectedWay(waySendList.shippingWays[0]);
+    if (waySendList.shippingWays && waySendList.shippingWays.length === 1) {
+      setSelectedShipping(waySendList.shippingWays[0]);
+    } else if (!waySendList.shippingWays || waySendList.shippingWays.length === 0) {
+      setSelectedShipping(null);
     }
   }, [waySendList.shippingWays]);
+
+  const handleSelectWay = (item) => {
+    setSelectedShipping(item);
+  };
 
   if (!waySendList.shippingWays || waySendList.shippingWays.length === 0) {
     return (
@@ -45,10 +50,10 @@ function WaySend({ waySendList }) {
         {waySendList.shippingWays.map((item) => (
           <div
             key={item.id}
-            onClick={() => setSelectedWay(item)}
+            onClick={() => handleSelectWay(item)}
             className={`
               w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer
-              ${item.id === selectedWay?.id 
+              ${item.id === selectedShipping?.id 
                 ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-white shadow-md' 
                 : 'border-gray-100 hover:border-blue-300 hover:shadow-sm'
               }
@@ -82,9 +87,9 @@ function WaySend({ waySendList }) {
               </div>
               <div className={`
                 w-5 h-5 rounded-full border-2 flex items-center justify-center
-                ${item.id === selectedWay?.id ? 'border-blue-500' : 'border-gray-300'}
+                ${item.id === selectedShipping?.id ? 'border-blue-500' : 'border-gray-300'}
               `}>
-                {item.id === selectedWay?.id && (
+                {item.id === selectedShipping?.id && (
                   <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
                 )}
               </div>

@@ -12,6 +12,46 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
+export const getProvince = async () => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Shipment/province`, {
+      params: {
+        langCode: "fa",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+
+export const getCity = async (provinceId) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Shipment/city`, {
+      params: {
+        langCode: "fa",
+        provinceId
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
 export const addAddress = async (data , token) => {
   try {
     const response = await axios.post(`${mainDomain}/api/User/address`, data , {
@@ -118,11 +158,74 @@ export const deleteAddress = async (id , token) => {
   }
 };
 
-export const getProvince = async () => {
+export const addLegal = async (data , token) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Shipment/province`, {
+    const response = await axios.post(`${mainDomain}/api/User/LegalInfo`, data , {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+export const getLegal = async (token) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/User/LegalInfo`, {
       params: {
-        langCode: "fa",
+        id: 0,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+export const getLegalId = async (id , token) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/User/LegalInfo`, {
+      params: {
+        id,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+export const deleteLegal = async (id , token) => {
+  try {
+    const response = await axios.delete(`${mainDomain}/api/User/LegalInfo/${id}` , {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -138,16 +241,17 @@ export const getProvince = async () => {
 };
 
 
-export const getCity = async (provinceId) => {
+
+export const estimateOrder = async (data, token) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Shipment/city`, {
-      params: {
-        langCode: "fa",
-        provinceId
+    const response = await axios.post(`${mainDomain}/api/Order/Estimate`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
   } catch (err) {
+    console.error("Error in estimate order:", err);
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
@@ -155,5 +259,6 @@ export const getCity = async (provinceId) => {
         container: "toast-modal",
       },
     });
+    throw err;
   }
 };

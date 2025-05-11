@@ -1,10 +1,8 @@
-import { setUser } from "@/redux/slice/user";
 import { authServiceOtp } from "@/services/Auth/authService";
 import { Alert, Spin } from "antd";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
 // تابع تبدیل اعداد انگلیسی به فارسی
@@ -27,7 +25,8 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
 
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (e.key === "Enter" && !loading) {
+      if (e.key === "Enter") {
+        e.preventDefault(); // جلوگیری از رفتار پیش‌فرض Enter
         submitLogin();
       }
     };
@@ -36,9 +35,7 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
     return () => {
       window.removeEventListener("keypress", handleKeyPress);
     };
-  }, [digits, loading]);
-
-  const dispatch = useDispatch();
+  }, [digits]); // فقط به digits وابسته است
 
   useEffect(() => {
     if (inputRefs.current[0]) {
@@ -63,6 +60,7 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
       inputRefs.current[index + 1].focus();
     }
 
+    // پاک کردن خطا فقط زمانی که کاربر در حال وارد کردن کد است
     setError("");
   };
 
@@ -72,53 +70,51 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
     }
   };
 
-  
   const submitLogin = async () => {
-    const isComplete = digits.every((digit) => digit !== "");
-    // تبدیل به انگلیسی برای پردازش
-    const englishCode = digits.map((d) => toEnglishNumber(d)).join("");
-   
-    if (isComplete) {
-      setLoading(true);
-      try {
-        const res = await authServiceOtp.login(mobile, englishCode);
-        const userData = res.data; 
-               
-        Cookies.set("user", JSON.stringify(userData));
-        dispatch(setUser(userData));
-        if (!from) {
-          router.push("/");
-          
-        }else{
-          if (from === 'card') {
-            router.push("/card/compeletePay");
-          }
-        }
-        Toast.fire({
-          icon: "success",
-          text: "با موفقیت وارد شدید",
-          customClass: {
-            container: "toast-modal",
-          },
-        });
-      } catch (err) {
-        Toast.fire({
-          icon: "error",
-          text: err.response?.data ? err.response?.data : "خطای شبکه",
-          customClass: {
-            container: "toast-modal",
-          },
-        });
-      } finally {
-        setLoading(false);
-      }
+    // بررسی تعداد اعداد وارد شده
+    const filledDigits = digits.filter(digit => digit !== "").length;
+    if (filledDigits < 6) {
+      setError("لطفا کد 6 رقمی را کامل وارد کنید");
+      return;
     }
-    if (!isComplete) {
-      setError("لطفا کد را به درستی وارد کنید");
+
+    if (loading) return; // جلوگیری از ارسال چندباره در زمان لودینگ
+
+    setLoading(true);
+    try {
+      const englishCode = digits.map((d) => toEnglishNumber(d)).join("");
+      const res = await authServiceOtp.login(mobile, englishCode);
+      const userData = res.data; 
+             
+      Cookies.set("user", JSON.stringify(userData));
+      if (!from) {
+        router.push("/");
+      } else {
+        if (from === 'card') {
+          router.push("/card/compeletePay");
+        }
+      }
+      Toast.fire({
+        icon: "success",
+        text: "با موفقیت وارد شدید",
+        customClass: {
+          container: "toast-modal",
+        },
+      });
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        text: err.response?.data ? err.response?.data : "خطای شبکه",
+        customClass: {
+          container: "toast-modal",
+        },
+      });
+    } finally {
+      setLoading(false);
     }
   };
+
   const router = useRouter();
-  // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -127,19 +123,6 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
     timerProgressBar: true,
     customClass: "toast-modal",
   });
-
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.key === "Enter" && !loading) {
-        submitLogin();
-      }
-    };
-
-    window.addEventListener("keypress", handleKeyPress);
-    return () => {
-      window.removeEventListener("keypress", handleKeyPress);
-    };
-  }, []);
 
   return (
     <>

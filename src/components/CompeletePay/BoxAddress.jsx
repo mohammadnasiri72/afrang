@@ -8,6 +8,7 @@ function BoxAddress({
   getAddressFu,
   selectedAddress,
   setSelectedAddress,
+  onAddressDelete
 }) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-lg">
@@ -68,7 +69,11 @@ function BoxAddress({
               </div>
               <div className="flex justify-end items-center gap-3 mt-3 pt-3 border-t border-gray-100">
                 <AddAddress id={address.id} getAddressFu={getAddressFu} />
-                <DeleteAddress id={address.id} getAddressFu={getAddressFu} />
+                <DeleteAddress 
+                  id={address.id} 
+                  getAddressFu={getAddressFu} 
+                  onAddressDelete={onAddressDelete}
+                />
               </div>
             </div>
           ))

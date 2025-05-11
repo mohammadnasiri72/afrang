@@ -2,31 +2,51 @@
 
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { addToCart } from '../../services/cart/cartService';
 import { fetchCart } from '@/redux/slices/cartSlice';
 import CartCounter from './CartCounter';
 import SuccessModal from './SuccessModal';
 import Cookies from "js-cookie";
 
-function CartActions({ product , selectedWarranty}) {
+function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const userId = JSON.parse(Cookies.get("user"))?.userId
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
+
+  const cartItem = items?.find(item => item.productId === product.id);
+  console.log('Cart Items:', items);
+  console.log('Current Product:', product.id);
+  console.log('Found Cart Item:', cartItem);
 
   const handleAddToCart = async () => {
+    const userCookie = Cookies.get("user");
+    if (!userCookie) {
+      const initialData = {
+        token: "",
+        refreshToken: "",
+        expiration: "",
+        userId: generateRandomUserId(),
+        displayName: "",
+        roles: [],
+      };
+      Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+    }
+
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
+
     try {
-      await addToCart(product.id, selectedWarranty , userId);
+      await addToCart(product.id, selectedWarranty, userId);
       dispatch(fetchCart());
       setShowSuccessModal(true);
     } catch (error) {
       console.error('Failed to add to cart:', error);
     }
   };
-
-  const cartItem = items?.find(item => item.productId === product.id);
 
   return (
     <>
@@ -36,8 +56,11 @@ function CartActions({ product , selectedWarranty}) {
             <CartCounter 
               quantity={cartItem.quantity} 
               productId={product.id} 
-              cartId={items.find((ev)=>ev.productId === product.id)?.id}
-              onSuccess={() => setShowSuccessModal(true)}
+              cartId={cartItem.id}
+              onSuccess={() => {
+                dispatch(fetchCart());
+                setShowSuccessModal(true);
+              }}
             />
           ) : (
             <button 

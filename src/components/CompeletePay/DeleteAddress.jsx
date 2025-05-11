@@ -1,16 +1,17 @@
-import { deleteAddress, getAddress } from "@/services/order/orderService";
-import { Spin } from "antd";
-import Cookies from "js-cookie";
 import { useState } from "react";
+import { deleteAddress } from "@/services/order/orderService";
+import Cookies from "js-cookie";
+import ConfirmModal from "./ConfirmModal";
 import { FaTrashAlt } from "react-icons/fa";
+import { Spin } from "antd";
 import Swal from "sweetalert2";
 
-function DeleteAddress({ id , getAddressFu}) {
-  const [loading, setLoading] = useState(false);
+function DeleteAddress({ id, getAddressFu, onAddressDelete }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
 
-  // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -18,59 +19,62 @@ function DeleteAddress({ id , getAddressFu}) {
     timer: 3000,
     timerProgressBar: true,
     customClass: "toast-modal",
-  });
+});
 
- 
-
-  const deleteHandler = async () => {
-    setLoading(true);
+  const handleDelete = async () => {
     try {
-      await deleteAddress(id, token);
-      getAddressFu();
-      Toast.fire({
-        icon: "success",
-        text: "آدرس با موفقیت حذف شد",
-        customClass: {
-          container: "toast-modal",
-        },
-      });
-    } catch (err) {
-      Toast.fire({
-        icon: "error",
-        text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
-      });
+      setIsLoading(true);
+      const response = await deleteAddress(id, token);
+      if (response) {
+        setIsModalOpen(false);
+        if (onAddressDelete) {
+          onAddressDelete();
+        }
+        getAddressFu();
+        Toast.fire({
+          icon: "success",
+          text: "آدرس با موفقیت حذف شد",
+          customClass: "toast-modal",
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting address:", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
+
   return (
     <>
-      <div className="w-auto">
-        <div className="w-full">
-          <button
-            disabled={loading}
-            onClick={deleteHandler}
-            className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] p-2 ${
-              loading ? "cursor-not-allowed" : "cursor-pointer"
-            }`}
-          >
-            {loading ? (
-              <div className="flex items-center gap-2 justify-center">
-                <span>درحال حذف</span>
-                <Spin className="white-spin" size="small" />
-              </div>
-            ) : (
-              <div className="flex items-center justify-center">
-                <FaTrashAlt />
-                <span>حذف</span>
-              </div>
-            )}
-          </button>
-        </div>
+      <div className="w-[100px]">
+        <button
+          disabled={isLoading}
+          onClick={() => setIsModalOpen(true)}
+          className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] p-2 ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+        >
+          {isLoading ? (
+            <div className="flex items-center gap-2 justify-center">
+              <span>درحال حذف</span>
+              <Spin className="white-spin" size="small" />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <FaTrashAlt />
+              <span>حذف</span>
+            </div>
+          )}
+        </button>
       </div>
+
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleDelete}
+        title="حذف آدرس"
+        message="آیا از حذف این آدرس اطمینان دارید؟"
+      />
     </>
   );
 }
