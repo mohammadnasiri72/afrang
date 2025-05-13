@@ -78,7 +78,7 @@ export default function DescCompeletePay() {
         const action = setEstimateData(estimateData);
         if (action) {
           dispatch(action);
-          router.push("/card/payment");
+          router.push("/card/infopay");
         } else {
           console.error("Action is undefined");
         }
@@ -86,7 +86,7 @@ export default function DescCompeletePay() {
         console.error("Error dispatching estimate data:", error);
       }
     } else {
-      router.push("/card/payment");
+      router.push("/card/infopay");
     }
   };
 

@@ -262,3 +262,151 @@ export const estimateOrder = async (data, token) => {
     throw err;
   }
 };
+
+
+export const estimateOrderSave = async (data, token) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Order/Save`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error in estimate order:", err);
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+    throw err;
+  }
+};
+
+
+export const getOrder = async (token) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Order`, {
+      params: {
+        pageSize: 20,
+        pageIndex: 1 ,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+export const getOrderTrackCode = async (trackCode , token) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Order/${trackCode}`, {
+     
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+
+export const getWayPayment = async (paymentId) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Item`, {
+      params: {
+        TypeId : 1022,
+        LangCode : 'fa',
+        CategoryIdArray: paymentId,
+      },
+
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+
+export const changePayment = async (data, token) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Payment/Change`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error in estimate order:", err);
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+    throw err;
+  }
+};
+
+export const getInfoPayOffline = async (paymentId) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Category/${paymentId}`);
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+
+export const PaymentOffline = async (data, token) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Payment/Offilne`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error in estimate order:", err);
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+    throw err;
+  }
+};

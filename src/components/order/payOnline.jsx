@@ -1,0 +1,232 @@
+"use client";
+import { changePayment, getWayPayment } from "@/services/order/orderService";
+import { getOrderTrackCodeData } from "@/services/order/orderService";
+import { mainDomainImg } from "@/utils/mainDomain";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaCheck, FaCreditCard, FaExchangeAlt, FaTimes } from "react-icons/fa";
+import "react-multi-date-picker/styles/layouts/mobile.css";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+
+export default function PayOnline({ orderData }) {
+    const router = useRouter();
+    // const dispatch = useDispatch();
+    // const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
+    // const estimateData = useSelector((state) => state.payment.estimateData);
+    // const selectedAddress = useSelector((state) => state.address.selectedAddress);
+    // const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
+    // const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
+    const user = Cookies.get("user");
+    const token = JSON.parse(user).token;
+    const [selectedGateway, setSelectedGateway] = useState(null);
+    const [gateways, setGateways] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // import sweet alert 2
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-start",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: "toast-modal",
+    });
+
+
+
+
+    useEffect(() => {
+        const fetchGateways = async () => {
+            try {
+                if (orderData?.order?.paymentId) {
+                    const response = await getWayPayment(orderData.order.paymentId);
+                    if (response) {
+                        // مرتب‌سازی درگاه‌ها بر اساس priority
+                        const sortedGateways = response
+                            .filter(gateway => gateway.isActive && !gateway.deleted)
+                            .sort((a, b) => b.priority - a.priority);
+                        setGateways(sortedGateways);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching gateways:', error);
+                Swal.fire({
+                    title: 'خطا',
+                    text: 'در دریافت لیست درگاه‌های پرداخت مشکلی پیش آمده است',
+                    icon: 'error',
+                    confirmButtonText: 'باشه',
+                    confirmButtonColor: '#d1182b'
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGateways();
+    }, [orderData?.order?.paymentId]);
+
+    const handleChangeToOffline = async () => {
+        try {
+            if (orderData?.order?.id) {
+                const data = {
+                    orderId: orderData.order.id,
+                    paymentType: "Offline"
+                };
+
+                await changePayment(data, token);
+
+                Toast.fire({
+                    icon: "success",
+                    text: "روش پرداخت با موفقیت به آفلاین تغییر کرد",
+                    customClass: {
+                        container: "toast-modal",
+                    },
+                });
+
+                // ریفرش کردن صفحه برای دریافت مجدد اطلاعات از سرور
+                router.refresh();
+            }
+        } catch (error) {
+            Toast.fire({
+                icon: "error",
+                text: error.response?.data ? error.response?.data : "خطای شبکه",
+                customClass: {
+                    container: "toast-modal",
+                },
+            });
+        }
+    };
+
+    return (
+        <>
+            <div className="lg:w-2/3 w-full lg:pl-5">
+                <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
+                    {/* عنوان و توضیحات */}
+                    <div className="mb-6">
+                        <h2 className="text-xl font-bold text-gray-800 mb-2">پرداخت آنلاین</h2>
+                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
+                    </div>
+
+                    {/* لیست درگاه‌ها */}
+                    {loading ? (
+                        <div className="flex justify-center items-center py-8">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-4 mb-8">
+                            {gateways.map((gateway) => (
+                                <div
+                                    key={gateway.id}
+                                    onClick={() => gateway.isActive && setSelectedGateway(gateway.id)}
+                                    className={`flex-1 min-w-[200px] flex flex-col items-center text-center p-4 rounded-lg border-2 transition-all duration-200
+                                        ${gateway.isActive
+                                            ? selectedGateway === gateway.id
+                                                ? 'border-[#d1182b] bg-red-50'
+                                                : 'border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer'
+                                            : 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60'
+                                        }`}
+                                >
+                                    <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center shadow-sm mb-3">
+                                        {gateway.image ? (
+                                            <img
+                                                src={mainDomainImg + gateway.image}
+                                                alt={gateway.id}
+                                                className="w-12 h-12 object-contain"
+                                            />
+                                        ) : (
+                                            <FaCreditCard className="text-3xl text-[#d1182b]" />
+                                        )}
+                                    </div>
+                                    <h3 className="font-medium text-gray-800 mb-1">{gateway.title}</h3>
+                                    <p className="text-sm text-gray-500 mb-3">
+                                        {gateway.summary || `${gateway.title} - پرداخت امن و مطمئن`}
+                                    </p>
+                                    {gateway.isActive && (
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mt-auto
+                                            ${selectedGateway === gateway.id
+                                                ? 'border-[#d1182b] bg-[#d1182b]'
+                                                : 'border-gray-300'
+                                            }`}
+                                        >
+                                            {selectedGateway === gateway.id && (
+                                                <FaCheck className="text-white text-xs" />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+
+                            {!loading && gateways.length === 0 && (
+                                <div className="w-full text-center py-8 text-gray-500">
+                                    درگاه پرداختی یافت نشد
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* دکمه‌های عملیات */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                        // onClick={async () => {
+                        //     if (selectedGateway && selectedPayment) {
+                        //         try {
+                        //             const selectedGatewayData = gateways.find(g => g.id === selectedGateway);
+                        //             const data = {
+                        //                 langCode: "fa",
+                        //                 addressId: selectedAddress?.id,
+                        //                 legalInfoId: selectedLegal?.id || 0,
+                        //                 shipmentId: selectedShipping?.id,
+                        //                 discountCode: estimateData?.discountCode || "",
+                        //                 paymentId: selectedPayment.id,
+                        //                 gatewayId: selectedGatewayData?.id,
+                        //                 gatewayKey: selectedGatewayData?.itemKey
+                        //             };
+
+                        //             const response = await estimateOrder(data, token);
+                        //             dispatch(setPaymentEstimateData(response));
+                        //             router.push("/card/payment");
+                        //         } catch (error) {
+                        //             Swal.fire({
+                        //                 title: 'خطا',
+                        //                 text: 'در بروزرسانی اطلاعات مشکلی پیش آمده است',
+                        //                 icon: 'error',
+                        //                 confirmButtonText: 'باشه',
+                        //                 confirmButtonColor: '#d1182b'
+                        //             });
+                        //         }
+                        //     }
+                        // }}
+                        disabled={!selectedGateway}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer
+                            ${selectedGateway
+                                ? 'bg-[#d1182b] text-white hover:bg-[#40768c]'
+                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            }`}
+                        >
+                            <FaCreditCard />
+                            <span>انتقال به صفحه پرداخت</span>
+                        </button>
+
+                        <button
+                            onClick={handleChangeToOffline}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer"
+                        >
+                            <FaExchangeAlt />
+                            <span>تغییر به پرداخت آفلاین</span>
+                        </button>
+
+                        <button
+                            onClick={() => router.push('/order')}
+                            className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
+                        >
+                            <FaTimes />
+                            <span>انصراف از پرداخت</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}

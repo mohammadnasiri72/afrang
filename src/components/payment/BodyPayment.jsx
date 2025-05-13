@@ -13,7 +13,7 @@ export default function BodyPayment() {
     useEffect(() => {
         // اگر estimateData وجود نداشت، کاربر را به صفحه قبل برگردان
         if (!estimateData) {
-            router.push("/card/compeletePay");
+            router.push("/card/infosend");
         }
     }, [estimateData, router]);
 

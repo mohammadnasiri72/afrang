@@ -1,46 +1,68 @@
 "use client";
-import { Switch } from "@headlessui/react";
+import { setEstimateData } from '@/redux/slices/paymentSlice';
+import { estimateOrderSave } from '@/services/order/orderService';
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from 'sweetalert2';
+import { setOrderData } from '@/redux/slices/orderSlice';
 
 function DescPayment({estimateData}) {
   const { items } = useSelector((state) => state.cart);
-  const [needInvoice, setNeedInvoice] = useState(false);
-  const [acceptTerms, setAcceptTerms] = useState(true);
   const [loading, setLoading] = useState(false);
   const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
+  const selectedAddress = useSelector((state) => state.address.selectedAddress);
+  const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
   const router = useRouter();
   const dispatch = useDispatch();
 
 
+
   
- 
+ // import sweet alert 2
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 
  
 
-  const handlePayment = () => {
-    // if (estimateData) {
-    //   try {
-    //     const action = setEstimateData(estimateData);
-    //     if (action) {
-    //       dispatch(action);
-    //       router.push("/card/payment");
-    //     } else {
-    //       console.error("Action is undefined");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error dispatching estimate data:", error);
-    //   }
-    // } else {
-    //   router.push("/card/payment");
-    // }
+  const handlePayment = async () => {
+    if (selectedPayment) {
+      setLoading(true);
+      try {
+        const data = {
+          langCode: "fa",
+          addressId: selectedAddress?.id,
+          legalInfoId: selectedLegal?.id || 0,
+          shipmentId: selectedShipping?.id,
+          discountCode: estimateData?.discountCode || "",
+          paymentId: selectedPayment.id
+        };
+        const response = await estimateOrderSave(data, token);
+        dispatch(setOrderData(response));
+        router.push(`/order?trackCode=${response}`);
+      } catch (error) {
+        setLoading(false);
+        Toast.fire({
+          icon: "error",
+          text: error.response?.data ? error.response?.data : "خطای شبکه",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      }
+    }
   };
 
   return (
@@ -123,42 +145,11 @@ function DescPayment({estimateData}) {
             </div>
           </div>
 
-          {/* سوئیچ‌ها */}
-          <div dir="ltr" className="space-y-3 mb-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[#444]">درخواست فاکتور رسمی</span>
-              <Switch
-                checked={needInvoice}
-                onChange={setNeedInvoice}
-                className={`${needInvoice ? 'bg-[#d1182b]' : 'bg-gray-300'
-                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
-              >
-                <span
-                  className={`${needInvoice ? 'translate-x-1' : 'translate-x-6'
-                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                />
-              </Switch>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#444]">قوانین و مقررات سایت را می‌پذیرم</span>
-              <Switch
-                checked={acceptTerms}
-                onChange={setAcceptTerms}
-                className={`${acceptTerms ? 'bg-[#d1182b]' : 'bg-gray-300'
-                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
-              >
-                <span
-                  className={`${acceptTerms ? 'translate-x-1' : 'translate-x-6'
-                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                />
-              </Switch>
-            </div>
-          </div>
-
+        
           <button
             onClick={handlePayment}
-            disabled={!acceptTerms || loading || !selectedPayment}
-            className={`w-full flex justify-center items-center gap-2 text-white ${acceptTerms && !loading && selectedPayment
+            disabled={ loading || !selectedPayment}
+            className={`w-full flex justify-center items-center gap-2 text-white ${ !loading && selectedPayment
                 ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
                 : "bg-gray-400"
               }  py-2 rounded-lg duration-300 mt-3`}

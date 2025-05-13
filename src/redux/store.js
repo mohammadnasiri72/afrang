@@ -15,6 +15,7 @@ import shippingReducer from './slices/shippingSlice';
 import legalIdReducer from './slices/legalIdSlice';
 import paymentWayReducer from './slices/paymentWaySlice';
 import discountReducer from './slices/discountSlice';
+import orderReducer from './slices/orderSlice';
 
 const loadUserFromCookie = () => {
   try {
@@ -42,7 +43,8 @@ export const store = configureStore({
     shipping: shippingReducer,
     legalId: legalIdReducer,
     paymentWay: paymentWayReducer,
-    discount: discountReducer
+    discount: discountReducer,
+    order: orderReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

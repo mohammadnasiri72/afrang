@@ -2,15 +2,15 @@
 import { Segmented, Steps } from "antd";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FaShoppingCart, FaCreditCard, FaTruck } from "react-icons/fa";
+import { FaShoppingCart, FaMapMarkerAlt, FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 function HeaderCard() {
   const [typeArticle, setTypeArticle] = useState("سبد خرید");
-  const { items } = useSelector((state) => state.cart);
   const pathname = usePathname();
-  const isCompletePayPage = pathname.includes("compeletePay");
-  const isCompletePayment = pathname.includes("payment");
+  const isCompleteinfosend = pathname.includes("infosend");
+  const isCompleteinfopay = pathname.includes("infopay");
+  const isCompletepayment = pathname.includes("order");
 
   return (
     <>
@@ -31,13 +31,13 @@ function HeaderCard() {
           />
         </div>
       </div>
-      <div className="flex flex-wrap items-center py-10">
-        <div className="md:w-1/3 w-full flex gap-3 text-lg font-semibold md:justify-start justify-center">
+      <div className="flex flex-wrap items-center justify-center py-10">
+        {/* <div className="md:w-1/3 w-full flex gap-3 text-lg font-semibold md:justify-start justify-center">
           <span>سبد خرید</span>
           <span className="text-[#888]"> {items.length} مرسوله</span>
-        </div>
+        </div> */}
 
-        <div className="md:w-1/3 w-full md:mt-0 mt-4">
+        <div className="md:w-1/2 w-full md:mt-0 mt-4">
           <Steps
             direction="horizontal"
             responsive={false}
@@ -49,17 +49,22 @@ function HeaderCard() {
                 icon: <FaShoppingCart className="text-red-600 text-2xl" />,
               },
               {
-                title: "تکمیل خرید",
+                title: "اطلاعات ارسال",
                 description: "اطلاعات ارسال",
-                status: isCompletePayment ? "finish" : isCompletePayPage ? "process" : "wait",
-
-                icon: <FaCreditCard className={`text-2xl ${isCompletePayPage || isCompletePayment ? "text-red-600" : ""}`} />,
+                status: (isCompleteinfopay || isCompleteinfosend || isCompletepayment) ? "finish" : "wait",
+                icon: <FaMapMarkerAlt className={`text-2xl ${(isCompleteinfosend || isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
               },
               {
-                title: "پرداخت",
-                description: "ورود به درگاه بانکی",
-                status: isCompletePayment ? "process" : "wait",
-                icon: <FaTruck className={`text-2xl ${ isCompletePayment ? "text-red-600" : ""}`} />,
+                title: "اطلاعات پرداخت",
+                description: "اطلاعات پرداخت",
+                status: (isCompleteinfopay || isCompletepayment) ? "finish" : "wait",
+                icon: <FaCreditCard className={`text-2xl ${(isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
+              },
+              {
+                title: "پرداخت و اتمام",
+                description: "پرداخت و اتمام",
+                status: isCompletepayment ? "finish" : "wait",
+                icon: <FaCheckCircle className={`text-2xl ${isCompletepayment ? "text-red-600" : ""}`} />,
               },
             ]}
           />

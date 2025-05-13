@@ -1,7 +1,6 @@
 import { setOpenMenuRes } from "@/redux/slice/menuRes";
 import { Drawer, Menu } from "antd";
-import { FaBars } from "react-icons/fa6";
-import { IoCloseSharp } from "react-icons/io5";
+import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 
 function DrawerMenuResponsive() {
@@ -188,7 +187,7 @@ function DrawerMenuResponsive() {
         open={open}
         closeIcon={
           <div className="bg-[#d1182b] rounded-full p-1 text-white ">
-            <IoCloseSharp className="text-xl" />
+            <FaXmark className="text-xl" />
           </div>
         }
       >

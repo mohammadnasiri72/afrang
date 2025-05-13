@@ -16,7 +16,6 @@ const BodyCard = () => {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
   const token = JSON.parse(Cookies.get("user"))?.token;
-  
   const router = useRouter();
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
@@ -42,7 +41,7 @@ const BodyCard = () => {
     if (!token) {
       router.push("/login?from=card");
     } else {
-      router.push("/card/compeletePay");
+      router.push("/card/infosend");
     }
   };
 
