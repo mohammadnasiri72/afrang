@@ -46,12 +46,12 @@ export default function PayOnline({ orderData }) {
                 }
             } catch (error) {
                 console.error('Error fetching gateways:', error);
-                Swal.fire({
-                    title: 'خطا',
-                    text: 'در دریافت لیست درگاه‌های پرداخت مشکلی پیش آمده است',
-                    icon: 'error',
-                    confirmButtonText: 'باشه',
-                    confirmButtonColor: '#d1182b'
+                Toast.fire({
+                    icon: "error",
+                    text: error.response?.data ? error.response?.data : "خطای شبکه",
+                    customClass: {
+                        container: "toast-modal",
+                    },
                 });
             } finally {
                 setLoading(false);
@@ -100,9 +100,6 @@ export default function PayOnline({ orderData }) {
                     {/* عنوان و توضیحات */}
                     <div className="mb-6">
                         <h2 className="text-xl font-bold text-gray-800 mb-2">پرداخت آنلاین</h2>
-                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
-                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
-                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
                         <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
                     </div>
 
@@ -168,41 +165,41 @@ export default function PayOnline({ orderData }) {
                     {/* دکمه‌های عملیات */}
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
-                        // onClick={async () => {
-                        //     if (selectedGateway && selectedPayment) {
-                        //         try {
-                        //             const selectedGatewayData = gateways.find(g => g.id === selectedGateway);
-                        //             const data = {
-                        //                 langCode: "fa",
-                        //                 addressId: selectedAddress?.id,
-                        //                 legalInfoId: selectedLegal?.id || 0,
-                        //                 shipmentId: selectedShipping?.id,
-                        //                 discountCode: estimateData?.discountCode || "",
-                        //                 paymentId: selectedPayment.id,
-                        //                 gatewayId: selectedGatewayData?.id,
-                        //                 gatewayKey: selectedGatewayData?.itemKey
-                        //             };
+                            // onClick={async () => {
+                            //     if (selectedGateway && selectedPayment) {
+                            //         try {
+                            //             const selectedGatewayData = gateways.find(g => g.id === selectedGateway);
+                            //             const data = {
+                            //                 langCode: "fa",
+                            //                 addressId: selectedAddress?.id,
+                            //                 legalInfoId: selectedLegal?.id || 0,
+                            //                 shipmentId: selectedShipping?.id,
+                            //                 discountCode: estimateData?.discountCode || "",
+                            //                 paymentId: selectedPayment.id,
+                            //                 gatewayId: selectedGatewayData?.id,
+                            //                 gatewayKey: selectedGatewayData?.itemKey
+                            //             };
 
-                        //             const response = await estimateOrder(data, token);
-                        //             dispatch(setPaymentEstimateData(response));
-                        //             router.push("/card/payment");
-                        //         } catch (error) {
-                        //             Swal.fire({
-                        //                 title: 'خطا',
-                        //                 text: 'در بروزرسانی اطلاعات مشکلی پیش آمده است',
-                        //                 icon: 'error',
-                        //                 confirmButtonText: 'باشه',
-                        //                 confirmButtonColor: '#d1182b'
-                        //             });
-                        //         }
-                        //     }
-                        // }}
-                        disabled={!selectedGateway}
-                        className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer
+                            //             const response = await estimateOrder(data, token);
+                            //             dispatch(setPaymentEstimateData(response));
+                            //             router.push("/card/payment");
+                            //         } catch (error) {
+                            //             Swal.fire({
+                            //                 title: 'خطا',
+                            //                 text: 'در بروزرسانی اطلاعات مشکلی پیش آمده است',
+                            //                 icon: 'error',
+                            //                 confirmButtonText: 'باشه',
+                            //                 confirmButtonColor: '#d1182b'
+                            //             });
+                            //         }
+                            //     }
+                            // }}
+                            disabled={!selectedGateway}
+                            className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer
                             ${selectedGateway
-                                ? 'bg-[#d1182b] text-white hover:bg-[#40768c]'
-                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            }`}
+                                    ? 'bg-[#d1182b] text-white hover:bg-[#40768c]'
+                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                }`}
                         >
                             <FaCreditCard />
                             <span>انتقال به صفحه پرداخت</span>

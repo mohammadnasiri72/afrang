@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import DescPayment from "./DescPayment";
 import TitlePayment from "./TitlePayment";
+import Cookies from "js-cookie";
 
 export default function BodyPayment() {
     const estimateData = useSelector((state) => state.payment.estimateData);
@@ -11,6 +12,12 @@ export default function BodyPayment() {
     
 
     useEffect(() => {
+        const user = Cookies.get("user");
+        if (!user) {
+            router.push("/card");
+            return;
+        }
+
         // اگر estimateData وجود نداشت، کاربر را به صفحه قبل برگردان
         if (!estimateData) {
             router.push("/card/infosend");
@@ -18,7 +25,11 @@ export default function BodyPayment() {
     }, [estimateData, router]);
 
     if (!estimateData) {
-        return null;
+        return (
+            <div className="w-full min-h-[400px] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+            </div>
+        );
     }
 
     return (
@@ -28,6 +39,5 @@ export default function BodyPayment() {
                 <DescPayment estimateData={estimateData} />
             </div>
         </>
-
     );
 }

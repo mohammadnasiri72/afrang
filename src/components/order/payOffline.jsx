@@ -1,5 +1,5 @@
 "use client";
-import { changePayment, getInfoPayOffline, PaymentOffline } from "@/services/order/orderService";
+import { changePayment, getInfoPayOffline, getWayPayment, PaymentOffline } from "@/services/order/orderService";
 import { Tooltip } from "@mui/material";
 import { Divider, Modal, Spin } from "antd";
 import Cookies from "js-cookie";
@@ -27,6 +27,7 @@ export default function PayOffline({ orderData }) {
     const router = useRouter();
     const user = Cookies.get("user");
     const token = JSON.parse(user).token;
+    const [offlineGateways, setOfflineGateways] = useState([]);
 
     // Fetch payment info when component mounts
     useEffect(() => {
@@ -42,6 +43,36 @@ export default function PayOffline({ orderData }) {
         };
 
         fetchPaymentInfo();
+    }, [orderData?.order?.paymentId]);
+
+    useEffect(() => {
+        const fetchGateways = async () => {
+            try {
+                if (orderData?.order?.paymentId) {
+                    const response = await getWayPayment(orderData.order.paymentId);
+                    if (response) {
+                        // مرتب‌سازی درگاه‌ها بر اساس priority
+                        const sortedGateways = response
+                            .filter(gateway => gateway.categoryKey === "offline")
+                            .sort((a, b) => b.priority - a.priority);
+                        setOfflineGateways(sortedGateways);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching gateways:', error);
+                Toast.fire({
+                    icon: "error",
+                    text: error.response?.data ? error.response?.data : "خطای شبکه",
+                    customClass: {
+                        container: "toast-modal",
+                    },
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGateways();
     }, [orderData?.order?.paymentId]);
 
     // import sweet alert 2
@@ -106,13 +137,7 @@ export default function PayOffline({ orderData }) {
             router.refresh();
 
         } catch (error) {
-            // Swal.fire({
-            //     title: 'خطا',
-            //     text: error.response?.data || 'در ثبت اطلاعات مشکلی پیش آمده است',
-            //     icon: 'error',
-            //     confirmButtonText: 'باشه',
-            //     confirmButtonColor: '#d1182b'
-            // });
+           
             Toast.fire({
                 icon: "error",
                 text: error.response?.data ? error.response?.data : "خطای شبکه",
@@ -176,42 +201,61 @@ export default function PayOffline({ orderData }) {
                         </p>
 
                         <div className="space-y-4">
-                            {/* شماره کارت */}
-                            {/* <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
-                                <div>
-                                    <p className="text-sm text-gray-500 mb-1">شماره کارت</p>
-                                    <p className="font-medium text-gray-800 font-mono">7390-4006-1219-6274</p>
-                                </div>
-                                <Tooltip title="کپی شماره کارت" arrow placement="top">
-                                    <button
-                                        onClick={() => handleCopy('7390-4006-1219-6274', 'شماره کارت')}
-                                        className="text-gray-400 hover:text-[#d1182b] transition-colors"
-                                    >
-                                        <FaCopy />
-                                    </button>
-                                </Tooltip>
-                            </div> */}
+                            {offlineGateways.map((gateway) => (
+                                <div key={gateway.id} className="space-y-4">
+                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                        <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                            <FaCreditCard className="text-[#d1182b]" />
+                                            {gateway.title}
+                                        </h3>
+                                        <div className="prose prose-sm max-w-none text-gray-600" 
+                                            dangerouslySetInnerHTML={{ __html: gateway.summary }} 
+                                        />
+                                    </div>
+                                    
+                                    {gateway.title === "کارت به کارت" && gateway.summary.includes("6104") && (
+                                        <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
+                                            <div>
+                                                <p className="text-sm text-gray-500 mb-1">شماره کارت</p>
+                                                <p className="font-medium text-gray-800 font-mono">
+                                                    {gateway.summary.match(/\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}/)[0]}
+                                                </p>
+                                            </div>
+                                            <Tooltip title="کپی شماره کارت" arrow placement="top">
+                                                <button
+                                                    onClick={() => handleCopy(gateway.summary.match(/\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}/)[0], 'شماره کارت')}
+                                                    className="text-gray-400 hover:text-[#d1182b] transition-colors"
+                                                >
+                                                    <FaCopy />
+                                                </button>
+                                            </Tooltip>
+                                        </div>
+                                    )}
 
-                            {/* شماره شبا */}
-                            {/* <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
-                                <div>
-                                    <p className="text-sm text-gray-500 mb-1">شماره شبا</p>
-                                    <p className="font-medium text-gray-800 font-mono">IR370550231100206368143001</p>
+                                    {gateway.title === "واریز به حساب" && gateway.summary.includes("IR") && (
+                                        <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
+                                            <div>
+                                                <p className="text-sm text-gray-500 mb-1">شماره شبا</p>
+                                                <p className="font-medium text-gray-800 font-mono">
+                                                    {gateway.summary.match(/IR\d+/)[0]}
+                                                </p>
+                                            </div>
+                                            <Tooltip title="کپی شماره شبا" arrow placement="top">
+                                                <button
+                                                    onClick={() => handleCopy(gateway.summary.match(/IR\d+/)[0], 'شماره شبا')}
+                                                    className="text-gray-400 hover:text-[#d1182b] transition-colors"
+                                                >
+                                                    <FaCopy />
+                                                </button>
+                                            </Tooltip>
+                                        </div>
+                                    )}
                                 </div>
-                                <Tooltip title="کپی شماره شبا" arrow placement="top">
-                                    <button
-                                        onClick={() => handleCopy('IR370550231100206368143001', 'شماره شبا')}
-                                        className="text-gray-400 hover:text-[#d1182b] transition-colors"
-                                    >
-                                        <FaCopy />
-                                    </button>
-                                </Tooltip>
-                            </div> */}
+                            ))}
 
-                            {/* شماره تماس */}
-                            {/* <div className="flex items-center gap-2 text-gray-600 mt-4">
+                            {/* <div className="flex items-center gap-2 text-gray-600 mt-6">
                                 <FaPhone className="text-[#d1182b]" />
-                                <p>در صورت نیاز می‌توانید با شماره <span className="font-medium">09170009688</span> تماس بگیرید</p>
+                                <p>در صورت نیاز به راهنمایی با شماره <span className="font-medium">09170009688</span> تماس بگیرید</p>
                             </div> */}
                         </div>
                     </div>
