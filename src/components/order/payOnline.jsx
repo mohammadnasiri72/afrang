@@ -115,12 +115,12 @@ export default function PayOnline({ orderData }) {
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
                         </div>
                     ) : (
-                        <div className="flex flex-wrap gap-4 mb-8">
+                        <div className="flex flex-col gap-2 mb-6">
                             {gateways.map((gateway) => (
                                 <div
                                     key={gateway.id}
                                     onClick={() => gateway.isActive && setSelectedGateway(gateway.id)}
-                                    className={`flex-1 min-w-[200px] flex flex-col items-center text-center p-4 rounded-lg border-2 transition-all duration-200
+                                    className={`w-full flex items-center gap-3 p-2.5 rounded-lg border-2 transition-all duration-200
                                         ${gateway.isActive
                                             ? selectedGateway === gateway.id
                                                 ? 'border-[#d1182b] bg-red-50'
@@ -128,30 +128,32 @@ export default function PayOnline({ orderData }) {
                                             : 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60'
                                         }`}
                                 >
-                                    <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center shadow-sm mb-3">
+                                    <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm">
                                         {gateway.image ? (
                                             <img
                                                 src={mainDomainImg + gateway.image}
                                                 alt={gateway.id}
-                                                className="w-12 h-12 object-contain"
+                                                className="w-7 h-7 object-contain"
                                             />
                                         ) : (
-                                            <FaCreditCard className="text-3xl text-[#d1182b]" />
+                                            <FaCreditCard className="text-xl text-[#d1182b]" />
                                         )}
                                     </div>
-                                    <h3 className="font-medium text-gray-800 mb-1">{gateway.title}</h3>
-                                    <p className="text-sm text-gray-500 mb-3">
-                                        {gateway.summary || `${gateway.title} - پرداخت امن و مطمئن`}
-                                    </p>
+                                    <div className="flex-grow">
+                                        <h3 className="font-medium text-gray-800 text-sm">{gateway.title}</h3>
+                                        <p className="text-xs text-gray-500">
+                                            {gateway.summary || `پرداخت امن`}
+                                        </p>
+                                    </div>
                                     {gateway.isActive && (
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mt-auto
+                                        <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
                                             ${selectedGateway === gateway.id
                                                 ? 'border-[#d1182b] bg-[#d1182b]'
                                                 : 'border-gray-300'
                                             }`}
                                         >
                                             {selectedGateway === gateway.id && (
-                                                <FaCheck className="text-white text-xs" />
+                                                <FaCheck className="text-white text-[10px]" />
                                             )}
                                         </div>
                                     )}
