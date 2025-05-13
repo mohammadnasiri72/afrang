@@ -17,26 +17,56 @@ import Link from "next/link";
 import { mainDomainImg } from "@/utils/mainDomain";
 
 export default function Header() {
-  const { user, isLoading } = useAuth();
+  const { user: authUser, isLoading } = useAuth();
+  const user = useSelector((state) => state.user.user);
   const { items, loading } = useSelector((state) => state.settings);
   const disPatch = useDispatch();
   const route = useRouter();
 
+  const checkAuthStatus = () => {
+    const userCookie = Cookies.get("user");
+    if (!userCookie) return false;
+    
+    try {
+      const userData = JSON.parse(userCookie);
+      return !!userData.token;
+    } catch {
+      return false;
+    }
+  };
+
   useEffect(() => {
     const userCookie = Cookies.get("user");
-    if (userCookie && !user) {
+    if (userCookie) {
       try {
         const userData = JSON.parse(userCookie);
-        disPatch(setUser(userData));
+        if (userData.token && (!user || !user.token)) {
+          disPatch(setUser(userData));
+        } else if (!userData.token && user) {
+          disPatch(setUser(null));
+        }
       } catch (error) {
         console.error("Error parsing user cookie:", error);
+        disPatch(setUser(null));
       }
+    } else if (user) {
+      disPatch(setUser(null));
     }
   }, [user, disPatch]);
+
+  useEffect(() => {
+    if (authUser?.token && (!user || !user.token)) {
+      disPatch(setUser(authUser));
+    } else if (!authUser?.token && user) {
+      disPatch(setUser(null));
+    }
+  }, [authUser, user, disPatch]);
 
   if (loading) {
     return <Loading />;
   }
+
+  const isAuthenticated = user?.token && checkAuthStatus();
 
   return (
     <div className="flex items-center justify-between lg:px-16 px-4 py-5 bg-white">
@@ -99,8 +129,8 @@ export default function Header() {
 
         {isLoading ? (
           <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-        ) : user?.token ? (
-          <ProfileDropdown  />
+        ) : isAuthenticated ? (
+          <ProfileDropdown />
         ) : (
           <div className="flex items-center gap-3 font-semibold">
             <div

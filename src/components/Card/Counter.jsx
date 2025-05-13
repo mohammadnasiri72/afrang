@@ -17,7 +17,6 @@ const Counter = () => {
   };
 
   const handleDelete = () => {
-    console.log("محصول حذف شد!");
   };
 
   return (

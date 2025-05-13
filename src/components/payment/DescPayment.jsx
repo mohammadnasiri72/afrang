@@ -1,5 +1,5 @@
 "use client";
-import { setEstimateData } from '@/redux/slices/paymentSlice';
+import { setOrderData } from '@/redux/slices/orderSlice';
 import { estimateOrderSave } from '@/services/order/orderService';
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -7,7 +7,6 @@ import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from 'sweetalert2';
-import { setOrderData } from '@/redux/slices/orderSlice';
 
 function DescPayment({estimateData}) {
   const { items } = useSelector((state) => state.cart);
@@ -51,7 +50,7 @@ const Toast = Swal.mixin({
         };
         const response = await estimateOrderSave(data, token);
         dispatch(setOrderData(response));
-        router.push(`/order?trackCode=${response}`);
+        router.push(`/profile/orders?trackCode=${response}`);
       } catch (error) {
         setLoading(false);
         Toast.fire({

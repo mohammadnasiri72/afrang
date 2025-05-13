@@ -30,7 +30,6 @@ export default async function BodyPaymentFinal({ trackCode , token}) {
     //     return null;
     // }
 
-    console.log(orderDataTrackCode);
 
     return (
         <>

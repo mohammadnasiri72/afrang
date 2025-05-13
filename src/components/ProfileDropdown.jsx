@@ -13,11 +13,38 @@ import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+
+const generateRandomUserId = () => {
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
+
+const resetUserCookie = () => {
+    const initialData = {
+        token: "",
+        refreshToken: "",
+        expiration: "",
+        userId: generateRandomUserId(),
+        displayName: "",
+        roles: [],
+    };
+    Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+};
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
+
+    // import sweet alert 2
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-start",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      customClass: "toast-modal",
+  });
 
   const user = JSON.parse(Cookies.get("user"));
 
@@ -41,10 +68,12 @@ const ProfileDropdown = () => {
     setLoading(true);
     try {
       await authServiceSignOut.signOut(user.token);
-      Cookies.remove("user");
-      dispatch(setUser(""));
+      resetUserCookie();
+      dispatch(setUser(null));
       setIsOpen(false);
-      router.push("/");
+      setTimeout(() => {
+        router.push("/");
+      }, 100);
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -64,7 +93,7 @@ const ProfileDropdown = () => {
       id: 1,
       label: "سبد خرید",
       icon: <FaShoppingCart className="text-lg" />,
-      href: "/card",
+      href: "/cart",
     },
     {
       id: 2,
@@ -76,7 +105,7 @@ const ProfileDropdown = () => {
       id: 3,
       label: "سفارش‌های من",
       icon: <BsBoxSeam className="text-lg" />,
-      href: "/orders",
+      href: "/profile/orders",
     },
   ];
 

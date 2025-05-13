@@ -32,22 +32,23 @@ export default async function Order(props) {
   return (
     <>
       <div className="bg-[#f6f6f6] overflow-hidden">
-        <Container>
+        {
+          trackCode &&
           <HeaderCard />
-          {orderData ? (
-            trackCode ? <BodyPaymentFinal trackCode={trackCode} token={token}/> :
+        }
+        {orderData ? (
+          trackCode ? <BodyPaymentFinal trackCode={trackCode} token={token} /> :
 
-              <BodyOrder orderData={orderData} />
-          ) : (
-            <div className="mt-4 text-center text-red-600">
-              خطا در دریافت اطلاعات سفارش
-            </div>
+            <BodyOrder orderData={orderData} />
+        ) : (
+          <div className="mt-4 text-center text-red-600">
+            خطا در دریافت اطلاعات سفارش
+          </div>
 
-          )}
+        )}
 
 
 
-        </Container>
       </div>
     </>
   );

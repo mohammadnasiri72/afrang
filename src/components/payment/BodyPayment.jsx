@@ -10,17 +10,27 @@ export default function BodyPayment() {
     const estimateData = useSelector((state) => state.payment.estimateData);
     const router = useRouter();
     
-
     useEffect(() => {
-        const user = Cookies.get("user");
-        if (!user) {
-            router.push("/card");
+        const userCookie = Cookies.get("user");
+        if (!userCookie) {
+            router.push("/cart");
             return;
         }
 
-        // اگر estimateData وجود نداشت، کاربر را به صفحه قبل برگردان
-        if (!estimateData) {
-            router.push("/card/infosend");
+        try {
+            const user = JSON.parse(userCookie);
+            if (!user.token) {
+                router.push("/cart");
+                return;
+            }
+
+            // اگر estimateData وجود نداشت، کاربر را به صفحه قبل برگردان
+            if (!estimateData) {
+                router.push("/cart/infosend");
+            }
+        } catch (error) {
+            console.error("Error parsing user cookie:", error);
+            router.push("/cart");
         }
     }, [estimateData, router]);
 

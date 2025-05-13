@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 
 export default function DescPaymentFinal({ orderData }) {
     const estimateData = useSelector((state) => state.payment.estimateData);
-    console.log(orderData);
 
 
     

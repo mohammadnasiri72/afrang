@@ -11,14 +11,25 @@ export default function CompeletePayWrapper() {
   const router = useRouter();
 
   useEffect(() => {
-    const user = Cookies.get("user");
-    if (!user) {
-      router.push("/card");
+    const userCookie = Cookies.get("user");
+    if (!userCookie) {
+      router.push("/cart");
       return;
     }
 
-    if (!items || items.length === 0) {
-      router.push("/card");
+    try {
+      const user = JSON.parse(userCookie);
+      if (!user.token) {
+        router.push("/cart");
+        return;
+      }
+
+      if (!items || items.length === 0) {
+        router.push("/cart");
+      }
+    } catch (error) {
+      console.error("Error parsing user cookie:", error);
+      router.push("/cart");
     }
   }, [items, router]);
 

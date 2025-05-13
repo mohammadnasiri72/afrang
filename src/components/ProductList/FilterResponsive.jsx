@@ -16,7 +16,6 @@ function FilterResponsive() {
   const handleMenuClick = (e) => {
     if (e.key === "logout") {
       // عملیات خروج
-      console.log("Logout clicked");
     }
     setVisible(false);
   };

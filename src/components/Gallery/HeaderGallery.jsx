@@ -45,7 +45,6 @@ function HeaderGallery() {
                   size="large"
                   defaultValue="مرتب سازی بر اساس"
                   onChange={(e) => {
-                    // console.log(e);
                   }}
                   suffixIcon={
                     <FaCaretDown className="text-[#d1182b] text-lg" />
@@ -72,7 +71,6 @@ function HeaderGallery() {
                     borderRadius: "8px",
                   }}
                   onChange={(e) => {
-                    // console.log(e);
                   }}
                   suffixIcon={
                     <FaCaretDown className="text-[#d1182b] text-lg" />

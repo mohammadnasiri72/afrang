@@ -92,7 +92,6 @@ const CommentTree = ({ comments, parentId = null, onReply, depth = 0 }) => {
 };
 
 function CommentUser({ comments, onReply }) {
-  console.log(comments);
   
   return (
     <div className="bg-white p-4 mt-3 rounded-lg">

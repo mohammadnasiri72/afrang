@@ -41,7 +41,7 @@ const BodyCard = () => {
     if (!token) {
       router.push("/login?from=card");
     } else {
-      router.push("/card/infosend");
+      router.push("/cart/infosend");
     }
   };
 

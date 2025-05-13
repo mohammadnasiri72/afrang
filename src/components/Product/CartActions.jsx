@@ -19,9 +19,7 @@ function CartActions({ product, selectedWarranty }) {
   }, [dispatch]);
 
   const cartItem = items?.find(item => item.productId === product.id);
-  console.log('Cart Items:', items);
-  console.log('Current Product:', product.id);
-  console.log('Found Cart Item:', cartItem);
+ 
 
   const handleAddToCart = async () => {
     const userCookie = Cookies.get("user");

@@ -1,16 +1,30 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import OrderDetails from './OrderDetails';
 
 export default function BodyOrder({ orderData }) {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const selectedTrackCode = searchParams.get('id');
 
     const handlePayment = (trackCode) => {
-        router.push(`/order?trackCode=${trackCode}`);
+        router.push(`/profile/orders?trackCode=${trackCode}`);
     };
 
-    console.log(orderData);
-
+    // اگر trackCode در URL وجود داشت، جزئیات سفارش رو نشون بده
+    if (selectedTrackCode) {
+        const selectedOrder = orderData?.find(order => order.trackCode === selectedTrackCode);
+        if (selectedOrder) {
+            return (
+                <div className="mt-4">
+                    <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
+                        <OrderDetails trackCode={selectedTrackCode} />
+                    </div>
+                </div>
+            );
+        }
+    }
     return (
         <div className="mt-4">
             <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
@@ -33,8 +47,8 @@ export default function BodyOrder({ orderData }) {
                                 <div className="space-y-2">
                                     <div className="flex justify-start items-center">
                                         <span className="text-gray-600">وضعیت پرداخت:</span>
-                                        <span className={`font-medium ${order.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-600'}`}>
-                                            {order.paymentStatus === 'paid' ? 'پرداخت شده' : 'پرداخت نشده'}
+                                        <span className={`font-medium ${order.paymentStatus === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                                            {order.paymentStatusTitle}
                                         </span>
                                     </div>
                                     <div className="flex justify-start items-center">
@@ -46,20 +60,17 @@ export default function BodyOrder({ orderData }) {
                                 <div className="space-y-2">
                                     <div className="flex justify-start items-center">
                                         <span className="text-gray-600">وضعیت سفارش:</span>
-                                        <span className={`font-medium ${order.orderStatus === 'pending' ? 'text-yellow-600' :
-                                            order.orderStatus === 'processing' ? 'text-blue-600' :
-                                                order.orderStatus === 'completed' ? 'text-green-600' :
-                                                    'text-gray-600'
+                                        <span className={`font-medium ${order.status === 1 ? 'text-yellow-600' :
+                                                order.status === 2 ? 'text-blue-600' :
+                                                    order.status === 3 ? 'text-green-600' :
+                                                        'text-gray-600'
                                             }`}>
-                                            {order.orderStatus === 'pending' ? 'در انتظار تایید' :
-                                                order.orderStatus === 'processing' ? 'در حال پردازش' :
-                                                    order.orderStatus === 'completed' ? 'تکمیل شده' :
-                                                        'نامشخص'}
+                                            {order.statusTitle}
                                         </span>
                                     </div>
                                     <div className="flex justify-start items-center">
                                         <span className="text-gray-600">روش پرداخت:</span>
-                                        <span className="font-medium">{order.paymentId === 2143 ? "پرداخت آفلاین" : order.paymentId === 2142 ? "پرداخت آنلاین" : 'نامشخص'}</span>
+                                        <span className="font-medium">{order.paymentId === 2143 ? 'پرداخت آفلاین' : order.paymentId === 2142 ? 'پرداخت آنلاین' : 'نامشخص'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -67,14 +78,12 @@ export default function BodyOrder({ orderData }) {
                             <div className="mt-4 pt-4 border-t border-gray-200">
                                 <div className="flex justify-between items-center">
                                     <button
-                                        className="text-[#d1182b] hover:text-[#40768c] transition-colors"
-                                        onClick={() => {/* اینجا می‌تونید لینک به صفحه جزئیات سفارش رو اضافه کنید */ }}
+                                        onClick={() => router.push(`/profile/orders?id=${order.trackCode}`)}
+                                        className="text-[#d1182b] hover:text-[#40768c] transition-colors cursor-pointer"
                                     >
                                         مشاهده جزئیات سفارش
                                     </button>
-                                    {
-                                    order.payable && 
-                                    (
+                                    {order.payable && (
                                         <button
                                             className="bg-[#d1182b] text-white px-4 py-2 rounded-lg hover:bg-[#40768c] transition-colors cursor-pointer"
                                             onClick={() => handlePayment(order.trackCode)}

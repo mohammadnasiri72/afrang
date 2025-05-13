@@ -28,6 +28,7 @@ export default function PayOffline({ orderData }) {
     const user = Cookies.get("user");
     const token = JSON.parse(user).token;
     const [offlineGateways, setOfflineGateways] = useState([]);
+    const [selectedGateway, setSelectedGateway] = useState(null);
 
     // Fetch payment info when component mounts
     useEffect(() => {
@@ -103,7 +104,7 @@ export default function PayOffline({ orderData }) {
             // ساختار داده برای ارسال به API
             const requestData = {
                 orderId: orderData.order.id,
-                paymentWayId: orderData.order.paymentId,
+                paymentWayId: selectedGateway,
                 refId: paymentData.referenceNumber,
                 trackId: "", // خالی طبق درخواست
                 amount: parseInt(paymentData.amount),
@@ -182,7 +183,6 @@ export default function PayOffline({ orderData }) {
         }
     };
 
-    console.log(paymentInfo);
 
     return (
         <>
@@ -203,17 +203,31 @@ export default function PayOffline({ orderData }) {
                         <div className="space-y-4">
                             {offlineGateways.map((gateway) => (
                                 <div key={gateway.id} className="space-y-4">
-                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                        <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                                            <FaCreditCard className="text-[#d1182b]" />
-                                            {gateway.title}
-                                        </h3>
+                                    <div 
+                                        className={`bg-gray-50 p-4 rounded-lg cursor-pointer transition-colors ${
+                                            selectedGateway === gateway.id ? 'ring-2 ring-[#d1182b]' : ''
+                                        }`}
+                                        onClick={() => setSelectedGateway(gateway.id)}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                type="radio"
+                                                name="paymentGateway"
+                                                checked={selectedGateway === gateway.id}
+                                                onChange={() => setSelectedGateway(gateway.id)}
+                                                className="w-4 h-4 text-[#d1182b] border-gray-300 focus:ring-[#d1182b]"
+                                            />
+                                            <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                                <FaCreditCard className="text-[#d1182b]" />
+                                                {gateway.title}
+                                            </h3>
+                                        </div>
                                         <div className="prose prose-sm max-w-none text-gray-600" 
                                             dangerouslySetInnerHTML={{ __html: gateway.summary }} 
                                         />
                                     </div>
                                     
-                                    {gateway.title === "کارت به کارت" && gateway.summary.includes("6104") && (
+                                    {gateway.id === "card-to-card" && gateway.summary.includes("6104") && selectedGateway === gateway.id && (
                                         <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
                                             <div>
                                                 <p className="text-sm text-gray-500 mb-1">شماره کارت</p>
@@ -223,7 +237,10 @@ export default function PayOffline({ orderData }) {
                                             </div>
                                             <Tooltip title="کپی شماره کارت" arrow placement="top">
                                                 <button
-                                                    onClick={() => handleCopy(gateway.summary.match(/\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}/)[0], 'شماره کارت')}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleCopy(gateway.summary.match(/\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}/)[0], 'شماره کارت');
+                                                    }}
                                                     className="text-gray-400 hover:text-[#d1182b] transition-colors"
                                                 >
                                                     <FaCopy />
@@ -232,7 +249,7 @@ export default function PayOffline({ orderData }) {
                                         </div>
                                     )}
 
-                                    {gateway.title === "واریز به حساب" && gateway.summary.includes("IR") && (
+                                    {gateway.id === "bank-transfer" && gateway.summary.includes("IR") && selectedGateway === gateway.id && (
                                         <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
                                             <div>
                                                 <p className="text-sm text-gray-500 mb-1">شماره شبا</p>
@@ -242,7 +259,10 @@ export default function PayOffline({ orderData }) {
                                             </div>
                                             <Tooltip title="کپی شماره شبا" arrow placement="top">
                                                 <button
-                                                    onClick={() => handleCopy(gateway.summary.match(/IR\d+/)[0], 'شماره شبا')}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleCopy(gateway.summary.match(/IR\d+/)[0], 'شماره شبا');
+                                                    }}
                                                     className="text-gray-400 hover:text-[#d1182b] transition-colors"
                                                 >
                                                     <FaCopy />
@@ -262,13 +282,26 @@ export default function PayOffline({ orderData }) {
 
                     {/* دکمه‌های عملیات */}
                     <div className="flex flex-col sm:flex-row gap-3">
-                        <button
-                            onClick={() => setIsPaymentModalOpen(true)}
-                            className="flex-1 flex items-center justify-center gap-2 bg-[#d1182b] text-white py-3 px-6 rounded-lg hover:bg-[#40768c] transition-colors duration-200 cursor-pointer"
+                        <Tooltip 
+                            title={!selectedGateway ? "لطفا ابتدا روش پرداخت را انتخاب کنید" : ""} 
+                            arrow 
+                            placement="top"
                         >
-                            <FaCreditCard />
-                            <span>ثبت اطلاعات پرداخت</span>
-                        </button>
+                            <div className="flex-1">
+                                <button
+                                    onClick={() => setIsPaymentModalOpen(true)}
+                                    disabled={!selectedGateway}
+                                    className={`flex-1 w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 ${
+                                        selectedGateway 
+                                            ? 'bg-[#d1182b] text-white hover:bg-[#40768c] cursor-pointer' 
+                                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    }`}
+                                >
+                                    <FaCreditCard />
+                                    <span>ثبت اطلاعات پرداخت</span>
+                                </button>
+                            </div>
+                        </Tooltip>
 
                         <button
                             onClick={handleChangeToOnline}
