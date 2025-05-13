@@ -12,12 +12,6 @@ import Swal from "sweetalert2";
 
 export default function PayOnline({ orderData }) {
     const router = useRouter();
-    // const dispatch = useDispatch();
-    // const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
-    // const estimateData = useSelector((state) => state.payment.estimateData);
-    // const selectedAddress = useSelector((state) => state.address.selectedAddress);
-    // const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
-    // const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
     const user = Cookies.get("user");
     const token = JSON.parse(user).token;
     const [selectedGateway, setSelectedGateway] = useState(null);
@@ -106,6 +100,9 @@ export default function PayOnline({ orderData }) {
                     {/* عنوان و توضیحات */}
                     <div className="mb-6">
                         <h2 className="text-xl font-bold text-gray-800 mb-2">پرداخت آنلاین</h2>
+                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
+                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
+                        <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
                         <p className="text-gray-600 text-sm">لطفاً درگاه پرداخت مورد نظر خود را انتخاب کنید</p>
                     </div>
 
