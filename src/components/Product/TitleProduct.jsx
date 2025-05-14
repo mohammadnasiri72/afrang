@@ -4,6 +4,8 @@ import DescProductDetails from "./DescProductDetails";
 import BasketBox from "./BasketBox";
 
 function TitleProduct({product}) {
+  console.log(product);
+  
   return (
     <>
       <div className="flex flex-wrap bg-white rounded-lg p-2">

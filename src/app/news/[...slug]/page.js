@@ -1,5 +1,5 @@
-import BlogDesc from "@/components/blogDetails/BlogDesc";
-import RelationBlog from "@/components/blogDetails/RelationBlog";
+import BlogDesc from "@/components/blogDetails/BlogDesc.jsx";
+import RelationBlog from "@/components/blogDetails/RelationBlog.jsx";
 import Container from "@/components/container";
 import { getComment } from "@/services/comments/serviceComment";
 

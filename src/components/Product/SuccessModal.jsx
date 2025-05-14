@@ -8,7 +8,7 @@ const SuccessModal = ({ isOpen, onClose }) => {
   const router = useRouter();
 
   const handleGoToCart = () => {
-    router.push('/card');
+    router.push('/cart');
   };
 
   return (

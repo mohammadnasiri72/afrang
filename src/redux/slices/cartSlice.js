@@ -1,14 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCart } from '@/services/cart/cartService';
+import { getCart, getNextCart } from '@/services/cart/cartService';
 import Cookies from 'js-cookie';
-
 
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
-  async (_, { rejectWithValue }) => {
+  async (cartType = 'current', { rejectWithValue }) => {
     try {
-      const response = await getCart(JSON.parse(Cookies.get("user"))?.userId);
-      return response;
+      const userId = JSON.parse(Cookies.get("user"))?.userId;
+      const response = cartType === 'next' 
+        ? await getNextCart(userId)
+        : await getCart(userId);
+      return { data: response, cartType };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -19,30 +21,27 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: [],
-    loading: false,
-    error: null
+    status: 'idle',
+    error: null,
+    cartType: 'current'
   },
-  reducers: {
-    clearCart: (state) => {
-      state.items = [];
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.status = 'loading';
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
-        state.loading = false;
-        state.items = action.payload;
+        state.status = 'succeeded';
+        state.items = action.payload.data;
+        state.cartType = action.payload.cartType;
+        state.error = null;
       })
       .addCase(fetchCart.rejected, (state, action) => {
-        state.loading = false;
+        state.status = 'failed';
         state.error = action.payload;
       });
-  }
+  },
 });
 
-export const { clearCart } = cartSlice.actions;
 export default cartSlice.reducer; 

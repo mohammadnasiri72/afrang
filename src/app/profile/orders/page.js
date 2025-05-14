@@ -1,7 +1,7 @@
 import HeaderCard from "@/components/Card/HeaderCard";
 import Container from "@/components/container";
-import BodyOrder from "@/components/order/BodyOrder";
-import BodyPaymentFinal from "@/components/order/BodyPaymentFinal";
+import BodyOrder from "@/components/profile/order/BodyOrder";
+import BodyPaymentFinal from "@/components/profile/order/BodyPaymentFinal";
 import { getOrder } from "@/services/order/orderService";
 import { cookies } from 'next/headers';
 

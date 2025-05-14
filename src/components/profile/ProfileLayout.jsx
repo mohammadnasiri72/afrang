@@ -21,7 +21,7 @@ import {
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
     { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
-
+    { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
 ];
 
 const generateRandomUserId = () => {

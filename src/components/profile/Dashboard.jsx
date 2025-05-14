@@ -1,118 +1,141 @@
 "use client";
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { FaShoppingBag, FaHeart, FaBox, FaClock, FaChartLine, FaArrowUp, FaArrowDown, FaAddressBook, FaUser, FaClipboardList, FaTimesCircle } from 'react-icons/fa';
-import { getdataDashboard } from '@/services/dashboard/dashboardService';
-import Cookies from 'js-cookie';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+    FaShoppingBag,
+    FaHeart,
+    FaBox,
+    FaClock,
+    FaChartLine,
+    FaArrowUp,
+    FaArrowDown,
+    FaAddressBook,
+    FaUser,
+    FaClipboardList,
+    FaTimesCircle,
+    FaEye,
+} from "react-icons/fa";
+import { getdataDashboard } from "@/services/dashboard/dashboardService";
+import { getRecentViews as getRecentViewsAPI } from "@/services/dashboard/dashboardService";
+import { getRecentViews } from "@/utils/recentViews";
+import Cookies from "js-cookie";
+import { mainDomainImg } from "@/utils/mainDomain";
 
 export default function Dashboard() {
-    const [activeTab, setActiveTab] = useState('overview');
+    const [activeTab, setActiveTab] = useState("overview");
+    const [recentViews, setRecentViews] = useState([]);
     const [dashboardData, setDashboardData] = useState({
         Record: 0,
         Pending: 0,
         Process: 0,
         Done: 0,
-        Cancel: 0
+        Cancel: 0,
     });
 
+
     useEffect(() => {
+        let isMounted = true; // برای جلوگیری از memory leak
+
         const fetchData = async () => {
-            const user = Cookies.get("user");
-            const token = JSON.parse(user).token;
-            const data = await getdataDashboard(token);
-            console.log('Dashboard Data:', data);
-            setDashboardData(data);
+            try {
+                const user = Cookies.get("user");
+                if (!user) return;
+                
+                const token = JSON.parse(user).token;
+                
+                // دریافت داده‌های داشبورد
+                const data = await getdataDashboard(token);
+                if (isMounted) {
+                    setDashboardData(data);
+                }
+
+                // دریافت لیست IDهای بازدید شده از localStorage
+                const viewedIds = getRecentViews();
+
+                if (viewedIds && viewedIds.length > 0) {
+                    // دریافت اطلاعات محصولات از API
+                    const recentViewsData = await getRecentViewsAPI({ ids: viewedIds }, token);
+                    
+                    if (isMounted && Array.isArray(recentViewsData)) {
+                        setRecentViews(recentViewsData);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            }
         };
 
         fetchData();
-    }, []);
+
+        return () => {
+            isMounted = false; // cleanup function
+        };
+    }, []); // فقط یکبار اجرا می‌شود
 
     const stats = [
-        { 
-            title: 'سفارشات ثبت شده', 
-            value: dashboardData.Record.toString(), 
-            icon: FaClipboardList, 
-            color: 'purple',
-            change: '+12%',
-            trend: 'up'
+        {
+            title: "در انتظار پرداخت",
+            value: dashboardData.Pending.toString(),
+            icon: FaClock,
+            color: "yellow",
+            change: "-3%",
+            trend: "down",
         },
-        { 
-            title: 'سفارشات فعال', 
-            value: dashboardData.Process.toString(), 
-            icon: FaShoppingBag, 
-            color: 'green',
-            change: '+8%',
-            trend: 'up'
+        {
+            title: "سفارشات ثبت شده",
+            value: dashboardData.Record.toString(),
+            icon: FaClipboardList,
+            color: "purple",
+            change: "+12%",
+            trend: "up",
         },
-        { 
-            title: 'در انتظار پرداخت', 
-            value: dashboardData.Pending.toString(), 
-            icon: FaClock, 
-            color: 'yellow',
-            change: '-3%',
-            trend: 'down'
+        {
+            title: "سفارشات فعال",
+            value: dashboardData.Process.toString(),
+            icon: FaShoppingBag,
+            color: "green",
+            change: "+8%",
+            trend: "up",
         },
-        { 
-            title: 'سفارشات تحویل شده', 
-            value: dashboardData.Done.toString(), 
-            icon: FaBox, 
-            color: 'blue',
-            change: '+5%',
-            trend: 'up'
+        {
+            title: "سفارشات تحویل شده",
+            value: dashboardData.Done.toString(),
+            icon: FaBox,
+            color: "blue",
+            change: "+5%",
+            trend: "up",
         },
-        { 
-            title: 'سفارشات لغو شده', 
-            value: dashboardData.Cancel.toString(), 
-            icon: FaTimesCircle, 
-            color: 'red',
-            change: '-2%',
-            trend: 'down'
+        {
+            title: "سفارشات لغو شده",
+            value: dashboardData.Cancel.toString(),
+            icon: FaTimesCircle,
+            color: "red",
+            change: "-2%",
+            trend: "down",
         },
     ];
 
-    const recentOrders = [
-        {
-            id: '12345',
-            status: 'در حال پردازش',
-            amount: '۲,۵۰۰,۰۰۰',
-            date: '۱۴۰۲/۱۲/۱۵',
-            items: 3
-        },
-        {
-            id: '12344',
-            status: 'تحویل داده شده',
-            amount: '۱,۸۰۰,۰۰۰',
-            date: '۱۴۰۲/۱۲/۱۰',
-            items: 2
-        },
-        {
-            id: '12343',
-            status: 'در انتظار پرداخت',
-            amount: '۳,۲۰۰,۰۰۰',
-            date: '۱۴۰۲/۱۲/۰۸',
-            items: 4
-        }
-    ];
+   
 
     const recentFavorites = [
         {
             id: 1,
-            name: 'لپ تاپ لنوو',
-            price: '۲۵,۵۰۰,۰۰۰',
-            image: '/placeholder.jpg'
+            name: "لپ تاپ لنوو",
+            price: "۲۵,۵۰۰,۰۰۰",
+            image: "/placeholder.jpg",
         },
         {
             id: 2,
-            name: 'هدفون سامسونگ',
-            price: '۲,۵۰۰,۰۰۰',
-            image: '/placeholder.jpg'
+            name: "هدفون سامسونگ",
+            price: "۲,۵۰۰,۰۰۰",
+            image: "/placeholder.jpg",
         },
         {
             id: 3,
-            name: 'شارژر سریع',
-            price: '۸۵۰,۰۰۰',
-            image: '/placeholder.jpg'
-        }
+            name: "شارژر سریع",
+            price: "۸۵۰,۰۰۰",
+            image: "/placeholder.jpg",
+        },
     ];
 
     return (
@@ -122,49 +145,48 @@ export default function Dashboard() {
                 <h1 className="text-2xl font-bold text-gray-800">داشبورد</h1>
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => setActiveTab('overview')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            activeTab === 'overview'
-                                ? 'bg-[#d1182b] text-white'
-                                : 'text-gray-600 hover:bg-gray-100'
-                        }`}
+                        onClick={() => setActiveTab("overview")}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "overview"
+                                ? "bg-[#d1182b] text-white"
+                                : "text-gray-600 hover:bg-gray-100"
+                            }`}
                     >
                         نمای کلی
                     </button>
                     <button
-                        onClick={() => setActiveTab('analytics')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            activeTab === 'analytics'
-                                ? 'bg-[#d1182b] text-white'
-                                : 'text-gray-600 hover:bg-gray-100'
-                        }`}
+                        onClick={() => setActiveTab("analytics")}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "analytics"
+                                ? "bg-[#d1182b] text-white"
+                                : "text-gray-600 hover:bg-gray-100"
+                            }`}
                     >
                         تحلیل و آمار
                     </button>
                 </div>
             </div>
-            
+
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {stats.map((stat, index) => {
                     const Icon = stat.icon;
-                    const TrendIcon = stat.trend === 'up' ? FaArrowUp : FaArrowDown;
-                    
+                    const TrendIcon = stat.trend === "up" ? FaArrowUp : FaArrowDown;
+
                     return (
                         <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-                            <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center justify-center mb-4">
                                 <div className={`p-3 bg-${stat.color}-50 rounded-lg`}>
-                                    <Icon className={`text-${stat.color}-500 text-xl`} />
+                                    <Icon className={`text-${stat.color}-500 text-5xl`} />
                                 </div>
-                                <div className={`flex items-center gap-1 text-sm ${
-                                    stat.trend === 'up' ? 'text-green-500' : 'text-red-500'
-                                }`}>
+                                {/* <div
+                                    className={`flex items-center gap-1 text-sm ${stat.trend === "up" ? "text-green-500" : "text-red-500"
+                                        }`}
+                                >
                                     <TrendIcon className="text-xs" />
                                     <span>{stat.change}</span>
-                                </div>
+                                </div> */}
                             </div>
-                            <p className="text-gray-500 text-sm mb-1">{stat.title}</p>
-                            <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                            <p className="text-gray-500 text-sm mb-1 text-center">{stat.title}</p>
+                            <p className="text-2xl font-bold text-gray-800 text-center">{stat.value}</p>
                         </div>
                     );
                 })}
@@ -172,46 +194,60 @@ export default function Dashboard() {
 
             {/* Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Recent Orders */}
+                {/* Recent Views */}
                 <div className="lg:col-span-2 bg-white rounded-lg shadow-sm">
                     <div className="p-6 border-b">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-gray-800">سفارشات اخیر</h3>
-                            <Link 
-                                href="/profile/orders"
-                                className="text-[#d1182b] text-sm hover:underline"
-                            >
-                                مشاهده همه
-                            </Link>
+                            <h3 className="text-lg font-semibold text-gray-800">
+                                آخرین بازدیدها
+                            </h3>
                         </div>
                     </div>
                     <div className="p-6">
-                        <div className="space-y-4">
-                            {recentOrders.map((order) => (
-                                <div key={order.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                    <div className="space-y-1">
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-medium text-gray-800">سفارش #{order.id}</p>
-                                            <span className={`px-2 py-1 rounded-full text-xs ${
-                                                order.status === 'در حال پردازش' 
-                                                    ? 'bg-blue-100 text-blue-600'
-                                                    : order.status === 'تحویل داده شده'
-                                                    ? 'bg-green-100 text-green-600'
-                                                    : 'bg-yellow-100 text-yellow-600'
-                                            }`}>
-                                                {order.status}
-                                            </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {Array.isArray(recentViews) && recentViews.length > 0 ? (
+                                recentViews.map((item) => (
+                                    <Link
+                                        href={item.url}
+                                        key={item.productId}
+                                        className="group bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+                                    >
+                                        <div className="aspect-square w-full bg-gray-100 relative overflow-hidden">
+                                            {item.image && (
+                                                <img
+                                                    src={mainDomainImg + item.image}
+                                                    alt={item.title}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                />
+                                            )}
                                         </div>
-                                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                                            <span>{order.date}</span>
-                                            <span>{order.items} کالا</span>
+                                        <div className="p-4">
+                                            <h4 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12">
+                                                {item.title}
+                                            </h4>
+                                            <div className="flex flex-col items-start justify-between gap-2">
+                                            <div className="text-xs text-gray-400">
+                                                    {item.categoryTitle}
+                                                </div>
+                                                <div className="text-sm text-gray-500">
+                                                    {item.finalPrice > 0 ? (
+                                                        <span className="text-[#d1182b] font-bold">
+                                                            {item.finalPrice.toLocaleString()} تومان
+                                                        </span>
+                                                    ) : (
+                                                        'تماس بگیرید'
+                                                    )}
+                                                </div>
+                                               
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="text-[#d1182b] font-medium">{order.amount} تومان</p>
-                                    </div>
-                                </div>
-                            ))}
+                                    </Link>
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500 col-span-full">
+                                    هنوز محصولی بازدید نشده است
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -222,8 +258,10 @@ export default function Dashboard() {
                     <div className="bg-white rounded-lg shadow-sm">
                         <div className="p-6 border-b">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold text-gray-800">آخرین علاقه‌مندی‌ها</h3>
-                                <Link 
+                                <h3 className="text-lg font-semibold text-gray-800">
+                                    آخرین علاقه‌مندی‌ها
+                                </h3>
+                                <Link
                                     href="/profile/favorites"
                                     className="text-[#d1182b] text-sm hover:underline"
                                 >
@@ -234,11 +272,18 @@ export default function Dashboard() {
                         <div className="p-6">
                             <div className="space-y-4">
                                 {recentFavorites.map((item) => (
-                                    <div key={item.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                                    <div
+                                        key={item.id}
+                                        className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
+                                    >
                                         <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
                                         <div className="flex-1">
-                                            <p className="font-medium text-gray-800 mb-1">{item.name}</p>
-                                            <p className="text-sm text-gray-500">{item.price} تومان</p>
+                                            <p className="font-medium text-gray-800 mb-1">
+                                                {item.name}
+                                            </p>
+                                            <p className="text-sm text-gray-500">
+                                                {item.price} تومان
+                                            </p>
                                         </div>
                                     </div>
                                 ))}
@@ -248,16 +293,18 @@ export default function Dashboard() {
 
                     {/* Quick Actions */}
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">دسترسی سریع</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                            دسترسی سریع
+                        </h3>
                         <div className="grid grid-cols-2 gap-3">
-                            <Link 
+                            <Link
                                 href="/profile/addresses/new"
                                 className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                             >
                                 <FaAddressBook />
                                 <span>افزودن آدرس</span>
                             </Link>
-                            <Link 
+                            <Link
                                 href="/profile/account"
                                 className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                             >
@@ -270,4 +317,4 @@ export default function Dashboard() {
             </div>
         </div>
     );
-} 
+}

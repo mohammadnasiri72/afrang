@@ -6,7 +6,7 @@ import { FaShoppingCart, FaMapMarkerAlt, FaCreditCard, FaCheckCircle } from "rea
 import { useSelector } from "react-redux";
 
 function HeaderCard() {
-  const [typeArticle, setTypeArticle] = useState("سبد خرید");
+  
   const pathname = usePathname();
   const isCompleteinfosend = pathname.includes("infosend");
   const isCompleteinfopay = pathname.includes("infopay");
@@ -14,7 +14,7 @@ function HeaderCard() {
 
   return (
     <>
-      <div className="bg-[#ebebeb] my-3 py-2 flex justify-center SegmentedCard">
+      {/* <div className="bg-[#ebebeb] my-3 py-2 flex justify-center SegmentedCard">
         <div className="w-60">
           <Segmented
             className="font-semibold text-3xl w-full"
@@ -30,7 +30,7 @@ function HeaderCard() {
             options={["خرید بعدی", "سبد خرید"]}
           />
         </div>
-      </div>
+      </div> */}
       <div className="flex flex-wrap items-center justify-center py-10">
         {/* <div className="md:w-1/3 w-full flex gap-3 text-lg font-semibold md:justify-start justify-center">
           <span>سبد خرید</span>

@@ -35,6 +35,36 @@ export const addToCart = async (productId, warrantyId = -1, userId) => {
   }
 };
 
+export const addToCartNext = async (id) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Cart/next/add?id=${id}`, {});
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+export const moveToCurrentCart = async (id) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Cart/next/back?id=${id}`, {});
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
 export const updateCart = async (cartId, updateType, userId) => {
   try {
     const response = await axios.put(`${mainDomain}/api/Cart/${cartId}`, {
@@ -60,6 +90,16 @@ export const getCart = async (userId) => {
     return response.data;
   } catch (error) {
     console.error("Error getting cart:", error);
+    throw error;
+  }
+};
+
+export const getNextCart = async (userId) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Cart/${userId}/next`);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting next cart:", error);
     throw error;
   }
 };

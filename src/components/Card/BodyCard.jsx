@@ -6,17 +6,21 @@ import { GoShieldCheck } from "react-icons/go";
 import { LuMailbox } from "react-icons/lu";
 import { useSelector, useDispatch } from "react-redux";
 import CartCounter from "../Product/CartCounter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchCart } from "@/redux/slices/cartSlice";
 import { mainDomainImg } from "@/utils/mainDomain";
+import { addToCartNext, moveToCurrentCart } from "@/services/cart/cartService";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { Spin } from "antd";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.cart);
+  const { items, cartType } = useSelector((state) => state.cart);
   const token = JSON.parse(Cookies.get("user"))?.token;
   const router = useRouter();
+  const [loadingItemId, setLoadingItemId] = useState(null);
+  
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
     items?.reduce((sum, item) => {
@@ -34,8 +38,8 @@ const BodyCard = () => {
     }, 0) || 0;
 
   useEffect(() => {
-    dispatch(fetchCart());
-  }, [dispatch]);
+    dispatch(fetchCart(cartType));
+  }, [dispatch, cartType]);
 
   const compeletePay = () => {
     if (!token) {
@@ -43,6 +47,80 @@ const BodyCard = () => {
     } else {
       router.push("/cart/infosend");
     }
+  };
+
+  const handleAddToNextCart = async (id) => {
+    try {
+      setLoadingItemId(id);
+      await addToCartNext(id);
+      dispatch(fetchCart(cartType));
+    } catch (error) {
+      console.error("Error adding to next cart:", error);
+    } finally {
+      setLoadingItemId(null);
+    }
+  };
+
+  const handleMoveToCurrentCart = async (id) => {
+    try {
+      setLoadingItemId(id);
+      await moveToCurrentCart(id);
+      dispatch(fetchCart(cartType));
+    } catch (error) {
+      console.error("Error moving to current cart:", error);
+    } finally {
+      setLoadingItemId(null);
+    }
+  };
+
+  const renderCartCounter = (item) => {
+    if (cartType === 'next') {
+      return (
+        <div className="flex items-center justify-center mt-2 text-gray-600">
+          <span className="text-sm">تعداد: {item.quantity}</span>
+        </div>
+      );
+    }
+
+    return (
+      <CartCounter
+        quantity={item.quantity}
+        productId={item.productId}
+        cartId={item.id}
+      />
+    );
+  };
+
+  const renderActionButton = (item) => {
+    const isLoading = loadingItemId === item.id;
+    const buttonProps = cartType === 'next' 
+      ? {
+          onClick: () => !isLoading && handleMoveToCurrentCart(item.id),
+          text: isLoading ? "در حال انتقال..." : "برگشت به سبد خرید",
+        }
+      : {
+          onClick: () => !isLoading && handleAddToNextCart(item.id),
+          text: isLoading ? "در حال افزودن..." : "افزودن به سبد خرید بعدی",
+        };
+
+    return (
+      <div 
+        onClick={buttonProps.onClick}
+        className={`cursor-pointer text-[#d1182b] text-xs font-semibold flex items-center gap-2 whitespace-nowrap ${isLoading ? 'opacity-50' : 'hover:opacity-80'}`}
+      >
+        {isLoading ? (
+          <>
+            <Spin className="custom-spin" size="small" />
+            <span>{buttonProps.text}</span>
+          </>
+        ) : (
+          <>
+            <span>{buttonProps.text}</span>
+            <FaAngleLeft />
+          </>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -53,7 +131,7 @@ const BodyCard = () => {
             <FaShoppingCart />
           </div>
           <h2 className="text-2xl font-semibold text-[#333] mb-2">
-            سبد خرید شما خالی است
+            {cartType === 'next' ? 'لیست خرید بعدی' : 'سبد خرید'} شما خالی است
           </h2>
           <p className="text-[#666]">
             برای مشاهده محصولات به صفحه اصلی مراجعه کنید
@@ -75,11 +153,7 @@ const BodyCard = () => {
                       src={mainDomainImg + item.image}
                       alt={item.product?.title}
                     />
-                    <CartCounter
-                      quantity={item.quantity}
-                      productId={item.productId}
-                      cartId={item.id}
-                    />
+                    {renderCartCounter(item)}
                   </div>
                   <div className="sm:w-3/4 w-full px-4 py-2 relative">
                     <h3 className="font-semibold text-lg text-[#333] mb-3">
@@ -131,53 +205,57 @@ const BodyCard = () => {
                           <span className="px-2 text-xs">تومان </span>
                         </div>
                       </div>
-                      <div className="cursor-pointer text-[#d1182b] text-xs font-semibold flex items-center whitespace-nowrap">
-                        <span className="">افزودن به سبد خرید بعدی</span>
-                        <FaAngleLeft />
-                      </div>
+                      {renderActionButton(item)}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
-            <div className="bg-[#ececec] p-3 rounded-lg">
-              <div className="flex justify-between text-[#444] py-1">
-                <span>قیمت کالاها ({items?.length || 0})</span>
-                <span>{totalPrice.toLocaleString()}</span>
-              </div>
-              {totalDiscount > 0 && (
+          {cartType === 'current' && (
+            <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
+              <div className="bg-[#ececec] p-3 rounded-lg">
                 <div className="flex justify-between text-[#444] py-1">
-                  <span>سود شما از این خرید</span>
-                  <span>{totalDiscount.toLocaleString()}</span>
+                  <span>قیمت کالاها ({items?.length || 0})</span>
+                  <span>{totalPrice.toLocaleString()}</span>
                 </div>
-              )}
-              <hr className="border-[#6666] my-3" />
-              <div className="flex justify-between py-1">
-                <span className="font-semibold">جمع سبد خرید</span>
-                <div className="flex items-center">
-                  <span className="font-semibold px-1 text-xl">
-                    {(totalPrice - totalDiscount).toLocaleString()}
-                  </span>
-                  <span>تومان</span>
+                {totalDiscount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1">
+                    <span>سود شما از این خرید</span>
+                    <span>{totalDiscount.toLocaleString()}</span>
+                  </div>
+                )}
+                <hr className="border-[#6666] my-3" />
+                <div className="flex justify-between py-1">
+                  <span className="font-semibold">جمع سبد خرید</span>
+                  <div className="flex items-center">
+                    <span className="font-semibold px-1 text-xl">
+                      {(totalPrice - totalDiscount).toLocaleString()}
+                    </span>
+                    <span>تومان</span>
+                  </div>
                 </div>
+                <button
+                  onClick={compeletePay}
+                  className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                >
+                  <FaShoppingCart />
+                  <span>پرداخت و تکمیل خرید</span>
+                </button>
               </div>
-              <button
-                onClick={compeletePay}
-                className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
-              >
-                <FaShoppingCart />
-                <span>پرداخت و تکمیل خرید</span>
-              </button>
+              <p className="text-[#444]">
+                این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
+                آنها نمی‌باشد.
+              </p>
             </div>
-            <p className="text-[#444]">
-              این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
-              آنها نمی‌باشد.
-            </p>
-          </div>
+          )}
         </>
       )}
+      <style jsx global>{`
+        .custom-spin .ant-spin-dot-item {
+          background-color: #d1182b !important;
+        }
+      `}</style>
     </div>
   );
 };
