@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AddAddress from "./AddAddress";
+import AddAddress from "@/components/profile/address/AddAddress";
 import DeleteAddress from "./DeleteAddress";
 import Image from "next/image";
 
@@ -10,11 +10,29 @@ function BoxAddress({
   setSelectedAddress,
   onAddressDelete
 }) {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editAddressId, setEditAddressId] = useState(null);
+
+  const handleAddClick = () => {
+    setEditAddressId(null);
+    setIsAddModalOpen(true);
+  };
+
+  const handleEditClick = (id) => {
+    setEditAddressId(id);
+    setIsAddModalOpen(true);
+  };
+
   return (
     <div className="bg-white rounded-xl p-4 shadow-lg">
       <div className="flex items-center justify-between mb-4 border-b pb-3">
         <h2 className="text-2xl font-bold text-gray-800">آدرس‌های ثبت شده</h2>
-        <AddAddress getAddressFu={getAddressFu} />
+        <button
+          onClick={handleAddClick}
+          className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer"
+        >
+          افزودن آدرس تحویل
+        </button>
       </div>
       <div className="w-full space-y-3">
         {addressList && addressList.length > 0 ? (
@@ -68,7 +86,15 @@ function BoxAddress({
                 </div>
               </div>
               <div className="flex justify-end items-center gap-3 mt-3 pt-3 border-t border-gray-100">
-                <AddAddress id={address.id} getAddressFu={getAddressFu} />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditClick(address.id);
+                  }}
+                  className="text-center text-[#fff] rounded-[5px] bg-[#1e88e5] font-[600] px-4 py-2 cursor-pointer"
+                >
+                  ویرایش
+                </button>
                 <DeleteAddress 
                   id={address.id} 
                   getAddressFu={getAddressFu} 
@@ -94,6 +120,16 @@ function BoxAddress({
           </div>
         )}
       </div>
+
+      <AddAddress
+        id={editAddressId}
+        getAddressFu={getAddressFu}
+        isOpen={isAddModalOpen}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setEditAddressId(null);
+        }}
+      />
     </div>
   );
 }
