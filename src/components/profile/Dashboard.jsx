@@ -1,43 +1,72 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaShoppingBag, FaHeart, FaBox, FaClock, FaChartLine, FaArrowUp, FaArrowDown, FaAddressBook, FaUser } from 'react-icons/fa';
+import { FaShoppingBag, FaHeart, FaBox, FaClock, FaChartLine, FaArrowUp, FaArrowDown, FaAddressBook, FaUser, FaClipboardList, FaTimesCircle } from 'react-icons/fa';
+import { getdataDashboard } from '@/services/dashboard/dashboardService';
+import Cookies from 'js-cookie';
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('overview');
+    const [dashboardData, setDashboardData] = useState({
+        Record: 0,
+        Pending: 0,
+        Process: 0,
+        Done: 0,
+        Cancel: 0
+    });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const user = Cookies.get("user");
+            const token = JSON.parse(user).token;
+            const data = await getdataDashboard(token);
+            console.log('Dashboard Data:', data);
+            setDashboardData(data);
+        };
+
+        fetchData();
+    }, []);
 
     const stats = [
         { 
-            title: 'سفارشات فعال', 
-            value: '2', 
-            icon: FaShoppingBag, 
-            color: 'red',
+            title: 'سفارشات ثبت شده', 
+            value: dashboardData.Record.toString(), 
+            icon: FaClipboardList, 
+            color: 'purple',
             change: '+12%',
             trend: 'up'
         },
         { 
-            title: 'سفارشات تحویل شده', 
-            value: '5', 
-            icon: FaBox, 
-            color: 'blue',
+            title: 'سفارشات فعال', 
+            value: dashboardData.Process.toString(), 
+            icon: FaShoppingBag, 
+            color: 'green',
             change: '+8%',
             trend: 'up'
         },
         { 
             title: 'در انتظار پرداخت', 
-            value: '1', 
+            value: dashboardData.Pending.toString(), 
             icon: FaClock, 
             color: 'yellow',
             change: '-3%',
             trend: 'down'
         },
         { 
-            title: 'علاقه‌مندی‌ها', 
-            value: '8', 
-            icon: FaHeart, 
-            color: 'green',
+            title: 'سفارشات تحویل شده', 
+            value: dashboardData.Done.toString(), 
+            icon: FaBox, 
+            color: 'blue',
             change: '+5%',
             trend: 'up'
+        },
+        { 
+            title: 'سفارشات لغو شده', 
+            value: dashboardData.Cancel.toString(), 
+            icon: FaTimesCircle, 
+            color: 'red',
+            change: '-2%',
+            trend: 'down'
         },
     ];
 
@@ -116,7 +145,7 @@ export default function Dashboard() {
             </div>
             
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {stats.map((stat, index) => {
                     const Icon = stat.icon;
                     const TrendIcon = stat.trend === 'up' ? FaArrowUp : FaArrowDown;
