@@ -15,13 +15,15 @@ import {
     FaSignOutAlt,
     FaChevronLeft,
     FaChevronRight,
-    FaSpinner
+    FaSpinner,
+    FaBuilding
 } from 'react-icons/fa';
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
     { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
     { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
+    { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
 ];
 
 const generateRandomUserId = () => {
@@ -173,7 +175,7 @@ export default function ProfileLayout({ children }) {
                                 onClick={LogoutHandler}
                                 disabled={isLoggingOut}
                                 className={`
-                                    w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg 
+                                    w-full flex items-center justify-start gap-3 px-4 py-3 rounded-lg 
                                     transition-colors cursor-pointer
                                     ${isLoggingOut 
                                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
@@ -207,13 +209,7 @@ export default function ProfileLayout({ children }) {
                 </div>
             </main>
 
-            {/* Mobile Sidebar Overlay */}
-            {/* {isSidebarOpen && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-                    onClick={() => setIsSidebarOpen(false)}
-                />
-            )} */}
+           
         </div>
     );
 } 

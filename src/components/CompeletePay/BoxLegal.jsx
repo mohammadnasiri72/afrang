@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Switch, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedLegal, clearSelectedLegal } from "@/redux/slices/legalIdSlice";
-import AddLegal from "./AddLegal";
+import AddLegal from "@/components/profile/legal/AddLegal";
 import EmptyLegalIcon from "./EmptyLegalIcon";
 import EditLegal from "./EditLegal";
 import DeleteLegal from "./DeleteLegal";
