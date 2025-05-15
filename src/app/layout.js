@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import "@ant-design/v5-patch-for-react-19";
 import "./globals.css";
 import { mainDomainImg } from "@/utils/mainDomain";
+import '@/styles/leaflet.css';
 
 export const metadata = {
   description: "خانه عکاسان افرنگ",

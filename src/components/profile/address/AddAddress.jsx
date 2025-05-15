@@ -12,7 +12,6 @@ import { FaCaretDown, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 import { MdOutlinePhoneAndroid, MdLocationOn } from "react-icons/md";
 import Swal from "sweetalert2";
 import dynamic from 'next/dynamic';
-import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 // Dynamic import for Map components to avoid SSR issues
@@ -36,6 +35,16 @@ const useMapEvent = dynamic(
   () => import('react-leaflet').then((mod) => mod.useMapEvent),
   { ssr: false }
 );
+
+// Create a separate Map component
+const MapComponent = dynamic(() => import('./MapComponent'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300 flex items-center justify-center bg-gray-50">
+      <Spin size="large" />
+    </div>
+  ),
+});
 
 function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   const mapRef = useRef();
@@ -291,6 +300,23 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
     setErrors((prev) => ({ ...prev, selectedProvince: "" }));
   };
 
+  // Add geolocation
+  useEffect(() => {
+    if (useMapToggle && typeof window !== 'undefined') {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setPosition({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.warn('Error getting location:', error);
+          // Fallback to Tehran coordinates
+          setPosition({ lat: 35.6892, lng: 51.3890 });
+        }
+      );
+    }
+  }, [useMapToggle]);
+
   return (
     <Modal
       title={
@@ -321,8 +347,18 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             checked={useMapToggle}
             onChange={(checked) => {
               setUseMapToggle(checked);
-              if (checked && position) {
-                console.log('Map toggled, position:', position);
+              if (checked) {
+                // Get user location when map is enabled
+                navigator.geolocation.getCurrentPosition(
+                  (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setPosition({ lat: latitude, lng: longitude });
+                  },
+                  (error) => {
+                    console.warn('Error getting location:', error);
+                    setPosition({ lat: 35.6892, lng: 51.3890 });
+                  }
+                );
               }
             }}
             className={useMapToggle ? "bg-[#d1182b]" : ""}
@@ -338,27 +374,13 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           )}
         </div>
 
-        {/* Map */}
+        {/* Map Component */}
         {useMapToggle && (
-          <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300">
-            <MapContainer
-              center={position}
-              zoom={13}
-              style={{ height: "100%", width: "100%" }}
-              scrollWheelZoom={true}
-              zoomControl={true}
-              attributionControl={true}
-              doubleClickZoom={false}
-              whenCreated={setMap}
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="© OpenStreetMap"
-                maxZoom={18}
-                minZoom={3}
-              />
-              <LocationMarker />
-            </MapContainer>
+          <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300 relative">
+            <MapComponent
+              position={position}
+              onPositionChange={updatePosition}
+            />
           </div>
         )}
 
@@ -587,6 +609,13 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         }
 
         /* Leaflet Map Styles */
+        .map-container {
+          position: relative;
+          height: 100%;
+          width: 100%;
+          z-index: 1;
+        }
+
         .leaflet-container {
           height: 100%;
           width: 100%;
@@ -594,8 +623,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           font-family: Yekan !important;
         }
 
+        /* Ensure map controls are above other elements */
         .leaflet-control-container {
-          direction: ltr;
+          z-index: 1000;
         }
 
         .leaflet-popup-content {
