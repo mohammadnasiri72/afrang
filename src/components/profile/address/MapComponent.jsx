@@ -25,10 +25,13 @@ const Popup = dynamic(
 // Custom marker icon
 const createCustomIcon = () => {
   return new L.Icon({
-    iconUrl: '/images/marker-icon.svg',
+    iconUrl: '/images/marker-icon.png',
+    iconRetinaUrl: '/images/marker-icon-2x.png',
+    shadowUrl: '/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
+    shadowSize: [41, 41]
   });
 };
 
@@ -76,10 +79,9 @@ const MapComponent = ({ position, onPositionChange }) => {
     // Initialize map icons
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
-      iconUrl: '/images/marker-icon.svg',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
+      iconRetinaUrl: '/images/marker-icon-2x.png',
+      iconUrl: '/images/marker-icon.png',
+      shadowUrl: '/images/marker-shadow.png',
     });
   }, []);
 

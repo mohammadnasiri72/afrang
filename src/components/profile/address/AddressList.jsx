@@ -91,7 +91,7 @@ export default function AddressList() {
         {addresses.map((address) => (
           <div
             key={address.id}
-            className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
+            className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between z-50 relative"
           >
             <div className="flex items-center gap-4 flex-1">
               <div className="flex flex-col">

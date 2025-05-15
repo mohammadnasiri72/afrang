@@ -47,7 +47,6 @@ const MapComponent = dynamic(() => import('./MapComponent'), {
 });
 
 function AddAddress({ getAddressFu, id, isOpen, onClose }) {
-  const mapRef = useRef();
   const [errors, setErrors] = useState({});
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -60,7 +59,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [useMapToggle, setUseMapToggle] = useState(false);
-  const [position, setPosition] = useState({ lat: 35.6892, lng: 51.3890 }); // تهران
+  const [position, setPosition] = useState({ lat: 35.6892, lng: 51.3890 }); // Default to Tehran
   const [map, setMap] = useState(null);
 
   // import sweet alert 2
@@ -93,40 +92,118 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
     }
   }, []);
 
+  // Validation patterns
+  const patterns = {
+    mobile: /^09[0|1|2|3|9][0-9]{8}$/, // شماره موبایل: 09 شروع و 11 رقم
+    nationalCode: /^[0-9]{10}$/, // کد ملی: دقیقاً 10 رقم
+    postalCode: /^[0-9]{10}$/, // کد پستی: دقیقاً 10 رقم
+  };
+
+  // Validation functions
+  const validateMobile = (mobile) => {
+    if (!mobile.trim()) {
+      return "شماره موبایل الزامی است";
+    }
+    if (!patterns.mobile.test(mobile)) {
+      return "شماره موبایل درست نیست";
+    }
+    return "";
+  };
+
+  const validateNationalCode = (code) => {
+    if (!code.trim()) {
+      return "کد ملی الزامی است";
+    }
+    if (!patterns.nationalCode.test(code)) {
+      return "کد ملی درست نیست";
+    }
+    // الگوریتم اعتبارسنجی کد ملی ایران
+    const digits = code.split('').map(Number);
+    const lastDigit = digits[9];
+    const sum = digits.slice(0, 9).reduce((acc, digit, index) => {
+      return acc + (digit * (10 - index));
+    }, 0);
+    const remainder = sum % 11;
+    const isValid = remainder < 2 ? lastDigit === remainder : lastDigit === (11 - remainder);
+    if (!isValid) {
+      return "کد ملی وارد شده معتبر نیست";
+    }
+    return "";
+  };
+
+  const validatePostalCode = (code) => {
+    if (!code.trim()) {
+      return "کد پستی الزامی است";
+    }
+
+    // اطمینان از اینکه فقط اعداد هستند
+    if (!/^\d+$/.test(code)) {
+      return "کد پستی درست نیست";
+    }
+
+    // بررسی طول کد پستی
+    if (code.length !== 10) {
+      return "کد پستی باید 10 رقم باشد";
+    }
+
+    // بررسی اینکه رقم اول صفر نباشد
+    if (code[0] === '0') {
+      return "کد پستی نمی‌تواند با صفر شروع شود";
+    }
+
+    return "";
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
+    // نام و نام خانوادگی
     if (!fullName.trim()) {
       newErrors.fullName = "نام الزامی است";
+    } else if (fullName.trim().length < 3) {
+      newErrors.fullName = "نام باید حداقل 3 حرف باشد";
     }
-    if (!mobile.trim()) {
-      newErrors.mobile = "شماره موبایل الزامی است";
+
+    // شماره موبایل
+    const mobileError = validateMobile(mobile);
+    if (mobileError) {
+      newErrors.mobile = mobileError;
     }
+
+    // استان و شهر
     if (!selectedProvince) {
       newErrors.selectedProvince = "استان الزامی است";
     }
     if (!selectedCity) {
       newErrors.selectedCity = "شهر الزامی است";
     }
-    if (!nationalCode.trim()) {
-      newErrors.nationalCode = "کد ملی الزامی است";
+
+    // کد ملی
+    const nationalCodeError = validateNationalCode(nationalCode);
+    if (nationalCodeError) {
+      newErrors.nationalCode = nationalCodeError;
     }
-    if (!postalCode.trim()) {
-      newErrors.postalCode = "کد پستی الزامی است";
+
+    // کد پستی
+    const postalCodeError = validatePostalCode(postalCode);
+    if (postalCodeError) {
+      newErrors.postalCode = postalCodeError;
     }
+
+    // آدرس
     if (!address.trim()) {
       newErrors.address = "آدرس الزامی است";
+    } else if (address.trim().length < 10) {
+      newErrors.address = "آدرس باید حداقل 10 حرف باشد";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const updatePosition = (newPosition) => {
-    console.log('Updating position:', newPosition);
     if (newPosition && typeof newPosition.lat === 'number' && typeof newPosition.lng === 'number') {
       setPosition(newPosition);
-    } else {
-      console.warn('Invalid position:', newPosition);
     }
   };
 
@@ -135,7 +212,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
     if (!map) return;
 
     const handleMapClick = (e) => {
-      console.log('Map clicked:', e.latlng);
       updatePosition(e.latlng);
     };
 
@@ -167,7 +243,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           dragend: (e) => {
             const marker = e.target;
             const newPos = marker.getLatLng();
-            console.log('Marker dragged to:', newPos);
             updatePosition(newPos);
           },
         }}
@@ -300,23 +375,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
     setErrors((prev) => ({ ...prev, selectedProvince: "" }));
   };
 
-  // Add geolocation
-  useEffect(() => {
-    if (useMapToggle && typeof window !== 'undefined') {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setPosition({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.warn('Error getting location:', error);
-          // Fallback to Tehran coordinates
-          setPosition({ lat: 35.6892, lng: 51.3890 });
-        }
-      );
-    }
-  }, [useMapToggle]);
-
   return (
     <Modal
       title={
@@ -347,19 +405,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             checked={useMapToggle}
             onChange={(checked) => {
               setUseMapToggle(checked);
-              if (checked) {
-                // Get user location when map is enabled
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setPosition({ lat: latitude, lng: longitude });
-                  },
-                  (error) => {
-                    console.warn('Error getting location:', error);
-                    setPosition({ lat: 35.6892, lng: 51.3890 });
-                  }
-                );
-              }
             }}
             className={useMapToggle ? "bg-[#d1182b]" : ""}
           />
@@ -459,16 +504,18 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           <div>
             <label className="block text-gray-700 mb-2">شماره موبایل*</label>
             <input
-              type="text"
+              type="tel"
               value={mobile}
               onChange={(e) => {
-                setMobile(e.target.value);
+                const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 11);
+                setMobile(value);
                 setErrors((prev) => ({ ...prev, mobile: "" }));
               }}
               className={`w-full px-4 py-2 rounded-lg border ${
                 errors.mobile ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
-              placeholder="شماره موبایل"
+              placeholder="09xxxxxxxxx"
+              dir="ltr"
             />
             {errors.mobile && (
               <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>
@@ -481,13 +528,15 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
               type="text"
               value={nationalCode}
               onChange={(e) => {
-                setNationalCode(e.target.value);
+                const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                setNationalCode(value);
                 setErrors((prev) => ({ ...prev, nationalCode: "" }));
               }}
               className={`w-full px-4 py-2 rounded-lg border ${
                 errors.nationalCode ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
-              placeholder="کد ملی"
+              placeholder="کد ملی 10 رقمی"
+              dir="ltr"
             />
             {errors.nationalCode && (
               <p className="text-red-500 text-sm mt-1">{errors.nationalCode}</p>
@@ -498,15 +547,29 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             <label className="block text-gray-700 mb-2">کد پستی*</label>
             <input
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={postalCode}
               onChange={(e) => {
-                setPostalCode(e.target.value);
-                setErrors((prev) => ({ ...prev, postalCode: "" }));
+                const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                setPostalCode(value);
+                // اگر کد پستی کامل شد، اعتبارسنجی کن
+                if (value.length === 10) {
+                  const error = validatePostalCode(value);
+                  if (error) {
+                    setErrors(prev => ({ ...prev, postalCode: error }));
+                  } else {
+                    setErrors(prev => ({ ...prev, postalCode: "" }));
+                  }
+                } else {
+                  setErrors(prev => ({ ...prev, postalCode: "" }));
+                }
               }}
               className={`w-full px-4 py-2 rounded-lg border ${
                 errors.postalCode ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
-              placeholder="کد پستی"
+              placeholder="کد پستی 10 رقمی"
+              dir="ltr"
             />
             {errors.postalCode && (
               <p className="text-red-500 text-sm mt-1">{errors.postalCode}</p>
