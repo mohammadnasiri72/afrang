@@ -1,25 +1,19 @@
 "use client";
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { authServiceSignOut } from "@/services/Auth/authService";
+import { getWalletUser } from '@/services/dashboard/dashboardService';
 import Cookies from 'js-cookie';
-import Swal from "sweetalert2";
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
+    FaAddressBook,
+    FaBuilding,
     FaHome,
     FaShoppingBag,
-    FaUser,
-    FaHeart,
-    FaAddressBook,
     FaSignOutAlt,
-    FaChevronLeft,
-    FaChevronRight,
-    FaSpinner,
-    FaBuilding,
-    FaWallet
+    FaSpinner
 } from 'react-icons/fa';
-import { getWalletUser } from '@/services/dashboard/dashboardService';
+import Swal from "sweetalert2";
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
