@@ -1,25 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import dynamic from 'next/dynamic';
+import { TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 
-// Dynamic imports for map components
+// Only MapContainer needs to be dynamic
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300 flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+      </div>
+    )
+  }
 );
 
 // Custom marker icon
@@ -35,97 +31,68 @@ const createCustomIcon = () => {
   });
 };
 
-// Location Marker Component
-const LocationMarker = ({ position, onPositionChange }) => {
-  const markerRef = useRef(null);
+// Map Controller Component
+const MapController = ({ position }) => {
+  const map = useMap();
 
   useEffect(() => {
-    if (markerRef.current) {
-      markerRef.current.openPopup();
+    if (map && position) {
+      map.setView([position.lat, position.lng], map.getZoom());
     }
-  }, [position]);
+  }, [position, map]);
 
-  return (
-    <Marker
-      ref={markerRef}
-      position={position}
-      icon={createCustomIcon()}
-      draggable={true}
-      eventHandlers={{
-        dragend: (e) => {
-          const marker = e.target;
-          const newPos = marker.getLatLng();
-          onPositionChange(newPos);
-        },
-      }}
-    >
-      <Popup>
-        <div className="text-center">
-          <p>موقعیت انتخاب شده</p>
-          <small className="text-gray-500 text-xs">
-            {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
-          </small>
-        </div>
-      </Popup>
-    </Marker>
-  );
+  return null;
 };
 
-const MapComponent = ({ position, onPositionChange }) => {
-  const mapRef = useRef(null);
-  const [mapInstance, setMapInstance] = useState(null);
-
-  useEffect(() => {
-    // Initialize map icons
-    delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: '/images/marker-icon-2x.png',
-      iconUrl: '/images/marker-icon.png',
-      shadowUrl: '/images/marker-shadow.png',
-    });
-  }, []);
-
-  // Handle map click
-  useEffect(() => {
-    if (!mapInstance) return;
-
-    const handleClick = (e) => {
-      const { lat, lng } = e.latlng;
-      onPositionChange({ lat, lng });
-    };
-
-    mapInstance.on('click', handleClick);
-
-    return () => {
-      mapInstance.off('click', handleClick);
-    };
-  }, [mapInstance, onPositionChange]);
-
+const MapComponent = ({ position, onPositionChange, searchControl }) => {
   return (
-    <div className="map-container">
-      <MapContainer
-        center={position}
-        zoom={13}
-        style={{ height: "100%", width: "100%" }}
-        scrollWheelZoom={true}
-        zoomControl={true}
-        attributionControl={true}
-        doubleClickZoom={false}
-        ref={mapRef}
-        whenReady={(map) => {
-          setMapInstance(map.target);
+    <>
+      <MapController position={position} />
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker
+        position={position}
+        icon={createCustomIcon()}
+        draggable={true}
+        eventHandlers={{
+          dragend: (e) => {
+            const marker = e.target;
+            const newPos = marker.getLatLng();
+            onPositionChange(newPos);
+          },
         }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          maxZoom={18}
-          minZoom={3}
-        />
-        <LocationMarker position={position} onPositionChange={onPositionChange} />
-      </MapContainer>
-    </div>
+        <Popup>
+          <div className="text-center">
+            <p>موقعیت انتخاب شده</p>
+            <small className="text-gray-500 text-xs">
+              {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
+            </small>
+          </div>
+        </Popup>
+      </Marker>
+      {searchControl}
+    </>
   );
 };
 
-export default MapComponent; 
+const MapWrapper = ({ position, onPositionChange, searchControl }) => {
+  return (
+    <MapContainer
+      center={[position.lat, position.lng]}
+      zoom={13}
+      scrollWheelZoom={true}
+      style={{ height: '100%', width: '100%' }}
+    >
+      <MapComponent
+        position={position}
+        onPositionChange={onPositionChange}
+        searchControl={searchControl}
+      />
+    </MapContainer>
+  );
+};
+
+export default MapWrapper; 

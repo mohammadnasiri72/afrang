@@ -16,8 +16,10 @@ import {
     FaChevronLeft,
     FaChevronRight,
     FaSpinner,
-    FaBuilding
+    FaBuilding,
+    FaWallet
 } from 'react-icons/fa';
+import { getWalletUser } from '@/services/dashboard/dashboardService';
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
@@ -34,6 +36,7 @@ export default function ProfileLayout({ children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [user, setUser] = useState(null);
+    const [walletBalance, setWalletBalance] = useState(null);
     const pathname = usePathname();
     const router = useRouter();
 
@@ -76,14 +79,14 @@ export default function ProfileLayout({ children }) {
             }
 
             const parsedUser = JSON.parse(cleanCookie);
-            
+
             // اگر توکن خالی بود، کوکی رو ریست کن
             if (!parsedUser.token) {
                 resetUserCookie();
                 router.push("/");
                 return;
             }
-            
+
             setUser(parsedUser);
         } catch (error) {
             console.error("Error details:", {
@@ -96,11 +99,26 @@ export default function ProfileLayout({ children }) {
         }
     }, []);
 
+    useEffect(() => {
+        const fetchWalletBalance = async () => {
+            if (user?.token) {
+                try {
+                    const balance = await getWalletUser(user.token);
+                    setWalletBalance(balance);
+                } catch (error) {
+                    console.error('خطا در دریافت موجودی کیف پول:', error);
+                }
+            }
+        };
+
+        fetchWalletBalance();
+    }, [user]);
+
     const LogoutHandler = async () => {
         if (isLoggingOut || !user) {
             return;
         }
-        
+
         setIsLoggingOut(true);
         try {
             await authServiceSignOut.signOut(user.token);
@@ -129,6 +147,7 @@ export default function ProfileLayout({ children }) {
         return null;
     }
 
+
     return (
         <div className="min-h-screen bg-[#f6f6f6] flex">
             {/* Sidebar */}
@@ -137,17 +156,37 @@ export default function ProfileLayout({ children }) {
                 transform transition-transform duration-300 ease-in-out lg:block hidden
             `}>
                 <div className="h-full flex flex-col">
-                    <div className="p-6 border-b">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-gray-800">پنل کاربری</h2>
-                            {/* <button
-                                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                                className="lg:hidden text-gray-600 hover:text-gray-800"
-                            >
-                                {isSidebarOpen ? <FaChevronRight /> : <FaChevronLeft />}
-                            </button> */}
+                    {/* بخش اطلاعات کاربر */}
+                    <div className="p-4 border-b">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                {user?.avatar ? (
+                                    <img 
+                                        src={user.avatar} 
+                                        alt={user.displayName} 
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600 text-sm">
+                                        {user?.displayName?.charAt(0) || '?'}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <h2 className="text-sm font-bold text-gray-800 truncate">{user?.displayName}</h2>
+                                <p className="text-xs text-gray-500 truncate">{user?.userId}</p>
+                            </div>
+                        </div>
+                        <div className="mt-3 p-2 bg-gray-50 rounded-lg">
+                            <div className="flex items-center justify-between text-xs">
+                                <span className="text-gray-600">کیف پول:</span>
+                                <span className="font-bold text-[#d1182b]">
+                                    {walletBalance !== null ? `${walletBalance.toLocaleString()} تومان` : 'در حال بارگذاری...'}
+                                </span>
+                            </div>
                         </div>
                     </div>
+
                     <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
                         {menuItems.map((item) => {
                             const Icon = item.icon;
@@ -177,8 +216,8 @@ export default function ProfileLayout({ children }) {
                                 className={`
                                     w-full flex items-center justify-start gap-3 px-4 py-3 rounded-lg 
                                     transition-colors cursor-pointer
-                                    ${isLoggingOut 
-                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                                    ${isLoggingOut
+                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                         : 'text-red-600 hover:bg-red-50'
                                     }
                                 `}
@@ -209,7 +248,7 @@ export default function ProfileLayout({ children }) {
                 </div>
             </main>
 
-           
+
         </div>
     );
 } 

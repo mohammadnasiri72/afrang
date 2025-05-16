@@ -287,20 +287,18 @@ export default function PayOffline({ orderData }) {
                             arrow 
                             placement="top"
                         >
-                            <div className="flex-1">
-                                <button
-                                    onClick={() => setIsPaymentModalOpen(true)}
-                                    disabled={!selectedGateway}
-                                    className={`flex-1 w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 ${
-                                        selectedGateway 
-                                            ? 'bg-[#d1182b] text-white hover:bg-[#40768c] cursor-pointer' 
-                                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                    }`}
-                                >
-                                    <FaCreditCard />
-                                    <span>ثبت اطلاعات پرداخت</span>
-                                </button>
-                            </div>
+                            <button
+                                onClick={() => setIsPaymentModalOpen(true)}
+                                disabled={!selectedGateway}
+                                className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 ${
+                                    selectedGateway 
+                                        ? 'bg-[#d1182b] text-white hover:bg-[#40768c] cursor-pointer' 
+                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                }`}
+                            >
+                                <FaCreditCard />
+                                <span>ثبت اطلاعات پرداخت</span>
+                            </button>
                         </Tooltip>
 
                         <button
@@ -312,7 +310,7 @@ export default function PayOffline({ orderData }) {
                         </button>
 
                         <button
-                            onClick={() => router.push('/order')}
+                            onClick={() => router.push('/profile/orders')}
                             className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
                         >
                             <FaTimes />

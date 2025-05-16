@@ -165,35 +165,6 @@ export default function PayOnline({ orderData }) {
                     {/* دکمه‌های عملیات */}
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
-                            // onClick={async () => {
-                            //     if (selectedGateway && selectedPayment) {
-                            //         try {
-                            //             const selectedGatewayData = gateways.find(g => g.id === selectedGateway);
-                            //             const data = {
-                            //                 langCode: "fa",
-                            //                 addressId: selectedAddress?.id,
-                            //                 legalInfoId: selectedLegal?.id || 0,
-                            //                 shipmentId: selectedShipping?.id,
-                            //                 discountCode: estimateData?.discountCode || "",
-                            //                 paymentId: selectedPayment.id,
-                            //                 gatewayId: selectedGatewayData?.id,
-                            //                 gatewayKey: selectedGatewayData?.itemKey
-                            //             };
-
-                            //             const response = await estimateOrder(data, token);
-                            //             dispatch(setPaymentEstimateData(response));
-                            //             router.push("/card/payment");
-                            //         } catch (error) {
-                            //             Swal.fire({
-                            //                 title: 'خطا',
-                            //                 text: 'در بروزرسانی اطلاعات مشکلی پیش آمده است',
-                            //                 icon: 'error',
-                            //                 confirmButtonText: 'باشه',
-                            //                 confirmButtonColor: '#d1182b'
-                            //             });
-                            //         }
-                            //     }
-                            // }}
                             disabled={!selectedGateway}
                             className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer
                             ${selectedGateway
@@ -214,7 +185,7 @@ export default function PayOnline({ orderData }) {
                         </button>
 
                         <button
-                            onClick={() => router.push('/order')}
+                            onClick={() => router.push('/profile/orders')}
                             className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
                         >
                             <FaTimes />

@@ -13,31 +13,219 @@ import { MdOutlinePhoneAndroid, MdLocationOn } from "react-icons/md";
 import Swal from "sweetalert2";
 import dynamic from 'next/dynamic';
 import L from 'leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import 'leaflet-geosearch/dist/geosearch.css';
+import { useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
-// Dynamic import for Map components to avoid SSR issues
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
-);
-const useMapEvent = dynamic(
-  () => import('react-leaflet').then((mod) => mod.useMapEvent),
-  { ssr: false }
-);
+// Create custom icon function
+const createCustomIcon = () => {
+  return new L.Icon({
+    iconUrl: '/images/marker-icon.png',
+    iconRetinaUrl: '/images/marker-icon-2x.png',
+    shadowUrl: '/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+};
 
-// Create a separate Map component
-const MapComponent = dynamic(() => import('./MapComponent'), {
+// Map Click Handler Component
+const MapClickHandler = ({ onPositionChange }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+
+    const handleClick = (e) => {
+      if (onPositionChange) {
+        onPositionChange(e.latlng);
+      }
+    };
+
+    map.on('click', handleClick);
+
+    return () => {
+      map.off('click', handleClick);
+    };
+  }, [map, onPositionChange]);
+
+  return null;
+};
+
+// Add Search Control Component
+const SearchControl = ({ onLocationSelect }) => {
+  const map = useMap();
+  const searchControlRef = useRef(null);
+
+  useEffect(() => {
+    if (!map) return;
+
+    const provider = new OpenStreetMapProvider();
+    const searchControl = new GeoSearchControl({
+      provider,
+      style: 'bar',
+      showMarker: false,
+      showPopup: false,
+      autoClose: true,
+      retainZoomLevel: false,
+      animateZoom: true,
+      keepResult: true,
+      searchControlPosition: 'topcenter',
+    });
+
+    map.addControl(searchControl);
+    searchControlRef.current = searchControl;
+
+    // Add event listener for search results
+    const handleSearchResult = (e) => {
+      if (onLocationSelect) {
+        onLocationSelect({
+          lat: e.location.lat,
+          lng: e.location.lng
+        });
+      }
+    };
+
+    map.on('geosearch/showlocation', handleSearchResult);
+
+    return () => {
+      if (searchControlRef.current) {
+        map.removeControl(searchControlRef.current);
+      }
+      map.off('geosearch/showlocation', handleSearchResult);
+    };
+  }, [map, onLocationSelect]);
+
+  return null;
+};
+
+// Map Controller Component
+const MapController = ({ position }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (map && position) {
+      map.setView([position.lat, position.lng], map.getZoom());
+    }
+  }, [position, map]);
+
+  return null;
+};
+
+// Custom Search Component
+const CustomSearch = ({ onLocationSelect }) => {
+  const [searchValue, setSearchValue] = useState('');
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const provider = new OpenStreetMapProvider();
+
+  const handleSearch = async (value) => {
+    setSearchValue(value);
+    if (!value.trim()) {
+      setResults([]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const searchResults = await provider.search({ query: value });
+      setResults(searchResults);
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSelect = (result) => {
+    if (onLocationSelect) {
+      onLocationSelect({
+        lat: result.y,
+        lng: result.x
+      });
+    }
+    setSearchValue('');
+    setResults([]);
+  };
+
+  return (
+    <div className="relative mb-4">
+      <div className="relative">
+        <input
+          type="text"
+          value={searchValue}
+          onChange={(e) => handleSearch(e.target.value)}
+          placeholder="جستجوی آدرس..."
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent text-right"
+          dir="rtl"
+        />
+        {isLoading && (
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+            <Spin size="small" />
+          </div>
+        )}
+      </div>
+      {results.length > 0 && (
+        <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-60 overflow-y-auto">
+          {results.map((result, index) => (
+            <div
+              key={index}
+              className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-right border-b border-gray-100 last:border-b-0"
+              onClick={() => handleSelect(result)}
+            >
+              <div className="text-sm text-gray-700">{result.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Map Component
+const MapComponent = ({ position, onPositionChange }) => {
+  return (
+    <MapContainer
+      center={[position.lat, position.lng]}
+      zoom={13}
+      style={{ height: '100%', width: '100%' }}
+    >
+      <MapClickHandler onPositionChange={onPositionChange} />
+      <MapController position={position} />
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker
+        position={position}
+        icon={createCustomIcon()}
+        draggable={true}
+        eventHandlers={{
+          dragend: (e) => {
+            const marker = e.target;
+            const newPos = marker.getLatLng();
+            onPositionChange(newPos);
+          },
+        }}
+      >
+        <Popup>
+          <div className="text-center">
+            <p>موقعیت انتخاب شده</p>
+            <small className="text-gray-500 text-xs">
+              {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
+            </small>
+          </div>
+        </Popup>
+      </Marker>
+    </MapContainer>
+  );
+};
+
+// Dynamic Map Wrapper
+const MapWrapper = dynamic(() => Promise.resolve(MapComponent), {
   ssr: false,
   loading: () => (
     <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300 flex items-center justify-center bg-gray-50">
@@ -413,7 +601,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             انتخاب موقعیت از روی نقشه
           </span>
           {useMapToggle && (
-            <Tooltip title="برای تغییر موقعیت روی نقشه کلیک کنید یا مارکر را بکشید">
+            <Tooltip title="برای تغییر موقعیت روی نقشه کلیک کنید، مارکر را بکشید یا از جستجوی آدرس استفاده کنید">
               <FaMapMarkerAlt className="text-gray-400 cursor-help" />
             </Tooltip>
           )}
@@ -421,12 +609,15 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
 
         {/* Map Component */}
         {useMapToggle && (
-          <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300 relative">
-            <MapComponent
-              position={position}
-              onPositionChange={updatePosition}
-            />
-          </div>
+          <>
+            <CustomSearch onLocationSelect={updatePosition} />
+            <div className="h-[300px] rounded-lg overflow-hidden border border-gray-300 relative">
+              <MapWrapper
+                position={position}
+                onPositionChange={updatePosition}
+              />
+            </div>
+          </>
         )}
 
         {/* Row 1: نام و نام خانوادگی، استان، شهر */}
@@ -673,10 +864,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
 
         /* Leaflet Map Styles */
         .map-container {
-          position: relative;
-          height: 100%;
-          width: 100%;
-          z-index: 1;
+          position: relative !important;
+          height: 100% !important;
+          width: 100% !important;
         }
 
         .leaflet-container {
@@ -766,6 +956,97 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         .leaflet-bottom.leaflet-right {
           margin-bottom: 5px;
           margin-right: 5px;
+        }
+
+        /* Search Control Styles */
+        .geosearch {
+          position: absolute !important;
+          top: 10px !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1000 !important;
+          width: 90% !important;
+          max-width: 400px !important;
+        }
+
+        .geosearch input {
+          width: 100% !important;
+          padding: 12px 16px !important;
+          border: 2px solid #e5e7eb !important;
+          border-radius: 12px !important;
+          font-size: 14px !important;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+          transition: all 0.2s !important;
+          font-family: Yekan !important;
+          direction: rtl !important;
+          background-color: white !important;
+        }
+
+        .geosearch input:focus {
+          outline: none !important;
+          border-color: #d1182b !important;
+          box-shadow: 0 0 0 3px rgba(209, 24, 43, 0.1) !important;
+        }
+
+        .geosearch input::placeholder {
+          color: #9ca3af !important;
+        }
+
+        .geosearch .results {
+          background: white !important;
+          border-radius: 12px !important;
+          margin-top: 8px !important;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+          max-height: 200px !important;
+          overflow-y: auto !important;
+          direction: rtl !important;
+          border: 1px solid #e5e7eb !important;
+        }
+
+        .geosearch .results .result {
+          padding: 12px 16px !important;
+          border-bottom: 1px solid #e5e7eb !important;
+          cursor: pointer !important;
+          transition: background-color 0.2s !important;
+          font-size: 13px !important;
+          color: #374151 !important;
+        }
+
+        .geosearch .results .result:last-child {
+          border-bottom: none !important;
+        }
+
+        .geosearch .results .result:hover {
+          background-color: #f3f4f6 !important;
+        }
+
+        .geosearch .results .result.active {
+          background-color: #fee2e2 !important;
+          color: #d1182b !important;
+        }
+
+        /* Custom scrollbar for results */
+        .geosearch .results::-webkit-scrollbar {
+          width: 6px !important;
+        }
+
+        .geosearch .results::-webkit-scrollbar-track {
+          background: #f1f1f1 !important;
+          border-radius: 3px !important;
+        }
+
+        .geosearch .results::-webkit-scrollbar-thumb {
+          background: #d1d5db !important;
+          border-radius: 3px !important;
+        }
+
+        .geosearch .results::-webkit-scrollbar-thumb:hover {
+          background: #9ca3af !important;
+        }
+
+        /* اطمینان از اینکه کنترل‌های نقشه زیر input جستجو نباشند */
+        .leaflet-control-container .leaflet-top {
+          z-index: 999 !important;
         }
       `}</style>
     </Modal>

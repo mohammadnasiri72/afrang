@@ -37,17 +37,14 @@ export const getdataDashboard = async ( token) => {
 
 export const getRecentViews = async (data, token) => {
   try {
-    console.log('Service - Sending request with data:', data);
     const response = await axios.post(`${mainDomain}/api/Product/GetListByIds`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
     });
-    console.log('Service - Response:', response.data);
     return response.data;
   } catch (err) {
-    console.error('Service - Error:', err);
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
@@ -59,3 +56,22 @@ export const getRecentViews = async (data, token) => {
   }
 };
 
+
+export const getWalletUser = async ( token) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/User/WalletBalance`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};

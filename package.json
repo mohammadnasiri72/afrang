@@ -29,6 +29,7 @@
     "jalaali-js": "^1.2.8",
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^4.2.0",
     "lightningcss": "^1.29.2",
     "moment-jalaali": "^0.10.4",
     "moment-jalali": "^0.3.9",
