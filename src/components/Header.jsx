@@ -20,8 +20,12 @@ export default function Header() {
   const { user: authUser, isLoading } = useAuth();
   const user = useSelector((state) => state.user.user);
   const { items, loading } = useSelector((state) => state.settings);
+  const { items: cartItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
+
+  console.log(cartItems);
+  
 
   const checkAuthStatus = () => {
     const userCookie = Cookies.get("user");
@@ -159,7 +163,7 @@ export default function Header() {
           className="cursor-pointer relative mt-3"
         >
           <Badge
-            count={5}
+            count={cartItems?.length || 0}
             style={{
               fontSize: "10px",
               fontWeight: "bold",

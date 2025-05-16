@@ -16,22 +16,22 @@ function ConfirmModal({ isOpen, onClose, onConfirm, title, message, isLoading })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center">
       <div 
-        className="fixed inset-0 bg-black/30 backdrop-blur-[2px] transition-opacity duration-300"
+        className="fixed inset-0 bg-black/50 backdrop-blur-[2px] transition-opacity duration-300"
         onClick={onClose}
       />
       <div 
-        className="relative bg-white rounded-lg p-4 w-full max-w-sm mx-4 transform transition-all duration-300 scale-100 opacity-100"
+        className="relative bg-white rounded-lg p-6 w-full max-w-sm mx-4 transform transition-all duration-300 scale-100 opacity-100 shadow-xl"
         style={{
           animation: 'modalFadeIn 0.3s ease-out'
         }}
       >
         <div className="text-center">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
-          <p className="text-sm text-gray-600 mb-4">{message}</p>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+          <p className="text-sm text-gray-600 mb-6">{message}</p>
         </div>
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-3">
           <button
             onClick={onClose}
             disabled={isLoading}

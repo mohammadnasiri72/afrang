@@ -1,22 +1,23 @@
 'use client';
 
 import { FaTrash } from "react-icons/fa6";
-import { useDispatch } from 'react-redux';
-import { fetchCart } from '@/redux/slices/cartSlice';
-import { updateCart, deleteCartItem } from '@/services/cart/cartService';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import SuccessModal from './SuccessModal';
+import DeleteProductModal from './DeleteProductModal';
+import { updateCart } from '@/services/cart/cartService';
+import { fetchCart } from '@/redux/slices/cartSlice';
 import Cookies from "js-cookie";
 
 const CartCounter = ({ quantity, productId, cartId }) => {
   const dispatch = useDispatch();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-const userId = JSON.parse(Cookies.get("user"))?.userId
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { cartType } = useSelector((store) => store.cart);
+  const userId = JSON.parse(Cookies.get("user"))?.userId;
+
   const handleIncrement = async () => {
     try {
-      await updateCart(cartId, 1 , userId);
-      dispatch(fetchCart());
-      // setShowSuccessModal(true);
+      await updateCart(cartId, 1, userId);
+      dispatch(fetchCart(cartType));
     } catch (error) {
       console.error('Failed to increment:', error);
     }
@@ -25,20 +26,11 @@ const userId = JSON.parse(Cookies.get("user"))?.userId
   const handleDecrement = async () => {
     if (quantity > 1) {
       try {
-        await updateCart(cartId, -1 , userId);
-        dispatch(fetchCart());
+        await updateCart(cartId, -1, userId);
+        dispatch(fetchCart(cartType));
       } catch (error) {
         console.error('Failed to decrement:', error);
       }
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      await deleteCartItem(cartId , userId);
-      dispatch(fetchCart());
-    } catch (error) {
-      console.error('خطا در حذف محصول:', error);
     }
   };
 
@@ -59,7 +51,7 @@ const userId = JSON.parse(Cookies.get("user"))?.userId
         <div className="w-1/3">
           {quantity === 1 ? (
             <button
-              onClick={handleDelete}
+              onClick={() => setShowDeleteModal(true)}
               className="text-[#d1182b] flex justify-center items-center mx-auto cursor-pointer w-full"
             >
               <FaTrash />
@@ -75,9 +67,11 @@ const userId = JSON.parse(Cookies.get("user"))?.userId
         </div>
       </div>
 
-      <SuccessModal 
-        isOpen={showSuccessModal} 
-        onClose={() => setShowSuccessModal(false)} 
+      <DeleteProductModal 
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        cartId={cartId}
+        cartType={cartType}
       />
     </>
   );
