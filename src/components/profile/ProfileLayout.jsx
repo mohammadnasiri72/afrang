@@ -5,21 +5,27 @@ import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     FaAddressBook,
     FaBuilding,
     FaHome,
     FaShoppingBag,
     FaSignOutAlt,
-    FaSpinner
+    FaSpinner,
+    FaKey,
+    FaUser
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
+import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slice/user';
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
+    { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
     { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
     { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
     { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
+    { id: 'change-password', title: 'تغییر رمز عبور', icon: FaKey, path: '/profile/change-password' },
 ];
 
 const generateRandomUserId = () => {
@@ -27,12 +33,15 @@ const generateRandomUserId = () => {
 };
 
 export default function ProfileLayout({ children }) {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const [user, setUser] = useState(null);
     const [walletBalance, setWalletBalance] = useState(null);
     const pathname = usePathname();
     const router = useRouter();
+    const dispatch = useDispatch();
+    const user = useSelector(selectUser);
+    const userStatus = useSelector(selectUserStatus);
+
+    
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -54,59 +63,31 @@ export default function ProfileLayout({ children }) {
             roles: [],
         };
         Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+        dispatch(setUser(initialData));
     };
 
     useEffect(() => {
-        const userCookie = Cookies.get("user");
-
-        if (!userCookie) {
+        if (!user || !user.token) {
             resetUserCookie();
             router.push("/");
             return;
         }
 
-        try {
-            const cleanCookie = userCookie.trim();
+        // Fetch user profile
+        dispatch(fetchUserProfile());
 
-            if (!cleanCookie) {
-                throw new Error("Empty cookie value");
-            }
-
-            const parsedUser = JSON.parse(cleanCookie);
-
-            // اگر توکن خالی بود، کوکی رو ریست کن
-            if (!parsedUser.token) {
-                resetUserCookie();
-                router.push("/");
-                return;
-            }
-
-            setUser(parsedUser);
-        } catch (error) {
-            console.error("Error details:", {
-                error: error.message,
-                cookieValue: userCookie,
-                cookieType: typeof userCookie
-            });
-            resetUserCookie();
-            router.push("/");
-        }
-    }, []);
-
-    useEffect(() => {
+        // Fetch wallet balance
         const fetchWalletBalance = async () => {
-            if (user?.token) {
-                try {
-                    const balance = await getWalletUser(user.token);
-                    setWalletBalance(balance);
-                } catch (error) {
-                    console.error('خطا در دریافت موجودی کیف پول:', error);
-                }
+            try {
+                const balance = await getWalletUser(user.token);
+                setWalletBalance(balance);
+            } catch (error) {
+                console.error('خطا در دریافت موجودی کیف پول:', error);
             }
         };
 
         fetchWalletBalance();
-    }, [user]);
+    }, [user?.token, dispatch]);
 
     const LogoutHandler = async () => {
         if (isLoggingOut || !user) {
@@ -135,12 +116,12 @@ export default function ProfileLayout({ children }) {
             setIsLoggingOut(false);
         }
     };
-
-    // اگر کاربر وجود نداشت، چیزی رندر نکن
-    if (!user) {
-        return null;
+    
+    if (!user || !user.token || userStatus === 'loading') {
+        return <div className="min-h-screen bg-[#f6f6f6] flex items-center justify-center">
+            <FaSpinner className="text-3xl text-[#d1182b] animate-spin" />
+        </div>;
     }
-
 
     return (
         <div className="min-h-screen bg-[#f6f6f6] flex">
@@ -241,8 +222,6 @@ export default function ProfileLayout({ children }) {
                     </div>
                 </div>
             </main>
-
-
         </div>
     );
 } 

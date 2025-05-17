@@ -50,3 +50,25 @@ export const authServiceSignOut = {
     });
   },
 };
+
+export const changePassword = async (data, token) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/Account/ChangePassword`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'خطا در تغییر رمز عبور');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};

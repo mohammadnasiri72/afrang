@@ -46,7 +46,7 @@ function ResponsiveMenu() {
       const scrollY = window.scrollY;
       const shouldBeSticky = scrollY > 200;
       
-      setIsSticky(shouldBeSticky);
+      // setIsSticky(shouldBeSticky);
     };
 
     window.addEventListener("scroll", handleScroll);

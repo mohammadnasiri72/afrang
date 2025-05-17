@@ -117,7 +117,7 @@ const ProfileDropdown = () => {
         className="flex items-center"
         aria-label="منوی پروفایل"
       >
-        <div className="overflow-hidden transition-all duration-300 cursor-pointer flex items-center justify-center z-50">
+        <div className="overflow-hidden transition-all duration-300 cursor-pointer flex items-center justify-center z-[20000]">
           <FaUser
             className={
               isOpen ? "text-2xl text-white/95" : "text-2xl text-gray-500"
@@ -141,19 +141,19 @@ const ProfileDropdown = () => {
             <div className="p-4 border-b border-gray-100 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden shadow-md cursor-pointer">
                 <img
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover flex items-center justify-center bg-gray-200"
                   src={
                     mainDomain + user?.avatar || "/images/default-avatar.jpg"
                   }
-                  alt={`${user?.displayName || "کاربر"}`}
+                  alt={`${user?.displayName.slice(0, 1) || "کاربر"}`}
                 />
               </div>
               <div className="select-none">
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-bold text-gray-900">
                   {user?.displayName || "کاربر مهمان"}
                 </p>
-                {user?.mobile && (
-                  <p className="text-xs text-gray-500">{user.mobile}</p>
+                {user?.userId && (
+                  <p className="text-xs text-gray-500">{user.userId}</p>
                 )}
               </div>
             </div>
