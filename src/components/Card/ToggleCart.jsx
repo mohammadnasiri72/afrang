@@ -3,7 +3,7 @@
 import { Segmented } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchCart } from '@/redux/slices/cartSlice';
+import { fetchCartData } from '@/redux/slices/cartSlice';
 
 function ToggleCart() {
   const [typeArticle, setTypeArticle] = useState("سبد خرید");
@@ -11,8 +11,9 @@ function ToggleCart() {
 
   const handleToggle = (value) => {
     setTypeArticle(value);
-    // اگر "خرید بعدی" انتخاب شد، درخواست next را ارسال کن
-    dispatch(fetchCart(value === "خرید بعدی" ? 'next' : 'current'));
+    // اگر "خرید بعدی" انتخاب شد، درخواست next را ارسال کن، در غیر این صورت current
+    const cartType = value === "خرید بعدی" ? 'next' : 'current';
+    dispatch(fetchCartData(cartType));
   };
 
   return (

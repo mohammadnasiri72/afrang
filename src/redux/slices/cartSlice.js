@@ -2,18 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getCart, getNextCart } from '@/services/cart/cartService';
 import Cookies from 'js-cookie';
 
-export const fetchCart = createAsyncThunk(
-  'cart/fetchCart',
-  async (cartType = 'current', { rejectWithValue }) => {
-    try {
-      const userId = JSON.parse(Cookies.get("user"))?.userId;
-      const response = cartType === 'next' 
-        ? await getNextCart(userId)
-        : await getCart(userId);
-      return { data: response, cartType };
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+// ایجاد thunk برای دریافت سبد خرید
+export const fetchCartData = createAsyncThunk(
+  'cart/fetchCartData',
+  async (cartType = 'current') => {
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
+    const response = cartType === 'next'
+      ? await getNextCart(userId)
+      : await getCart(userId);
+    return { items: response || [], cartType };
   }
 );
 
@@ -21,27 +18,34 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: [],
-    status: 'idle',
-    error: null,
-    cartType: 'current'
+    cartType: 'current',
+    loading: false,
+    error: null
   },
-  reducers: {},
+  reducers: {
+    updateCart: (state, action) => {
+      state.items = action.payload.items;
+      state.cartType = action.payload.cartType;
+    }
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCart.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchCart.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.items = action.payload.data;
-        state.cartType = action.payload.cartType;
+      .addCase(fetchCartData.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCart.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
+      .addCase(fetchCartData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload.items;
+        state.cartType = action.payload.cartType;
+      })
+      .addCase(fetchCartData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        state.items = [];
       });
-  },
+  }
 });
 
+export const { updateCart } = cartSlice.actions;
 export default cartSlice.reducer; 

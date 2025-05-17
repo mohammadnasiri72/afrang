@@ -72,96 +72,95 @@ function ShoppingDrawer() {
         width={300}
         styles={styles}
       >
-        <div className="flex justify-between items-center pb-3">
-          <span className="text-[#666] text-[15px]">
-            سبد خرید ({items?.length || 0})
-          </span>
-          <IoCloseOutline
-            onClick={onClose}
-            className="text-3xl cursor-pointer hover:bg-[#0001] rounded-full duration-300 p-1"
-          />
-        </div>
-
-        {items?.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10">
-            <div className="text-4xl text-[#d1182b] mb-4">
-              <FaCartShopping />
-            </div>
-            <p className="text-[#666] text-center">
-              سبد خرید شما خالی است
-            </p>
+        <div className="flex flex-col h-full">
+          <div className="flex justify-between items-center pb-3">
+            <span className="text-[#666] text-[15px]">
+              سبد خرید ({items?.length || 0})
+            </span>
+            <IoCloseOutline
+              onClick={onClose}
+              className="text-3xl cursor-pointer hover:bg-[#0001] rounded-full duration-300 p-1"
+            />
           </div>
-        ) : (
-          <>
-            {items?.map((item) => (
-              <div key={item.id}>
-                <div className="flex">
-                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                    {item.image ? (
-                      <img
-                        className="w-full h-full object-cover"
-                        src={mainDomainImg + item.image}
-                        alt={item.title}
-                      />
-                    ) : (
-                      <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
-                        {item.title}
-                      </span>
-                    )}
+
+          {items?.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10">
+              <div className="text-4xl text-[#d1182b] mb-4">
+                <FaCartShopping />
+              </div>
+              <p className="text-[#666] text-center">
+                سبد خرید شما خالی است
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="flex-1 overflow-auto">
+                {items?.map((item) => (
+                  <div key={item.id}>
+                    <div className="flex">
+                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                        {item.image ? (
+                          <img
+                            className="w-full h-full object-cover"
+                            src={mainDomainImg + item.image}
+                            alt={item.title}
+                          />
+                        ) : (
+                          <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
+                            {item.title}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0">
+                        <span className="text-sm line-clamp-2 w-full">{item.title}</span>
+                        <div className="flex items-center">
+                          <span className="font-semibold">
+                            {item.finalPrice.toLocaleString()}
+                          </span>
+                          <span className="px-1 text-xs">تومان</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-500">
+                            تعداد: {item.quantity}
+                          </span>
+                          <FaTrash
+                            onClick={() => handleDeleteClick(item)}
+                            className="text-[#d1182b] cursor-pointer hover:text-[#b91626] transition-colors"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <Divider variant="dashed" dashed />
                   </div>
-                  <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0">
-                    <span className="text-sm line-clamp-2 w-full">{item.title}</span>
-                    <div className="flex items-center">
-                      <span className="font-semibold">
-                        {item.finalPrice.toLocaleString()}
-                      </span>
-                      <span className="px-1 text-xs">تومان</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">
-                        تعداد: {item.quantity}
-                      </span>
-                      <FaTrash
-                        onClick={() => handleDeleteClick(item)}
-                        className="text-[#d1182b] cursor-pointer hover:text-[#b91626] transition-colors"
-                      />
-                    </div>
+                ))}
+              </div>
+
+              <div className="mt-auto pt-4 border-t">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="font-semibold text-[#666] text-[17px]">
+                    جمع خرید:
+                  </span>
+                  <div className="flex items-center font-semibold text-[#666] text-[16px]">
+                    <span>{totalPrice.toLocaleString()}</span>
+                    <span className="px-1">تومان</span>
                   </div>
                 </div>
-                <Divider variant="dashed" dashed />
+                <div>
+                  <Link onClick={onClose} href={"/cart"}>
+                    <button className="w-full bg-[#d1182b] text-white duration-300 hover:bg-[#b91626] cursor-pointer py-3 mb-3 font-semibold rounded-lg">
+                      سبد خرید
+                    </button>
+                  </Link>
+                  <Link onClick={onClose} href={"/cart/infosend"}>
+                    <button className="w-full bg-[#d1182b] text-white duration-300 hover:bg-[#b91626] cursor-pointer py-3 font-semibold rounded-lg">
+                      تسویه حساب
+                    </button>
+                  </Link>
+                </div>
               </div>
-            ))}
-
-            <Divider
-              style={{
-                borderColor: "#666",
-                marginTop: "30px",
-                marginBottom: "10px",
-              }}
-            />
-            <div className="flex justify-between items-center">
-              <span className="font-semibold text-[#666] text-[17px]">
-                جمع خرید:
-              </span>
-              <div className="flex items-center font-semibold text-[#666] text-[16px]">
-                <span>{totalPrice.toLocaleString()}</span>
-                <span className="px-1">تومان</span>
-              </div>
-            </div>
-            <div>
-              <Link onClick={onClose} href={"/cart"}>
-                <button className="w-full bg-[#d1182b] text-white duration-300 hover:bg-[#b91626] cursor-pointer py-3 mt-5 font-semibold rounded-lg">
-                  سبد خرید
-                </button>
-              </Link>
-              <Link onClick={onClose} href={"/cart/infosend"}>
-                <button className="w-full bg-[#d1182b] text-white duration-300 hover:bg-[#b91626] cursor-pointer py-3 mt-5 font-semibold rounded-lg">
-                  تسویه حساب
-                </button>
-              </Link>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </Drawer>
 
       <DeleteProductModal

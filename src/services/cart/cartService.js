@@ -84,21 +84,29 @@ export const updateCart = async (cartId, updateType, userId) => {
   }
 };
 
-export const getCart = async (userId) => {
+export const getCart = async (userId, signal) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Cart/${userId}`);
+    const response = await axios.get(`${mainDomain}/api/Cart/${userId}`, { signal });
     return response.data;
   } catch (error) {
+    if (error.name === 'AbortError') {
+      // Request was aborted, handle silently
+      return;
+    }
     console.error("Error getting cart:", error);
     throw error;
   }
 };
 
-export const getNextCart = async (userId) => {
+export const getNextCart = async (userId, signal) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Cart/${userId}/next`);
+    const response = await axios.get(`${mainDomain}/api/Cart/${userId}/next`, { signal });
     return response.data;
   } catch (error) {
+    if (error.name === 'AbortError') {
+      // Request was aborted, handle silently
+      return;
+    }
     console.error("Error getting next cart:", error);
     throw error;
   }

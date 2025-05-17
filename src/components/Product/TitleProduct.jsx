@@ -4,7 +4,6 @@ import DescProductDetails from "./DescProductDetails";
 import BasketBox from "./BasketBox";
 
 function TitleProduct({product}) {
-  console.log(product);
   
   return (
     <>

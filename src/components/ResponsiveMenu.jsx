@@ -7,7 +7,6 @@ import { FaHome, FaShoppingBag, FaAddressBook, FaBuilding, FaSignOutAlt } from "
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenMenuRes } from "@/redux/slice/menuRes";
 import Link from "next/link";
-import { fetchMenu } from "@/redux/slice/menuRes";
 import Loading from "./Loading";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -25,18 +24,10 @@ function ResponsiveMenu() {
   const router = useRouter();
   const { items, loading, openMenuRes } = useSelector((state) => state.menuRes);
   const [isSticky, setIsSticky] = useState(false);
-  const isRequested = useRef(false);
   const user = JSON.parse(Cookies.get("user") || "{}");
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0 });
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
-
-  useEffect(() => {
-    if (items.length === 0 && !isRequested.current) {
-      isRequested.current = true;
-      dispatch(fetchMenu());
-    }
-  }, [dispatch, items.length]);
 
   useEffect(() => {
     const handleScroll = () => {

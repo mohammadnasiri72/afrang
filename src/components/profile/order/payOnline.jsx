@@ -17,6 +17,7 @@ export default function PayOnline({ orderData }) {
     const [selectedGateway, setSelectedGateway] = useState(null);
     const [gateways, setGateways] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [offlineLoading, setOfflineLoading] = useState(false);
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -63,6 +64,7 @@ export default function PayOnline({ orderData }) {
 
     const handleChangeToOffline = async () => {
         try {
+            setOfflineLoading(true);
             if (orderData?.order?.id) {
                 const data = {
                     orderId: orderData.order.id,
@@ -90,6 +92,8 @@ export default function PayOnline({ orderData }) {
                     container: "toast-modal",
                 },
             });
+        } finally {
+            setOfflineLoading(false);
         }
     };
 
@@ -178,10 +182,17 @@ export default function PayOnline({ orderData }) {
 
                         <button
                             onClick={handleChangeToOffline}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer"
+                            disabled={offlineLoading}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
                         >
-                            <FaExchangeAlt />
-                            <span>تغییر به پرداخت آفلاین</span>
+                            {offlineLoading ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700"></div>
+                            ) : (
+                                <>
+                                    <FaExchangeAlt />
+                                    <span>تغییر به پرداخت آفلاین</span>
+                                </>
+                            )}
                         </button>
 
                         <button

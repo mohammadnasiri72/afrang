@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { deleteCartItem } from "@/services/cart/cartService";
-import { fetchCart } from "@/redux/slices/cartSlice";
+import { fetchCartData } from "@/redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -31,7 +31,7 @@ function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
     setIsLoading(true);
     try {
       await deleteCartItem(cartId, userId);
-      dispatch(fetchCart(cartType));
+      dispatch(fetchCartData(cartType));
       Toast.fire({
         icon: "success",
         text: "محصول با موفقیت از سبد خرید حذف شد",

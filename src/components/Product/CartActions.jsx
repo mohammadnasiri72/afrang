@@ -2,9 +2,9 @@
 
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { addToCart } from '../../services/cart/cartService';
-import { fetchCart } from '@/redux/slices/cartSlice';
+import { fetchCartData } from '@/redux/slices/cartSlice';
 import CartCounter from './CartCounter';
 import SuccessModal from './SuccessModal';
 import Cookies from "js-cookie";
@@ -13,10 +13,6 @@ function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  useEffect(() => {
-    dispatch(fetchCart());
-  }, [dispatch]);
 
   const cartItem = items?.find(item => item.productId === product.id);
  
@@ -39,7 +35,7 @@ function CartActions({ product, selectedWarranty }) {
 
     try {
       await addToCart(product.id, selectedWarranty, userId);
-      dispatch(fetchCart());
+      dispatch(fetchCartData());
       setShowSuccessModal(true);
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -56,7 +52,7 @@ function CartActions({ product, selectedWarranty }) {
               productId={product.id} 
               cartId={cartItem.id}
               onSuccess={() => {
-                dispatch(fetchCart());
+                dispatch(fetchCartData());
                 setShowSuccessModal(true);
               }}
             />

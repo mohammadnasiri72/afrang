@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import DeleteProductModal from './DeleteProductModal';
 import { updateCart } from '@/services/cart/cartService';
-import { fetchCart } from '@/redux/slices/cartSlice';
+import { fetchCartData } from '@/redux/slices/cartSlice';
 import Cookies from "js-cookie";
 
 const CartCounter = ({ quantity, productId, cartId }) => {
@@ -17,7 +17,7 @@ const CartCounter = ({ quantity, productId, cartId }) => {
   const handleIncrement = async () => {
     try {
       await updateCart(cartId, 1, userId);
-      dispatch(fetchCart(cartType));
+      dispatch(fetchCartData(cartType));
     } catch (error) {
       console.error('Failed to increment:', error);
     }
@@ -27,7 +27,7 @@ const CartCounter = ({ quantity, productId, cartId }) => {
     if (quantity > 1) {
       try {
         await updateCart(cartId, -1, userId);
-        dispatch(fetchCart(cartType));
+        dispatch(fetchCartData(cartType));
       } catch (error) {
         console.error('Failed to decrement:', error);
       }

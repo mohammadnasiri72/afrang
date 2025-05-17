@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 export default function PayOffline({ orderData }) {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [onlineLoading, setOnlineLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [paymentInfo, setPaymentInfo] = useState(null);
     const [paymentData, setPaymentData] = useState({
@@ -153,6 +154,7 @@ export default function PayOffline({ orderData }) {
 
     const handleChangeToOnline = async () => {
         try {
+            setOnlineLoading(true);
             if (orderData?.order?.id) {
                 const data = {
                     orderId: orderData.order.id,
@@ -180,6 +182,7 @@ export default function PayOffline({ orderData }) {
                     container: "toast-modal",
                 },
             });
+        } finally {
         }
     };
 
@@ -303,10 +306,17 @@ export default function PayOffline({ orderData }) {
 
                         <button
                             onClick={handleChangeToOnline}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer"
+                            disabled={onlineLoading}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
                         >
-                            <FaExchangeAlt />
-                            <span>تغییر به پرداخت آنلاین</span>
+                            {onlineLoading ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700"></div>
+                            ) : (
+                                <>
+                                    <FaExchangeAlt />
+                                    <span>تغییر به پرداخت آنلاین</span>
+                                </>
+                            )}
                         </button>
 
                         <button

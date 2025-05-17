@@ -9,26 +9,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BsBoxSeam } from "react-icons/bs";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
+import { FaBox, FaKey, FaShoppingCart, FaUser } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
 const generateRandomUserId = () => {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
 const resetUserCookie = () => {
-    const initialData = {
-        token: "",
-        refreshToken: "",
-        expiration: "",
-        userId: generateRandomUserId(),
-        displayName: "",
-        roles: [],
-    };
-    Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+  const initialData = {
+    token: "",
+    refreshToken: "",
+    expiration: "",
+    userId: generateRandomUserId(),
+    displayName: "",
+    roles: [],
+  };
+  Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
 };
 
 const ProfileDropdown = () => {
@@ -36,14 +35,14 @@ const ProfileDropdown = () => {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
 
-    // import sweet alert 2
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-start",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      customClass: "toast-modal",
+  // import sweet alert 2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
   });
 
   const user = JSON.parse(Cookies.get("user"));
@@ -97,15 +96,21 @@ const ProfileDropdown = () => {
     },
     {
       id: 2,
-      label: "تنظیمات حساب",
-      icon: <IoMdSettings className="text-lg" />,
-      href: "/settings",
+      label: "ویرایش پروفایل",
+      icon: <FaUser className="text-lg" />,
+      href: "/profile/edit-profile",
     },
     {
       id: 3,
       label: "سفارش‌های من",
-      icon: <BsBoxSeam className="text-lg" />,
+      icon: <FaBox className="text-lg" />,
       href: "/profile/orders",
+    },
+    {
+      id: 4,
+      label: "تغییر رمز عبور",
+      icon: <FaKey className="text-lg" />,
+      href: "/profile/change-password",
     },
   ];
 
@@ -117,7 +122,7 @@ const ProfileDropdown = () => {
         className="flex items-center"
         aria-label="منوی پروفایل"
       >
-        <div className="overflow-hidden transition-all duration-300 cursor-pointer flex items-center justify-center z-[20000]">
+        <div className="overflow-hidden transition-all duration-300 cursor-pointer flex items-center justify-center z-[10000]">
           <FaUser
             className={
               isOpen ? "text-2xl text-white/95" : "text-2xl text-gray-500"

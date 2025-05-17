@@ -22,7 +22,6 @@ export default function BodyCompeletePay() {
   
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
-  const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
 
   useEffect(() => {
     if (!items || items.length === 0) {

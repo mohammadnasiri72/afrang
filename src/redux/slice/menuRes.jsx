@@ -1,7 +1,6 @@
 "use client";
 
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMenuItems } from "@/services/menuService";
 
 const initialState = {
   openMenuRes: false,
@@ -32,16 +31,4 @@ export const menuResSlice = createSlice({
 });
 
 export const { setOpenMenuRes, setMenuItems, setLoading, setError } = menuResSlice.actions;
-
-export const fetchMenu = () => async (dispatch) => {
-  try {
-    dispatch(setLoading());
-    const items = await fetchMenuItems();
-    dispatch(setMenuItems(items));
-  } catch (error) {
-    console.error("Error fetching menu items:", error);
-    dispatch(setError(error.message));
-  }
-};
-
 export default menuResSlice.reducer;

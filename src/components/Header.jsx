@@ -24,7 +24,6 @@ export default function Header() {
   const disPatch = useDispatch();
   const route = useRouter();
 
-  console.log(cartItems);
   
 
   const checkAuthStatus = () => {

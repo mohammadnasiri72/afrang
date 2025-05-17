@@ -7,6 +7,7 @@ import ExpandableText from "../Product/ExpandableText";
 import AddToCartButton from "./AddToCartButton";
 
 function Products({ products, layout = "list" }) {
+  
   const ProductCard = ({ product }) => (
     <div className="bg-white rounded-lg relative z-50">
       <div className="flex w-full flex-wrap">

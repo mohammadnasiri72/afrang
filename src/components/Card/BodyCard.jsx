@@ -6,10 +6,10 @@ import { GoShieldCheck } from "react-icons/go";
 import { LuMailbox } from "react-icons/lu";
 import { useSelector, useDispatch } from "react-redux";
 import CartCounter from "../Product/CartCounter";
-import { useEffect, useState } from "react";
-import { fetchCart } from "@/redux/slices/cartSlice";
+import { useState } from "react";
+import { updateCart } from "@/redux/slices/cartSlice";
 import { mainDomainImg } from "@/utils/mainDomain";
-import { addToCartNext, moveToCurrentCart } from "@/services/cart/cartService";
+import { addToCartNext, moveToCurrentCart, getCart, getNextCart } from "@/services/cart/cartService";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { Spin } from "antd";
@@ -20,7 +20,7 @@ const BodyCard = () => {
   const token = JSON.parse(Cookies.get("user"))?.token;
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
-  
+
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
     items?.reduce((sum, item) => {
@@ -37,10 +37,6 @@ const BodyCard = () => {
       return sum + (oldPrice - price) * quantity;
     }, 0) || 0;
 
-  useEffect(() => {
-    dispatch(fetchCart(cartType));
-  }, [dispatch, cartType]);
-
   const compeletePay = () => {
     if (!token) {
       router.push("/login?from=card");
@@ -53,7 +49,9 @@ const BodyCard = () => {
     try {
       setLoadingItemId(id);
       await addToCartNext(id);
-      dispatch(fetchCart(cartType));
+      const userId = JSON.parse(Cookies.get("user"))?.userId;
+      const response = await getCart(userId);
+      dispatch(updateCart({ items: response, cartType }));
     } catch (error) {
       console.error("Error adding to next cart:", error);
     } finally {
@@ -65,7 +63,11 @@ const BodyCard = () => {
     try {
       setLoadingItemId(id);
       await moveToCurrentCart(id);
-      dispatch(fetchCart(cartType));
+      const userId = JSON.parse(Cookies.get("user"))?.userId;
+      const response = cartType === 'next'
+        ? await getNextCart(userId)
+        : await getCart(userId);
+      dispatch(updateCart({ items: response, cartType }));
     } catch (error) {
       console.error("Error moving to current cart:", error);
     } finally {
@@ -93,18 +95,18 @@ const BodyCard = () => {
 
   const renderActionButton = (item) => {
     const isLoading = loadingItemId === item.id;
-    const buttonProps = cartType === 'next' 
+    const buttonProps = cartType === 'next'
       ? {
-          onClick: () => !isLoading && handleMoveToCurrentCart(item.id),
-          text: isLoading ? "در حال انتقال..." : "برگشت به سبد خرید",
-        }
+        onClick: () => !isLoading && handleMoveToCurrentCart(item.id),
+        text: isLoading ? "در حال انتقال..." : "برگشت به سبد خرید",
+      }
       : {
-          onClick: () => !isLoading && handleAddToNextCart(item.id),
-          text: isLoading ? "در حال افزودن..." : "افزودن به سبد خرید بعدی",
-        };
+        onClick: () => !isLoading && handleAddToNextCart(item.id),
+        text: isLoading ? "در حال افزودن..." : "افزودن به سبد خرید بعدی",
+      };
 
     return (
-      <div 
+      <div
         onClick={buttonProps.onClick}
         className={`cursor-pointer text-[#d1182b] text-xs font-semibold flex items-center gap-2 whitespace-nowrap ${isLoading ? 'opacity-50' : 'hover:opacity-80'}`}
       >
@@ -121,6 +123,18 @@ const BodyCard = () => {
         )}
       </div>
     );
+  };
+
+  const getImageUrl = (image) => {
+    if (!image) return defaultImage;
+    try {
+      if (image.startsWith('http')) {
+        return image;
+      }
+      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
+    } catch (error) {
+      return defaultImage;
+    }
   };
 
   return (
@@ -150,7 +164,7 @@ const BodyCard = () => {
                     <img
                       style={{ filter: " brightness(0.8)" }}
                       className="w-full rounded-lg"
-                      src={mainDomainImg + item.image}
+                      src={getImageUrl(item.image)}
                       alt={item.product?.title}
                     />
                     {renderCartCounter(item)}
