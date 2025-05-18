@@ -8,6 +8,8 @@ import { fetchCartData } from '@/redux/slices/cartSlice';
 import CartCounter from './CartCounter';
 import SuccessModal from './SuccessModal';
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { FaShoppingBasket } from "react-icons/fa";
 
 function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
@@ -15,7 +17,6 @@ function CartActions({ product, selectedWarranty }) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const cartItem = items?.find(item => item.productId === product.id);
- 
 
   const handleAddToCart = async () => {
     const userCookie = Cookies.get("user");
@@ -47,15 +48,27 @@ function CartActions({ product, selectedWarranty }) {
       <div className="mt-5 flex flex-col gap-2">
         {product.canAddCart ? (
           cartItem ? (
-            <CartCounter 
-              quantity={cartItem.quantity} 
-              productId={product.id} 
-              cartId={cartItem.id}
-              onSuccess={() => {
-                dispatch(fetchCartData());
-                setShowSuccessModal(true);
-              }}
-            />
+            <div className="flex flex-col justify-center items-center">
+              <Link 
+                href="/cart" 
+                className="h-full flex items-center bg-[#40768c] text-white rounded-sm hover:bg-[#2f5a6a] transition-all duration-300 group px-5 py-2"
+              >
+                <div className="flex items-center gap-2">
+                  <FaShoppingBasket className="text-lg group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-sm">سبد خرید</span>
+                </div>
+              </Link>
+              <CartCounter 
+                quantity={cartItem.quantity} 
+                productId={product.id} 
+                cartId={cartItem.id}
+                onSuccess={() => {
+                  dispatch(fetchCartData());
+                  setShowSuccessModal(true);
+                }}
+              />
+              
+            </div>
           ) : (
             <button 
               onClick={handleAddToCart}

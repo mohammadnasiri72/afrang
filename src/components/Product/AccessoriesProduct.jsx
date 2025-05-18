@@ -3,21 +3,33 @@
 import { mainDomainImg } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaAngleLeft } from "react-icons/fa6";
 import { SlBasket } from "react-icons/sl";
+import { getRelatedProductsByIdString } from "@/services/products/productService";
 
 function AccessoriesProduct({ product }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      if (product.product?.relatedId) {
+        const result = await getRelatedProductsByIdString(product.product.relatedId);
+        setRelatedProducts(result || []);
+      }
+    };
+
+    fetchRelatedProducts();
+  }, [product.product?.relatedId]);
 
   // Get unique categories from relatedProducts
-  const categories = [...new Set(product.relatedProducts.map(item => item.categoryTitle))];
+  const categories = [...new Set(relatedProducts.map(item => item.categoryTitle))];
 
   // Filter products based on selected category
-  const filteredProducts = product.relatedProducts.filter(
+  const filteredProducts = relatedProducts.filter(
     item => item.categoryTitle === categories[accessoriesProductId - 1]
   );
-
 
   return (
     <>

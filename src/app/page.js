@@ -1,31 +1,55 @@
 import Loading from "@/components/Loading";
+import { getBlogs } from "@/services/blogs/blogService";
+import { getCategory } from "@/services/Category/categoryService";
+import { getProductAction, getProductListId, getProducts } from "@/services/products/productService";
 import React, { Suspense } from "react";
 
 export default async function Home() {
+
+  const { items: blogs } = await getBlogs();
+
+  const newProducts = await getProducts({
+    page: 1,
+    pageSize: 12,
+    orderBy: "8",
+  });
+  const actionProducts = await getProductAction();
+
+  const productList = await getProductListId({
+    ids: actionProducts[0].productIds
+  });
+  const category = await getCategory();
+
+  console.log(category);
+
   return (
     <>
       <Suspense fallback={<Loading />}>
         <div className="bg-[#f6f6f6] overflow-hidden">
           <SliderHome />
-          <div className="sm:px-20 px-2 mt-5">
-            <EidDiscount />
-          </div>
-          <div className="mt-10 sm:px-16 px-2">
-            <ProductMain />
-          </div>
-          <CameraAccessories />
+          {
+            actionProducts && actionProducts.length > 0 &&
+            <div className="sm:px-20 px-2 mt-5">
+              <EidDiscount actionProducts={actionProducts[0]} products={productList} />
+            </div>
+          }
+          {
+            category && category.length > 0 &&
+            <CameraAccessories category={category}/>
+          }
           <BoxImgHome />
-          <div className="sm:px-20 px-2 mt-20">
-            <NewProduct />
-          </div>
-          <div className="mt-5 sm:px-16 px-2">
-            <ProductMain />
-          </div>
+          {
+            newProducts && newProducts.length > 0 &&
+            <div className="sm:px-20 px-2 mt-20">
+              <NewProduct products={newProducts} />
+            </div>
+          }
+
           <div className="secondHand-sec mt-20">
             <SecondHandProduct />
           </div>
           <ArticleHeader />
-          <ArticleSlider />
+          <ArticleSlider blogs={blogs} />
         </div>
       </Suspense>
     </>
@@ -34,7 +58,6 @@ export default async function Home() {
 
 const SliderHome = React.lazy(() => import("@/components/home/SliderHome"));
 const EidDiscount = React.lazy(() => import("@/components/home/EidDiscount"));
-const ProductMain = React.lazy(() => import("@/components/home/ProductMain"));
 const CameraAccessories = React.lazy(() =>
   import("@/components/home/CameraAccessories")
 );

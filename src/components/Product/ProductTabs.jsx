@@ -1,7 +1,7 @@
 'use client';
 
 import { Segmented } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductMain from "../home/ProductMain";
 import AccessoriesProduct from "./AccessoriesProduct";
 import CommentProduct from "./CommentProduct";
@@ -9,9 +9,30 @@ import CriticismProduct from "./CriticismProduct";
 import DetailsProduct from "./DetailsProduct";
 import SpecificationsProduct from "./SpecificationsProduct";
 import BundleProducts from "./BundleProducts";
+import { getRelatedProductsByIdString } from "@/services/products/productService";
 
 function ProductTabs({ product, comments, totalCount }) {
   const [tabProDetails, setTabProDetails] = useState(product.typeId === 3 ? 1 : 2);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [similarProducts, setSimilarProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      // دریافت محصولات مرتبط
+      if (product.product?.relatedId) {
+        const relatedResult = await getRelatedProductsByIdString(product.product.relatedId);
+        setRelatedProducts(relatedResult || []);
+      }
+
+      // دریافت محصولات مشابه
+      if (product.product?.similarId) {
+        const similarResult = await getRelatedProductsByIdString(product.product.similarId);
+        setSimilarProducts(similarResult || []);
+      }
+    };
+
+    fetchProducts();
+  }, [product.product?.relatedId, product.product?.similarId]);
 
   const options = [
     { label: "پرسش و پاسخ", value: 6 },
@@ -71,8 +92,8 @@ function ProductTabs({ product, comments, totalCount }) {
         </div>
       </div>
       <div className="mt-5">
-        {product.relatedProducts && product.relatedProducts.length > 0 && (
-          <ProductMain products={product.relatedProducts} />
+        {relatedProducts.length > 0 && (
+          <ProductMain products={relatedProducts} />
         )}
       </div>
 
@@ -89,8 +110,8 @@ function ProductTabs({ product, comments, totalCount }) {
         </div>
       </div>
       <div className="mt-5">
-        {product.similarProducts && product.similarProducts.length > 0 && (
-          <ProductMain products={product.similarProducts} />
+        {similarProducts.length > 0 && (
+          <ProductMain products={similarProducts} />
         )}
       </div>
     </>

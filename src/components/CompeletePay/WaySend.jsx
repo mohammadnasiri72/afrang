@@ -1,10 +1,11 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { mainDomainImg } from "@/utils/mainDomain";
 
 function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   const defaultImage = "/images/shipping-default.png";
-
+  
   useEffect(() => {
     if (waySendList.shippingWays && waySendList.shippingWays.length === 1) {
       setSelectedShipping(waySendList.shippingWays[0]);
@@ -25,11 +26,10 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-4">
           <div className="relative w-32 h-32 mb-6">
-            <Image
+            <img
               src="/images/empty-shipping.svg"
               alt="روش ارسال"
-              fill
-              className="object-contain"
+              className="w-full h-full object-contain"
             />
           </div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">ابتدا آدرس خود را ثبت کنید</h3>
@@ -40,6 +40,18 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
       </div>
     );
   }
+
+  const getImageUrl = (image) => {
+    if (!image) return defaultImage;
+    try {
+      if (image.startsWith('http')) {
+        return image;
+      }
+      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
+    } catch (error) {
+      return defaultImage;
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl p-4 shadow-lg">
@@ -53,19 +65,18 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
             onClick={() => handleSelectWay(item)}
             className={`
               w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer
-              ${item.id === selectedShipping?.id 
-                ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-white shadow-md' 
+              ${item.id === selectedShipping?.id
+                ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-white shadow-md'
                 : 'border-gray-100 hover:border-blue-300 hover:shadow-sm'
               }
             `}
           >
             <div className="flex items-center gap-4 w-full">
               <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1.5 shadow-sm">
-                <Image
-                  src={item.image ? mainDomainImg + item.image : defaultImage}
-                  alt={item.title?.length > 20 ? item.title.substring(0, 20) + '...' : item.title}
-                  fill
-                  className="object-contain rounded-md"
+                <img
+                  src={getImageUrl(item.image)}
+                  alt={item.title?.length > 10 ? item.title.substring(0, 10) + '...' : item.title}
+                  className="w-full h-full object-contain rounded-md"
                 />
               </div>
               <div className="flex-1 grid grid-cols-12 gap-3 items-center w-full">

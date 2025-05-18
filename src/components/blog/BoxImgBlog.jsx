@@ -23,7 +23,7 @@ async function BoxImgBlog({
     <Container>
       <div className="flex flex-wrap items-center pt-20">
         {category.map((cat) => (
-          <div key={cat.id} className="p-4 lg:w-[14.286%] sm:w-1/4 w-1/2  ">
+          <div key={cat.id} className="p-4 lg:w-[14.286%] sm:w-1/4 w-1/2">
             <Link
               href={`?${(() => {
                 const params = new URLSearchParams(searchParams);
@@ -37,13 +37,13 @@ async function BoxImgBlog({
               scroll={false}
             >
               <div
-                className={`rounded-[50px] overflow-hidden cursor-pointer border-4 ${
+                className={`rounded-[50px] overflow-hidden cursor-pointer border-4 h-52 ${
                   activeCategory === cat.id.toString()
                     ? "border-teal-500 shadow-lg"
                     : "border-transparent"
                 }`}
               >
-                <img className="w-full" src={cat.img} alt="" />
+                <img className="w-full h-full object-cover" src={cat.img} alt="" />
               </div>
               <p
                 className={`cursor-pointer mt-4 text-lg font-semibold ${

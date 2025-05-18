@@ -1,0 +1,36 @@
+import { mainDomain } from "@/utils/mainDomain";
+import axios from "axios";
+import Swal from "sweetalert2";
+
+// import sweet alert 2
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+});
+
+export const getCategory = async () => {
+    try {
+        const params = {
+            TypeId: 4,
+            LangCode: "fa",
+            IsHome: 1,
+        };
+
+        const response = await axios.get(`${mainDomain}/api/Category`, {
+            params,
+        });
+
+        return response.data;
+    } catch (error) {
+        Toast.fire({
+            icon: "error",
+            text: error.response?.data ? error.response?.data : "خطای شبکه",
+        });
+    }
+};
+
+

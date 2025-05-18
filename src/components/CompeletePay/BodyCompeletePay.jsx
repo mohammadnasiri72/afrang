@@ -68,9 +68,7 @@ export default function BodyCompeletePay() {
     }
   }, [selectedAddress]);
 
-  const handleLegalChange = (legal) => {
-    dispatch(setSelectedLegal(legal));
-  };
+ 
 
   const handleShippingChange = (shipping) => {
     dispatch(setSelectedShipping(shipping));

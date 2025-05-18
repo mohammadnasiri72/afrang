@@ -9,7 +9,7 @@ function PriceProduct({ product }) {
         <div className="text-lg text-blue-500 py-5 mt-5 font-semibold select-none">تماس بگیرید</div>
       }
       {
-       !product.callPriceButton && product.price === 0 &&
+        !product.callPriceButton && product.price === 0 &&
         <div className="text-lg text-blue-500 py-5 mt-5">بدون قیمت</div>
       }
       {
@@ -25,7 +25,7 @@ function PriceProduct({ product }) {
               </div>
               <div className="flex items-center gap-3">
                 <span className="font-semibold text-lg line-through text-[#888]">
-                  {product.price.toLocaleString()}
+                  {product?.price1?.toLocaleString()}
                 </span>
                 <span className="text-white bg-[#d1182b] px-3 py-0.5 rounded-sm">
                   {product.discount}%
@@ -35,12 +35,21 @@ function PriceProduct({ product }) {
           )}
           {product.discount === 0 && (
             <div className="flex flex-col py-5">
-              <div className="flex items-center gap-3">
-                <span className="font-semibold text-2xl">
-                  {product.price.toLocaleString()}
-                </span>
-                <span className="text-[#555]"> تومان</span>
-              </div>
+              {
+                product?.price1 !== 0 &&
+                <div className="flex items-center gap-3">
+                  <span className="font-semibold text-2xl">
+                    {product?.price1?.toLocaleString()}
+                  </span>
+                  <span className="text-[#555]"> تومان</span>
+                </div>
+              }
+              {
+                product?.price1 === 0 &&
+                <div className="flex items-center gap-3">
+                  <span className="text-[#555]"> بدون قیمت</span>
+                </div>
+              }
             </div>
           )}
         </div>

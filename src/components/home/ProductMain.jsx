@@ -6,14 +6,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-import { Pagination, Navigation } from "swiper/modules";
-import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
-import { useEffect } from "react";
 import { mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
+import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
+import { Navigation, Pagination } from "swiper/modules";
+import { useEffect } from "react";
+import Timer from "../ProductList/Timer";
+import CountdownTimer from './CountdownTimer';
 
 export default function ProductMain({ products }) {
   // useEffect(() => {
@@ -21,6 +23,18 @@ export default function ProductMain({ products }) {
   //     console.log(products);
   //   }
   // }, [products]);
+
+  const getImageUrl = (image) => {
+    if (!image) return defaultImage;
+    try {
+      if (image.startsWith('http')) {
+        return image;
+      }
+      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
+    } catch (error) {
+      return defaultImage;
+    }
+  };
   return (
     <>
       <Swiper
@@ -67,40 +81,12 @@ export default function ProductMain({ products }) {
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-cover"
                       style={{ filter: " brightness(0.95)" }}
-                      src={mainDomainImg + product.image}
-                      // src="/images/gallery/image11.jpg"
+                      src={getImageUrl(product.image)}
                       alt={product.title}
                     />
                   </Link>
                   <div className="p-4">
-                    {/* <div className="sm:flex hidden justify-center gap-2 group-hover:-translate-y-1/2 translate-y-0 duration-300 opacity-0 group-hover:opacity-100">
-                      <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
-                        <span className="text-[#d1182b] font-semibold">22</span>
-                        <span className="pr-1">ساعت</span>
-                      </div>
-                      <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
-                        <span className="text-[#d1182b] font-semibold">11</span>
-                        <span className="pr-1">دقیقه</span>
-                      </div>
-                      <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
-                        <span className="text-[#d1182b] font-semibold">15</span>
-                        <span className="pr-1">ثانیه</span>
-                      </div>
-                    </div>
-                    <div className="sm:hidden flex justify-center gap-2 -translate-y-1/2 duration-300  opacity-100">
-                      <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
-                        <span className="text-[#d1182b] font-semibold">22</span>
-                        <span className="pr-1">ساعت</span>
-                      </div>
-                      <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
-                        <span className="text-[#d1182b] font-semibold">11</span>
-                        <span className="pr-1">دقیقه</span>
-                      </div>
-                      <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
-                        <span className="text-[#d1182b] font-semibold">15</span>
-                        <span className="pr-1">ثانیه</span>
-                      </div>
-                    </div> */}
+                    {product.salePlanTimer && <CountdownTimer targetDate={product.salePlanTimer} />}
                     <Link
                       href={product.url}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer"
@@ -193,6 +179,8 @@ export default function ProductMain({ products }) {
                         </div>
                       </div>
                     }
+
+
                   </div>
                 </div>
               </div>

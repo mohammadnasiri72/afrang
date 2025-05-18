@@ -80,7 +80,7 @@ function SelectCategoryFilter() {
     else
       params.delete("maxPrice");
 
-    router.push(`/product?${params.toString()}`, { scroll: false });
+    router.push(`/products?${params.toString()}`, { scroll: false });
   };
 
   const handleFilterChange = () => {
@@ -100,7 +100,7 @@ function SelectCategoryFilter() {
       minPrice: "",
       maxPrice: "",
     });
-    router.push("/product", { scroll: false });
+    router.push("/products", { scroll: false });
   };
 
   const handleChange = (event, newValue) => {

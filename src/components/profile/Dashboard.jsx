@@ -40,9 +40,9 @@ export default function Dashboard() {
             try {
                 const user = Cookies.get("user");
                 if (!user) return;
-                
+
                 const token = JSON.parse(user).token;
-                
+
                 // دریافت داده‌های داشبورد
                 const data = await getdataDashboard(token);
                 if (isMounted) {
@@ -55,7 +55,7 @@ export default function Dashboard() {
                 if (viewedIds && viewedIds.length > 0) {
                     // دریافت اطلاعات محصولات از API
                     const recentViewsData = await getRecentViewsAPI({ ids: viewedIds }, token);
-                    
+
                     if (isMounted && Array.isArray(recentViewsData)) {
                         setRecentViews(recentViewsData);
                     }
@@ -90,7 +90,7 @@ export default function Dashboard() {
             trend: "up",
         },
         {
-            title: "سفارشات فعال",
+            title: "سفارشات درحال پیگیری",
             value: dashboardData.Process.toString(),
             icon: FaShoppingBag,
             color: "green",
@@ -115,7 +115,7 @@ export default function Dashboard() {
         },
     ];
 
-   
+
 
     const recentFavorites = [
         {
@@ -138,6 +138,18 @@ export default function Dashboard() {
         },
     ];
 
+    const getImageUrl = (image) => {
+        if (!image) return defaultImage;
+        try {
+            if (image.startsWith('http')) {
+                return image;
+            }
+            return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
+        } catch (error) {
+            return defaultImage;
+        }
+    };
+
     return (
         <div className="space-y-6">
             {/* Page Header */}
@@ -147,8 +159,8 @@ export default function Dashboard() {
                     <button
                         onClick={() => setActiveTab("overview")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "overview"
-                                ? "bg-[#d1182b] text-white"
-                                : "text-gray-600 hover:bg-gray-100"
+                            ? "bg-[#d1182b] text-white"
+                            : "text-gray-600 hover:bg-gray-100"
                             }`}
                     >
                         نمای کلی
@@ -156,8 +168,8 @@ export default function Dashboard() {
                     <button
                         onClick={() => setActiveTab("analytics")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "analytics"
-                                ? "bg-[#d1182b] text-white"
-                                : "text-gray-600 hover:bg-gray-100"
+                            ? "bg-[#d1182b] text-white"
+                            : "text-gray-600 hover:bg-gray-100"
                             }`}
                     >
                         تحلیل و آمار
@@ -212,12 +224,12 @@ export default function Dashboard() {
                                         key={item.productId}
                                         className="group bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
                                     >
-                                        <div className="aspect-square w-full bg-gray-100 relative overflow-hidden">
+                                        <div className="aspect-square w-full bg-white relative overflow-hidden">
                                             {item.image && (
                                                 <img
-                                                    src={mainDomainImg + item.image}
+                                                    src={getImageUrl(item.image)}
                                                     alt={item.title}
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                                                 />
                                             )}
                                         </div>
@@ -226,7 +238,7 @@ export default function Dashboard() {
                                                 {item.title}
                                             </h4>
                                             <div className="flex flex-col items-start justify-between gap-2">
-                                            <div className="text-xs text-gray-400">
+                                                <div className="text-xs text-gray-400">
                                                     {item.categoryTitle}
                                                 </div>
                                                 <div className="text-sm text-gray-500">
@@ -238,7 +250,7 @@ export default function Dashboard() {
                                                         'تماس بگیرید'
                                                     )}
                                                 </div>
-                                               
+
                                             </div>
                                         </div>
                                     </Link>

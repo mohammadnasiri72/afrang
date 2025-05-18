@@ -5,8 +5,12 @@ import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
 import Warranties from "./Warranties";
 import { useState } from "react";
+import { useSelector } from 'react-redux';
 
 function BasketBox({ product }) {
+  const { items } = useSelector((state) => state.cart);
+  const isInCart = items?.some(item => item.productId === product.id);
+  
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
   );
@@ -22,6 +26,7 @@ function BasketBox({ product }) {
             selectedWarranty={selectedWarranty}
             setSelectedWarranty={setSelectedWarranty}
             warrantiesArray={warrantiesArray}
+            disabled={isInCart}
           />
         )}
 
@@ -35,7 +40,7 @@ function BasketBox({ product }) {
           <span className="text-sm text-[#333]"> ضمانت اصل بودن کالا </span>
         </div>
 
-        <PriceProduct product={product} />
+        <PriceProduct product={product.product} />
 
         <div className="mt-10 p-4">
           {product?.inventory?.inventorySetting?.showInventory && (
