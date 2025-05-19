@@ -79,7 +79,7 @@ export default function ProductMain({ products }) {
                   )}
                   <Link href={product.url}>
                     <img
-                      className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-cover"
+                      className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain"
                       style={{ filter: " brightness(0.95)" }}
                       src={getImageUrl(product.image)}
                       alt={product.title}

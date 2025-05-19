@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { mainDomain } from "@/utils/mainDomain";
+import { mainDomain, mainDomainImg } from "@/utils/mainDomain";
 import Loading from "../Loading";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -11,6 +11,19 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import { Autoplay, Pagination } from "swiper/modules";
+
+const getImageUrl = (image) => {
+    if (!image) return defaultImage;
+    try {
+      if (image.startsWith('http')) {
+        return image;
+      }
+      return `${mainDomainImg}/${image.replace(/^(~\/|\.\.\/)/g, '')}`;
+    } catch (error) {
+      console.error('Error processing image URL:', error);
+      return defaultImage;
+    }
+  };
 
 const SupportBox = () => {
   const [items, setItems] = useState([]);
@@ -95,8 +108,8 @@ const SupportBox = () => {
             <SwiperSlide key={item.id}>
               <div className="rounded-lg bg-white p-5 flex sm:flex-row flex-col justify-center gap-2 items-center">
                 <img
-                  src={`https://afrangadmin.aitest2.ir${item.image}`}
-                  alt={item.title}
+                  src={getImageUrl(item.image)}
+                  alt={item.id}
                 />
                 <span>{item.title}</span>
               </div>

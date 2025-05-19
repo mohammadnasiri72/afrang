@@ -1,19 +1,13 @@
 "use client";
 
-import {
-  Box,
-  Checkbox,
-  createTheme,
-  FormControlLabel,
-  FormGroup,
-  Slider,
-  ThemeProvider,
-} from "@mui/material";
-import { Collapse, Divider, Switch } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Collapse, Divider, Switch, Skeleton } from "antd";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaAngleUp } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
+import { getCategoryChild } from "@/services/Property/propertyService";
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
@@ -22,27 +16,78 @@ const theme = createTheme({
 function SelectCategoryFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
+
   const [filters, setFilters] = useState({
     category: [],
     minPrice: "",
     maxPrice: "",
   });
 
+  const [apiData, setApiData] = useState({
+    brands: [],
+    categories: {},
+    maxPrice: 100000
+  });
 
+  const [loading, setLoading] = useState(true);
   const [valuePrice, setValuePrice] = useState([0, 100000]);
+  const [defaultMaxPrice, setDefaultMaxPrice] = useState(100000);
+  const [selectedBrands, setSelectedBrands] = useState([]);
   const [valueCategory, setValueCategory] = useState([]);
-  const [activeKeys, setActiveKeys] = useState([]);
+  const [activeKeys, setActiveKeys] = useState(["1"]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [switchStates, setSwitchStates] = useState({
+    available: false,    // محصولات موجود
+    discount: false,     // محصولات تخفیف‌دار
+    vip: false,         // محصولات فروش ویژه
+    price: false        // محصولات قیمت‌دار
+  });
+
+  useEffect(() => {
+    const mainCategoryId = params?.slug?.[0];
+    if (!mainCategoryId) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const result = await getCategoryChild(mainCategoryId);
+        if (result) {
+          setApiData({
+            brands: result.brands || [],
+            categories: result.categories || {},
+            maxPrice: result.maxPrice || 100000
+          });
+          setDefaultMaxPrice(result.maxPrice || 100000);
+          setValuePrice([0, result.maxPrice || 100000]);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const urlCategories = searchParams.get("category") || "";
+    const price1 = searchParams.get("price1");
+    const price2 = searchParams.get("price2");
+
     setFilters({
       category: urlCategories ? urlCategories.split(",") : [],
-      minPrice: searchParams.get("minPrice") || "",
-      maxPrice: searchParams.get("maxPrice") || "",
+      minPrice: price1 || "",
+      maxPrice: price2 || "",
     });
+
+    // تنظیم مقادیر اسلایدر بر اساس URL یا مقادیر پیش‌فرض
     setValuePrice([
-      searchParams.get("minPrice") || 0,
-      searchParams.get("maxPrice") || 100000,
+      price1 ? parseInt(price1) : 0,
+      price2 ? parseInt(price2) : defaultMaxPrice
     ]);
 
     if (searchParams.get("category")) {
@@ -51,56 +96,76 @@ function SelectCategoryFilter() {
       setValueCategory([]);
     }
 
-    // Set active keys based on search params
-    const keys = [];
-    if (searchParams.get("minPrice") || searchParams.get("maxPrice")) {
-      keys.push("3"); // Price range section key
+    // خواندن برندهای انتخاب شده از URL در لود اولیه
+    const brandsFromUrl = searchParams.get("BrandId");
+    if (brandsFromUrl) {
+      setSelectedBrands(brandsFromUrl.split(","));
+    } else {
+      setSelectedBrands([]);
     }
-    if (searchParams.get("category")) {
-      keys.push("1"); // Category section key
-    }
-    setActiveKeys(keys);
+  }, [searchParams, defaultMaxPrice]);
+
+  useEffect(() => {
+    setSwitchStates({
+      available: searchParams.get('statusid') === '1',
+      discount: searchParams.get('onlydiscount') === '1',
+      vip: searchParams.get('onlyfest') === '1',
+      price: searchParams.get('onlyprice') === '1'
+    });
   }, [searchParams]);
 
-  const updateURL = (newFilters) => {
-    const params = new URLSearchParams(searchParams);
+  const handleBrandChange = (brandId) => {
+    let newSelectedBrands;
+    if (selectedBrands.includes(brandId)) {
+      newSelectedBrands = selectedBrands.filter(id => id !== brandId);
+    } else {
+      newSelectedBrands = [...selectedBrands, brandId];
+    }
+    setSelectedBrands(newSelectedBrands);
 
-    if (newFilters.category.length > 0)
-      params.set("category", newFilters.category.join(","));
-    else
-      params.delete("category");
-
-    if (newFilters.minPrice && newFilters.minPrice !== 0) 
-      params.set("minPrice", newFilters.minPrice);
-    else
-      params.delete("minPrice");
-
-    if (newFilters.maxPrice && newFilters.maxPrice !== 100000)
-      params.set("maxPrice", newFilters.maxPrice);
-    else
-      params.delete("maxPrice");
-
-    router.push(`/products?${params.toString()}`, { scroll: false });
+    // به‌روزرسانی URL به صورت مستقیم
+    const params = new URLSearchParams(searchParams.toString());
+    if (newSelectedBrands.length > 0) {
+      params.set("BrandId", newSelectedBrands.join(","));
+    } else {
+      params.delete("BrandId");
+    }
+    router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   const handleFilterChange = () => {
-    const newFilters = {
-      ...filters,
-      minPrice: valuePrice[0],
-      maxPrice: valuePrice[1],
-      category: valueCategory,
-    };
-    setFilters(newFilters);
-    updateURL(newFilters);
+    const params = new URLSearchParams(searchParams.toString());
+
+    // فقط اضافه کردن قیمت‌ها به URL
+    if (valuePrice[0] > 0) {
+      params.set("price1", valuePrice[0]);
+    } else {
+      params.delete("price1");
+    }
+
+    if (valuePrice[1] < defaultMaxPrice) {
+      params.set("price2", valuePrice[1]);
+    } else {
+      params.delete("price2");
+    }
+
+    router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   const handleResetFilters = () => {
     setFilters({
-      category: [],
       minPrice: "",
       maxPrice: "",
     });
-    router.push("/products", { scroll: false });
+    setSelectedBrands([]);
+    setValuePrice([0, defaultMaxPrice]);
+    
+    // برگشت به URL اصلی کتگوری فعلی (بدون پارامترها)
+    const mainCategoryId = params?.slug?.[0];
+    const mainCategoryTitle = params?.slug?.[1];
+    if (mainCategoryId && mainCategoryTitle) {
+      router.push(`/products/${mainCategoryId}/${mainCategoryTitle}`);
+    }
   };
 
   const handleChange = (event, newValue) => {
@@ -111,6 +176,133 @@ function SelectCategoryFilter() {
     setActiveKeys(keys);
   };
 
+  const handleCategoryClick = (id, title) => {
+    setLoading(true);
+    setSelectedCategory(id);
+    
+    const params = new URLSearchParams(searchParams.toString());
+    const newUrl = `/products/${id}/${title}${params.toString() ? `?${params.toString()}` : ''}`;
+    router.push(newUrl);
+  };
+
+  const handleSwitchChange = (type) => {
+    const newStates = { ...switchStates, [type]: !switchStates[type] };
+    setSwitchStates(newStates);
+
+    const params = new URLSearchParams(searchParams.toString());
+    
+    // آپدیت پارامترها بر اساس وضعیت جدید سوئیچ‌ها
+    if (newStates.available) {
+      params.set('statusid', '1');
+    } else {
+      params.delete('statusid');
+    }
+
+    if (newStates.discount) {
+      params.set('onlydiscount', '1');
+    } else {
+      params.delete('onlydiscount');
+    }
+
+    if (newStates.vip) {
+      params.set('onlyfest', '1');
+    } else {
+      params.delete('onlyfest');
+    }
+
+    if (newStates.price) {
+      params.set('onlyprice', '1');
+    } else {
+      params.delete('onlyprice');
+    }
+
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  const renderCategories = () => {
+    if (loading) {
+      return Array(5).fill(null).map((_, index) => (
+        <div key={index} className="p-2.5 my-1">
+          <Skeleton.Button
+            active
+            size="large"
+            block
+            style={{ 
+              height: '40px',
+              borderRadius: '6px'
+            }}
+          />
+        </div>
+      ));
+    }
+
+    return Object.entries(apiData.categories).map(([id, title]) => {
+      const isSelected = selectedCategory === id;
+      return (
+        <div
+          key={id}
+          onClick={() => handleCategoryClick(id, title)}
+          className={`p-2.5 my-1 rounded-md transition-all duration-300 cursor-pointer text-right
+            ${isSelected
+              ? 'bg-[#d1182b] text-white hover:bg-[#b31525]'
+              : 'hover:bg-gray-100'
+            }`}
+        >
+          <span className={isSelected ? 'text-white' : 'text-gray-800'}>
+            {title}
+          </span>
+        </div>
+      );
+    });
+  };
+
+  const renderBrands = () => {
+    if (loading) {
+      return Array(5).fill(null).map((_, index) => (
+        <div key={index} className="p-2">
+          <Skeleton.Button
+            active
+            size="large"
+            block
+            style={{ 
+              height: '30px',
+              borderRadius: '6px'
+            }}
+          />
+        </div>
+      ));
+    }
+
+    return apiData.brands.map((brand) => (
+      <div key={brand.id}>
+        <FormControlLabel
+          onChange={() => handleBrandChange(brand.id.toString())}
+          sx={{
+            width: "100%",
+            p: 0,
+            m: 0,
+            "& .MuiFormControlLabel-label": {
+              width: "100%",
+            },
+          }}
+          control={
+            <Checkbox checked={selectedBrands.includes(brand.id.toString())} />
+          }
+          label={
+            <div
+              style={{ fontFamily: "Yekan" }}
+              className="select-none text-sm font-semibold w-full flex items-center justify-between"
+            >
+              <span className="w-full">{brand.title}</span>
+              <span>{brand.titleEn}</span>
+            </div>
+          }
+        />
+        <Divider style={{ margin: 0, padding: 0 }} />
+      </div>
+    ));
+  };
+
   const outerItems = [
     {
       key: "1",
@@ -118,169 +310,21 @@ function SelectCategoryFilter() {
         <div className="text-[16px] font-semibold select-none">دسته بندی</div>
       ),
       children: (
-        <Collapse
-          ghost
-          items={[
-            {
-              key: "A",
-              label: <div className="select-none">همه کالاها</div>,
-              children: (
-                <div>
-                  <FormGroup dir="ltr">
-                    {Array(3)
-                      .fill(null)
-                      .map((e, i) => (
-                        <div key={i}>
-                          <FormControlLabel
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              p: 0,
-                              m: 0,
-                            }}
-                            control={<Checkbox />}
-                            label={
-                              <div
-                                style={{ fontFamily: "Yekan" }}
-                                className="select-none text-sm font-semibold"
-                              >
-                                محصول شماره {i + 1}
-                              </div>
-                            }
-                          />
-                          <Divider style={{ margin: 0, padding: 0 }} />
-                        </div>
-                      ))}
-                  </FormGroup>
-                </div>
-              ),
-            },
-            {
-              key: "B",
-              label: <div className="select-none">دوربین عکاسی</div>,
-              children: (
-                <div>
-                  <FormGroup dir="ltr">
-                    {Array(3)
-                      .fill(null)
-                      .map((e, i) => (
-                        <div key={i}>
-                          <FormControlLabel
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              p: 0,
-                              m: 0,
-                            }}
-                            control={<Checkbox />}
-                            label={
-                              <div
-                                style={{ fontFamily: "Yekan" }}
-                                className="select-none text-sm font-semibold"
-                              >
-                                دوربین شماره {i + 1}
-                              </div>
-                            }
-                          />
-                          <Divider style={{ margin: 0, padding: 0 }} />
-                        </div>
-                      ))}
-                  </FormGroup>
-                </div>
-              ),
-            },
-            {
-              key: "C",
-              label: <div className="select-none">لنز</div>,
-              children: (
-                <div>
-                  <FormGroup dir="ltr">
-                    {Array(2)
-                      .fill(null)
-                      .map((e, i) => (
-                        <div key={i}>
-                          <FormControlLabel
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              p: 0,
-                              m: 0,
-                            }}
-                            control={<Checkbox />}
-                            label={
-                              <div
-                                style={{ fontFamily: "Yekan" }}
-                                className="select-none text-sm font-semibold"
-                              >
-                                لنز شماره {i + 1}
-                              </div>
-                            }
-                          />
-                          <Divider style={{ margin: 0, padding: 0 }} />
-                        </div>
-                      ))}
-                  </FormGroup>
-                </div>
-              ),
-            },
-          ]}
-          expandIcon={({ isActive }) => (
-            <FaAngleUp className={isActive ? "rotateico" : "ico"} />
-          )}
-        />
+        <div style={{ minHeight: loading ? '250px' : 'auto' }}>
+          <FormGroup dir="rtl">
+            {renderCategories()}
+          </FormGroup>
+        </div>
       ),
     },
     {
       key: "2",
       label: <div className="text-[16px] font-semibold select-none">برند</div>,
       children: (
-        <div>
+        <div style={{ minHeight: loading ? '200px' : 'auto' }}>
           <FormGroup>
-            {[
-              { nameFa: "سونی", nameEn: "sony" },
-              { nameFa: "کنون", nameEn: "canon" },
-            ].map((e, i) => (
-              <div key={i}>
-                <FormControlLabel
-                  onChange={() => {
-                    if (valueCategory.includes(e.nameEn)) {
-                      setValueCategory(
-                        valueCategory.filter((ev) => ev !== e.nameEn)
-                      );
-                    } else {
-                      setValueCategory([...valueCategory, e.nameEn]);
-                    }
-                  }}
-                  sx={{
-                    width: "100%",
-
-                    p: 0,
-                    m: 0,
-                    "& .MuiFormControlLabel-label": {
-                      width: "100%",
-                    },
-                  }}
-                  control={
-                    <Checkbox checked={valueCategory.includes(e.nameEn)} />
-                  }
-                  label={
-                    <div
-                      style={{ fontFamily: "Yekan" }}
-                      className="select-none text-sm font-semibold w-full flex justify-between"
-                    >
-                      <span className="w-full">{e.nameFa}</span>
-                      <span>{e.nameEn}</span>
-                    </div>
-                  }
-                />
-                <Divider style={{ margin: 0, padding: 0 }} />
-              </div>
-            ))}
+            {renderBrands()}
           </FormGroup>
-          <div className="flex justify-between items-center pt-8 pb-3">
-            <span className="font-semibold">نمایش محصولات موجود </span>
-            <Switch style={{ color: "red" }} defaultChecked />
-          </div>
         </div>
       ),
     },
@@ -299,26 +343,40 @@ function SelectCategoryFilter() {
               valueLabelDisplay="auto"
               sx={{
                 "& .MuiSlider-rail": {
-                  backgroundColor: "#d8d8d8", // رنگ پس‌زمینه
+                  backgroundColor: "#d8d8d8",
                 },
                 "& .MuiSlider-track": {
-                  backgroundColor: "#40768c", // رنگ مسیر فعال
+                  backgroundColor: "#40768c",
                   border: "none",
                 },
                 "& .MuiSlider-thumb": {
-                  backgroundColor: "#40768c", // رنگ دستگیره
+                  backgroundColor: "#40768c",
                   transform: "translate(50%, -50%)",
                 },
-                direction: "rtl", // جهت را به چپ‌به‌رست نگه می‌داریم
+                direction: "rtl",
               }}
               min={0}
-              max={100000}
-              step={100}
+              max={apiData.maxPrice}
+              step={1000}
             />
           </ThemeProvider>
-          <div className="bg-[#f0f0f0] p-3 rounded-sm flex justify-center select-none">
-            از <span className="font-semibold px-1">{valuePrice[0]}</span> تا
-            <span className="font-semibold px-1">{valuePrice[1]}</span> تومان
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
+              <span className="text-gray-500">از</span>
+              <div className="font-semibold">{valuePrice[0].toLocaleString()} تومان</div>
+            </div>
+            <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
+              <span className="text-gray-500">تا</span>
+              <div className="font-semibold">{valuePrice[1].toLocaleString()} تومان</div>
+            </div>
+          </div>
+          <div className="mt-4">
+            <button
+              onClick={handleFilterChange}
+              className="bg-[#18d1be] w-full rounded-lg duration-300 text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
+            >
+              اعمال فیلتر قیمت
+            </button>
           </div>
         </div>
       ),
@@ -349,13 +407,39 @@ function SelectCategoryFilter() {
           <FaAngleUp className={isActive ? "rotateico" : "ico"} />
         )}
       />
-      <div className="px-3 mt-2">
-        <button
-          onClick={handleFilterChange}
-          className="bg-[#18d1be] w-full rounded-lg duration-300 text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
-        >
-          اعمال
-        </button>
+      <div className="flex flex-col gap-3 mt-2 border-t pt-4">
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">محصولات موجود</span>
+          <Switch 
+            checked={switchStates.available}
+            onChange={() => handleSwitchChange('available')}
+            style={{ color: "red" }} 
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">محصولات تخفیف‌دار</span>
+          <Switch 
+            checked={switchStates.discount}
+            onChange={() => handleSwitchChange('discount')}
+            style={{ color: "red" }} 
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">محصولات فروش ویژه</span>
+          <Switch 
+            checked={switchStates.vip}
+            onChange={() => handleSwitchChange('vip')}
+            style={{ color: "red" }} 
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">محصولات قیمت‌دار</span>
+          <Switch 
+            checked={switchStates.price}
+            onChange={() => handleSwitchChange('price')}
+            style={{ color: "red" }} 
+          />
+        </div>
       </div>
     </>
   );

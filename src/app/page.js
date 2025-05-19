@@ -1,6 +1,7 @@
 import Loading from "@/components/Loading";
 import { getBlogs } from "@/services/blogs/blogService";
 import { getCategory } from "@/services/Category/categoryService";
+import { getItem } from "@/services/Item/item";
 import { getProductAction, getProductListId, getProducts } from "@/services/products/productService";
 import React, { Suspense } from "react";
 
@@ -13,6 +14,12 @@ export default async function Home() {
     pageSize: 12,
     orderBy: "8",
   });
+  const mainBanner = await getItem({
+    TypeId: 1015,
+    LangCode: 'fa',
+    CategoryIdArray: "3293",
+  });
+
   const actionProducts = await getProductAction();
 
   const productList = await getProductListId({
@@ -20,7 +27,6 @@ export default async function Home() {
   });
   const category = await getCategory();
 
-  console.log(category);
 
   return (
     <>
@@ -35,9 +41,12 @@ export default async function Home() {
           }
           {
             category && category.length > 0 &&
-            <CameraAccessories category={category}/>
+            <CameraAccessories category={category} />
           }
-          <BoxImgHome />
+          {
+            mainBanner && mainBanner.length > 0 &&
+            <BoxImgHome mainBanner={mainBanner} />
+          }
           {
             newProducts && newProducts.length > 0 &&
             <div className="sm:px-20 px-2 mt-20">

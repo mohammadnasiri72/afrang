@@ -1,13 +1,13 @@
 import { mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
-import { FaCartShopping, FaEye } from "react-icons/fa6";
+import { FaCartShopping } from "react-icons/fa6";
 import AddToCartButton from "./AddToCartButton";
 import PriceProduct from "./PriceProduct";
 
 
 function Products({ products, layout = "list" }) {
 
-
+  console.log(products);
 
   const getImageUrl = (image) => {
     if (!image) return defaultImage;
@@ -25,7 +25,7 @@ function Products({ products, layout = "list" }) {
     <>
       <div className="bg-white rounded-lg relative z-50">
         <div className="flex w-full flex-wrap">
-          <div className="p-3 md:w-1/3 w-full">
+          <div className="p-3 lg:w-1/3 w-full">
             <Link href={product.url}>
               <img
                 className="w-full h-48 object-contain rounded-lg"
@@ -34,13 +34,12 @@ function Products({ products, layout = "list" }) {
               />
             </Link>
           </div>
-          <div className="p-5 md:w-1/3 w-full">
+          <div className="p-5 lg:w-1/3 w-full">
             <Link href={product.url} className="hover:text-[#d1182b] duration-300">
-
               <h5 className="font-semibold text-lg">{product.title}</h5>
             </Link>
           </div>
-          <div className="md:w-1/3 w-full bg-[#f9f9f9] px-8">
+          <div className="lg:w-1/3 w-full bg-[#f9f9f9] p-4 lg:px-8 ">
             <div className="flex flex-col w-full h-full">
               <PriceProduct product={product} />
               <div className="flex items-center py-2">
@@ -146,12 +145,12 @@ function Products({ products, layout = "list" }) {
     <div
       className={
         layout === "grid"
-          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"
-          : "space-y-5"
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"
+          : "space-y-5 mt-5"
       }
     >
       {products.map((product) => (
-        <div key={product.id} className={layout === "grid" ? "h-full" : "mt-5"}>
+        <div key={product.id} className={layout === "grid" ? "h-full" : ""}>
           {layout === "grid" ? (
             <GridProductCard product={product} />
           ) : (

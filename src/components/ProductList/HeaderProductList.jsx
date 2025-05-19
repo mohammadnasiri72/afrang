@@ -46,22 +46,22 @@ function HeaderProductList({ onLayoutChange }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg p-5 overflow-auto">
+      <div className="bg-white rounded-lg p-5">
         <div className="flex justify-between items-center">
-          <div className="flex lg:gap-7 gap-3 items-center">
+          <div className="flex lg:gap-7 gap-3 items-center lg:overflow-visible overflow-x-auto overflow-y-hidden pb-2 lg:pb-0 hide-scrollbar">
             <div className="lg:flex hidden items-center gap-2 whitespace-nowrap">
               <FaSortAmountUp />
               <span className="font-bold select-none">مرتب سازی : </span>
             </div>
 
-            <div className="lg:hidden">
+            <div className="lg:hidden min-w-fit">
               <FilterResponsive />
             </div>
             {sortOptions.map((option) => (
               <span
                 key={option.value || "default"}
                 onClick={() => handleSort(option.value)}
-                className={`font-semibold cursor-pointer duration-300 text-[15px] whitespace-nowrap select-none hover:text-[#d1182b] ${
+                className={`font-semibold cursor-pointer duration-300 text-[15px] whitespace-nowrap select-none hover:text-[#d1182b] min-w-fit ${
                   currentOrderBy === option.value
                     ? "text-[#d1182b] border-[#18d1be]"
                     : "text-[#444] border-[#d5d5d5]"
@@ -90,6 +90,15 @@ function HeaderProductList({ onLayoutChange }) {
           </div>
         </div>
       </div>
+      <style jsx global>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </>
   );
 }

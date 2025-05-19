@@ -14,20 +14,30 @@ const Toast = Swal.mixin({
 
 export const getProducts = async (data) => {
   try {
-    const params = {
-      LangCode: "fa",
-      PageSize: data.pageSize,
-      PageIndex: data.page,
+    const params = {     
+      LangCode: "fa",  
+      PageSize: data.pageSize,  
+      PageIndex: data.page,    
+      ...(data.BrandId && { BrandId: data.BrandId }),   
+      ...(data.CategoryId && { CategoryId: data.CategoryId }), 
+      ...(data.price1 && data.price1 !== 0 && { Price1: data.price1 }), 
+      ...(data.price2 && data.price2 !== 100000 && { Price2: data.price2 }), 
       ...(data.orderBy && { OrderBy: data.orderBy }),
-      ...(data.CategoryId && { CategoryId: data.CategoryId }),
-      ...(data.price1 && data.price1 !== 0 && { Price1: data.price1 }),
-      ...(data.price2 && data.price2 !== 100000 && { Price2: data.price2 }),
+      ...(data.OnlyPrice && { OnlyPrice: data.OnlyPrice }),
+      ...(data.OnlyDiscount && { OnlyDiscount: data.OnlyDiscount }),
+      ...(data.StatusId && { StatusId: data.StatusId }),
+      ...(data.OnlyFest && { OnlyFest: data.OnlyFest }),
     };
 
     const response = await axios.get(`${mainDomain}/api/Product`, {
       params,
-    });
-    return response.data
+    });    
+    
+    if (!response.data || !Array.isArray(response.data)) {
+      return [];
+    }
+
+    return response.data;
   } catch (error) {
     Toast.fire({
       icon: "error",

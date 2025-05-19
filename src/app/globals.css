@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+:root {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  scroll-behavior: smooth !important;
+}
+
 @font-face {
   font-family: "Yekan";
   src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("truetype");
@@ -47,6 +56,10 @@ body {
   font-weight: normal;
   line-height: 23px;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+html {
   scroll-behavior: smooth;
 }
 
