@@ -1,18 +1,18 @@
 "use client";
 
-import { FaAngleLeft, FaShoppingCart } from "react-icons/fa";
-import { BsArchive } from "react-icons/bs";
-import { GoShieldCheck } from "react-icons/go";
-import { LuMailbox } from "react-icons/lu";
-import { useSelector, useDispatch } from "react-redux";
-import CartCounter from "../Product/CartCounter";
-import { useState } from "react";
 import { updateCart } from "@/redux/slices/cartSlice";
-import { mainDomainImg } from "@/utils/mainDomain";
-import { addToCartNext, moveToCurrentCart, getCart, getNextCart } from "@/services/cart/cartService";
+import { addToCartNext, getCart, getNextCart, moveToCurrentCart } from "@/services/cart/cartService";
+import { getImageUrl } from "@/utils/mainDomain";
+import { Spin } from "antd";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { Spin } from "antd";
+import { useState } from "react";
+import { BsArchive } from "react-icons/bs";
+import { FaAngleLeft, FaShoppingCart } from "react-icons/fa";
+import { GoShieldCheck } from "react-icons/go";
+import { LuMailbox } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import CartCounter from "../Product/CartCounter";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
@@ -125,17 +125,7 @@ const BodyCard = () => {
     );
   };
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
+
 
   return (
     <div className="flex flex-wrap">

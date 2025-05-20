@@ -1,4 +1,4 @@
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import AddToCartButton from "./AddToCartButton";
@@ -7,19 +7,8 @@ import PriceProduct from "./PriceProduct";
 
 function Products({ products, layout = "list" }) {
 
-  console.log(products);
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
+ 
 
   const ProductCard = ({ product }) => (
     <>

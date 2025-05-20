@@ -10,7 +10,6 @@ import WaySend from "./WaySend";
 import BoxLegal from "./BoxLegal";
 import { setSelectedAddress } from '@/redux/slices/addressSlice';
 import { setSelectedShipping } from '@/redux/slices/shippingSlice';
-import { setSelectedLegal } from '@/redux/slices/legalIdSlice';
 
 export default function BodyCompeletePay() {
   const dispatch = useDispatch();

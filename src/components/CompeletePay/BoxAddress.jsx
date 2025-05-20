@@ -1,7 +1,6 @@
 import { useState } from "react";
 import AddAddress from "@/components/profile/address/AddAddress";
 import DeleteAddress from "./DeleteAddress";
-import Image from "next/image";
 
 function BoxAddress({
   addressList,
@@ -12,6 +11,7 @@ function BoxAddress({
 }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editAddressId, setEditAddressId] = useState(null);
+  const [imgError, setImgError] = useState(false);
 
   const handleAddClick = () => {
     setEditAddressId(null);
@@ -106,12 +106,21 @@ function BoxAddress({
         ) : (
           <div className="flex flex-col items-center justify-center py-12 px-4">
             <div className="relative w-32 h-32 mb-6">
-              <Image
-                src="/images/gallery/empty-address.svg"
-                alt="آدرس ثبت نشده"
-                fill
-                className="object-contain"
-              />
+              {!imgError ? (
+                <img
+                  src="/images/gallery/empty-address.svg"
+                  alt="آدرس ثبت نشده"
+                  className="w-full h-full object-contain"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              )}
             </div>
             <h3 className="text-xl font-semibold text-gray-700 mb-2">آدرس ثبت نشده</h3>
             <p className="text-gray-500 text-center mb-6">

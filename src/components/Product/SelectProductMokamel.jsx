@@ -1,10 +1,10 @@
 "use client";
+import { getProductListId } from "@/services/products/productService";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Select } from "antd";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
-import { getProductListId } from "@/services/products/productService";
-import { mainDomainImg } from "@/utils/mainDomain";
 
 function SelectProductMokamel({ product }) {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -35,17 +35,7 @@ function SelectProductMokamel({ product }) {
     selectedProducts.includes(item.id)
   );
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
+
 
   return (
     <>
@@ -69,12 +59,11 @@ function SelectProductMokamel({ product }) {
           options={optionalProducts.map((product) => ({
             value: product.id,
             label: (
-              <div 
-                className={`p-3 duration-300 ${
-                  selectedProducts.includes(product.id) 
-                    ? 'bg-[#d1182b10] hover:bg-[#d1182b15]' 
+              <div
+                className={`p-3 duration-300 ${selectedProducts.includes(product.id)
+                    ? 'bg-[#d1182b10] hover:bg-[#d1182b15]'
                     : 'hover:bg-[#f3f3f3]'
-                } flex items-center justify-between`}
+                  } flex items-center justify-between`}
               >
                 <span>{product.title}</span>
                 {selectedProducts.includes(product.id) && (
@@ -107,7 +96,7 @@ function SelectProductMokamel({ product }) {
         {filteredProducts.map((product) => (
           <div key={product.id} className="p-2">
             <div className="bg-[#f6f6f6] flex items-center justify-center gap-2 rounded-sm border border-[#0002] h-11 px-2">
-              <img src={getImageUrl(product.image) } alt={product.id} className="h-8 w-8 object-contain" />
+              <img src={getImageUrl(product.image)} alt={product.id} className="h-8 w-8 object-contain" />
               <span className="whitespace-nowrap">{product.title}</span>
               <div>
                 <IoIosClose

@@ -383,6 +383,15 @@ function SelectCategoryFilter() {
     },
   ];
 
+  // فیلتر کردن آیتم‌ها بعد از اتمام لودینگ
+  const filteredItems = loading 
+    ? outerItems 
+    : outerItems.filter((item, index) => {
+        if (index === 0) return Object.keys(apiData.categories).length > 0;
+        if (index === 1) return apiData.brands.length > 0;
+        return true; // همیشه محدوده قیمت رو نشون بده
+      });
+
   return (
     <>
       <div className="flex justify-between pb-10">
@@ -400,7 +409,7 @@ function SelectCategoryFilter() {
       <Collapse
         ghost
         expandIconPosition="end"
-        items={outerItems}
+        items={filteredItems}
         activeKey={activeKeys}
         onChange={handleCollapseChange}
         expandIcon={({ isActive }) => (

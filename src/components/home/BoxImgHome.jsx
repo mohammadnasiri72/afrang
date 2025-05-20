@@ -1,20 +1,10 @@
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 
 export default function BoxImgHome({ mainBanner }) {
   console.log(mainBanner);
   const defaultImage = "/images/gallery/cat-banner-1.png";
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
+ 
 
   return (
     <>

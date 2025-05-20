@@ -6,24 +6,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { Pagination } from "swiper/modules";
 export default function CameraAccessories({ category }) {
 
-  const defaultImage = "/images/icons/lens.png";
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^(~\/|\.\.\/)/g, '')}`;
-    } catch (error) {
-      console.error('Error processing image URL:', error);
-      return defaultImage;
-    }
-  };
+
   return (
     <>
       <div className="box-slider-CameraAccessories pt-16 pb-48 mt-3">

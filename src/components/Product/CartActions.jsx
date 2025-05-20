@@ -16,7 +16,7 @@ function CartActions({ product, selectedWarranty }) {
   const { items } = useSelector((state) => state.cart);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const cartItem = items?.find(item => item.productId === product.id);
+  const cartItem = items?.find(item => item.productId === product?.product?.productId);
 
   const handleAddToCart = async () => {
     const userCookie = Cookies.get("user");
@@ -35,7 +35,7 @@ function CartActions({ product, selectedWarranty }) {
     const userId = JSON.parse(Cookies.get("user"))?.userId;
 
     try {
-      await addToCart(product.id, selectedWarranty, userId);
+      await addToCart(product?.product?.productId , selectedWarranty, userId);
       dispatch(fetchCartData());
       setShowSuccessModal(true);
     } catch (error) {
@@ -60,7 +60,7 @@ function CartActions({ product, selectedWarranty }) {
               </Link>
               <CartCounter 
                 quantity={cartItem.quantity} 
-                productId={product.id} 
+                productId={product?.product?.productId} 
                 cartId={cartItem.id}
                 onSuccess={() => {
                   dispatch(fetchCartData());

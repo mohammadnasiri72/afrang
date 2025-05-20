@@ -5,7 +5,7 @@ import { FaArrowLeft, FaBox, FaTruck, FaCheckCircle, FaTimesCircle, FaClock, FaM
 import { useRouter } from 'next/navigation';
 import { getOrderTrackCode } from '@/services/order/orderService';
 import Cookies from 'js-cookie';
-import { mainDomainImg } from '@/utils/mainDomain';
+import { getImageUrl } from '@/utils/mainDomain';
 
 export default function OrderDetails({ trackCode }) {
     const router = useRouter();
@@ -93,7 +93,6 @@ export default function OrderDetails({ trackCode }) {
         }
     };
 
-    console.log(orderDetails);
 
     return (
         <div className="space-y-6">
@@ -134,7 +133,7 @@ export default function OrderDetails({ trackCode }) {
                         {orderDetails.products.map((item) => (
                             <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                                 <div className="w-20 h-20 bg-gray-200 rounded-lg relative">
-                                    <img src={mainDomainImg + item.image} alt={item.title} className="w-full h-full object-cover rounded-lg" />
+                                    <img src={getImageUrl(item.image)} alt={item.id} className="w-full h-full object-cover rounded-lg" />
                                     {
                                         item.qty > 1 &&
                                         <div className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs font-bold px-2 py-1 rounded-full min-w-[24px] h-6 flex items-center justify-center">

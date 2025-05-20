@@ -1,25 +1,21 @@
 "use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import {
-    FaShoppingBag,
-    FaHeart,
-    FaBox,
-    FaClock,
-    FaChartLine,
-    FaArrowUp,
-    FaArrowDown,
-    FaAddressBook,
-    FaUser,
-    FaClipboardList,
-    FaTimesCircle,
-    FaEye,
-} from "react-icons/fa";
-import { getdataDashboard } from "@/services/dashboard/dashboardService";
-import { getRecentViews as getRecentViewsAPI } from "@/services/dashboard/dashboardService";
+import { getdataDashboard, getRecentViews as getRecentViewsAPI } from "@/services/dashboard/dashboardService";
+import { getImageUrl } from "@/utils/mainDomain";
 import { getRecentViews } from "@/utils/recentViews";
 import Cookies from "js-cookie";
-import { mainDomainImg } from "@/utils/mainDomain";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import {
+    FaAddressBook,
+    FaArrowDown,
+    FaArrowUp,
+    FaBox,
+    FaClipboardList,
+    FaClock,
+    FaShoppingBag,
+    FaTimesCircle,
+    FaUser
+} from "react-icons/fa";
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState("overview");
@@ -138,17 +134,7 @@ export default function Dashboard() {
         },
     ];
 
-    const getImageUrl = (image) => {
-        if (!image) return defaultImage;
-        try {
-            if (image.startsWith('http')) {
-                return image;
-            }
-            return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-        } catch (error) {
-            return defaultImage;
-        }
-    };
+
 
     return (
         <div className="space-y-6">

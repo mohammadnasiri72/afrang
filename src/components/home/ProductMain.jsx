@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
@@ -23,18 +23,7 @@ export default function ProductMain({ products }) {
   //     console.log(products);
   //   }
   // }, [products]);
-
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
+  
   return (
     <>
       <Swiper

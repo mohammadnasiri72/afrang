@@ -6,7 +6,7 @@ export const metadata = {
   description: "محصولات",
 };
 
-export default async function layoutProducts({ children }) {
+export default async function layoutProduct({ children }) {
   return (
     <div>
       <BreadcrumbNav />

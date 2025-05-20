@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // import required modules
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
-import { mainDomainImg } from "@/utils/mainDomain";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -54,46 +54,7 @@ export default function SliderProductDetails({ attachments }) {
             modules={[FreeMode, Thumbs]}
             className="mySwiper2"
           >
-            {/* <SwiperSlide>
-            <a className="w-full" href="/images/gallery/image11.jpg" data-fancybox="gallery" data-caption="Caption Images 1">
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </a>
-          </SwiperSlide>
-          <SwiperSlide>
-            <a className="w-full" href="/images/gallery/image11.jpg" data-fancybox="gallery" data-caption="Caption Images 2">
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </a>
-          </SwiperSlide>
-          <SwiperSlide>
-            <a className="w-full" href="/images/gallery/image11.jpg" data-fancybox="gallery" data-caption="Caption Images 3">
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </a>
-          </SwiperSlide>
-          <SwiperSlide>
-            <a className="w-full" href="/images/gallery/image11.jpg" data-fancybox="gallery" data-caption="Caption Images 4">
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </a>
-          </SwiperSlide>
-          <SwiperSlide>
-            <a className="w-full" href="/images/gallery/image11.jpg" data-fancybox="gallery" data-caption="Caption Images 5">
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </a>
-          </SwiperSlide> */}
+
             {attachments.map((attachment) => (
               <SwiperSlide key={attachment.id}>
                 <a
@@ -104,7 +65,7 @@ export default function SliderProductDetails({ attachments }) {
                 >
                   <img
                     className="w-full border rounded-sm border-[#3331]"
-                    src={mainDomainImg + attachment.fileUrl}
+                    src={getImageUrl(attachment.fileUrl)}
                   />
                 </a>
               </SwiperSlide>
@@ -125,40 +86,10 @@ export default function SliderProductDetails({ attachments }) {
               <SwiperSlide key={attachment.id}>
                 <img
                   className="w-full border rounded-sm border-[#3331]"
-                  src={mainDomainImg + attachment.fileUrl}
+                  src={getImageUrl(attachment.fileUrl)}
                 />
               </SwiperSlide>
             ))}
-            {/* <SwiperSlide>
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                className="w-full border rounded-sm border-[#3331]"
-                src="/images/gallery/image11.jpg"
-              />
-            </SwiperSlide> */}
           </Swiper>
         </div>
       )}

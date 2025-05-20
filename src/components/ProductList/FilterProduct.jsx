@@ -1,20 +1,9 @@
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import SelectCategoryFilter from "./SelectCategoryFilter";
 
 function FilterProduct({ BannerProduct }) {
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^(~\/|\.\.\/)/g, '')}`;
-    } catch (error) {
-      console.error('Error processing image URL:', error);
-      return defaultImage;
-    }
-  };
+
 
   return (
     <div className="lg:w-1/4 w-full lg:min-w-[300px]">

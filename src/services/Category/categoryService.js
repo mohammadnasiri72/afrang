@@ -33,4 +33,47 @@ export const getCategory = async () => {
     }
 };
 
+export const getBreadcrumb = async (id) => {
+    try {
+        const params = {
+            id,
+            LangCode: "fa",
+        };
+
+        const response = await axios.get(`${mainDomain}/api/Category/Breadcrumb`, {
+            params,
+        });
+
+        return response.data;
+    } catch (error) {
+        Toast.fire({
+            icon: "error",
+            text: error.response?.data ? error.response?.data : "خطای شبکه",
+        });
+        return [];
+    }
+};
+
+export const getBreadcrumbProduct = async (id) => {
+    try {
+        const params = {
+            id,
+            LangCode: "fa",
+        };
+
+        const response = await axios.get(`${mainDomain}/api/Item/Breadcrumb`, {
+            params,
+        });
+
+        return response.data;
+    } catch (error) {
+        Toast.fire({
+            icon: "error",
+            text: error.response?.data ? error.response?.data : "خطای شبکه",
+        });
+        return [];
+    }
+};
+
+
 

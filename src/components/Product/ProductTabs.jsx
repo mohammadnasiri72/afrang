@@ -12,7 +12,7 @@ import BundleProducts from "./BundleProducts";
 import { getRelatedProductsByIdString } from "@/services/products/productService";
 
 function ProductTabs({ product, comments, totalCount }) {
-  const [tabProDetails, setTabProDetails] = useState(product.typeId === 3 ? 1 : 2);
+  const [tabProDetails, setTabProDetails] = useState(product.product.typeId === 3 ? 1 : 2);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
 
@@ -40,12 +40,12 @@ function ProductTabs({ product, comments, totalCount }) {
     { label: "نظرات", value: 4 },
     { label: "مشخصات فنی", value: 3 },
     { label: "توضیحات محصول", value: 2 },
-    ...(product.typeId === 3 ? [{ label: "محصولات دسته ای", value: 1 }] : []),
+    ...(product.product.typeId === 3 ? [{ label: "محصولات دسته ای", value: 1 }] : []),
   ];
 
   return (
     <>
-      <div className="flex flex-wrap bg-white rounded-lg mt-3">
+      <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative">
         <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5 ">
           <Segmented
             className="font-semibold text-3xl w-full overflow-auto"
@@ -78,42 +78,48 @@ function ProductTabs({ product, comments, totalCount }) {
           {tabProDetails === 6 && <CriticismProduct product={product} />}
         </div>
       </div>
-
-      <div className="sm:px-4 mt-20">
-        <div className="sm:hidden flex justify-center items-center pb-10">
-          <div className="sm:hidden flex items-center title-newProduct relative">
-            <h2 className="font-semibold text-xl">محصولات مکمل</h2>
+      {
+        relatedProducts.length > 0 &&
+        <div className="sm:px-4 mt-20">
+          <div className="sm:hidden flex justify-center items-center pb-10">
+            <div className="sm:hidden flex items-center title-newProduct relative">
+              <h2 className="font-semibold text-xl">محصولات مکمل</h2>
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="sm:flex hidden items-center title-newProduct relative">
+              <h2 className="font-semibold text-xl">محصولات مکمل</h2>
+            </div>
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="sm:flex hidden items-center title-newProduct relative">
-            <h2 className="font-semibold text-xl">محصولات مکمل</h2>
-          </div>
-        </div>
-      </div>
-      <div className="mt-5">
-        {relatedProducts.length > 0 && (
+      }
+      {
+        relatedProducts.length > 0 &&
+        <div className="mt-5">
           <ProductMain products={relatedProducts} />
-        )}
-      </div>
-
-      <div className="sm:px-4 mt-20">
-        <div className="sm:hidden flex justify-center items-center pb-10">
-          <div className="sm:hidden flex items-center title-newProduct relative">
-            <h2 className="font-semibold text-xl">محصولات مشابه</h2>
+        </div>
+      }
+      {
+        similarProducts.length > 0 &&
+        <div className="sm:px-4 mt-20">
+          <div className="sm:hidden flex justify-center items-center pb-10">
+            <div className="sm:hidden flex items-center title-newProduct relative">
+              <h2 className="font-semibold text-xl">محصولات مشابه</h2>
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="sm:flex hidden items-center title-newProduct relative">
+              <h2 className="font-semibold text-xl">محصولات مشابه</h2>
+            </div>
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="sm:flex hidden items-center title-newProduct relative">
-            <h2 className="font-semibold text-xl">محصولات مشابه</h2>
-          </div>
-        </div>
-      </div>
-      <div className="mt-5">
-        {similarProducts.length > 0 && (
+      }
+      {
+        similarProducts.length > 0 &&
+        <div className="mt-5">
           <ProductMain products={similarProducts} />
-        )}
-      </div>
+        </div>
+      }
     </>
   );
 }

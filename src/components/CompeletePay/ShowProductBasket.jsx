@@ -1,22 +1,10 @@
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { BsArchive } from "react-icons/bs";
-import { GoShieldCheck } from "react-icons/go";
-import { LuMailbox } from "react-icons/lu";
 
 function ShowProductBasket({items}) {
   const defaultImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='14' fill='%239ca3af' text-anchor='middle' dominant-baseline='middle'%3Eتصویر محصول%3C/text%3E%3C/svg%3E";
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
+  
 
   return (
     <div className="bg-white rounded-xl p-4 shadow-lg">

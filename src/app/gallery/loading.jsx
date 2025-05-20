@@ -1,5 +1,5 @@
 import Loading from '@/components/Loading';
 
-export default function RootLoading() {
+export default function GalleryLoading() {
   return <Loading fullScreen />;
-}
+} 

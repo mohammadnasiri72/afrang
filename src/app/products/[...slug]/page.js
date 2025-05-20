@@ -1,5 +1,4 @@
 import BodyProductList from "@/components/ProductList/BodyProductList";
-import BreadcrumbNav from "@/components/BreadcrumbNav";
 import FilterProduct from "@/components/ProductList/FilterProduct";
 import PaginationProduct from "@/components/ProductList/PaginationProduct";
 import { getProducts } from "@/services/products/productService";
@@ -50,10 +49,7 @@ export default async function ProductList(props) {
 
 
 
-  const breadcrumbItems = [
-    { title: "محصولات", href: "/products" },
-    { title: categoryTitle }
-  ];
+ 
 
    const BannerProduct = await getItem({
     TypeId: 1015,
@@ -61,11 +57,10 @@ export default async function ProductList(props) {
     CategoryIdArray: "4693",
   });
 
-  
 
   return (
     <>
-      <BreadcrumbNav items={breadcrumbItems} />
+     
       <div className="bg-[#f6f6f6] overflow-hidden py-10">
         <div className="xl:px-16">
           <div className="flex flex-col lg:flex-row w-full">

@@ -1,16 +1,16 @@
-import HeaderCard from "@/components/Card/HeaderCard";
+import dynamic from 'next/dynamic';
 import Container from "@/components/container";
-import BodyPayment from "@/components/payment/BodyPayment";
 
-export default async function CompeletePay() {
-    return (
-        <>
-            <div className="bg-[#f6f6f6] overflow-hidden">
-                <Container>
-                    <HeaderCard />
-                    <BodyPayment />
-                </Container>
-            </div>
-        </>
-    );
+const HeaderCard = dynamic(() => import("@/components/Card/HeaderCard"));
+const BodyPayment = dynamic(() => import("@/components/payment/BodyPayment"));
+
+export default function CompletePay() {
+  return (
+    <div className="bg-[#f6f6f6] overflow-hidden">
+      <Container>
+        <HeaderCard />
+        <BodyPayment />
+      </Container>
+    </div>
+  );
 }

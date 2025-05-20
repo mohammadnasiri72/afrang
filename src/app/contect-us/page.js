@@ -1,11 +1,13 @@
-import BodyContact from "@/components/contact/BodyContact";
-import GoogleMap from "@/components/contact/GoogleMap";
-import HeaderContact from "@/components/contact/HeaderContact";
+import dynamic from 'next/dynamic';
 import Container from "@/components/container";
 
-export default async function Contact() {
+const HeaderContact = dynamic(() => import("@/components/contact/HeaderContact"));
+const BodyContact = dynamic(() => import("@/components/contact/BodyContact"));
+const GoogleMap = dynamic(() => import("@/components/contact/GoogleMap"));
+
+export default function Contact() {
   return (
-    <>
+    <div>
       <HeaderContact />
       <div className="bg-[#f6f6f6] overflow-hidden">
         <Container>
@@ -13,6 +15,6 @@ export default async function Contact() {
         </Container>
         <GoogleMap />
       </div>
-    </>
+    </div>
   );
 }

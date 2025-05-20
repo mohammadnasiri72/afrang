@@ -47,6 +47,7 @@
     "react-multi-date-picker": "^4.5.2",
     "react-redux": "^9.2.0",
     "react-slick": "^0.30.3",
+    "react-spinners": "^0.17.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.15",
     "sweetalert2": "^11.17.2",

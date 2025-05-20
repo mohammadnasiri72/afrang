@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
+import { useEffect, useState } from "react";
 
 function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   const defaultImage = "/images/shipping-default.png";
-  
+  const [imageErrors, setImageErrors] = useState({});
+
   useEffect(() => {
     if (waySendList.shippingWays && waySendList.shippingWays.length === 1) {
       setSelectedShipping(waySendList.shippingWays[0]);
@@ -16,6 +17,10 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
 
   const handleSelectWay = (item) => {
     setSelectedShipping(item);
+  };
+
+  const handleImageError = (itemId) => {
+    setImageErrors(prev => ({ ...prev, [itemId]: true }));
   };
 
   if (!waySendList.shippingWays || waySendList.shippingWays.length === 0) {
@@ -30,6 +35,9 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
               src="/images/empty-shipping.svg"
               alt="روش ارسال"
               className="w-full h-full object-contain"
+              onError={(e) => {
+                e.target.src = defaultImage;
+              }}
             />
           </div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">ابتدا آدرس خود را ثبت کنید</h3>
@@ -40,18 +48,6 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
       </div>
     );
   }
-
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
 
   return (
     <div className="bg-white rounded-xl p-4 shadow-lg">
@@ -74,9 +70,10 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
             <div className="flex items-center gap-4 w-full">
               <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1.5 shadow-sm">
                 <img
-                  src={getImageUrl(item.image)}
+                  src={imageErrors[item.id] ? defaultImage : (item.image ? getImageUrl(item.image) : defaultImage)}
                   alt={item.title?.length > 10 ? item.title.substring(0, 10) + '...' : item.title}
                   className="w-full h-full object-contain rounded-md"
+                  onError={() => handleImageError(item.id)}
                 />
               </div>
               <div className="flex-1 grid grid-cols-12 gap-3 items-center w-full">

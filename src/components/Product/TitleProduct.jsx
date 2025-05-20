@@ -4,22 +4,32 @@ import DescProductDetails from "./DescProductDetails";
 import BasketBox from "./BasketBox";
 
 function TitleProduct({ product }) {
+  // ساخت آبجکت جدید برای تصویر اصلی با همان ساختار attachments
+  const mainImageAttachment = product?.product?.image ? {
+    id: 'main-image',
+    itemId: product.product.id,
+    itemKey: "Image",
+    fileUrl: product.product.image,
+    priority: 0, // اولویت صفر برای نمایش در اول اسلایدر
+    title: "تصویر اصلی محصول"
+  } : null;
 
-
+  // ترکیب تصویر اصلی با سایر تصاویر
+  const allAttachments = mainImageAttachment 
+    ? [mainImageAttachment, ...(product.attachments || [])]
+    : product.attachments;
 
   return (
     <>
       <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative">
-
         {
-          product.attachments && product.attachments.length > 0 &&
+          allAttachments && allAttachments.length > 0 &&
           <div className="lg:w-1/3 w-full p-2">
-            <SliderProductDetails attachments={product.attachments} />
+            <SliderProductDetails attachments={allAttachments} />
           </div>
-
         }
         {
-          (!product.attachments || product.attachments.length === 0) &&
+          (!allAttachments || allAttachments.length === 0) &&
           <div className="flex flex-col items-center justify-center h-full bg-gray-50 rounded-lg p-6">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +44,6 @@ function TitleProduct({ product }) {
             </div>
           </div>
         }
-
 
         <div className="lg:w-5/12 w-full p-2">
           <DescProductDetails product={product} />

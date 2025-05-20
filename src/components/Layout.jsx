@@ -9,7 +9,6 @@ import Footer from "./Footer";
 import Header from "./Header";
 import BoxImgBranding from "./home/BoxImgBranding";
 import SupportBox from "./home/SupportBox";
-import Loading from "./Loading";
 import NavBar from "./NavBar";
 import SocialNetworks from "./SocialNetworks";
 import SubFooter from "./SubFooter";
@@ -21,6 +20,7 @@ import { updateCart } from "@/redux/slices/cartSlice";
 import { getCart, getNextCart } from "@/services/cart/cartService";
 import { setLoading, setMenuItems, setError } from "@/redux/slice/menuRes";
 import { fetchMenuItems } from "@/services/menuService";
+import Loading from "./Loading";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -36,16 +36,13 @@ function InitialDataManager() {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        // اگر قبلاً اجرا شده، دیگه اجرا نکن
         if (initialized.current) return;
         initialized.current = true;
 
-        // دریافت منو
         dispatch(setLoading());
         const menuItems = await fetchMenuItems();
         dispatch(setMenuItems(menuItems));
 
-        // دریافت سبد خرید
         const userId = JSON.parse(Cookies.get("user"))?.userId;
         const cartResponse = cartType === 'next'
           ? await getNextCart(userId)
@@ -61,7 +58,7 @@ function InitialDataManager() {
     };
 
     loadInitialData();
-  }, []); // فقط یک بار در اول کار اجرا شود
+  }, []);
 
   if (isLoading) return null;
   return null;
@@ -95,7 +92,7 @@ function Layout({ children }) {
       <AuthProvider>
         <DynamicTitle />
         {mounted ? (
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<Loading fullScreen />}>
             <InitialDataManager />
             <div>
               {!pathname.includes("/login") &&
@@ -120,7 +117,7 @@ function Layout({ children }) {
             </div>
           </Suspense>
         ) : (
-          <Loading />
+          <Loading fullScreen />
         )}
       </AuthProvider>
     </Provider>

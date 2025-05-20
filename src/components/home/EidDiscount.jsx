@@ -1,7 +1,7 @@
 "use client";
+import { getImageUrl } from "@/utils/mainDomain";
+import { useEffect, useState } from 'react';
 import { FaCaretLeft } from "react-icons/fa6";
-import { useState, useEffect } from 'react';
-import { mainDomainImg } from "@/utils/mainDomain";
 import ProductMain from "./ProductMain";
 
 export default function EidDiscount({ actionProducts, products }) {
@@ -25,18 +25,7 @@ export default function EidDiscount({ actionProducts, products }) {
     }
   }, [selectedCategory, products]);
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^\.\.\//, '')}`;
-    } catch (error) {
-      return defaultImage;
-    }
-  };
-
+ 
   return (
     <>
       <div className="sm:hidden flex justify-center items-center pb-10">

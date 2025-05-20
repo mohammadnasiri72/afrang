@@ -1,31 +1,16 @@
 import { getCategory } from "@/services/Category/categoryService";
-import BreadcrumbNav from "@/components/BreadcrumbNav";
+import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaBoxOpen } from "react-icons/fa6";
-import { mainDomainImg } from "@/utils/mainDomain";
 
 export default async function ProductList() {
   const categories = await getCategory();
 
-  const breadcrumbItems = [
-    { title: "محصولات" }
-  ];
 
-  const getImageUrl = (image) => {
-    if (!image) return defaultImage;
-    try {
-      if (image.startsWith('http')) {
-        return image;
-      }
-      return `${mainDomainImg}/${image.replace(/^(~\/|\.\.\/)/g, '')}`;
-    } catch (error) {
-      console.error('Error processing image URL:', error);
-      return defaultImage;
-    }
-  };
+
+
   return (
     <>
-      <BreadcrumbNav items={breadcrumbItems} />
       <div className="bg-[#f6f6f6] overflow-hidden py-10">
         <div className="container mx-auto px-4">
           {categories.length === 0 ? (
@@ -38,7 +23,7 @@ export default async function ProductList() {
                 <p className="text-gray-600 mb-6">
                   متأسفانه در حال حاضر دسته‌بندی‌ای برای نمایش وجود ندارد.
                 </p>
-                <Link 
+                <Link
                   href="/"
                   className="bg-[#d1182b] text-white px-6 py-2 rounded-md hover:bg-[#b31525] transition-colors duration-300"
                 >
@@ -58,8 +43,8 @@ export default async function ProductList() {
                   >
                     <div className="flex flex-col items-center text-center">
                       {category.image && (
-                        <img 
-                          src={getImageUrl(category.image)} 
+                        <img
+                          src={getImageUrl(category.image)}
                           alt={category.title}
                           className="w-24 h-24 object-contain mb-4"
                         />
