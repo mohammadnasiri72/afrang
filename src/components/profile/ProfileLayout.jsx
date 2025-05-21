@@ -18,6 +18,7 @@ import {
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slice/user';
+import Loading from '@/components/Loading';
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
@@ -118,9 +119,7 @@ export default function ProfileLayout({ children }) {
     };
     
     if (!user || !user.token || userStatus === 'loading') {
-        return <div className="min-h-screen bg-[#f6f6f6] flex items-center justify-center">
-            <FaSpinner className="text-3xl text-[#d1182b] animate-spin" />
-        </div>;
+        return <Loading />;
     }
 
     return (

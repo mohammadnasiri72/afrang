@@ -1,7 +1,8 @@
-import BlogDesc from "@/components/blogDetails/BlogDesc.jsx";
-import RelationBlog from "@/components/blogDetails/RelationBlog.jsx";
-import Container from "@/components/container";
-import { getComment } from "@/services/comments/serviceComment";
+import dynamic from 'next/dynamic';
+const BlogDesc = dynamic(() => import('@/components/blogDetails/BlogDesc.jsx'));
+const RelationBlog = dynamic(() => import('@/components/blogDetails/RelationBlog.jsx'));
+const Container = dynamic(() => import('@/components/container'));
+const getComment = dynamic(() => import('@/services/comments/serviceComment'));
 
 export default async function BlogDetails(props) {
   const prop = await props;

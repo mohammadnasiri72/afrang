@@ -12,19 +12,16 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { setUser } from "@/redux/slice/user";
-import Loading from "./Loading";
 import Link from "next/link";
 import { mainDomainImg } from "@/utils/mainDomain";
 
 export default function Header() {
   const { user: authUser, isLoading } = useAuth();
   const user = useSelector((state) => state.user.user);
-  const { items, loading } = useSelector((state) => state.settings);
+  const { items } = useSelector((state) => state.settings);
   const { items: cartItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
-
-  
 
   const checkAuthStatus = () => {
     const userCookie = Cookies.get("user");
@@ -64,10 +61,6 @@ export default function Header() {
       disPatch(setUser(null));
     }
   }, [authUser, user, disPatch]);
-
-  if (loading) {
-    return <Loading />;
-  }
 
   const isAuthenticated = user?.token && checkAuthStatus();
 

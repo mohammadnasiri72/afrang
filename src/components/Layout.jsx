@@ -20,7 +20,6 @@ import { updateCart } from "@/redux/slices/cartSlice";
 import { getCart, getNextCart } from "@/services/cart/cartService";
 import { setLoading, setMenuItems, setError } from "@/redux/slice/menuRes";
 import { fetchMenuItems } from "@/services/menuService";
-import Loading from "./Loading";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -92,7 +91,7 @@ function Layout({ children }) {
       <AuthProvider>
         <DynamicTitle />
         {mounted ? (
-          <Suspense fallback={<Loading fullScreen />}>
+          <>
             <InitialDataManager />
             <div>
               {!pathname.includes("/login") &&
@@ -115,9 +114,11 @@ function Layout({ children }) {
                   </>
                 )}
             </div>
-          </Suspense>
+          </>
         ) : (
-          <Loading fullScreen />
+          <div className="fixed inset-0 bg-white flex items-center justify-center">
+            <div className="w-16 h-16 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+          </div>
         )}
       </AuthProvider>
     </Provider>

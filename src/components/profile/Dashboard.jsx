@@ -16,8 +16,10 @@ import {
     FaTimesCircle,
     FaUser
 } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState("overview");
     const [recentViews, setRecentViews] = useState([]);
     const [dashboardData, setDashboardData] = useState({
@@ -27,7 +29,6 @@ export default function Dashboard() {
         Done: 0,
         Cancel: 0,
     });
-
 
     useEffect(() => {
         let isMounted = true; // برای جلوگیری از memory leak
@@ -70,48 +71,55 @@ export default function Dashboard() {
 
     const stats = [
         {
-            title: "در انتظار پرداخت",
-            value: dashboardData.Pending.toString(),
-            icon: FaClock,
-            color: "yellow",
-            change: "-3%",
-            trend: "down",
-        },
-        {
-            title: "سفارشات ثبت شده",
+            title: "ثبت شده",
             value: dashboardData.Record.toString(),
             icon: FaClipboardList,
             color: "purple",
             change: "+12%",
             trend: "up",
+            statusId: 1
         },
         {
-            title: "سفارشات درحال پیگیری",
+            title: "منتظر پردازش",
+            value: dashboardData.Pending.toString(),
+            icon: FaClock,
+            color: "yellow",
+            change: "-3%",
+            trend: "down",
+            statusId: 2
+        },
+        {
+            title: "درحال انجام",
             value: dashboardData.Process.toString(),
-            icon: FaShoppingBag,
-            color: "green",
-            change: "+8%",
-            trend: "up",
-        },
-        {
-            title: "سفارشات تحویل شده",
-            value: dashboardData.Done.toString(),
             icon: FaBox,
             color: "blue",
-            change: "+5%",
+            change: "+8%",
             trend: "up",
+            statusId: 3
         },
         {
-            title: "سفارشات لغو شده",
+            title: "انجام شده",
+            value: dashboardData.Done.toString(),
+            icon: FaShoppingBag,
+            color: "green",
+            change: "+5%",
+            trend: "up",
+            statusId: 4
+        },
+        {
+            title: "لغو شده",
             value: dashboardData.Cancel.toString(),
             icon: FaTimesCircle,
             color: "red",
             change: "-2%",
             trend: "down",
+            statusId: 5
         },
     ];
 
-
+    const handleStatClick = (statusId) => {
+        router.push(`/profile/orders?statusId=${statusId}&page=1`);
+    };
 
     const recentFavorites = [
         {
@@ -133,8 +141,6 @@ export default function Dashboard() {
             image: "/placeholder.jpg",
         },
     ];
-
-
 
     return (
         <div className="space-y-6">
@@ -170,18 +176,15 @@ export default function Dashboard() {
                     const TrendIcon = stat.trend === "up" ? FaArrowUp : FaArrowDown;
 
                     return (
-                        <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+                        <div 
+                            key={index} 
+                            className="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-all duration-300"
+                            onClick={() => handleStatClick(stat.statusId)}
+                        >
                             <div className="flex items-center justify-center mb-4">
                                 <div className={`p-3 bg-${stat.color}-50 rounded-lg`}>
                                     <Icon className={`text-${stat.color}-500 text-5xl`} />
                                 </div>
-                                {/* <div
-                                    className={`flex items-center gap-1 text-sm ${stat.trend === "up" ? "text-green-500" : "text-red-500"
-                                        }`}
-                                >
-                                    <TrendIcon className="text-xs" />
-                                    <span>{stat.change}</span>
-                                </div> */}
                             </div>
                             <p className="text-gray-500 text-sm mb-1 text-center">{stat.title}</p>
                             <p className="text-2xl font-bold text-gray-800 text-center">{stat.value}</p>

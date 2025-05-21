@@ -1,0 +1,26 @@
+.order-tabs-custom .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #d1182b !important;
+  font-weight: bold !important;
+}
+
+.order-tabs-custom .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: #d1182b !important;
+}
+
+.order-tabs-custom .ant-tabs-ink-bar {
+  background: #d1182b !important;
+  height: 4px !important;
+  border-radius: 2px;
+  width: 40% !important;
+  left: 30% !important;
+}
+
+/* Override Ant Design default styles */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #d1182b !important;
+  font-weight: bold !important;
+}
+
+.ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: #d1182b !important;
+} 

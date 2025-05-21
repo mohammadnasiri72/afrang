@@ -28,7 +28,7 @@ function Loading({ fullScreen = false }) {
 
   if (fullScreen) {
     return (
-      <div className="fixed top-0 bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm flex flex-col gap-4 justify-center items-center z-[9999]">
+      <div className="fixed top-0 bottom-0 left-0 right-0 bg-white backdrop-blur-sm flex flex-col gap-4 justify-center items-center z-[9999999]">
         {loaderElement}
         <div className="mt-4 text-gray-500 font-semibold animate-pulse">
           در حال بارگذاری...

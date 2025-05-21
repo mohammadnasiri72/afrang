@@ -1,7 +1,9 @@
-import EidDiscount from "@/components/home/EidDiscount";
-import DetailsOffers from "@/components/Offers/DetailsOffers";
-import ProductDiscount from "@/components/Offers/ProductDiscount";
-import SliderOffers from "@/components/Offers/SliderOffers";
+import dynamic from 'next/dynamic';
+const EidDiscount = dynamic(() => import('@/components/home/EidDiscount'));
+const DetailsOffers = dynamic(() => import('@/components/Offers/DetailsOffers'));
+const ProductDiscount = dynamic(() => import('@/components/Offers/ProductDiscount'));
+const SliderOffers = dynamic(() => import('@/components/Offers/SliderOffers'));
+
 
 export default async function Offers() {  
   

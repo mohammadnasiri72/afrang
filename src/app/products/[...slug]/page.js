@@ -1,8 +1,8 @@
-import BodyProductList from "@/components/ProductList/BodyProductList";
-import FilterProduct from "@/components/ProductList/FilterProduct";
-import PaginationProduct from "@/components/ProductList/PaginationProduct";
+import dynamic from 'next/dynamic';
+const BodyProductList = dynamic(() => import("@/components/ProductList/BodyProductList"));
+const FilterProduct = dynamic(() => import("@/components/ProductList/FilterProduct"));
+const PaginationProduct = dynamic(() => import("@/components/ProductList/PaginationProduct"));
 import { getProducts } from "@/services/products/productService";
-import Link from "next/link";
 import { FaBoxOpen } from "react-icons/fa6";
 import { getItem } from "@/services/Item/item";
 
@@ -13,7 +13,6 @@ export default async function ProductList(props) {
 
   const slug = await params;
   const id = Number(slug.slug[0]);
-  const categoryTitle = decodeURIComponent(slug.slug[1]);
 
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const orderBy = searchParams?.OrderBy ? parseInt(searchParams.OrderBy) : "";

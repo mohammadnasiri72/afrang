@@ -26,6 +26,7 @@
     "date-fns-jalali": "^4.1.0-0",
     "dayjs": "^1.11.13",
     "dayjs-jalali": "^0.0.2",
+    "framer-motion": "^12.12.1",
     "he": "^1.2.0",
     "jalaali-js": "^1.2.8",
     "js-cookie": "^3.0.5",

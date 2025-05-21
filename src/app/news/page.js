@@ -1,7 +1,10 @@
-import BoxImgBlog from "@/components/blog/BoxImgBlog";
-import HeaderBlog from "@/components/blog/HeaderBlog";
+import dynamic from 'next/dynamic';
 import { getBlogsCat } from "@/services/blogs/blogCategory";
 import { getBlogs } from "@/services/blogs/blogService";
+const BoxImgBlog = dynamic(() => import('@/components/blog/BoxImgBlog'));
+const HeaderBlog = dynamic(() => import('@/components/blog/HeaderBlog'));
+
+
 
 export default async function Blog(props) {
   const prop = await props;

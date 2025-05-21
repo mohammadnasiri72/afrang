@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 const HeaderGallery = dynamic(() => import('@/components/Gallery/HeaderGallery'));
 const BodyGallery = dynamic(() => import('@/components/Gallery/BodyGallery'));
 
+
+
 export default async function Gallery() {
   return (
     <>

@@ -44,6 +44,9 @@ function SelectCategoryFilter() {
     price: false        // محصولات قیمت‌دار
   });
 
+  const [categorySearch, setCategorySearch] = useState("");
+  const [brandSearch, setBrandSearch] = useState("");
+
   useEffect(() => {
     const mainCategoryId = params?.slug?.[0];
     if (!mainCategoryId) {
@@ -219,6 +222,15 @@ function SelectCategoryFilter() {
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
+  const filteredCategories = Object.entries(apiData.categories).filter(([id, title]) =>
+    title.toLowerCase().includes(categorySearch.toLowerCase())
+  );
+
+  const filteredBrands = apiData.brands.filter((brand) =>
+    brand.title.toLowerCase().includes(brandSearch.toLowerCase()) ||
+    brand.titleEn.toLowerCase().includes(brandSearch.toLowerCase())
+  );
+
   const renderCategories = () => {
     if (loading) {
       return Array(5).fill(null).map((_, index) => (
@@ -236,7 +248,7 @@ function SelectCategoryFilter() {
       ));
     }
 
-    return Object.entries(apiData.categories).map(([id, title]) => {
+    return filteredCategories.map(([id, title]) => {
       const isSelected = selectedCategory === id;
       return (
         <div
@@ -273,7 +285,7 @@ function SelectCategoryFilter() {
       ));
     }
 
-    return apiData.brands.map((brand) => (
+    return filteredBrands.map((brand) => (
       <div key={brand.id}>
         <FormControlLabel
           onChange={() => handleBrandChange(brand.id.toString())}
@@ -310,10 +322,21 @@ function SelectCategoryFilter() {
         <div className="text-[16px] font-semibold select-none">دسته بندی</div>
       ),
       children: (
-        <div style={{ minHeight: loading ? '250px' : 'auto' }}>
-          <FormGroup dir="rtl">
-            {renderCategories()}
-          </FormGroup>
+        <div>
+          <div className="mb-3">
+            <input
+              type="text"
+              placeholder="جستجو در دسته‌بندی‌ها..."
+              value={categorySearch}
+              onChange={(e) => setCategorySearch(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent"
+            />
+          </div>
+          <div className="overflow-y-auto px-2" style={{ maxHeight: '250px' }}>
+            <FormGroup dir="rtl">
+              {renderCategories()}
+            </FormGroup>
+          </div>
         </div>
       ),
     },
@@ -321,10 +344,21 @@ function SelectCategoryFilter() {
       key: "2",
       label: <div className="text-[16px] font-semibold select-none">برند</div>,
       children: (
-        <div style={{ minHeight: loading ? '200px' : 'auto' }}>
-          <FormGroup>
-            {renderBrands()}
-          </FormGroup>
+        <div>
+          <div className="mb-3">
+            <input
+              type="text"
+              placeholder="جستجو در برندها..."
+              value={brandSearch}
+              onChange={(e) => setBrandSearch(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent"
+            />
+          </div>
+          <div className="overflow-y-auto px-2" style={{ maxHeight: '250px' }}>
+            <FormGroup>
+              {renderBrands()}
+            </FormGroup>
+          </div>
         </div>
       ),
     },
@@ -336,29 +370,39 @@ function SelectCategoryFilter() {
       children: (
         <div>
           <ThemeProvider theme={theme}>
-            <Slider
-              getAriaLabel={() => "Temperature range"}
-              value={valuePrice}
-              onChange={handleChange}
-              valueLabelDisplay="auto"
-              sx={{
-                "& .MuiSlider-rail": {
-                  backgroundColor: "#d8d8d8",
-                },
-                "& .MuiSlider-track": {
-                  backgroundColor: "#40768c",
-                  border: "none",
-                },
-                "& .MuiSlider-thumb": {
-                  backgroundColor: "#40768c",
-                  transform: "translate(50%, -50%)",
-                },
-                direction: "rtl",
-              }}
-              min={0}
-              max={apiData.maxPrice}
-              step={1000}
-            />
+            <div className="px-4">
+              <Slider
+                getAriaLabel={() => "Temperature range"}
+                value={valuePrice}
+                onChange={handleChange}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(value) => value.toLocaleString()}
+                sx={{
+                  "& .MuiSlider-rail": {
+                    backgroundColor: "#d8d8d8",
+                  },
+                  "& .MuiSlider-track": {
+                    backgroundColor: "#40768c",
+                    border: "none",
+                  },
+                  "& .MuiSlider-thumb": {
+                    backgroundColor: "#40768c",
+                    transform: "translate(50%, -50%)",
+                  },
+                  "& .MuiSlider-valueLabel": {
+                    backgroundColor: "#40768c",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                  },
+                  direction: "rtl",
+                }}
+                min={0}
+                max={apiData.maxPrice}
+                step={1000}
+              />
+            </div>
           </ThemeProvider>
           <div className="flex flex-col gap-2 mt-4">
             <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
@@ -415,38 +459,39 @@ function SelectCategoryFilter() {
         expandIcon={({ isActive }) => (
           <FaAngleUp className={isActive ? "rotateico" : "ico"} />
         )}
+        className="[&_.ant-collapse-content]:!px-0 [&_.ant-collapse-item]:!border-0 [&_.ant-collapse-header]:!px-0 [&_.ant-collapse-content-box]:!px-0"
       />
-      <div className="flex flex-col gap-3 mt-2 border-t pt-4">
-        <div className="flex justify-between items-center">
-          <span className="font-semibold">محصولات موجود</span>
+      <div className="flex flex-col gap-4 mt-6 border-t pt-6">
+        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+          <span className="font-semibold text-base text-gray-700">محصولات موجود</span>
           <Switch 
             checked={switchStates.available}
             onChange={() => handleSwitchChange('available')}
-            style={{ color: "red" }} 
+            style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center">
-          <span className="font-semibold">محصولات تخفیف‌دار</span>
+        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+          <span className="font-semibold text-base text-gray-700">محصولات تخفیف‌دار</span>
           <Switch 
             checked={switchStates.discount}
             onChange={() => handleSwitchChange('discount')}
-            style={{ color: "red" }} 
+            style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center">
-          <span className="font-semibold">محصولات فروش ویژه</span>
+        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+          <span className="font-semibold text-base text-gray-700">محصولات فروش ویژه</span>
           <Switch 
             checked={switchStates.vip}
             onChange={() => handleSwitchChange('vip')}
-            style={{ color: "red" }} 
+            style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center">
-          <span className="font-semibold">محصولات قیمت‌دار</span>
+        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+          <span className="font-semibold text-base text-gray-700">محصولات قیمت‌دار</span>
           <Switch 
             checked={switchStates.price}
             onChange={() => handleSwitchChange('price')}
-            style={{ color: "red" }} 
+            style={{ color: "#d1182b" }} 
           />
         </div>
       </div>

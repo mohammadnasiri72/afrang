@@ -1,6 +1,7 @@
-import BodyProduct from "@/components/Product/BodyProduct";
-import TitleProduct from "@/components/Product/TitleProduct";
-import { getComment } from "@/services/comments/serviceComment";
+import dynamic from 'next/dynamic';
+const BodyProduct = dynamic(() => import('@/components/Product/BodyProduct'));
+const TitleProduct = dynamic(() => import('@/components/Product/TitleProduct'));
+import { getComment } from '@/services/comments/serviceComment';
 import { getProductId } from "@/services/products/productService";
 
 export default async function ProductDetails(props) {

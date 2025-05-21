@@ -286,12 +286,13 @@ export const estimateOrderSave = async (data, token) => {
 };
 
 
-export const getOrder = async (token) => {
+export const getOrder = async (token, params = {}) => {
   try {
     const response = await axios.get(`${mainDomain}/api/Order`, {
       params: {
-        pageSize: 20,
-        pageIndex: 1 ,
+        pageSize: params.pageSize || 10,
+        pageIndex: params.pageIndex || 1,
+        statusId: params.statusId || null
       },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -299,6 +300,7 @@ export const getOrder = async (token) => {
     });
     return response.data;
   } catch (err) {
+    console.error('API Error:', err.response?.data || err.message);
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
@@ -306,6 +308,7 @@ export const getOrder = async (token) => {
         container: "toast-modal",
       },
     });
+    throw err;
   }
 };
 
@@ -317,6 +320,7 @@ export const getOrderTrackCode = async (trackCode , token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    
     return response.data;
   } catch (err) {
     Toast.fire({

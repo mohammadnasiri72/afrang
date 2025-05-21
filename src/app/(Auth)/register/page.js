@@ -1,9 +1,6 @@
 import dynamic from 'next/dynamic';
-import Loading from "@/components/Loading";
 
-const Register = dynamic(() => import("@/components/Auth/Register/Register"), {
-  loading: () => <Loading />
-});
+const Register = dynamic(() => import("@/components/Auth/Register/Register"));
 
 export default function RegisterPage() {
   return (
