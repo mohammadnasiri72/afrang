@@ -3,14 +3,19 @@ import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import AddToCartButton from "./AddToCartButton";
 import PriceProduct from "./PriceProduct";
+import ExpandableText from "../Product/ExpandableText";
 
 
 function Products({ products, layout = "list" }) {
 
 
- 
+  console.log(products);
+
+
 
   const ProductCard = ({ product }) => (
+
+
     <>
       <div className="bg-white rounded-lg relative z-50">
         <div className="flex w-full flex-wrap">
@@ -27,6 +32,10 @@ function Products({ products, layout = "list" }) {
             <Link href={product.url} className="hover:text-[#d1182b] duration-300">
               <h5 className="font-semibold text-lg">{product.title}</h5>
             </Link>
+            {
+              product.summary &&
+              <ExpandableText text={product.summary} />
+            }
           </div>
           <div className="lg:w-1/3 w-full bg-[#f9f9f9] p-4 lg:px-8 ">
             <div className="flex flex-col w-full h-full">
@@ -49,7 +58,7 @@ function Products({ products, layout = "list" }) {
               )}
               {product.canAddCart && (
                 <div className="mt-2 flex flex-col gap-2">
-                  <AddToCartButton product={product} />
+                  <AddToCartButton productId={product.productId} />
                 </div>
               )}
             </div>
@@ -118,7 +127,7 @@ function Products({ products, layout = "list" }) {
             <span>مشاهده جزئیات</span>
           </Link> */}
           {product.canAddCart ? (
-            <AddToCartButton product={product} />
+            <AddToCartButton productId={product.productId} />
           ) : (
             <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">
               <FaCartShopping />
