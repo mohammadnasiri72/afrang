@@ -7,9 +7,8 @@ import ExpandableText from "../Product/ExpandableText";
 
 
 function Products({ products, layout = "list" }) {
+ 
 
-
-  console.log(products);
 
 
 

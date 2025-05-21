@@ -16,7 +16,7 @@ import SubHeader from "./SubHeader";
 import DynamicTitle from "./DynamicTitle";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCart } from "@/redux/slices/cartSlice";
+import { fetchCartData, updateCart } from "@/redux/slices/cartSlice";
 import { getCart, getNextCart } from "@/services/cart/cartService";
 import { setLoading, setMenuItems, setError } from "@/redux/slice/menuRes";
 import { fetchMenuItems } from "@/services/menuService";
@@ -57,6 +57,8 @@ function InitialDataManager() {
     };
 
     loadInitialData();
+
+    dispatch(fetchCartData());
   }, []);
 
   if (isLoading) return null;

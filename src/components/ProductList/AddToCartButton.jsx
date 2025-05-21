@@ -1,19 +1,28 @@
 "use client";
 
-import { FaCartShopping } from "react-icons/fa6";
-import { useState } from "react";
-import { getProductId } from "../../services/products/productService";
-import { addToCart } from "../../services/cart/cartService";
+import { fetchCartData } from "@/redux/slices/cartSlice";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Modal, message } from "antd";
 import Cookies from "js-cookie";
-import { getImageUrl } from "@/utils/mainDomain";
+import { useState } from "react";
+import { FaCartShopping } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { addToCart } from "../../services/cart/cartService";
+import { getProductId } from "../../services/products/productService";
+import CartCounter from "../Product/CartCounter";
 
 const AddToCartButton = ({ productId }) => {
+  const { items } = useSelector((state) => state.cart);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const cartItem = items?.find(item => item.productId === productId);
+
+  console.log(cartItem);
+  
 
   const Toast = Swal.mixin({
     toast: true,
@@ -24,8 +33,8 @@ const AddToCartButton = ({ productId }) => {
     customClass: "toast-modal",
   });
 
-  console.log(product);
 
+  const dispatch = useDispatch();
 
   const handleAddToCart = async () => {
     try {
@@ -58,6 +67,7 @@ const AddToCartButton = ({ productId }) => {
 
       await addToCart(productId, selectedWarranty?.id || -1, userId);
       setIsModalOpen(false);
+      dispatch(fetchCartData());
       Toast.fire({
         icon: "success",
         text: "محصول با موفقیت به سبد خرید اضافه شد",
@@ -71,14 +81,25 @@ const AddToCartButton = ({ productId }) => {
 
   return (
     <>
-      <button
-        onClick={handleAddToCart}
-        disabled={isLoading}
-        className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <FaCartShopping className="" />
-        <span className="">{isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}</span>
-      </button>
+      {
+        (!cartItem || cartItem.quantity === 0)
+        &&
+        <button
+          onClick={handleAddToCart}
+          disabled={isLoading}
+          className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FaCartShopping className="" />
+          <span className="">{isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}</span>
+        </button>
+      }
+      {
+        cartItem && cartItem.quantity > 0 &&
+        <CartCounter
+          quantity={cartItem.quantity}
+          cartId={cartItem.id}
+        />
+      }
 
       <Modal
         title=""

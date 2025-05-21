@@ -49,7 +49,7 @@ function CartActions({ product, selectedWarranty }) {
         {product.canAddCart ? (
           cartItem ? (
             <div className="flex flex-col justify-center items-center">
-              <Link 
+              {/* <Link 
                 href="/cart" 
                 className="h-full flex items-center bg-[#40768c] text-white rounded-sm hover:bg-[#2f5a6a] transition-all duration-300 group px-5 py-2"
               >
@@ -57,15 +57,10 @@ function CartActions({ product, selectedWarranty }) {
                   <FaShoppingBasket className="text-lg group-hover:scale-110 transition-transform duration-300" />
                   <span className="text-sm">سبد خرید</span>
                 </div>
-              </Link>
+              </Link> */}
               <CartCounter 
                 quantity={cartItem.quantity} 
-                productId={product?.product?.productId} 
                 cartId={cartItem.id}
-                onSuccess={() => {
-                  dispatch(fetchCartData());
-                  setShowSuccessModal(true);
-                }}
               />
               
             </div>
