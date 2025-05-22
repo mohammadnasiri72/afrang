@@ -1,0 +1,29 @@
+// این فایل نیازی به "use client" ندارد چون یک Server Component است
+import SubHeader from "./SubHeader";
+import Header from "./Header";
+import NavBar from "./NavBar";
+import SocialNetworks from "./SocialNetworks";
+import BoxImgBranding from "./home/BoxImgBranding";
+import SupportBox from "./home/SupportBox";
+import Footer from "./Footer";
+import SubFooter from "./SubFooter";
+
+export default function LayoutWrapper({ children, showHeaderFooter = true }) {
+  if (!showHeaderFooter) {
+    return <>{children}</>;
+  }
+
+  return (
+    <>
+      <SubHeader />
+      <Header />
+      <NavBar />
+      <SocialNetworks />
+      {children}
+      <BoxImgBranding />
+      <SupportBox />
+      <Footer />
+      <SubFooter />
+    </>
+  );
+} 

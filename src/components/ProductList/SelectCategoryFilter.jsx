@@ -7,6 +7,7 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaAngleUp } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 import { getCategoryChild } from "@/services/Property/propertyService";
 
 const theme = createTheme({
@@ -128,6 +129,9 @@ function SelectCategoryFilter() {
 
     // به‌روزرسانی URL به صورت مستقیم
     const params = new URLSearchParams(searchParams.toString());
+    // حذف پارامتر page برای برگشت به صفحه اول
+    params.delete('page');
+    
     if (newSelectedBrands.length > 0) {
       params.set("BrandId", newSelectedBrands.join(","));
     } else {
@@ -138,6 +142,8 @@ function SelectCategoryFilter() {
 
   const handleFilterChange = () => {
     const params = new URLSearchParams(searchParams.toString());
+    // حذف پارامتر page برای برگشت به صفحه اول
+    params.delete('page');
 
     // فقط اضافه کردن قیمت‌ها به URL
     if (valuePrice[0] > 0) {
@@ -184,6 +190,9 @@ function SelectCategoryFilter() {
     setSelectedCategory(id);
     
     const params = new URLSearchParams(searchParams.toString());
+    // حذف پارامتر page برای برگشت به صفحه اول
+    params.delete('page');
+    
     const newUrl = `/products/${id}/${title}${params.toString() ? `?${params.toString()}` : ''}`;
     router.push(newUrl);
   };
@@ -193,6 +202,9 @@ function SelectCategoryFilter() {
     setSwitchStates(newStates);
 
     const params = new URLSearchParams(searchParams.toString());
+    
+    // حذف پارامتر page برای برگشت به صفحه اول
+    params.delete('page');
     
     // آپدیت پارامترها بر اساس وضعیت جدید سوئیچ‌ها
     if (newStates.available) {
@@ -248,6 +260,14 @@ function SelectCategoryFilter() {
       ));
     }
 
+    if (filteredCategories.length === 0) {
+      return (
+        <div className="text-center py-4 text-gray-500">
+          دسته‌بندی مورد نظر یافت نشد
+        </div>
+      );
+    }
+
     return filteredCategories.map(([id, title]) => {
       const isSelected = selectedCategory === id;
       return (
@@ -283,6 +303,14 @@ function SelectCategoryFilter() {
           />
         </div>
       ));
+    }
+
+    if (filteredBrands.length === 0) {
+      return (
+        <div className="text-center py-4 text-gray-500">
+          برند مورد نظر یافت نشد
+        </div>
+      );
     }
 
     return filteredBrands.map((brand) => (
@@ -323,14 +351,15 @@ function SelectCategoryFilter() {
       ),
       children: (
         <div>
-          <div className="mb-3">
+          <div className="mb-3 relative">
             <input
               type="text"
               placeholder="جستجو در دسته‌بندی‌ها..."
               value={categorySearch}
               onChange={(e) => setCategorySearch(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent"
+              className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent"
             />
+            <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
           <div className="overflow-y-auto px-2" style={{ maxHeight: '250px' }}>
             <FormGroup dir="rtl">
@@ -345,14 +374,15 @@ function SelectCategoryFilter() {
       label: <div className="text-[16px] font-semibold select-none">برند</div>,
       children: (
         <div>
-          <div className="mb-3">
+          <div className="mb-3 relative">
             <input
               type="text"
               placeholder="جستجو در برندها..."
               value={brandSearch}
               onChange={(e) => setBrandSearch(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent"
+              className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent"
             />
+            <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
           <div className="overflow-y-auto px-2" style={{ maxHeight: '250px' }}>
             <FormGroup>
@@ -431,10 +461,18 @@ function SelectCategoryFilter() {
   const filteredItems = loading 
     ? outerItems 
     : outerItems.filter((item, index) => {
-        if (index === 0) return Object.keys(apiData.categories).length > 0;
-        if (index === 1) return apiData.brands.length > 0;
+        if (index === 0) return Object.keys(apiData.categories).length > 0 || categorySearch.length > 0;
+        if (index === 1) return apiData.brands.length > 0 || brandSearch.length > 0;
         return true; // همیشه محدوده قیمت رو نشون بده
       });
+
+  // اگر هیچ داده‌ای وجود نداشت و در حالت جستجو نیستیم، اکوردئون‌ها را مخفی کن
+  const shouldShowCollapse = !loading && (
+    Object.keys(apiData.categories).length > 0 || 
+    apiData.brands.length > 0 || 
+    categorySearch.length > 0 || 
+    brandSearch.length > 0
+  );
 
   return (
     <>
@@ -450,17 +488,23 @@ function SelectCategoryFilter() {
           </span>
         </div>
       </div>
-      <Collapse
-        ghost
-        expandIconPosition="end"
-        items={filteredItems}
-        activeKey={activeKeys}
-        onChange={handleCollapseChange}
-        expandIcon={({ isActive }) => (
-          <FaAngleUp className={isActive ? "rotateico" : "ico"} />
-        )}
-        className="[&_.ant-collapse-content]:!px-0 [&_.ant-collapse-item]:!border-0 [&_.ant-collapse-header]:!px-0 [&_.ant-collapse-content-box]:!px-0"
-      />
+      {shouldShowCollapse ? (
+        <Collapse
+          ghost
+          expandIconPosition="end"
+          items={filteredItems}
+          activeKey={activeKeys}
+          onChange={handleCollapseChange}
+          expandIcon={({ isActive }) => (
+            <FaAngleUp className={isActive ? "rotateico" : "ico"} />
+          )}
+          className="[&_.ant-collapse-content]:!px-0 [&_.ant-collapse-item]:!border-0 [&_.ant-collapse-header]:!px-0 [&_.ant-collapse-content-box]:!px-0"
+        />
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          هیچ فیلتری برای نمایش وجود ندارد
+        </div>
+      )}
       <div className="flex flex-col gap-4 mt-6 border-t pt-6">
         <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">محصولات موجود</span>

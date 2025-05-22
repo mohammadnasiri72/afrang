@@ -153,11 +153,14 @@ const BodyCard = () => {
                   <div className="sm:w-1/4 w-full">
                     <img
                       style={{ filter: " brightness(0.8)" }}
-                      className="w-full rounded-lg"
+                      className="w-full rounded-lg min-h-32 object-contain"
                       src={getImageUrl(item.image)}
-                      alt={item.product?.title}
+                      alt={item?.title}
                     />
+                    <div className="mt-5">
+
                     {renderCartCounter(item)}
+                    </div>
                   </div>
                   <div className="sm:w-3/4 w-full px-4 py-2 relative">
                     <h3 className="font-semibold text-lg text-[#333] mb-3">

@@ -175,9 +175,7 @@ export default function OrderDetails({ trackCode }) {
                                     </div>
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 mt-4 border-t border-gray-200">
                                         <div className="flex flex-wrap items-center gap-4 text-sm">
-                                            <span className={`px-3 py-1.5 rounded-lg ${item.isActive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                                                {item.isActive ? 'فعال' : 'غیرفعال'}
-                                            </span>
+                                           
                                             <span className="bg-[#40768c] text-white text-xs font-bold px-3 py-1.5 rounded-full min-w-[28px] h-7 flex items-center justify-center">
                                                 {item.qty} عدد
                                             </span>

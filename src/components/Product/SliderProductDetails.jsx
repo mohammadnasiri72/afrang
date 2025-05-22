@@ -59,7 +59,7 @@ export default function SliderProductDetails({ attachments }) {
               <SwiperSlide key={attachment.id}>
                 <a
                   className="w-full"
-                  href={mainDomainImg + attachment.fileUrl}
+                  href={getImageUrl(attachment.fileUrl)}
                   data-fancybox="gallery"
                   data-caption="Caption Images 4"
                 >

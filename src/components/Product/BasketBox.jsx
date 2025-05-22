@@ -45,9 +45,9 @@ function BasketBox({ product }) {
         <PriceProduct product={product.product} />
 
         <div className="mt-10 p-4">
-          {product?.product?.inventoryQtyForView > 0 &&  (
-            <span className="text-[#d1182b] font-semibold">
-              تنها {product?.product?.inventoryQtyForView} عدد در انبار افرنگ
+          {product?.inventory?.inventoryQtyForView > 0 && product?.inventory?.inventoryQtyForView < 10 &&  (
+            <span className="text-[#d1182b] font-semibold whitespace-nowrap">
+              تنها <span className="text-lg font-bold px-1">{product?.inventory?.inventoryQtyForView}</span> عدد در انبار افرنگ
               باقی مانده
             </span>
           )}

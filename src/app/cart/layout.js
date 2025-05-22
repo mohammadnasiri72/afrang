@@ -5,5 +5,7 @@ export const metadata = {
   description: "سبد خرید",
 };
 export default async function layoutCard({ children }) {
-  return <div>{children}</div>;
+  return <div>
+    {children}
+    </div>;
 }

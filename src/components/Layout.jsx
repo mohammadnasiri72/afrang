@@ -20,6 +20,7 @@ import { fetchCartData, updateCart } from "@/redux/slices/cartSlice";
 import { getCart, getNextCart } from "@/services/cart/cartService";
 import { setLoading, setMenuItems, setError } from "@/redux/slice/menuRes";
 import { fetchMenuItems } from "@/services/menuService";
+import LayoutWrapper from "./LayoutWrapper";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -58,7 +59,7 @@ function InitialDataManager() {
 
     loadInitialData();
 
-    dispatch(fetchCartData());
+    // dispatch(fetchCartData());
   }, []);
 
   if (isLoading) return null;
@@ -68,6 +69,7 @@ function InitialDataManager() {
 function Layout({ children }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const showHeaderFooter = !pathname.includes("/login") && !pathname.includes("/register");
 
   useEffect(() => {
     setMounted(true);
@@ -95,27 +97,9 @@ function Layout({ children }) {
         {mounted ? (
           <>
             <InitialDataManager />
-            <div>
-              {!pathname.includes("/login") &&
-                !pathname.includes("/register") && (
-                  <>
-                    <SubHeader />
-                    <Header />
-                    <NavBar />
-                    <SocialNetworks />
-                  </>
-                )}
+            <LayoutWrapper showHeaderFooter={showHeaderFooter}>
               {children}
-              {!pathname.includes("/login") &&
-                !pathname.includes("/register") && (
-                  <>
-                    <BoxImgBranding />
-                    <SupportBox />
-                    <Footer />
-                    <SubFooter />
-                  </>
-                )}
-            </div>
+            </LayoutWrapper>
           </>
         ) : (
           <div className="fixed inset-0 bg-white flex items-center justify-center">

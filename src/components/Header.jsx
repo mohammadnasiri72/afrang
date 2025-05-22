@@ -1,5 +1,4 @@
-"use client";
-
+import Link from "next/link";
 import { setOpenShopping } from "@/redux/slice/shopping";
 import { Badge } from "antd";
 import { useRouter } from "next/navigation";
@@ -12,8 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { setUser } from "@/redux/slice/user";
-import Link from "next/link";
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
 
 export default function Header() {
   const { user: authUser, isLoading } = useAuth();
@@ -78,9 +76,10 @@ export default function Header() {
               <img
                 className="w-14 "
                 src={
-                  mainDomainImg +
-                  items.find((item) => item.propertyKey === "site_footer_logo")
-                    ?.value
+                  getImageUrl(
+                    items.find((item) => item.propertyKey === "site_footer_logo")
+                      ?.value
+                  )
                 }
                 alt=""
               />
@@ -96,7 +95,7 @@ export default function Header() {
         <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">
           <IoSearchSharp className="text-2xl cursor-pointer" />
           <input
-            className=" bg-transparent border-none outline-none p-2 "
+            className=" bg-transparent border-none outline-none p-2 w-full"
             type="text"
             placeholder="جستجو..."
           />
