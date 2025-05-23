@@ -7,7 +7,7 @@ import { updateCart } from "@/services/cart/cartService";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Divider, Drawer } from "antd";
 import Cookies from "js-cookie";
-import Link from "next/link";
+import { useRouter, usePathname } from 'next/navigation';
 import { useState } from "react";
 import { FaCartShopping, FaTrash, FaPlus, FaMinus } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
@@ -17,11 +17,11 @@ function ShoppingDrawer() {
   const open = useSelector((store) => store.shopping.openShopping);
   const { items, cartType } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
   const userId = JSON.parse(Cookies.get("user"))?.userId;
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-
-  
 
   const onClose = () => {
     dispatch(setOpenShopping(false));
@@ -30,9 +30,7 @@ function ShoppingDrawer() {
   const handleDeleteClick = (item) => {
     setItemToDelete(item);
     setDeleteModalOpen(true);
-    
   };
-  
 
   const handleIncrement = async (item) => {
     try {
@@ -41,8 +39,6 @@ function ShoppingDrawer() {
     } catch (error) {
       console.error('Failed to increment:', error);
     }
-    // console.log(item.id);
-    
   };
 
   const handleDecrement = async (item) => {
@@ -54,6 +50,15 @@ function ShoppingDrawer() {
         console.error('Failed to decrement:', error);
       }
     }
+  };
+
+  // تابع برای مدیریت کلیک روی لینک‌ها
+  const handleNavigation = (url) => {
+    // بستن دراور
+    dispatch(setOpenShopping(false));
+    
+    // هدایت به URL مورد نظر
+    router.push(url);
   };
 
   // محاسبه جمع کل
@@ -137,13 +142,16 @@ function ShoppingDrawer() {
                         )}
                       </div>
                       <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0 mt-5 sm:mt-0">
-                        <Link 
-                          href={item.url}
-                          onClick={onClose}
-                          className="text-sm line-clamp-2 w-full hover:text-[#d1182b] transition-colors duration-300 font-bold !text-gray-800 no-underline"
+                        <button 
+                          onClick={() => handleNavigation(item.url)}
+                          className={`text-sm line-clamp-2 w-full text-right transition-colors duration-300 font-bold no-underline ${
+                            pathname === item.url 
+                              ? 'text-white bg-[#d1182b] px-2 py-1 rounded' 
+                              : 'text-gray-800 hover:text-[#d1182b]'
+                          }`}
                         >
                           {item.title}
-                        </Link>
+                        </button>
                         <div className="flex items-center">
                           <span className="font-semibold">
                             {item.finalPrice.toLocaleString()}
@@ -230,16 +238,26 @@ function ShoppingDrawer() {
                   </div>
                 </div>
                 <div>
-                  <Link onClick={onClose} href={"/cart"}>
-                    <button className="w-full bg-[#d1182b] text-white duration-300 hover:bg-[#b91626] cursor-pointer py-3 mb-3 font-semibold rounded-lg">
-                      سبد خرید
-                    </button>
-                  </Link>
-                  <Link onClick={onClose} href={"/cart/infosend"}>
-                    <button className="w-full bg-[#d1182b] text-white duration-300 hover:bg-[#b91626] cursor-pointer py-3 font-semibold rounded-lg">
-                      تسویه حساب
-                    </button>
-                  </Link>
+                  <button 
+                    onClick={() => handleNavigation("/cart")}
+                    className={`w-full text-white duration-300 cursor-pointer py-3 mb-3 font-semibold rounded-lg ${
+                      pathname === '/cart' 
+                        ? 'bg-[#b91626]' 
+                        : 'bg-[#d1182b] hover:bg-[#b91626]'
+                    }`}
+                  >
+                    سبد خرید
+                  </button>
+                  <button 
+                    onClick={() => handleNavigation("/cart/infosend")}
+                    className={`w-full text-white duration-300 cursor-pointer py-3 font-semibold rounded-lg ${
+                      pathname === '/cart/infosend' 
+                        ? 'bg-[#b91626]' 
+                        : 'bg-[#d1182b] hover:bg-[#b91626]'
+                    }`}
+                  >
+                    تسویه حساب
+                  </button>
                 </div>
               </div>
             </>

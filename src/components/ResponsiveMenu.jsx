@@ -4,7 +4,7 @@ import { setOpenMenuRes } from "@/redux/slice/menuRes";
 import { Drawer, Menu } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
@@ -23,12 +23,15 @@ const dashboardMenuItems = [
 function ResponsiveMenu() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const { items, loading, openMenuRes } = useSelector((state) => state.menuRes);
   const [isSticky, setIsSticky] = useState(false);
+  const [openKeys, setOpenKeys] = useState([]);
   const user = JSON.parse(Cookies.get("user") || "{}");
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0 });
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,6 +61,100 @@ function ResponsiveMenu() {
       <img className="w-11" src="/images/logo.png" alt="logo" />
     </div>
   );
+
+  // تابع برای مدیریت کلیک روی لینک‌ها
+  const handleNavigation = (url) => {
+    // بستن دراور
+    dispatch(setOpenMenuRes(false));
+    
+    // هدایت به URL مورد نظر
+    router.push(url);
+  };
+
+  // تابع برای پیدا کردن کلید اکوردئون بر اساس مسیر فعلی
+  const getAccordionKeyFromPath = (path) => {
+    if (!path) return null;
+
+    const normalizedPath = decodeURIComponent(path);
+
+    // چک کردن مسیرهای داشبورد
+    if (path.startsWith('/profile/')) {
+      return 'dashboard-group';
+    }
+
+    // چک کردن همه آیتم‌های منو
+    for (const item of items) {
+      // اگر آیتم زیرمنو داره
+      if (item.Children && item.Children.length > 0) {
+        // چک کردن مستقیم URL آیتم
+        const itemUrl = item.url || item.pageUrl;
+        if (itemUrl && decodeURIComponent(itemUrl) === normalizedPath) {
+          return item.id;
+        }
+
+        // چک کردن زیرمنوها
+        for (const child of item.Children) {
+          const childUrl = child.url || child.pageUrl;
+          if (childUrl && decodeURIComponent(childUrl) === normalizedPath) {
+            return item.id;
+          }
+
+          // چک کردن زیرمنوهای سطح دوم
+          if (child.Children && child.Children.length > 0) {
+            for (const subChild of child.Children) {
+              const subChildUrl = subChild.url || subChild.pageUrl;
+              if (subChildUrl && decodeURIComponent(subChildUrl) === normalizedPath) {
+                return item.id;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return null;
+  };
+
+  // تنظیم کلید اکوردئون وقتی مسیر تغییر می‌کنه
+  useEffect(() => {
+    const currentKey = getAccordionKeyFromPath(pathname);
+    if (currentKey) {
+      setOpenKeys(prev => {
+        // اگر کلید قبلاً وجود نداشته، اضافه کن
+        if (!prev.includes(currentKey)) {
+          return [...prev, currentKey];
+        }
+        return prev;
+      });
+    }
+  }, [pathname, items]);
+
+  // تابع برای چک کردن اینکه آیا مسیر فعلی با مسیر داده شده مطابقت دارد
+  const isActivePath = (path) => {
+    if (!path) return false;
+    
+    // تبدیل URL به حالت نرمال
+    const normalizedPathname = decodeURIComponent(pathname);
+    const normalizedPath = decodeURIComponent(path);
+    return normalizedPathname === normalizedPath;
+  };
+
+  // تابع برای چک کردن اینکه آیا آیتم پدر فعال است
+  const isParentActive = (items) => {
+    if (!items) return false;
+    return items.some(item => {
+      if (item.Children) {
+        return isParentActive(item.Children);
+      }
+      const itemUrl = item.url || item.pageUrl;
+      if (!itemUrl) return false;
+      
+      const normalizedPathname = decodeURIComponent(pathname);
+      const normalizedItemUrl = decodeURIComponent(itemUrl);
+      
+      return normalizedPathname === normalizedItemUrl;
+    });
+  };
 
   if (loading) {
     return (
@@ -111,7 +208,7 @@ function ResponsiveMenu() {
                   )}
                   {item.Children && item.Children.length > 0 && (
                     <div 
-                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[99999]"
+                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[9999]"
                       style={{ 
                         position: 'fixed',
                         top: `${dropdownPosition.top}px`,
@@ -171,18 +268,32 @@ function ResponsiveMenu() {
     const renderMenuItems = (items) => {
       return items.map((item) => {
         if (item.Children && item.Children.length > 0) {
+          const isActive = isParentActive(item.Children);
           return {
             key: item.id,
-            label: item.title,
+            label: (
+              <div className={`text-right px-4 py-2 cursor-pointer ${
+                isActive ? 'text-[#d1182b]' : ''
+              }`}>
+                {item.title}
+              </div>
+            ),
             children: renderMenuItems(item.Children),
           };
         }
         return {
           key: item.id,
           label: (
-            <Link href={item.url || item.pageUrl || "#"}>
+            <button
+              onClick={() => handleNavigation(item.url || item.pageUrl || "#")}
+              className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${
+                isActivePath(item.url || item.pageUrl) 
+                  ? 'text-[#d1182b]' 
+                  : 'text-gray-800 hover:text-[#d1182b]'
+              }`}
+            >
               {item.title}
-            </Link>
+            </button>
           ),
         };
       });
@@ -191,6 +302,7 @@ function ResponsiveMenu() {
     const handleLogout = async () => {
       try {
         Cookies.remove("user");
+        dispatch(setOpenMenuRes(false));
         router.push("/");
       } catch (error) {
         console.error("Logout error:", error);
@@ -201,20 +313,35 @@ function ResponsiveMenu() {
     const dashboardItems = user?.token ? [
       {
         key: 'dashboard-group',
-        label: 'داشبورد کاربری',
+        label: (
+          <div className={`text-right px-4 py-2 cursor-pointer ${
+            dashboardMenuItems.some(item => isActivePath(item.path)) 
+              ? 'text-[#d1182b]' 
+              : ''
+          }`}>
+            داشبورد کاربری
+          </div>
+        ),
         children: dashboardMenuItems.map(item => ({
           key: item.id,
           label: (
-            <Link href={item.path} onClick={onClose} className="flex items-center gap-3">
+            <button
+              onClick={() => handleNavigation(item.path)}
+              className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${
+                isActivePath(item.path) 
+                  ? 'text-[#d1182b]' 
+                  : 'text-gray-800 hover:text-[#d1182b]'
+              }`}
+            >
               <item.icon className="text-lg" />
               <span>{item.title}</span>
-            </Link>
+            </button>
           ),
         }))
       }
     ] : [];
 
-    // ترکیب آیتم‌های داشبورد با منوی اصلی و اضافه کردن دکمه خروج در انتها
+    // ترکیب آیتم‌های منو
     const menuItems = [
       ...dashboardItems,
       ...renderMenuItems(items),
@@ -224,7 +351,6 @@ function ResponsiveMenu() {
           <button
             onClick={() => {
               handleLogout();
-              onClose();
             }}
             className="flex items-center gap-3 w-full text-red-600 bg-transparent px-4 py-2 rounded-lg transition-colors cursor-pointer"
           >
@@ -235,6 +361,9 @@ function ResponsiveMenu() {
       }] : [])
     ];
 
+    // پیدا کردن کلید اکوردئون فعلی
+    const currentAccordionKey = getAccordionKeyFromPath(pathname);
+
     return (
       <>
         <div className="p-3 lg:hidden flex justify-between items-center w-full">
@@ -244,7 +373,7 @@ function ResponsiveMenu() {
         </div>
 
         <Drawer
-          zIndex={10001}
+          zIndex={1001}
           width={300}
           title={<Title />}
           onClose={onClose}
@@ -257,22 +386,55 @@ function ResponsiveMenu() {
           }}
           open={openMenuRes}
           closeIcon={
-            <div className="bg-[#d1182b] rounded-full p-1 text-white">
+            <div className="bg-[#d1182b] rounded-full p-1 text-white cursor-pointer">
               <FaXmark className="text-xl" />
             </div>
           }
         >
-          <div className="text-[#d1182b] mt-3 font-semibold px-3">
-            <Link href="/">صفحه نخست</Link>
-          </div>
-
           <Menu
             mode="inline"
-            style={{ width: "100%", direction: "rtl", zIndex: "1000" }}
+            style={{ 
+              width: "100%", 
+              direction: "rtl", 
+              zIndex: "1000",
+              backgroundColor: "#fff",
+            }}
             className="custom-menu"
             items={menuItems}
-            defaultOpenKeys={user?.token ? ['dashboard-group'] : []}
+            defaultOpenKeys={currentAccordionKey ? [currentAccordionKey] : []}
           />
+
+          <style jsx global>{`
+            .custom-menu .ant-menu-item-selected {
+              background-color: #b91626 !important;
+              color: white !important;
+            }
+            .custom-menu .ant-menu-item:hover {
+              color: #d1182b !important;
+            }
+            .custom-menu .ant-menu-submenu-title:hover {
+              color: #d1182b !important;
+            }
+            .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+              color: #d1182b !important;
+            }
+            .custom-menu .ant-menu-submenu-open > .ant-menu-submenu-title {
+              color: #d1182b !important;
+            }
+            .custom-menu .ant-menu-submenu-active > .ant-menu-submenu-title {
+              color: #d1182b !important;
+            }
+            .custom-menu .ant-menu-item-active {
+              background-color: rgba(209, 24, 43, 0.1) !important;
+            }
+            .custom-menu .ant-menu-submenu-active > .ant-menu-submenu-title {
+              background-color: rgba(209, 24, 43, 0.1) !important;
+            }
+            .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+              background-color: #b91626 !important;
+              color: white !important;
+            }
+          `}</style>
         </Drawer>
       </>
     );
