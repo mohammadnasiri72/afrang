@@ -13,9 +13,9 @@ export default function BoxImgHome({ mainBanner }) {
           <div className="flex flex-wrap">
             <div className="md:w-1/4 w-1/2 p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[0].image)}
                     alt={mainBanner[0].categoryTitle}
                   />
@@ -25,9 +25,9 @@ export default function BoxImgHome({ mainBanner }) {
 
             <div className="w-full sm:w-1/2 md:w-1/2 hidden md:block p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[1].image)}
                     alt={mainBanner[1].categoryTitle}
                   />
@@ -37,9 +37,9 @@ export default function BoxImgHome({ mainBanner }) {
 
             <div className="md:w-1/4 w-1/2 p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[2].image)}
                     alt={mainBanner[2].categoryTitle}
                   />
@@ -47,11 +47,11 @@ export default function BoxImgHome({ mainBanner }) {
               </div>
             </div>
 
-            <div className="sm:w-full md:hidden block">
+            <div className="w-full md:hidden block">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#">
                   <img
-                    className="w-full h-full"
+                    className="w-full h-full min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[1].image)}
                     alt={mainBanner[1].categoryTitle}
                   />
@@ -63,9 +63,9 @@ export default function BoxImgHome({ mainBanner }) {
           <div className="flex flex-wrap">
             <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[3].image)}
                     alt={mainBanner[3].categoryTitle}
                   />
@@ -75,9 +75,9 @@ export default function BoxImgHome({ mainBanner }) {
 
             <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[4].image)}
                     alt={mainBanner[4].categoryTitle}
                   />
@@ -87,9 +87,9 @@ export default function BoxImgHome({ mainBanner }) {
 
             <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[5].image)}
                     alt={mainBanner[5].categoryTitle}
                   />
@@ -99,9 +99,9 @@ export default function BoxImgHome({ mainBanner }) {
 
             <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
               <div className="h-full mb-[15px] bg-white border-2 border-gray-200 rounded-lg">
-                <a href="#">
+                <a href="#" className="block w-full">
                   <img
-                    className="w-full h-full"
+                    className="w-full aspect-square min-h-[200px] object-cover"
                     src={getImageUrl(mainBanner[6].image)}
                     alt={mainBanner[6].categoryTitle}
                   />

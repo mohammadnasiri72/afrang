@@ -35,7 +35,7 @@ export default function CameraAccessories({ category }) {
                 spaceBetween: 8,
               },
               100: {
-                slidesPerView: 2,
+                slidesPerView: 1,
                 spaceBetween: 5,
               },
             }}

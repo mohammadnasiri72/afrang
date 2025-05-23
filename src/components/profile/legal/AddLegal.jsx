@@ -184,7 +184,7 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
         >
             <div className="mt-6 space-y-4">
                 {/* Row 1: نام سازمان، کد اقتصادی، استان */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-gray-700 mb-2">نام سازمان*</label>
                         <div className={`bg-[#fff] rounded-lg px-4 py-2 flex items-center border ${errors.organizationName ? "border-red-500" : "border-gray-300"} focus-within:ring-2 focus-within:ring-[#d1182b] focus-within:border-transparent`}>
@@ -238,7 +238,7 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                 </div>
 
                 {/* Row 2: شهر، شناسه ملی، شماره ثبت */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
                     <div>
                         <label className="block text-gray-700 mb-2">استان*</label>
@@ -309,7 +309,7 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                 </div>
 
                 {/* Row 3: شماره تماس */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-gray-700 mb-2">شماره تماس*</label>
                         <div className={`bg-[#fff] rounded-lg px-4 py-2 flex items-center border ${errors.landlineNumber ? "border-red-500" : "border-gray-300"} focus-within:ring-2 focus-within:ring-[#d1182b] focus-within:border-transparent`}>

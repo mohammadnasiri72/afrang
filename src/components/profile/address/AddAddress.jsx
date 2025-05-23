@@ -621,7 +621,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         )}
 
         {/* Row 1: نام و نام خانوادگی، استان، شهر */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-gray-700 mb-2">نام و نام خانوادگی*</label>
             <input
@@ -699,7 +699,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         </div>
 
         {/* Row 2: شماره موبایل، کد ملی، کد پستی */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-gray-700 mb-2">شماره موبایل*</label>
             <input
@@ -752,7 +752,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
               onChange={(e) => {
                 const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
                 setPostalCode(value);
-                // اگر کد پستی کامل شد، اعتبارسنجی کن
                 if (value.length === 10) {
                   const error = validatePostalCode(value);
                   if (error) {

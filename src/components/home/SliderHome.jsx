@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 import { fetchSliderItems } from "@/services/sliderService";
+import Loading from "@/components/Loading";
 
 const SliderHome = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -53,18 +54,7 @@ const SliderHome = () => {
   };
 
   if (loading) {
-    return (
-      <div className="animate-pulse">
-        <div className="h-64 bg-gray-100 rounded-lg relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="space-y-4 text-center">
-              <div className="h-8 bg-gray-200 rounded w-48 mx-auto"></div>
-              <div className="h-4 bg-gray-200 rounded w-64 mx-auto"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <Loading slider={true} />;
   }
 
   return (

@@ -2,81 +2,48 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import OrderDetails from './OrderDetails';
-import { Tabs, Tab, Box, Pagination } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Pagination } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { getOrder } from "@/services/order/orderService";
 import Cookies from 'js-cookie';
 import { motion, AnimatePresence } from 'framer-motion';
 import Loading from '@/components/Loading';
 import { FaClipboardList, FaHourglassHalf, FaTruck, FaCheckCircle, FaTimesCircle, FaEye, FaCreditCard, FaCalendarAlt, FaMoneyBillWave, FaShoppingBag, FaInfoCircle } from 'react-icons/fa';
+import { Segmented } from 'antd';
+import React from 'react';
 
 const ORDER_STATUS = {
-  REGISTERED: 1,     // ثبت شده
-  PENDING: 2,        // منتظر پردازش
-  PROCESSING: 3,     // درحال انجام
-  COMPLETED: 4,      // انجام شده
-  CANCELLED: 5       // لغو شده
+    REGISTERED: 1,     // ثبت شده
+    PENDING: 2,        // منتظر پردازش
+    PROCESSING: 3,     // درحال انجام
+    COMPLETED: 4,      // انجام شده
+    CANCELLED: 5       // لغو شده
 };
 
+// تعریف ترتیب دلخواه آیتم‌ها
+const ORDER_STATUS_ORDER = [
+    ORDER_STATUS.REGISTERED,
+    ORDER_STATUS.PENDING,
+    ORDER_STATUS.PROCESSING,
+    ORDER_STATUS.COMPLETED,
+    ORDER_STATUS.CANCELLED,
+];
+
 const ORDER_STATUS_TITLES = {
-  [ORDER_STATUS.REGISTERED]: 'ثبت شده',
-  [ORDER_STATUS.PENDING]: 'منتظر پردازش',
-  [ORDER_STATUS.PROCESSING]: 'درحال انجام',
-  [ORDER_STATUS.COMPLETED]: 'انجام شده',
-  [ORDER_STATUS.CANCELLED]: 'لغو شده'
+    [ORDER_STATUS.REGISTERED]: 'ثبت شده',
+    [ORDER_STATUS.PENDING]: 'منتظر پردازش',
+    [ORDER_STATUS.PROCESSING]: 'درحال انجام',
+    [ORDER_STATUS.COMPLETED]: 'انجام شده',
+    [ORDER_STATUS.CANCELLED]: 'لغو شده',
 };
 
 const ORDER_STATUS_ICONS = {
-  [ORDER_STATUS.REGISTERED]: FaClipboardList,
-  [ORDER_STATUS.PENDING]: FaHourglassHalf,
-  [ORDER_STATUS.PROCESSING]: FaTruck,
-  [ORDER_STATUS.COMPLETED]: FaCheckCircle,
-  [ORDER_STATUS.CANCELLED]: FaTimesCircle
+    [ORDER_STATUS.REGISTERED]: FaClipboardList,
+    [ORDER_STATUS.PENDING]: FaHourglassHalf,
+    [ORDER_STATUS.PROCESSING]: FaTruck,
+    [ORDER_STATUS.COMPLETED]: FaCheckCircle,
+    [ORDER_STATUS.CANCELLED]: FaTimesCircle
 };
-
-// استایل سفارشی برای تب‌ها
-const StyledTabs = styled((props) => (
-  <Tabs
-    {...props}
-    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
-  />
-))({
-  minHeight: '40px',
-  '& .MuiTabs-indicator': {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    height: '4px',
-  },
-  '& .MuiTabs-indicatorSpan': {
-    width: '80%',
-    backgroundColor: '#d1182b',
-    borderRadius: '4px',
-  },
-});
-
-const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
-  ({ theme }) => ({
-    textTransform: 'none',
-    fontWeight: 'bold',
-    fontSize: '1rem',
-    padding: '0 16px',
-    minHeight: '40px',
-    color: '#666',
-    fontFamily: 'var(--font-vazirmatn)',
-    '&.Mui-selected': {
-      color: '#d1182b',
-    },
-    '&:hover': {
-      color: '#d1182b',
-    },
-    '& .MuiTab-iconWrapper': {
-      marginLeft: '8px',
-      marginRight: '0',
-    }
-  }),
-);
 
 export default function BodyOrder({ orderData: initialOrderData, currentStatus, currentPage }) {
     const [orderData, setOrderData] = useState(initialOrderData);
@@ -87,8 +54,7 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
     const router = useRouter();
     const searchParams = useSearchParams();
     const selectedTrackCode = searchParams.get('id');
-    console.log(orderData);
-    
+
 
     useEffect(() => {
         setTimeout(() => {
@@ -167,6 +133,19 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         router.push(`/profile/orders?id=${trackCode}`);
     };
 
+    const options = [...ORDER_STATUS_ORDER].reverse().map(statusId => {
+        const Icon = ORDER_STATUS_ICONS[statusId];
+        return {
+            label: (
+                <div className="flex items-center justify-center gap-2 text-right">
+                    <span>{ORDER_STATUS_TITLES[statusId]}</span>
+                    <Icon className="text-lg" />
+                </div>
+            ),
+            value: statusId
+        };
+    });
+
     // اگر trackCode در URL وجود داشت، جزئیات سفارش رو نشون بده
     if (selectedTrackCode) {
         return (
@@ -180,33 +159,31 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
 
     return (
         <div className="mt-4">
-            <div id="orders-top" className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">تاریخچه سفارشات من</h2>
-                
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '4px' }}>
-                    <StyledTabs
-                        value={currentStatus}
-                        onChange={handleTabChange}
-                        aria-label="order status tabs"
-                    >
-                        {Object.entries(ORDER_STATUS_TITLES).map(([statusId, title]) => {
-                            const Icon = ORDER_STATUS_ICONS[parseInt(statusId)];
-                            return (
-                                <StyledTab
-                                    key={statusId}
-                                    value={parseInt(statusId)}
-                                    label={title}
-                                    icon={<Icon className="text-lg" />}
-                                    iconPosition="start"
-                                />
-                            );
-                        })}
-                    </StyledTabs>
-                </Box>
+            <div id="orders-top" className="bg-white rounded-xl p-4 sm:p-6 shadow-lg z-50 relative max-w-full">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">تاریخچه سفارشات من</h2>
 
-                <div className="space-y-6 mt-6">
+                <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 absolute w-full left-0 right-0 top-10">
+                    <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
+                        <Segmented
+                            className="font-semibold text-3xl w-full overflow-auto"
+                            dir="ltr"
+                            style={{
+                                padding: "8px",
+                                fontFamily: "yekan",
+                                width: "100%"
+                            }}
+                            value={currentStatus}
+                            onChange={(value) => {
+                                handleTabChange(null, value);
+                            }}
+                            options={options}
+                        />
+                    </div>
+                </div>
+
+                <div className="space-y-4 sm:space-y-6 mt-4 mt-36 w-full">
                     {loading ? (
-                        <div className="flex justify-center items-center py-12">
+                        <div className="flex justify-center items-center py-8 sm:py-12">
                             <Loading />
                         </div>
                     ) : orderData?.length > 0 ? (
@@ -219,21 +196,21 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                 transition={{ duration: 0.3 }}
                             >
                                 {orderData.map((order) => (
-                                    <div key={order.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                                        <div className="flex justify-between items-center mb-6">
-                                            <h3 className="text-lg font-bold text-gray-800">سفارش {order.trackCode}</h3>
+                                    <div key={order.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
+                                            <h3 className="text-base sm:text-lg font-bold text-gray-800">سفارش {order.trackCode}</h3>
                                             {order.payable && (
                                                 <button
-                                                    className="flex items-center gap-2 bg-[#d1182b] text-white px-6 py-2.5 rounded-lg hover:bg-[#40768c] transition-colors cursor-pointer shadow-sm hover:shadow-md"
+                                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#d1182b] text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#40768c] transition-colors cursor-pointer shadow-sm hover:shadow-md"
                                                     onClick={() => handlePayment(order.trackCode)}
                                                 >
-                                                    <FaCreditCard className="text-lg" />
+                                                    <FaCreditCard className="text-base sm:text-lg" />
                                                     <span>پرداخت سفارش</span>
                                                 </button>
                                             )}
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                             <div className="space-y-3">
                                                 <div className="flex justify-start items-center">
                                                     <FaShoppingBag className="text-[#d1182b] ml-2" />
@@ -267,10 +244,10 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                                     <FaTruck className="text-[#d1182b] ml-2" />
                                                     <span className="text-gray-600">وضعیت سفارش:</span>
                                                     <span className={`font-medium mr-2 ${order.status === 1 ? 'text-yellow-600' :
-                                                            order.status === 2 ? 'text-blue-600' :
-                                                                order.status === 3 ? 'text-green-600' :
-                                                                    'text-gray-600'
-                                                    }`}>
+                                                        order.status === 2 ? 'text-blue-600' :
+                                                            order.status === 3 ? 'text-green-600' :
+                                                                'text-gray-600'
+                                                        }`}>
                                                         {order.statusTitle}
                                                     </span>
                                                 </div>
@@ -282,13 +259,13 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                             </div>
                                         </div>
 
-                                        <div className="mt-6 pt-4 border-t border-gray-200">
+                                        <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
                                             <div className="flex justify-end">
                                                 <button
                                                     onClick={() => handleViewDetails(order.trackCode)}
-                                                    className="flex items-center gap-2 bg-[#40768c] text-white px-6 py-2.5 rounded-lg hover:bg-[#2c5266] transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#40768c] text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#2c5266] transition-all cursor-pointer shadow-sm hover:shadow-md"
                                                 >
-                                                    <FaEye className="text-lg" />
+                                                    <FaEye className="text-base sm:text-lg" />
                                                     <span>مشاهده جزئیات سفارش</span>
                                                 </button>
                                             </div>
@@ -298,16 +275,16 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                             </motion.div>
                         </AnimatePresence>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-                            <svg className="w-16 h-16 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-gray-500">
+                            <svg className="w-12 sm:w-16 h-12 sm:h-16 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
-                            <p className="text-lg">سفارشی در این دسته‌بندی یافت نشد</p>
+                            <p className="text-base sm:text-lg">سفارشی در این دسته‌بندی یافت نشد</p>
                         </div>
                     )}
 
                     {totalPages > 1 && (
-                        <div className="flex justify-center mt-6">
+                        <div className="flex justify-center mt-4 sm:mt-6">
                             <Pagination
                                 page={currentPage}
                                 count={totalPages}

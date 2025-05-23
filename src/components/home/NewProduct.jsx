@@ -25,23 +25,62 @@ function NewProduct({products}) {
 
   return (
     <>
-      <div className="sm:hidden flex justify-center items-center pb-10">
-        <div className="sm:hidden flex items-center title-newProduct relative">
+      <div className="lg:hidden flex justify-center items-center pb-10">
+        <div className="flex items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
         </div>
       </div>
-      <div className="flex justify-between items-center">
-        <div className="sm:flex hidden items-center title-newProduct relative">
+      <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+        <div className="lg:flex hidden items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
         </div>
-        <div className="flex items-center gap-3">
+        
+        {/* بخش موبایل */}
+        <div className="lg:hidden w-full">
+          {/* هدر دسته‌بندی‌ها */}
+          <div className="flex items-center justify-between mb-3 px-2">
+            <h3 className="text-lg font-semibold text-gray-700">دسته‌بندی‌ها</h3>
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
+            >
+              <span className="text-sm">نمایش همه</span>
+              <FaCaretLeft className="text-sm" />
+            </button>
+          </div>
+
+          {/* لیست دسته‌بندی‌ها */}
+          <div className="overflow-x-auto pb-2">
+            <div className="flex items-center gap-2 min-w-max px-2">
+              {categories.map((category, index) => (
+                <div key={category} className="flex items-center">
+                  <span
+                    onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
+                    className={`text-base cursor-pointer duration-300 font-medium whitespace-nowrap ${
+                      category === selectedCategory
+                        ? 'text-[#d1182b] font-bold'
+                        : 'text-[#0008] hover:text-[#000]'
+                    }`}
+                  >
+                    {category}
+                  </span>
+                  {index < categories.length - 1 && <span className="mx-2">/</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* دسته‌بندی‌ها در حالت دسکتاپ */}
+        <div className="hidden lg:flex items-center gap-3">
           {categories.map((category, index) => (
             <div key={category} className="flex items-center">
               <span
                 onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                className={`text-lg cursor-pointer duration-300 font-medium ${category === selectedCategory
-                  ? 'text-[#d1182b] font-bold'
-                  : 'text-[#0008] hover:text-[#000]'
+                className={`text-lg cursor-pointer duration-300 font-medium ${
+                  category === selectedCategory
+                    ? 'text-[#d1182b] font-bold'
+                    : 'text-[#0008] hover:text-[#000]'
                 }`}
               >
                 {category}
@@ -50,9 +89,11 @@ function NewProduct({products}) {
             </div>
           ))}
         </div>
-        <div 
+
+        {/* دکمه نمایش همه در دسکتاپ */}
+        <div
           onClick={() => setSelectedCategory(null)}
-          className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
+          className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
         >
           <span>نمایش همه</span>
           <FaCaretLeft />

@@ -122,7 +122,7 @@ const ProfileDropdown = () => {
         className="flex items-center"
         aria-label="منوی پروفایل"
       >
-        <div className="overflow-hidden transition-all duration-300 cursor-pointer flex items-center justify-center z-[10000]">
+        <div className={`overflow-hidden transition-all duration-300 cursor-pointer flex items-center justify-center  ${isOpen ? "z-[10000]" : ""}`}>
           <FaUser
             className={
               isOpen ? "text-2xl text-white/95" : "text-2xl text-gray-500"

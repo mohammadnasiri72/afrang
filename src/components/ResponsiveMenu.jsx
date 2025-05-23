@@ -1,22 +1,23 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Drawer, Menu } from "antd";
-import { FaBars, FaXmark } from "react-icons/fa6";
-import { FaHome, FaShoppingBag, FaAddressBook, FaBuilding, FaSignOutAlt } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
 import { setOpenMenuRes } from "@/redux/slice/menuRes";
-import Link from "next/link";
-import Loading from "./Loading";
+import { Drawer, Menu } from "antd";
 import Cookies from "js-cookie";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import { useEffect, useRef, useState } from "react";
+import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey } from "react-icons/fa";
+import { FaBars, FaXmark } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "./Loading";
 
 const dashboardMenuItems = [
   { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
+  { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
   { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
   { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
   { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
+  { id: 'change-password', title: 'تغییر رمز عبور', icon: FaKey, path: '/profile/change-password' },
 ];
 
 function ResponsiveMenu() {
@@ -59,7 +60,11 @@ function ResponsiveMenu() {
   );
 
   if (loading) {
-    return <Loading />;
+    return (
+      <div className="w-full">
+        <Loading navbar={true} />
+      </div>
+    );
   }
 
   // Desktop Menu Component
@@ -239,7 +244,7 @@ function ResponsiveMenu() {
         </div>
 
         <Drawer
-          zIndex={1001}
+          zIndex={10001}
           width={300}
           title={<Title />}
           onClose={onClose}

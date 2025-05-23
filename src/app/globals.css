@@ -477,8 +477,8 @@ html {
   padding-right: 0px;
   padding-top: 8px;
   padding-bottom: 8px;
-  margin-right: 20px !important;
-  margin-left: 20px !important;
+  margin-right: 10px !important;
+  margin-left: 10px !important;
   width: 100%;
   font-weight: 600 !important;
   font-size: 14px;
@@ -487,7 +487,6 @@ html {
 
 .SegmentedProduct .ant-segmented {
   background-color: #ebebeb;
- 
 }
 
 

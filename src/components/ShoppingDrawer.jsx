@@ -79,7 +79,7 @@ function ShoppingDrawer() {
           onClick={() => {
             dispatch(setOpenShopping(true));
           }}
-          className="text-[#d1182b] text-3xl cursor-pointer"
+          className="text-3xl cursor-pointer"
         />
         {items?.length > 0 && (
           <span className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
