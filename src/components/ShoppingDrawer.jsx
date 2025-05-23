@@ -122,16 +122,69 @@ function ShoppingDrawer() {
               <div className="flex-1 overflow-auto">
                 {items?.map((item) => (
                   <div key={item.id}>
-                    <div className="flex">
-                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative group">
+                    <div className="flex flex-col sm:flex-row p-3">
+                      <div className="w-full sm:w-20 sm:h-20 w-36 h-36 border border-[#0001] p-3 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
                         {item.image ? (
-                          <>
-                            <img
-                              className="w-full h-full object-cover transition-all duration-300 group-hover:opacity-50"
-                              src={getImageUrl(item.image)}
-                              alt={item.title}
-                            />
-                            <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <img
+                            className="w-full h-full object-contain"
+                            src={getImageUrl(item.image)}
+                            alt={item.title}
+                          />
+                        ) : (
+                          <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
+                            {item.title}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0 mt-5 sm:mt-0">
+                        <Link 
+                          href={item.url}
+                          onClick={onClose}
+                          className="text-sm line-clamp-2 w-full hover:text-[#d1182b] transition-colors duration-300 font-bold !text-gray-800 no-underline"
+                        >
+                          {item.title}
+                        </Link>
+                        <div className="flex items-center">
+                          <span className="font-semibold">
+                            {item.finalPrice.toLocaleString()}
+                          </span>
+                          <span className="px-1 text-xs">تومان</span>
+                        </div>
+                        
+                        {/* دکمه‌های کنترل تعداد و حذف */}
+                        <div className="flex items-center gap-2 mt-1 w-full">
+                          {/* گروه دکمه‌های + و - */}
+                          <div className="flex items-center border border-[#d1182b] rounded-lg sm:hidden">
+                            <button
+                              onClick={() => handleIncrement(item)}
+                              className="text-lg text-[#d1182b] cursor-pointer font-semibold px-3 py-1 hover:text-red-700 transition-colors"
+                            >
+                              +
+                            </button>
+                            <span className="text-base font-bold px-2">{item.quantity}</span>
+                            <button
+                              onClick={() => handleDecrement(item)}
+                              disabled={item.quantity === 1}
+                              className={`text-lg font-semibold px-3 py-1 transition-colors ${
+                                item.quantity === 1 
+                                  ? 'text-gray-300 cursor-not-allowed' 
+                                  : 'text-[#d1182b] cursor-pointer hover:text-red-700'
+                              }`}
+                            >
+                              -
+                            </button>
+                          </div>
+
+                          {/* دکمه حذف */}
+                          <button
+                            onClick={() => handleDeleteClick(item)}
+                            className="p-1.5 text-[#d1182b] hover:bg-red-50 rounded-lg transition-colors cursor-pointer sm:hidden"
+                          >
+                            <FaTrash className="text-base" />
+                          </button>
+
+                          {/* نسخه دسکتاپ - نمایش با هاور */}
+                          <div className="hidden sm:block absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <div className="absolute inset-0 flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 scale-95 group-hover:scale-100">
                               <button
                                 onClick={() => handleIncrement(item)}
@@ -157,30 +210,7 @@ function ShoppingDrawer() {
                                 <FaMinus />
                               </button>
                             </div>
-                          </>
-                        ) : (
-                          <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
-                            {item.title}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0">
-                        <Link 
-                          href={item.url}
-                          onClick={onClose}
-                          className="text-sm line-clamp-2 w-full hover:text-[#d1182b] transition-colors duration-300 font-bold !text-gray-800 no-underline"
-                        >
-                          {item.title}
-                        </Link>
-                        <div className="flex items-center">
-                          <span className="font-semibold">
-                            {item.finalPrice.toLocaleString()}
-                          </span>
-                          <span className="px-1 text-xs">تومان</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-gray-500">
-                          <span>تعداد:</span>
-                          <span className="font-medium">{item.quantity}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
