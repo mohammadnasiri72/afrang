@@ -7,11 +7,12 @@ import DeleteProductModal from './DeleteProductModal';
 import { updateCart } from '@/services/cart/cartService';
 import { fetchCartData } from '@/redux/slices/cartSlice';
 import Cookies from "js-cookie";
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const CartCounter = ({ quantity, cartId }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { cartType } = useSelector((store) => store.cart);
   const userId = JSON.parse(Cookies.get("user"))?.userId;
@@ -84,13 +85,15 @@ const CartCounter = ({ quantity, cartId }) => {
         </button>
       </div>
 
-      <button
-        onClick={handleGoToCart}
-        className="flex items-center justify-center gap-2 bg-[#d1182b] text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors w-full cursor-pointer"
-      >
-        <FaShoppingCart />
-        <span>مشاهده سبد خرید</span>
-      </button>
+      {pathname !== '/cart' && (
+        <button
+          onClick={handleGoToCart}
+          className="flex items-center justify-center gap-2 bg-[#d1182b] text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors w-full cursor-pointer"
+        >
+          <FaShoppingCart />
+          <span>مشاهده سبد خرید</span>
+        </button>
+      )}
 
       <DeleteProductModal 
         isOpen={showDeleteModal}

@@ -150,7 +150,7 @@ const BodyCard = () => {
                   key={item.id}
                   className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
                 >
-                  <div className="sm:w-1/4 w-full">
+                  <div className="sm:w-1/4 w-full flex flex-col justify-between">
                     <img
                       style={{ filter: " brightness(0.8)" }}
                       className="w-full rounded-lg min-h-32 object-contain"
@@ -159,60 +159,68 @@ const BodyCard = () => {
                     />
                     <div className="mt-5">
 
-                    {renderCartCounter(item)}
+                      {renderCartCounter(item)}
                     </div>
                   </div>
-                  <div className="sm:w-3/4 w-full px-4 py-2 relative">
-                    <h3 className="font-semibold text-lg text-[#333] mb-3">
-                      {item.title}
-                    </h3>
-                    {item.warranty && (
-                      <div className="flex items-center mt-2">
-                        <BsArchive className="text-[#666]" />
-                        <span className="px-2 text-[13px]">
-                          {item.warranty}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex items-center mt-2">
-                      <GoShieldCheck className="text-[#666]" />
-                      <span className="px-2 text-[13px]">
-                        ضمانت اصل بودن کالا
-                      </span>
-                    </div>
-                    <div className="flex items-center mt-2">
-                      <LuMailbox className="text-[#666]" />
-                      <span className="px-2 text-[13px]">
-                        ارسال از 3 روز کاری دیگر
-                      </span>
-                    </div>
-                    {item.discount !== 0 && (
-                      <div className="mt-3">
-                        <span className="bg-[#d1182b] px-3 py-1 rounded-sm text-white font-bold">
-                          {item.discount}٪
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex justify-between items-end mt-10 sm:absolute bottom-0 right-5 left-5">
-                      <div className="flex flex-col">
-                        {item.discount !== 0 && (
-                          <div className="flex items-center">
-                            <span className="font-semibold text-[#666] text-lg line-through">
-                              {item.price1.toLocaleString()}
-                            </span>
-                            <span className="px-2 text-xs text-[#666]">
-                              قیمت قبل ازتخفیف
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex items-center">
-                          <span className="font-semibold text-xl">
-                            {item.finalPrice.toLocaleString()}
+                  <div className="sm:w-3/4 w-full px-4 py-2 relative flex flex-col justify-between">
+
+
+                    <div>
+
+                      <h3 className="font-semibold text-lg text-[#333] mb-3">
+                        {item.title}
+                      </h3>
+                      {item.warranty && (
+                        <div className="flex items-center mt-2">
+                          <BsArchive className="text-[#666]" />
+                          <span className="px-2 text-[13px]">
+                            {item.warranty}
                           </span>
-                          <span className="px-2 text-xs">تومان </span>
                         </div>
+                      )}
+                      <div className="flex items-center mt-2">
+                        <GoShieldCheck className="text-[#666]" />
+                        <span className="px-2 text-[13px]">
+                          ضمانت اصل بودن کالا
+                        </span>
                       </div>
-                      {renderActionButton(item)}
+                      <div className="flex items-center mt-2">
+                        <LuMailbox className="text-[#666]" />
+                        <span className="px-2 text-[13px]">
+                          ارسال از 3 روز کاری دیگر
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+
+                      {item.discount !== 0 && (
+                        <div className="mt-3">
+                          <span className="bg-[#d1182b] px-3 py-1 rounded-sm text-white font-bold">
+                            {item.discount}٪
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-end">
+                        <div className="flex flex-col">
+                          {item.discount !== 0 && (
+                            <div className="flex items-center">
+                              <span className="font-semibold text-[#666] text-lg line-through">
+                                {item.price1.toLocaleString()}
+                              </span>
+                              <span className="px-2 text-xs text-[#666]">
+                                قیمت قبل ازتخفیف
+                              </span>
+                            </div>
+                          )}
+                          <div className="flex items-center">
+                            <span className="font-semibold text-xl">
+                              {item.finalPrice.toLocaleString()}
+                            </span>
+                            <span className="px-2 text-xs">تومان </span>
+                          </div>
+                        </div>
+                        {renderActionButton(item)}
+                      </div>
                     </div>
                   </div>
                 </div>
