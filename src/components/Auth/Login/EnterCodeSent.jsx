@@ -91,7 +91,7 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
         router.push("/");
       } else {
         if (from === 'card') {
-          router.push("/card/compeletePay");
+          router.push("/cart/infosend");
         }
       }
       Toast.fire({

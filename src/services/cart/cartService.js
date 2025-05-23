@@ -12,7 +12,7 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-export const addToCart = async (productId, warrantyId = -1, userId) => {
+export const addToCart = async (productId, warrantyId = -1, userId, quantity = 1) => {
   try {
     const response = await axios.post(`${mainDomain}/api/Cart`, {
       langCode: "fa",
@@ -21,7 +21,7 @@ export const addToCart = async (productId, warrantyId = -1, userId) => {
       colorId: -1,
       warrantyId: warrantyId,
       parentId: -1,
-      quantity: 1,
+      quantity: quantity,
     });
     return response.data;
   } catch (err) {

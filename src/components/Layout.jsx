@@ -17,7 +17,7 @@ import DynamicTitle from "./DynamicTitle";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCartData, updateCart } from "@/redux/slices/cartSlice";
-import { getCart, getNextCart } from "@/services/cart/cartService";
+import { getCart, getNextCart, addToCart, deleteCartItem } from "@/services/cart/cartService";
 import { setLoading, setMenuItems, setError } from "@/redux/slice/menuRes";
 import { fetchMenuItems } from "@/services/menuService";
 import LayoutWrapper from "./LayoutWrapper";
@@ -30,37 +30,120 @@ const generateRandomUserId = () => {
 function InitialDataManager() {
   const dispatch = useDispatch();
   const { cartType } = useSelector(state => state.cart);
+  const user = useSelector(state => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const initialized = useRef(false);
+  const lastUserId = useRef(null);
+  const lastCartType = useRef(null);
 
   useEffect(() => {
-    const loadInitialData = async () => {
+    const loadData = async () => {
       try {
-        if (initialized.current) return;
-        initialized.current = true;
+        // فقط در اولین بار اجرا می‌شود
+        if (!initialized.current) {
+          initialized.current = true;
+          dispatch(setLoading());
+          const menuItems = await fetchMenuItems();
+          dispatch(setMenuItems(menuItems));
+        }
 
-        dispatch(setLoading());
-        const menuItems = await fetchMenuItems();
-        dispatch(setMenuItems(menuItems));
+        const currentUserId = user?.userId || JSON.parse(Cookies.get("user"))?.userId;
+        const isLoggedIn = user?.token; // چک کردن وضعیت لاگین
 
-        const userId = JSON.parse(Cookies.get("user"))?.userId;
-        const cartResponse = cartType === 'next'
-          ? await getNextCart(userId)
-          : await getCart(userId);
-        dispatch(updateCart({ items: cartResponse || [], cartType }));
+        console.log('Current State:', {
+          currentUserId,
+          lastUserId: lastUserId.current,
+          isLoggedIn,
+          hasToken: !!user?.token
+        });
+
+        // اگر کاربر لاگین شده و قبلاً لاگین نبوده (تغییر از حالت مهمان به کاربر)
+        if (isLoggedIn && lastUserId.current && lastUserId.current !== currentUserId) {
+          console.log('Merging carts...', {
+            previousUserId: lastUserId.current,
+            newUserId: currentUserId
+          });
+
+          try {
+            // دریافت سبد خرید قبلی (قبل از لاگین)
+            const previousCartItems = await getCart(lastUserId.current);
+            console.log('Previous cart items:', previousCartItems);
+            
+            // دریافت سبد خرید جدید (بعد از لاگین)
+            const newCartItems = await getCart(currentUserId);
+            console.log('New cart items:', newCartItems);
+            
+            // اگر سبد خرید قبلی خالی نبود، محصولات رو به سبد خرید جدید اضافه کن
+            if (previousCartItems && previousCartItems.length > 0) {
+              console.log('Adding items from previous cart...');
+              for (const item of previousCartItems) {
+                console.log('Adding item:', item);
+                try {
+                  await addToCart(
+                    item.productId,
+                    item.warrantyId || -1,
+                    currentUserId,
+                    item.quantity
+                  );
+                } catch (error) {
+                  console.error('Error adding item to new cart:', error);
+                }
+              }
+            }
+
+            // دریافت سبد خرید نهایی بعد از ادغام
+            const finalCartItems = await getCart(currentUserId);
+            console.log('Final cart items:', finalCartItems);
+            dispatch(updateCart({ items: finalCartItems || [], cartType }));
+            
+            // حذف سبد خرید قبلی
+            if (previousCartItems && previousCartItems.length > 0) {
+              console.log('Cleaning up previous cart...');
+              for (const item of previousCartItems) {
+                try {
+                  await deleteCartItem(item.id, lastUserId.current);
+                } catch (error) {
+                  console.error('Error deleting item from previous cart:', error);
+                }
+              }
+            }
+          } catch (error) {
+            console.error("Error in cart merge process:", error);
+          }
+        }
+
+        // به‌روزرسانی lastUserId و lastCartType
+        if (currentUserId !== lastUserId.current || cartType !== lastCartType.current) {
+          console.log('Updating cart state:', {
+            from: { userId: lastUserId.current, cartType: lastCartType.current },
+            to: { userId: currentUserId, cartType }
+          });
+
+          lastUserId.current = currentUserId;
+          lastCartType.current = cartType;
+          
+          if (currentUserId) {
+            const cartResponse = cartType === 'next'
+              ? await getNextCart(currentUserId)
+              : await getCart(currentUserId);
+            dispatch(updateCart({ items: cartResponse || [], cartType }));
+          } else {
+            dispatch(updateCart({ items: [], cartType }));
+          }
+        }
       } catch (error) {
-        console.error("Error loading initial data:", error);
-        dispatch(setError(error.message));
+        console.error("Error loading data:", error);
+        if (!initialized.current) {
+          dispatch(setError(error.message));
+        }
         dispatch(updateCart({ items: [], cartType }));
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadInitialData();
-
-    // dispatch(fetchCartData());
-  }, []);
+    loadData();
+  }, [user, cartType, dispatch]);
 
   if (isLoading) return null;
   return null;

@@ -22,11 +22,6 @@ export default function BodyCompeletePay() {
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
 
-  useEffect(() => {
-    if (!items || items.length === 0) {
-      dispatch(fetchCart());
-    }
-  }, []);
   const { items } = useSelector((state) => state.cart);
 
   // get address

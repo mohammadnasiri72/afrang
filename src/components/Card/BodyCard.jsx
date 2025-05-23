@@ -193,7 +193,7 @@ const BodyCard = () => {
                         </span>
                       </div>
                     )}
-                    <div className="flex justify-between items-end mt-10 absolute bottom-0 right-5 left-5">
+                    <div className="flex justify-between items-end mt-10 sm:absolute bottom-0 right-5 left-5">
                       <div className="flex flex-col">
                         {item.discount !== 0 && (
                           <div className="flex items-center">
