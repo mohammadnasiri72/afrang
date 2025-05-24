@@ -3,11 +3,15 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { FaCheck } from "react-icons/fa";
 
 function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   const defaultImage = "/images/shipping-default.png";
   const [imageErrors, setImageErrors] = useState({});
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
+
+  console.log(waySendList);
+  
 
   useEffect(() => {
     if (!selectedAddress) {
@@ -55,63 +59,68 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   }
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-lg">
-      <div className="flex items-center justify-between mb-4 border-b pb-3">
-        <h2 className="text-2xl font-bold text-gray-800">روش ارسال</h2>
+    <div className="flex flex-col gap-4">
+      <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
+      <div className="flex items-center justify-between pb-5">
+        <h2 className="text-gray-700 font-bold text-lg">روش ارسال</h2>
       </div>
-      <div className="w-full space-y-3">
-        {waySendList.shippingWays.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => handleSelectWay(item)}
-            className={`
-              w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer
-              ${item.id === selectedShipping?.id
-                ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-white shadow-md'
-                : 'border-gray-100 hover:border-blue-300 hover:shadow-sm'
-              }
-            `}
-          >
-            <div className="flex items-center gap-4">
-              <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1.5 shadow-sm">
+        <div className="w-full space-y-3">
+          {waySendList.shippingWays.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => handleSelectWay(item)}
+              className={`
+                w-full flex items-center gap-3 p-4 rounded-lg border-2 transition-all duration-200
+                ${item.id === selectedShipping?.id 
+                  ? 'border-[#d1182b] bg-red-50'
+                  : 'border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer'
+                }
+              `}
+            >
+              <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm">
                 <img
                   src={imageErrors[item.id] ? defaultImage : (item.image ? getImageUrl(item.image) : defaultImage)}
-                  alt={item.title?.length > 10 ? item.title.substring(0, 10) + '...' : item.title}
+                  alt={item.id}
                   className="w-full h-full object-contain rounded-md"
                   onError={() => handleImageError(item.id)}
                 />
               </div>
-              <div className="flex-1 grid grid-cols-12 gap-3 items-center w-full">
-                <div className="col-span-12 sm:col-span-5">
-                  <div className="font-bold text-base text-gray-800 whitespace-nowrap truncate">
+              <div className="flex-grow">
+                <div className="flex flex-col gap-1">
+                  <div className="text-base font-medium text-gray-800">
                     {item.title}
                   </div>
-                  {item.description && (
-                    <div className="text-sm text-gray-400 mt-0.5 leading-relaxed line-clamp-1">
-                      {item.description}
-                    </div>
+                  {item.desc && (
+                    <div 
+                      className="text-sm text-gray-500"
+                      dangerouslySetInnerHTML={{ __html: item.desc }}
+                    />
                   )}
-                </div>
-                <div className="col-span-12 sm:col-span-4">
-                  <div className="font-bold text-base text-gray-800">
+                  <div className="text-sm font-medium text-[#d1182b]">
+                    <span className="text-gray-600">هزینه ارسال: </span>
                     {item.price && item.price !== "0" ? `${item.price} تومان` : "رایگان"}
                   </div>
                 </div>
               </div>
-              <div className={`
-                w-5 h-5 rounded-full border-2 flex items-center justify-center
-                ${item.id === selectedShipping?.id ? 'border-blue-500' : 'border-gray-300'}
-              `}>
-                {item.id === selectedShipping?.id && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                )}
+              <div className="flex items-center gap-2">
+                <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
+                  ${item.id === selectedShipping?.id
+                    ? 'border-[#d1182b] bg-[#d1182b]'
+                    : 'border-gray-300'
+                  }`}
+                >
+                  {item.id === selectedShipping?.id && (
+                    <FaCheck className="text-white text-[10px]" />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export default WaySend;
+

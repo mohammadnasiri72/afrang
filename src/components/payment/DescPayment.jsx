@@ -12,6 +12,7 @@ import { clearAddressState } from '@/redux/slices/addressSlice';
 import { clearShippingState } from '@/redux/slices/shippingSlice';
 import { clearPaymentState } from '@/redux/slices/paymentWaySlice';
 import { fetchCartData } from '@/redux/slices/cartSlice';
+import { message } from "antd";
 
 function DescPayment({estimateData}) {
   const { items, cartType } = useSelector((store) => store.cart);
@@ -51,7 +52,6 @@ function DescPayment({estimateData}) {
       
       if (response) {
         dispatch(setOrderData(response));
-        dispatch(fetchCartData(cartType));
         router.push(`/profile/orders?trackCode=${response}`);
       }
     } catch (error) {
@@ -147,11 +147,16 @@ function DescPayment({estimateData}) {
 
         
           <button
-            onClick={handlePayment}
-            disabled={loading || !selectedPayment}
+            onClick={() => {
+              if (!selectedPayment) {
+                message.warning("لطفاً روش پرداخت را انتخاب کنید");
+              } else {
+                handlePayment();
+              }
+            }}
             className={`w-full flex justify-center items-center gap-2 text-white ${!loading && selectedPayment
                 ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
-                : "bg-gray-400"
+                : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
               }  py-2 rounded-lg duration-300 mt-3`}
           >
             {loading ? (

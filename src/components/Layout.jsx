@@ -1,25 +1,16 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { Suspense, useEffect, useState, useRef } from "react";
-import { Provider } from "react-redux";
-import { store } from "./../redux/store";
 import { AuthProvider } from "@/context/AuthContext";
-import Footer from "./Footer";
-import Header from "./Header";
-import BoxImgBranding from "./home/BoxImgBranding";
-import SupportBox from "./home/SupportBox";
-import NavBar from "./NavBar";
-import SocialNetworks from "./SocialNetworks";
-import SubFooter from "./SubFooter";
-import SubHeader from "./SubHeader";
-import DynamicTitle from "./DynamicTitle";
-import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCartData, updateCart } from "@/redux/slices/cartSlice";
-import { getCart, getNextCart, addToCart, deleteCartItem } from "@/services/cart/cartService";
-import { setLoading, setMenuItems, setError } from "@/redux/slice/menuRes";
+import { setError, setLoading, setMenuItems } from "@/redux/slice/menuRes";
+import { updateCart } from "@/redux/slices/cartSlice";
+import { addToCart, deleteCartItem, getCart, getNextCart } from "@/services/cart/cartService";
 import { fetchMenuItems } from "@/services/menuService";
+import Cookies from "js-cookie";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { store } from "./../redux/store";
+import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
 
 const generateRandomUserId = () => {

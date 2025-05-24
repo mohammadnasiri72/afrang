@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { getOrder } from "@/services/order/orderService";
 import { cookies } from 'next/headers';
+import ClearCart from './ClearCart';
 
 const HeaderCard = dynamic(() => import("@/components/Card/HeaderCard"));
 const BodyOrder = dynamic(() => import("@/components/profile/order/BodyOrder"));
@@ -23,8 +24,6 @@ export default async function Order(props) {
   const userCookie = cookieStore.get('user');
   const token = userCookie ? JSON.parse(userCookie.value).token : null;
 
-  
-
   let orderData = null;
   if (token) {
     try {
@@ -44,7 +43,10 @@ export default async function Order(props) {
         {trackCode && <HeaderCard />}
         {orderData ? (
           trackCode ? (
-            <BodyPaymentFinal trackCode={trackCode} token={token} />
+            <>
+              <ClearCart />
+              <BodyPaymentFinal trackCode={trackCode} token={token} />
+            </>
           ) : (
             <BodyOrder 
               orderData={orderData} 

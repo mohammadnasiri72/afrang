@@ -6,6 +6,7 @@ import CartActions from "./CartActions";
 import Warranties from "./Warranties";
 import { useState } from "react";
 import { useSelector } from 'react-redux';
+import { FaTruck, FaTruckFast, FaRecycle } from "react-icons/fa6";
 
 function BasketBox({ product }) {
   const { items } = useSelector((state) => state.cart);
@@ -17,8 +18,9 @@ function BasketBox({ product }) {
   const [selectedWarranty, setSelectedWarranty] = useState(
     warrantiesArray[0]?.value || null
   );
-  
-  
+
+  console.log(product);
+
   return (
     <div className="p-2 h-full">
       <div className="bg-[#f9f9f9] h-full rounded-lg p-7">
@@ -42,10 +44,35 @@ function BasketBox({ product }) {
           <span className="text-sm text-[#333]"> ضمانت اصل بودن کالا </span>
         </div>
 
+        {product.product.conditionId === 20 && (
+          <div className="flex items-center gap-3 mt-6 text-[#888]">
+            <FaRecycle className="text-xl " />
+            <span className="text-sm font-bold"> کالای کارکرده</span>
+          </div>
+        )}
+
+        <div className="flex items-center gap-3">
+          {product.product.fastShipping && (
+            <div className="flex items-center gap-3 mt-6 text-[#d1182b]">
+              <FaTruckFast className="text-xl" />
+              <span className="text-sm font-semibold"> ارسال سریع </span>
+            </div>
+          )}
+          {product.product.freeShipping && (
+            <div className="flex items-center gap-3 mt-6 text-[#d1182b]">
+              <FaTruck className="text-xl" />
+              <span className="text-sm font-semibold"> ارسال رایگان </span>
+            </div>
+          )}
+
+        </div>
+
+
+
         <PriceProduct product={product.product} />
 
         <div className="mt-10 p-4">
-          {product?.inventory?.inventoryQtyForView > 0 && product?.inventory?.inventoryQtyForView < 10 &&  (
+          {product?.inventory?.inventorySetting?.showInventory && (
             <span className="text-[#d1182b] font-semibold whitespace-nowrap">
               تنها <span className="text-lg font-bold px-1">{product?.inventory?.inventoryQtyForView}</span> عدد در انبار افرنگ
               باقی مانده

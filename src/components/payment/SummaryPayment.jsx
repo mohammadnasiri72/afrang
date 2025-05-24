@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { FaUser, FaTruck, FaShoppingCart, FaBuilding } from "react-icons/fa";
-import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
 
 export default function SummaryPayment({ estimateData }) {
@@ -34,7 +34,7 @@ export default function SummaryPayment({ estimateData }) {
     if (!items?.length && !selectedAddress && !selectedShipping) {
         return (
             <div className="container mx-auto px-4">
-                <div className="bg-white rounded-xl p-6 shadow-lg mt-5">
+                <div className="bg-white rounded-lg p-4 shadow-sm mt-4">
                     <div className="flex justify-center items-center h-40">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
                     </div>
@@ -45,39 +45,32 @@ export default function SummaryPayment({ estimateData }) {
 
     return (
         <div className="container mx-auto px-4" key={forceUpdate}>
-            <div className="bg-white rounded-xl p-6 shadow-lg mt-5">
-                <div className="flex justify-center items-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800">خلاصه سفارش</h2>
+            <div className="bg-white rounded-lg p-4 shadow-sm mt-4 z-50 relative">
+                <div className="flex items-center gap-2 mb-3">
+                    <FaShoppingCart className="text-lg text-[#d1182b]" />
+                    <h2 className="text-lg font-medium text-gray-800">خلاصه سفارش</h2>
                 </div>
 
                 {/* اطلاعات تحویل گیرنده */}
-                <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-3">
-                        <FaUser className="text-[#d1182b] text-xl" />
-                        <h3 className="text-lg font-semibold text-gray-800">تحویل گیرنده</h3>
+                <div className="mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaUser className="text-[#d1182b] text-base" />
+                        <h3 className="text-base font-medium text-gray-800">تحویل گیرنده</h3>
                     </div>
                     {selectedAddress && (
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">نام و نام خانوادگی</span>
-                                    <span className="font-medium text-gray-800">{selectedAddress.fullName}</span>
+                                    <span className="text-sm text-gray-500">نام و نام خانوادگی</span>
+                                    <span className="text-gray-800">{selectedAddress.fullName}</span>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">شماره موبایل</span>
-                                    <span className="font-medium text-gray-800">{selectedAddress.mobile}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">کد ملی</span>
-                                    <span className="font-medium text-gray-800">{selectedAddress.nationalCode || '-'}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">کد پستی</span>
-                                    <span className="font-medium text-gray-800">{selectedAddress.postalCode || '-'}</span>
+                                    <span className="text-sm text-gray-500">شماره موبایل</span>
+                                    <span className="text-gray-800">{selectedAddress.mobile}</span>
                                 </div>
                                 <div className="flex flex-col col-span-1 sm:col-span-2">
-                                    <span className="text-sm text-gray-500 mb-1">آدرس کامل</span>
-                                    <span className="font-medium text-gray-800">
+                                    <span className="text-sm text-gray-500">آدرس کامل</span>
+                                    <span className="text-gray-800">
                                         {selectedAddress.provinceTitle}، {selectedAddress.cityTitle}، {selectedAddress.address}
                                     </span>
                                 </div>
@@ -87,25 +80,25 @@ export default function SummaryPayment({ estimateData }) {
                 </div>
 
                 {/* اطلاعات نحوه ارسال */}
-                <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-3">
-                        <FaTruck className="text-[#d1182b] text-xl" />
-                        <h3 className="text-lg font-semibold text-gray-800">نحوه ارسال</h3>
+                <div className="mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaTruck className="text-[#d1182b] text-base" />
+                        <h3 className="text-base font-medium text-gray-800">نحوه ارسال</h3>
                     </div>
                     {selectedShipping && (
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
+                            <div className="flex justify-between items-center">
                                 <div>
-                                    <p className="font-medium text-gray-800">{selectedShipping.title}</p>
+                                    <p className="text-gray-800">{selectedShipping.title}</p>
                                     {selectedShipping.description && (
-                                        <p className="text-gray-600 mt-1">{selectedShipping.description}</p>
+                                        <p className="text-gray-500 text-sm mt-1">{selectedShipping.description}</p>
                                     )}
                                 </div>
-                                <div className="text-left">
+                                <div>
                                     {selectedShipping.price > 0 ? (
-                                        <p className="font-medium text-gray-800">{selectedShipping.price.toLocaleString()} تومان</p>
+                                        <p className="text-[#d1182b]">{selectedShipping.price.toLocaleString()} تومان</p>
                                     ) : (
-                                        <p className="font-medium text-green-600">رایگان</p>
+                                        <p className="text-[#d1182b]">رایگان</p>
                                     )}
                                 </div>
                             </div>
@@ -115,50 +108,28 @@ export default function SummaryPayment({ estimateData }) {
 
                 {/* اطلاعات حقوقی */}
                 {selectedLegal && (
-                    <div className="mb-6">
-                        <div className="flex items-center gap-2 mb-3">
-                            <FaBuilding className="text-[#d1182b] text-xl" />
-                            <h3 className="text-lg font-semibold text-gray-800">اطلاعات حقوقی</h3>
+                    <div className="mb-3">
+                        <div className="flex items-center gap-2 mb-2">
+                            <FaBuilding className="text-[#d1182b] text-base" />
+                            <h3 className="text-base font-medium text-gray-800">اطلاعات حقوقی</h3>
                         </div>
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">نام سازمان</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.organizationName}</span>
+                                    <span className="text-sm text-gray-500">نام سازمان</span>
+                                    <span className="text-gray-800">{selectedLegal.organizationName}</span>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">کد اقتصادی</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.economicCode}</span>
+                                    <span className="text-sm text-gray-500">کد اقتصادی</span>
+                                    <span className="text-gray-800">{selectedLegal.economicCode}</span>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">شناسه ملی</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.nationalId}</span>
+                                    <span className="text-sm text-gray-500">شناسه ملی</span>
+                                    <span className="text-gray-800">{selectedLegal.nationalId}</span>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">شماره ثبت</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.registrationId}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">شماره تماس</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.landlineNumber}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">کد کاربری</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.userId}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">استان</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.provinceTitle}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm text-gray-500 mb-1">شهر</span>
-                                    <span className="font-medium text-gray-800">{selectedLegal.cityTitle}</span>
-                                </div>
-                                <div className="flex flex-col col-span-1 sm:col-span-4">
-                                    <span className="text-sm text-gray-500 mb-1">وضعیت</span>
-                                    <span className="font-medium text-gray-800">
-                                        {selectedLegal.isArchive ? 'آرشیو شده' : 'فعال'}
-                                    </span>
+                                    <span className="text-sm text-gray-500">شماره ثبت</span>
+                                    <span className="text-gray-800">{selectedLegal.registrationId}</span>
                                 </div>
                             </div>
                         </div>
@@ -166,35 +137,35 @@ export default function SummaryPayment({ estimateData }) {
                 )}
 
                 {/* اقلام سفارش */}
-                <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-3">
-                        <FaShoppingCart className="text-[#d1182b] text-xl" />
-                        <h3 className="text-lg font-semibold text-gray-800">اقلام سفارش</h3>
+                <div className="mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaShoppingCart className="text-[#d1182b] text-base" />
+                        <h3 className="text-base font-medium text-gray-800">اقلام سفارش</h3>
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
                         {items?.map((item, index) => (
-                            <div key={item.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-200 last:border-0 gap-2">
-                                <div className="flex items-center gap-3">
+                            <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
+                                <div className="flex items-center gap-2">
                                     <img
                                         src={getImageUrl(item.image)}
                                         alt={item.id}
-                                        className="w-16 h-16 object-cover rounded-lg"
+                                        className="w-12 h-12 object-cover rounded-lg"
                                     />
                                     <div>
-                                        <p className="font-medium text-gray-800">{item.title}</p>
-                                        <p className="text-gray-600 text-sm">تعداد: {item.quantity}</p>
+                                        <p className="text-gray-800">{item.title}</p>
+                                        <p className="text-gray-500 text-sm">تعداد: {item.quantity}</p>
                                     </div>
                                 </div>
-                                <div className="text-left">
+                                <div>
                                     {item.finalPrice ? (
                                         <>
-                                            <p className="font-medium text-gray-800">{item.finalPrice.toLocaleString()} تومان</p>
+                                            <p className="text-[#d1182b]">{item.finalPrice.toLocaleString()} تومان</p>
                                             {item.price1 > item.finalPrice && (
                                                 <p className="text-gray-500 text-sm line-through">{item.price1.toLocaleString()} تومان</p>
                                             )}
                                         </>
                                     ) : (
-                                        <p className="font-medium text-gray-800">{item.price1.toLocaleString()} تومان</p>
+                                        <p className="text-[#d1182b]">{item.price1.toLocaleString()} تومان</p>
                                     )}
                                 </div>
                             </div>
@@ -203,14 +174,14 @@ export default function SummaryPayment({ estimateData }) {
                 </div>
 
                 {/* خلاصه قیمت */}
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
                     <div className="space-y-2">
                         <div className="flex justify-between text-gray-600">
                             <span>قیمت کالاها ({items?.length || 0})</span>
                             <span>{totalPrice.toLocaleString()} تومان</span>
                         </div>
                         {totalDiscount > 0 && (
-                            <div className="flex justify-between text-green-600">
+                            <div className="flex justify-between text-[#d1182b]">
                                 <span>سود شما از این خرید</span>
                                 <span>{totalDiscount.toLocaleString()} تومان</span>
                             </div>
@@ -228,9 +199,9 @@ export default function SummaryPayment({ estimateData }) {
                             </div>
                         )}
                         <div className="border-t border-gray-200 pt-2 mt-2">
-                            <div className="flex flex-col sm:flex-row justify-between items-center font-bold text-lg">
-                                <span>مبلغ قابل پرداخت</span>
-                                <span className="text-[#d1182b]">
+                            <div className="flex justify-between items-center">
+                                <span className="font-medium">مبلغ قابل پرداخت</span>
+                                <span className="text-[#d1182b] font-bold">
                                     {estimateData?.finalAmount ?
                                         estimateData.finalAmount.toLocaleString() :
                                         (totalPrice - totalDiscount + (selectedShipping?.price || 0)).toLocaleString()

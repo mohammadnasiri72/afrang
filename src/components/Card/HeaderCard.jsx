@@ -24,30 +24,39 @@ function HeaderCard() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [isCompletepayment, router]);
 
+  const handleStepClick = (step) => {
+    // اگر در مرحله پرداخت هستیم، فقط اجازه برگشت به سبد خرید رو میدیم
+    if (isCompletepayment && step !== 0) {
+      return;
+    }
+
+    switch (step) {
+      case 0:
+        router.push('/cart');
+        break;
+      case 1:
+        if (isCompleteinfopay || isCompleteinfosend || isCompletepayment) {
+          router.push('/cart/infosend');
+        }
+        break;
+      case 2:
+        if (isCompleteinfopay || isCompletepayment) {
+          router.push('/cart/infopay');
+        }
+        break;
+      case 3:
+        if (isCompletepayment) {
+          router.push('/cart/order');
+        }
+        break;
+    }
+  };
+
   return (
     <>
-      {/* <div className="bg-[#ebebeb] my-3 py-2 flex justify-center SegmentedCard">
-        <div className="w-60">
-          <Segmented
-            className="font-semibold text-3xl w-full"
-            dir="ltr"
-            style={{
-              padding: 0,
-              fontFamily: "yekan",
-            }}
-            value={typeArticle}
-            onChange={(e) => {
-              setTypeArticle(e);
-            }}
-            options={["خرید بعدی", "سبد خرید"]}
-          />
-        </div>
-      </div> */}
+     
       <div className="flex flex-wrap items-center justify-center py-10">
-        {/* <div className="md:w-1/3 w-full flex gap-3 text-lg font-semibold md:justify-start justify-center">
-          <span>سبد خرید</span>
-          <span className="text-[#888]"> {items.length} مرسوله</span>
-        </div> */}
+       
 
         <div className="md:w-1/2 w-full md:mt-0 mt-4">
           <Steps
@@ -56,27 +65,35 @@ function HeaderCard() {
             items={[
               {
                 title: "سبد خرید",
-                description: "انتخاب محصولات",
+                description: "انتخاب و بررسی محصولات",
                 status: "finish",
                 icon: <FaShoppingCart className="text-red-600 text-2xl" />,
+                onClick: () => handleStepClick(0),
+                className: "cursor-pointer hover:opacity-80 transition-opacity"
               },
               {
                 title: "اطلاعات ارسال",
-                description: "اطلاعات ارسال",
+                description: "ثبت آدرس و روش ارسال",
                 status: (isCompleteinfopay || isCompleteinfosend || isCompletepayment) ? "finish" : "wait",
                 icon: <FaMapMarkerAlt className={`text-2xl ${(isCompleteinfosend || isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
+                onClick: () => handleStepClick(1),
+                className: (isCompleteinfopay || isCompleteinfosend || isCompletepayment) && !isCompletepayment ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-not-allowed"
               },
               {
                 title: "اطلاعات پرداخت",
-                description: "اطلاعات پرداخت",
+                description: "انتخاب روش پرداخت",
                 status: (isCompleteinfopay || isCompletepayment) ? "finish" : "wait",
                 icon: <FaCreditCard className={`text-2xl ${(isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
+                onClick: () => handleStepClick(2),
+                className: (isCompleteinfopay || isCompletepayment) && !isCompletepayment ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-not-allowed"
               },
               {
                 title: "پرداخت و اتمام",
-                description: "پرداخت و اتمام",
+                description: "تکمیل و ثبت سفارش",
                 status: isCompletepayment ? "finish" : "wait",
                 icon: <FaCheckCircle className={`text-2xl ${isCompletepayment ? "text-red-600" : ""}`} />,
+                onClick: () => handleStepClick(3),
+                className: isCompletepayment ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-not-allowed"
               },
             ]}
           />
@@ -117,6 +134,9 @@ function HeaderCard() {
         .ant-steps-item {
           flex: 1 !important;
           text-align: center !important;
+        }
+        .ant-steps-item:hover {
+          opacity: 0.8;
         }
       `}</style>
     </>

@@ -59,7 +59,7 @@ function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
   const modalContent = (
     <div className="fixed inset-0 z-[999999] flex items-center justify-center">
       <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-[2px] transition-opacity duration-300"
+        className="fixed inset-0 bg-black/30 backdrop-blur-[3px] transition-opacity duration-300"
         onClick={onClose}
       />
       <div 
@@ -69,7 +69,12 @@ function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
         }}
       >
         <div className="text-center">
-          <h3 className="text-lg font-bold text-gray-900 mb-2">حذف از سبد خرید</h3>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#d1182b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <h3 className="text-lg font-bold text-gray-900">حذف از سبد خرید</h3>
+          </div>
           <p className="text-sm text-gray-600 mb-6">آیا از حذف این محصول از سبد خرید اطمینان دارید؟</p>
         </div>
         <div className="flex justify-center gap-3">

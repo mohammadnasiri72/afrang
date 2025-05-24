@@ -7,6 +7,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { FaTicketAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -149,7 +150,10 @@ export default function SelectCodeDiscount() {
     return (
         <div className="container mx-auto px-4 mt-5">
             <div className="bg-white rounded-xl p-6 shadow-lg">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">کد تخفیف</h2>
+                <div className="flex items-center gap-2 mb-4">
+                    <FaTicketAlt className="text-xl text-[#d1182b]" />
+                    <h2 className="text-xl font-bold text-gray-800">کد تخفیف</h2>
+                </div>
                 {!discountCode ? (
                     <form onSubmit={handleSubmit} className="space-y-2">
                         <div className="flex gap-2">
@@ -159,18 +163,18 @@ export default function SelectCodeDiscount() {
                                 onChange={handleInputChange}
                                 placeholder="کد تخفیف خود را وارد کنید"
                                 className={`flex-1 p-2 border rounded-lg focus:outline-none transition-colors duration-200 ${inputError
-                                        ? 'border-red-500 focus:border-red-500 bg-red-50'
-                                        : 'border-gray-300 focus:border-blue-500'
-                                    }`}
+                                    ? 'border-red-500 focus:border-red-500 bg-red-50'
+                                    : 'border-gray-200 focus:border-[#d1182b] hover:border-[#d1182b]'
+                                }`}
                                 disabled={isLoading}
                             />
                             <button
                                 type="submit"
                                 disabled={isLoading || !code.trim()}
-                                className={`px-4 py-2 rounded-lg text-white cursor-pointer ${isLoading || !code.trim()
+                                className={`px-4 py-2 rounded-lg text-white transition-colors duration-200 ${isLoading || !code.trim()
                                     ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-[#d1182b] hover:bg-[#40768c]'
-                                    }`}
+                                    : 'bg-[#d1182b] hover:bg-[#40768c] cursor-pointer'
+                                }`}
                             >
                                 {isLoading ? (
                                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -184,38 +188,35 @@ export default function SelectCodeDiscount() {
                         )}
                     </form>
                 ) : (
-                    <div className="flex items-center justify-between bg-green-50 p-3 rounded-lg">
+                    <div className="flex items-center justify-between bg-[#fff5f5] p-4 rounded-lg border border-[#d1182b]">
                         <div>
-                            <p className="text-green-800 font-medium">کد تخفیف اعمال شده:</p>
-                            <p className="text-green-600">{discountCode}</p>
+                            <p className="text-gray-800 font-medium">کد تخفیف اعمال شده:</p>
+                            <p className="text-[#d1182b]">{discountCode}</p>
                             {estimateData?.discountCodeAmount > 0 && (
-                                <p className="text-green-600 text-sm mt-1">
+                                <p className="text-gray-500 text-sm mt-1">
                                     مبلغ تخفیف: {estimateData.discountCodeAmount.toLocaleString()} تومان
                                 </p>
                             )}
                         </div>
                         <Tooltip
                             title="حذف کد تخفیف"
-                           
                             arrow
-                           
-                           
                         >
                             <IconButton
                                 onClick={handleRemoveCode}
                                 disabled={isLoading}
                                 size="small"
                                 sx={{
-                                    color: 'rgb(220, 38, 38)', // text-red-600
+                                    color: '#d1182b',
                                     '&:hover': {
-                                        color: 'rgb(153, 27, 27)', // text-red-800
-                                        backgroundColor: 'rgba(254, 242, 242, 0.8)', // hover:bg-red-50
+                                        color: '#40768c',
+                                        backgroundColor: 'rgba(255, 245, 245, 0.8)',
                                     },
                                     transition: 'all 0.2s',
                                 }}
                             >
                                 {isLoading ? (
-                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-red-600"></div>
+                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#d1182b]"></div>
                                 ) : (
                                     <FaRegTrashCan className="text-xl" />
                                 )}

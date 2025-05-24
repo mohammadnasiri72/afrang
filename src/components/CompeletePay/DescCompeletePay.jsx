@@ -7,6 +7,7 @@ import { estimateOrder } from "@/services/order/orderService";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { setEstimateData } from "@/redux/slices/paymentSlice";
+import { message } from "antd";
 
 export default function DescCompeletePay() {
   const { items } = useSelector((state) => state.cart);
@@ -197,11 +198,20 @@ export default function DescCompeletePay() {
           </div>
 
           <button
-            onClick={handlePayment}
-            disabled={!acceptTerms || !selectedShipping || !selectedAddress || loading}
+            onClick={() => {
+              if (!acceptTerms) {
+                message.warning("لطفاً قوانین و مقررات سایت را بپذیرید");
+              } else if (!selectedAddress) {
+                message.warning("لطفاً آدرس خود را انتخاب کنید");
+              } else if (!selectedShipping) {
+                message.warning("لطفاً روش ارسال را انتخاب کنید");
+              } else {
+                handlePayment();
+              }
+            }}
             className={`w-full flex justify-center items-center gap-2 text-white ${acceptTerms && selectedShipping && selectedAddress && !loading
                 ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
-                : "bg-gray-400"
+                : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
               }  py-2 rounded-lg duration-300 mt-3`}
           >
             {loading ? (

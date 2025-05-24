@@ -253,7 +253,11 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                             value={selectedProvince}
                             size="large"
                             suffixIcon={<FaCaretDown className="text-[#d1182b]" />}
-                            popupClassName="custom-select-dropdown"
+                            classNames={{
+                                popup: {
+                                    root: "custom-select-dropdown"
+                                }
+                            }}
                         >
                             {provinceList.map((province) => (
                                 <Select.Option key={province.provinceId} value={province.provinceId}>
@@ -277,7 +281,11 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                             disabled={!selectedProvince}
                             size="large"
                             suffixIcon={<FaCaretDown className="text-[#d1182b]" />}
-                            popupClassName="custom-select-dropdown"
+                            classNames={{
+                                popup: {
+                                    root: "custom-select-dropdown"
+                                }
+                            }}
                         >
                             {cityList.map((city) => (
                                 <Select.Option key={city.id} value={city.id}>

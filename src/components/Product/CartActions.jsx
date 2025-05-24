@@ -61,6 +61,7 @@ function CartActions({ product, selectedWarranty }) {
               <CartCounter 
                 quantity={cartItem.quantity} 
                 cartId={cartItem.id}
+                ctrl={product?.inventory?.inventorySetting?.showQtyControl}
               />
               
             </div>

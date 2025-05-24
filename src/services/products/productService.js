@@ -22,7 +22,7 @@ export const getProducts = async (data) => {
       ...(data.CategoryId && { CategoryId: data.CategoryId }), 
       ...(data.price1 && data.price1 !== 0 && { Price1: data.price1 }), 
       ...(data.price2 && data.price2 !== 100000 && { Price2: data.price2 }), 
-      ...(data.orderBy && { OrderBy: data.orderBy }),
+      OrderBy: data.orderBy || "2",
       ...(data.OnlyPrice && { OnlyPrice: data.OnlyPrice }),
       ...(data.OnlyDiscount && { OnlyDiscount: data.OnlyDiscount }),
       ...(data.StatusId && { StatusId: data.StatusId }),

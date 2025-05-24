@@ -31,8 +31,14 @@ export default function CompletePay() {
 
     useEffect(() => {
         const checkCart = async () => {
+            // اگر در مسیر ثبت سفارش هستیم، اجازه خالی بودن سبد خرید رو بده
             if (!items || items.length === 0) {
-                router.push('/cart');
+                const currentPath = window.location.pathname;
+                const searchParams = window.location.search;
+                // اگر در صفحه سفارشات با trackCode هستیم، اجازه خالی بودن سبد خرید رو بده
+                if (!currentPath.includes('/profile/orders') || !searchParams.includes('trackCode')) {
+                    router.push('/cart');
+                }
             }
         };
         checkCart();

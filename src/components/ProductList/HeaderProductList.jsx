@@ -12,7 +12,7 @@ function HeaderProductList({ onLayoutChange }) {
 
   const handleSort = (orderBy) => {
     const params = new URLSearchParams(searchParams);
-    if (orderBy) {
+    if (orderBy && orderBy !== "2") {
       params.set("OrderBy", orderBy);
     } else {
       params.delete("OrderBy");
@@ -35,7 +35,6 @@ function HeaderProductList({ onLayoutChange }) {
   };
 
   const sortOptions = [
-    { label: "مرتبط‌ترین", value: null },
     { label: "جدیدترین", value: "2" },
     { label: "پربازدید ترین", value: "1" },
     { label: "ارزان‌ترین", value: "4" },
@@ -62,7 +61,7 @@ function HeaderProductList({ onLayoutChange }) {
                 key={option.value || "default"}
                 onClick={() => handleSort(option.value)}
                 className={`font-semibold cursor-pointer duration-300 text-[15px] whitespace-nowrap select-none hover:text-[#d1182b] min-w-fit ${
-                  currentOrderBy === option.value
+                  (currentOrderBy === option.value || (!currentOrderBy && option.value === "2"))
                     ? "text-[#d1182b] border-[#18d1be]"
                     : "text-[#444] border-[#d5d5d5]"
                 } border lg:border-none rounded-lg lg:rounded-none px-[15px] lg:px-0 py-[5px] lg:py-0 flex lg:inline items-center justify-center gap-1 ${

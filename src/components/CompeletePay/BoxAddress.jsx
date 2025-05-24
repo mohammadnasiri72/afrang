@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddAddress from "@/components/profile/address/AddAddress";
 import DeleteAddress from "./DeleteAddress";
+import { FaPlus, FaHome, FaCheck } from "react-icons/fa";
 
 function BoxAddress({
   addressList,
@@ -24,125 +25,98 @@ function BoxAddress({
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-lg">
-      <div className="flex items-center justify-between mb-4 border-b pb-3">
-        <h2 className="text-2xl font-bold text-gray-800">آدرس‌های ثبت شده</h2>
+    <div className="flex flex-col gap-4">
+      <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
+      <div className="flex items-center justify-between pb-5">
+        <h2 className="text-gray-700 font-bold text-lg">آدرس‌های ثبت شده</h2>
         <button
           onClick={handleAddClick}
-          className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer"
+          className="flex items-center gap-1 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
         >
-          <span className="hidden sm:inline">افزودن آدرس تحویل</span>
-          <span className="sm:hidden">افزودن</span>
+          <FaPlus className="text-xs" />
+          <span>افزودن</span>
         </button>
       </div>
-      <div className="w-full space-y-3">
-        {addressList && addressList.length > 0 ? (
-          addressList.map((address) => (
-            <div
-              key={address.id}
-              onClick={() => setSelectedAddress(address)}
-              className={`
-                w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer
-                ${address.id === selectedAddress?.id 
-                  ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-white shadow-md' 
-                  : 'border-gray-100 hover:border-blue-300 hover:shadow-sm'
-                }
-              `}
-            >
-              <div className="flex items-center gap-4 w-full">
-                <div className="flex-1 grid grid-cols-12 gap-3 items-center w-full">
-                  <div className="col-span-12 sm:col-span-3">
-                    <div className="font-bold text-base text-gray-800">
-                      گیرنده: <span className="font-normal">{address.fullName}</span>
+        <div className="w-full space-y-3">
+          {addressList && addressList.length > 0 ? (
+            addressList.map((address) => (
+              <div
+                key={address.id}
+                onClick={() => setSelectedAddress(address)}
+                className={`
+                  w-full flex items-center gap-3 p-4 rounded-lg border-2 transition-all duration-200
+                  ${address.id === selectedAddress?.id 
+                    ? 'border-[#d1182b] bg-red-50'
+                    : 'border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer'
+                  }
+                `}
+              >
+                <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm">
+                  <FaHome className="text-xl text-[#d1182b]" />
+                </div>
+                <div className="flex-grow">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">گیرنده:</span>
+                      <span className="text-gray-600 mr-2">{address.fullName}</span>
                     </div>
-                  </div>
-                  <div className="col-span-12 sm:col-span-3">
-                    <div className="font-bold text-base text-gray-800">
-                      کد ملی: <span className="font-normal">{address.nationalCode}</span>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">کد ملی:</span>
+                      <span className="text-gray-600 mr-2">{address.nationalCode}</span>
                     </div>
-                  </div>
-                  <div className="col-span-12 sm:col-span-3">
-                    <div className="font-bold text-base text-gray-800">
-                      شماره تماس: <span className="font-normal">{address.mobile}</span>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">شماره تماس:</span>
+                      <span className="text-gray-600 mr-2">{address.mobile}</span>
                     </div>
-                  </div>
-                  <div className="col-span-12 sm:col-span-3">
-                    <div className="font-bold text-base text-gray-800">
-                      کد پستی: <span className="font-normal">{address.postalCode}</span>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">کد پستی:</span>
+                      <span className="text-gray-600 mr-2">{address.postalCode}</span>
                     </div>
-                  </div>
-                  <div className="col-span-12 mt-2">
-                    <div className="font-bold text-base text-gray-800">
-                      آدرس: <span className="font-normal">{address.provinceTitle} - {address.cityTitle} - {address.address}</span>
+                    <div className="text-sm col-span-2">
+                      <span className="font-medium text-gray-800">آدرس:</span>
+                      <span className="text-gray-600 mr-2">{address.provinceTitle} - {address.cityTitle} - {address.address}</span>
                     </div>
                   </div>
                 </div>
-                <div className={`
-                  w-5 h-5 rounded-full border-2 flex items-center justify-center
-                  ${address.id === selectedAddress?.id ? 'border-blue-500' : 'border-gray-300'}
-                `}>
-                  {address.id === selectedAddress?.id && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                  )}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditClick(address.id);
+                      }}
+                      className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
+                      title="ویرایش"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <DeleteAddress
+                      id={address.id}
+                      onDelete={onAddressDelete}
+                    />
+                  </div>
+                  <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
+                    ${address.id === selectedAddress?.id
+                      ? 'border-[#d1182b] bg-[#d1182b]'
+                      : 'border-gray-300'
+                    }`}
+                  >
+                    {address.id === selectedAddress?.id && (
+                      <FaCheck className="text-white text-[10px]" />
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="flex justify-end items-center gap-3 mt-3 pt-3 border-t border-gray-100">
-                <div className="w-full sm:w-24">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditClick(address.id);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 text-center text-[#fff] rounded-[5px] bg-[#1e88e5] font-[600] px-4 py-2 cursor-pointer"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    ویرایش
-                  </button>
-                </div>
-                <div className="w-full sm:w-24">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onAddressDelete(address.id);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-4 py-2 cursor-pointer"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    حذف
-                  </button>
-                </div>
-              </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center py-8">
+              <EmptyAddressIcon />
+              <p className="text-gray-500 mt-4">آدرس ثبت نشده است</p>
             </div>
-          ))
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 px-4">
-            <div className="relative w-32 h-32 mb-6">
-              {!imgError ? (
-                <img
-                  src="/images/gallery/empty-address.svg"
-                  alt="آدرس ثبت نشده"
-                  className="w-full h-full object-contain"
-                  onError={() => setImgError(true)}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-              )}
-            </div>
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">آدرس ثبت نشده</h3>
-            <p className="text-gray-500 text-center mb-6">
-              برای ثبت سفارش نیاز به ثبت آدرس دارید. لطفاً با کلیک روی دکمه افزودن آدرس، آدرس خود را ثبت کنید.
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <AddAddress
