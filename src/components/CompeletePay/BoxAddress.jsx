@@ -31,7 +31,8 @@ function BoxAddress({
           onClick={handleAddClick}
           className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer"
         >
-          افزودن آدرس تحویل
+          <span className="hidden sm:inline">افزودن آدرس تحویل</span>
+          <span className="sm:hidden">افزودن</span>
         </button>
       </div>
       <div className="w-full space-y-3">
@@ -50,22 +51,22 @@ function BoxAddress({
             >
               <div className="flex items-center gap-4 w-full">
                 <div className="flex-1 grid grid-cols-12 gap-3 items-center w-full">
-                  <div className="col-span-3">
+                  <div className="col-span-12 sm:col-span-3">
                     <div className="font-bold text-base text-gray-800">
                       گیرنده: <span className="font-normal">{address.fullName}</span>
                     </div>
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-12 sm:col-span-3">
                     <div className="font-bold text-base text-gray-800">
                       کد ملی: <span className="font-normal">{address.nationalCode}</span>
                     </div>
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-12 sm:col-span-3">
                     <div className="font-bold text-base text-gray-800">
                       شماره تماس: <span className="font-normal">{address.mobile}</span>
                     </div>
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-12 sm:col-span-3">
                     <div className="font-bold text-base text-gray-800">
                       کد پستی: <span className="font-normal">{address.postalCode}</span>
                     </div>
@@ -86,20 +87,34 @@ function BoxAddress({
                 </div>
               </div>
               <div className="flex justify-end items-center gap-3 mt-3 pt-3 border-t border-gray-100">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditClick(address.id);
-                  }}
-                  className="text-center text-[#fff] rounded-[5px] bg-[#1e88e5] font-[600] px-4 py-2 cursor-pointer"
-                >
-                  ویرایش
-                </button>
-                <DeleteAddress 
-                  id={address.id} 
-                  getAddressFu={getAddressFu} 
-                  onAddressDelete={onAddressDelete}
-                />
+                <div className="w-full sm:w-24">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditClick(address.id);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 text-center text-[#fff] rounded-[5px] bg-[#1e88e5] font-[600] px-4 py-2 cursor-pointer"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    ویرایش
+                  </button>
+                </div>
+                <div className="w-full sm:w-24">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddressDelete(address.id);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-4 py-2 cursor-pointer"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    حذف
+                  </button>
+                </div>
               </div>
             </div>
           ))

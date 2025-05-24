@@ -2,10 +2,21 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedPayment } from "@/redux/slices/paymentWaySlice";
+import { useEffect } from "react";
 
 export default function SelectWayPayment({ estimateData }) {
     const dispatch = useDispatch();
     const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
+
+    // اگر فقط یک روش پرداخت وجود داشت، به صورت خودکار انتخاب کن
+    useEffect(() => {
+        if (estimateData.paymentWays?.length === 1) {
+            dispatch(setSelectedPayment(estimateData.paymentWays[0]));
+        } else if (estimateData.paymentWays?.length > 1) {
+            // اگر چند روش پرداخت وجود داشت و هیچ کدام انتخاب نشده بود، انتخاب رو پاک کن
+            dispatch(setSelectedPayment(null));
+        }
+    }, [estimateData.paymentWays]);
 
     const handlePaymentSelect = (payment) => {
         dispatch(setSelectedPayment(payment));

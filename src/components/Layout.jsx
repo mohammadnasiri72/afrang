@@ -50,34 +50,22 @@ function InitialDataManager() {
         const currentUserId = user?.userId || JSON.parse(Cookies.get("user"))?.userId;
         const isLoggedIn = user?.token; // چک کردن وضعیت لاگین
 
-        console.log('Current State:', {
-          currentUserId,
-          lastUserId: lastUserId.current,
-          isLoggedIn,
-          hasToken: !!user?.token
-        });
+       
 
         // اگر کاربر لاگین شده و قبلاً لاگین نبوده (تغییر از حالت مهمان به کاربر)
         if (isLoggedIn && lastUserId.current && lastUserId.current !== currentUserId) {
-          console.log('Merging carts...', {
-            previousUserId: lastUserId.current,
-            newUserId: currentUserId
-          });
+         
 
           try {
             // دریافت سبد خرید قبلی (قبل از لاگین)
             const previousCartItems = await getCart(lastUserId.current);
-            console.log('Previous cart items:', previousCartItems);
             
             // دریافت سبد خرید جدید (بعد از لاگین)
             const newCartItems = await getCart(currentUserId);
-            console.log('New cart items:', newCartItems);
             
             // اگر سبد خرید قبلی خالی نبود، محصولات رو به سبد خرید جدید اضافه کن
             if (previousCartItems && previousCartItems.length > 0) {
-              console.log('Adding items from previous cart...');
               for (const item of previousCartItems) {
-                console.log('Adding item:', item);
                 try {
                   await addToCart(
                     item.productId,
@@ -93,7 +81,6 @@ function InitialDataManager() {
 
             // دریافت سبد خرید نهایی بعد از ادغام
             const finalCartItems = await getCart(currentUserId);
-            console.log('Final cart items:', finalCartItems);
             dispatch(updateCart({ items: finalCartItems || [], cartType }));
             
             // حذف سبد خرید قبلی

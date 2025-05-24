@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     selectedPayment: null,
+    paymentMethods: []
 };
 
 const paymentWaySlice = createSlice({
@@ -11,11 +12,15 @@ const paymentWaySlice = createSlice({
         setSelectedPayment: (state, action) => {
             state.selectedPayment = action.payload;
         },
-        clearSelectedPayment: (state) => {
-            state.selectedPayment = null;
+        setPaymentMethods: (state, action) => {
+            state.paymentMethods = action.payload;
         },
-    },
+        clearPaymentState: (state) => {
+            state.selectedPayment = null;
+            state.paymentMethods = [];
+        }
+    }
 });
 
-export const { setSelectedPayment, clearSelectedPayment } = paymentWaySlice.actions;
+export const { setSelectedPayment, setPaymentMethods, clearPaymentState } = paymentWaySlice.actions;
 export default paymentWaySlice.reducer; 

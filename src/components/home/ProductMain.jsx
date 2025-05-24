@@ -16,6 +16,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { useEffect } from "react";
 import Timer from "../ProductList/Timer";
 import CountdownTimer from './CountdownTimer';
+import AddToCartButton from "../ProductList/AddToCartButton";
 
 export default function ProductMain({ products }) {
   // useEffect(() => {
@@ -23,7 +24,7 @@ export default function ProductMain({ products }) {
   //     console.log(products);
   //   }
   // }, [products]);
-  
+
   return (
     <>
       <Swiper
@@ -145,15 +146,16 @@ export default function ProductMain({ products }) {
                     {
                       product.canAddCart &&
                       <div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-teal-500 font-bold">
-                          <SlBasket className="text-xl" />
-                          <span className="px-1">افزودن به سبد خرید</span>
+                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
+                          {/* <SlBasket className="text-xl" />
+                          <span className="px-1">افزودن به سبد خرید</span> */}
+                          <AddToCartButton productId={product.productId} />
                         </div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-teal-500 font-bold absolute">
-                          <SlBasket className="text-xl" />
-                          <span className="px-1">افزودن به سبد خرید</span>
+                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
+                        <AddToCartButton productId={product.productId} />
                         </div>
                       </div>
+                      
                     }
                     {
                       !product.canAddCart &&

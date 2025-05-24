@@ -8,7 +8,7 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Divider, Drawer } from "antd";
 import Cookies from "js-cookie";
 import { useRouter, usePathname } from 'next/navigation';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCartShopping, FaTrash, FaPlus, FaMinus } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,12 @@ function ShoppingDrawer() {
   const userId = JSON.parse(Cookies.get("user"))?.userId;
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+
+  useEffect(()=>{
+    if (open) {
+      dispatch(fetchCartData(cartType));
+    }
+  }, [open]);
 
   const onClose = () => {
     dispatch(setOpenShopping(false));
@@ -126,8 +132,8 @@ function ShoppingDrawer() {
             <>
               <div className="flex-1 overflow-auto">
                 {items?.map((item) => (
-                  <div key={item.id}>
-                    <div className="flex flex-col sm:flex-row p-3">
+                  <div key={item.id} className="group">
+                    <div className="flex flex-col sm:flex-row p-3 relative">
                       <div className="w-full sm:w-20 sm:h-20 w-36 h-36 border border-[#0001] p-3 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
                         {item.image ? (
                           <img
@@ -140,23 +146,47 @@ function ShoppingDrawer() {
                             {item.title}
                           </span>
                         )}
+                        {/* نسخه دسکتاپ - نمایش با هاور */}
+                        <div className="hidden sm:block absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="absolute inset-0 flex items-center justify-center gap-1.5">
+                            <button
+                              onClick={() => handleIncrement(item)}
+                              className="w-7 h-6 flex items-center justify-center text-white bg-black/50 hover:bg-black/70 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer text-xs"
+                            >
+                              <FaPlus />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(item)}
+                              className="w-7 h-6 flex items-center justify-center text-white bg-[#d1182b]/80 hover:bg-[#d1182b] rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer text-xs"
+                            >
+                              <FaTrash />
+                            </button>
+                            <button
+                              onClick={() => handleDecrement(item)}
+                              disabled={item.quantity === 1}
+                              className={`w-7 h-6 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg cursor-pointer text-xs ${
+                                item.quantity === 1 
+                                  ? 'text-gray-300 bg-gray-400/30 cursor-not-allowed' 
+                                  : 'text-white bg-black/50 hover:bg-black/70 hover:scale-110 active:scale-95 hover:shadow-xl'
+                              }`}
+                            >
+                              <FaMinus />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                       <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0 mt-5 sm:mt-0">
                         <button 
                           onClick={() => handleNavigation(item.url)}
-                          className={`text-sm line-clamp-2 w-full text-right transition-colors duration-300 font-bold no-underline ${
-                            pathname === item.url 
-                              ? 'text-white bg-[#d1182b] px-2 py-1 rounded' 
-                              : 'text-gray-800 hover:text-[#d1182b]'
-                          }`}
+                          className="text-sm line-clamp-2 w-full text-right transition-colors duration-300 font-bold no-underline text-gray-800 hover:text-[#d1182b] cursor-pointer"
                         >
                           {item.title}
                         </button>
                         <div className="flex items-center">
-                          <span className="font-semibold">
+                          <span className="font-bold text-[#d1182b]">
                             {item.finalPrice.toLocaleString()}
                           </span>
-                          <span className="px-1 text-xs">تومان</span>
+                          <span className="px-1 text-xs text-[#d1182b]">تومان</span>
                         </div>
                         
                         {/* دکمه‌های کنترل تعداد و حذف */}
@@ -190,35 +220,6 @@ function ShoppingDrawer() {
                           >
                             <FaTrash className="text-base" />
                           </button>
-
-                          {/* نسخه دسکتاپ - نمایش با هاور */}
-                          <div className="hidden sm:block absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <div className="absolute inset-0 flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 scale-95 group-hover:scale-100">
-                              <button
-                                onClick={() => handleIncrement(item)}
-                                className="w-7 h-6 flex items-center justify-center text-white bg-black/50 hover:bg-black/70 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer text-xs"
-                              >
-                                <FaPlus />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteClick(item)}
-                                className="w-7 h-6 flex items-center justify-center text-white bg-[#d1182b]/80 hover:bg-[#d1182b] rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer text-xs"
-                              >
-                                <FaTrash />
-                              </button>
-                              <button
-                                onClick={() => handleDecrement(item)}
-                                disabled={item.quantity === 1}
-                                className={`w-7 h-6 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg cursor-pointer text-xs ${
-                                  item.quantity === 1 
-                                    ? 'text-gray-300 bg-gray-400/30 cursor-not-allowed' 
-                                    : 'text-white bg-black/50 hover:bg-black/70 hover:scale-110 active:scale-95 hover:shadow-xl'
-                                }`}
-                              >
-                                <FaMinus />
-                              </button>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -232,15 +233,15 @@ function ShoppingDrawer() {
                   <span className="font-semibold text-[#666] text-[17px]">
                     جمع خرید:
                   </span>
-                  <div className="flex items-center font-semibold text-[#666] text-[16px]">
+                  <div className="flex items-center font-bold text-[#d1182b] text-[20px]">
                     <span>{totalPrice.toLocaleString()}</span>
-                    <span className="px-1">تومان</span>
+                    <span className="px-1 text-[16px]">تومان</span>
                   </div>
                 </div>
                 <div>
                   <button 
                     onClick={() => handleNavigation("/cart")}
-                    className={`w-full text-white duration-300 cursor-pointer py-3 mb-3 font-semibold rounded-lg ${
+                    className={`w-full text-white duration-300 cursor-pointer py-3 mb-3 font-semibold rounded-lg relative z-[10001] ${
                       pathname === '/cart' 
                         ? 'bg-[#b91626]' 
                         : 'bg-[#d1182b] hover:bg-[#b91626]'
@@ -250,7 +251,7 @@ function ShoppingDrawer() {
                   </button>
                   <button 
                     onClick={() => handleNavigation("/cart/infosend")}
-                    className={`w-full text-white duration-300 cursor-pointer py-3 font-semibold rounded-lg ${
+                    className={`w-full text-white duration-300 cursor-pointer py-3 font-semibold rounded-lg relative z-[10001] ${
                       pathname === '/cart/infosend' 
                         ? 'bg-[#b91626]' 
                         : 'bg-[#d1182b] hover:bg-[#b91626]'

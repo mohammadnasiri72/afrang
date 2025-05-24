@@ -266,22 +266,28 @@ export const estimateOrder = async (data, token) => {
 
 export const estimateOrderSave = async (data, token) => {
   try {
+    console.log('Sending data to API:', data); // برای دیباگ
     const response = await axios.post(`${mainDomain}/api/Order/Save`, data, {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
     });
     return response.data;
-  } catch (err) {
-    console.error("Error in estimate order:", err);
-    Toast.fire({
-      icon: "error",
-      text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
-    });
-    throw err;
+  } catch (error) {
+    console.error('API Error:', error.response?.data); // برای دیباگ
+    if (error.response) {
+      // اگر سرور پاسخ داد اما با خطا
+      const errorMessage = error.response.data?.message || error.response.data || 'خطا در ثبت سفارش';
+      throw new Error(errorMessage);
+    } else if (error.request) {
+      // اگر درخواست ارسال شد اما پاسخی دریافت نشد
+      throw new Error('خطا در ارتباط با سرور');
+    } else {
+      // اگر خطا در تنظیم درخواست رخ داد
+      throw new Error('خطا در ارسال درخواست');
+    }
   }
 };
 

@@ -2,15 +2,20 @@
 
 import { useSelector } from "react-redux";
 import { FaUser, FaTruck, FaShoppingCart, FaBuilding } from "react-icons/fa";
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
+import { useEffect, useState } from "react";
 
 export default function SummaryPayment({ estimateData }) {
     const { items } = useSelector((state) => state.cart);
     const selectedAddress = useSelector((state) => state.address.selectedAddress);
     const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
     const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
+    const [forceUpdate, setForceUpdate] = useState(0);
 
-
+    useEffect(() => {
+        // Force re-render when component mounts or route changes
+        setForceUpdate(prev => prev + 1);
+    }, [items, selectedAddress, selectedShipping, selectedLegal]);
 
     const totalPrice = items?.reduce((sum, item) => {
         const price = item.price1 || 0;
@@ -25,8 +30,21 @@ export default function SummaryPayment({ estimateData }) {
         return sum + (oldPrice - price) * quantity;
     }, 0) || 0;
 
+    // فقط زمانی loading نمایش داده شود که هیچ داده‌ای در دسترس نباشد
+    if (!items?.length && !selectedAddress && !selectedShipping) {
+        return (
+            <div className="container mx-auto px-4">
+                <div className="bg-white rounded-xl p-6 shadow-lg mt-5">
+                    <div className="flex justify-center items-center h-40">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4" key={forceUpdate}>
             <div className="bg-white rounded-xl p-6 shadow-lg mt-5">
                 <div className="flex justify-center items-center mb-6">
                     <h2 className="text-2xl font-bold text-gray-800">خلاصه سفارش</h2>
@@ -40,7 +58,7 @@ export default function SummaryPayment({ estimateData }) {
                     </div>
                     {selectedAddress && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="grid grid-cols-4 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                                 <div className="flex flex-col">
                                     <span className="text-sm text-gray-500 mb-1">نام و نام خانوادگی</span>
                                     <span className="font-medium text-gray-800">{selectedAddress.fullName}</span>
@@ -57,7 +75,7 @@ export default function SummaryPayment({ estimateData }) {
                                     <span className="text-sm text-gray-500 mb-1">کد پستی</span>
                                     <span className="font-medium text-gray-800">{selectedAddress.postalCode || '-'}</span>
                                 </div>
-                                <div className="flex flex-col col-span-2">
+                                <div className="flex flex-col col-span-1 sm:col-span-2">
                                     <span className="text-sm text-gray-500 mb-1">آدرس کامل</span>
                                     <span className="font-medium text-gray-800">
                                         {selectedAddress.provinceTitle}، {selectedAddress.cityTitle}، {selectedAddress.address}
@@ -76,7 +94,7 @@ export default function SummaryPayment({ estimateData }) {
                     </div>
                     {selectedShipping && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                                 <div>
                                     <p className="font-medium text-gray-800">{selectedShipping.title}</p>
                                     {selectedShipping.description && (
@@ -103,7 +121,7 @@ export default function SummaryPayment({ estimateData }) {
                             <h3 className="text-lg font-semibold text-gray-800">اطلاعات حقوقی</h3>
                         </div>
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="grid grid-cols-4 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                                 <div className="flex flex-col">
                                     <span className="text-sm text-gray-500 mb-1">نام سازمان</span>
                                     <span className="font-medium text-gray-800">{selectedLegal.organizationName}</span>
@@ -136,7 +154,7 @@ export default function SummaryPayment({ estimateData }) {
                                     <span className="text-sm text-gray-500 mb-1">شهر</span>
                                     <span className="font-medium text-gray-800">{selectedLegal.cityTitle}</span>
                                 </div>
-                                <div className="flex flex-col col-span-4">
+                                <div className="flex flex-col col-span-1 sm:col-span-4">
                                     <span className="text-sm text-gray-500 mb-1">وضعیت</span>
                                     <span className="font-medium text-gray-800">
                                         {selectedLegal.isArchive ? 'آرشیو شده' : 'فعال'}
@@ -155,10 +173,10 @@ export default function SummaryPayment({ estimateData }) {
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                         {items?.map((item, index) => (
-                            <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
+                            <div key={item.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-200 last:border-0 gap-2">
                                 <div className="flex items-center gap-3">
                                     <img
-                                        src={mainDomainImg + item.image}
+                                        src={getImageUrl(item.image)}
                                         alt={item.id}
                                         className="w-16 h-16 object-cover rounded-lg"
                                     />
@@ -210,7 +228,7 @@ export default function SummaryPayment({ estimateData }) {
                             </div>
                         )}
                         <div className="border-t border-gray-200 pt-2 mt-2">
-                            <div className="flex justify-between font-bold text-lg">
+                            <div className="flex flex-col sm:flex-row justify-between items-center font-bold text-lg">
                                 <span>مبلغ قابل پرداخت</span>
                                 <span className="text-[#d1182b]">
                                     {estimateData?.finalAmount ?

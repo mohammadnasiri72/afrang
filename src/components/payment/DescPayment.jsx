@@ -7,9 +7,14 @@ import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from 'sweetalert2';
+import { clearLegalState } from '@/redux/slices/legalIdSlice';
+import { clearAddressState } from '@/redux/slices/addressSlice';
+import { clearShippingState } from '@/redux/slices/shippingSlice';
+import { clearPaymentState } from '@/redux/slices/paymentWaySlice';
+import { fetchCartData } from '@/redux/slices/cartSlice';
 
 function DescPayment({estimateData}) {
-  const { items } = useSelector((state) => state.cart);
+  const { items, cartType } = useSelector((store) => store.cart);
   const [loading, setLoading] = useState(false);
   const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
@@ -20,47 +25,43 @@ function DescPayment({estimateData}) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-
-
-  
- // import sweet alert 2
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-start",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  customClass: "toast-modal",
-});
-
-
- 
+  // import sweet alert 2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+  });
 
   const handlePayment = async () => {
-    if (selectedPayment) {
-      setLoading(true);
-      try {
-        const data = {
-          langCode: "fa",
-          addressId: selectedAddress?.id,
-          legalInfoId: selectedLegal?.id || 0,
-          shipmentId: selectedShipping?.id,
-          discountCode: estimateData?.discountCode || "",
-          paymentId: selectedPayment.id
-        };
-        const response = await estimateOrderSave(data, token);
+    setLoading(true);
+    try {
+      const data = {
+        langCode: "fa",
+        addressId: selectedAddress.id,
+        legalInfoId: selectedLegal?.id || 0,
+        shipmentId: selectedShipping.id,
+        discountCode: estimateData?.discountCode || "",
+        paymentId: selectedPayment.id
+      };
+
+      const response = await estimateOrderSave(data, token);
+      
+      if (response) {
         dispatch(setOrderData(response));
+        dispatch(fetchCartData(cartType));
         router.push(`/profile/orders?trackCode=${response}`);
-      } catch (error) {
-        setLoading(false);
-        Toast.fire({
-          icon: "error",
-          text: error.response?.data ? error.response?.data : "خطای شبکه",
-          customClass: {
-            container: "toast-modal",
-          },
-        });
       }
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        text: error.message || "خطا در ثبت سفارش",
+        customClass: { container: "toast-modal" },
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,7 +138,7 @@ const Toast = Swal.mixin({
               <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
               <div className="flex items-center">
                 <span className="font-bold text-2xl text-[#d1182b]">
-                  {estimateData?.finalAmount ? estimateData.finalAmount.toLocaleString() : finalPrice.toLocaleString()}
+                  {estimateData?.finalAmount ? estimateData.finalAmount.toLocaleString() : 0}
                 </span>
                 <span className="mr-1">تومان</span>
               </div>
@@ -147,8 +148,8 @@ const Toast = Swal.mixin({
         
           <button
             onClick={handlePayment}
-            disabled={ loading || !selectedPayment}
-            className={`w-full flex justify-center items-center gap-2 text-white ${ !loading && selectedPayment
+            disabled={loading || !selectedPayment}
+            className={`w-full flex justify-center items-center gap-2 text-white ${!loading && selectedPayment
                 ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
                 : "bg-gray-400"
               }  py-2 rounded-lg duration-300 mt-3`}

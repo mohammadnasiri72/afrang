@@ -1,16 +1,28 @@
 "use client";
 import { Segmented, Steps } from "antd";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { FaShoppingCart, FaMapMarkerAlt, FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 function HeaderCard() {
-  
+  const router = useRouter();
   const pathname = usePathname();
   const isCompleteinfosend = pathname.includes("infosend");
   const isCompleteinfopay = pathname.includes("infopay");
   const isCompletepayment = pathname.includes("order");
+
+  // اگر در مرحله پرداخت هستیم و کاربر سعی می‌کند به عقب برگردد، به صفحه سبد خرید هدایت می‌شود
+  useEffect(() => {
+    const handlePopState = () => {
+      if (isCompletepayment) {
+        router.push('/cart');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isCompletepayment, router]);
 
   return (
     <>

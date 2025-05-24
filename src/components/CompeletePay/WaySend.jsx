@@ -2,18 +2,23 @@
 
 import { getImageUrl } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   const defaultImage = "/images/shipping-default.png";
   const [imageErrors, setImageErrors] = useState({});
+  const selectedAddress = useSelector((state) => state.address.selectedAddress);
 
   useEffect(() => {
-    if (waySendList.shippingWays && waySendList.shippingWays.length === 1) {
+    if (!selectedAddress) {
+      // اگر آدرسی انتخاب نشده، روش‌های ارسال را پاک کن
+      setSelectedShipping(null);
+    } else if (waySendList.shippingWays && waySendList.shippingWays.length === 1) {
       setSelectedShipping(waySendList.shippingWays[0]);
     } else if (!waySendList.shippingWays || waySendList.shippingWays.length === 0) {
       setSelectedShipping(null);
     }
-  }, [waySendList.shippingWays]);
+  }, [waySendList.shippingWays, selectedAddress]);
 
   const handleSelectWay = (item) => {
     setSelectedShipping(item);
@@ -23,7 +28,7 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
     setImageErrors(prev => ({ ...prev, [itemId]: true }));
   };
 
-  if (!waySendList.shippingWays || waySendList.shippingWays.length === 0) {
+  if (!selectedAddress || !waySendList.shippingWays || waySendList.shippingWays.length === 0) {
     return (
       <div className="bg-white rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between mb-4 border-b pb-3">
@@ -67,7 +72,7 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
               }
             `}
           >
-            <div className="flex items-center gap-4 w-full">
+            <div className="flex items-center gap-4">
               <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1.5 shadow-sm">
                 <img
                   src={imageErrors[item.id] ? defaultImage : (item.image ? getImageUrl(item.image) : defaultImage)}
@@ -77,7 +82,7 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
                 />
               </div>
               <div className="flex-1 grid grid-cols-12 gap-3 items-center w-full">
-                <div className="col-span-5">
+                <div className="col-span-12 sm:col-span-5">
                   <div className="font-bold text-base text-gray-800 whitespace-nowrap truncate">
                     {item.title}
                   </div>
@@ -87,7 +92,7 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
                     </div>
                   )}
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-12 sm:col-span-4">
                   <div className="font-bold text-base text-gray-800">
                     {item.price && item.price !== "0" ? `${item.price} تومان` : "رایگان"}
                   </div>

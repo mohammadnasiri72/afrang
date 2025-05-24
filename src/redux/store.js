@@ -16,6 +16,8 @@ import legalIdReducer from './slices/legalIdSlice';
 import paymentWayReducer from './slices/paymentWaySlice';
 import discountReducer from './slices/discountSlice';
 import orderReducer from './slices/orderSlice';
+import { clearStateMiddleware } from './middleware/clearStateMiddleware';
+import { loadState, saveState } from './middleware/persistState';
 
 const loadUserFromCookie = () => {
   try {
@@ -28,6 +30,8 @@ const loadUserFromCookie = () => {
   }
   return null;
 };
+
+const persistedState = loadState();
 
 export const store = configureStore({
   reducer: {
@@ -51,10 +55,16 @@ export const store = configureStore({
       serializableCheck: false,
       immutableCheck: false,
       thunk: true
-    }),
+    }).concat(clearStateMiddleware),
   preloadedState: {
     user: {
       user: loadUserFromCookie(),
     },
+    ...persistedState
   },
 })
+
+// Subscribe to store changes and save to localStorage
+store.subscribe(() => {
+    saveState(store.getState());
+});
