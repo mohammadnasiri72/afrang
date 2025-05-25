@@ -5,7 +5,7 @@ import { Drawer, Menu } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,22 +31,8 @@ function ResponsiveMenu() {
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0 });
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
-
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const navbar = navbarRef.current;
-      if (!navbar) return;
-
-      const scrollY = window.scrollY;
-      const shouldBeSticky = scrollY > 200;
-      
-      // setIsSticky(shouldBeSticky);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const timeoutRef = useRef(null);
+  const isCalculatingRef = useRef(false);
 
   const showDrawer = () => {
     dispatch(setOpenMenuRes(true));
@@ -156,6 +142,31 @@ function ResponsiveMenu() {
     });
   };
 
+  const handleMouseEnter = useCallback((e) => {
+    if (isCalculatingRef.current) return;
+    isCalculatingRef.current = true;
+
+    const navbar = navbarRef.current;
+    if (!navbar) return;
+
+    const navbarRect = navbar.getBoundingClientRect();
+    const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
+    setDropdownPosition({ top: topPosition });
+
+    // ریست کردن فلگ بعد از 100 میلی‌ثانیه
+    setTimeout(() => {
+      isCalculatingRef.current = false;
+    }, 100);
+  }, [isSticky]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   if (loading) {
     return (
       <div className="w-full">
@@ -166,15 +177,6 @@ function ResponsiveMenu() {
 
   // Desktop Menu Component
   const DesktopMenu = () => {
-    const handleMouseEnter = (e) => {
-      const navbar = navbarRef.current;
-      if (!navbar) return;
-
-      const navbarRect = navbar.getBoundingClientRect();
-      const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
-      setDropdownPosition({ top: topPosition });
-    };
-
     return (
       <div
         ref={navbarRef}
@@ -193,7 +195,7 @@ function ResponsiveMenu() {
                   className={`hover:bg-[#0002] duration-300 px-1 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
-                  onMouseEnter={item.Children?.length > 0 ? handleMouseEnter : undefined}
+                  onMouseEnter={handleMouseEnter}
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <div className="p-3 cursor-pointer font-semibold whitespace-nowrap">
@@ -208,7 +210,7 @@ function ResponsiveMenu() {
                   )}
                   {item.Children && item.Children.length > 0 && (
                     <div 
-                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[9999]"
+                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[99999989899899999]"
                       style={{ 
                         position: 'fixed',
                         top: `${dropdownPosition.top}px`,
