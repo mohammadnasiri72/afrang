@@ -86,7 +86,13 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
       const res = await authServiceOtp.login(mobile, englishCode);
       const userData = res.data; 
              
-      Cookies.set("user", JSON.stringify(userData));
+      // تنظیم کوکی با زمان انقضا
+      Cookies.set("user", JSON.stringify(userData), {
+        expires: new Date(userData.expiration),
+        secure: true,
+        sameSite: 'strict'
+      });
+
       if (!from) {
         router.push("/");
       } else {

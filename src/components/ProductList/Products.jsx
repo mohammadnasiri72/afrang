@@ -1,4 +1,4 @@
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCartShopping, FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
 import { Tooltip } from "antd";
@@ -10,7 +10,6 @@ import PriceProduct from "./PriceProduct";
 function Products({ products, layout = "list" }) {
 
 
-  console.log(products);
 
 
 
@@ -24,7 +23,7 @@ function Products({ products, layout = "list" }) {
             <Link href={product.url}>
               <img
                 className="w-48 h-48 object-contain rounded-lg"
-                src={getImageUrl(product.image)}
+                src={getImageUrl2(product.image)}
                 alt={product.title}
               />
             </Link>
@@ -96,7 +95,7 @@ function Products({ products, layout = "list" }) {
           <Link href={`${product.url}`}>
             <img
               className="w-40 h-40 object-contain rounded-lg mb-4"
-              src={getImageUrl(product.image)}
+              src={getImageUrl2(product.image)}
               alt={product.title}
             />
           </Link>

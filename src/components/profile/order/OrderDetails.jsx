@@ -5,7 +5,7 @@ import { FaArrowLeft, FaBox, FaTruck, FaCheckCircle, FaTimesCircle, FaClock, FaM
 import { useRouter } from 'next/navigation';
 import { getOrderTrackCode } from '@/services/order/orderService';
 import Cookies from 'js-cookie';
-import { getImageUrl } from '@/utils/mainDomain';
+import { getImageUrl2 } from '@/utils/mainDomain';
 import Loading from '@/components/Loading';
 
 export default function OrderDetails({ trackCode }) {
@@ -63,7 +63,6 @@ export default function OrderDetails({ trackCode }) {
         return null;
     }
 
-    console.log(orderDetails);
 
 
     return (
@@ -129,7 +128,7 @@ export default function OrderDetails({ trackCode }) {
                                     rel="noopener noreferrer"
                                     className="w-full sm:w-32 h-32 bg-white rounded-xl relative flex-shrink-0 block hover:opacity-90 transition-opacity border border-gray-100"
                                 >
-                                    <img src={getImageUrl(item.image)} alt={item.id} className="w-full h-full object-contain rounded-xl p-3" />
+                                    <img src={getImageUrl2(item.image)} alt={item.id} className="w-full h-full object-contain rounded-xl p-3" />
                                 </a>
                                 <div className="flex-1 w-full">
                                     <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">

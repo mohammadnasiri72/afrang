@@ -47,7 +47,7 @@ async function HeaderBlog({ page, pageSize, searchParams, category, blogs }) {
         </div>
         {blogs.length > 0 && (
           <div>
-            <div className="flex flex-wrap bg-white rounded-lg overflow-hidden ">
+            <div className="flex flex-wrap bg-white p-5 rounded-lg overflow-hidden ">
               <div className="lg:w-1/3 w-full py-3 px-5">
                 <h3 className="text-2xl font-semibold">{blogs[0].title}</h3>
                 <p className="leading-[45px]  text-[17px] text-[#666] mt-2 text-justify">
@@ -66,11 +66,11 @@ async function HeaderBlog({ page, pageSize, searchParams, category, blogs }) {
                   </span>
                 </div>
               </div>
-              <div className="lg:w-2/3 w-full relative cursor-pointer group overflow-hidden rounded-lg">
+              <div className="lg:w-2/3 w-full relative cursor-pointer group overflow-hidden rounded-lg flex items-center justify-center">
                 <img
                   src={blogs[0].img}
                   alt={blogs[0].title}
-                  className="group-hover:scale-120 scale-100 duration-300 group-hover:grayscale-[0.7] filter  brightness-[0.95] object-cover w-full h-full"
+                  className="group-hover:scale-105 scale-100 duration-300 group-hover:grayscale-[0.7] filter  brightness-[0.95] object-cover w-96 h-96 object-contain overflow-hidden"
                 />
                 <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2  border-[1.5px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2 group-hover:opacity-100 opacity-0" />
                 <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0  border-[1.5px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />

@@ -38,27 +38,14 @@ export default function Header() {
     if (userCookie) {
       try {
         const userData = JSON.parse(userCookie);
-        if (userData.token && (!user || !user.token)) {
+        if (!user || !user.token) {
           disPatch(setUser(userData));
-        } else if (!userData.token && user) {
-          disPatch(setUser(null));
         }
       } catch (error) {
         console.error("Error parsing user cookie:", error);
-        disPatch(setUser(null));
       }
-    } else if (user) {
-      disPatch(setUser(null));
     }
-  }, [user, disPatch]);
-
-  useEffect(() => {
-    if (authUser?.token && (!user || !user.token)) {
-      disPatch(setUser(authUser));
-    } else if (!authUser?.token && user) {
-      disPatch(setUser(null));
-    }
-  }, [authUser, user, disPatch]);
+  }, []);
 
   const isAuthenticated = user?.token && checkAuthStatus();
 
@@ -88,8 +75,11 @@ export default function Header() {
             <img className="w-14" src="/images/logo.png" alt="" />
           )}
           <div className="flex-col px-1 font-extrabold logo-text lg:flex hidden">
-            <span className="whitespace-nowrap"> خانــه عکاســــان </span>
-            <span>افــــــــــرنـگ</span>
+           
+            <span className="w-20">
+              {items.find((item) => item.propertyKey === "site_title")
+                      ?.value}
+            </span>
           </div>
         </div>
         <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">

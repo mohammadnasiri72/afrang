@@ -109,6 +109,17 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         }
     }, [currentStatus, currentPage]);
 
+    // اضافه کردن useEffect جدید برای هندل کردن برگشت از صفحه جزئیات
+    useEffect(() => {
+        const handlePopState = () => {
+            // وقتی با دکمه بک برمی‌گردیم، دیتا رو می‌گیریم
+            fetchOrders(currentStatus, currentPage);
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, [currentStatus, currentPage]);
+
     const handlePayment = (trackCode) => {
         router.push(`/profile/orders?trackCode=${trackCode}`);
     };
@@ -129,7 +140,6 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
     const handleViewDetails = (trackCode) => {
         setLastStatus(currentStatus);
         setLastPage(currentPage);
-        setLoading(true);
         router.push(`/profile/orders?id=${trackCode}`);
     };
 

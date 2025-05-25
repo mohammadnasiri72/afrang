@@ -2,30 +2,26 @@
 
 import React from "react";
 import Marquee from "react-fast-marquee";
+import { useSelector } from "react-redux";
 
 export default function SubHeader() {
+  const { items } = useSelector((state) => state.settings);
+
   return (
     <>
-      <div
-        className="marquee flex items-center py-3 w-full bg-teal-500 text-white text-sm"
-        style={{ direction: "ltr" }}
-      >
-        <Marquee speed={50} gradient={false} direction="right">
-          {" "}
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
-          استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در
-          ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و
-          کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد{" "}
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
-          استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در
-          ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و
-          کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد{" "}
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
-          استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در
-          ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و
-          کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد{" "}
-        </Marquee>
-      </div>
+      {
+        items.find((item) => item.propertyKey === "site_marquee")
+          ?.value &&
+        <div
+          className="marquee flex items-center py-3 w-full bg-teal-500 text-white text-sm"
+          style={{ direction: "ltr" }}
+        >
+          <Marquee speed={50} gradient={false} direction="right">
+            {items.find((item) => item.propertyKey === "site_marquee")
+              ?.value}
+          </Marquee>
+        </div>
+      }
     </>
   );
 }

@@ -21,7 +21,6 @@ const AddToCartButton = ({ productId }) => {
 
   const cartItem = items?.find(item => item.productId === productId);
 
-  console.log(cartItem);
   
 
   const Toast = Swal.mixin({

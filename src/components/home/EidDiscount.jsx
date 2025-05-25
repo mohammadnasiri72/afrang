@@ -67,7 +67,7 @@ export default function EidDiscount({ actionProducts, products }) {
                 <div key={category} className="flex items-center">
                   <span
                     onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                    className={`text-base cursor-pointer duration-300 font-medium whitespace-nowrap ${
+                    className={`text-sm cursor-pointer duration-300 font-medium whitespace-nowrap ${
                       category === selectedCategory
                         ? 'text-[#d1182b] font-bold'
                         : 'text-[#0008] hover:text-[#000]'
@@ -88,7 +88,7 @@ export default function EidDiscount({ actionProducts, products }) {
             <div key={category} className="flex items-center">
               <span
                 onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                className={`text-lg cursor-pointer duration-300 font-medium ${
+                className={`text-sm cursor-pointer duration-300 font-medium ${
                   category === selectedCategory
                     ? 'text-[#d1182b] font-bold'
                     : 'text-[#0008] hover:text-[#000]'

@@ -12,7 +12,6 @@ function BundleProducts({ product }) {
   const [bundleProducts, setBundleProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(product);
 
 
   useEffect(() => {

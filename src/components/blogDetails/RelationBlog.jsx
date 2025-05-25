@@ -43,7 +43,7 @@ async function RelationBlog() {
 
   return (
     <>
-      <div className="lg:w-1/4 w-full p-2">
+      <div className="lg:w-1/4 w-full p-2 z-50 relative">
         <div className="bg-white p-4 rounded-lg">
           <h2 className="font-semibold text-[16px]">آخرین اخبار</h2>
           {blogs.length > 0 &&
@@ -53,9 +53,9 @@ async function RelationBlog() {
                   href={blog.url}
                   className="relative group overflow-hidden"
                 >
-                  <div className="overflow-hidden relative cursor-pointer">
+                  <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
                     <img
-                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter  brightness-[0.95] w-full"
+                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter  brightness-[0.95] w-56 h-56"
                       src={blog.img}
                       alt={blog.title}
                     />

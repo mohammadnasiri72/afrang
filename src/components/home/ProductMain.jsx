@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl, getImageUrl2, mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
@@ -24,6 +24,8 @@ export default function ProductMain({ products }) {
   //     console.log(products);
   //   }
   // }, [products]);
+
+  
 
   return (
     <>
@@ -69,10 +71,10 @@ export default function ProductMain({ products }) {
                   )}
                   <Link href={product.url}>
                     <img
-                      className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain"
+                      className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain flex items-center justify-center"
                       style={{ filter: " brightness(0.95)" }}
-                      src={getImageUrl(product.image)}
-                      alt={product.title}
+                      src={getImageUrl2(product.image)}
+                      alt={'🚫'}
                     />
                   </Link>
                   <div className="p-4">

@@ -1,7 +1,7 @@
 "use client";
 
 import { getRelatedProductsByIdString } from "@/services/products/productService";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Skeleton } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -141,7 +141,7 @@ function AccessoriesProduct({ product }) {
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"
                       style={{ filter: " brightness(0.95)" }}
-                      src={getImageUrl(item.image)}
+                      src={getImageUrl2(item.image)}
                       alt={item.title}
                     />
                   </Link>

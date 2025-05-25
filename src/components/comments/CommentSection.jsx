@@ -12,7 +12,6 @@ function CommentSection({ id, comments: initialComments = [], totalCount }) {
   const [replyTo, setReplyTo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log(initialComments);
   
 
   const loadMoreComments = async () => {

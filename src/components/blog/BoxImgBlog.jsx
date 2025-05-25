@@ -65,10 +65,10 @@ async function BoxImgBlog({
                   2.4 <FaStar className="px-1 text-xl" />
                 </span>
               </div>
-              <div className="overflow-hidden relative cursor-pointer">
-                <Link href={blog.url}>
+              <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
+                <Link href={blog.url} className="flex items-center justify-center">
                   <img
-                    className="group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] w-full"
+                    className="group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] w-56 h-56 object-contain"
                     src={blog.img}
                     alt=""
                   />

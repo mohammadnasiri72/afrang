@@ -19,7 +19,6 @@ function BasketBox({ product }) {
     warrantiesArray[0]?.value || null
   );
 
-  console.log(product);
 
   return (
     <div className="p-2 h-full">

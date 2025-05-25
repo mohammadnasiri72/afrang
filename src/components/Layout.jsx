@@ -41,19 +41,19 @@ function InitialDataManager() {
         const currentUserId = user?.userId || JSON.parse(Cookies.get("user"))?.userId;
         const isLoggedIn = user?.token; // چک کردن وضعیت لاگین
 
-       
+
 
         // اگر کاربر لاگین شده و قبلاً لاگین نبوده (تغییر از حالت مهمان به کاربر)
         if (isLoggedIn && lastUserId.current && lastUserId.current !== currentUserId) {
-         
+
 
           try {
             // دریافت سبد خرید قبلی (قبل از لاگین)
             const previousCartItems = await getCart(lastUserId.current);
-            
+
             // دریافت سبد خرید جدید (بعد از لاگین)
             const newCartItems = await getCart(currentUserId);
-            
+
             // اگر سبد خرید قبلی خالی نبود، محصولات رو به سبد خرید جدید اضافه کن
             if (previousCartItems && previousCartItems.length > 0) {
               for (const item of previousCartItems) {
@@ -73,10 +73,9 @@ function InitialDataManager() {
             // دریافت سبد خرید نهایی بعد از ادغام
             const finalCartItems = await getCart(currentUserId);
             dispatch(updateCart({ items: finalCartItems || [], cartType }));
-            
+
             // حذف سبد خرید قبلی
             if (previousCartItems && previousCartItems.length > 0) {
-              console.log('Cleaning up previous cart...');
               for (const item of previousCartItems) {
                 try {
                   await deleteCartItem(item.id, lastUserId.current);
@@ -92,14 +91,11 @@ function InitialDataManager() {
 
         // به‌روزرسانی lastUserId و lastCartType
         if (currentUserId !== lastUserId.current || cartType !== lastCartType.current) {
-          console.log('Updating cart state:', {
-            from: { userId: lastUserId.current, cartType: lastCartType.current },
-            to: { userId: currentUserId, cartType }
-          });
+
 
           lastUserId.current = currentUserId;
           lastCartType.current = cartType;
-          
+
           if (currentUserId) {
             const cartResponse = cartType === 'next'
               ? await getNextCart(currentUserId)
@@ -137,18 +133,26 @@ function Layout({ children }) {
   }, []);
 
   useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (!userCookie) {
-      const initialData = {
-        token: "",
-        refreshToken: "",
-        expiration: "",
-        userId: generateRandomUserId(),
-        displayName: "",
-        roles: [],
-      };
-      Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
-    }
+    setTimeout(() => {
+
+
+      const userCookie = Cookies.get("user");
+      if (!userCookie) {
+        const initialData = {
+          token: "",
+          refreshToken: "",
+          expiration: "",
+          userId: generateRandomUserId(),
+          displayName: "",
+          roles: [],
+        };
+        Cookies.set("user", JSON.stringify(initialData));
+
+      }
+
+    }, 2000);
+
+
   }, []);
 
   return (

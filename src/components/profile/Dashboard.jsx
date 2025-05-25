@@ -1,6 +1,6 @@
 "use client";
 import { getdataDashboard, getRecentViews as getRecentViewsAPI } from "@/services/dashboard/dashboardService";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { getRecentViews } from "@/utils/recentViews";
 import Cookies from "js-cookie";
 import Link from "next/link";
@@ -216,7 +216,7 @@ export default function Dashboard() {
                                         <div className="aspect-square w-full bg-white relative overflow-hidden">
                                             {item.image && (
                                                 <img
-                                                    src={getImageUrl(item.image)}
+                                                    src={getImageUrl2(item.image)}
                                                     alt={item.title}
                                                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                                                 />

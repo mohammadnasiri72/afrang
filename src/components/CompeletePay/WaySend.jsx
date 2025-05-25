@@ -10,7 +10,6 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   const [imageErrors, setImageErrors] = useState({});
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
 
-  console.log(waySendList);
   
 
   useEffect(() => {

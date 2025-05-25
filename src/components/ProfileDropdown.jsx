@@ -70,9 +70,7 @@ const ProfileDropdown = () => {
       resetUserCookie();
       dispatch(setUser(null));
       setIsOpen(false);
-      setTimeout(() => {
-        router.push("/");
-      }, 100);
+      router.replace("/");
     } catch (err) {
       Toast.fire({
         icon: "error",

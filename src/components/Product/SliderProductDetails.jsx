@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
@@ -59,13 +59,13 @@ export default function SliderProductDetails({ attachments }) {
               <SwiperSlide key={attachment.id}>
                 <a
                   className="w-full"
-                  href={getImageUrl(attachment.fileUrl)}
+                  href={getImageUrl2(attachment.fileUrl)}
                   data-fancybox="gallery"
                   data-caption="Caption Images 4"
                 >
                   <img
                     className="w-full border rounded-sm border-[#3331]"
-                    src={getImageUrl(attachment.fileUrl)}
+                    src={getImageUrl2(attachment.fileUrl)}
                   />
                 </a>
               </SwiperSlide>
@@ -86,7 +86,7 @@ export default function SliderProductDetails({ attachments }) {
               <SwiperSlide key={attachment.id}>
                 <img
                   className="w-full border rounded-sm border-[#3331]"
-                  src={getImageUrl(attachment.fileUrl)}
+                  src={getImageUrl2(attachment.fileUrl)}
                 />
               </SwiperSlide>
             ))}

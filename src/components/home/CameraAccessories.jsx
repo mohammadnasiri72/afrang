@@ -45,11 +45,11 @@ export default function CameraAccessories({ category }) {
                 <SwiperSlide key={item.id}>
                   <Link href={item.url} className="flex flex-col items-center justify-center">
                     <div className="flex flex-col items-center justify-center select-none cursor-pointer">
-                      <div className="w-[200px] h-[200px] flex items-center justify-center">
+                      <div className="w-[50px] h-[50px] flex items-center justify-center">
                         <img
-                          src={getImageUrl(item.image) || defaultImage}
-                          alt={item.title}
-                          className="w-full h-full object-contain"
+                          src={getImageUrl(item.image)}
+                          alt={'🚫'}
+                          className="w-[50px] h-[50px]"
                         />
                       </div>
                       <span className="text-white text-xl mt-3 font-medium">

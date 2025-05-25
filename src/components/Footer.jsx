@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdMailOutline } from "react-icons/md";
 
 import { fetchSettingsData } from "@/redux/slice/settings";
@@ -9,12 +9,16 @@ import { mainDomainImg } from "@/utils/mainDomain";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { fetchSocialNetworksData } from "@/redux/slice/socialNetworks";
+import { getMenuFooter } from "@/services/menu/menuService";
 
 const Footer = () => {
   const dispatch = useDispatch();
   const { items, loading } = useSelector((state) => state.settings);
   const { items: socialNetworks, loading: socialNetworksLoading } = useSelector((state) => state.socialNetworks);
   const hasFetchedSocialNetworks = useRef(false);
+  const [footerMenu, setFooterMenu] = useState([]);
+  const [menuLoading, setMenuLoading] = useState(false);
+  
 
   useEffect(() => {
     if (items.length === 0) {
@@ -26,9 +30,23 @@ const Footer = () => {
     }
   }, [dispatch, items.length, socialNetworks.length, socialNetworksLoading]);
 
-  
+  useEffect(() => {
+    const fetchFooterMenu = async () => {
+      try {
+        setMenuLoading(true);
+        const menuData = await getMenuFooter();
+        setFooterMenu(menuData);
+      } catch (error) {
+        console.error('Error fetching footer menu:', error);
+      } finally {
+        setMenuLoading(false);
+      }
+    };
 
-  if (loading || socialNetworksLoading) {
+    fetchFooterMenu();
+  }, []);
+
+  if (loading || socialNetworksLoading || menuLoading) {
     return <Loading />;
   }
 
@@ -237,21 +255,15 @@ const Footer = () => {
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
         </p>
         <div className="flex sm:flex-nowrap flex-wrap justify-center items-center xl:w-1/2 w-full">
-          <div className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full">
-            پرفروش ها
-          </div>
-          <div className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full">
-            تخفیف ها و پیشنهادات
-          </div>
-          <div className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full">
-            لیست قیمت
-          </div>
-          <div className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full">
-            سوالات متداول
-          </div>
-          <div className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full">
-            تماس با ما
-          </div>
+          {footerMenu[0]?.menuItems?.map((menuItem) => (
+            <Link
+              key={menuItem.id}
+              href={menuItem.href}
+              className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full"
+            >
+              {menuItem.title}
+            </Link>
+          ))}
         </div>
       </div>
     </div>
