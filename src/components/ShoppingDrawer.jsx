@@ -4,7 +4,7 @@ import DeleteProductModal from "@/components/Product/DeleteProductModal";
 import { setOpenShopping } from "@/redux/slice/shopping";
 import { fetchCartData } from "@/redux/slices/cartSlice";
 import { updateCart } from "@/services/cart/cartService";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Drawer } from "antd";
 import Cookies from "js-cookie";
 import { useRouter, usePathname } from 'next/navigation';
@@ -138,7 +138,7 @@ function ShoppingDrawer() {
                         {item.image ? (
                           <img
                             className="w-full h-full object-contain"
-                            src={getImageUrl(item.image)}
+                            src={getImageUrl2(item.image)}
                             alt={item.title}
                           />
                         ) : (

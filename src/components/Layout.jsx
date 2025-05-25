@@ -12,6 +12,8 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./../redux/store";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
+import axios from "axios";
+import { mainDomain } from "@/utils/mainDomain";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -78,7 +80,10 @@ function InitialDataManager() {
             if (previousCartItems && previousCartItems.length > 0) {
               for (const item of previousCartItems) {
                 try {
-                  await deleteCartItem(item.id, lastUserId.current);
+                  // حذف مستقیم از API بدون نمایش پیام
+                  await axios.delete(
+                    `${mainDomain}/api/Cart/${lastUserId.current}/${item.id}`
+                  );
                 } catch (error) {
                   console.error('Error deleting item from previous cart:', error);
                 }

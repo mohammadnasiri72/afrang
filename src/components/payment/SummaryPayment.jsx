@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { FaUser, FaTruck, FaShoppingCart, FaBuilding } from "react-icons/fa";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
 
 export default function SummaryPayment({ estimateData }) {
@@ -147,7 +147,7 @@ export default function SummaryPayment({ estimateData }) {
                             <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
                                 <div className="flex items-center gap-2">
                                     <img
-                                        src={getImageUrl(item.image)}
+                                        src={getImageUrl2(item.image)}
                                         alt={item.id}
                                         className="w-12 h-12 object-cover rounded-lg"
                                     />

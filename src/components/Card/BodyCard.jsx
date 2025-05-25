@@ -2,7 +2,7 @@
 
 import { updateCart } from "@/redux/slices/cartSlice";
 import { addToCartNext, getCart, getNextCart, moveToCurrentCart } from "@/services/cart/cartService";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -154,7 +154,7 @@ const BodyCard = () => {
                     <img
                       style={{ filter: " brightness(0.8)" }}
                       className="w-full rounded-lg min-h-32 object-contain"
-                      src={getImageUrl(item.image)}
+                      src={getImageUrl2(item.image)}
                       alt={item?.title}
                     />
                     <div className="mt-5">

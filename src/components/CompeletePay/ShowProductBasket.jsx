@@ -1,4 +1,4 @@
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { BsArchive } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
@@ -21,7 +21,7 @@ function ShowProductBasket({items}) {
             <div className="flex items-start gap-3 w-full">
               <Link href={item.url} className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1 hover:opacity-80 transition-opacity">
                 <img
-                  src={getImageUrl(item.image)}
+                  src={getImageUrl2(item.image)}
                   alt={item.title || "تصویر محصول"}
                   className="w-full h-full object-contain rounded-md"
                   onError={(e) => {

@@ -1,7 +1,14 @@
 import { useState } from "react";
 import AddAddress from "@/components/profile/address/AddAddress";
 import DeleteAddress from "./DeleteAddress";
-import { FaPlus, FaHome, FaCheck } from "react-icons/fa";
+import { FaPlus, FaHome, FaCheck, FaMapMarkerAlt } from "react-icons/fa";
+
+// کامپوننت آیکون برای نمایش وضعیت خالی بودن آدرس‌ها
+const EmptyAddressIcon = () => (
+  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+    <FaMapMarkerAlt className="text-3xl text-gray-400" />
+  </div>
+);
 
 function BoxAddress({
   addressList,

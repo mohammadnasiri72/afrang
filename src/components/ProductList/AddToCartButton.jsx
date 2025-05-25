@@ -1,7 +1,7 @@
 "use client";
 
 import { fetchCartData } from "@/redux/slices/cartSlice";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { Modal, message } from "antd";
 import Cookies from "js-cookie";
 import { useState } from "react";
@@ -113,7 +113,7 @@ const AddToCartButton = ({ productId }) => {
             <div className="flex gap-4">
               <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src={getImageUrl(product.product.image)}
+                  src={getImageUrl2(product.product.image)}
                   alt={product.product.title}
                   className="w-full h-full object-contain"
                 />
