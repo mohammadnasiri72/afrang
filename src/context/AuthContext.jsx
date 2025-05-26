@@ -3,38 +3,30 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/slice/user";
-import Cookies from "js-cookie";
+import { getUserCookie } from "@/utils/cookieUtils";
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [mounted, setMounted] = useState(false);
-  const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      try {
-        const userData = JSON.parse(userCookie);
-        dispatch(setUser(userData));
-      } catch (error) {
-        console.error("Error parsing user cookie:", error);
-      }
-    }
-    setMounted(true);
-  }, [dispatch]);
+    const userData = getUserCookie();
+    setUser(userData);
+    setLoading(false);
+  }, []);
 
-  if (!mounted) {
-    return null;
+  if (!loading) {
+    return (
+      <AuthContext.Provider value={{ user, isLoading: false }}>
+        {children}
+      </AuthContext.Provider>
+    );
   }
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading: false }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
+  return null;
+};
 
 export function useAuth() {
   const context = useContext(AuthContext);

@@ -52,7 +52,7 @@ async function BlogDesc({ id, comments, totalCount }) {
           </div>
           <div className="mt-4">
             <img
-              className="w-96 h-96 object-contain"
+              className="w- h-96 object-cover"
               src={blog.length > 0 ? blog[0].img : ""}
               alt={blog.length > 0 ? blog[0].title : ""}
             />

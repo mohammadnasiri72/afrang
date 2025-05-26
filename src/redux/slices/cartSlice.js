@@ -1,16 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getCart, getNextCart } from '@/services/cart/cartService';
 import Cookies from 'js-cookie';
+import { getUserId } from "@/utils/cookieUtils";
 
 // ایجاد thunk برای دریافت سبد خرید
-export const fetchCartData = createAsyncThunk(
-  'cart/fetchCartData',
-  async (cartType = 'current') => {
-    const userId = JSON.parse(Cookies.get("user"))?.userId;
-    const response = cartType === 'next'
-      ? await getNextCart(userId)
-      : await getCart(userId);
-    return { items: response || [], cartType };
+export const fetchCartItems = createAsyncThunk(
+  'cart/fetchCartItems',
+  async (_, { rejectWithValue }) => {
+    try {
+      const userId = getUserId();
+      if (!userId) return rejectWithValue("No user ID found");
+      const response = await getCart(userId);
+      return { items: response || [], cartType: 'current' };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -36,16 +40,16 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCartData.pending, (state) => {
+      .addCase(fetchCartItems.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCartData.fulfilled, (state, action) => {
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload.items;
         state.cartType = action.payload.cartType;
       })
-      .addCase(fetchCartData.rejected, (state, action) => {
+      .addCase(fetchCartItems.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         state.items = [];

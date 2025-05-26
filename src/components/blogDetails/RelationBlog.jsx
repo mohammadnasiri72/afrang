@@ -55,7 +55,7 @@ async function RelationBlog() {
                 >
                   <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
                     <img
-                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter  brightness-[0.95] w-56 h-56"
+                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter  brightness-[0.95] w-56 h-56 object-cover"
                       src={blog.img}
                       alt={blog.title}
                     />

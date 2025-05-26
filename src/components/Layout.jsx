@@ -14,6 +14,7 @@ import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
 import axios from "axios";
 import { mainDomain } from "@/utils/mainDomain";
+import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -40,15 +41,11 @@ function InitialDataManager() {
           dispatch(setMenuItems(menuItems));
         }
 
-        const currentUserId = user?.userId || JSON.parse(Cookies.get("user"))?.userId;
+        const currentUserId = user?.userId || getUserId();
         const isLoggedIn = user?.token; // چک کردن وضعیت لاگین
-
-
 
         // اگر کاربر لاگین شده و قبلاً لاگین نبوده (تغییر از حالت مهمان به کاربر)
         if (isLoggedIn && lastUserId.current && lastUserId.current !== currentUserId) {
-
-
           try {
             // دریافت سبد خرید قبلی (قبل از لاگین)
             const previousCartItems = await getCart(lastUserId.current);
@@ -80,7 +77,6 @@ function InitialDataManager() {
             if (previousCartItems && previousCartItems.length > 0) {
               for (const item of previousCartItems) {
                 try {
-                  // حذف مستقیم از API بدون نمایش پیام
                   await axios.delete(
                     `${mainDomain}/api/Cart/${lastUserId.current}/${item.id}`
                   );
@@ -96,8 +92,6 @@ function InitialDataManager() {
 
         // به‌روزرسانی lastUserId و lastCartType
         if (currentUserId !== lastUserId.current || cartType !== lastCartType.current) {
-
-
           lastUserId.current = currentUserId;
           lastCartType.current = cartType;
 
@@ -128,10 +122,13 @@ function InitialDataManager() {
   return null;
 }
 
-function Layout({ children }) {
+// کامپوننت داخلی که از Redux استفاده می‌کند
+function LayoutContent({ children }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const showHeaderFooter = !pathname.includes("/login") && !pathname.includes("/register");
+  const user = useSelector((state) => state.user.user);
+  const currentUserId = user?.userId || getUserId();
 
   useEffect(() => {
     setMounted(true);
@@ -139,8 +136,6 @@ function Layout({ children }) {
 
   useEffect(() => {
     setTimeout(() => {
-
-
       const userCookie = Cookies.get("user");
       if (!userCookie) {
         const initialData = {
@@ -152,31 +147,34 @@ function Layout({ children }) {
           roles: [],
         };
         Cookies.set("user", JSON.stringify(initialData));
-
       }
-
     }, 2000);
-
-
   }, []);
 
   return (
+    <AuthProvider>
+      <DynamicTitle />
+      {mounted ? (
+        <>
+          <InitialDataManager />
+          <LayoutWrapper showHeaderFooter={showHeaderFooter}>
+            {children}
+          </LayoutWrapper>
+        </>
+      ) : (
+        <div className="fixed inset-0 bg-white flex items-center justify-center">
+          <div className="w-16 h-16 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+    </AuthProvider>
+  );
+}
+
+// کامپوننت اصلی که Provider را فراهم می‌کند
+function Layout({ children }) {
+  return (
     <Provider store={store}>
-      <AuthProvider>
-        <DynamicTitle />
-        {mounted ? (
-          <>
-            <InitialDataManager />
-            <LayoutWrapper showHeaderFooter={showHeaderFooter}>
-              {children}
-            </LayoutWrapper>
-          </>
-        ) : (
-          <div className="fixed inset-0 bg-white flex items-center justify-center">
-            <div className="w-16 h-16 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-          </div>
-        )}
-      </AuthProvider>
+      <LayoutContent>{children}</LayoutContent>
     </Provider>
   );
 }

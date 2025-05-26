@@ -2,7 +2,7 @@
 
 import { setOpenMenuRes } from "@/redux/slice/menuRes";
 import { Drawer, Menu } from "antd";
-import Cookies from "js-cookie";
+import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -27,12 +27,17 @@ function ResponsiveMenu() {
   const { items, loading, openMenuRes } = useSelector((state) => state.menuRes);
   const [isSticky, setIsSticky] = useState(false);
   const [openKeys, setOpenKeys] = useState([]);
-  const user = JSON.parse(Cookies.get("user") || "{}");
+  const [user, setUser] = useState({});
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0 });
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
   const timeoutRef = useRef(null);
   const isCalculatingRef = useRef(false);
+
+  useEffect(() => {
+    const userData = getUserCookie();
+    setUser(userData || {});
+  }, []);
 
   const showDrawer = () => {
     dispatch(setOpenMenuRes(true));

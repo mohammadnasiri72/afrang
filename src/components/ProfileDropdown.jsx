@@ -13,6 +13,7 @@ import { FaBox, FaKey, FaShoppingCart, FaUser } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import { getUserCookie } from "@/utils/cookieUtils";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -34,6 +35,7 @@ const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
+  const [user, setUser] = useState(null);
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -44,8 +46,6 @@ const ProfileDropdown = () => {
     timerProgressBar: true,
     customClass: "toast-modal",
   });
-
-  const user = JSON.parse(Cookies.get("user"));
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -61,6 +61,11 @@ const ProfileDropdown = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const userData = getUserCookie();
+    setUser(userData);
   }, []);
 
   const LogoutHandler = async () => {

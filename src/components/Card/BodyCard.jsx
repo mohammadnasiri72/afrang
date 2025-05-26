@@ -4,22 +4,29 @@ import { updateCart } from "@/redux/slices/cartSlice";
 import { addToCartNext, getCart, getNextCart, moveToCurrentCart } from "@/services/cart/cartService";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Spin } from "antd";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsArchive } from "react-icons/bs";
 import { FaAngleLeft, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
 import { LuMailbox } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import CartCounter from "../Product/CartCounter";
+import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
   const { items, cartType } = useSelector((state) => state.cart);
-  const token = JSON.parse(Cookies.get("user"))?.token;
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const userData = getUserCookie();
+    setUserId(userData?.userId || null);
+    setToken(userData?.token || null);
+  }, []);
 
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
@@ -49,7 +56,6 @@ const BodyCard = () => {
     try {
       setLoadingItemId(id);
       await addToCartNext(id);
-      const userId = JSON.parse(Cookies.get("user"))?.userId;
       const response = await getCart(userId);
       dispatch(updateCart({ items: response, cartType }));
     } catch (error) {
@@ -63,7 +69,6 @@ const BodyCard = () => {
     try {
       setLoadingItemId(id);
       await moveToCurrentCart(id);
-      const userId = JSON.parse(Cookies.get("user"))?.userId;
       const response = cartType === 'next'
         ? await getNextCart(userId)
         : await getCart(userId);
@@ -124,8 +129,6 @@ const BodyCard = () => {
       </div>
     );
   };
-
-
 
   return (
     <div className="flex flex-wrap">

@@ -2,16 +2,16 @@
 
 import DeleteProductModal from "@/components/Product/DeleteProductModal";
 import { setOpenShopping } from "@/redux/slice/shopping";
-import { fetchCartData } from "@/redux/slices/cartSlice";
+import { fetchCartItems } from "@/redux/slices/cartSlice";
 import { updateCart } from "@/services/cart/cartService";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Drawer } from "antd";
-import Cookies from "js-cookie";
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { FaCartShopping, FaTrash, FaPlus, FaMinus } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
+import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 function ShoppingDrawer() {
   const open = useSelector((store) => store.shopping.openShopping);
@@ -19,16 +19,21 @@ function ShoppingDrawer() {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-  const userCookie = Cookies.get("user");
-  const userId = userCookie ? JSON.parse(userCookie)?.userId : null;
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userData = getUserCookie();
+    setUserId(userData?.userId || null);
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchCartItems());
+    }
+  }, [dispatch, userId]);
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-
-  useEffect(()=>{
-    if (open) {
-      dispatch(fetchCartData(cartType));
-    }
-  }, [open]);
 
   const onClose = () => {
     dispatch(setOpenShopping(false));
@@ -40,19 +45,21 @@ function ShoppingDrawer() {
   };
 
   const handleIncrement = async (item) => {
+    if (!userId) return;
     try {
       await updateCart(item.id, 1, userId);
-      dispatch(fetchCartData(cartType));
+      dispatch(fetchCartItems());
     } catch (error) {
       console.error('Failed to increment:', error);
     }
   };
 
   const handleDecrement = async (item) => {
+    if (!userId) return;
     if (item.quantity > 1) {
       try {
         await updateCart(item.id, -1, userId);
-        dispatch(fetchCartData(cartType));
+        dispatch(fetchCartItems());
       } catch (error) {
         console.error('Failed to decrement:', error);
       }

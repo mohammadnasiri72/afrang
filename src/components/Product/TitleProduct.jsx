@@ -4,6 +4,8 @@ import DescProductDetails from "./DescProductDetails";
 import BasketBox from "./BasketBox";
 
 function TitleProduct({ product }) {
+
+
   // ساخت آبجکت جدید برای تصویر اصلی با همان ساختار attachments
   const mainImageAttachment = product?.product?.image ? {
     id: 'main-image',

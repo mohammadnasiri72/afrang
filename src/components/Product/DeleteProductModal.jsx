@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { deleteCartItem } from "@/services/cart/cartService";
-import { fetchCartData } from "@/redux/slices/cartSlice";
+import { fetchCartItems } from "@/redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { createPortal } from "react-dom";
+import { getUserId } from "@/utils/cookieUtils";
 
 function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
-  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     setMounted(true);
+    const userId = getUserId();
+    setUserId(userId);
     return () => setMounted(false);
   }, []);
 
@@ -31,7 +34,7 @@ function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
     setIsLoading(true);
     try {
       await deleteCartItem(cartId, userId);
-      dispatch(fetchCartData(cartType));
+      dispatch(fetchCartItems());
       Toast.fire({
         icon: "success",
         text: "محصول با موفقیت از سبد خرید حذف شد",

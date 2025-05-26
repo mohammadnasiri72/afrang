@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { getUserProfile } from "@/services/dashboard/dashboardService";
 
 // Create async thunk for fetching user profile
@@ -7,7 +7,7 @@ export const fetchUserProfile = createAsyncThunk(
   "user/fetchProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const userCookie = Cookies.get("user");
+      const userCookie = getUserCookie();
       if (!userCookie) return rejectWithValue("No user cookie found");
       
       const userData = JSON.parse(userCookie);
@@ -22,9 +22,9 @@ export const fetchUserProfile = createAsyncThunk(
 );
 
 const initialState = {
-  user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : '',
-  status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
-  error: null
+  user: getUserCookie() || '',
+  loading: false,
+  error: null,
 };
 
 export const userSlice = createSlice({

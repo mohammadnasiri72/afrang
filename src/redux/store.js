@@ -18,20 +18,14 @@ import discountReducer from './slices/discountSlice';
 import orderReducer from './slices/orderSlice';
 import { clearStateMiddleware } from './middleware/clearStateMiddleware';
 import { loadState, saveState } from './middleware/persistState';
+import { getUserCookie } from "@/utils/cookieUtils";
 
-const loadUserFromCookie = () => {
-  try {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      return JSON.parse(userCookie);
-    }
-  } catch (error) {
-    console.error("Error loading user from cookie:", error);
-  }
-  return null;
+const persistedState = {
+  user: {
+    user: getUserCookie() || '',
+  },
+  ...loadState()
 };
-
-const persistedState = loadState();
 
 export const store = configureStore({
   reducer: {
@@ -56,12 +50,7 @@ export const store = configureStore({
       immutableCheck: false,
       thunk: true
     }).concat(clearStateMiddleware),
-  preloadedState: {
-    user: {
-      user: loadUserFromCookie(),
-    },
-    ...persistedState
-  },
+  preloadedState: persistedState,
 })
 
 // Subscribe to store changes and save to localStorage

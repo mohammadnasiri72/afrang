@@ -1,6 +1,6 @@
 "use client";
 
-import { mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl2, mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
 import { SlBasket } from "react-icons/sl";
 import { useEffect, useState } from "react";
@@ -69,6 +69,9 @@ function BundleProducts({ product }) {
     );
   }
 
+  console.log(bundleProducts);
+  
+
   return (
     <div className="p-5">
       <div className="flex flex-wrap md:-mt-3 w-full">
@@ -83,18 +86,19 @@ function BundleProducts({ product }) {
                 </div>
               )}
               <div className="relative rounded-lg group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
-                <Link href={`/product/${item.id}/${item.title}`} className="flex-grow-0">
+                <Link href={item.url} className="flex-grow-0">
                   <img
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"
                     style={{ filter: "brightness(0.95)" }}
-                    src={`${mainDomainImg}/${item.image}`}
-                    alt={item.title}
+                    // src={`${mainDomainImg}/${item.image}`}
+                    src={getImageUrl2(item.image)}
+                    alt={'🚫'}
                   />
                 </Link>
 
                 <div className="flex-grow flex flex-col justify-between p-3">
                   <Link
-                    href={`/product/${item.id}/${item.title}`}
+                    href={item.url}
                     className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2"
                   >
                     {item.title}

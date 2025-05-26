@@ -49,7 +49,7 @@ const NavBar = () => {
       <div
         className={`
           bg-[#d1182b] lg:px-16 px-2 flex items-center justify-between text-white
-          transition-transform duration-300 ease-out z-[60000000]
+          transition-transform duration-300 ease-out z-[600]
           ${isFixed 
             ? 'fixed top-0 left-0 right-0 z-50 shadow-lg translate-y-0' 
             : 'fixed -top-14 left-0 right-0 z-50 -translate-y-full'

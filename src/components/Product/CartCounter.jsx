@@ -2,12 +2,13 @@
 
 import { FaTrash, FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DeleteProductModal from './DeleteProductModal';
 import { updateCart } from '@/services/cart/cartService';
-import { fetchCartData } from '@/redux/slices/cartSlice';
+import { fetchCartItems } from '@/redux/slices/cartSlice';
 import Cookies from "js-cookie";
 import { useRouter, usePathname } from 'next/navigation';
+import { getUserId } from "@/utils/cookieUtils";
 
 const CartCounter = ({ quantity, cartId, ctrl }) => {
   const dispatch = useDispatch();
@@ -15,12 +16,17 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
   const pathname = usePathname();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { cartType } = useSelector((store) => store.cart);
-  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userId = getUserId();
+    setUserId(userId);
+  }, []);
 
   const handleIncrement = async () => {
     try {
       await updateCart(cartId, 1, userId);
-      dispatch(fetchCartData(cartType));
+      dispatch(fetchCartItems());
     } catch (error) {
       console.error('Failed to increment:', error);
     }
@@ -30,7 +36,7 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
     if (quantity > 1) {
       try {
         await updateCart(cartId, -1, userId);
-        dispatch(fetchCartData(cartType));
+        dispatch(fetchCartItems());
       } catch (error) {
         console.error('Failed to decrement:', error);
       }

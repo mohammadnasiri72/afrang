@@ -2,7 +2,7 @@
 
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { addToCart } from '../../services/cart/cartService';
 import { fetchCartData } from '@/redux/slices/cartSlice';
 import CartCounter from './CartCounter';
@@ -10,13 +10,20 @@ import SuccessModal from './SuccessModal';
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { FaShoppingBasket } from "react-icons/fa";
+import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   const cartItem = items?.find(item => item.productId === product?.product?.productId);
+
+  useEffect(() => {
+    const userData = getUserCookie();
+    setUserId(userData?.userId || null);
+  }, []);
 
   const handleAddToCart = async () => {
     const userCookie = Cookies.get("user");
