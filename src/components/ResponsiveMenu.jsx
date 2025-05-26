@@ -210,7 +210,7 @@ function ResponsiveMenu() {
                   )}
                   {item.Children && item.Children.length > 0 && (
                     <div 
-                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[99999989899899999]"
+                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[999]"
                       style={{ 
                         position: 'fixed',
                         top: `${dropdownPosition.top}px`,

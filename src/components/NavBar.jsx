@@ -44,7 +44,7 @@ const NavBar = () => {
 
   return (
     <>
-    <div className="z-[60565] relative">
+    <div>
       {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
       <div
         className={`
