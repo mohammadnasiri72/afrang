@@ -1,6 +1,6 @@
 "use client";
 
-import { updateCart } from "@/redux/slices/cartSlice";
+import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { addToCartNext, getCart, getNextCart, moveToCurrentCart } from "@/services/cart/cartService";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Spin } from "antd";
@@ -16,7 +16,9 @@ import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
-  const { items, cartType } = useSelector((state) => state.cart);
+  const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
+  const items = cartType === 'current' ? currentItems : nextItems;
+  
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -56,8 +58,8 @@ const BodyCard = () => {
     try {
       setLoadingItemId(id);
       await addToCartNext(id);
-      const response = await getCart(userId);
-      dispatch(updateCart({ items: response, cartType }));
+      dispatch(fetchCurrentCart());
+      dispatch(fetchNextCart());
     } catch (error) {
       console.error("Error adding to next cart:", error);
     } finally {
@@ -69,10 +71,8 @@ const BodyCard = () => {
     try {
       setLoadingItemId(id);
       await moveToCurrentCart(id);
-      const response = cartType === 'next'
-        ? await getNextCart(userId)
-        : await getCart(userId);
-      dispatch(updateCart({ items: response, cartType }));
+      dispatch(fetchCurrentCart());
+      dispatch(fetchNextCart());
     } catch (error) {
       console.error("Error moving to current cart:", error);
     } finally {
@@ -92,7 +92,6 @@ const BodyCard = () => {
     return (
       <CartCounter
         quantity={item.quantity}
-        productId={item.productId}
         cartId={item.id}
       />
     );

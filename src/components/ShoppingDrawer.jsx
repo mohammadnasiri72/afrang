@@ -2,7 +2,7 @@
 
 import DeleteProductModal from "@/components/Product/DeleteProductModal";
 import { setOpenShopping } from "@/redux/slice/shopping";
-import { fetchCartItems } from "@/redux/slices/cartSlice";
+import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { updateCart } from "@/services/cart/cartService";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Drawer } from "antd";
@@ -15,7 +15,7 @@ import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 function ShoppingDrawer() {
   const open = useSelector((store) => store.shopping.openShopping);
-  const { items, cartType } = useSelector((store) => store.cart);
+  const { currentItems } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -28,7 +28,7 @@ function ShoppingDrawer() {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchCartItems());
+      dispatch(fetchCurrentCart());
     }
   }, [dispatch, userId]);
 
@@ -48,7 +48,7 @@ function ShoppingDrawer() {
     if (!userId) return;
     try {
       await updateCart(item.id, 1, userId);
-      dispatch(fetchCartItems());
+      dispatch(fetchCurrentCart());
     } catch (error) {
       console.error('Failed to increment:', error);
     }
@@ -59,7 +59,7 @@ function ShoppingDrawer() {
     if (item.quantity > 1) {
       try {
         await updateCart(item.id, -1, userId);
-        dispatch(fetchCartItems());
+        dispatch(fetchCurrentCart());
       } catch (error) {
         console.error('Failed to decrement:', error);
       }
@@ -73,11 +73,10 @@ function ShoppingDrawer() {
     
     // هدایت به URL مورد نظر
     router.push(url);
-   
   };
 
   // محاسبه جمع کل
-  const totalPrice = items?.reduce((sum, item) => {
+  const totalPrice = currentItems?.reduce((sum, item) => {
     const price = item.finalPrice || 0;
     const quantity = item.quantity || 0;
     return sum + price * quantity;
@@ -101,9 +100,9 @@ function ShoppingDrawer() {
           }}
           className="text-3xl cursor-pointer"
         />
-        {items?.length > 0 && (
+        {currentItems?.length > 0 && (
           <span className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {items.length}
+            {currentItems.length}
           </span>
         )}
       </div>
@@ -120,7 +119,7 @@ function ShoppingDrawer() {
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center pb-3">
             <span className="text-[#666] text-[15px]">
-              سبد خرید ({items?.length || 0})
+              سبد خرید ({currentItems?.length || 0})
             </span>
             <IoCloseOutline
               onClick={onClose}
@@ -128,7 +127,7 @@ function ShoppingDrawer() {
             />
           </div>
 
-          {items?.length === 0 ? (
+          {currentItems?.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">
               <div className="text-4xl text-[#d1182b] mb-4">
                 <FaCartShopping />
@@ -140,7 +139,7 @@ function ShoppingDrawer() {
           ) : (
             <>
               <div className="flex-1 overflow-auto">
-                {items?.map((item) => (
+                {currentItems?.map((item) => (
                   <div key={item.id} className="group">
                     <div className="flex flex-col sm:flex-row p-3 relative">
                       <div className="w-full sm:w-20 sm:h-20 w-36 h-36 border border-[#0001] p-3 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
@@ -282,7 +281,7 @@ function ShoppingDrawer() {
           setItemToDelete(null);
         }}
         cartId={itemToDelete?.id}
-        cartType={cartType}
+        cartType="current"
       />
 
       <style jsx global>{`

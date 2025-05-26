@@ -24,7 +24,7 @@ export default function BodyCompeletePay() {
   
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
-  const { items } = useSelector((state) => state.cart);
+  const { currentItems } = useSelector((state) => state.cart);
 
   // get address
   const getAddressFu = async () => {
@@ -142,7 +142,7 @@ export default function BodyCompeletePay() {
         )}
       </div>
       <div className="mt-5">
-        <ShowProductBasket items={items} />
+        <ShowProductBasket items={currentItems} />
       </div>
     </div>
   );

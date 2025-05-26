@@ -2,7 +2,7 @@
 
 import { AuthProvider } from "@/context/AuthContext";
 import { setError, setLoading, setMenuItems } from "@/redux/slice/menuRes";
-import { updateCart } from "@/redux/slices/cartSlice";
+import { fetchCurrentCart, fetchNextCart, setCartType } from "@/redux/slices/cartSlice";
 import { addToCart, deleteCartItem, getCart, getNextCart } from "@/services/cart/cartService";
 import { fetchMenuItems } from "@/services/menuService";
 import Cookies from "js-cookie";
@@ -71,7 +71,7 @@ function InitialDataManager() {
 
             // دریافت سبد خرید نهایی بعد از ادغام
             const finalCartItems = await getCart(currentUserId);
-            dispatch(updateCart({ items: finalCartItems || [], cartType }));
+            dispatch(fetchCurrentCart());
 
             // حذف سبد خرید قبلی
             if (previousCartItems && previousCartItems.length > 0) {
@@ -96,12 +96,12 @@ function InitialDataManager() {
           lastCartType.current = cartType;
 
           if (currentUserId) {
-            const cartResponse = cartType === 'next'
-              ? await getNextCart(currentUserId)
-              : await getCart(currentUserId);
-            dispatch(updateCart({ items: cartResponse || [], cartType }));
-          } else {
-            dispatch(updateCart({ items: [], cartType }));
+            dispatch(setCartType(cartType));
+            if (cartType === 'next') {
+              dispatch(fetchNextCart());
+            } else {
+              dispatch(fetchCurrentCart());
+            }
           }
         }
       } catch (error) {
@@ -109,7 +109,6 @@ function InitialDataManager() {
         if (!initialized.current) {
           dispatch(setError(error.message));
         }
-        dispatch(updateCart({ items: [], cartType }));
       } finally {
         setIsLoading(false);
       }

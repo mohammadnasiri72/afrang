@@ -6,7 +6,7 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
 
 export default function SummaryPayment({ estimateData }) {
-    const { items } = useSelector((state) => state.cart);
+    const { currentItems } = useSelector((state) => state.cart);
     const selectedAddress = useSelector((state) => state.address.selectedAddress);
     const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
     const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
@@ -15,15 +15,15 @@ export default function SummaryPayment({ estimateData }) {
     useEffect(() => {
         // Force re-render when component mounts or route changes
         setForceUpdate(prev => prev + 1);
-    }, [items, selectedAddress, selectedShipping, selectedLegal]);
+    }, [currentItems, selectedAddress, selectedShipping, selectedLegal]);
 
-    const totalPrice = items?.reduce((sum, item) => {
+    const totalPrice = currentItems?.reduce((sum, item) => {
         const price = item.price1 || 0;
         const quantity = item.quantity || 0;
         return sum + price * quantity;
     }, 0) || 0;
 
-    const totalDiscount = items?.reduce((sum, item) => {
+    const totalDiscount = currentItems?.reduce((sum, item) => {
         const oldPrice = item.price1 || 0;
         const price = item.finalPrice || 0;
         const quantity = item.quantity || 0;
@@ -31,7 +31,7 @@ export default function SummaryPayment({ estimateData }) {
     }, 0) || 0;
 
     // فقط زمانی loading نمایش داده شود که هیچ داده‌ای در دسترس نباشد
-    if (!items?.length && !selectedAddress && !selectedShipping) {
+    if (!currentItems?.length && !selectedAddress && !selectedShipping) {
         return (
             <div className="container mx-auto px-4">
                 <div className="bg-white rounded-lg p-4 shadow-sm mt-4">
@@ -143,7 +143,7 @@ export default function SummaryPayment({ estimateData }) {
                         <h3 className="text-base font-medium text-gray-800">اقلام سفارش</h3>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
-                        {items?.map((item, index) => (
+                        {currentItems?.map((item, index) => (
                             <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
                                 <div className="flex items-center gap-2">
                                     <img
@@ -177,7 +177,7 @@ export default function SummaryPayment({ estimateData }) {
                 <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
                     <div className="space-y-2">
                         <div className="flex justify-between text-gray-600">
-                            <span>قیمت کالاها ({items?.length || 0})</span>
+                            <span>قیمت کالاها ({currentItems?.length || 0})</span>
                             <span>{totalPrice.toLocaleString()} تومان</span>
                         </div>
                         {totalDiscount > 0 && (

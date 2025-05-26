@@ -7,47 +7,29 @@ import { FaCartShopping } from "react-icons/fa6";
 import { IoSearchSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
-import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import Cookies from "js-cookie";
-import { setUser } from "@/redux/slice/user";
 import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
+import { setUser } from "@/redux/slice/user";
+import Cookies from "js-cookie";
 
 export default function Header() {
-  const { user: authUser, isLoading } = useAuth();
   const user = useSelector((state) => state.user.user);
   const { items } = useSelector((state) => state.settings);
-  const { items: cartItems } = useSelector((state) => state.cart);
+  const { currentItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
-
-  const checkAuthStatus = () => {
-    const userCookie = Cookies.get("user");
-    if (!userCookie) return false;
-    
-    try {
-      const userData = JSON.parse(userCookie);
-      return !!userData.token;
-    } catch {
-      return false;
-    }
-  };
 
   useEffect(() => {
     const userCookie = Cookies.get("user");
     if (userCookie) {
       try {
         const userData = JSON.parse(userCookie);
-        if (!user || !user.token) {
-          disPatch(setUser(userData));
-        }
+        disPatch(setUser(userData));
       } catch (error) {
         console.error("Error parsing user cookie:", error);
       }
     }
   }, []);
-
-  const isAuthenticated = user?.token && checkAuthStatus();
 
   return (
     <div className="flex items-center justify-between lg:px-16 px-4 py-5 bg-white">
@@ -112,9 +94,7 @@ export default function Header() {
           </div>
         </div>
 
-        {isLoading ? (
-          <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-        ) : isAuthenticated ? (
+        {user?.token ? (
           <ProfileDropdown />
         ) : (
           <div className="flex items-center gap-3 font-semibold">
@@ -144,7 +124,7 @@ export default function Header() {
           className="cursor-pointer relative mt-3"
         >
           <Badge
-            count={cartItems?.length || 0}
+            count={currentItems?.length || 0}
             style={{
               fontSize: "10px",
               fontWeight: "bold",

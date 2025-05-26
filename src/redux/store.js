@@ -16,7 +16,6 @@ import legalIdReducer from './slices/legalIdSlice';
 import paymentWayReducer from './slices/paymentWaySlice';
 import discountReducer from './slices/discountSlice';
 import orderReducer from './slices/orderSlice';
-import { clearStateMiddleware } from './middleware/clearStateMiddleware';
 import { loadState, saveState } from './middleware/persistState';
 import { getUserCookie } from "@/utils/cookieUtils";
 
@@ -49,7 +48,7 @@ export const store = configureStore({
       serializableCheck: false,
       immutableCheck: false,
       thunk: true
-    }).concat(clearStateMiddleware),
+    }),
   preloadedState: persistedState,
 })
 

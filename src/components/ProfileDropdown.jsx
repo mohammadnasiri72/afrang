@@ -14,6 +14,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { getUserCookie } from "@/utils/cookieUtils";
+import { clearUser } from "@/redux/slice/user";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -29,6 +30,7 @@ const resetUserCookie = () => {
     roles: [],
   };
   Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+  return initialData;
 };
 
 const ProfileDropdown = () => {
@@ -47,8 +49,8 @@ const ProfileDropdown = () => {
     customClass: "toast-modal",
   });
 
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
   // بستن منو هنگام کلیک خارج از آن
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -69,21 +71,26 @@ const ProfileDropdown = () => {
   }, []);
 
   const LogoutHandler = async () => {
+    if (!user?.token) {
+      resetUserCookie();
+      dispatch(clearUser());
+      router.replace("/");
+      return;
+    }
+
     setLoading(true);
     try {
       await authServiceSignOut.signOut(user.token);
       resetUserCookie();
-      dispatch(setUser(null));
+      dispatch(clearUser());
       setIsOpen(false);
       router.replace("/");
     } catch (err) {
-      Toast.fire({
-        icon: "error",
-        text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
-      });
+      console.error("Logout error:", err);
+      resetUserCookie();
+      dispatch(clearUser());
+      setIsOpen(false);
+      router.replace("/");
     } finally {
       setLoading(false);
     }

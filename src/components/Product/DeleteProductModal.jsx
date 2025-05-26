@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { deleteCartItem } from "@/services/cart/cartService";
-import { fetchCartItems } from "@/redux/slices/cartSlice";
+import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { createPortal } from "react-dom";
-import { getUserId } from "@/utils/cookieUtils";
+import { getUserCookie } from "@/utils/cookieUtils";
 
-function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
+function DeleteProductModal({ isOpen, onClose, cartId }) {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
@@ -16,8 +16,8 @@ function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
 
   useEffect(() => {
     setMounted(true);
-    const userId = getUserId();
-    setUserId(userId);
+    const userData = getUserCookie();
+    setUserId(userData?.userId || null);
     return () => setMounted(false);
   }, []);
 
@@ -31,10 +31,22 @@ function DeleteProductModal({ isOpen, onClose, cartId, cartType }) {
   });
 
   const handleDelete = async () => {
+    if (!userId) {
+      Toast.fire({
+        icon: "error",
+        text: "خطا در شناسایی کاربر",
+        customClass: {
+          container: "toast-modal",
+        },
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       await deleteCartItem(cartId, userId);
-      dispatch(fetchCartItems());
+      dispatch(fetchCurrentCart());
+      dispatch(fetchNextCart());
       Toast.fire({
         icon: "success",
         text: "محصول با موفقیت از سبد خرید حذف شد",

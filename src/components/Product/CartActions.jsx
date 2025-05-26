@@ -4,7 +4,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { addToCart } from '../../services/cart/cartService';
-import { fetchCartData } from '@/redux/slices/cartSlice';
+import { fetchCurrentCart } from '@/redux/slices/cartSlice';
 import CartCounter from './CartCounter';
 import SuccessModal from './SuccessModal';
 import Cookies from "js-cookie";
@@ -14,11 +14,11 @@ import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.cart);
+  const { currentItems } = useSelector((state) => state.cart);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const cartItem = items?.find(item => item.productId === product?.product?.productId);
+  const cartItem = currentItems?.find(item => item.productId === product?.product?.productId);
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -32,7 +32,7 @@ function CartActions({ product, selectedWarranty }) {
         token: "",
         refreshToken: "",
         expiration: "",
-        userId: generateRandomUserId(),
+        userId,
         displayName: "",
         roles: [],
       };
@@ -42,8 +42,8 @@ function CartActions({ product, selectedWarranty }) {
     const userId = JSON.parse(Cookies.get("user"))?.userId;
 
     try {
-      await addToCart(product?.product?.productId , selectedWarranty, userId);
-      dispatch(fetchCartData());
+      await addToCart(product?.product?.productId, selectedWarranty, userId);
+      dispatch(fetchCurrentCart());
       setShowSuccessModal(true);
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -68,7 +68,7 @@ function CartActions({ product, selectedWarranty }) {
               <CartCounter 
                 quantity={cartItem.quantity} 
                 cartId={cartItem.id}
-                ctrl={product?.inventory?.inventorySetting?.showQtyControl}
+                ctrl={product?.inventory?.inventorySetting?.showQtyControl ? false : true}
               />
               
             </div>

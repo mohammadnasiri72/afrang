@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getUserProfile } from "@/services/dashboard/dashboardService";
+import Cookies from "js-cookie";
 
 // Create async thunk for fetching user profile
 export const fetchUserProfile = createAsyncThunk(
@@ -21,8 +22,21 @@ export const fetchUserProfile = createAsyncThunk(
   }
 );
 
+const generateRandomUserId = () => {
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
+
+const getDefaultUserData = () => ({
+  token: "",
+  refreshToken: "",
+  expiration: "",
+  userId: generateRandomUserId(),
+  displayName: "",
+  roles: [],
+});
+
 const initialState = {
-  user: getUserCookie() || '',
+  user: null,
   loading: false,
   error: null,
 };
@@ -35,14 +49,21 @@ export const userSlice = createSlice({
       state.user = action.payload;
       // Update cookie when user data changes
       if (action.payload) {
-        Cookies.set("user", JSON.stringify(action.payload));
+        Cookies.set("user", JSON.stringify(action.payload), { expires: 7, path: "/" });
       }
     },
     updateUserFields: (state, action) => {
       state.user = { ...state.user, ...action.payload };
-      // Update cookie with new user data
-      Cookies.set("user", JSON.stringify(state.user));
-    }
+      // Update cookie when user data changes
+      if (state.user) {
+        Cookies.set("user", JSON.stringify(state.user), { expires: 7, path: "/" });
+      }
+    },
+    clearUser: (state) => {
+      const defaultData = getDefaultUserData();
+      state.user = defaultData;
+      Cookies.set("user", JSON.stringify(defaultData), { expires: 7, path: "/" });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -63,7 +84,7 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, updateUserFields } = userSlice.actions;
+export const { setUser, updateUserFields, clearUser } = userSlice.actions;
 
 // Selectors
 export const selectUser = (state) => state.user.user;

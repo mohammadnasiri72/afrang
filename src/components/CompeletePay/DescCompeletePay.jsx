@@ -10,7 +10,7 @@ import { setEstimateData } from "@/redux/slices/paymentSlice";
 import { message } from "antd";
 
 export default function DescCompeletePay() {
-  const { items } = useSelector((state) => state.cart);
+  const { currentItems } = useSelector((state) => state.cart);
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
   const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
@@ -25,14 +25,14 @@ export default function DescCompeletePay() {
   const dispatch = useDispatch();
 
   const totalPrice =
-    items?.reduce((sum, item) => {
+    currentItems?.reduce((sum, item) => {
       const price = item.price1 || 0;
       const quantity = item.quantity || 0;
       return sum + price * quantity;
     }, 0) || 0;
 
   const totalDiscount =
-    items?.reduce((sum, item) => {
+    currentItems?.reduce((sum, item) => {
       const oldPrice = item.price1 || 0;
       const price = item.finalPrice || 0;
       const quantity = item.quantity || 0;
@@ -96,7 +96,7 @@ export default function DescCompeletePay() {
       <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
         <div className="bg-[#ececec] p-3 rounded-lg">
           <div className="flex justify-between text-[#444] py-1">
-            <span>قیمت کالاها ({items?.length || 0})</span>
+            <span>قیمت کالاها ({currentItems?.length || 0})</span>
             <span>{estimateData?.productAmount ? estimateData.productAmount.toLocaleString() : totalPrice.toLocaleString()} تومان</span>
           </div>
           {totalDiscount > 0 && (

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import DeleteProductModal from './DeleteProductModal';
 import { updateCart } from '@/services/cart/cartService';
-import { fetchCartItems } from '@/redux/slices/cartSlice';
+import { fetchCurrentCart, fetchNextCart } from '@/redux/slices/cartSlice';
 import Cookies from "js-cookie";
 import { useRouter, usePathname } from 'next/navigation';
 import { getUserId } from "@/utils/cookieUtils";
@@ -26,7 +26,11 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
   const handleIncrement = async () => {
     try {
       await updateCart(cartId, 1, userId);
-      dispatch(fetchCartItems());
+      if (cartType === 'current') {
+        dispatch(fetchCurrentCart());
+      } else {
+        dispatch(fetchNextCart());
+      }
     } catch (error) {
       console.error('Failed to increment:', error);
     }
@@ -36,7 +40,11 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
     if (quantity > 1) {
       try {
         await updateCart(cartId, -1, userId);
-        dispatch(fetchCartItems());
+        if (cartType === 'current') {
+          dispatch(fetchCurrentCart());
+        } else {
+          dispatch(fetchNextCart());
+        }
       } catch (error) {
         console.error('Failed to decrement:', error);
       }
@@ -50,49 +58,37 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
-        {
-          ctrl &&
-          <div className="flex items-center border border-[#d1182b] w-36 rounded-lg">
-            <div className="w-1/3">
-              <button
-                onClick={handleIncrement}
-                className="text-2xl text-[#d1182b] cursor-pointer font-semibold mx-auto flex justify-center w-full hover:text-red-700 transition-colors"
-              >
-                +
-              </button>
-            </div>
-            <div className="w-1/3">
-              <span className="text-xl font-bold text-center flex justify-center">{quantity}</span>
-            </div>
-            <div className="w-1/3">
-              <button
-                onClick={handleDecrement}
-                disabled={quantity === 1}
-                className={`text-2xl font-semibold mx-auto flex justify-center w-full transition-colors ${quantity === 1
+        <div className="flex items-center gap-2">
+          {
+            <div className="flex items-center border border-[#d1182b] w-36 rounded-lg">
+              <div className="w-1/3">
+                <button disabled={ctrl}
+                  onClick={handleIncrement}
+                  className={`text-2xl font-semibold mx-auto flex justify-center w-full transition-colors ${ctrl ? 'text-gray-300 cursor-not-allowed' : 'text-[#d1182b] cursor-pointer hover:text-red-700'}`}
+                >
+                  +
+                </button>
+              </div>
+              <div className="w-1/3">
+                <span className="text-xl font-bold text-center flex justify-center">{quantity}</span>
+              </div>
+              <div className="w-1/3">
+                <button
+                  onClick={handleDecrement}
+                  disabled={quantity === 1 || ctrl}
+                  className={`text-2xl font-semibold mx-auto flex justify-center w-full transition-colors ${quantity === 1 || ctrl
                     ? 'text-gray-300 cursor-not-allowed'
                     : 'text-[#d1182b] cursor-pointer hover:text-red-700'
-                  }`}
-              >
-                -
-              </button>
+                    }`}
+                >
+                  -
+                </button>
+              </div>
             </div>
-          </div>
-        }
+          }
+        </div>
 
-       
-      </div>
-      <div className="flex items-center gap-2">
-
-      {pathname !== '/cart' && (
         <button
-          onClick={handleGoToCart}
-          className="flex items-center justify-center gap-2 bg-[#d1182b] text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors w-full cursor-pointer"
-        >
-          <FaShoppingCart />
-          <span>مشاهده سبد خرید</span>
-        </button>
-      )}
-       <button
           onClick={() => setShowDeleteModal(true)}
           className="p-2 text-[#d1182b] hover:bg-red-50 rounded-lg transition-colors cursor-pointer group relative"
         >
@@ -105,7 +101,15 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
           </div>
         </button>
       </div>
-
+      {pathname !== '/cart' && (
+        <button
+          onClick={handleGoToCart}
+          className="flex items-center justify-center gap-2 bg-[#d1182b] text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors w-full cursor-pointer"
+        >
+          <FaShoppingCart />
+          <span>مشاهده سبد خرید</span>
+        </button>
+      )}
 
       <DeleteProductModal
         isOpen={showDeleteModal}

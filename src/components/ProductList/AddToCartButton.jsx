@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchCartData } from "@/redux/slices/cartSlice";
+import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Modal, message } from "antd";
 import Cookies from "js-cookie";
@@ -11,15 +11,20 @@ import Swal from "sweetalert2";
 import { addToCart } from "../../services/cart/cartService";
 import { getProductId } from "../../services/products/productService";
 import CartCounter from "../Product/CartCounter";
+import { getUserCookie } from "@/utils/cookieUtils";
+
+const generateRandomUserId = () => {
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
 
 const AddToCartButton = ({ productId }) => {
-  const { items } = useSelector((state) => state.cart);
+  const { currentItems } = useSelector((state) => state.cart);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const cartItem = items?.find(item => item.productId === productId);
+  const cartItem = currentItems?.find(item => item.productId === productId);
 
   
 
@@ -59,14 +64,33 @@ const AddToCartButton = ({ productId }) => {
   const handleConfirm = async () => {
     try {
       setIsLoading(true);
-      const user = JSON.parse(Cookies.get("user"));
-      const userId = user.userId;
+      const userData = getUserCookie();
+      let userId;
 
-
+      if (!userData?.token) {
+        // اگر کاربر مهمان است، چک کن که آیا قبلاً userId داشته یا نه
+        if (userData?.userId) {
+          userId = userData.userId;
+        } else {
+          userId = generateRandomUserId();
+          const initialData = {
+            token: "",
+            refreshToken: "",
+            expiration: "",
+            userId: userId,
+            displayName: "",
+            roles: [],
+          };
+          Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+        }
+      } else {
+        userId = userData.userId;
+      }
 
       await addToCart(productId, selectedWarranty?.id || -1, userId);
       setIsModalOpen(false);
-      dispatch(fetchCartData());
+      dispatch(fetchCurrentCart());
+      dispatch(fetchNextCart());
       Toast.fire({
         icon: "success",
         text: "محصول با موفقیت به سبد خرید اضافه شد",
@@ -97,6 +121,7 @@ const AddToCartButton = ({ productId }) => {
         <CartCounter
           quantity={cartItem.quantity}
           cartId={cartItem.id}
+          ctrl
         />
       }
 

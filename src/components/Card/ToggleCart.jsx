@@ -1,19 +1,25 @@
 "use client";
 
 import { Segmented } from 'antd';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchCartData } from '@/redux/slices/cartSlice';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCurrentCart, fetchNextCart, setCartType } from '@/redux/slices/cartSlice';
 
 function ToggleCart() {
   const [typeArticle, setTypeArticle] = useState("سبد خرید");
   const dispatch = useDispatch();
+  const { cartType } = useSelector((state) => state.cart);
+
+  // دریافت هر دو سبد خرید در ابتدای لود کامپوننت
+  useEffect(() => {
+    dispatch(fetchCurrentCart());
+    dispatch(fetchNextCart());
+  }, [dispatch]);
 
   const handleToggle = (value) => {
     setTypeArticle(value);
-    // اگر "خرید بعدی" انتخاب شد، درخواست next را ارسال کن، در غیر این صورت current
-    const cartType = value === "خرید بعدی" ? 'next' : 'current';
-    dispatch(fetchCartData(cartType));
+    const newCartType = value === "خرید بعدی" ? 'next' : 'current';
+    dispatch(setCartType(newCartType));
   };
 
   return (

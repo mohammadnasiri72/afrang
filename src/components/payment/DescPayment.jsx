@@ -15,7 +15,7 @@ import { fetchCartData } from '@/redux/slices/cartSlice';
 import { message } from "antd";
 
 function DescPayment({estimateData}) {
-  const { items, cartType } = useSelector((store) => store.cart);
+  const { currentItems, cartType } = useSelector((store) => store.cart);
   const [loading, setLoading] = useState(false);
   const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
@@ -70,7 +70,7 @@ function DescPayment({estimateData}) {
       <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
         <div className="bg-[#ececec] p-3 rounded-lg">
           <div className="flex justify-between text-[#444] py-1">
-            <span>قیمت کالاها ({items?.length || 0})</span>
+            <span>قیمت کالاها ({currentItems?.length || 0})</span>
             <span>{estimateData?.productAmount ? estimateData.productAmount.toLocaleString() : 0} تومان</span>
           </div>
           {estimateData?.discountAmount > 0 && (
