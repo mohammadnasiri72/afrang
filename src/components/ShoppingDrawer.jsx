@@ -19,7 +19,8 @@ function ShoppingDrawer() {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  const userCookie = Cookies.get("user");
+  const userId = userCookie ? JSON.parse(userCookie)?.userId : null;
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
@@ -65,6 +66,7 @@ function ShoppingDrawer() {
     
     // هدایت به URL مورد نظر
     router.push(url);
+   
   };
 
   // محاسبه جمع کل

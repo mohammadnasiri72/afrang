@@ -4,6 +4,7 @@ import "./globals.css";
 import { mainDomainImg } from "@/utils/mainDomain";
 import '@/styles/leaflet.css';
 import { Toaster } from "react-hot-toast";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export const metadata = {
   description: "خانه عکاسان افرنگ",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl">
       <body>
+        <ScrollToTop />
         <Layout>{children}</Layout>
         <Toaster position="top-center" />
       </body>
