@@ -21,6 +21,9 @@ function ShoppingDrawer() {
   const pathname = usePathname();
   const [userId, setUserId] = useState(null);
 
+  console.log(currentItems);
+  
+
   useEffect(() => {
     const userData = getUserCookie();
     setUserId(userData?.userId || null);
@@ -141,97 +144,75 @@ function ShoppingDrawer() {
               <div className="flex-1 overflow-auto">
                 {currentItems?.map((item) => (
                   <div key={item.id} className="group">
-                    <div className="flex flex-col sm:flex-row p-3 relative">
-                      <div className="w-full sm:w-20 sm:h-20 w-36 h-36 border border-[#0001] p-3 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
-                        {item.image ? (
-                          <img
-                            className="w-full h-full object-contain"
-                            src={getImageUrl2(item.image)}
-                            alt={item.title}
-                          />
-                        ) : (
-                          <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
-                            {item.title}
-                          </span>
-                        )}
-                        {/* نسخه دسکتاپ - نمایش با هاور */}
-                        <div className="hidden sm:block absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="absolute inset-0 flex items-center justify-center gap-1.5">
-                            <button
-                              onClick={() => handleIncrement(item)}
-                              className="w-7 h-6 flex items-center justify-center text-white bg-black/50 hover:bg-black/70 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer text-xs"
-                            >
-                              <FaPlus />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteClick(item)}
-                              className="w-7 h-6 flex items-center justify-center text-white bg-[#d1182b]/80 hover:bg-[#d1182b] rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer text-xs"
-                            >
-                              <FaTrash />
-                            </button>
-                            <button
-                              onClick={() => handleDecrement(item)}
-                              disabled={item.quantity === 1}
-                              className={`w-7 h-6 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg cursor-pointer text-xs ${
-                                item.quantity === 1 
-                                  ? 'text-gray-300 bg-gray-400/30 cursor-not-allowed' 
-                                  : 'text-white bg-black/50 hover:bg-black/70 hover:scale-110 active:scale-95 hover:shadow-xl'
-                              }`}
-                            >
-                              <FaMinus />
-                            </button>
-                          </div>
+                    <div className="flex flex-col p-3 relative">
+                      {/* تصویر و عنوان */}
+                      <div className="flex items-start gap-3">
+                        <div className="w-20 h-20 flex-shrink-0 border border-[#0001] p-2 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
+                          {item.image ? (
+                            <img
+                              className="w-full h-full object-contain"
+                              src={getImageUrl2(item.image)}
+                              alt={item.title}
+                            />
+                          ) : (
+                            <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
+                              {item.title}
+                            </span>
+                          )}
+                          {/* لیبل تخفیف */}
+                          {item.discount > 0 && (
+                            <div className="absolute top-0 right-0 bg-[#d1182b] text-white text-xs px-2 py-1 rounded-bl-lg">
+                              {item.discount}% 
+                            </div>
+                          )}
                         </div>
-                      </div>
-                      <div className="flex flex-col items-start px-3 gap-1 flex-1 min-w-0 mt-5 sm:mt-0">
-                        <button 
-                          onClick={() => handleNavigation(item.url)}
-                          className="text-sm line-clamp-2 w-full text-right transition-colors duration-300 font-bold no-underline text-gray-800 hover:text-[#d1182b] cursor-pointer"
-                        >
-                          {item.title}
-                        </button>
-                        <div className="flex items-center">
-                          <span className="font-bold text-[#d1182b]">
-                            {item.finalPrice.toLocaleString()}
-                          </span>
-                          <span className="px-1 text-xs text-[#d1182b]">تومان</span>
-                        </div>
-                        
-                        {/* دکمه‌های کنترل تعداد و حذف */}
-                        <div className="flex items-center gap-2 mt-1 w-full">
-                          {/* گروه دکمه‌های + و - */}
-                          <div className="flex items-center border border-[#d1182b] rounded-lg sm:hidden">
-                            <button
-                              onClick={() => handleIncrement(item)}
-                              className="text-lg text-[#d1182b] cursor-pointer font-semibold px-3 py-1 hover:text-red-700 transition-colors"
-                            >
-                              +
-                            </button>
-                            <span className="text-base font-bold px-2">{item.quantity}</span>
-                            <button
-                              onClick={() => handleDecrement(item)}
-                              disabled={item.quantity === 1}
-                              className={`text-lg font-semibold px-3 py-1 transition-colors ${
-                                item.quantity === 1 
-                                  ? 'text-gray-300 cursor-not-allowed' 
-                                  : 'text-[#d1182b] cursor-pointer hover:text-red-700'
-                              }`}
-                            >
-                              -
-                            </button>
-                          </div>
-
-                          {/* دکمه حذف */}
-                          <button
-                            onClick={() => handleDeleteClick(item)}
-                            className="p-1.5 text-[#d1182b] hover:bg-red-50 rounded-lg transition-colors cursor-pointer sm:hidden"
+                        <div className="flex-1 min-w-0">
+                          <button 
+                            onClick={() => handleNavigation(item.url)}
+                            className="text-sm line-clamp-2 w-full text-right transition-colors duration-300 font-bold no-underline text-gray-800 hover:text-[#d1182b] cursor-pointer"
                           >
-                            <FaTrash className="text-base" />
+                            {item.title}
                           </button>
                         </div>
                       </div>
+
+                      {/* اطلاعات محصول */}
+                      <div className="mt-3 space-y-3">
+                        {/* تعداد و دکمه حذف */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-1 rounded-lg border border-[#d1182b]/10">
+                            <span className="text-sm font-medium text-gray-700">تعداد : </span>
+                            <span className="text-sm font-bold text-[#d1182b] px-1"> {item.quantity} </span>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteClick(item)}
+                            className="inline-flex items-center gap-1.5 text-[#d1182b] hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-300 cursor-pointer border border-[#d1182b]/20 hover:border-[#d1182b]/40"
+                          >
+                            <FaTrash className="text-sm" />
+                            <span className="text-xs font-medium">حذف از سبد خرید</span>
+                          </button>
+                        </div>
+
+                        {/* گارانتی */}
+                        {item.warranty && (
+                          <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
+                            <span className="text-sm font-bold text-[#d1182b]">{item.warranty}</span>
+                          </div>
+                        )}
+
+                        {/* قیمت */}
+                        <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
+                          <span className="text-sm font-medium text-gray-700">قیمت :</span>
+                          <div className="flex items-center">
+                            <span className="text-lg font-bold text-[#d1182b]">
+                              {item.finalPrice.toLocaleString()}
+                            </span>
+                            <span className="mr-1 text-sm text-[#d1182b]">تومان</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <Divider variant="dashed" dashed />
+                    <div className="h-[1px] bg-[#d1182b]/10 my-2"></div>
                   </div>
                 ))}
               </div>

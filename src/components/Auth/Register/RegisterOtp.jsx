@@ -1,10 +1,13 @@
 import { authServiceSendOtp } from "@/services/Auth/authService";
+import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlinePhoneAndroid } from "react-icons/md";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
@@ -13,6 +16,10 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
   const [loading, setLoading] = useState(false);
 
   const [errorMobile, setErrorMobile] = useState("");
+
+  const { items } = useSelector((state) => state.settings);
+
+  
   const router = useRouter();
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -71,14 +78,26 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
-          <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
-            <div className="max-w-[57px]">
-              <a href="#">
-                <img href="#" src="/images/logo.png" />
-              </a>
+        <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
+            <div>
+              <Link href="/">
+                <Image 
+                  src={ getImageUrl(
+                    items.find((item) => item.propertyKey === "site_footer_logo")
+                      ?.value
+                  )}
+                  width={57}
+                  height={57}
+                  alt="logo"
+                  className="object-contain"
+                  unoptimized
+                />
+              </Link>
             </div>
-            <div className="logo-text hover:text-blue-700 duration-300">
-              <a href="#">خانــه عکاســــان افــــــــــرنـگ</a>
+            <div className="logo-text hover:text-[#d1182b] duration-300">
+              <Link href="/">
+                <span>خانــه عکاســــان افــــــــــرنـگ</span>
+              </Link>
             </div>
           </div>
           <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">

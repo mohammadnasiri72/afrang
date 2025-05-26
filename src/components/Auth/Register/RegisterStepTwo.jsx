@@ -1,18 +1,18 @@
 import { setUser } from "@/redux/slice/user";
-import { mainDomain } from "@/utils/mainDomain";
+import { authServiceOtp } from "@/services/Auth/authService";
+import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
-import axios from "axios";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import EnterCodeSent from "./EnterCodeSent";
-import { authServiceOtp } from "@/services/Auth/authService";
 
 function RegisterStepTwo({ mobile, setStateRegister }) {
   const [name, setName] = useState("");
@@ -23,6 +23,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
   const [password2, setPassword2] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const { items } = useSelector((state) => state.settings);
 
   const user = Cookies.get("user");
   const userId = JSON.parse(user).userId;
@@ -132,13 +134,25 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
-            <div className="max-w-[57px]">
-              <a href="#">
-                <img href="#" src="/images/logo.png" />
-              </a>
+            <div>
+              <Link href="/">
+                <Image
+                  src={getImageUrl(
+                    items.find((item) => item.propertyKey === "site_footer_logo")
+                      ?.value
+                  )}
+                  width={57}
+                  height={57}
+                  alt="logo"
+                  className="object-contain"
+                  unoptimized
+                />
+              </Link>
             </div>
-            <div className="logo-text hover:text-blue-700 duration-300">
-              <a href="#">خانــه عکاســــان افــــــــــرنـگ</a>
+            <div className="logo-text hover:text-[#d1182b] duration-300">
+              <Link href="/">
+                <span>خانــه عکاســــان افــــــــــرنـگ</span>
+              </Link>
             </div>
           </div>
           <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">
@@ -155,9 +169,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   نام
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.name ? "border border-red-500" : ""
-                  }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.name ? "border border-red-500" : ""
+                    }`}
                 >
                   <FaUser className="text-[#656565]" />
                   <input
@@ -182,9 +195,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   نام خانوادگی
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.family ? "border border-red-500" : ""
-                  }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.family ? "border border-red-500" : ""
+                    }`}
                 >
                   <FaUser className="text-[#656565]" />
                   <input
@@ -212,9 +224,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.password ? "border border-red-500" : ""
-                  }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.password ? "border border-red-500" : ""
+                    }`}
                 >
                   <FaLock className="text-[#656565]" />
                   <input
@@ -239,9 +250,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   تکرار رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.password2 ? "border border-red-500" : ""
-                  }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.password2 ? "border border-red-500" : ""
+                    }`}
                 >
                   <FaLock className="text-[#656565]" />
                   <input
@@ -269,9 +279,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                 آدرس ایمیل ( اختیاری )
               </label>
               <div
-                className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                  errors.email ? "border border-red-500" : ""
-                }`}
+                className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.email ? "border border-red-500" : ""
+                  }`}
               >
                 <MdEmail className="text-[#656565]" />
                 <input
@@ -308,9 +317,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
             <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
               <button
                 onClick={submitRegister}
-                className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
-                  loading ? "cursor-not-allowed" : "cursor-pointer"
-                }`}
+                className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
               >
                 {loading ? (
                   <div className="flex items-center gap-2 justify-center">

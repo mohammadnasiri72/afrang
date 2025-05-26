@@ -1,8 +1,12 @@
 import { authServiceOtp } from "@/services/Auth/authService";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Alert, Spin } from "antd";
 import Cookies from "js-cookie";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 // تابع تبدیل اعداد انگلیسی به فارسی
@@ -17,7 +21,7 @@ const toEnglishNumber = (number) => {
   return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
 };
 
-function EnterCodeSent({ mobile, setStateLogin , from}) {
+function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [loading, setLoading] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
@@ -84,8 +88,8 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
     try {
       const englishCode = digits.map((d) => toEnglishNumber(d)).join("");
       const res = await authServiceOtp.login(mobile, englishCode);
-      const userData = res.data; 
-             
+      const userData = res.data;
+
       // تنظیم کوکی با زمان انقضا
       Cookies.set("user", JSON.stringify(userData), {
         expires: new Date(userData.expiration),
@@ -130,18 +134,32 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
     customClass: "toast-modal",
   });
 
+  const { items } = useSelector((state) => state.settings);
+
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
-            <div className="max-w-[57px]">
-              <a href="#">
-                <img href="#" src="/images/logo.png" />
-              </a>
+            <div>
+              <Link href="/">
+                <Image
+                  src={getImageUrl(
+                    items.find((item) => item.propertyKey === "site_footer_logo")
+                      ?.value
+                  )}
+                  width={57}
+                  height={57}
+                  alt="logo"
+                  className="object-contain"
+                  unoptimized
+                />
+              </Link>
             </div>
-            <div className="logo-text hover:text-blue-700 duration-300">
-              <a href="#">خانــه عکاســــان افــــــــــرنـگ</a>
+            <div className="logo-text hover:text-[#d1182b] duration-300">
+              <Link href="/">
+                <span>خانــه عکاســــان افــــــــــرنـگ</span>
+              </Link>
             </div>
           </div>
           <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">
@@ -204,11 +222,10 @@ function EnterCodeSent({ mobile, setStateLogin , from}) {
                 <button
                   disabled={loading || !digits.every((digit) => digit !== "")}
                   onClick={submitLogin}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
-                    loading || !digits.every((digit) => digit !== "")
+                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading || !digits.every((digit) => digit !== "")
                       ? "cursor-not-allowed"
                       : "cursor-pointer"
-                  }`}
+                    }`}
                 >
                   {loading ? (
                     <div className="flex items-center gap-2 justify-center">

@@ -2,17 +2,22 @@ import { authServiceStatic } from "@/services/Auth/authService";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import { getImageUrl } from "@/utils/mainDomain";
 
-function LoginStatic({ setStateLogin , from}) {
+function LoginStatic({ setStateLogin, from }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const { items } = useSelector((state) => state.settings);
 
+  
 
 
   const router = useRouter();
@@ -66,8 +71,8 @@ function LoginStatic({ setStateLogin , from}) {
       Cookies.set("user", JSON.stringify(userData));
       if (!from) {
         router.push("/");
-        
-      }else{
+
+      } else {
         if (from === 'card') {
           router.push("/card/compeletePay");
         }
@@ -92,18 +97,33 @@ function LoginStatic({ setStateLogin , from}) {
     }
   };
 
+ 
+  
+
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
-            <div className="max-w-[57px]">
-              <a href="#">
-                <img href="#" src="/images/logo.png" />
-              </a>
+            <div>
+              <Link href="/">
+                <Image 
+                  src={ getImageUrl(
+                    items.find((item) => item.propertyKey === "site_footer_logo")
+                      ?.value
+                  )}
+                  width={57}
+                  height={57}
+                  alt="logo"
+                  className="object-contain"
+                  unoptimized
+                />
+              </Link>
             </div>
-            <div className="logo-text hover:text-blue-700 duration-300">
-              <a href="#">خانــه عکاســــان افــــــــــرنـگ</a>
+            <div className="logo-text hover:text-[#d1182b] duration-300">
+              <Link href="/">
+                <span>خانــه عکاســــان افــــــــــرنـگ</span>
+              </Link>
             </div>
           </div>
           <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">
@@ -119,9 +139,8 @@ function LoginStatic({ setStateLogin , from}) {
                   شماره تلفن/آدرس ایمیل
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.username ? "border border-red-500" : ""
-                  }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.username ? "border border-red-500" : ""
+                    }`}
                 >
                   <FaUser className="text-[#656565]" />
                   <input
@@ -134,7 +153,7 @@ function LoginStatic({ setStateLogin , from}) {
                     type="text"
                     name=""
                     id=""
-                    placeholder="نام و نام خانوادگی خود را وارد کنید."
+                    placeholder="نام کاربری/ایمیل را وارد کنید."
                   />
                 </div>
                 {errors.username && (
@@ -146,9 +165,8 @@ function LoginStatic({ setStateLogin , from}) {
                   رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.password ? "border border-red-500" : ""
-                  }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.password ? "border border-red-500" : ""
+                    }`}
                 >
                   <FaLock className="text-[#656565]" />
                   <input
@@ -192,10 +210,9 @@ function LoginStatic({ setStateLogin , from}) {
               <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
                 <button
                   disabled={loading}
-                    onClick={submitLogin}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
-                    loading ? "cursor-not-allowed" : "cursor-pointer"
-                  }`}
+                  onClick={submitLogin}
+                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading ? "cursor-not-allowed" : "cursor-pointer"
+                    }`}
                 >
                   {loading ? (
                     <div className="flex items-center gap-2 justify-center">
