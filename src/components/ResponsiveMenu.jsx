@@ -52,7 +52,7 @@ function ResponsiveMenu() {
   const handleNavigation = (url) => {
     // بستن دراور
     dispatch(setOpenMenuRes(false));
-    
+
     // هدایت به URL مورد نظر
     router.push(url);
   };
@@ -118,7 +118,7 @@ function ResponsiveMenu() {
   // تابع برای چک کردن اینکه آیا مسیر فعلی با مسیر داده شده مطابقت دارد
   const isActivePath = (path) => {
     if (!path) return false;
-    
+
     // تبدیل URL به حالت نرمال
     const normalizedPathname = decodeURIComponent(pathname);
     const normalizedPath = decodeURIComponent(path);
@@ -134,30 +134,34 @@ function ResponsiveMenu() {
       }
       const itemUrl = item.url || item.pageUrl;
       if (!itemUrl) return false;
-      
+
       const normalizedPathname = decodeURIComponent(pathname);
       const normalizedItemUrl = decodeURIComponent(itemUrl);
-      
+
       return normalizedPathname === normalizedItemUrl;
     });
   };
 
   const handleMouseEnter = useCallback((e) => {
+
+
     if (isCalculatingRef.current) return;
-    isCalculatingRef.current = true;
+      isCalculatingRef.current = true;
 
-    const navbar = navbarRef.current;
-    if (!navbar) return;
+      const navbar = navbarRef.current;
+      if (!navbar) return;
 
-    const navbarRect = navbar.getBoundingClientRect();
-    const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
-    setDropdownPosition({ top: topPosition });
+      const navbarRect = navbar.getBoundingClientRect();
+      const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
+      setDropdownPosition({ top: topPosition });
 
-    // ریست کردن فلگ بعد از 100 میلی‌ثانیه
-    setTimeout(() => {
-      isCalculatingRef.current = false;
-    }, 100);
-  }, [isSticky]);
+
+  }, []);
+
+
+  const handleMouseLeave = useCallback((e) => {
+    isCalculatingRef.current = false;
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -180,11 +184,10 @@ function ResponsiveMenu() {
     return (
       <div
         ref={navbarRef}
-        className={`main-navbar bg-[#d1182b] duration-1000 ease-in-out w-full flex text-white ${
-          isSticky
+        className={`main-navbar bg-[#d1182b] duration-1000 ease-in-out w-full flex text-white ${isSticky
             ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
             : "relative"
-        }`}
+          }`}
       >
         <div className="container mx-auto">
           <div className="flex justify-start w-full whitespace-nowrap overflow-x-auto lg:overflow-visible">
@@ -192,10 +195,10 @@ function ResponsiveMenu() {
               {items.map((item, i) => (
                 <div
                   key={item.id}
-                  className={`hover:bg-[#0002] duration-300 px-1 relative group hidden lg:flex items-center ${
-                    i === items.length - 1 ? "" : "border-l border-[#fff8]"
-                  }`}
+                  className={`hover:bg-[#0002] duration-300 px-1 relative group hidden lg:flex items-center ${i === items.length - 1 ? "" : "border-l border-[#fff8]"
+                    }`}
                   onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <div className="p-3 cursor-pointer font-semibold whitespace-nowrap">
@@ -209,9 +212,9 @@ function ResponsiveMenu() {
                     </Link>
                   )}
                   {item.Children && item.Children.length > 0 && (
-                    <div 
+                    <div
                       className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[999]"
-                      style={{ 
+                      style={{
                         position: 'fixed',
                         top: `${dropdownPosition.top}px`,
                         left: 0,
@@ -274,9 +277,8 @@ function ResponsiveMenu() {
           return {
             key: item.id,
             label: (
-              <div className={`text-right px-4 py-2 cursor-pointer ${
-                isActive ? 'text-[#d1182b]' : ''
-              }`}>
+              <div className={`text-right px-4 py-2 cursor-pointer ${isActive ? 'text-[#d1182b]' : ''
+                }`}>
                 {item.title}
               </div>
             ),
@@ -288,11 +290,10 @@ function ResponsiveMenu() {
           label: (
             <button
               onClick={() => handleNavigation(item.url || item.pageUrl || "#")}
-              className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${
-                isActivePath(item.url || item.pageUrl) 
-                  ? 'text-[#d1182b]' 
+              className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${isActivePath(item.url || item.pageUrl)
+                  ? 'text-[#d1182b]'
                   : 'text-gray-800 hover:text-[#d1182b]'
-              }`}
+                }`}
             >
               {item.title}
             </button>
@@ -316,11 +317,10 @@ function ResponsiveMenu() {
       {
         key: 'dashboard-group',
         label: (
-          <div className={`text-right px-4 py-2 cursor-pointer ${
-            dashboardMenuItems.some(item => isActivePath(item.path)) 
-              ? 'text-[#d1182b]' 
+          <div className={`text-right px-4 py-2 cursor-pointer ${dashboardMenuItems.some(item => isActivePath(item.path))
+              ? 'text-[#d1182b]'
               : ''
-          }`}>
+            }`}>
             داشبورد کاربری
           </div>
         ),
@@ -329,11 +329,10 @@ function ResponsiveMenu() {
           label: (
             <button
               onClick={() => handleNavigation(item.path)}
-              className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${
-                isActivePath(item.path) 
-                  ? 'text-[#d1182b]' 
+              className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${isActivePath(item.path)
+                  ? 'text-[#d1182b]'
                   : 'text-gray-800 hover:text-[#d1182b]'
-              }`}
+                }`}
             >
               <item.icon className="text-lg" />
               <span>{item.title}</span>
@@ -395,9 +394,9 @@ function ResponsiveMenu() {
         >
           <Menu
             mode="inline"
-            style={{ 
-              width: "100%", 
-              direction: "rtl", 
+            style={{
+              width: "100%",
+              direction: "rtl",
               zIndex: "1000",
               backgroundColor: "#fff",
             }}
