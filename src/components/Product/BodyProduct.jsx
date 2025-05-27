@@ -2,8 +2,8 @@
 
 import ProductTabs from './ProductTabs';
 
-function BodyProduct({ product, comments , totalCount}) {
-  return <ProductTabs product={product} comments={comments} totalCount={totalCount}/>;
+function BodyProduct({ product}) {
+  return <ProductTabs product={product} />;
 }
 
 export default BodyProduct;

@@ -14,7 +14,7 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-function SendCommentBox({ itemId, parentId = -1, onCommentSent }) {
+function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -93,6 +93,7 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent }) {
         ...formData,
         itemId,
         parentId,
+        type,
       };
       
       await sendComment(commentData);

@@ -15,7 +15,7 @@ const BodyPayment = dynamic(() => import("@/components/payment/BodyPayment"));
 export default function CompletePay() {
     const router = useRouter();
     const dispatch = useDispatch();
-    const { items } = useSelector((state) => state.cart);
+    const { currentItems } = useSelector((state) => state.cart);
     const selectedAddress = useSelector((state) => state.address.selectedAddress);
     const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
 
@@ -32,7 +32,7 @@ export default function CompletePay() {
     useEffect(() => {
         const checkCart = async () => {
             // اگر در مسیر ثبت سفارش هستیم، اجازه خالی بودن سبد خرید رو بده
-            if (!items || items.length === 0) {
+            if (!currentItems || currentItems.length === 0) {
                 const currentPath = window.location.pathname;
                 const searchParams = window.location.search;
                 // اگر در صفحه سفارشات با trackCode هستیم، اجازه خالی بودن سبد خرید رو بده
@@ -42,7 +42,7 @@ export default function CompletePay() {
             }
         };
         checkCart();
-    }, [dispatch, items, router]);
+    }, [dispatch, currentItems, router]);
 
     useEffect(() => {
         if (!selectedAddress || !selectedShipping) {

@@ -2,16 +2,16 @@
 
 import DeleteProductModal from "@/components/Product/DeleteProductModal";
 import { setOpenShopping } from "@/redux/slice/shopping";
-import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
+import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { updateCart } from "@/services/cart/cartService";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import { Divider, Drawer } from "antd";
-import { useRouter, usePathname } from 'next/navigation';
+import { Drawer, Tooltip } from "antd";
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { FaCartShopping, FaTrash, FaPlus, FaMinus } from "react-icons/fa6";
+import { FaCartShopping, FaTrash } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 
 function ShoppingDrawer() {
   const open = useSelector((store) => store.shopping.openShopping);
@@ -165,34 +165,33 @@ function ShoppingDrawer() {
                               {item.discount}% 
                             </div>
                           )}
+                          {/* تعداد محصول */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/90 text-white text-xs px-2 py-1 text-center">
+                            {item.quantity} عدد
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <button 
-                            onClick={() => handleNavigation(item.url)}
-                            className="text-sm line-clamp-2 w-full text-right transition-colors duration-300 font-bold no-underline text-gray-800 hover:text-[#d1182b] cursor-pointer"
-                          >
-                            {item.title}
-                          </button>
+                        <div className="flex-1 min-w-0 flex flex-col">
+                          <div className="flex items-start justify-between gap-2">
+                            <button 
+                              onClick={() => handleNavigation(item.url)}
+                              className="text-sm line-clamp-2 flex-1 text-right transition-colors duration-300 font-bold no-underline text-gray-800 hover:text-[#d1182b] cursor-pointer"
+                            >
+                              {item.title}
+                            </button>
+                            <Tooltip title="حذف از سبد خرید" placement="left" zIndex={9999}>
+                              <button
+                                onClick={() => handleDeleteClick(item)}
+                                className="text-[#d1182b] hover:bg-red-50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer"
+                              >
+                                <FaTrash className="text-sm" />
+                              </button>
+                            </Tooltip>
+                          </div>
                         </div>
                       </div>
 
                       {/* اطلاعات محصول */}
                       <div className="mt-3 space-y-3">
-                        {/* تعداد و دکمه حذف */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-1 rounded-lg border border-[#d1182b]/10">
-                            <span className="text-sm font-medium text-gray-700">تعداد : </span>
-                            <span className="text-sm font-bold text-[#d1182b] px-1"> {item.quantity} </span>
-                          </div>
-                          <button
-                            onClick={() => handleDeleteClick(item)}
-                            className="inline-flex items-center gap-1.5 text-[#d1182b] hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-300 cursor-pointer border border-[#d1182b]/20 hover:border-[#d1182b]/40"
-                          >
-                            <FaTrash className="text-sm" />
-                            <span className="text-xs font-medium">حذف از سبد خرید</span>
-                          </button>
-                        </div>
-
                         {/* گارانتی */}
                         {item.warranty && (
                           <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
@@ -202,12 +201,14 @@ function ShoppingDrawer() {
 
                         {/* قیمت */}
                         <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
-                          <span className="text-sm font-medium text-gray-700">قیمت :</span>
-                          <div className="flex items-center">
-                            <span className="text-lg font-bold text-[#d1182b]">
-                              {item.finalPrice.toLocaleString()}
-                            </span>
-                            <span className="mr-1 text-sm text-[#d1182b]">تومان</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-gray-700">قیمت :</span>
+                            <div className="flex items-center">
+                              <span className="text-lg font-bold text-[#d1182b]">
+                                {item.finalPrice.toLocaleString()}
+                              </span>
+                              <span className="mr-1 text-sm text-[#d1182b]">تومان</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -241,7 +242,7 @@ function ShoppingDrawer() {
                   <button 
                     onClick={() => handleNavigation("/cart/infosend")}
                     className={`w-full text-white duration-300 cursor-pointer py-3 font-semibold rounded-lg relative z-[10001] ${
-                      pathname === '/cart/infosend' 
+                      pathname === '/cart/infosend'
                         ? 'bg-[#b91626]' 
                         : 'bg-[#d1182b] hover:bg-[#b91626]'
                     }`}

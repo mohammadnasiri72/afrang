@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 
 export default function CompeletePayWrapper() {
-  const { items } = useSelector((state) => state.cart);
+  const { currentItems } = useSelector((state) => state.cart);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,16 +24,16 @@ export default function CompeletePayWrapper() {
         return;
       }
 
-      if (!items || items.length === 0) {
+      if (!currentItems || currentItems.length === 0) {
         router.push("/cart");
       }
     } catch (error) {
       console.error("Error parsing user cookie:", error);
       router.push("/cart");
     }
-  }, [items, router]);
+  }, [currentItems, router]);
 
-  if (!items || items.length === 0) {
+  if (!currentItems || currentItems.length === 0) {
     return (
       <div className="w-full min-h-[400px] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>

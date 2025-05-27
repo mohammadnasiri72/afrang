@@ -36,11 +36,10 @@ function HeaderProductList({ onLayoutChange }) {
 
   const sortOptions = [
     { label: "جدیدترین", value: "2" },
+    { label: "پرفروش ها", value: "3" },
     { label: "پربازدید ترین", value: "1" },
     { label: "ارزان‌ترین", value: "4" },
-    { label: "پرفروش ها", value: "3" },
     { label: "گران ترین", value: "5" },
-    { label: "آرشیو", value: "6" },
   ];
 
   return (

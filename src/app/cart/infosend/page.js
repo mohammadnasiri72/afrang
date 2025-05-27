@@ -14,16 +14,18 @@ const CompeletePayWrapper = dynamic(() => import("@/components/CompeletePay/Comp
 export default function CompletePay() {
     const router = useRouter();
     const dispatch = useDispatch();
-    const { items } = useSelector((state) => state.cart);
+    const { currentItems } = useSelector((state) => state.cart);
 
     useEffect(() => {
         const checkCart = async () => {
-            if (!items || items.length === 0) {
+            if (!currentItems || currentItems.length === 0) {
                 router.push('/cart');
             }
         };
         checkCart();
-    }, [dispatch, items, router]);
+    }, [dispatch, currentItems, router]);
+
+    
 
     return (
         <div className="bg-[#f6f6f6] overflow-hidden">

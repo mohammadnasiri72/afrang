@@ -1,6 +1,33 @@
+import { getImageUrl } from "@/utils/mainDomain";
 import React from "react";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import { FaCommentSlash } from "react-icons/fa";
+import moment from "moment-jalaali";
+
+const convertPersianToEnglish = (str) => {
+  const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  
+  return str.split('').map(char => {
+    const index = persianNumbers.indexOf(char);
+    return index !== -1 ? englishNumbers[index] : char;
+  }).join('');
+};
+
+const formatPersianDate = (dateString) => {
+  try {
+    const persianMonths = [
+      'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+      'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+    ];
+    
+    const date = moment(dateString);
+    return `${date.jDate()} ${persianMonths[date.jMonth()]} ${date.jYear()}`;
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return dateString;
+  }
+};
 
 // کامپوننت حالت خالی
 const EmptyComments = () => {
@@ -22,13 +49,13 @@ const CommentItem = ({ comment, onReply }) => {
       <div className="flex justify-between px-2 items-start">
         <div className="flex items-center">
           <img
-            src={comment.userPhoto || "/images/icons/user-image.png"}
-            alt={comment.userName || "کاربر"}
+            src={getImageUrl(comment.userPhoto)}
+            alt={comment.name || "کاربر"}
             className="w-10 h-10 rounded-full"
           />
           <div className="flex flex-col px-3">
             <span className="font-bold">{comment.name || "ناشناس"}</span>
-            <span className="text-[#0008]">{comment.dateProduct}</span>
+            <span className="text-[#0008]">{formatPersianDate(comment.created)}</span>
           </div>
         </div>
         {onReply && (
@@ -49,7 +76,7 @@ const CommentItem = ({ comment, onReply }) => {
 };
 
 // تابع بازگشتی برای نمایش کامنت‌های فرزند
-const CommentTree = ({ comments, parentId = null, onReply, depth = 0 }) => {
+const CommentTree = ({ comments, parentId = null, onReply, depth = 0 , type}) => {
   // برای کامنت‌های اصلی، parentId باید null باشد
   const currentParentId = parentId === null ? null : parentId.toString();
   
@@ -69,6 +96,8 @@ const CommentTree = ({ comments, parentId = null, onReply, depth = 0 }) => {
   if (filteredComments.length === 0 && currentParentId === null) {
     return <EmptyComments />;
   }
+
+  
   
   return (
     <>
@@ -91,13 +120,13 @@ const CommentTree = ({ comments, parentId = null, onReply, depth = 0 }) => {
   );
 };
 
-function CommentUser({ comments, onReply }) {
+function CommentUser({ comments, onReply , type}) {
   
   return (
     <div className="bg-white p-4 mt-3 rounded-lg">
       <h2 className="font-semibold text-[18px]">نظرات کاربران</h2>
       <hr className="mt-4 border-[#40768c55]" />
-      <CommentTree comments={comments} onReply={onReply} />
+      <CommentTree comments={comments} onReply={onReply} type={type} />
     </div>
   );
 }

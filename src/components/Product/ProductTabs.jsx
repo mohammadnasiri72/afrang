@@ -11,7 +11,7 @@ import SpecificationsProduct from "./SpecificationsProduct";
 import BundleProducts from "./BundleProducts";
 import { getRelatedProductsByIdString } from "@/services/products/productService";
 
-function ProductTabs({ product, comments, totalCount }) {
+function ProductTabs({ product }) {
   const [tabProDetails, setTabProDetails] = useState(product.product.typeId === 3 ? 1 : 2);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
@@ -69,13 +69,17 @@ function ProductTabs({ product, comments, totalCount }) {
           {tabProDetails === 3 && <SpecificationsProduct product={product} />}
           {tabProDetails === 4 && (
             <CommentProduct
-              comments={comments}
+             
               id={product.id}
-              totalCount={totalCount}
+              type={0}
             />
           )}
           {tabProDetails === 5 && <AccessoriesProduct product={product} />}
-          {tabProDetails === 6 && <CriticismProduct product={product} />}
+          {tabProDetails === 6 && <CommentProduct
+           
+            id={product.id}
+            type={1}
+          />}
         </div>
       </div>
       {

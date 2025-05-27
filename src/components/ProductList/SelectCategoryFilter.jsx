@@ -474,20 +474,38 @@ function SelectCategoryFilter() {
     brandSearch.length > 0
   );
 
+  // تابع برای بررسی وجود فیلترهای فعال
+  const hasActiveFilters = () => {
+    return (
+      selectedBrands.length > 0 ||
+      valuePrice[0] > 0 ||
+      valuePrice[1] < defaultMaxPrice ||
+      switchStates.available ||
+      switchStates.discount ||
+      switchStates.vip ||
+      switchStates.price ||
+      searchParams.get("category") ||
+      searchParams.get("OrderBy")
+    );
+  };
+
   return (
     <>
-      <div className="flex justify-between pb-10">
+      <div className="flex justify-between items-center">
         <h4 className="font-semibold text-lg">فیلترها</h4>
-        <div
-          onClick={handleResetFilters}
-          className="flex items-center cursor-pointer"
-        >
-          <IoCloseOutline className="text-red-600 text-xl" />
-          <span className="text-red-600 text-sm font-semibold">
-            حذف فیلتر‌ها
-          </span>
-        </div>
+        {hasActiveFilters() && (
+          <button
+            onClick={handleResetFilters}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 group cursor-pointer"
+          >
+            <IoCloseOutline className="text-red-600 text-xl group-hover:rotate-90 transition-transform duration-300" />
+            <span className="text-red-600 text-sm font-semibold">
+              حذف فیلتر‌ها
+            </span>
+          </button>
+        )}
       </div>
+      <Divider style={{marginBottom: "0px"}}/>
       {shouldShowCollapse ? (
         <Collapse
           ghost

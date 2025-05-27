@@ -69,15 +69,17 @@ function BasketBox({ product }) {
 
 
         <PriceProduct product={product.product} />
-
-        <div className="mt-10 p-4">
-          {product?.inventory?.inventorySetting?.showInventory && (
-            <span className="text-[#d1182b] font-semibold whitespace-nowrap">
-              تنها <span className="text-lg font-bold px-1">{product?.inventory?.inventoryQtyForView}</span> عدد در انبار افرنگ
-              باقی مانده
-            </span>
-          )}
-        </div>
+        {
+          product?.inventory?.inventorySetting?.showInventory &&
+          <div className="p-4">
+            {(
+              <span className="text-[#d1182b] font-semibold whitespace-nowrap">
+                تنها <span className="text-lg font-bold px-1">{product?.inventory?.inventoryQtyForView}</span> عدد در انبار افرنگ
+                باقی مانده
+              </span>
+            )}
+          </div>
+        }
         <CartActions product={product} selectedWarranty={selectedWarranty} />
       </div>
     </div>

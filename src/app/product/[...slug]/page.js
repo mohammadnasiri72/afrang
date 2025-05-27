@@ -17,10 +17,7 @@ export default async function ProductDetails(props) {
   
   
 
-  const { items: comments , totalCount} = await getComment(
-    id,
-    pageComment,
-  );
+ 
 
  
    
@@ -29,7 +26,7 @@ export default async function ProductDetails(props) {
       <div className="bg-[#f6f6f6] overflow-hidden py-10">
         <div className="xl:px-16">
           <TitleProduct product={{...product , id}}/>   
-          <BodyProduct product={{...product , id}} comments={comments} totalCount={totalCount}/>
+          <BodyProduct product={{...product , id}} />
         </div>
       </div>
     </>

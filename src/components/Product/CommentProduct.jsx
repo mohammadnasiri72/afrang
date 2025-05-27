@@ -2,10 +2,10 @@
 
 import CommentSection from "../comments/CommentSection";
 
-function CommentProduct({ comments , id , totalCount}) {
+function CommentProduct({ id , type }) {
   return (
     <>
-      <CommentSection id={id} comments={comments} totalCount={totalCount}/>
+      <CommentSection id={id} type={type} />
     </>
   );
 }
