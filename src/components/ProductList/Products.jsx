@@ -19,7 +19,7 @@ function Products({ products, layout = "list" }) {
     <>
       <div className="bg-white rounded-lg relative z-50">
         <div className="flex w-full flex-wrap">
-          <div className="p-3 lg:w-1/3 w-full relative flex items-center justify-center">
+          <div className="p-3 lg:w-1/3 w-1/5 relative flex items-center justify-center">
             <Link href={product.url}>
               <img
                 className="w-48 h-48 object-contain rounded-lg"

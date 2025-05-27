@@ -45,8 +45,14 @@ export default async function ProductList() {
                     <div className="flex flex-col items-center text-center">
                       {category.image && (
                         <div className="bg-gray-600 p-10 rounded-full mb-4 group-hover:bg-[#d1182b] transition-colors duration-300 shadow-sm flex items-center justify-center">
-                          <img className="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-300 filter drop-shadow-sm" src={getImageUrl(category.image)}>
-                          </img>
+                          <Image 
+                            src={getImageUrl(category.image)}
+                            alt={category.title}
+                            width={56}
+                            height={56}
+                            unoptimized
+                            className="object-contain group-hover:scale-110 transition-transform duration-300 filter drop-shadow-sm"
+                          />
                         </div>
                       )}
                       <h2 className="text-xl font-semibold mb-2 group-hover:text-[#d1182b] transition-colors duration-300">{category.title}</h2>

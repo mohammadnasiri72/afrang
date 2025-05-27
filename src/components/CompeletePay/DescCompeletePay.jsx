@@ -167,8 +167,8 @@ export default function DescCompeletePay() {
 
           {/* سوئیچ‌ها */}
           <div dir="ltr" className="space-y-3 mb-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[#444]">درخواست فاکتور رسمی</span>
+            <div className="flex items-center justify-end">
+              <span className="text-[#444] px-1">درخواست فاکتور رسمی</span>
               <Switch
                 checked={needInvoice}
                 onChange={setNeedInvoice}
@@ -181,8 +181,8 @@ export default function DescCompeletePay() {
                 />
               </Switch>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#444]">قوانین و مقررات سایت را می‌پذیرم</span>
+            <div className="flex items-center justify-end">
+              <span className="text-[#444] px-1">قوانین و مقررات سایت را می‌پذیرم</span>
               <Switch
                 checked={acceptTerms}
                 onChange={setAcceptTerms}

@@ -50,6 +50,8 @@ const Footer = () => {
     return <Loading />;
   }
 
+  
+
   return (
     <div className="footer sm:pb-0 pb-16 ">
       <div className="lg:px-16 px-2 pt-10 border-b-8 border-[#d1182b] relative">
@@ -258,7 +260,7 @@ const Footer = () => {
           {footerMenu[0]?.menuItems?.map((menuItem) => (
             <Link
               key={menuItem.id}
-              href={menuItem.href}
+              href={menuItem.url}
               className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full"
             >
               {menuItem.title}

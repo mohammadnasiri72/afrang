@@ -54,7 +54,7 @@ function CommentSection({ id, type }) {
         setIsLoading(false);
       }
     };
-    
+
     fetchComments();
   }, [id, type]);
 
@@ -98,13 +98,13 @@ function CommentSection({ id, type }) {
           <FaQuestionCircle className="text-6xl text-gray-300 mb-4" />
         )}
         <h3 className="text-xl font-semibold text-gray-700 mb-2">
-          {type === 0 
+          {type === 0
             ? "هنوز نظری ثبت نشده است"
             : "هنوز پرسشی ثبت نشده است"
           }
         </h3>
         <p className="text-gray-500 text-center max-w-md">
-          {type === 0 
+          {type === 0
             ? "اولین نفری باشید که نظر خود را درباره این مطلب بیان می‌کنید"
             : "اولین نفری باشید که پرسش خود را درباره این مطلب مطرح می‌کنید"
           }
@@ -124,14 +124,7 @@ function CommentSection({ id, type }) {
           {/* {totalCount > comments.length && (
         <LoadMoreButton loading={loading} onClick={loadMoreComments} />
       )} */}
-          <div id="comment-box" className="transition-all duration-500 z-50 relative">
-            <SendCommentBox
-              itemId={id}
-              parentId={replyTo || -1}
-              onCommentSent={handleCommentSent}
-              type={type}
-            />
-          </div>
+
         </div>
       }
       {
@@ -146,6 +139,15 @@ function CommentSection({ id, type }) {
           <CommentSkeleton />
         </div>
       }
+
+      <div id="comment-box" className="transition-all duration-500 z-50 relative">
+        <SendCommentBox
+          itemId={id}
+          parentId={replyTo || -1}
+          onCommentSent={handleCommentSent}
+          type={type}
+        />
+      </div>
     </>
   );
 }

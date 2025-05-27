@@ -1,4 +1,6 @@
+import { itemVisit } from '@/services/Item/item';
 import dynamic from 'next/dynamic';
+import { headers } from 'next/headers';
 const BlogDesc = dynamic(() => import('@/components/blogDetails/BlogDesc.jsx'));
 const RelationBlog = dynamic(() => import('@/components/blogDetails/RelationBlog.jsx'));
 const Container = dynamic(() => import('@/components/container'));
@@ -17,6 +19,19 @@ export default async function BlogDetails(props) {
     : 1;
 
   const { items: comments, totalCount } = await getComment(id, pageComment);
+
+  const headersList = headers();
+  const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+  const userAgent = headersList.get('user-agent') || 'unknown';
+  const url = headersList.get('x-url') || headersList.get('referer') || '';
+
+
+  // Record the visit with IP and User Agent
+  try {
+    await itemVisit(id, url, ip, userAgent);
+  } catch (error) {
+    console.error('Error recording visit:', error);
+  }
 
   return (
     <>

@@ -13,6 +13,7 @@ import { LuMailbox } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import CartCounter from "../Product/CartCounter";
 import { getUserCookie, getUserId } from "@/utils/cookieUtils";
+import Image from "next/image";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
@@ -152,58 +153,56 @@ const BodyCard = () => {
                   key={item.id}
                   className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
                 >
-                  <div className="sm:w-1/4 w-full flex flex-col justify-between">
-                    <img
-                      style={{ filter: " brightness(0.8)" }}
-                      className="w-full rounded-lg min-h-32 object-contain"
-                      src={getImageUrl2(item.image)}
-                      alt={item?.title}
-                    />
+                  <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
+                    <div className="relative">
+                      <Image
+                        style={{ filter: " brightness(0.8)" }}
+                        className="rounded-lg object-contain"
+                        src={getImageUrl2(item.image)}
+                        alt={item?.title}
+                        width={150}
+                        height={150}
+                        unoptimized
+                      />
+                      {item.discount !== 0 && (
+                        <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                          {item.discount}٪
+                        </span>
+                      )}
+                    </div>
                     <div className="mt-5">
-
                       {renderCartCounter(item)}
                     </div>
                   </div>
-                  <div className="sm:w-3/4 w-full px-4 py-2 relative flex flex-col justify-between">
-
-
+                  <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                     <div>
-
-                      <h3 className="font-semibold text-lg text-[#333] mb-3">
+                      <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] mb-3">
                         {item.title}
                       </h3>
                       {item.warranty && (
                         <div className="flex items-center mt-2">
                           <BsArchive className="text-[#666]" />
-                          <span className="px-2 text-[13px]">
+                          <span className="px-2 sm:text-[13px] text-xs">
                             {item.warranty}
                           </span>
                         </div>
                       )}
                       <div className="flex items-center mt-2">
                         <GoShieldCheck className="text-[#666]" />
-                        <span className="px-2 text-[13px]">
+                        <span className="px-2 sm:text-[13px] text-xs">
                           ضمانت اصل بودن کالا
                         </span>
                       </div>
                       <div className="flex items-center mt-2">
                         <LuMailbox className="text-[#666]" />
-                        <span className="px-2 text-[13px]">
+                        <span className="px-2 sm:text-[13px] text-xs">
                           ارسال از 3 روز کاری دیگر
                         </span>
                       </div>
                     </div>
                     <div>
-
-                      {item.discount !== 0 && (
-                        <div className="mt-3">
-                          <span className="bg-[#d1182b] px-3 py-1 rounded-sm text-white font-bold">
-                            {item.discount}٪
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex justify-between items-end">
-                        <div className="flex flex-col">
+                      <div className="flex justify-between items-center flex-wrap">
+                        <div className="flex flex-col py-3">
                           {item.discount !== 0 && (
                             <div className="flex items-center">
                               <span className="font-semibold text-[#666] text-lg line-through">
@@ -243,13 +242,15 @@ const BodyCard = () => {
                   </div>
                 )}
                 <hr className="border-[#6666] my-3" />
-                <div className="flex justify-between py-1">
-                  <span className="font-semibold">جمع سبد خرید</span>
-                  <div className="flex items-center">
-                    <span className="font-semibold px-1 text-xl">
-                      {(totalPrice - totalDiscount).toLocaleString()}
-                    </span>
-                    <span>تومان</span>
+                <div className="bg-white p-3 rounded-lg mb-3">
+                  <div className="flex justify-center items-center flex-col">
+                    <span className="font-bold text-lg">جمع سبد خرید:</span>
+                    <div className="flex items-center">
+                      <span className="font-bold text-2xl text-[#d1182b]">
+                        {(totalPrice - totalDiscount).toLocaleString()}
+                      </span>
+                      <span className="mr-1">تومان</span>
+                    </div>
                   </div>
                 </div>
                 <button
@@ -278,3 +279,20 @@ const BodyCard = () => {
 };
 
 export default BodyCard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

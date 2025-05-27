@@ -16,6 +16,8 @@ function ProductTabs({ product }) {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
 
+  
+
   useEffect(() => {
     const fetchProducts = async () => {
       // دریافت محصولات مرتبط
@@ -70,14 +72,14 @@ function ProductTabs({ product }) {
           {tabProDetails === 4 && (
             <CommentProduct
              
-              id={product.id}
+              id={product.product.productId}
               type={0}
             />
           )}
           {tabProDetails === 5 && <AccessoriesProduct product={product} />}
           {tabProDetails === 6 && <CommentProduct
            
-            id={product.id}
+           id={product.product.productId}
             type={1}
           />}
         </div>

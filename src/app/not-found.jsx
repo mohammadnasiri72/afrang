@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaHome, FaArrowRight } from "react-icons/fa";
+import Image from "next/image";
 
 export default function NotFound() {
   const router = useRouter();
@@ -11,10 +12,13 @@ export default function NotFound() {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center relative z-50">
         <div className="mb-8">
-          <img
+          <Image
             src="/images/gallery/404.png"
             alt="404 Illustration"
-            className="w-64 h-64 mx-auto"
+            width={256}
+            height={256}
+            className="mx-auto"
+            priority
           />
         </div>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">صفحه مورد نظر یافت نشد</h1>

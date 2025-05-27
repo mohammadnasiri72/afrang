@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa6";
 import { IoMdTime } from "react-icons/io";
 import CommentSection from "../comments/CommentSection";
+import Image from "next/image";
 
 async function BlogDesc({ id, comments, totalCount }) {
   const { items: blog } = await getBlogsId(id);
@@ -51,10 +52,14 @@ async function BlogDesc({ id, comments, totalCount }) {
             </div>
           </div>
           <div className="mt-4">
-            <img
-              className="w- h-96 object-cover"
+            <Image
               src={blog.length > 0 ? blog[0].img : ""}
               alt={blog.length > 0 ? blog[0].title : ""}
+              width={1200}
+              height={800}
+              priority
+              unoptimized
+              className="w-full h-auto object-cover"
             />
           </div>
           <div className="mt-4">

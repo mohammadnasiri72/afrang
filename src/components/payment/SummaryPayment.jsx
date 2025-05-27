@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { FaUser, FaTruck, FaShoppingCart, FaBuilding } from "react-icons/fa";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
+import ShowProductBasket from "../CompeletePay/ShowProductBasket";
 
 export default function SummaryPayment({ estimateData }) {
     const { currentItems } = useSelector((state) => state.cart);
@@ -136,81 +137,7 @@ export default function SummaryPayment({ estimateData }) {
                     </div>
                 )}
 
-                {/* اقلام سفارش */}
-                <div className="mb-3">
-                    <div className="flex items-center gap-2 mb-2">
-                        <FaShoppingCart className="text-[#d1182b] text-base" />
-                        <h3 className="text-base font-medium text-gray-800">اقلام سفارش</h3>
-                    </div>
-                    <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
-                        {currentItems?.map((item, index) => (
-                            <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={getImageUrl2(item.image)}
-                                        alt={item.id}
-                                        className="w-12 h-12 object-cover rounded-lg"
-                                    />
-                                    <div>
-                                        <p className="text-gray-800">{item.title}</p>
-                                        <p className="text-gray-500 text-sm">تعداد: {item.quantity}</p>
-                                    </div>
-                                </div>
-                                <div>
-                                    {item.finalPrice ? (
-                                        <>
-                                            <p className="text-[#d1182b]">{item.finalPrice.toLocaleString()} تومان</p>
-                                            {item.price1 > item.finalPrice && (
-                                                <p className="text-gray-500 text-sm line-through">{item.price1.toLocaleString()} تومان</p>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <p className="text-[#d1182b]">{item.price1.toLocaleString()} تومان</p>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* خلاصه قیمت */}
-                <div className="bg-white p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-gray-600">
-                            <span>قیمت کالاها ({currentItems?.length || 0})</span>
-                            <span>{totalPrice.toLocaleString()} تومان</span>
-                        </div>
-                        {totalDiscount > 0 && (
-                            <div className="flex justify-between text-[#d1182b]">
-                                <span>سود شما از این خرید</span>
-                                <span>{totalDiscount.toLocaleString()} تومان</span>
-                            </div>
-                        )}
-                        {selectedShipping?.price > 0 && (
-                            <div className="flex justify-between text-gray-600">
-                                <span>هزینه ارسال</span>
-                                <span>{selectedShipping.price.toLocaleString()} تومان</span>
-                            </div>
-                        )}
-                        {estimateData?.taxAmount > 0 && (
-                            <div className="flex justify-between text-gray-600">
-                                <span>مالیات ({estimateData?.taxPercent}%)</span>
-                                <span>{estimateData.taxAmount.toLocaleString()} تومان</span>
-                            </div>
-                        )}
-                        <div className="border-t border-gray-200 pt-2 mt-2">
-                            <div className="flex justify-between items-center">
-                                <span className="font-medium">مبلغ قابل پرداخت</span>
-                                <span className="text-[#d1182b] font-bold">
-                                    {estimateData?.finalAmount ?
-                                        estimateData.finalAmount.toLocaleString() :
-                                        (totalPrice - totalDiscount + (selectedShipping?.price || 0)).toLocaleString()
-                                    } تومان
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               <ShowProductBasket items={currentItems}/>
             </div>
         </div>
     );

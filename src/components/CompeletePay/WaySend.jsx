@@ -95,10 +95,10 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
                       dangerouslySetInnerHTML={{ __html: item.desc }}
                     />
                   )}
-                  <div className="text-sm font-medium text-[#d1182b]">
+                  {/* <div className="text-sm font-medium text-[#d1182b]">
                     <span className="text-gray-600">هزینه ارسال: </span>
                     {item.price && item.price !== "0" ? `${item.price} تومان` : "رایگان"}
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="flex items-center gap-2">

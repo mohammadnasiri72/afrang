@@ -1,16 +1,17 @@
-import Link from "next/link";
 import { setOpenShopping } from "@/redux/slice/shopping";
+import { setUser } from "@/redux/slice/user";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Badge } from "antd";
+import Cookies from "js-cookie";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoSearchSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
-import { useEffect } from "react";
-import { getImageUrl, mainDomainImg } from "@/utils/mainDomain";
-import { setUser } from "@/redux/slice/user";
-import Cookies from "js-cookie";
+import SearchHeader from "./SearchHeader";
 
 export default function Header() {
   const user = useSelector((state) => state.user.user);
@@ -56,22 +57,31 @@ export default function Header() {
           ) : (
             <img className="w-14" src="/images/logo.png" alt="" />
           )}
-          <div className="flex-col px-1 font-extrabold logo-text lg:flex hidden">
-           
-            <span className="w-20">
-              {items.find((item) => item.propertyKey === "site_title")
-                      ?.value}
-            </span>
-          </div>
+
+          <Link
+            href={
+              items.find((item) => item.propertyKey === "site_home_url")
+                ?.value
+            }
+          >
+            <div className="flex-col px-1 font-extrabold logo-text lg:flex hidden">
+
+              <span className="w-20">
+                {items.find((item) => item.propertyKey === "site_title")
+                  ?.value}
+              </span>
+            </div>
+          </Link>
         </div>
-        <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">
+        {/* <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">
           <IoSearchSharp className="text-2xl cursor-pointer" />
           <input
             className=" bg-transparent border-none outline-none p-2 w-full"
             type="text"
             placeholder="جستجو..."
           />
-        </div>
+        </div> */}
+        <SearchHeader />
       </div>
       <div className="flex items-center justify-end lg:w-1/2 w-auto gap-7">
         <div className="lg:flex hidden items-center">
@@ -82,10 +92,9 @@ export default function Header() {
             <span className="text-[#0008]"> آیا سوالی دارید </span>
             <span className="text-red-700 font-semibold text-sm">
               <a
-                href={`tel:${
-                  items.find((item) => item.propertyKey === "site_tel")
+                href={`tel:${items.find((item) => item.propertyKey === "site_tel")
                     ?.value || "02177615546"
-                }`}
+                  }`}
               >
                 {items.find((item) => item.propertyKey === "site_tel")?.value ||
                   "77615546"}

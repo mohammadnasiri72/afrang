@@ -1,6 +1,7 @@
 import { getEndBlogs } from "@/services/blogs/blogService";
 import Link from "next/link";
 import moment from "moment-jalaali";
+import Image from "next/image";
 
 async function RelationBlog() {
   const { items: blogs } = await getEndBlogs();
@@ -54,10 +55,13 @@ async function RelationBlog() {
                   className="relative group overflow-hidden"
                 >
                   <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
-                    <img
-                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter  brightness-[0.95] w-56 h-56 object-cover"
+                    <Image
+                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-cover"
                       src={blog.img}
                       alt={blog.title}
+                      width={224}
+                      height={224}
+                      unoptimized
                     />
                     <hr className="w-14 absolute top-1/2 left-full ease-out duration-500 translate-x-0 -translate-y-1/2  border-t-[1px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2" />
                     <hr className="w-14 absolute -top-full left-1/2 ease-out duration-500 -translate-x-1/2 translate-y-0  border-t-[1px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />

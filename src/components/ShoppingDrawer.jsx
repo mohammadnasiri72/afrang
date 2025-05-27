@@ -155,7 +155,7 @@ function ShoppingDrawer() {
                               alt={item.title}
                             />
                           ) : (
-                            <span className="text-xs text-gray-500 text-center p-1 line-clamp-3">
+                            <span className="text-xs text-gray-500 text-center p-1 line-clamp-2">
                               {item.title}
                             </span>
                           )}
@@ -171,14 +171,23 @@ function ShoppingDrawer() {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0 flex flex-col">
-                          <div className="flex items-start justify-between gap-2">
-                            <button 
-                              onClick={() => handleNavigation(item.url)}
-                              className="text-sm line-clamp-2 flex-1 text-right transition-colors duration-300 font-bold no-underline text-gray-800 hover:text-[#d1182b] cursor-pointer"
-                            >
-                              {item.title}
-                            </button>
-                            <Tooltip title="حذف از سبد خرید" placement="left" zIndex={9999}>
+                          <div 
+                            onClick={() => handleNavigation(item.url)}
+                            className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer"
+                            style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              maxHeight: '2.5em',
+                              lineHeight: '1.25em'
+                            }}
+                          >
+                            {item.title}
+                          </div>
+                          <div className="flex justify-end mt-2">
+                            <Tooltip title="حذف از سبد خرید" placement="left" zIndex={10001}>
                               <button
                                 onClick={() => handleDeleteClick(item)}
                                 className="text-[#d1182b] hover:bg-red-50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer"
@@ -231,7 +240,7 @@ function ShoppingDrawer() {
                 <div>
                   <button 
                     onClick={() => handleNavigation("/cart")}
-                    className={`w-full text-white duration-300 cursor-pointer py-3 mb-3 font-semibold rounded-lg relative z-[10001] ${
+                    className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${
                       pathname === '/cart' 
                         ? 'bg-[#b91626]' 
                         : 'bg-[#d1182b] hover:bg-[#b91626]'
@@ -241,7 +250,7 @@ function ShoppingDrawer() {
                   </button>
                   <button 
                     onClick={() => handleNavigation("/cart/infosend")}
-                    className={`w-full text-white duration-300 cursor-pointer py-3 font-semibold rounded-lg relative z-[10001] ${
+                    className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${
                       pathname === '/cart/infosend'
                         ? 'bg-[#b91626]' 
                         : 'bg-[#d1182b] hover:bg-[#b91626]'

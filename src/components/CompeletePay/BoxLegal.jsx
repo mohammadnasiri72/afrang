@@ -45,7 +45,7 @@ function BoxLegal() {
             const data = await getLegal(token);
             if (data) {
                 setLegalList(data);
-                
+
                 // اگر فقط یک اطلاعات حقوقی وجود دارد، آن را انتخاب کن
                 if (data.length === 1) {
                     dispatch(setSelectedLegal(data[0]));
@@ -124,12 +124,12 @@ function BoxLegal() {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <span className="text-gray-700 font-bold text-lg">خرید حقوقی می‌باشد</span>
                     <Switch
                         checked={isLegalEnabled}
                         onChange={handleSwitchChange}
                         className="custom-switch"
                     />
+                    <span className="text-gray-700 font-bold text-lg">خرید حقوقی می‌باشد</span>
                 </div>
                 {isLegalEnabled && (
                     <button

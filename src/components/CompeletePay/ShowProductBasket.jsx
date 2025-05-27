@@ -29,7 +29,12 @@ function ShowProductBasket({items}) {
                     e.target.src = defaultImage;
                   }}
                 />
-                <div className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs font-medium px-2 py-0.5 rounded-full">
+                {item.discount !== 0 && (
+                  <div className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs font-medium px-2 py-0.5 rounded-full">
+                    {item.discount}٪
+                  </div>
+                )}
+                <div className="absolute -bottom-2 left-0 right-0 bg-[#d1182b]/80 text-white text-xs font-medium py-0.5 text-center rounded-b-md">
                   {item.quantity} عدد
                 </div>
               </Link>
@@ -47,30 +52,26 @@ function ShowProductBasket({items}) {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center justify-between mt-2">
-                  <div className="flex items-center gap-2">
-                    {item.discount !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-500 line-through">
-                          {item.price1.toLocaleString()}
-                        </span>
-                        <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
-                          {item.discount}٪ تخفیف
-                        </span>
+                <div className="flex flex-col items-end mt-2 space-y-1">
+                  {item.discount !== 0 && (
+                    <div className="text-sm text-gray-500 line-through">
+                      {item.price1.toLocaleString()} تومان
+                    </div>
+                  )}
+                  {item.quantity > 1 ? (
+                    <>
+                      <div className="text-base text-[#d1182b]">
+                        {item.finalPrice.toLocaleString()} تومان
                       </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end gap-0.5">
-                    <div className="flex items-center gap-1">
-                      <span className="text-base text-[#d1182b]">
-                        {item.finalPrice.toLocaleString()}
-                      </span>
-                      <span className="text-sm text-gray-500">تومان</span>
+                      <div className="text-sm text-gray-800">
+                        قیمت کل: {(item.finalPrice * item.quantity).toLocaleString()} تومان
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-base text-[#d1182b]">
+                      {item.finalPrice.toLocaleString()} تومان
                     </div>
-                    <div className="text-sm text-gray-800">
-                      قیمت کل: {(item.finalPrice * item.quantity).toLocaleString()} تومان
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
