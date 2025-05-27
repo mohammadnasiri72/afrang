@@ -1,20 +1,17 @@
 "use client";
 
-import { setUser } from "@/redux/slice/user";
+import { clearUser } from "@/redux/slice/user";
 import { authServiceSignOut } from "@/services/Auth/authService";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { mainDomain } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BsBoxSeam } from "react-icons/bs";
 import { FaBox, FaKey, FaShoppingCart, FaUser } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import { getUserCookie } from "@/utils/cookieUtils";
-import { clearUser } from "@/redux/slice/user";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -39,15 +36,10 @@ const ProfileDropdown = () => {
   const dropdownRef = useRef(null);
   const [user, setUser] = useState(null);
 
-  // import sweet alert 2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
+  
+  
+
+ 
 
   const router = useRouter();
   const dispatch = useDispatch();

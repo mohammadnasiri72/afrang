@@ -40,9 +40,7 @@ export default function ProfileLayout({ children }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const userStatus = useSelector(selectUserStatus);
-
-    
+    const userStatus = useSelector(selectUserStatus);    
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -137,7 +135,7 @@ export default function ProfileLayout({ children }) {
                                 {user?.avatar ? (
                                     <img 
                                         src={user.avatar} 
-                                        alt={user.displayName} 
+                                        alt={`${user?.displayName.slice(0, 1)}`} 
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
