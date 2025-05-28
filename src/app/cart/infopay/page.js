@@ -45,15 +45,17 @@ export default function CompletePay() {
     }, [dispatch, currentItems, router]);
 
     useEffect(() => {
-        if (!selectedAddress || !selectedShipping) {
-            Toast.fire({
-                icon: "warning",
-                text: "لطفاً ابتدا آدرس و روش ارسال را انتخاب کنید",
-                customClass: { container: "toast-modal" },
-            });
-            router.push("/cart/infosend");
+        if (currentItems && currentItems.length !== 0) {
+            if (!selectedAddress || !selectedShipping) {
+                Toast.fire({
+                    icon: "warning",
+                    text: "لطفاً ابتدا آدرس و روش ارسال را انتخاب کنید",
+                    customClass: { container: "toast-modal" },
+                });
+                router.push("/cart/infosend");
+            }
         }
-    }, [selectedAddress, selectedShipping]);
+    }, [selectedAddress, selectedShipping , currentItems]);
 
     return (
         <div className="bg-[#f6f6f6] overflow-hidden">

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSettingsData } from "@/redux/slice/settings";
+import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { mainDomainImg } from "@/utils/mainDomain";
 
 const DynamicTitle = () => {

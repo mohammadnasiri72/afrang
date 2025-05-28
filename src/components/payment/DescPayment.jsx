@@ -86,6 +86,13 @@ function DescPayment({estimateData}) {
             </div>
           )}
           {
+            estimateData?.walletIsActive  &&
+            <div className="flex justify-between text-[#444] py-1">
+              <span>موجودی کیف پول</span>
+              <span>{estimateData?.walletAmount ? estimateData.walletAmount.toLocaleString() : 0} تومان</span>
+            </div>
+          }
+          {
             estimateData?.taxAmount > 0 &&
             <div className="flex justify-between text-[#444] py-1">
               <span>مالیات({estimateData?.taxPercent}%)</span>
@@ -128,6 +135,8 @@ function DescPayment({estimateData}) {
               <span>{estimateData?.shipmentDesc}</span>
             </div>
           }
+
+
          
 
           <hr className="border-[#6666] my-3" />

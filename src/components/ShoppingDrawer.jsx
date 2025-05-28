@@ -1,7 +1,7 @@
 "use client";
 
 import DeleteProductModal from "@/components/Product/DeleteProductModal";
-import { setOpenShopping } from "@/redux/slice/shopping";
+import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { updateCart } from "@/services/cart/cartService";
 import { getUserCookie } from "@/utils/cookieUtils";
@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { FaCartShopping, FaTrash } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
+import { FaRecycle } from "react-icons/fa";
 
 function ShoppingDrawer() {
   const open = useSelector((store) => store.shopping.openShopping);
@@ -21,8 +22,7 @@ function ShoppingDrawer() {
   const pathname = usePathname();
   const [userId, setUserId] = useState(null);
 
-  console.log(currentItems);
-  
+
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -73,7 +73,7 @@ function ShoppingDrawer() {
   const handleNavigation = (url) => {
     // بستن دراور
     dispatch(setOpenShopping(false));
-    
+
     // هدایت به URL مورد نظر
     router.push(url);
   };
@@ -162,7 +162,7 @@ function ShoppingDrawer() {
                           {/* لیبل تخفیف */}
                           {item.discount > 0 && (
                             <div className="absolute top-0 right-0 bg-[#d1182b] text-white text-xs px-2 py-1 rounded-bl-lg">
-                              {item.discount}% 
+                              {item.discount}%
                             </div>
                           )}
                           {/* تعداد محصول */}
@@ -171,7 +171,7 @@ function ShoppingDrawer() {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0 flex flex-col">
-                          <div 
+                          <div
                             onClick={() => handleNavigation(item.url)}
                             className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer"
                             style={{
@@ -186,6 +186,14 @@ function ShoppingDrawer() {
                           >
                             {item.title}
                           </div>
+
+                          {item.conditionId === 20 && (
+                            <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                              <FaRecycle className="ml-1.5" />
+                              <span className="font-semibold">کالای کارکرده</span>
+                            </div>
+                          )}
+
                           <div className="flex justify-end mt-2">
                             <Tooltip title="حذف از سبد خرید" placement="left" zIndex={10001}>
                               <button
@@ -238,23 +246,21 @@ function ShoppingDrawer() {
                   </div>
                 </div>
                 <div>
-                  <button 
+                  <button
                     onClick={() => handleNavigation("/cart")}
-                    className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${
-                      pathname === '/cart' 
-                        ? 'bg-[#b91626]' 
+                    className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${pathname === '/cart'
+                        ? 'bg-[#b91626]'
                         : 'bg-[#d1182b] hover:bg-[#b91626]'
-                    }`}
+                      }`}
                   >
                     سبد خرید
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleNavigation("/cart/infosend")}
-                    className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${
-                      pathname === '/cart/infosend'
-                        ? 'bg-[#b91626]' 
+                    className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${pathname === '/cart/infosend'
+                        ? 'bg-[#b91626]'
                         : 'bg-[#d1182b] hover:bg-[#b91626]'
-                    }`}
+                      }`}
                   >
                     تسویه حساب
                   </button>

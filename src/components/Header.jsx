@@ -1,5 +1,5 @@
-import { setOpenShopping } from "@/redux/slice/shopping";
-import { setUser } from "@/redux/slice/user";
+import { setOpenShopping } from "@/redux/slices/shoppingSlice";
+import { setUser } from "@/redux/slices/userSlice";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Badge } from "antd";
 import Cookies from "js-cookie";

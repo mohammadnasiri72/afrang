@@ -8,7 +8,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { updateUserProfile } from '@/services/dashboard/dashboardService';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, updateUserFields } from '@/redux/slice/user';
+import { selectUser, updateUserFields } from '@/redux/slices/userSlice';
 
 export default function EditProfile() {
     const dispatch = useDispatch();

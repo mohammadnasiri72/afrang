@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/redux/slice/user";
+import { setUser } from "@/redux/slices/userSlice";
 
 export function useUser() {
   //   const [user, setUser] = useState(null);

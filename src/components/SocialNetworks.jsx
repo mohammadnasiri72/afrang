@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSocialNetworksData } from "@/redux/slice/socialNetworks";
+import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 
 const SocialNetworks = () => {
   const dispatch = useDispatch();

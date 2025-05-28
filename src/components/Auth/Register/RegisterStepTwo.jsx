@@ -1,4 +1,4 @@
-import { setUser } from "@/redux/slice/user";
+import { setUser } from "@/redux/slices/userSlice";
 import { authServiceOtp } from "@/services/Auth/authService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";

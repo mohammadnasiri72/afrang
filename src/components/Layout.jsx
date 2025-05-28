@@ -1,7 +1,7 @@
 "use client";
 
 import { AuthProvider } from "@/context/AuthContext";
-import { setError, setLoading, setMenuItems } from "@/redux/slice/menuRes";
+import { setError, setLoading, setMenuItems } from "@/redux/slices/menuResSlice";
 import { fetchCurrentCart, fetchNextCart, setCartType } from "@/redux/slices/cartSlice";
 import { addToCart, deleteCartItem, getCart, getNextCart } from "@/services/cart/cartService";
 import { fetchMenuItems } from "@/services/menuService";
@@ -15,6 +15,7 @@ import LayoutWrapper from "./LayoutWrapper";
 import axios from "axios";
 import { mainDomain } from "@/utils/mainDomain";
 import { getUserCookie, getUserId } from "@/utils/cookieUtils";
+import { syncUserCookieWithRedux } from "@/utils/manageCookie";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -135,8 +136,8 @@ function LayoutContent({ children }) {
 
   useEffect(() => {
     setTimeout(() => {
-      const userCookie = Cookies.get("user");
-      if (!userCookie) {
+      const userData = syncUserCookieWithRedux();
+      if (!userData) {
         const initialData = {
           token: "",
           refreshToken: "",
@@ -146,6 +147,7 @@ function LayoutContent({ children }) {
           roles: [],
         };
         Cookies.set("user", JSON.stringify(initialData));
+        store.dispatch(setUser(initialData));
       }
     }, 2000);
   }, []);

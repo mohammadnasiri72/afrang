@@ -1,9 +1,9 @@
 "use client";
 
-import { clearUser } from "@/redux/slice/user";
+import { clearUser } from "@/redux/slices/userSlice";
 import { authServiceSignOut } from "@/services/Auth/authService";
 import { getUserCookie } from "@/utils/cookieUtils";
-import { mainDomain } from "@/utils/mainDomain";
+import { getImageUrl, mainDomain } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
@@ -36,10 +36,10 @@ const ProfileDropdown = () => {
   const dropdownRef = useRef(null);
   const [user, setUser] = useState(null);
 
-  
-  
 
- 
+
+
+
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -147,13 +147,24 @@ const ProfileDropdown = () => {
             {/* هدر منو */}
             <div className="p-4 border-b border-gray-100 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden shadow-md cursor-pointer">
-                <img
+                {/* <img
                   className="w-full h-full object-cover flex items-center justify-center bg-gray-200"
                   src={
                     mainDomain + user?.avatar || "/images/default-avatar.jpg"
                   }
                   alt={`${user?.displayName.slice(0, 1) || "کاربر"}`}
-                />
+                /> */}
+                {user?.avatar ? (
+                  <img
+                    src={getImageUrl(user.avatar)}
+                    alt={`${user?.displayName.slice(0, 1)}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600 text-sm">
+                    {user?.displayName?.charAt(0) || '?'}
+                  </div>
+                )}
               </div>
               <div className="select-none">
                 <p className="text-sm font-bold text-gray-900">

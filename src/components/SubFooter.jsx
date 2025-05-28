@@ -1,4 +1,4 @@
-import { setOpenMenuRes } from "@/redux/slice/menuRes";
+import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import { FaUserCircle } from "react-icons/fa";
 import { FaBars, FaCartShopping } from "react-icons/fa6";
 import { useDispatch } from "react-redux";

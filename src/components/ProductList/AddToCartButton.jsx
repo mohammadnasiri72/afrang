@@ -171,11 +171,11 @@ const AddToCartButton = ({ productId }) => {
                 </div>
 
                 {/* هشدار موجودی کم */}
-                {product.inventory.inventoryQtyForView > 0 && product.inventory.inventoryQtyForView < 10 && (
+                {/* {product.inventory.inventoryQtyForView > 0 && product.inventory.inventoryQtyForView < 10 && (
                   <div className="mt-1 text-xs text-[#d1182b]">
                     تنها {product.inventory.inventoryQtyForView} عدد در انبار موجود است
                   </div>
-                )}
+                )} */}
 
                 {/* گارانتی‌ها */}
                 {Object.keys(product.warranties).length > 0 && (

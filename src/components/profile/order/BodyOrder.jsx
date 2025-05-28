@@ -5,12 +5,14 @@ import OrderDetails from './OrderDetails';
 import { Box, Pagination } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { getOrder } from "@/services/order/orderService";
+import { getdataDashboard } from "@/services/dashboard/dashboardService";
 import Cookies from 'js-cookie';
 import { motion, AnimatePresence } from 'framer-motion';
 import Loading from '@/components/Loading';
 import { FaClipboardList, FaHourglassHalf, FaTruck, FaCheckCircle, FaTimesCircle, FaEye, FaCreditCard, FaCalendarAlt, FaMoneyBillWave, FaShoppingBag, FaInfoCircle } from 'react-icons/fa';
 import { Segmented } from 'antd';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const ORDER_STATUS = {
     REGISTERED: 1,     // ثبت شده
@@ -46,21 +48,30 @@ const ORDER_STATUS_ICONS = {
 };
 
 export default function BodyOrder({ orderData: initialOrderData, currentStatus, currentPage }) {
-    const [orderData, setOrderData] = useState(initialOrderData);
+    const [orderData, setOrderData] = useState(initialOrderData || []);
     const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [lastStatus, setLastStatus] = useState(currentStatus);
     const [lastPage, setLastPage] = useState(currentPage);
+    const [dashboardData, setDashboardData] = useState({
+        Record: 0,
+        Pending: 0,
+        Process: 0,
+        Done: 0,
+        Cancel: 0
+    });
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const selectedTrackCode = searchParams.get('id');
-
+    const statusId = searchParams.get('statusId');
+    const page = searchParams.get('page');
 
     useEffect(() => {
         setTimeout(() => {
             window.scrollTo(0, 0);
         }, 100);
-    }, [currentPage]);
+    }, [page]);
 
     const getToken = () => {
         const userCookie = Cookies.get('user');
@@ -76,6 +87,18 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         return null;
     };
 
+    const fetchDashboardData = async () => {
+        const token = getToken();
+        if (!token) return;
+
+        try {
+            const data = await getdataDashboard(token);
+            setDashboardData(data);
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error);
+        }
+    };
+
     const fetchOrders = async (statusId, page = 1) => {
         const token = getToken();
         if (!token) return;
@@ -83,13 +106,14 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         setLoading(true);
         try {
             const response = await getOrder(token, {
-                pageSize: 10,
+                pageSize: 20,
                 pageIndex: page,
                 statusId: statusId
             });
+
             if (response && response.length > 0) {
                 setOrderData(response);
-                setTotalPages(Math.ceil(response[0].total / 10));
+                setTotalPages(Math.ceil(response[0].total / 20));
             } else {
                 setOrderData([]);
                 setTotalPages(1);
@@ -103,52 +127,66 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         }
     };
 
+    // حذف useEffect های قبلی و اضافه کردن یک useEffect جدید برای تغییرات URL
     useEffect(() => {
-        if (!selectedTrackCode) {
-            fetchOrders(currentStatus, currentPage);
+        if (!selectedTrackCode && statusId && page) {
+            fetchOrders(parseInt(statusId), parseInt(page));
+            fetchDashboardData();
         }
-    }, [currentStatus, currentPage]);
+    }, [statusId, page, selectedTrackCode]);
 
-    // اضافه کردن useEffect جدید برای هندل کردن برگشت از صفحه جزئیات
+    // مقداردهی اولیه
     useEffect(() => {
-        const handlePopState = () => {
-            // وقتی با دکمه بک برمی‌گردیم، دیتا رو می‌گیریم
-            fetchOrders(currentStatus, currentPage);
-        };
-
-        window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
-    }, [currentStatus, currentPage]);
+        if (initialOrderData && initialOrderData.length > 0) {
+            setOrderData(initialOrderData);
+            setTotalPages(Math.ceil(initialOrderData[0].total / 20));
+            setLoading(false);
+        }
+        fetchDashboardData();
+    }, [initialOrderData]);
 
     const handlePayment = (trackCode) => {
         router.push(`/profile/orders?trackCode=${trackCode}`);
     };
 
     const handleTabChange = (event, newValue) => {
-        setLastStatus(newValue);
-        setLastPage(1);
-        setLoading(true);
         router.push(`/profile/orders?statusId=${newValue}&page=1`);
     };
 
     const handlePageChange = (event, page) => {
-        setLastPage(page);
-        setLoading(true);
-        router.push(`/profile/orders?statusId=${currentStatus}&page=${page}`);
+        router.push(`/profile/orders?statusId=${statusId}&page=${page}`);
     };
 
     const handleViewDetails = (trackCode) => {
-        setLastStatus(currentStatus);
-        setLastPage(currentPage);
         router.push(`/profile/orders?id=${trackCode}`);
     };
 
     const options = [...ORDER_STATUS_ORDER].reverse().map(statusId => {
         const Icon = ORDER_STATUS_ICONS[statusId];
+        let count = 0;
+
+        switch (statusId) {
+            case ORDER_STATUS.REGISTERED:
+                count = dashboardData?.Record || 0;
+                break;
+            case ORDER_STATUS.PENDING:
+                count = dashboardData?.Pending || 0;
+                break;
+            case ORDER_STATUS.PROCESSING:
+                count = dashboardData?.Process || 0;
+                break;
+            case ORDER_STATUS.COMPLETED:
+                count = dashboardData?.Done || 0;
+                break;
+            case ORDER_STATUS.CANCELLED:
+                count = dashboardData?.Cancel || 0;
+                break;
+        }
+
         return {
             label: (
                 <div className="flex items-center justify-center gap-2 text-right">
-                    <span>{ORDER_STATUS_TITLES[statusId]}</span>
+                    <span>{ORDER_STATUS_TITLES[statusId]} ({count})</span>
                     <Icon className="text-lg" />
                 </div>
             ),
@@ -209,7 +247,7 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                     <div key={order.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
                                             <h3 className="text-base sm:text-lg font-bold text-gray-800">سفارش {order.trackCode}</h3>
-                                            {order.payable && (
+                                            {order.paymentStatus >= 1 && order.paymentStatus <= 5 && order.status < 4 && (
                                                 <button
                                                     className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#d1182b] text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#40768c] transition-colors cursor-pointer shadow-sm hover:shadow-md"
                                                     onClick={() => handlePayment(order.trackCode)}
@@ -252,7 +290,7 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                             <div className="space-y-3">
                                                 <div className="flex justify-start items-center">
                                                     <FaTruck className="text-[#d1182b] ml-2" />
-                                                    <span className="text-gray-600">وضعیت سفارش:</span>
+                                                    <span className="text-gray-600">وضعیت سفارش :</span>
                                                     <span className={`font-medium mr-2 ${order.status === 1 ? 'text-yellow-600' :
                                                         order.status === 2 ? 'text-blue-600' :
                                                             order.status === 3 ? 'text-green-600' :

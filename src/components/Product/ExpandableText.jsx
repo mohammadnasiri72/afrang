@@ -48,10 +48,10 @@ const ExpandableText = ({ text, linesToShow = 3, lineHeight = 1.5 }) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full text-xs sm:text-sm">
       <div
         ref={textRef}
-        className={`overflow-hidden transition-all duration-300 ease-in-out relative`}
+        className={`overflow-hidden transition-all duration-300 ease-in-out relative text-justify`}
         style={{
           lineHeight: `${lineHeight}`,
           maxHeight: isExpanded

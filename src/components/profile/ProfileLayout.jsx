@@ -17,7 +17,7 @@ import {
     FaUser
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
-import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slice/user';
+import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slices/userSlice';
 import Loading from '@/components/Loading';
 
 const menuItems = [

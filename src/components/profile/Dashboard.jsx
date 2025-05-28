@@ -20,28 +20,34 @@ import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState("overview");
-    const [recentViews, setRecentViews] = useState([]);
     const [dashboardData, setDashboardData] = useState({
         Record: 0,
         Pending: 0,
         Process: 0,
         Done: 0,
-        Cancel: 0,
+        Cancel: 0
     });
+    const [activeTab, setActiveTab] = useState("overview");
+    const [recentViews, setRecentViews] = useState([]);
 
     useEffect(() => {
-        let isMounted = true; // برای جلوگیری از memory leak
+        let isMounted = true;
 
         const fetchData = async () => {
             try {
                 const user = Cookies.get("user");
-                if (!user) return;
+                if (!user) {
+                    console.log('No user found in cookies');
+                    return;
+                }
 
                 const token = JSON.parse(user).token;
+                console.log('Fetching dashboard data...');
 
                 // دریافت داده‌های داشبورد
                 const data = await getdataDashboard(token);
+                console.log('API Response:', data);
+
                 if (isMounted) {
                     setDashboardData(data);
                 }
@@ -65,14 +71,14 @@ export default function Dashboard() {
         fetchData();
 
         return () => {
-            isMounted = false; // cleanup function
+            isMounted = false;
         };
-    }, []); // فقط یکبار اجرا می‌شود
+    }, []);
 
     const stats = [
         {
             title: "ثبت شده",
-            value: dashboardData.Record.toString(),
+            value: dashboardData?.Record?.toString() || "0",
             icon: FaClipboardList,
             color: "purple",
             change: "+12%",
@@ -81,7 +87,7 @@ export default function Dashboard() {
         },
         {
             title: "منتظر پردازش",
-            value: dashboardData.Pending.toString(),
+            value: dashboardData?.Pending?.toString() || "0",
             icon: FaClock,
             color: "yellow",
             change: "-3%",
@@ -90,7 +96,7 @@ export default function Dashboard() {
         },
         {
             title: "درحال انجام",
-            value: dashboardData.Process.toString(),
+            value: dashboardData?.Process?.toString() || "0",
             icon: FaBox,
             color: "blue",
             change: "+8%",
@@ -99,7 +105,7 @@ export default function Dashboard() {
         },
         {
             title: "انجام شده",
-            value: dashboardData.Done.toString(),
+            value: dashboardData?.Done?.toString() || "0",
             icon: FaShoppingBag,
             color: "green",
             change: "+5%",
@@ -108,7 +114,7 @@ export default function Dashboard() {
         },
         {
             title: "لغو شده",
-            value: dashboardData.Cancel.toString(),
+            value: dashboardData?.Cancel?.toString() || "0",
             icon: FaTimesCircle,
             color: "red",
             change: "-2%",
@@ -147,7 +153,7 @@ export default function Dashboard() {
             {/* Page Header */}
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-800">داشبورد</h1>
-                <div className="flex items-center gap-2">
+                {/* <div className="flex items-center gap-2">
                     <button
                         onClick={() => setActiveTab("overview")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "overview"
@@ -166,7 +172,7 @@ export default function Dashboard() {
                     >
                         تحلیل و آمار
                     </button>
-                </div>
+                </div> */}
             </div>
 
             {/* Quick Stats */}
@@ -299,14 +305,14 @@ export default function Dashboard() {
                         </h3>
                         <div className="grid grid-cols-2 gap-3">
                             <Link
-                                href="/profile/addresses/new"
+                                href="/profile/orders"
                                 className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                             >
-                                <FaAddressBook />
-                                <span>افزودن آدرس</span>
+                                <FaShoppingBag />
+                                <span>سفارشات من</span>
                             </Link>
                             <Link
-                                href="/profile/account"
+                                href="/profile/edit-profile"
                                 className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                             >
                                 <FaUser />

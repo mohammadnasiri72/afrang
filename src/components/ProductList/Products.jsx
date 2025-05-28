@@ -1,5 +1,6 @@
 import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
+import Image from "next/image";
 import { FaCartShopping, FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
 import { Tooltip } from "antd";
 import ExpandableText from "../Product/ExpandableText";
@@ -18,31 +19,40 @@ function Products({ products, layout = "list" }) {
 
     <>
       <div className="bg-white rounded-lg relative z-50">
-        <div className="flex w-full flex-wrap">
-          <div className="p-3 lg:w-1/3 w-1/5 relative flex items-center justify-center">
-            <Link href={product.url}>
-              <img
-                className="w-48 h-48 object-contain rounded-lg"
-                src={getImageUrl2(product.image)}
-                alt={product.title}
-              />
-            </Link>
-            {product.conditionId === 20 && (
-              <div className="absolute top-2 right-2 bg-[#40768c] text-white px-3 py-1 rounded-sm transform shadow-md">
-                کارکرده
+        <div className="flex w-full flex-wrap items-start">
+          <div className="p-3 lg:w-1/3 w-full relative flex items-start justify-center ">
+            <Link href={product.url} className="relative">
+              <div className="relative overflow-hidden rounded-lg group">
+                <Image
+                  className="object-contain rounded-lg w-48 h-48 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                  src={getImageUrl2(product.image)}
+                  alt={product.title}
+                  width={200}
+                  height={200}
+                  priority={false}
+                  unoptimized
+                />
+                {product.discount !== 0 && (
+                  <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                    {product.discount}٪
+                  </span>
+                )}
+                
               </div>
-            )}
+            
+            </Link>
           </div>
-          <div className="p-5 lg:w-1/3 w-full">
+          <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
             <Link href={product.url} className="hover:text-[#d1182b] duration-300">
-              <h5 className="font-semibold text-lg">{product.title}</h5>
+              <h5 className="font-semibold sm:text-lg text-sm">{product.title}</h5>
             </Link>
             {
               product.summary &&
               <ExpandableText text={product.summary} />
             }
+
           </div>
-          <div className="lg:w-1/3 w-full bg-[#f9f9f9] p-4 lg:px-8 ">
+          <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
             <div className="flex flex-col w-full h-full">
               <PriceProduct product={product} />
               <div className="flex items-center py-2">
@@ -53,20 +63,30 @@ function Products({ products, layout = "list" }) {
                 <img src="/images/icons/fast-delivery-2.png" alt="" />
                 <span className="px-3"> ضمانت اصل بودن کالا </span>
               </div>
+
+              {product.conditionId === 20 && (
+                <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                  <FaRecycle className="ml-1.5" />
+                  <span className="font-semibold px-3">کالای کارکرده</span>
+                </div>
+              )}
+
+
+
               <div className="flex items-center gap-3 mb-2">
 
-              {product.fastShipping && (
-                <div className="flex items-center py-2 text-[#d1182b]">
-                  <FaTruckFast className="text-lg" />
-                  <span className="px-3 font-semibold"> ارسال سریع </span>
-                </div>
-              )}
-              {product.freeShipping && (
-                <div className="flex items-center py-2 text-[#40768c]">
-                  <FaTruck className="text-lg" />
-                  <span className="px-3 font-semibold"> ارسال رایگان </span>
-                </div>
-              )}
+                {product.fastShipping && (
+                  <div className="flex items-center py-2 text-[#d1182b]">
+                    <FaTruckFast className="text-lg" />
+                    <span className="px-3 font-semibold"> ارسال سریع </span>
+                  </div>
+                )}
+                {product.freeShipping && (
+                  <div className="flex items-center py-2 text-[#40768c]">
+                    <FaTruck className="text-lg" />
+                    <span className="px-3 font-semibold"> ارسال رایگان </span>
+                  </div>
+                )}
               </div>
               {!product.canAddCart && (
                 <div className="mt-2">
@@ -93,10 +113,14 @@ function Products({ products, layout = "list" }) {
       <div className="flex flex-col items-center flex-grow">
         <div className="relative w-full flex justify-center items-center">
           <Link href={`${product.url}`}>
-            <img
+            <Image
               className="w-40 h-40 object-contain rounded-lg mb-4"
               src={getImageUrl2(product.image)}
               alt={product.title}
+              width={160}
+              height={160}
+              priority={false}
+              unoptimized
             />
           </Link>
           {product.conditionId === 20 && (
@@ -109,18 +133,18 @@ function Products({ products, layout = "list" }) {
           {product.title}
         </Link>
 
-         <div className="flex items-center justify-center gap-3 mb-2">
-            {product.fastShipping && (
-              <Tooltip title="ارسال سریع" placement="top">
-                <FaTruckFast className="text-2xl text-[#d1182b] cursor-pointer" />
-              </Tooltip>
-            )}
-            {product.freeShipping && (
-              <Tooltip title="ارسال رایگان" placement="top">
-                <FaTruck className="text-2xl text-[#40768c] cursor-pointer" />
-              </Tooltip>
-            )}
-          </div>
+        <div className="flex items-center justify-center gap-3 mb-2">
+          {product.fastShipping && (
+            <Tooltip title="ارسال سریع" placement="top">
+              <FaTruckFast className="text-2xl text-[#d1182b] cursor-pointer" />
+            </Tooltip>
+          )}
+          {product.freeShipping && (
+            <Tooltip title="ارسال رایگان" placement="top">
+              <FaTruck className="text-2xl text-[#40768c] cursor-pointer" />
+            </Tooltip>
+          )}
+        </div>
 
 
         {product.statusId === 1 && product.discount > 0 && (
@@ -161,7 +185,7 @@ function Products({ products, layout = "list" }) {
               }
             </div>
           )}
-         
+
           {product.canAddCart ? (
             <AddToCartButton productId={product.productId} />
           ) : (

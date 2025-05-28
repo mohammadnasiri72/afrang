@@ -114,7 +114,7 @@ export const getProductTerm = async (term) => {
       params:{
         langCode:'fa',
         term,
-        pageSize:200,
+        pageSize:50,
         page:1
       }
     } );

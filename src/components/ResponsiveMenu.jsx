@@ -1,6 +1,6 @@
 "use client";
 
-import { setOpenMenuRes } from "@/redux/slice/menuRes";
+import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import { Drawer, Menu } from "antd";
 import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";

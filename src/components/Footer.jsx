@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MdMailOutline } from "react-icons/md";
 
-import { fetchSettingsData } from "@/redux/slice/settings";
+import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { mainDomainImg } from "@/utils/mainDomain";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
-import { fetchSocialNetworksData } from "@/redux/slice/socialNetworks";
+import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
 
 const Footer = () => {

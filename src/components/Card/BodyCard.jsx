@@ -1,25 +1,30 @@
 "use client";
 
 import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
-import { addToCartNext, getCart, getNextCart, moveToCurrentCart } from "@/services/cart/cartService";
+import { addToCartNext, moveToCurrentCart } from "@/services/cart/cartService";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Spin } from "antd";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BsArchive } from "react-icons/bs";
-import { FaAngleLeft, FaShoppingCart } from "react-icons/fa";
+import { FaAngleLeft, FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
 import { LuMailbox } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import CartCounter from "../Product/CartCounter";
-import { getUserCookie, getUserId } from "@/utils/cookieUtils";
-import Image from "next/image";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
   const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
   const items = cartType === 'current' ? currentItems : nextItems;
-  
+
+
+  console.log(currentItems);
+
+
+
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -46,6 +51,8 @@ const BodyCard = () => {
       const quantity = item.quantity || 0;
       return sum + (oldPrice - price) * quantity;
     }, 0) || 0;
+
+
 
   const compeletePay = () => {
     if (!token) {
@@ -154,10 +161,10 @@ const BodyCard = () => {
                   className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
                 >
                   <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
-                    <div className="relative">
+                    <div className="relative rounded-lg overflow-hidden">
                       <Image
                         style={{ filter: " brightness(0.8)" }}
-                        className="rounded-lg object-contain"
+                        className="w-full h-full object-contain"
                         src={getImageUrl2(item.image)}
                         alt={item?.title}
                         width={150}
@@ -169,6 +176,11 @@ const BodyCard = () => {
                           {item.discount}٪
                         </span>
                       )}
+                      {/* {item.conditionId === 20 && (
+                        <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/80 text-white text-center py-1 text-sm font-semibold">
+                          کارکرده
+                        </div>
+                      )} */}
                     </div>
                     <div className="mt-5">
                       {renderCartCounter(item)}
@@ -193,12 +205,18 @@ const BodyCard = () => {
                           ضمانت اصل بودن کالا
                         </span>
                       </div>
-                      <div className="flex items-center mt-2">
+                      {item.conditionId === 20 && (
+                        <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                          <FaRecycle className="ml-1.5" />
+                          <span className="font-semibold">کالای کارکرده</span>
+                        </div>
+                      )}
+                      {/* <div className="flex items-center mt-2">
                         <LuMailbox className="text-[#666]" />
                         <span className="px-2 sm:text-[13px] text-xs">
                           ارسال از 3 روز کاری دیگر
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                     <div>
                       <div className="flex justify-between items-center flex-wrap">
@@ -241,6 +259,7 @@ const BodyCard = () => {
                     <span>{totalDiscount.toLocaleString()}</span>
                   </div>
                 )}
+
                 <hr className="border-[#6666] my-3" />
                 <div className="bg-white p-3 rounded-lg mb-3">
                   <div className="flex justify-center items-center flex-col">

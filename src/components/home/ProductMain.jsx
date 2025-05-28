@@ -9,14 +9,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { getImageUrl, getImageUrl2, mainDomainImg } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
-import { useEffect } from "react";
-import Timer from "../ProductList/Timer";
-import CountdownTimer from './CountdownTimer';
 import AddToCartButton from "../ProductList/AddToCartButton";
+import CountdownTimer from './CountdownTimer';
+import { FaRecycle } from "react-icons/fa";
 
 export default function ProductMain({ products }) {
   // useEffect(() => {
@@ -25,7 +24,7 @@ export default function ProductMain({ products }) {
   //   }
   // }, [products]);
 
-  
+
 
   return (
     <>
@@ -85,6 +84,12 @@ export default function ProductMain({ products }) {
                     >
                       {product.title}
                     </Link>
+                    {product.conditionId === 20 && (
+                      <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                        <FaRecycle className="ml-1.5" />
+                        <span className="font-semibold px-3">کالای کارکرده</span>
+                      </div>
+                    )}
                     {
                       !product.callPriceButton && product.finalPrice !== 0 &&
                       <div>
@@ -154,10 +159,10 @@ export default function ProductMain({ products }) {
                           <AddToCartButton productId={product.productId} />
                         </div>
                         <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
-                        <AddToCartButton productId={product.productId} />
+                          <AddToCartButton productId={product.productId} />
                         </div>
                       </div>
-                      
+
                     }
                     {
                       !product.canAddCart &&

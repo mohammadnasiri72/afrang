@@ -28,7 +28,7 @@ const SearchNavbar = () => {
 
     const handleSearch = async (value) => {
         setSearchTerm(value);
-        
+
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
@@ -70,11 +70,17 @@ const SearchNavbar = () => {
 
             {/* Results Dropdown */}
             {showResults && (searchTerm.length >= 2) && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] max-h-[400px] overflow-y-auto z-[9999] w-full">
-                    {loading ? (
-                        <div className="p-4 text-center text-gray-500">در حال جستجو...</div>
-                    ) : results.length > 0 ? (
-                        <div className="p-4 bg-white">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] h-[400px] overflow-y-auto z-[9999] w-full">
+                    <div className="p-4 bg-white relative">
+                        {loading && (
+                            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
+                                <div className="flex items-center gap-2 text-[#d1182b]">
+                                    <div className="w-5 h-5 border-2 border-[#d1182b] border-t-transparent rounded-full animate-spin"></div>
+                                    <span>در حال جستجو...</span>
+                                </div>
+                            </div>
+                        )}
+                        {results.length > 0 ? (
                             <div className="flex flex-col gap-4">
                                 {results.map((product) => (
                                     <Link
@@ -86,7 +92,7 @@ const SearchNavbar = () => {
                                         <div className="w-20 h-20 relative flex-shrink-0">
                                             <Image
                                                 src={getImageUrl2(product.image)}
-                                                alt={product.title}
+                                                alt={product.title.slice(0, 20)}
                                                 fill
                                                 className="object-contain"
                                                 unoptimized
@@ -96,20 +102,31 @@ const SearchNavbar = () => {
                                             <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
                                                 {product.title}
                                             </h3>
-                                            <div className="mt-1 flex items-center gap-2">
-                                                <span className="text-sm font-bold text-[#d1182b]">
-                                                    {product.finalPrice.toLocaleString()}
-                                                </span>
-                                                <span className="text-xs text-gray-500">تومان</span>
-                                            </div>
+                                            {
+                                                !product.priceDesc &&
+                                                <div className="mt-1 flex items-center gap-2">
+                                                    <span className="text-sm font-bold text-[#d1182b]">
+                                                        {product.finalPrice.toLocaleString()}
+                                                    </span>
+                                                    <span className="text-xs text-gray-500">تومان</span>
+                                                </div>
+                                            }
+                                            {
+                                                product.priceDesc &&
+                                                <div className="mt-1 flex items-center gap-2">
+                                                    <span className="text-sm font-bold text-[#d1182b]">
+                                                        {product.priceDesc}
+                                                    </span>
+                                                </div>
+                                            }
                                         </div>
                                     </Link>
                                 ))}
                             </div>
-                        </div>
-                    ) : (
-                        <div className="p-4 text-center text-gray-500">نتیجه‌ای یافت نشد</div>
-                    )}
+                        ) : !loading && (
+                            <div className="text-center text-gray-500">نتیجه‌ای یافت نشد</div>
+                        )}
+                    </div>
                 </div>
             )}
         </div>

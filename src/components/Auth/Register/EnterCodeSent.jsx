@@ -1,4 +1,4 @@
-import { setUser } from "@/redux/slice/user";
+import { setUser } from "@/redux/slices/userSlice";
 import { authServiceOtp } from "@/services/Auth/authService";
 import { Alert, Spin } from "antd";
 import Cookies from "js-cookie";

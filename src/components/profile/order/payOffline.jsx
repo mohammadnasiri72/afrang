@@ -31,6 +31,8 @@ export default function PayOffline({ orderData }) {
     const [offlineGateways, setOfflineGateways] = useState([]);
     const [selectedGateway, setSelectedGateway] = useState(null);
 
+    
+
     // Fetch payment info when component mounts
     useEffect(() => {
         const fetchPaymentInfo = async () => {
@@ -76,6 +78,16 @@ export default function PayOffline({ orderData }) {
 
         fetchGateways();
     }, [orderData?.order?.paymentId]);
+
+    // اضافه کردن useEffect برای تنظیم مبلغ پیش‌فرض
+    useEffect(() => {
+        if (isPaymentModalOpen && orderData?.order?.orderTotal) {
+            setPaymentData(prev => ({
+                ...prev,
+                amount: orderData.order.orderTotal
+            }));
+        }
+    }, [isPaymentModalOpen, orderData?.order?.orderTotal]);
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -405,11 +417,15 @@ export default function PayOffline({ orderData }) {
                         >
                             <FaCreditCard className="text-[#656565] text-sm" />
                             <input
-                                type="number"
-                                value={paymentData.amount}
+                                type="text"
+                                value={paymentData.amount ? parseInt(paymentData.amount).toLocaleString() : ''}
                                 onChange={(e) => {
-                                    setPaymentData(prev => ({ ...prev, amount: e.target.value }));
-                                    if (errors.amount) setErrors(prev => ({ ...prev, amount: '' }));
+                                    // حذف جداکننده‌ها و تبدیل به عدد
+                                    const value = e.target.value.replace(/,/g, '');
+                                    if (value === '' || /^\d+$/.test(value)) {
+                                        setPaymentData(prev => ({ ...prev, amount: value }));
+                                        if (errors.amount) setErrors(prev => ({ ...prev, amount: '' }));
+                                    }
                                 }}
                                 className="mr-2 w-full bg-transparent text-right outline-none text-sm"
                                 placeholder="مبلغ واریزی"

@@ -11,12 +11,14 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { FaShoppingBasket } from "react-icons/fa";
 import { getUserCookie, getUserId } from "@/utils/cookieUtils";
+import { Spin } from 'antd';
 
 function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
   const { currentItems } = useSelector((state) => state.cart);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const cartItem = currentItems?.find(item => item.productId === product?.product?.productId);
 
@@ -42,11 +44,14 @@ function CartActions({ product, selectedWarranty }) {
     const userId = JSON.parse(Cookies.get("user"))?.userId;
 
     try {
+      setIsLoading(true);
       await addToCart(product?.product?.productId, selectedWarranty, userId);
       dispatch(fetchCurrentCart());
       setShowSuccessModal(true);
     } catch (error) {
       console.error('Failed to add to cart:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,10 +80,20 @@ function CartActions({ product, selectedWarranty }) {
           ) : (
             <button 
               onClick={handleAddToCart}
-              className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm"
+              disabled={isLoading}
+              className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <FaCartShopping className="" />
-              <span className="">افزودن به سبد خرید</span>
+              {isLoading ? (
+                <>
+                  <Spin className="custom-spin" size="small" />
+                  <span>در حال افزودن...</span>
+                </>
+              ) : (
+                <>
+                  <FaCartShopping />
+                  <span>افزودن به سبد خرید</span>
+                </>
+              )}
             </button>
           )
         ) : (
@@ -93,6 +108,12 @@ function CartActions({ product, selectedWarranty }) {
         isOpen={showSuccessModal} 
         onClose={() => setShowSuccessModal(false)} 
       />
+
+      <style jsx global>{`
+        .custom-spin .ant-spin-dot-item {
+          background-color: white !important;
+        }
+      `}</style>
     </>
   );
 }

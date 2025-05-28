@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/redux/slice/user";
+import { setUser } from "@/redux/slices/userSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 
 const AuthContext = createContext();

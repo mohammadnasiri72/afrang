@@ -24,6 +24,9 @@ export default function DescCompeletePay() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  console.log(estimateData);
+  
+
   const totalPrice =
     currentItems?.reduce((sum, item) => {
       const price = item.price1 || 0;
@@ -124,6 +127,14 @@ export default function DescCompeletePay() {
             <div className="flex justify-between text-[#444] py-1">
               <span>هزینه ارسال</span>
               <span>رایگان</span>
+            </div>
+          }
+
+          {
+            estimateData?.walletIsActive  &&
+            <div className="flex justify-between text-[#444] py-1">
+              <span>موجودی کیف پول</span>
+              <span>{estimateData?.walletAmount ? estimateData.walletAmount.toLocaleString() : 0} تومان</span>
             </div>
           }
 

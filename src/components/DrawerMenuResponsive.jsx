@@ -1,4 +1,4 @@
-import { setOpenMenuRes } from "@/redux/slice/menuRes";
+import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import { Drawer, Menu } from "antd";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
