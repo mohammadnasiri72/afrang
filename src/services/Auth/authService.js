@@ -1,5 +1,6 @@
 import axios from "axios";
 import { mainDomain } from "@/utils/mainDomain";
+import { api } from '../api';
 
 export const authServiceStatic = {
   login: async (username, password) => {
@@ -68,6 +69,32 @@ export const changePassword = async (data, token) => {
         }
 
         return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getUserProfile = async (token) => {
+    try {
+        const response = await api.get('/user/profile', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const updateUserProfile = async (token, fields) => {
+    try {
+        const response = await api.put('/user/profile', fields, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
         throw error;
     }

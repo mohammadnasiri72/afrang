@@ -32,6 +32,17 @@ export const fetchNextCart = createAsyncThunk(
   }
 );
 
+// اکشن برای دریافت هر دو سبد خرید
+export const fetchCartData = createAsyncThunk(
+  'cart/fetchCartData',
+  async (_, { dispatch }) => {
+    await Promise.all([
+      dispatch(fetchCurrentCart()),
+      dispatch(fetchNextCart())
+    ]);
+  }
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {

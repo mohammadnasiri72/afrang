@@ -1,7 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getSettings } from '@/services/settings/settingsService';
+
+// اکشن برای دریافت تنظیمات
+export const fetchSettingsData = createAsyncThunk(
+  'settings/fetchSettingsData',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getSettings();
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const initialState = {
     settings: null,
+    loading: false,
+    error: null
 };
 
 const settingsSlice = createSlice({
@@ -15,6 +31,22 @@ const settingsSlice = createSlice({
             state.settings = null;
         },
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchSettingsData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSettingsData.fulfilled, (state, action) => {
+                state.loading = false;
+                state.settings = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchSettingsData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            });
+    }
 });
 
 export const { setSettings, clearSettings } = settingsSlice.actions;
