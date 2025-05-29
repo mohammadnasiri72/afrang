@@ -1,11 +1,11 @@
 "use client";
 
-import { IoSearchSharp } from "react-icons/io5";
-import { useState, useEffect, useRef } from "react";
 import { getProductTerm } from "@/services/products/productService";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { IoClose, IoSearchSharp } from "react-icons/io5";
 
 const SearchHeader = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -68,6 +68,18 @@ const SearchHeader = () => {
                     onChange={(e) => handleSearch(e.target.value)}
                     onFocus={() => searchTerm.length >= 2 && setShowResults(true)}
                 />
+                {searchTerm && (
+                    <button
+                        onClick={() => {
+                            setSearchTerm("");
+                            setResults([]);
+                            setShowResults(false);
+                        }}
+                        className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+                    >
+                        <IoClose className="text-xl" />
+                    </button>
+                )}
             </div>
 
             {/* Results Dropdown */}

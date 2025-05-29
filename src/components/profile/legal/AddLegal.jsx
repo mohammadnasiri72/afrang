@@ -296,7 +296,7 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                         {errors.selectedCity && <p className="text-red-500 text-xs mt-1">{errors.selectedCity}</p>}
                     </div>
 
-                   
+
 
                     <div>
                         <label className="block text-gray-700 mb-2">شماره ثبت*</label>
@@ -343,8 +343,8 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                         onClick={onClose}
                         disabled={loading}
                         className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${loading
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:bg-gray-200 cursor-pointer"
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-gray-200 cursor-pointer"
                             }`}
                     >
                         انصراف

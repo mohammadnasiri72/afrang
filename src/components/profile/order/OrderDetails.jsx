@@ -7,13 +7,15 @@ import Cookies from 'js-cookie';
 import moment from 'moment-jalaali';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaArrowLeft, FaBarcode, FaBox, FaCalendarAlt, FaCheckCircle, FaClock, FaMapMarkerAlt, FaMoneyBillWave, FaPhone, FaRecycle, FaTruck, FaUser } from 'react-icons/fa';
+import { FaArrowLeft, FaBarcode, FaBox, FaCalendarAlt, FaCheckCircle, FaClock, FaMapMarkerAlt, FaMoneyBillWave, FaPhone, FaRecycle, FaTruck, FaUser, FaBuilding } from 'react-icons/fa';
 import { IoIosCard } from 'react-icons/io';
+import { Switch } from 'antd';
 
 export default function OrderDetails({ trackCode }) {
     const router = useRouter();
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showLegalInfo, setShowLegalInfo] = useState(false);
 
     const convertPersianToEnglish = (str) => {
         const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -24,6 +26,8 @@ export default function OrderDetails({ trackCode }) {
             return index !== -1 ? englishNumbers[index] : char;
         }).join('');
     };
+
+    console.log(orderDetails);
 
     const formatPersianDate = (dateString) => {
         try {
@@ -164,36 +168,37 @@ export default function OrderDetails({ trackCode }) {
                                     href={item.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-full sm:w-32 h-32 bg-white rounded-xl relative flex-shrink-0 block hover:opacity-90 transition-opacity border border-gray-100"
+                                    className="w-full sm:w-24 h-24 bg-white rounded-xl relative flex-shrink-0 block hover:opacity-90 transition-opacity border border-gray-100"
                                 >
-                                    <img src={getImageUrl2(item.image)} alt={item.id} className="w-full h-full object-contain rounded-xl p-3" />
+                                    <img src={getImageUrl2(item.image)} alt={item.id} className="w-full h-full object-contain rounded-xl p-2" />
+                                    <span className="absolute top-1 right-1 bg-[#40768c] text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] h-5 flex items-center justify-center">
+                                        {item.qty} عدد
+                                    </span>
                                 </a>
                                 <div className="flex-1 w-full">
-                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                         <div className="w-full sm:w-auto">
                                             <div className="flex items-center gap-3 mb-2">
                                                 <a
                                                     href={item.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors"
+                                                    className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors line-clamp-2"
                                                 >
                                                     {item.title}
                                                 </a>
                                             </div>
                                             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                                                <span>کد محصول: {item.productId}</span>
-                                                {/* <span>دسته‌بندی: {item.categoryId}</span> */}
                                                 {item.warranty && (
-                                                    <span className="text-green-600">گارانتی: {item.warranty}</span>
+                                                    <span className="text-green-600 line-clamp-1">گارانتی: {item.warranty}</span>
                                                 )}
                                             </div>
-                                                {item.conditionId === 20 && (
-                                                    <div className="flex items-center text-sm text-[#d1182b] mt-2">
-                                                        <FaRecycle className="ml-1.5" />
-                                                        <span className="font-semibold">کالای کارکرده</span>
-                                                    </div>
-                                                )}
+                                            {item.conditionId === 20 && (
+                                                <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                                                    <FaRecycle className="ml-1.5" />
+                                                    <span className="font-semibold">کالای کارکرده</span>
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="flex flex-col items-end w-full sm:w-auto">
                                             {item.hasDiscount && (
@@ -213,28 +218,11 @@ export default function OrderDetails({ trackCode }) {
                                                 <span className="text-sm text-gray-500 mt-1 whitespace-nowrap">
                                                     مالیات: {item.tax.toLocaleString()} تومان
                                                 </span>
+                                                <span className="text-xs text-gray-400 mt-0.5 whitespace-nowrap">
+                                                    کد محصول: {item.productId}
+                                                </span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 mt-4 border-t border-gray-200">
-                                        <div className="flex flex-wrap items-center gap-4 text-sm">
-
-                                            <span className="bg-[#40768c] text-white text-xs font-bold px-3 py-1.5 rounded-full min-w-[28px] h-7 flex items-center justify-center">
-                                                {item.qty} عدد
-                                            </span>
-                                            {item.isCanceled && (
-                                                <span className="bg-red-100 text-red-600 px-3 py-1.5 rounded-lg">لغو شده</span>
-                                            )}
-                                        </div>
-                                        <a
-                                            href={item.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-[#40768c] hover:text-[#2c5266] text-sm flex items-center gap-2"
-                                        >
-                                            مشاهده محصول
-                                            <FaArrowLeft className="text-xs" />
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -283,7 +271,65 @@ export default function OrderDetails({ trackCode }) {
 
                 {/* Order Details Sidebar */}
                 <div className="space-y-4">
-
+                    {/* Legal Purchase Information */}
+                    {orderDetails.userLegalInfos && (
+                        <div className="bg-white rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-4">
+                                    <Switch
+                                        checked={showLegalInfo}
+                                        onChange={() => setShowLegalInfo(!showLegalInfo)}
+                                        className="custom-switch"
+                                    />
+                                    <div className="flex items-center gap-2">
+                                        <h4 className="text-gray-800 font-bold">خرید حقوقی</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            {showLegalInfo && (
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                        <div className="flex-1 flex justify-between">
+                                            <span className="text-gray-600">نام سازمان :</span>
+                                            <span className="font-medium">{orderDetails.userLegalInfos.organizationName}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                        <div className="flex-1 flex justify-between">
+                                            <span className="text-gray-600">شناسه ملی :</span>
+                                            <span className="font-medium">{orderDetails.userLegalInfos.nationalId}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                        <div className="flex-1 flex justify-between">
+                                            <span className="text-gray-600">کد اقتصادی :</span>
+                                            <span className="font-medium">{orderDetails.userLegalInfos.economicCode}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                        <div className="flex-1 flex justify-between">
+                                            <span className="text-gray-600">شماره ثبت :</span>
+                                            <span className="font-medium">{orderDetails.userLegalInfos.registrationId}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                        <div className="flex-1 flex justify-between">
+                                            <span className="text-gray-600">شماره تماس :</span>
+                                            <span className="font-medium">{orderDetails.userLegalInfos.landlineNumber}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 py-2">
+                                        <div className="flex-1 flex justify-between">
+                                            <span className="text-gray-600">آدرس :</span>
+                                            <span className="font-medium text-justify">
+                                                {orderDetails.userLegalInfos.provinceTitle}، {orderDetails.userLegalInfos.cityTitle}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Shipping Information */}
                     <div className="bg-white rounded-xl p-4 shadow-sm">
@@ -399,6 +445,15 @@ export default function OrderDetails({ trackCode }) {
 
                 </div>
             </div>
+
+            <style jsx global>{`
+                .ant-switch-checked {
+                    background-color: #40768c !important;
+                }
+                .ant-switch:hover:not(.ant-switch-disabled).ant-switch-checked {
+                    background-color: #2c5266 !important;
+                }
+            `}</style>
         </div>
     );
 } 

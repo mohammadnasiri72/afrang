@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Switch, Button } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { setLegalEnabled, setSelectedLegal } from "@/redux/slices/legalIdSlice";
 import AddLegal from "@/components/profile/legal/AddLegal";
-import EmptyLegalIcon from "./EmptyLegalIcon";
-import EditLegal from "./EditLegal";
+import { setLegalEnabled, setSelectedLegal } from "@/redux/slices/legalIdSlice";
 import { getLegal, getLegalId } from "@/services/order/orderService";
+import { Switch } from "antd";
 import Cookies from "js-cookie";
-import { FaPlus, FaBuilding, FaCheck } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaBuilding, FaCheck, FaPlus } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteLegal from "./DeleteLegal";
+import EmptyLegalIcon from "./EmptyLegalIcon";
 
 function BoxLegal() {
     const dispatch = useDispatch();
