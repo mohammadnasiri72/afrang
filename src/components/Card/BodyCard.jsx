@@ -14,6 +14,7 @@ import { GoShieldCheck } from "react-icons/go";
 import { LuMailbox } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import CartCounter from "../Product/CartCounter";
+import Link from "next/link";
 
 const BodyCard = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,6 @@ const BodyCard = () => {
   const items = cartType === 'current' ? currentItems : nextItems;
 
 
-  console.log(currentItems);
 
 
 
@@ -56,7 +56,9 @@ const BodyCard = () => {
 
   const compeletePay = () => {
     if (!token) {
-      router.push("/login?from=card");
+      // ذخیره مسیر فعلی در localStorage
+      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      router.push("/login");
     } else {
       router.push("/cart/infosend");
     }
@@ -162,15 +164,17 @@ const BodyCard = () => {
                 >
                   <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
                     <div className="relative rounded-lg overflow-hidden">
-                      <Image
-                        style={{ filter: " brightness(0.8)" }}
-                        className="w-full h-full object-contain"
-                        src={getImageUrl2(item.image)}
-                        alt={item?.title}
-                        width={150}
-                        height={150}
-                        unoptimized
-                      />
+                      <Link href={item.url}>
+                        <Image
+                          style={{ filter: " brightness(0.8)" }}
+                          className="w-full h-full object-contain"
+                          src={getImageUrl2(item.image)}
+                          alt={item?.title}
+                          width={150}
+                          height={150}
+                          unoptimized
+                        />
+                      </Link>
                       {item.discount !== 0 && (
                         <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
                           {item.discount}٪
@@ -188,9 +192,11 @@ const BodyCard = () => {
                   </div>
                   <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                     <div>
-                      <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] mb-3">
-                        {item.title}
-                      </h3>
+                      <Link href={item.url}>
+                        <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] mb-3 hover:text-[#d1182b] transition-colors duration-300">
+                          {item.title}
+                        </h3>
+                      </Link>
                       {item.warranty && (
                         <div className="flex items-center mt-2">
                           <BsArchive className="text-[#666]" />

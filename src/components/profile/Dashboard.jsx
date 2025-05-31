@@ -1,12 +1,14 @@
 "use client";
 import { getdataDashboard, getRecentViews as getRecentViewsAPI } from "@/services/dashboard/dashboardService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getItemByIds } from "@/services/Item/item";
+import { getLikes } from "@/services/UserActivity/UserActivityService";
+import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
 import { getRecentViews } from "@/utils/recentViews";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import {
-    FaAddressBook,
     FaArrowDown,
     FaArrowUp,
     FaBox,
@@ -16,7 +18,6 @@ import {
     FaTimesCircle,
     FaUser
 } from "react-icons/fa";
-import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
     const router = useRouter();
@@ -27,8 +28,33 @@ export default function Dashboard() {
         Done: 0,
         Cancel: 0
     });
-    const [activeTab, setActiveTab] = useState("overview");
+    const [listLiked, setListLiked] = useState([]);
+    const [likedItems, setLikedItems] = useState([]);
     const [recentViews, setRecentViews] = useState([]);
+
+    useEffect(() => {
+        const user = Cookies.get("user");
+        const token = JSON.parse(user).token;
+        const fetchListLiked = async () => {
+            const response = await getLikes(5, token);
+            setListLiked(response);
+
+            // Transform listLiked into required format and fetch items
+            if (response && response.length > 0) {
+                const formattedData = {
+                    ids: response
+                };
+
+                const itemsData = await getItemByIds(formattedData, token);
+                setLikedItems(itemsData);
+            }
+        }
+        fetchListLiked();
+    }, [])
+
+
+
+
 
     useEffect(() => {
         let isMounted = true;
@@ -182,8 +208,8 @@ export default function Dashboard() {
                     const TrendIcon = stat.trend === "up" ? FaArrowUp : FaArrowDown;
 
                     return (
-                        <div 
-                            key={index} 
+                        <div
+                            key={index}
                             className="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-all duration-300"
                             onClick={() => handleStatClick(stat.statusId)}
                         >
@@ -268,9 +294,9 @@ export default function Dashboard() {
                                 <h3 className="text-lg font-semibold text-gray-800">
                                     آخرین علاقه‌مندی‌ها
                                 </h3>
-                                <Link
-                                    href="/profile/favorites"
-                                    className="text-[#d1182b] text-sm hover:underline"
+                                <Link 
+                                    href="/profile/favorites" 
+                                    className="text-sm text-[#d1182b] hover:text-[#d1182b]/80 transition-colors"
                                 >
                                     مشاهده همه
                                 </Link>
@@ -278,22 +304,43 @@ export default function Dashboard() {
                         </div>
                         <div className="p-6">
                             <div className="space-y-4">
-                                {recentFavorites.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
-                                    >
-                                        <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
-                                        <div className="flex-1">
-                                            <p className="font-medium text-gray-800 mb-1">
-                                                {item.name}
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                {item.price} تومان
-                                            </p>
+                                {likedItems && likedItems.length > 0 ? (
+                                    likedItems.map((item) => (
+                                        <div
+                                            key={item.id}
+                                            className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
+                                        >
+                                            <Link href={item.url} target="_blank">
+                                                <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+                                                    {item.image && (
+                                                        <img
+                                                            src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)}
+                                                            alt={item.title}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </Link>
+                                            <div className="flex-1">
+                                                <Link href={item.url} target="_blank">
+                                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-2">
+                                                        {item.title}
+                                                    </p>
+                                                </Link>
+
+                                                <div className="flex flex-col items-start justify-between gap-2">
+                                                    <div className="text-xs text-gray-400">
+                                                        {item.categoryTitle}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                ) : (
+                                    <p className="text-center text-gray-500">
+                                        هنوز محصولی به علاقه‌مندی‌ها اضافه نشده است
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>

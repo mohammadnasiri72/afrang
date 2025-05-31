@@ -97,13 +97,19 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         sameSite: 'strict'
       });
 
-      if (!from) {
+      // بررسی مسیر ذخیره شده در localStorage
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
+        router.push(redirectPath);
+      } else if (!from) {
         router.push("/");
       } else {
         if (from === 'card') {
           router.push("/cart/infosend");
         }
       }
+
       Toast.fire({
         icon: "success",
         text: "با موفقیت وارد شدید",

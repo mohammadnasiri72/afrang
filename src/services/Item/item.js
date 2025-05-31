@@ -54,6 +54,21 @@ export const getItemByUrl = async (url) => {
 };
 
 
+export const getItemByIds = async (data, token) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Item/GetListByIds`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+
 
 export const itemVisit = async (id, url, ip, userAgent) => {
   const data = {
@@ -64,7 +79,7 @@ export const itemVisit = async (id, url, ip, userAgent) => {
     userAgent
   }
   console.log(data);
-  
+
   try {
     const response = await axios.post(`${mainDomain}/api/Item/visit`, data);
     return response.data;

@@ -14,7 +14,8 @@ import {
     FaSignOutAlt,
     FaSpinner,
     FaKey,
-    FaUser
+    FaUser,
+    FaHeart
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slices/userSlice';
@@ -24,6 +25,7 @@ const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
     { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
     { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
+    { id: 'favorites', title: 'علاقه‌مندی‌های من', icon: FaHeart, path: '/profile/favorites' },
     { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
     { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
     { id: 'change-password', title: 'تغییر رمز عبور', icon: FaKey, path: '/profile/change-password' },

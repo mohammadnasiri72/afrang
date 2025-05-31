@@ -69,14 +69,20 @@ function LoginStatic({ setStateLogin, from }) {
       const res = await authServiceStatic.login(username, password);
       const userData = res.data;
       Cookies.set("user", JSON.stringify(userData));
-      if (!from) {
-        router.push("/");
 
+      // بررسی مسیر ذخیره شده در localStorage
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
+        router.push(redirectPath);
+      } else if (!from) {
+        router.push("/");
       } else {
         if (from === 'card') {
           router.push("/card/compeletePay");
         }
       }
+
       Toast.fire({
         icon: "success",
         text: "با موفقیت وارد شدید",

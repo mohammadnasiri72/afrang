@@ -1,20 +1,61 @@
 import { getBlogsId } from "@/services/blogs/blogServiceId";
+import Image from "next/image";
 import { FaCalendarAlt } from "react-icons/fa";
 import {
   FaComments,
-  FaHeart,
   FaInstagram,
   FaLinkedin,
   FaTelegram,
   FaUser,
-  FaWhatsapp,
+  FaWhatsapp
 } from "react-icons/fa6";
 import { IoMdTime } from "react-icons/io";
 import CommentSection from "../comments/CommentSection";
-import Image from "next/image";
+import LikeComponent from "./LikeComponent";
+import moment from "moment-jalaali";
 
 async function BlogDesc({ id, comments, totalCount }) {
   const { items: blog } = await getBlogsId(id);
+
+  // Calculate reading time based on content
+  const calculateReadingTime = (content) => {
+    // Remove HTML tags
+    const textContent = content.replace(/<[^>]*>/g, '');
+    // Count words (assuming average reading speed of 200 words per minute)
+    const wordCount = textContent.trim().split(/\s+/).length;
+    const readingTime = Math.ceil(wordCount / 200);
+    return readingTime;
+  };
+
+  // Format date to Persian
+  const formatPersianDate = (dateString) => {
+    try {
+      // Convert Persian numbers to English
+      const persianToEnglish = (str) => {
+        const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        return str.split('').map(char => {
+          const index = persianNumbers.indexOf(char);
+          return index !== -1 ? englishNumbers[index] : char;
+        }).join('');
+      };
+
+      const [year, month, day] = dateString.split('/').map(persianToEnglish);
+      
+      const persianMonths = [
+        'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+        'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+      ];
+
+      return `${day} ${persianMonths[parseInt(month) - 1]} ${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return dateString;
+    }
+  };
+
+  console.log(blog);
+  
 
   return (
     <>
@@ -27,7 +68,7 @@ async function BlogDesc({ id, comments, totalCount }) {
             <div className="flex items-center">
               <FaCalendarAlt className="text-[#40768c]" />
               <span className="px-1 text-[#40768caa]">
-                {blog.length > 0 ? blog[0].dateProduct : ""}
+                {blog.length > 0 ? formatPersianDate(blog[0].dateProduct) : ""}
               </span>
             </div>
             <div className="flex items-center">
@@ -47,7 +88,7 @@ async function BlogDesc({ id, comments, totalCount }) {
             <div className="flex items-center">
               <IoMdTime className="text-[#40768c]" />
               <span className="px-1 text-[#40768caa]">
-                زمان خواندن این مطلب: 12 دقیقه
+                زمان خواندن این مطلب: {blog.length > 0 ? calculateReadingTime(blog[0].body) : 0} دقیقه
               </span>
             </div>
           </div>
@@ -67,15 +108,8 @@ async function BlogDesc({ id, comments, totalCount }) {
           </div>
           <hr className="mt-10 border-[#40768c55] border-[1.5px]" />
           <div className="flex justify-between items-center p-3 font-semibold">
-            <div className="flex items-center">
-              <FaHeart className="text-[#40768c88]" />
-              <span className="px-2 text-[#18304a] ">پسندیدم</span>
-              <span className="text-[#18304a]">|</span>
-              <span className="px-2 text-[#18304a]">
-                {" "}
-                تعداد پسندیده شده ها: 435{" "}
-              </span>
-            </div>
+            
+            <LikeComponent blog={blog[0]}/>
             <div className="flex items-center">
               <span> اشتراک گذاری : </span>
               <div className="px-2 flex items-center gap-2">
