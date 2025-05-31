@@ -24,7 +24,6 @@ export default function DescCompeletePay() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  console.log(estimateData);
   
 
   const totalPrice =

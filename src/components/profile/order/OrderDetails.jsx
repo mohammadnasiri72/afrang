@@ -27,7 +27,6 @@ export default function OrderDetails({ trackCode }) {
         }).join('');
     };
 
-    console.log(orderDetails);
 
     const formatPersianDate = (dateString) => {
         try {

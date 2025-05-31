@@ -26,7 +26,6 @@ export const getLikes = async (limit, token) => {
 };
 
 export const postLike = async (id, token) => {
-    console.log(id, token);
 
     try {
         const response = await axios.post(`${mainDomain}/api/UserActivity/Like/${id}`, {}, {

@@ -8,11 +8,43 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { updateUserProfile } from '@/services/dashboard/dashboardService';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, updateUserFields } from '@/redux/slices/userSlice';
+import { selectUser, updateUserFields, selectUserProfile } from '@/redux/slices/userSlice';
+
+// Function to convert Persian date to required format
+const convertPersianDate = (dateString) => {
+    if (!dateString) return null;
+    
+    // Check if the date is already in English format (YYYY/MM/DD)
+    if (dateString.includes('/')) {
+        return dateString;
+    }
+
+    // Split the date string into year, month, and day
+    const [year, month, day] = dateString.split('-');
+    
+    // Convert Persian numbers to English
+    const persianToEnglish = (str) => {
+        if (!str) return '';
+        const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return str.split('').map(char => {
+            const index = persianNumbers.indexOf(char);
+            return index !== -1 ? index.toString() : char;
+        }).join('');
+    };
+
+    // Convert each part to English numbers
+    const englishYear = persianToEnglish(year);
+    const englishMonth = persianToEnglish(month);
+    const englishDay = persianToEnglish(day);
+
+    // Return in the required format
+    return `${englishYear}/${englishMonth}/${englishDay}`;
+};
 
 export default function EditProfile() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const userProfile = useSelector(selectUserProfile);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -34,17 +66,21 @@ export default function EditProfile() {
     });
 
     useEffect(() => {
-        if (user) {
-            // Split displayName into firstName and lastName
-            const [first = '', last = ''] = (user.displayName || '').split(' ');
-            setFirstName(first);
-            setLastName(last);
-            setEmail(user.email || '');
-            if (user.birthDate) {
-                setBirthDate(user.birthDate);
+        if (userProfile) {
+            setFirstName(userProfile.name);
+            setLastName(userProfile.family);
+            setEmail(userProfile.email || '');
+            if (userProfile.brithDate) {
+                // If the date is already in English format (YYYY/MM/DD), use it directly
+                if (userProfile.brithDate.includes('/')) {
+                    setBirthDate(userProfile.brithDate);
+                } else {
+                    // Otherwise, convert it to the required format
+                    setBirthDate(convertPersianDate(userProfile.brithDate));
+                }
             }
         }
-    }, [user]);
+    }, [userProfile]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -83,7 +119,10 @@ export default function EditProfile() {
             formData.append('LastName', lastName.trim());
             formData.append('DisplayName', `${firstName.trim()} ${lastName.trim()}`);
             if (email.trim()) formData.append('Email', email.trim());
-            if (birthDate) formData.append('BirthDate', birthDate instanceof Date ? birthDate.toISOString().split('T')[0] : birthDate);
+            if (birthDate) {
+                const formattedDate = convertPersianDate(birthDate);
+                formData.append('BirthDate', formattedDate);
+            }
 
             // Call API to update profile
             await updateUserProfile(formData, user.token);
@@ -94,7 +133,7 @@ export default function EditProfile() {
                 lastName: lastName.trim(),
                 displayName: `${firstName.trim()} ${lastName.trim()}`,
                 email: email.trim() || user.email,
-                birthDate: birthDate instanceof Date ? birthDate.toISOString().split('T')[0] : birthDate
+                birthDate: birthDate ? convertPersianDate(birthDate) : null
             }));
 
             Toast.fire({
@@ -147,9 +186,8 @@ export default function EditProfile() {
                                     setErrors({ ...errors, firstName: '' });
                                 }
                             }}
-                            className={`w-full px-4 py-2 rounded-lg border ${
-                                errors.firstName ? 'border-red-500' : 'border-gray-300'
-                            } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+                            className={`w-full px-4 py-2 rounded-lg border ${errors.firstName ? 'border-red-500' : 'border-gray-300'
+                                } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                             placeholder="نام"
                             dir="rtl"
                         />
@@ -172,9 +210,8 @@ export default function EditProfile() {
                                     setErrors({ ...errors, lastName: '' });
                                 }
                             }}
-                            className={`w-full px-4 py-2 rounded-lg border ${
-                                errors.lastName ? 'border-red-500' : 'border-gray-300'
-                            } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+                            className={`w-full px-4 py-2 rounded-lg border ${errors.lastName ? 'border-red-500' : 'border-gray-300'
+                                } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                             placeholder="نام خانوادگی"
                             dir="rtl"
                         />
@@ -228,9 +265,8 @@ export default function EditProfile() {
                                 setErrors({ ...errors, email: '' });
                             }
                         }}
-                        className={`w-full px-4 py-2 rounded-lg border ${
-                            errors.email ? 'border-red-500' : 'border-gray-300'
-                        } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+                        className={`w-full px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                            } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                         placeholder="example@gmail.com"
                         dir="ltr"
                     />
@@ -242,9 +278,8 @@ export default function EditProfile() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full px-4 py-2 text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${
-                        loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b91626]'
-                    }`}
+                    className={`w-full px-4 py-2 text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b91626]'
+                        }`}
                 >
                     {loading ? (
                         <div className="flex items-center justify-center gap-2">

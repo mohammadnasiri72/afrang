@@ -78,7 +78,6 @@ export const itemVisit = async (id, url, ip, userAgent) => {
     ip,
     userAgent
   }
-  console.log(data);
 
   try {
     const response = await axios.post(`${mainDomain}/api/Item/visit`, data);

@@ -54,7 +54,6 @@ async function BlogDesc({ id, comments, totalCount }) {
     }
   };
 
-  console.log(blog);
   
 
   return (

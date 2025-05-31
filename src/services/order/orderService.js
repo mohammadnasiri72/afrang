@@ -266,7 +266,6 @@ export const estimateOrder = async (data, token) => {
 
 export const estimateOrderSave = async (data, token) => {
   try {
-    console.log('Sending data to API:', data); // برای دیباگ
     const response = await axios.post(`${mainDomain}/api/Order/Save`, data, {
       headers: {
         'Authorization': `Bearer ${token}`,

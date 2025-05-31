@@ -76,7 +76,7 @@ export const changePassword = async (data, token) => {
 
 export const getUserProfile = async (token) => {
     try {
-        const response = await api.get('/user/profile', {
+        const response = await axios.get(`${mainDomain}/api/User/profile`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -89,7 +89,7 @@ export const getUserProfile = async (token) => {
 
 export const updateUserProfile = async (token, fields) => {
     try {
-        const response = await api.put('/user/profile', fields, {
+        const response = await axios.put(`${mainDomain}/api/User/profile`, fields, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

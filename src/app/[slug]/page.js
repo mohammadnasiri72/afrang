@@ -7,7 +7,6 @@ import { Divider } from "antd";
 export default async function DynamicPage({ params }) {
   try {
     const data = await getItemByUrl(params.slug);
-    console.log(data);
 
     if (!data) {
       notFound();

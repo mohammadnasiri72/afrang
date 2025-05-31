@@ -63,16 +63,13 @@ export default function Dashboard() {
             try {
                 const user = Cookies.get("user");
                 if (!user) {
-                    console.log('No user found in cookies');
                     return;
                 }
 
                 const token = JSON.parse(user).token;
-                console.log('Fetching dashboard data...');
 
                 // دریافت داده‌های داشبورد
                 const data = await getdataDashboard(token);
-                console.log('API Response:', data);
 
                 if (isMounted) {
                     setDashboardData(data);

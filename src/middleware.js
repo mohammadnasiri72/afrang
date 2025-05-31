@@ -1,31 +1,41 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export function middleware(request) {
-    // Check if the request is for profile routes
-    if (request.nextUrl.pathname.startsWith('/profile')) {
-        const cookieStore = cookies()
-        const user = cookieStore.get('user')
+    // Get the pathname of the request
+    const path = request.nextUrl.pathname;
 
-        // If no user cookie or invalid token, redirect to 404
-        if (!user) {
-            return NextResponse.rewrite(new URL('/not-found', request.url))
-        }
+    // Define protected routes that require authentication
+    const protectedRoutes = ['/profile', '/dashboard'];
+    
+    // Check if the current path is a protected route
+    const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
 
+    // Get the user cookie
+    const userCookie = request.cookies.get('user')?.value;
+
+    // Check if user cookie exists and has a valid token
+    let hasValidToken = false;
+    if (userCookie) {
         try {
-            const userData = JSON.parse(user.value)
-            if (!userData.token) {
-                return NextResponse.rewrite(new URL('/not-found', request.url))
-            }
+            const userData = JSON.parse(userCookie);
+            hasValidToken = !!userData?.token;
         } catch (error) {
-            return NextResponse.rewrite(new URL('/not-found', request.url))
+            hasValidToken = false;
         }
     }
 
-    return NextResponse.next()
+    // If it's a protected route and there's no valid token, redirect to unauthorized page
+    if (isProtectedRoute && !hasValidToken) {
+        return NextResponse.redirect(new URL('/unauthorized', request.url));
+    }
+
+    return NextResponse.next();
 }
 
 // Configure which routes to run middleware on
 export const config = {
-    matcher: '/profile/:path*'
-} 
+    matcher: [
+        '/profile/:path*',
+        '/dashboard/:path*'
+    ]
+}; 

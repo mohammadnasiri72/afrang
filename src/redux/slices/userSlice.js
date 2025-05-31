@@ -7,6 +7,8 @@ export const fetchUserProfile = createAsyncThunk(
     async (_, { getState }) => {
         const state = getState();
         const token = state.user.user?.token;
+
+       
         
         if (!token) {
             throw new Error('No token available');
@@ -23,6 +25,7 @@ export const fetchUserProfile = createAsyncThunk(
 
 const initialState = {
     user: null,
+    userProfile: null,
     status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null
 };
@@ -40,8 +43,14 @@ const userSlice = createSlice({
         setError: (state, action) => {
             state.error = action.payload;
         },
+        updateUserFields: (state, action) => {
+            if (state.user) {
+                state.user = { ...state.user, ...action.payload };
+            }
+        },
         clearUser: (state) => {
             state.user = null;
+            state.userProfile = null;
             state.status = 'idle';
             state.error = null;
         },
@@ -54,7 +63,7 @@ const userSlice = createSlice({
             })
             .addCase(fetchUserProfile.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = { ...state.user, ...action.payload };
+                state.userProfile = action.payload;
                 state.error = null;
             })
             .addCase(fetchUserProfile.rejected, (state, action) => {
@@ -64,10 +73,11 @@ const userSlice = createSlice({
     }
 });
 
-export const { setUser, setStatus, setError, clearUser } = userSlice.actions;
+export const { setUser, setStatus, setError, clearUser, updateUserFields } = userSlice.actions;
 
 // Selectors
 export const selectUser = (state) => state.user.user;
+export const selectUserProfile = (state) => state.user.userProfile;
 export const selectUserStatus = (state) => state.user.status;
 export const selectUserError = (state) => state.user.error;
 

@@ -69,7 +69,6 @@ function BundleProducts({ product }) {
     );
   }
 
-  console.log(bundleProducts);
   
 
   return (
