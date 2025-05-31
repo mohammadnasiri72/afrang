@@ -31,6 +31,7 @@ export default async function ProductList(props) {
   const onlyDiscount = searchParams?.onlydiscount === "1" ? "1" : undefined;
   const statusId = searchParams?.statusid === "1" ? "1" : undefined;
   const onlyfest = searchParams?.onlyfest === "1" ? "1" : undefined;
+  const conditionId = searchParams?.conditionId === "20" ? "20" : undefined;
 
   const products = await getProducts({
     page: page,
@@ -43,7 +44,8 @@ export default async function ProductList(props) {
     OnlyPrice: onlyPrice,
     OnlyDiscount: onlyDiscount,
     StatusId: statusId,
-    OnlyFest: onlyfest
+    OnlyFest: onlyfest,
+    ConditionId: conditionId
   });
 
 

@@ -42,7 +42,8 @@ function SelectCategoryFilter() {
     available: false,    // محصولات موجود
     discount: false,     // محصولات تخفیف‌دار
     vip: false,         // محصولات فروش ویژه
-    price: false        // محصولات قیمت‌دار
+    price: false,       // محصولات قیمت‌دار
+    secondHand: false   // کالای دست دوم
   });
 
   const [categorySearch, setCategorySearch] = useState("");
@@ -111,10 +112,11 @@ function SelectCategoryFilter() {
 
   useEffect(() => {
     setSwitchStates({
-      available: searchParams.get('statusid') === '1',
+      available: searchParams.get('statusid') === '1' || searchParams.get('StatusId') === '1',
       discount: searchParams.get('onlydiscount') === '1',
       vip: searchParams.get('onlyfest') === '1',
-      price: searchParams.get('onlyprice') === '1'
+      price: searchParams.get('onlyprice') === '1',
+      secondHand: searchParams.get('ConditionId') === '20' || searchParams.get('conditionId') === '20'
     });
   }, [searchParams]);
 
@@ -229,6 +231,12 @@ function SelectCategoryFilter() {
       params.set('onlyprice', '1');
     } else {
       params.delete('onlyprice');
+    }
+
+    if (newStates.secondHand) {
+      params.set('conditionId', '20');
+    } else {
+      params.delete('conditionId');
     }
 
     router.push(`${window.location.pathname}?${params.toString()}`);
@@ -484,6 +492,7 @@ function SelectCategoryFilter() {
       switchStates.discount ||
       switchStates.vip ||
       switchStates.price ||
+      switchStates.secondHand ||
       searchParams.get("category") ||
       searchParams.get("OrderBy")
     );
@@ -553,6 +562,14 @@ function SelectCategoryFilter() {
           <Switch 
             checked={switchStates.price}
             onChange={() => handleSwitchChange('price')}
+            style={{ color: "#d1182b" }} 
+          />
+        </div>
+        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+          <span className="font-semibold text-base text-gray-700">کالای دست دوم</span>
+          <Switch 
+            checked={switchStates.secondHand}
+            onChange={() => handleSwitchChange('secondHand')}
             style={{ color: "#d1182b" }} 
           />
         </div>

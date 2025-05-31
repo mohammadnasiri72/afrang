@@ -27,11 +27,15 @@ export const getProducts = async (data) => {
       ...(data.OnlyDiscount && { OnlyDiscount: data.OnlyDiscount }),
       ...(data.StatusId && { StatusId: data.StatusId }),
       ...(data.OnlyFest && { OnlyFest: data.OnlyFest }),
+      ...(data.ConditionId && { ConditionId: data.ConditionId }),
     };
+
 
     const response = await axios.get(`${mainDomain}/api/Product`, {
       params,
     });    
+    
+   
     
     if (!response.data || !Array.isArray(response.data)) {
       return [];

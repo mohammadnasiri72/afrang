@@ -37,9 +37,9 @@ function Products({ products, layout = "list" }) {
                     {product.discount}٪
                   </span>
                 )}
-                
+
               </div>
-            
+
             </Link>
           </div>
           <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
@@ -57,37 +57,37 @@ function Products({ products, layout = "list" }) {
               <PriceProduct product={product} />
               <div className="flex items-center py-2">
                 <img src="/images/icons/benchmark.png" alt="" />
-                <span className="px-3"> مقایسه محصول </span>
+                <span className="px-1"> مقایسه محصول </span>
               </div>
               <div className="flex items-center py-2">
                 <img src="/images/icons/fast-delivery-2.png" alt="" />
-                <span className="px-3"> ضمانت اصل بودن کالا </span>
+                <span className="px-1"> ضمانت اصل بودن کالا </span>
               </div>
+              <div className="flex items-center gap-3 mb-2">
 
+                {product.fastShipping && (
+                  <div className="flex items-center py-2 ">
+                    <FaTruckFast className="text-lg text-[#898989]" />
+                    <span className="px-1 font-semibold"> ارسال سریع </span>
+                  </div>
+                )}
+                {product.freeShipping && (
+                  <div className="flex items-center py-2">
+                    <FaTruck className="text-lg text-[#898989]" />
+                    <span className="px-1 font-semibold"> ارسال رایگان </span>
+                  </div>
+                )}
+              </div>
               {product.conditionId === 20 && (
                 <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
                   <FaRecycle className="ml-1.5" />
-                  <span className="font-semibold px-3">کالای کارکرده</span>
+                  <span className="font-semibold px-1">کالای کارکرده</span>
                 </div>
               )}
 
 
 
-              <div className="flex items-center gap-3 mb-2">
 
-                {product.fastShipping && (
-                  <div className="flex items-center py-2 text-[#d1182b]">
-                    <FaTruckFast className="text-lg" />
-                    <span className="px-3 font-semibold"> ارسال سریع </span>
-                  </div>
-                )}
-                {product.freeShipping && (
-                  <div className="flex items-center py-2 text-[#40768c]">
-                    <FaTruck className="text-lg" />
-                    <span className="px-3 font-semibold"> ارسال رایگان </span>
-                  </div>
-                )}
-              </div>
               {!product.canAddCart && (
                 <div className="mt-2">
                   <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
