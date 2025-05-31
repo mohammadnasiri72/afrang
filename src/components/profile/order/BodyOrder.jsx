@@ -263,7 +263,7 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                                 <div className="flex justify-start items-center">
                                                     <FaShoppingBag className="text-[#d1182b] ml-2" />
                                                     <span className="text-gray-600">شماره سفارش:</span>
-                                                    <span className="font-medium text-[#d1182b] mr-2">{order.trackCode}</span>
+                                                    <span className="font-medium mr-2">{order.trackCode}</span>
                                                 </div>
                                                 <div className="flex justify-start items-center">
                                                     <FaCalendarAlt className="text-[#d1182b] ml-2" />
@@ -276,7 +276,7 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                                 <div className="flex justify-start items-center">
                                                     <FaMoneyBillWave className="text-[#d1182b] ml-2" />
                                                     <span className="text-gray-600">وضعیت پرداخت:</span>
-                                                    <span className={`font-medium mr-2 ${order.paymentStatus === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                                                    <span className={`font-medium mr-2 `}>
                                                         {order.paymentStatusTitle}
                                                     </span>
                                                 </div>
@@ -291,10 +291,12 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                                 <div className="flex justify-start items-center">
                                                     <FaTruck className="text-[#d1182b] ml-2" />
                                                     <span className="text-gray-600">وضعیت سفارش :</span>
-                                                    <span className={`font-medium mr-2 ${order.status === 1 ? 'text-yellow-600' :
-                                                        order.status === 2 ? 'text-blue-600' :
-                                                            order.status === 3 ? 'text-green-600' :
-                                                                'text-gray-600'
+                                                    <span className={`font-medium mr-2 ${order.status === 1 ? 'text-gray-600' :
+                                                        order.status === 2 ? 'text-yellow-600' :
+                                                            order.status === 3 ? 'text-blue-600' :
+                                                                order.status === 4 ? 'text-green-600' :
+                                                                    order.status === 5 ? 'text-red-600' :
+                                                                        'text-gray-600'
                                                         }`}>
                                                         {order.statusTitle}
                                                     </span>

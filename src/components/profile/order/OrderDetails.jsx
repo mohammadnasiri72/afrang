@@ -7,15 +7,15 @@ import Cookies from 'js-cookie';
 import moment from 'moment-jalaali';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaArrowLeft, FaBarcode, FaBox, FaCalendarAlt, FaCheckCircle, FaClock, FaMapMarkerAlt, FaMoneyBillWave, FaPhone, FaRecycle, FaTruck, FaUser, FaBuilding } from 'react-icons/fa';
+import { FaArrowLeft, FaBarcode, FaBox, FaCalendarAlt, FaCheckCircle, FaClock, FaMapMarkerAlt, FaMoneyBillWave, FaPhone, FaRecycle, FaTruck, FaUser, FaBuilding, FaChevronDown, FaAngleDown } from 'react-icons/fa';
 import { IoIosCard } from 'react-icons/io';
-import { Switch } from 'antd';
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 
 export default function OrderDetails({ trackCode }) {
     const router = useRouter();
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [showLegalInfo, setShowLegalInfo] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const convertPersianToEnglish = (str) => {
         const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -44,7 +44,6 @@ export default function OrderDetails({ trackCode }) {
         }
     };
 
-    console.log(orderDetails);
 
 
     const handleBack = () => {
@@ -273,61 +272,102 @@ export default function OrderDetails({ trackCode }) {
                 <div className="space-y-4">
                     {/* Legal Purchase Information */}
                     {orderDetails.userLegalInfos && (
-                        <div className="bg-white rounded-xl p-4 shadow-sm">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-4">
-                                    <Switch
-                                        checked={showLegalInfo}
-                                        onChange={() => setShowLegalInfo(!showLegalInfo)}
-                                        className="custom-switch"
-                                    />
+                        <div className="bg-white rounded-xl px-4 py-2 shadow-sm mb-4">
+                            <Accordion 
+                                expanded={isExpanded}
+                                onChange={(e, expanded) => setIsExpanded(expanded)}
+                                sx={{
+                                    boxShadow: 'none',
+                                    '&:before': {
+                                        display: 'none',
+                                    },
+                                    '&.Mui-expanded': {
+                                        margin: 0,
+                                    },
+                                }}
+                            >
+                                <AccordionSummary
+                                    expandIcon={
+                                        <div className='flex items-center gap-2'>
+                                            <Typography 
+                                                sx={{ 
+                                                    color: '#d1182b',
+                                                    fontSize: '0.775rem',
+                                                    fontWeight: 'bold',
+                                                    fontFamily: 'Yekan',
+                                                    '&:hover': {
+                                                        color: '#b31526'
+                                                    }
+                                                }}
+                                            >
+                                                {isExpanded ? 'بستن جزئیات' : 'مشاهده جزئیات'}
+                                            </Typography>
+                                            <FaAngleDown className={`transition-transform text-[#d1182b] hover:text-[#b31526] duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                                        </div>
+                                    }
+                                    sx={{
+                                        padding: 0,
+                                        '& .MuiAccordionSummary-content': {
+                                            margin: 0,
+                                        },
+                                        '& .MuiAccordionSummary-expandIconWrapper': {
+                                            position: 'static',
+                                            marginRight: 'auto',
+                                            marginLeft: 0,
+                                        },
+                                        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+                                            transform: 'none',
+                                        }
+                                    }}
+                                >
                                     <div className="flex items-center gap-2">
-                                        <h4 className="text-gray-800 font-bold">خرید حقوقی</h4>
+                                        <FaBuilding className="text-[#40768c]" />
+                                        <h4 className="text-gray-800 font-bold">خرید حقوقی میباشد</h4>
                                     </div>
-                                </div>
-                            </div>
-                            {showLegalInfo && (
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
-                                        <div className="flex-1 flex justify-between">
-                                            <span className="text-gray-600">نام سازمان :</span>
-                                            <span className="font-medium">{orderDetails.userLegalInfos.organizationName}</span>
+                                </AccordionSummary>
+                                <AccordionDetails sx={{ padding: '1rem 0 0 0' }}>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                            <div className="flex-1 flex justify-between">
+                                                <span className="text-gray-600">نام سازمان :</span>
+                                                <span className="font-medium">{orderDetails.userLegalInfos.organizationName}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                            <div className="flex-1 flex justify-between">
+                                                <span className="text-gray-600">شناسه ملی :</span>
+                                                <span className="font-medium">{orderDetails.userLegalInfos.nationalId}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                            <div className="flex-1 flex justify-between">
+                                                <span className="text-gray-600">کد اقتصادی :</span>
+                                                <span className="font-medium">{orderDetails.userLegalInfos.economicCode}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                            <div className="flex-1 flex justify-between">
+                                                <span className="text-gray-600">شماره ثبت :</span>
+                                                <span className="font-medium">{orderDetails.userLegalInfos.registrationId}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                            <div className="flex-1 flex justify-between">
+                                                <span className="text-gray-600">شماره تماس :</span>
+                                                <span className="font-medium">{orderDetails.userLegalInfos.landlineNumber}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 py-2">
+                                            <div className="flex-1 flex justify-between">
+                                                <span className="text-gray-600">آدرس :</span>
+                                                <span className="font-medium text-justify">
+                                                    {orderDetails.userLegalInfos.provinceTitle}، {orderDetails.userLegalInfos.cityTitle}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
-                                        <div className="flex-1 flex justify-between">
-                                            <span className="text-gray-600">شناسه ملی :</span>
-                                            <span className="font-medium">{orderDetails.userLegalInfos.nationalId}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
-                                        <div className="flex-1 flex justify-between">
-                                            <span className="text-gray-600">کد اقتصادی :</span>
-                                            <span className="font-medium">{orderDetails.userLegalInfos.economicCode}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
-                                        <div className="flex-1 flex justify-between">
-                                            <span className="text-gray-600">شماره ثبت :</span>
-                                            <span className="font-medium">{orderDetails.userLegalInfos.registrationId}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 py-2 border-b border-gray-50">
-                                        <div className="flex-1 flex justify-between">
-                                            <span className="text-gray-600">شماره تماس :</span>
-                                            <span className="font-medium">{orderDetails.userLegalInfos.landlineNumber}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 py-2">
-                                        <div className="flex-1 flex justify-between">
-                                            <span className="text-gray-600">آدرس :</span>
-                                            <span className="font-medium text-justify">
-                                                {orderDetails.userLegalInfos.provinceTitle}، {orderDetails.userLegalInfos.cityTitle}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                                </AccordionDetails>
+                            </Accordion>
                         </div>
                     )}
 
@@ -452,6 +492,15 @@ export default function OrderDetails({ trackCode }) {
                 }
                 .ant-switch:hover:not(.ant-switch-disabled).ant-switch-checked {
                     background-color: #2c5266 !important;
+                }
+                .MuiAccordionSummary-expandIconWrapper.Mui-expanded .fa-angle-down {
+                    transform: rotate(180deg) !important;
+                }
+                .fa-angle-down {
+                    transition: transform 0.3s ease !important;
+                }
+                .MuiAccordionSummary-expandIconWrapper {
+                    transition: transform 0.3s ease !important;
                 }
             `}</style>
         </div>
