@@ -1,12 +1,12 @@
 "use client";
 
-import dynamic from 'next/dynamic';
 import Container from "@/components/container";
-import { useEffect } from 'react';
+import Loading from '@/components/Loading';
+import Cookies from 'js-cookie';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import { fetchCartData } from '@/redux/slices/cartSlice';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const HeaderCard = dynamic(() => import("@/components/Card/HeaderCard"));
 const CompeletePayWrapper = dynamic(() => import("@/components/CompeletePay/CompeletePayWrapper"));
@@ -15,17 +15,43 @@ export default function CompletePay() {
     const router = useRouter();
     const dispatch = useDispatch();
     const { currentItems } = useSelector((state) => state.cart);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const checkCart = async () => {
-            if (!currentItems || currentItems.length === 0) {
+        const checkAuthAndCart = async () => {
+            try {
+                // Check for user token
+                const userCookie = Cookies.get('user');
+                if (!userCookie) {
+                    router.push('/cart');
+                    return;
+                }
+
+                const userData = JSON.parse(userCookie);
+                if (!userData?.token) {
+                    router.push('/cart');
+                    return;
+                }
+
+                // Check cart items
+                if (!currentItems || currentItems.length === 0) {
+                    router.push('/cart');
+                    return;
+                }
+
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error checking auth:', error);
                 router.push('/cart');
             }
         };
-        checkCart();
+
+        checkAuthAndCart();
     }, [dispatch, currentItems, router]);
 
-    
+    if (isLoading) {
+        return <Loading fullScreen />;
+    }
 
     return (
         <div className="bg-[#f6f6f6] overflow-hidden">
