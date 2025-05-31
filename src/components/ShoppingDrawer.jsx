@@ -21,12 +21,12 @@ function ShoppingDrawer() {
   const router = useRouter();
   const pathname = usePathname();
   const [userId, setUserId] = useState(null);
-
-
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const userData = getUserCookie();
     setUserId(userData?.userId || null);
+    setToken(userData?.token || null);
   }, []);
 
   useEffect(() => {
@@ -84,6 +84,16 @@ function ShoppingDrawer() {
     const quantity = item.quantity || 0;
     return sum + price * quantity;
   }, 0) || 0;
+
+  const handleCheckout = () => {
+    if (!token) {
+      // ذخیره مسیر فعلی در localStorage
+      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      router.push('/login');
+      return;
+    }
+    handleNavigation("/cart/infosend");
+  };
 
   const styles = {
     body: {
@@ -256,7 +266,7 @@ function ShoppingDrawer() {
                     سبد خرید
                   </button>
                   <button
-                    onClick={() => handleNavigation("/cart/infosend")}
+                    onClick={handleCheckout}
                     className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${pathname === '/cart/infosend'
                         ? 'bg-[#b91626]'
                         : 'bg-[#d1182b] hover:bg-[#b91626]'
