@@ -35,6 +35,12 @@ function ShoppingDrawer() {
     }
   }, [dispatch, userId]);
 
+  useEffect(() => {
+    if (open) {
+      dispatch(fetchCurrentCart());
+    }
+  }, [open])
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
@@ -259,8 +265,8 @@ function ShoppingDrawer() {
                   <button
                     onClick={() => handleNavigation("/cart")}
                     className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${pathname === '/cart'
-                        ? 'bg-[#b91626]'
-                        : 'bg-[#d1182b] hover:bg-[#b91626]'
+                      ? 'bg-[#b91626]'
+                      : 'bg-[#d1182b] hover:bg-[#b91626]'
                       }`}
                   >
                     سبد خرید
@@ -268,8 +274,8 @@ function ShoppingDrawer() {
                   <button
                     onClick={handleCheckout}
                     className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${pathname === '/cart/infosend'
-                        ? 'bg-[#b91626]'
-                        : 'bg-[#d1182b] hover:bg-[#b91626]'
+                      ? 'bg-[#b91626]'
+                      : 'bg-[#d1182b] hover:bg-[#b91626]'
                       }`}
                   >
                     تسویه حساب
