@@ -14,10 +14,8 @@ const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
 
 function LoginDainamic({ setStateLogin, mobile, setMobile }) {
   const [loading, setLoading] = useState(false);
-
   const [errorMobile, setErrorMobile] = useState("");
-  const { items } = useSelector((state) => state.settings);
-
+  const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
   // import sweet alert 2
@@ -82,7 +80,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
               <Link href="/">
                 <Image
                   src={getImageUrl(
-                    items.find((item) => item.propertyKey === "site_footer_logo")
+                    settings?.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value
                   )}
                   width={57}

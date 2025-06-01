@@ -14,12 +14,9 @@ const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
 
 function RegisterOtp({ setStateRegister, mobile, setMobile }) {
   const [loading, setLoading] = useState(false);
-
   const [errorMobile, setErrorMobile] = useState("");
+  const { settings } = useSelector((state) => state.settings);
 
-  const { items } = useSelector((state) => state.settings);
-
-  
   const router = useRouter();
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -82,8 +79,8 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
             <div>
               <Link href="/">
                 <Image 
-                  src={ getImageUrl(
-                    items.find((item) => item.propertyKey === "site_footer_logo")
+                  src={getImageUrl(
+                    settings?.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value
                   )}
                   width={57}

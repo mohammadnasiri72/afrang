@@ -24,7 +24,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const { items } = useSelector((state) => state.settings);
+  const { settings } = useSelector((state) => state.settings);
 
   const user = Cookies.get("user");
   const userId = JSON.parse(user).userId;
@@ -138,7 +138,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
               <Link href="/">
                 <Image
                   src={getImageUrl(
-                    items.find((item) => item.propertyKey === "site_footer_logo")
+                    settings?.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value
                   )}
                   width={57}

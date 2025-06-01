@@ -15,10 +15,7 @@ function LoginStatic({ setStateLogin, from }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const { items } = useSelector((state) => state.settings);
-
-  
-
+  const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
   // import sweet alert 2
@@ -103,9 +100,6 @@ function LoginStatic({ setStateLogin, from }) {
     }
   };
 
- 
-  
-
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
@@ -114,8 +108,8 @@ function LoginStatic({ setStateLogin, from }) {
             <div>
               <Link href="/">
                 <Image 
-                  src={ getImageUrl(
-                    items.find((item) => item.propertyKey === "site_footer_logo")
+                  src={getImageUrl(
+                    settings?.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value
                   )}
                   width={57}

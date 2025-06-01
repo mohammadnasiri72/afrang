@@ -26,6 +26,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const inputRefs = useRef([]);
+  const { settings } = useSelector((state) => state.settings);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -140,8 +141,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     customClass: "toast-modal",
   });
 
-  const { items } = useSelector((state) => state.settings);
-
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
@@ -151,7 +150,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               <Link href="/">
                 <Image
                   src={getImageUrl(
-                    items.find((item) => item.propertyKey === "site_footer_logo")
+                    settings?.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value
                   )}
                   width={57}
