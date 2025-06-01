@@ -128,3 +128,19 @@ export const getProductTerm = async (term) => {
   }
 };
 
+
+
+
+export const getProductPricing = async (categoryId) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Product/Pricing` , {
+      params:{
+        categoryId,
+      }
+    });
+    return response.data
+  } catch (error) {
+   console.log(error);
+    return []
+  }
+};

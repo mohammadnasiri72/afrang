@@ -14,7 +14,7 @@ export default async function Contact() {
     const data = await getItemByUrl('contect-us');    // اگر داده‌ای دریافت نشد یا خالی بود، صفحه را نمایش می‌دهیم
     return (
       <div>
-        <HeaderContact />
+        <HeaderContact data={data}/>
         <div className="bg-[#f6f6f6] overflow-hidden">
           <Container>
             <BodyContact />
