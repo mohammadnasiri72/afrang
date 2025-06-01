@@ -23,6 +23,7 @@
     "@reduxjs/toolkit": "^2.6.1",
     "antd": "^5.25.1",
     "axios": "^1.8.1",
+    "critters": "^0.0.23",
     "date-fns-jalali": "^4.1.0-0",
     "dayjs": "^1.11.13",
     "dayjs-jalali": "^0.0.2",
