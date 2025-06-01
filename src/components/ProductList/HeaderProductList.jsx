@@ -3,19 +3,23 @@ import { FaSortAmountUp } from "react-icons/fa";
 import { FaList, FaTableCells } from "react-icons/fa6";
 import FilterResponsive from "./FilterResponsive";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 
 function HeaderProductList({ onLayoutChange }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentOrderBy = searchParams.get("OrderBy");
+  const dispatch = useDispatch();
+  const currentOrderBy = searchParams.get("orderby");
   const currentLayout = searchParams.get("layout") || "list";
 
   const handleSort = (orderBy) => {
+    dispatch(setFilterLoading(true));
     const params = new URLSearchParams(searchParams);
-    if (orderBy && orderBy !== "2") {
-      params.set("OrderBy", orderBy);
+    if (orderBy) {
+      params.set("orderby", orderBy);
     } else {
-      params.delete("OrderBy");
+      params.delete("orderby");
     }
     if (params.get("page") === "1") {
       params.delete("page");
@@ -24,6 +28,7 @@ function HeaderProductList({ onLayoutChange }) {
   };
 
   const handleLayoutChange = (layout) => {
+    dispatch(setFilterLoading(true));
     const params = new URLSearchParams(searchParams);
     if (layout === "grid") {
       params.set("layout", "grid");

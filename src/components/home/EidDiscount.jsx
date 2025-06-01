@@ -3,11 +3,13 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { useEffect, useState } from 'react';
 import { FaCaretLeft } from "react-icons/fa6";
 import ProductMain from "./ProductMain";
+import { useRouter } from "next/navigation";
 
 export default function EidDiscount({ actionProducts, products }) {
   const defaultImage = "";
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const router = useRouter();
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories = products
@@ -52,7 +54,9 @@ export default function EidDiscount({ actionProducts, products }) {
           <div className="flex items-center justify-between mb-3 px-2">
             <h3 className="text-lg font-semibold text-gray-700">دسته‌بندی‌ها</h3>
             <button
-              onClick={() => setSelectedCategory(null)}
+                onClick={() => {
+                  router.push(`/products?onlyfest=1&orderby=2`);
+                }}
               className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
             >
               <span className="text-sm">نمایش همه</span>
@@ -103,7 +107,9 @@ export default function EidDiscount({ actionProducts, products }) {
 
         {/* دکمه نمایش همه در دسکتاپ */}
         <div
-          onClick={() => setSelectedCategory(null)}
+          onClick={() => {
+            router.push(`/products?onlyfest=1&orderby=2`);
+          }}
           className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
         >
           <span>نمایش همه</span>

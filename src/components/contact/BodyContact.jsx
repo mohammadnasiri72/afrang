@@ -10,9 +10,176 @@ import {
 } from "react-icons/fa6";
 import { GoMail } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
+import { useSelector } from "react-redux";
 
 function BodyContact() {
   const [typeArticle, setTypeArticle] = useState("شماره های تماس");
+  const { settings, loading } = useSelector((state) => state.settings);
+
+  if (loading) {
+    return <div>در حال بارگذاری...</div>;
+  }
+
+  if (!settings || !Array.isArray(settings)) {
+    return <div>اطلاعاتی یافت نشد</div>;
+  }
+
+  const sitePostalCode = settings.find(item => item.propertyKey === "site_postalcode")?.value;
+  const sitePhone = settings.find(item => item.propertyKey === "site_tel")?.value;
+  const siteAddress = settings.find(item => item.propertyKey === "site_address1")?.value;
+  const siteMobile = settings.find(item => item.propertyKey === "site_social_tel")?.value;
+  const siteManagerName = settings.find(item => item.propertyKey === "site_admin_tel")?.title;
+  const siteManagerMobile = settings.find(item => item.propertyKey === "site_admin_tel")?.value;
+  const siteSalesManagerName = settings.find(item => item.propertyKey === "site_adminsale_tel")?.title;
+  const siteSalesManagerMobile = settings.find(item => item.propertyKey === "site_adminsale_tel")?.value;
+  const siteEmail = settings.find(item => item.propertyKey === "site_email")?.value;
+  const siteWorkingHours = settings.find(item => item.propertyKey === "site_worktime")?.value;
+
+  const renderContactCards = () => {
+    switch (typeArticle) {
+      case "شماره های تماس":
+        return (
+          <>
+            <div className="w-full lg:w-1/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <FaPhoneVolume />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    تلفن
+                  </span>
+                  <p className="mb-0">{sitePhone}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full lg:w-1/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <FaMobileScreen />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    موبایل
+                  </span>
+                  <p className="mb-0">{siteMobile}</p>
+                </div>
+              </div>
+            </div>
+
+
+          </>
+        );
+
+      case "ایمیل و کد پستی":
+        return (
+          <>
+            <div className="w-full lg:w-1/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <GoMail />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    ایمیل
+                  </span>
+                  <p className="mb-0">{siteEmail}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full lg:w-1/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <LuTag />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    کد پستی
+                  </span>
+                  <p className="mb-0">{sitePostalCode}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+
+      case "ساعات کار":
+        return (
+          <div className="w-full lg:w-1/3 p-3">
+            <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+              <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <LuTag />
+                </div>
+              </div>
+              <div className="py-4 px-2 pl-[50px]">
+                <span className="text-[#616161] text-[13px] font-bold">
+                  ساعات کاری
+                </span>
+                <p className="mb-0">{siteWorkingHours}</p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "فکس و سایر تلفن ها":
+        return (
+          <>
+            <div className="w-full lg:w-1/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <FaPhoneVolume />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    فکس
+                  </span>
+                  <p className="mb-0">{siteManagerMobile}</p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full lg:w-2/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start  mltp_col_info">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <FaRegUser />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    {siteManagerName}
+                  </span>
+                  <p>{siteManagerMobile}</p>
+                </div>
+
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    {siteSalesManagerName}
+                  </span>
+                  <p>{siteSalesManagerMobile}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+
+      default:
+        return null;
+    }
+  };
+  
   return (
     <>
       <div className="flex justify-center items-center gap-4 mt-10 py-5">
@@ -50,100 +217,9 @@ function BodyContact() {
         <div className="rounded-lg bg-white p-5">
           <div id="tab-1" className="tab-item">
             <div className="flex flex-wrap">
-              <div className="w-full lg:w-1/3 p-3">
-                <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                    <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                      <GoMail />
-                    </div>
-                  </div>
-                  <div className="py-4 px-2 pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      کد پستی
-                    </span>
-                    <p className="mb-0">1561635731</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-1/3 p-3">
-                <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                    <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                      <FaPhoneVolume />
-                    </div>
-                  </div>
-                  <div className="py-4 px-2 pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      تلفن
-                    </span>
-                    <p className="mb-0">7و 02177615546</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-1/3 p-3">
-                <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                    <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                      <LuTag />
-                    </div>
-                  </div>
-                  <div className="py-4 px-2 pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      واحد فروش:
-                    </span>
-                    <p className="mb-0">فقط واحد 205</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-1/3 p-3">
-                <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                    <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                      <FaMobileScreen />
-                    </div>
-                  </div>
-                  <div className="py-4 px-2 pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      موبایل
-                    </span>
-                    <p className="mb-0">09125103328</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-2/3 p-3">
-                <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start  mltp_col_info">
-                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                    <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                      <FaRegUser />
-                    </div>
-                  </div>
-                  <div className="py-4 px-2 pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      مهندس حسین نوازنی مدیر سایت
-                    </span>
-                    <p>09125103328</p>
-                  </div>
-
-                  <div className="py-4 px-2 pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      مهندس حسام نوازنی مدیر فروش
-                    </span>
-                    <p>09125190061</p>
-                  </div>
-                </div>
-              </div>
+              {renderContactCards()}
             </div>
           </div>
-
-          {/* <div id="tab-2" className="tab-item" style="display: none">222</div>
-
-                <div id="tab-3" className="tab-item" style="display: none">333</div>
-
-                <div id="tab-4" className="tab-item" style="display: none">444</div> */}
         </div>
       </div>
       <div className="mt-8">
@@ -179,7 +255,7 @@ function BodyContact() {
                     className="custom-selectContact h-12 w-full border-none bg-[#f0f0f0] rounded-[8px]"
                     size="large"
                     defaultValue="فروش"
-                    onChange={(e) => {}}
+                    onChange={(e) => { }}
                     suffixIcon={
                       <FaCaretDown className="text-[#d1182b] text-lg" />
                     }
@@ -189,7 +265,6 @@ function BodyContact() {
                         label: "فروش",
                       },
                       { value: "گزینه2", label: "گزینه2" },
-                      // { value: "disabled", label: "Disabled", disabled: true },
                     ]}
                   />
                 </div>

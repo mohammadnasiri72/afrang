@@ -5,6 +5,34 @@ const PaginationProduct = dynamic(() => import("@/components/ProductList/Paginat
 import { getProducts } from "@/services/products/productService";
 import { FaBoxOpen } from "react-icons/fa6";
 import { getItem } from "@/services/Item/item";
+import { Suspense } from 'react';
+
+// Loading component
+function LoadingProducts() {
+  return (
+    <div className="w-full">
+      <div className="animate-pulse">
+        {[...Array(3)].map((_, index) => (
+          <div key={index} className="bg-white rounded-lg p-4 mb-4">
+            <div className="flex flex-wrap">
+              <div className="w-1/3 p-3">
+                <div className="bg-gray-200 rounded-lg w-48 h-48"></div>
+              </div>
+              <div className="w-1/3 p-5">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+              <div className="w-1/3 bg-gray-100 p-8">
+                <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default async function ProductList(props) {
   const prop = await props;
@@ -15,7 +43,7 @@ export default async function ProductList(props) {
   const id = Number(slug.slug[0]);
 
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
-  const orderBy = searchParams?.OrderBy ? parseInt(searchParams.OrderBy) : "";
+  const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
   const layout = searchParams?.layout ? searchParams.layout : "list";
   const price1 = searchParams?.price1 ? parseInt(searchParams.price1) : 0;
   const price2 = searchParams?.price2
@@ -24,7 +52,7 @@ export default async function ProductList(props) {
   const pageSize = searchParams?.pageSize
     ? parseInt(searchParams.pageSize)
     : 20;
-  const brandId = searchParams?.BrandId || "";
+  const brandId = searchParams?.brandid || "";
   
   // تبدیل مقادیر به عدد 1 برای ارسال به API
   const onlyPrice = searchParams?.onlyprice === "1" ? "1" : undefined;

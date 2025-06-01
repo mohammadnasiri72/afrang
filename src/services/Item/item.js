@@ -33,7 +33,7 @@ export const getItem = async (params) => {
 };
 
 
-export const getItemByUrl = async (url) => {
+export const getItemByUrl = async (url) => {  
   try {
     const response = await axios.get(`${mainDomain}/api/Item/findByUrl`, {
       params: {

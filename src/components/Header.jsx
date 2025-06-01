@@ -15,7 +15,7 @@ import SearchHeader from "./SearchHeader";
 
 export default function Header() {
   const user = useSelector((state) => state.user.user);
-  const { items } = useSelector((state) => state.settings);
+  const { settings } = useSelector((state) => state.settings);
   const { currentItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
@@ -36,10 +36,10 @@ export default function Header() {
     <div className="flex items-center justify-between lg:px-16 px-4 py-5 bg-white">
       <div className="flex items-center lg:w-1/2 w-auto">
         <div className="flex items-center lg:w-2/5 w-auto">
-          {items.find((item) => item.propertyKey === "site_home_url") ? (
+          {settings?.find((item) => item.propertyKey === "site_home_url") ? (
             <Link
               href={
-                items.find((item) => item.propertyKey === "site_home_url")
+                settings.find((item) => item.propertyKey === "site_home_url")
                   ?.value
               }
             >
@@ -47,7 +47,7 @@ export default function Header() {
                 className="w-14 "
                 src={
                   getImageUrl(
-                    items.find((item) => item.propertyKey === "site_footer_logo")
+                    settings.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value
                   )
                 }
@@ -60,15 +60,14 @@ export default function Header() {
 
           <Link
             href={
-              items.find((item) => item.propertyKey === "site_home_url")
-                ?.value
+              settings?.find((item) => item.propertyKey === "site_home_url")
+                ?.value || "/"
             }
           >
             <div className="flex-col px-1 font-extrabold logo-text lg:flex hidden">
-
               <span className="w-20">
-                {items.find((item) => item.propertyKey === "site_title")
-                  ?.value}
+                {settings?.find((item) => item.propertyKey === "site_title")
+                  ?.value || "خانه عکاسان افرنگ"}
               </span>
             </div>
           </Link>
@@ -92,11 +91,11 @@ export default function Header() {
             <span className="text-[#0008]"> آیا سوالی دارید </span>
             <span className="text-red-700 font-semibold text-sm">
               <a
-                href={`tel:${items.find((item) => item.propertyKey === "site_tel")
+                href={`tel:${settings?.find((item) => item.propertyKey === "site_tel")
                     ?.value || "02177615546"
                   }`}
               >
-                {items.find((item) => item.propertyKey === "site_tel")?.value ||
+                {settings?.find((item) => item.propertyKey === "site_tel")?.value ||
                   "77615546"}
               </a>
             </span>

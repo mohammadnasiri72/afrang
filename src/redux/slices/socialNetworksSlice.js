@@ -1,12 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getSocialNetworks } from '@/services/socialNetworks/socialNetworksService';
+import { getItem } from '@/services/Item/item';
 
 // اکشن برای دریافت شبکه‌های اجتماعی
 export const fetchSocialNetworksData = createAsyncThunk(
   'socialNetworks/fetchSocialNetworksData',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getSocialNetworks();
+      const response = await getItem({
+        TypeId : 8,
+        LangCode : "fa",
+      });
       return response;
     } catch (error) {
       return rejectWithValue(error.message);

@@ -22,6 +22,7 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import { persistStore, persistReducer } from 'redux-persist';
 import { combineReducers } from 'redux';
 import storage from 'redux-persist/lib/storage';
+import filterLoadingReducer from './features/filterLoadingSlice';
 
 const persistedState = {
   user: {
@@ -45,7 +46,8 @@ const rootReducer = combineReducers({
   paymentWay: paymentWayReducer,
   discount: discountReducer,
   order: orderReducer,
-  favorites: favoritesReducer
+  favorites: favoritesReducer,
+  filterLoading: filterLoadingReducer
 });
 
 const persistConfig = {

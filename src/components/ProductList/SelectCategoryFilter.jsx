@@ -9,12 +9,15 @@ import { FaAngleUp } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { getCategoryChild } from "@/services/Property/propertyService";
+import { useDispatch } from "react-redux";
+import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
 });
 
 function SelectCategoryFilter() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
@@ -50,15 +53,17 @@ function SelectCategoryFilter() {
   const [brandSearch, setBrandSearch] = useState("");
 
   useEffect(() => {
-    const mainCategoryId = params?.slug?.[0];
-    if (!mainCategoryId) {
-      setLoading(false);
-      return;
-    }
+    const mainCategoryId = params?.slug?.[0] || -1;
+    // if (!mainCategoryId) {
+    //   setLoading(false);
+    //   return;
+    // }
 
     const fetchData = async () => {
       try {
         const result = await getCategoryChild(mainCategoryId);
+        console.log(result);
+        
         if (result) {
           setApiData({
             brands: result.brands || [],
@@ -102,7 +107,7 @@ function SelectCategoryFilter() {
     }
 
     // خواندن برندهای انتخاب شده از URL در لود اولیه
-    const brandsFromUrl = searchParams.get("BrandId");
+    const brandsFromUrl = searchParams.get("brandid");
     if (brandsFromUrl) {
       setSelectedBrands(brandsFromUrl.split(","));
     } else {
@@ -120,34 +125,32 @@ function SelectCategoryFilter() {
     });
   }, [searchParams]);
 
-  const handleBrandChange = (brandId) => {
+  const handleBrandChange = (brandid) => {
+    dispatch(setFilterLoading(true));
     let newSelectedBrands;
-    if (selectedBrands.includes(brandId)) {
-      newSelectedBrands = selectedBrands.filter(id => id !== brandId);
+    if (selectedBrands.includes(brandid)) {
+      newSelectedBrands = selectedBrands.filter(id => id !== brandid);
     } else {
-      newSelectedBrands = [...selectedBrands, brandId];
+      newSelectedBrands = [...selectedBrands, brandid];
     }
     setSelectedBrands(newSelectedBrands);
 
-    // به‌روزرسانی URL به صورت مستقیم
     const params = new URLSearchParams(searchParams.toString());
-    // حذف پارامتر page برای برگشت به صفحه اول
     params.delete('page');
     
     if (newSelectedBrands.length > 0) {
-      params.set("BrandId", newSelectedBrands.join(","));
+      params.set("brandid", newSelectedBrands.join(","));
     } else {
-      params.delete("BrandId");
+      params.delete("brandid");
     }
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   const handleFilterChange = () => {
+    dispatch(setFilterLoading(true));
     const params = new URLSearchParams(searchParams.toString());
-    // حذف پارامتر page برای برگشت به صفحه اول
     params.delete('page');
 
-    // فقط اضافه کردن قیمت‌ها به URL
     if (valuePrice[0] > 0) {
       params.set("price1", valuePrice[0]);
     } else {
@@ -164,6 +167,7 @@ function SelectCategoryFilter() {
   };
 
   const handleResetFilters = () => {
+    dispatch(setFilterLoading(true));
     setFilters({
       minPrice: "",
       maxPrice: "",
@@ -171,12 +175,10 @@ function SelectCategoryFilter() {
     setSelectedBrands([]);
     setValuePrice([0, defaultMaxPrice]);
     
-    // برگشت به URL اصلی کتگوری فعلی (بدون پارامترها)
-    const mainCategoryId = params?.slug?.[0];
-    const mainCategoryTitle = params?.slug?.[1];
-    if (mainCategoryId && mainCategoryTitle) {
-      router.push(`/products/${mainCategoryId}/${mainCategoryTitle}`);
-    }
+    // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=2
+    const params = new URLSearchParams();
+    params.set('OrderBy', '2');
+    router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   const handleChange = (event, newValue) => {
@@ -188,11 +190,11 @@ function SelectCategoryFilter() {
   };
 
   const handleCategoryClick = (id, title) => {
+    dispatch(setFilterLoading(true));
     setLoading(true);
     setSelectedCategory(id);
     
     const params = new URLSearchParams(searchParams.toString());
-    // حذف پارامتر page برای برگشت به صفحه اول
     params.delete('page');
     
     const newUrl = `/products/${id}/${title}${params.toString() ? `?${params.toString()}` : ''}`;
@@ -200,15 +202,13 @@ function SelectCategoryFilter() {
   };
 
   const handleSwitchChange = (type) => {
+    dispatch(setFilterLoading(true));
     const newStates = { ...switchStates, [type]: !switchStates[type] };
     setSwitchStates(newStates);
 
     const params = new URLSearchParams(searchParams.toString());
-    
-    // حذف پارامتر page برای برگشت به صفحه اول
     params.delete('page');
     
-    // آپدیت پارامترها بر اساس وضعیت جدید سوئیچ‌ها
     if (newStates.available) {
       params.set('statusid', '1');
     } else {
@@ -484,19 +484,25 @@ function SelectCategoryFilter() {
 
   // تابع برای بررسی وجود فیلترهای فعال
   const hasActiveFilters = () => {
+    const orderBy = searchParams.get("OrderBy");
+    const hasOnlyOrderBy2 = orderBy === "2" && searchParams.size === 1;
+    
     return (
-      selectedBrands.length > 0 ||
-      valuePrice[0] > 0 ||
-      valuePrice[1] < defaultMaxPrice ||
-      switchStates.available ||
-      switchStates.discount ||
-      switchStates.vip ||
-      switchStates.price ||
-      switchStates.secondHand ||
-      searchParams.get("category") ||
-      searchParams.get("OrderBy")
+      !hasOnlyOrderBy2 && (
+        selectedBrands.length > 0 ||
+        valuePrice[0] > 0 ||
+        valuePrice[1] < defaultMaxPrice ||
+        switchStates.available ||
+        switchStates.discount ||
+        switchStates.vip ||
+        switchStates.price ||
+        switchStates.secondHand ||
+        searchParams.get("category") ||
+        (orderBy && orderBy !== "2")
+      )
     );
   };
+
 
   return (
     <>
@@ -532,8 +538,8 @@ function SelectCategoryFilter() {
           هیچ فیلتری برای نمایش وجود ندارد
         </div>
       )}
-      <div className="flex flex-col gap-4 mt-6 border-t pt-6">
-        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+      <div className="flex flex-col gap-2 mt-6 border-t pt-6">
+        <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">محصولات موجود</span>
           <Switch 
             checked={switchStates.available}
@@ -541,7 +547,7 @@ function SelectCategoryFilter() {
             style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+        <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">محصولات تخفیف‌دار</span>
           <Switch 
             checked={switchStates.discount}
@@ -549,7 +555,7 @@ function SelectCategoryFilter() {
             style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+        <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">محصولات فروش ویژه</span>
           <Switch 
             checked={switchStates.vip}
@@ -557,7 +563,7 @@ function SelectCategoryFilter() {
             style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+        <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">محصولات قیمت‌دار</span>
           <Switch 
             checked={switchStates.price}
@@ -565,7 +571,7 @@ function SelectCategoryFilter() {
             style={{ color: "#d1182b" }} 
           />
         </div>
-        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+        <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">کالای دست دوم</span>
           <Switch 
             checked={switchStates.secondHand}

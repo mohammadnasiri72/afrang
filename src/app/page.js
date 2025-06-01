@@ -21,6 +21,14 @@ export default async function Home() {
     pageSize: 12,
     orderBy: "8",
   });
+  const oldProducts = await getProducts({
+    page: 1,
+    pageSize: 12,
+    orderBy: "2",
+    ConditionId: 20,
+  });
+
+  
 
   const mainBanner = await getItem({
     TypeId: 1015,
@@ -56,7 +64,7 @@ export default async function Home() {
         </div>
       )}
       <div className="secondHand-sec mt-20">
-        <SecondHandProduct />
+        <SecondHandProduct oldProducts={oldProducts} />
       </div>
       <ArticleHeader />
       <ArticleSlider blogs={blogs} />

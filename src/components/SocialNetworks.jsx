@@ -7,13 +7,16 @@ import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 
 const SocialNetworks = () => {
   const dispatch = useDispatch();
-  const { items, loading } = useSelector((state) => state.socialNetworks);
+  const { socialNetworks, loading } = useSelector((state) => state.socialNetworks);
+
+  console.log(socialNetworks);
+  
 
   useEffect(() => {
-    if (items.length === 0) {
+    if (!socialNetworks || socialNetworks.length === 0) {
       dispatch(fetchSocialNetworksData());
     }
-  }, [dispatch, items.length]);
+  }, [dispatch, socialNetworks]);
 
   if (loading) {
     return (
@@ -36,16 +39,16 @@ const SocialNetworks = () => {
       style={{ zIndex: "10020" }}
       className="fixed bottom-20 right-5 sm:flex hidden flex-col gap-3"
     >
-      {items.map((item) => (
+      {socialNetworks?.map((item) => (
         <Link
           key={item.id}
-          href={item.sourceLink}
+          href={item.sourceLink || "#"}
           target="_blank"
           className="bg-[#aaa5] p-2 rounded-lg cursor-pointer duration-300 hover:bg-white hover:text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
         >
           <img
             src={`https://afrangadmin.aitest2.ir${item.image}`}
-            alt={item.title}
+            alt={item.title || "social network"}
             className="w-6 h-6 object-contain"
           />
         </Link>

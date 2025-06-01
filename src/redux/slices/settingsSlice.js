@@ -6,9 +6,14 @@ export const fetchSettingsData = createAsyncThunk(
   'settings/fetchSettingsData',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getSettings();
-      return response;
+      const data = await getSettings();
+      return data;
     } catch (error) {
+      console.error('Error in fetchSettingsData thunk:', {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data
+      });
       return rejectWithValue(error.message);
     }
   }
@@ -44,7 +49,7 @@ const settingsSlice = createSlice({
             })
             .addCase(fetchSettingsData.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
             });
     }
 });

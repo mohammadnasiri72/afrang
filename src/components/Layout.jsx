@@ -16,6 +16,8 @@ import axios from "axios";
 import { mainDomain } from "@/utils/mainDomain";
 import { getUserCookie, getUserId } from "@/utils/cookieUtils";
 import { syncUserCookieWithRedux } from "@/utils/manageCookie";
+import { fetchSettingsData } from "@/redux/slices/settingsSlice";
+import { setUser } from "@/redux/slices/userSlice";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -25,6 +27,7 @@ const generateRandomUserId = () => {
 function InitialDataManager() {
   const dispatch = useDispatch();
   const { cartType } = useSelector(state => state.cart);
+  const { settings } = useSelector(state => state.settings);
   const user = useSelector(state => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const initialized = useRef(false);
@@ -38,7 +41,13 @@ function InitialDataManager() {
         if (!initialized.current) {
           initialized.current = true;
           dispatch(setLoading());
-          const menuItems = await fetchMenuItems();
+          
+          // دریافت منو و تنظیمات به صورت موازی
+          const [menuItems, settingsData] = await Promise.all([
+            fetchMenuItems(),
+            dispatch(fetchSettingsData()).unwrap()
+          ]);
+          
           dispatch(setMenuItems(menuItems));
         }
 

@@ -6,7 +6,7 @@ import { Divider } from "antd";
 
 export default async function DynamicPage({ params }) {
   try {
-    const data = await getItemByUrl(params.slug);
+    const data = await getItemByUrl(params.slug);    
 
     if (!data) {
       notFound();
@@ -15,7 +15,7 @@ export default async function DynamicPage({ params }) {
     return (
       <>
         {data.breadcrumb && <Breadcrumb items={data.breadcrumb} />}
-        <Divider style={{marginTop: '0px'}}/>
+        <Divider style={{ marginTop: '0px' }} />
         <div className="container mx-auto px-4 pb-8 z-50 relative">
           <h1 className="text-3xl font-bold mb-6">{data.title}</h1>
           <div className="relative">

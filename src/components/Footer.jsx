@@ -13,22 +13,22 @@ import { getMenuFooter } from "@/services/menu/menuService";
 
 const Footer = () => {
   const dispatch = useDispatch();
-  const { items, loading } = useSelector((state) => state.settings);
-  const { items: socialNetworks, loading: socialNetworksLoading } = useSelector((state) => state.socialNetworks);
+  const { settings, loading } = useSelector((state) => state.settings);
+  const { socialNetworks, loading: socialNetworksLoading } = useSelector((state) => state.socialNetworks);
   const hasFetchedSocialNetworks = useRef(false);
   const [footerMenu, setFooterMenu] = useState([]);
   const [menuLoading, setMenuLoading] = useState(false);
   
 
   useEffect(() => {
-    if (items.length === 0) {
+    if (!settings || settings.length === 0) {
       dispatch(fetchSettingsData());
     }
-    if (socialNetworks.length === 0 && !socialNetworksLoading && !hasFetchedSocialNetworks.current) {
+    if (!socialNetworks || socialNetworks.length === 0 && !socialNetworksLoading && !hasFetchedSocialNetworks.current) {
       hasFetchedSocialNetworks.current = true;
       dispatch(fetchSocialNetworksData());
     }
-  }, [dispatch, items.length, socialNetworks.length, socialNetworksLoading]);
+  }, [dispatch, settings, socialNetworks, socialNetworksLoading]);
 
   useEffect(() => {
     const fetchFooterMenu = async () => {
@@ -50,26 +50,24 @@ const Footer = () => {
     return <Loading />;
   }
 
-  
-
   return (
     <div className="footer sm:pb-0 pb-16 ">
       <div className="lg:px-16 px-2 pt-10 border-b-8 border-[#d1182b] relative">
         <div className="flex flex-wrap">
           <div className="lg:w-1/3 sm:w-1/2 w-full p-3 flex flex-col items-center justify-center">
             <div className="w-full flex sm:justify-start justify-center">
-              {items.find((item) => item.propertyKey === "site_home_url") ? (
+              {settings?.find((item) => item.propertyKey === "site_home_url") ? (
                 <Link
                   href={
-                    items.find((item) => item.propertyKey === "site_home_url")
-                      ?.value
+                    settings?.find((item) => item.propertyKey === "site_home_url")
+                      ?.value || "/"
                   }
                 >
                   <img
                     className="w-20 "
                     src={
                       mainDomainImg +
-                      items.find(
+                      settings?.find(
                         (item) => item.propertyKey === "site_footer_logo"
                       )?.value
                     }
@@ -85,7 +83,7 @@ const Footer = () => {
                 آدرس :{" "}
               </span>
               <span>
-                {items.find((item) => item.propertyKey === "site_address1")
+                {settings?.find((item) => item.propertyKey === "site_address1")
                   ?.value || "آدرس در دسترس نیست"}
               </span>
             </div>
@@ -131,11 +129,11 @@ const Footer = () => {
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
                       href={`tel:${
-                        items.find((item) => item.propertyKey === "site_tel")
+                        settings?.find((item) => item.propertyKey === "site_tel")
                           ?.value || "02177615546"
                       }`}
                     >
-                      {items.find((item) => item.propertyKey === "site_tel")
+                      {settings?.find((item) => item.propertyKey === "site_tel")
                         ?.value || "77615546"}
                     </a>
                   </span>
@@ -175,11 +173,11 @@ const Footer = () => {
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
                       href={`mailto:${
-                        items.find((item) => item.propertyKey === "site_email")
+                        settings?.find((item) => item.propertyKey === "site_email")
                           ?.value || "unreal@outlook.com"
                       }`}
                     >
-                      {items.find((item) => item.propertyKey === "site_email")
+                      {settings?.find((item) => item.propertyKey === "site_email")
                         ?.value || "unreal@outlook.com"}
                     </a>
                   </span>
@@ -192,7 +190,7 @@ const Footer = () => {
               عضویت در خبرنامه <span className="text-[#d1182b]">افرنگ</span>
             </h4>
             <p className="text-[#666] mt-4 sm:text-start text-center">
-              {items.find(
+              {settings?.find(
                 (item) => item.propertyKey === "site_footer_description"
               )?.value ||
                 "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
@@ -211,16 +209,16 @@ const Footer = () => {
               </button>
             </div>
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
-              {socialNetworks.map((item) => (
+              {socialNetworks?.map((item) => (
                 <Link
                   key={item.id}
-                  href={item.sourceLink}
+                  href={item.sourceLink || "#"}
                   target="_blank"
                   className="bg-[#aaa5] p-2 rounded-lg cursor-pointer duration-300 hover:bg-white hover:text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                 >
                   <img
-                    src={`https://afrangadmin.aitest2.ir${item.image}`}
-                    alt={item.title}
+                    src={mainDomainImg + item.image}
+                    alt={item.title || "social network"}
                     className="w-6 h-6 object-contain"
                   />
                 </Link>
@@ -232,7 +230,7 @@ const Footer = () => {
             <h4 className="font-semibold text-[16px]">ساعت کاری</h4>
             <div className="mt-3">
               <p>
-                {items.find((item) => item.propertyKey === "site_worktime")
+                {settings?.find((item) => item.propertyKey === "site_worktime")
                   ?.value ||
                   "شنبه تا چهارشنبه از ساعت 10 الی 18 و پنج شنبه از ساعت 10 الی 16"}
               </p>
@@ -253,14 +251,14 @@ const Footer = () => {
       </div>
       <div className="sm:px-16 px-2 sm:flex hidden flex-wrap justify-between items-center">
         <p className="xl:w-1/2 w-full text-center">
-          {items.find((item) => item.propertyKey === "site_copyright")?.value ||
+          {settings?.find((item) => item.propertyKey === "site_copyright")?.value ||
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
         </p>
         <div className="flex sm:flex-nowrap flex-wrap justify-center items-center xl:w-1/2 w-full">
           {footerMenu[0]?.menuItems?.map((menuItem) => (
             <Link
               key={menuItem.id}
-              href={menuItem.url}
+              href={menuItem.url || "#"}
               className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full"
             >
               {menuItem.title}

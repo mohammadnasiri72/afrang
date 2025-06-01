@@ -7,18 +7,18 @@ import { mainDomainImg } from "@/utils/mainDomain";
 
 const DynamicTitle = () => {
   const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.settings);
+  const { settings, loading } = useSelector((state) => state.settings);
 
   useEffect(() => {
-    if (items.length === 0) {
+    if (!settings || settings.length === 0) {
       dispatch(fetchSettingsData());
     }
-  }, [dispatch, items.length]);
+  }, [dispatch, settings]);
 
   useEffect(() => {
-    if (items.length > 0) {
+    if (settings && settings.length > 0) {
       // Update title
-      const siteTitle = items.find(
+      const siteTitle = settings.find(
         (item) => item.propertyKey === "site_title"
       )?.value;
       if (siteTitle) {
@@ -28,7 +28,7 @@ const DynamicTitle = () => {
       }
 
       // Update favicon
-      const favicon = items.find(
+      const favicon = settings.find(
         (item) => item.propertyKey === "site_icon"
       )?.value;
       if (favicon) {
@@ -40,7 +40,7 @@ const DynamicTitle = () => {
         document.getElementsByTagName('head')[0].appendChild(link);
       }
     }
-  }, [items]);
+  }, [settings]);
 
   return null;
 };

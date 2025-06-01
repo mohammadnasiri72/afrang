@@ -5,19 +5,19 @@ import Marquee from "react-fast-marquee";
 import { useSelector } from "react-redux";
 
 export default function SubHeader() {
-  const { items } = useSelector((state) => state.settings);
+  const { settings } = useSelector((state) => state.settings);
 
   return (
     <>
       {
-        items.find((item) => item.propertyKey === "site_marquee")
+        settings?.find((item) => item.propertyKey === "site_marquee")
           ?.value &&
         <div
           className="marquee flex items-center py-3 w-full bg-teal-500 text-white text-sm"
           style={{ direction: "ltr" }}
         >
           <Marquee speed={50} gradient={false} direction="right">
-            {items.find((item) => item.propertyKey === "site_marquee")
+            {settings.find((item) => item.propertyKey === "site_marquee")
               ?.value}
           </Marquee>
         </div>

@@ -1,15 +1,17 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
 import { FaCaretLeft } from "react-icons/fa6";
-import { useState, useEffect } from 'react';
 import ProductMain from "./ProductMain";
 
-function NewProduct({products}) {
+function NewProduct({ products }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const router = useRouter();
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
-  const categories = products 
-    ? [...new Set(products.map(product => product.categoryTitle))].slice(0, 5) 
+  const categories = products
+    ? [...new Set(products.map(product => product.categoryTitle))].slice(0, 5)
     : [];
 
   useEffect(() => {
@@ -34,14 +36,16 @@ function NewProduct({products}) {
         <div className="lg:flex hidden items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
         </div>
-        
+
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
           <div className="flex items-center justify-between mb-3 px-2">
             <h3 className="text-lg font-semibold text-gray-700">دسته‌بندی‌ها</h3>
             <button
-              onClick={() => setSelectedCategory(null)}
+              onClick={() => {
+                router.push(`/products?orderby=2`);
+              }}
               className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
             >
               <span className="text-sm">نمایش همه</span>
@@ -56,11 +60,10 @@ function NewProduct({products}) {
                 <div key={category} className="flex items-center">
                   <span
                     onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                    className={`text-sm cursor-pointer duration-300 font-medium whitespace-nowrap ${
-                      category === selectedCategory
+                    className={`text-sm cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
                         ? 'text-[#d1182b] font-bold'
                         : 'text-[#0008] hover:text-[#000]'
-                    }`}
+                      }`}
                   >
                     {category}
                   </span>
@@ -77,11 +80,10 @@ function NewProduct({products}) {
             <div key={category} className="flex items-center">
               <span
                 onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                className={`text-sm cursor-pointer duration-300 font-medium ${
-                  category === selectedCategory
+                className={`text-sm cursor-pointer duration-300 font-medium ${category === selectedCategory
                     ? 'text-[#d1182b] font-bold'
                     : 'text-[#0008] hover:text-[#000]'
-                }`}
+                  }`}
               >
                 {category}
               </span>
@@ -92,7 +94,9 @@ function NewProduct({products}) {
 
         {/* دکمه نمایش همه در دسکتاپ */}
         <div
-          onClick={() => setSelectedCategory(null)}
+          onClick={() => {
+            router.push(`/products?orderby=2`);
+          }}
           className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
         >
           <span>نمایش همه</span>
