@@ -1,6 +1,4 @@
-import React from 'react';
-
-const Loading = () => {
+export default function Loading() {
   return (
     <div className="space-y-8">
       {[...Array(2)].map((_, categoryIndex) => (
@@ -45,6 +43,4 @@ const Loading = () => {
       ))}
     </div>
   );
-};
-
-export default Loading; 
+} 

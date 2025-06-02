@@ -20,7 +20,6 @@ export default async function ProductList({ searchParams }) {
     const price2 = searchParams?.price2 ? parseInt(searchParams.price2) : 100000;
     const pageSize = searchParams?.pageSize ? parseInt(searchParams.pageSize) : 20;
     const brandId = searchParams?.BrandId || "";
-    
     const onlyPrice = searchParams?.onlyprice === "1" ? "1" : undefined;
     const onlyDiscount = searchParams?.onlydiscount === "1" ? "1" : undefined;
     const statusId = searchParams?.statusid === "1" ? "1" : undefined;
@@ -83,6 +82,7 @@ export default async function ProductList({ searchParams }) {
 
   // اگر searchParams نداشته باشیم، دسته‌بندی‌ها را نمایش می‌دهیم
   const categories = await getCategory();
+
 
   return (
     <>

@@ -14,7 +14,10 @@ const nextConfig = {
         ]
     },
     experimental: {
-        optimizePackageImports: ['@ant-design/icons', 'antd', 'react-icons']
+        optimizePackageImports: ['@ant-design/icons', 'antd', 'react-icons'],
+        serverActions: {
+            allowedOrigins: ['afrang.aitest2.ir', 'afrangdigital.com']
+        }
     }
 };
 
