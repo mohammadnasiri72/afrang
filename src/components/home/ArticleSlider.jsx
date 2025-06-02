@@ -64,7 +64,7 @@ export default function ArticleSlider({ blogs }) {
                         2.4 <FaStar className="px-1 text-xl" />
                       </span>
                     </div>
-                    <Link href={blog.url} className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none">
+                    {/* <Link href={blog.url} className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none">
                       <img
                         className="group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] w-full h-48 object-cover border-none outline-none"
                         style={{ filter: " brightness(0.95)" }}
@@ -73,16 +73,16 @@ export default function ArticleSlider({ blogs }) {
                       />
                       <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2  border-[1.5px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2" />
                       <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0  border-[1.5px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />
-                    </Link>
+                    </Link> */}
 
                     <div className="p-3 bg-white flex-grow flex flex-col">
                       <h3 className="mb-2">
-                        <Link
+                        {/* <Link
                           className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1"
                           href={blog.url}
                         >
                           {blog.title}
-                        </Link>
+                        </Link> */}
                       </h3>
                       <div className="flex-grow">
                         <div className="text-[#000a] text-[13px] min-h-[80px] overflow-hidden">

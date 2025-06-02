@@ -133,7 +133,7 @@ function Products({ products, layout = "list" }) {
                 <div className="mt-2">
                   <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
                     <FaCartShopping className="text-[#333]" />
-                    <span className="text-[#666]">موجود نیست</span>
+                    <span className="text-[#666]">{product.statusDesc}</span>
                   </button>
                 </div>
               )}
@@ -228,7 +228,7 @@ function Products({ products, layout = "list" }) {
           ) : (
             <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">
               <FaCartShopping />
-              <span>موجود نیست</span>
+              <span>{product.statusDesc}</span>
             </button>
           )}
         </div>

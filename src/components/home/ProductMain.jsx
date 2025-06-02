@@ -13,7 +13,7 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
-import AddToCartButton from "../ProductList/AddToCartButton";
+import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from './CountdownTimer';
 import { FaRecycle } from "react-icons/fa";
 
@@ -156,10 +156,10 @@ export default function ProductMain({ products }) {
                         <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
                           {/* <SlBasket className="text-xl" />
                           <span className="px-1">افزودن به سبد خرید</span> */}
-                          <AddToCartButton productId={product.productId} />
+                          <AddToCartButtonCard productId={product.productId} />
                         </div>
                         <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
-                          <AddToCartButton productId={product.productId} />
+                          <AddToCartButtonCard productId={product.productId} />
                         </div>
                       </div>
 
@@ -169,11 +169,11 @@ export default function ProductMain({ products }) {
                       <div>
                         <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold">
                           <SlBasket className="text-xl text-[#333]" />
-                          <span className="px-1 text-[#666]">موجود نیست</span>
+                          <span className="px-1 text-[#666]">{product.statusDesc}</span>
                         </div>
                         <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 text-white rounded-b-lg  duration-300 font-bold absolute">
                           <SlBasket className="text-xl text-[#333]" />
-                          <span className="px-1 text-[#666]">موجود نیست</span>
+                          <span className="px-1 text-[#666]">{product.statusDesc}</span>
                         </div>
                       </div>
                     }

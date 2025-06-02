@@ -13,7 +13,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[0].image)}
                     alt={mainBanner[0].categoryTitle}
                   />
@@ -25,7 +25,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[1].image)}
                     alt={mainBanner[1].categoryTitle}
                   />
@@ -37,7 +37,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[2].image)}
                     alt={mainBanner[2].categoryTitle}
                   />
@@ -49,7 +49,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#">
                   <img
-                    className="w-full h-full min-h-[200px] object-cover"
+                    className="w-full h-full min-h-[50px] object-cover"
                     src={getImageUrl(mainBanner[1].image)}
                     alt={mainBanner[1].categoryTitle}
                   />
@@ -63,7 +63,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[3].image)}
                     alt={mainBanner[3].categoryTitle}
                   />
@@ -75,7 +75,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[4].image)}
                     alt={mainBanner[4].categoryTitle}
                   />
@@ -87,7 +87,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[5].image)}
                     alt={mainBanner[5].categoryTitle}
                   />
@@ -99,7 +99,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">
                 <a href="#" className="block w-full">
                   <img
-                    className="w-full min-h-[200px] object-contain"
+                    className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[6].image)}
                     alt={mainBanner[6].categoryTitle}
                   />

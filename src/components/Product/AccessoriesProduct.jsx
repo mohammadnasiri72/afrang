@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa6";
 import { SlBasket } from "react-icons/sl";
+import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 
 function AccessoriesProduct({ product }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
@@ -205,13 +206,15 @@ function AccessoriesProduct({ product }) {
                       )}
                       {item.canAddCart && (
                         <div>
-                          <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#d1182b] font-bold">
-                            <SlBasket className="text-xl" />
-                            <span className="px-1">افزودن به سبد خرید</span>
+                          <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center  text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#d1182b] font-bold">
+                            {/* <SlBasket className="text-xl" />
+                            <span className="px-1">افزودن به سبد خرید</span> */}
+                            <AddToCartButtonCard productId={item.productId} />
                           </div>
-                          <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:hidden flex justify-center items-center py-2 text-white rounded-b-lg duration-300 cursor-pointer hover:bg-[#d1182b] font-bold">
-                            <SlBasket className="text-xl" />
-                            <span className="px-1">افزودن به سبد خرید</span>
+                          <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:hidden flex justify-center items-center  text-white rounded-b-lg duration-300 cursor-pointer hover:bg-[#d1182b] font-bold">
+                            {/* <SlBasket className="text-xl" />
+                            <span className="px-1">افزودن به سبد خرید</span> */}
+                            <AddToCartButtonCard productId={item.productId} />
                           </div>
                         </div>
                       )}
@@ -219,11 +222,11 @@ function AccessoriesProduct({ product }) {
                         <div>
                           <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold cursor-default select-none">
                             <SlBasket className="text-xl text-[#333]" />
-                            <span className="px-1 text-[#666]">موجود نیست</span>
+                            <span className="px-1 text-[#666]">{item.statusDesc}</span>
                           </div>
                           <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex justify-center items-center py-2 text-white rounded-b-lg duration-300 font-bold cursor-default select-none">
                             <SlBasket className="text-xl text-[#333]" />
-                            <span className="px-1 text-[#666]">موجود نیست</span>
+                            <span className="px-1 text-[#666]">{item.statusDesc}</span>
                           </div>
                         </div>
                       )}

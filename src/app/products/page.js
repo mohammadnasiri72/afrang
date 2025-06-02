@@ -122,8 +122,8 @@ export default async function ProductList({ searchParams }) {
                           <Image 
                             src={getImageUrl(category.image)}
                             alt={category.title}
-                            width={56}
-                            height={56}
+                            width={64}
+                            height={64}
                             unoptimized
                             className="object-contain group-hover:scale-110 transition-transform duration-300 filter drop-shadow-sm"
                           />

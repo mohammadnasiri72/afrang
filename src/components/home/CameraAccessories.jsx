@@ -27,15 +27,15 @@ export default function CameraAccessories({ category }) {
             speed={1000}
             breakpoints={{
               1024: {
-                slidesPerView: 6,
+                slidesPerView: 5,
                 spaceBetween: 10,
               },
               768: {
-                slidesPerView: 4,
+                slidesPerView: 3,
                 spaceBetween: 8,
               },
               100: {
-                slidesPerView: 1,
+                slidesPerView: 2,
                 spaceBetween: 5,
               },
             }}
@@ -52,7 +52,7 @@ export default function CameraAccessories({ category }) {
                           className="w-[50px] h-[50px]"
                         />
                       </div>
-                      <span className="text-white text-xl mt-3 font-medium">
+                      <span className="text-white text-xl mt-3 font-medium text-center">
                         {item.title}
                       </span>
                     </div>

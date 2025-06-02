@@ -25,12 +25,12 @@ export default function BodyPriceList({ categories }) {
                         className="group"
                     >
                         <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl z-50 relative">
-                            <div className="relative h-48 w-full bg-gray-500 flex items-center justify-center">
+                            <div className="relative h-32 w-full bg-gray-500 flex items-center justify-center">
                                 <Image
                                     src={getImageUrl(category.image)}
                                     alt={category.title}
-                                    width={100}
-                                    height={100}
+                                    width={64}
+                                    height={64}
                                     className="object-contain group-hover:scale-105 transition-transform duration-300"
                                     unoptimized
                                 />
