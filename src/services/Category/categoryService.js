@@ -23,7 +23,6 @@ export const getCategory = async () => {
         const response = await axios.get(`${mainDomain}/api/Category`, {
             params,
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         Toast.fire({

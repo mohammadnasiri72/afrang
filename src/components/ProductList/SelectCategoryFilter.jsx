@@ -62,7 +62,6 @@ function SelectCategoryFilter() {
     const fetchData = async () => {
       try {
         const result = await getCategoryChild(mainCategoryId);
-        console.log(result);
         
         if (result) {
           setApiData({

@@ -18,11 +18,7 @@ import CountdownTimer from './CountdownTimer';
 import { FaRecycle } from "react-icons/fa";
 
 export default function ProductMain({ products }) {
-  // useEffect(() => {
-  //   if (products) {
-  //     console.log(products);
-  //   }
-  // }, [products]);
+
 
 
 

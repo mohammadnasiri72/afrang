@@ -32,13 +32,15 @@ function BreadcrumbNav() {
         return;
       }
 
+      
+
       // اگر شناسه محصول در URL وجود داشت
-      if (params?.slug?.[0]) {
+      if (params?.slug?.[params?.slug?.length - 2]) {
         // اگر در صفحه محصول هستیم از getBreadcrumbProduct استفاده کن
         const isProductPage = pathname.includes('/product/');
         const data = isProductPage 
-          ? await getBreadcrumbProduct(params.slug[0])
-          : await getBreadcrumb(params.slug[0]);
+          ? await getBreadcrumbProduct(params?.slug?.[params?.slug?.length - 2])
+          : await getBreadcrumb(params?.slug?.[params?.slug?.length - 2]);
 
         if (data) {
           // تنظیم آیتم‌های مسیر

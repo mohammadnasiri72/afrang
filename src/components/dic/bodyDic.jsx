@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FaBook } from "react-icons/fa";
 
 export default function BodyDic({dics}) {
-    console.log(dics);
     
     
     // Group items by category

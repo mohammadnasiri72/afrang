@@ -8,7 +8,6 @@ function GoogleMap() {
   const siteAddress = settings.find(item => item.propertyKey === "site_address1")?.value;
   const map = settings.find(item => item.propertyKey === "site_map_script")?.value;
 
-  console.log(map);
 
 
   return (

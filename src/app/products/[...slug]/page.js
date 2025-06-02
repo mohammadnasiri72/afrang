@@ -40,7 +40,7 @@ export default async function ProductList(props) {
   const searchParams = await prop.searchParams;
 
   const slug = await params;
-  const id = Number(slug.slug[0]);
+  const id = Number(slug.slug[slug.slug.length - 2]);
 
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";

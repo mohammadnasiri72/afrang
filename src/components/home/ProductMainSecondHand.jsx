@@ -15,7 +15,6 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import AddToCartButton from "../ProductList/AddToCartButton";
 
 export default function ProductMainSecondHand({ oldProducts }) {
-  console.log(oldProducts);
 
   return (
     <>

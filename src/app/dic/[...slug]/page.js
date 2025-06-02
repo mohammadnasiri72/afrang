@@ -3,14 +3,12 @@ import { getItem, getItemById } from '@/services/Item/item';
 import { Breadcrumb } from "antd";
 import Link from "next/link";
 
-export default async function DicItemPage({ params, searchParams }) {
-    const { slug } = params;
+export default async function DicItemPage({  searchParams }) {
     const itemId = parseInt(searchParams.id);
 
     // Get all dictionary items
     const dic = await getItemById(itemId);
 
-    console.log(dic);
 
     if (!dic) {
         return (
