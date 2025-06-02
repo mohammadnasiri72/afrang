@@ -9,7 +9,6 @@ const SocialNetworks = () => {
   const dispatch = useDispatch();
   const { socialNetworks, loading } = useSelector((state) => state.socialNetworks);
 
-  console.log(socialNetworks);
   
 
   useEffect(() => {

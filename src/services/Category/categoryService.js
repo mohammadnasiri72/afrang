@@ -33,6 +33,22 @@ export const getCategory = async () => {
     }
 };
 
+
+export const getCategoryById = async (id) => {
+    try {
+       
+
+        const response = await axios.get(`${mainDomain}/api/Category/${id}`);
+
+        return response.data;
+    } catch (error) {
+        Toast.fire({
+            icon: "error",
+            text: error.response?.data ? error.response?.data : "خطای شبکه",
+        });
+    }
+};
+
 export const getBreadcrumb = async (id) => {
     try {
         const params = {

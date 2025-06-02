@@ -33,6 +33,22 @@ export const getItem = async (params) => {
 };
 
 
+export const getItemById = async (id) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Item/${id}`);
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};
+
+
 export const getItemByUrl = async (url) => {  
   try {
     const response = await axios.get(`${mainDomain}/api/Item/findByUrl`, {

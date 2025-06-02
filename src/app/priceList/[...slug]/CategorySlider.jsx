@@ -41,6 +41,7 @@ export default function CategorySlider({ categories, currentId }) {
                     <SwiperSlide key={category.id}>
                         <Link
                             href={getPriceListUrl(category.url)}
+                            scroll={false}
                             className={`block group ${category.id === currentId ? ' rounded-lg' : ''}`}
                         >
                             <div className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md ${

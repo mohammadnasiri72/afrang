@@ -190,29 +190,29 @@ function ResponsiveMenu() {
     return (
       <div
         ref={navbarRef}
-        className={`main-navbar bg-[#d1182b] duration-1000 ease-in-out w-full flex text-white ${isSticky
+        className={`main-navbar  duration-1000 ease-in-out w-full flex text-white ${isSticky
             ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
             : "relative"
           }`}
       >
-        <div className="container mx-auto">
+        <div className="w-full ">
           <div className="flex justify-start w-full whitespace-nowrap overflow-x-auto lg:overflow-visible">
             <div className="flex items-center" ref={menuRef}>
               {items.map((item, i) => (
                 <div
                   key={item.id}
-                  className={`hover:bg-[#0002] duration-300 px-1 relative group hidden lg:flex items-center ${i === items.length - 1 ? "" : "border-l border-[#fff8]"
+                  className={`hover:bg-[#0002] duration-300 px-0.5 relative group hidden lg:flex items-center ${i === items.length - 1 ? "" : "border-l border-[#fff8]"
                     }`}
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <div className="p-3 cursor-pointer font-semibold whitespace-nowrap">
+                    <div className="px-2 py-2 cursor-pointer font-semibold whitespace-nowrap">
                       {item.title}
                     </div>
                   ) : (
                     <Link href={item.url || item.pageUrl || "#"}>
-                      <div className="p-3 cursor-pointer font-semibold whitespace-nowrap">
+                      <div className="px-2 py-2 cursor-pointer font-semibold whitespace-nowrap">
                         {item.title}
                       </div>
                     </Link>
@@ -235,9 +235,20 @@ function ResponsiveMenu() {
                           {item.Children.map((child) => (
                             <div key={child.id} className="w-1/2">
                               <div className="p-3">
-                                <h3 className="whitespace-nowrap font-semibold text-[#d1182b]">
-                                  {child.title}
-                                </h3>
+                                {child.url || child.pageUrl ? (
+                                  <Link href={child.url || child.pageUrl || "#"}>
+                                    <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
+                                      <img src="/images/icons/Arrow-Left.png" alt="" className="w-4" />
+                                      <span className="whitespace-nowrap text-sm">
+                                        {child.title}
+                                      </span>
+                                    </div>
+                                  </Link>
+                                ) : (
+                                  <h3 className="whitespace-nowrap font-semibold text-[#d1182b]">
+                                    {child.title}
+                                  </h3>
+                                )}
                                 {child.Children && child.Children.length > 0 && (
                                   <div className="grid grid-cols-3 gap-2 mt-2">
                                     {child.Children.map((subChild) => (

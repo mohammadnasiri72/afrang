@@ -48,7 +48,7 @@ const NavBar = () => {
         {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
         <div
           className={`
-          bg-[#d1182b] lg:px-16 px-2 flex items-center justify-between text-white
+          bg-[#d1182b] px-2 flex items-center justify-between text-white
           transition-transform duration-300 ease-out z-[600]
           ${isFixed
               ? 'fixed top-0 left-0 right-0 z-50 shadow-lg translate-y-0'
@@ -66,7 +66,7 @@ const NavBar = () => {
         {/* navbar اصلی که همیشه در جای خودش هست */}
         <div
           ref={navbarRef}
-          className="bg-[#d1182b] lg:px-16 px-2 flex items-center justify-between text-white"
+          className="bg-[#d1182b]  px-2 flex items-center justify-between text-white"
         >
 
           <SearchNavbar />

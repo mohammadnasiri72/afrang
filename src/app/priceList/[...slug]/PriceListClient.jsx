@@ -18,11 +18,41 @@ const EmptyState = () => {
     );
 };
 
+const SkeletonLoader = () => {
+    return (
+        <div className="space-y-8">
+            {[1, 2, 3].map((categoryIndex) => (
+                <div key={categoryIndex} className="bg-white rounded-lg shadow-sm">
+                    <div className="border-b border-gray-100 p-4">
+                        <div className="flex items-center justify-between">
+                            <div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="h-10 w-64 bg-gray-200 rounded animate-pulse"></div>
+                        </div>
+                    </div>
+                    <div className="divide-y divide-gray-100">
+                        {[1, 2, 3, 4].map((productIndex) => (
+                            <div key={productIndex} className="p-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                        <div className="h-5 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                                    </div>
+                                    <div className="flex items-center gap-8">
+                                        <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+                                        <div className="h-5 w-32 bg-gray-200 rounded animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};
+
 export default function PriceListClient({ pricing }) {
     const [searchTerms, setSearchTerms] = useState({});
-
-    console.log(pricing);
-    
+    const [isLoading, setIsLoading] = useState(false);
 
     // Group products by category
     const groupedProducts = pricing?.reduce((acc, product) => {
@@ -51,17 +81,33 @@ export default function PriceListClient({ pricing }) {
         );
     };
 
+    console.log(pricing);
+    
+
     const formatPrice = (price) => {
-        // اگر قیمت عدد بود، تومان رو اضافه کن
-        if (!isNaN(price) && price !== '') {
-            return `${price} تومان`;
+        // اگر قیمت خالی بود، همون رو برگردون
+        if (!price) return price;
+
+        // حذف کاماها از قیمت
+        const cleanPrice = price.toString().replace(/,/g, '');
+        
+        // چک کردن اینکه آیا می‌تونه به عدد تبدیل بشه
+        if (!isNaN(cleanPrice) && cleanPrice !== '') {
+            // تبدیل به عدد و اضافه کردن کاما به هر سه رقم
+            const formattedNumber = Number(cleanPrice).toLocaleString('fa-IR');
+            return `${formattedNumber} تومان`;
         }
-        // در غیر این صورت همون قیمت رو برگردون
+        
+        // اگر عدد نبود، همون متن رو برگردون
         return price;
     };
 
     if (!pricing || pricing.length === 0) {
         return <EmptyState />;
+    }
+
+    if (isLoading) {
+        return <SkeletonLoader />;
     }
 
     return (
@@ -97,10 +143,16 @@ export default function PriceListClient({ pricing }) {
                         </div>
                     </div>
                     <div className="divide-y divide-gray-100">
+                        {/* Table Header */}
+                        <div className="hidden sm:grid grid-cols-12 gap-4 p-4 bg-gray-50 text-sm font-medium text-gray-600">
+                            <div className="col-span-7">عنوان محصول</div>
+                            <div className="col-span-2 text-center">وضعیت</div>
+                            <div className="col-span-3 text-center">قیمت</div>
+                        </div>
                         {filterProducts(products, categoryId).map((product) => (
                             <div key={product.productId} className="p-4 hover:bg-gray-50 transition-colors duration-200">
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
-                                    <div className="flex-1">
+                                <div className="grid grid-cols-12 gap-4 items-center">
+                                    <div className="col-span-12 sm:col-span-7 text-center sm:text-right">
                                         <Link 
                                             href={product.url}
                                             className="text-gray-900 hover:text-[#18d1be] transition-colors duration-200"
@@ -108,24 +160,24 @@ export default function PriceListClient({ pricing }) {
                                             {product.title}
                                         </Link>
                                     </div>
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
-                                        <span className={`px-3 py-1 rounded-full text-sm ${
+                                    <div className="col-span-6 sm:col-span-2 flex justify-center">
+                                        <span className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${
                                             product.statusId === 1 
                                                 ? 'bg-green-100 text-green-800' 
                                                 : 'bg-red-100 text-red-800'
                                         }`}>
                                             {product.statusDesc}
                                         </span>
-                                        <div className="flex items-center gap-2">
-                                            {product.discount > 0 && !isNaN(product.price) && product.price !== '' && (
-                                                <span className="px-2 py-1 bg-red-100 text-red-600 rounded-full text-sm font-medium">
-                                                    {product.discount}% تخفیف
-                                                </span>
-                                            )}
-                                            <span className="text-[#0a1d39] font-medium">
-                                                {formatPrice(product.price)}
+                                    </div>
+                                    <div className="col-span-6 sm:col-span-3 flex flex-col sm:flex-row items-center justify-center gap-2">
+                                        {product.discount > 0 && !isNaN(product.price) && product.price !== '' && (
+                                            <span className="px-2 py-1 bg-red-100 text-red-600 rounded-full text-sm font-medium whitespace-nowrap">
+                                                {product.discount}% تخفیف
                                             </span>
-                                        </div>
+                                        )}
+                                        <span className="text-[#0a1d39] font-medium whitespace-nowrap">
+                                            {formatPrice(product.price)}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
