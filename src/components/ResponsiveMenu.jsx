@@ -149,21 +149,16 @@ function ResponsiveMenu() {
   };
 
   const handleMouseEnter = useCallback((e) => {
-
-
     if (isCalculatingRef.current) return;
-      isCalculatingRef.current = true;
+    isCalculatingRef.current = true;
 
-      const navbar = navbarRef.current;
-      if (!navbar) return;
+    const navbar = navbarRef.current;
+    if (!navbar) return;
 
-      const navbarRect = navbar.getBoundingClientRect();
-      const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
-      setDropdownPosition({ top: topPosition });
-
-
+    const navbarRect = navbar.getBoundingClientRect();
+    const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
+    setDropdownPosition({ top: topPosition });
   }, []);
-
 
   const handleMouseLeave = useCallback((e) => {
     isCalculatingRef.current = false;
@@ -191,8 +186,8 @@ function ResponsiveMenu() {
       <div
         ref={navbarRef}
         className={`main-navbar  duration-1000 ease-in-out w-full flex text-white ${isSticky
-            ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
-            : "relative"
+          ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
+          : "relative"
           }`}
       >
         <div className="w-full ">
@@ -227,7 +222,9 @@ function ResponsiveMenu() {
                         right: 0,
                         width: '100%',
                         transform: 'translateY(0)',
-                        transition: 'all 0.3s ease-in-out'
+                        transition: 'all 0.3s ease-in-out',
+                        maxHeight: '80vh',
+                        overflowY: 'auto'
                       }}
                     >
                       <div className="container mx-auto">
@@ -235,19 +232,23 @@ function ResponsiveMenu() {
                           {item.Children.map((child) => (
                             <div key={child.id} className="w-1/2">
                               <div className="p-3">
-                                {child.url || child.pageUrl ? (
+                                {child.Children && child.Children.length > 0 ? (
+                                  <Link href={child.url || child.pageUrl || "#"}>
+                                    <div className="px-3 py-2 rounded-lg mb-3">
+                                      <h3 className="whitespace-nowrap font-bold text-[#130f26]">
+                                        {child.title}
+                                      </h3>
+                                    </div>
+                                  </Link>
+                                ) : (
                                   <Link href={child.url || child.pageUrl || "#"}>
                                     <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
                                       <img src="/images/icons/Arrow-Left.png" alt="" className="w-4" />
-                                      <span className="whitespace-nowrap text-sm">
+                                      <span className="whitespace-nowrap text-sm font-semibold">
                                         {child.title}
                                       </span>
                                     </div>
                                   </Link>
-                                ) : (
-                                  <h3 className="whitespace-nowrap font-semibold text-[#d1182b]">
-                                    {child.title}
-                                  </h3>
                                 )}
                                 {child.Children && child.Children.length > 0 && (
                                   <div className="grid grid-cols-3 gap-2 mt-2">
@@ -258,7 +259,7 @@ function ResponsiveMenu() {
                                       >
                                         <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
                                           <img src="/images/icons/Arrow-Left.png" alt="" className="w-4" />
-                                          <span className="whitespace-nowrap text-sm">
+                                          <span className="whitespace-nowrap text-sm font-semibold">
                                             {subChild.title}
                                           </span>
                                         </div>
@@ -308,8 +309,8 @@ function ResponsiveMenu() {
             <button
               onClick={() => handleNavigation(item.url || item.pageUrl || "#")}
               className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${isActivePath(item.url || item.pageUrl)
-                  ? 'text-[#d1182b]'
-                  : 'text-gray-800 hover:text-[#d1182b]'
+                ? 'text-[#d1182b]'
+                : 'text-gray-800 hover:text-[#d1182b]'
                 }`}
             >
               {item.title}
@@ -335,8 +336,8 @@ function ResponsiveMenu() {
         key: 'dashboard-group',
         label: (
           <div className={`text-right px-4 py-2 cursor-pointer ${dashboardMenuItems.some(item => isActivePath(item.path))
-              ? 'text-[#d1182b]'
-              : ''
+            ? 'text-[#d1182b]'
+            : ''
             }`}>
             داشبورد کاربری
           </div>
@@ -347,8 +348,8 @@ function ResponsiveMenu() {
             <button
               onClick={() => handleNavigation(item.path)}
               className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${isActivePath(item.path)
-                  ? 'text-[#d1182b]'
-                  : 'text-gray-800 hover:text-[#d1182b]'
+                ? 'text-[#d1182b]'
+                : 'text-gray-800 hover:text-[#d1182b]'
                 }`}
             >
               <item.icon className="text-lg" />
