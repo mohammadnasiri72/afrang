@@ -100,7 +100,7 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
       {pathname !== '/cart' && (
         <button
           onClick={handleGoToCart}
-          className="flex items-center justify-center gap-2 bg-[#d1182b] text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors w-full cursor-pointer"
+          className="flex items-center justify-center gap-2 bg-[#d1182b] hover:bg-[#40768c] text-white py-2 px-4 rounded-sm transition-colors w-full cursor-pointer"
         >
           <FaShoppingCart />
           <span>مشاهده سبد خرید</span>

@@ -69,79 +69,142 @@ function Products({ products, layout = "list" }) {
     <>
       <div className="bg-white rounded-lg relative z-50">
         <div className="flex w-full flex-wrap items-start">
-          <div className="p-3 lg:w-1/3 w-full relative flex items-start justify-center ">
-            <Link href={product.url} className="relative">
-              <div className="relative overflow-hidden rounded-lg group">
-                <Image
-                  className="object-contain rounded-lg w-48 h-48 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
-                  src={getImageUrl2(product.image)}
-                  alt={product.title}
-                  width={200}
-                  height={200}
-                  priority={false}
-                  unoptimized
-                />
-                {product.discount !== 0 && (
-                  <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
-                    {product.discount}٪
-                  </span>
-                )}
-              </div>
-            </Link>
-          </div>
-          <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
-            <Link href={product.url} className="hover:text-[#d1182b] duration-300">
-              <h5 className="font-semibold sm:text-lg text-sm">{product.title}</h5>
-            </Link>
-            {
-              product.summary &&
-              <ExpandableText text={product.summary} />
-            }
-          </div>
-          <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
-            <div className="flex flex-col w-full h-full">
-              <PriceProduct product={product} />
-              <div className="flex items-center py-2">
-                <img src="/images/icons/benchmark.png" alt="" />
-                <span className="px-1"> مقایسه محصول </span>
-              </div>
-              <div className="flex items-center py-2">
-                <img src="/images/icons/fast-delivery-2.png" alt="" />
-                <span className="px-1"> ضمانت اصل بودن کالا </span>
-              </div>
-              <div className="flex items-center gap-3 mb-2">
-                {product.fastShipping && (
-                  <div className="flex items-center py-2 ">
-                    <FaTruckFast className="text-lg text-[#898989]" />
-                    <span className="px-1 font-semibold"> ارسال سریع </span>
+          {/* موبایل: چیدمان افقی */}
+          <div className="lg:hidden w-full">
+            <div className="flex gap-3 p-3">
+              {/* تصویر محصول */}
+              <div className="relative flex-shrink-0">
+                <Link href={product.url} className="relative">
+                  <div className="relative overflow-hidden rounded-lg group">
+                    <Image
+                      className="object-contain rounded-lg w-24 h-24 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                      src={getImageUrl2(product.image)}
+                      alt={product.title}
+                      width={96}
+                      height={96}
+                      priority={false}
+                      unoptimized
+                    />
+                    {product.discount !== 0 && (
+                      <span className="absolute top-1 right-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm text-white text-xs font-bold">
+                        {product.discount}٪
+                      </span>
+                    )}
                   </div>
-                )}
-                {product.freeShipping && (
-                  <div className="flex items-center py-2">
-                    <FaTruck className="text-lg text-[#898989]" />
-                    <span className="px-1 font-semibold"> ارسال رایگان </span>
-                  </div>
-                )}
+                </Link>
               </div>
-              {product.conditionId === 20 && (
-                <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
-                  <FaRecycle className="ml-1.5" />
-                  <span className="font-semibold px-1">کالای کارکرده</span>
+
+              {/* اطلاعات محصول */}
+              <div className="flex-grow">
+                <Link href={product.url} className="hover:text-[#d1182b] duration-300">
+                  <h5 className="font-semibold text-sm line-clamp-2 mb-1">{product.title}</h5>
+                </Link>
+                <PriceProduct product={product} />
+                <div className="flex items-center gap-2 mt-1">
+                  {product.fastShipping && (
+                    <div className="flex items-center text-xs">
+                      <FaTruckFast className="text-[#898989] ml-1" />
+                      <span className="text-[#666]">ارسال سریع</span>
+                    </div>
+                  )}
+                  {product.freeShipping && (
+                    <div className="flex items-center text-xs">
+                      <FaTruck className="text-[#898989] ml-1" />
+                      <span className="text-[#666]">ارسال رایگان</span>
+                    </div>
+                  )}
                 </div>
-              )}
-              {!product.canAddCart && (
-                <div className="mt-2">
-                  <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
-                    <FaCartShopping className="text-[#333]" />
-                    <span className="text-[#666]">{product.statusDesc}</span>
-                  </button>
-                </div>
-              )}
-              {product.canAddCart && (
-                <div className="mt-2 flex flex-col gap-2">
+              </div>
+            </div>
+
+            {/* دکمه‌های عملیات */}
+            <div className="px-3 pb-3">
+              {!product.canAddCart ? (
+                <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm text-sm">
+                  <FaCartShopping className="text-[#333]" />
+                  <span className="text-[#666]">{product.statusDesc}</span>
+                </button>
+              ) : (
+                <div className="flex flex-col gap-2">
                   <AddToCartButton productId={product.productId} />
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* دسکتاپ: چیدمان اصلی */}
+          <div className="hidden lg:flex w-full">
+            <div className="p-3 lg:w-1/3 w-full relative flex items-start justify-center">
+              <Link href={product.url} className="relative">
+                <div className="relative overflow-hidden rounded-lg group">
+                  <Image
+                    className="object-contain rounded-lg w-48 h-48 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                    src={getImageUrl2(product.image)}
+                    alt={product.title}
+                    width={200}
+                    height={200}
+                    priority={false}
+                    unoptimized
+                  />
+                  {product.discount !== 0 && (
+                    <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                      {product.discount}٪
+                    </span>
+                  )}
+                </div>
+              </Link>
+            </div>
+            <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
+              <Link href={product.url} className="hover:text-[#d1182b] duration-300">
+                <h5 className="font-semibold sm:text-lg text-sm">{product.title}</h5>
+              </Link>
+              {product.summary && <ExpandableText text={product.summary} />}
+            </div>
+            <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
+              <div className="flex flex-col w-full h-full">
+                <PriceProduct product={product} />
+                <div className="flex items-center py-2">
+                  <img src="/images/icons/benchmark.png" alt="" />
+                  <span className="px-1"> مقایسه محصول </span>
+                </div>
+                <div className="flex items-center py-2">
+                  <img src="/images/icons/fast-delivery-2.png" alt="" />
+                  <span className="px-1"> ضمانت اصل بودن کالا </span>
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  {product.fastShipping && (
+                    <div className="flex items-center py-2">
+                      <FaTruckFast className="text-lg text-[#898989]" />
+                      <span className="px-1 font-semibold"> ارسال سریع </span>
+                    </div>
+                  )}
+                  {product.freeShipping && (
+                    <div className="flex items-center py-2">
+                      <FaTruck className="text-lg text-[#898989]" />
+                      <span className="px-1 font-semibold"> ارسال رایگان </span>
+                    </div>
+                  )}
+                </div>
+                {product.conditionId === 20 && (
+                  <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                    <FaRecycle className="ml-1.5" />
+                    <span className="font-semibold px-1">کالای کارکرده</span>
+                  </div>
+                )}
+                {!product.canAddCart && (
+                  <div className="mt-2">
+                    <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
+                      <FaCartShopping className="text-[#333]" />
+                      <span className="text-[#666]">{product.statusDesc}</span>
+                    </button>
+                  </div>
+                )}
+                {product.canAddCart && (
+                  <div className="mt-2 flex flex-col gap-2">
+                    <AddToCartButton productId={product.productId} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
