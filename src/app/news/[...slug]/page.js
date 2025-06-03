@@ -43,6 +43,7 @@ export default async function BlogDetails(props) {
               id={id}
               comments={comments}
               totalCount={totalCount}
+              params={params}
             />
           </div>
         </Container>

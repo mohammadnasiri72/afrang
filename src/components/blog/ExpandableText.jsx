@@ -70,12 +70,12 @@ const ExpandableText = ({ text, linesToShow = 3, lineHeight = 1.5 }) => {
 
       {showToggle && (
         <div className="flex justify-center">
-          <button
+          {/* <button
             onClick={toggleExpand}
             className="bg-none border-none text-blue-600 cursor-pointer text-sm inline-block mt-1 hover:underline"
           >
             {isExpanded ? "کمتر" : "بیشتر"}
-          </button>
+          </button> */}
         </div>
       )}
     </div>

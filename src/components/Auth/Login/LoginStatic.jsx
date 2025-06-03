@@ -9,6 +9,7 @@ import { FaLock, FaUser } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { getImageUrl } from "@/utils/mainDomain";
+import { login } from "@/services/Account/AccountService";
 
 function LoginStatic({ setStateLogin, from }) {
   const [username, setUsername] = useState("");
@@ -63,30 +64,45 @@ function LoginStatic({ setStateLogin, from }) {
 
     setLoading(true);
     try {
-      const res = await authServiceStatic.login(username, password);
-      const userData = res.data;
-      Cookies.set("user", JSON.stringify(userData));
-
-      // بررسی مسیر ذخیره شده در localStorage
-      const redirectPath = localStorage.getItem('redirectAfterLogin');
-      if (redirectPath) {
-        localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
-        router.push(redirectPath);
-      } else if (!from) {
-        router.push("/");
-      } else {
-        if (from === 'card') {
-          router.push("/card/compeletePay");
-        }
-      }
-
-      Toast.fire({
-        icon: "success",
-        text: "با موفقیت وارد شدید",
-        customClass: {
-          container: "toast-modal",
-        },
+      const userData = await login({
+        username,
+        password,
+        remember: true,
       });
+      if (userData.token) {
+
+        Cookies.set("user", JSON.stringify(userData));
+  
+        // بررسی مسیر ذخیره شده در localStorage
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
+          router.push(redirectPath);
+        } else if (!from) {
+          router.push("/");
+        } else {
+          if (from === 'card') {
+            router.push("/card/compeletePay");
+          }
+        }
+  
+        Toast.fire({
+          icon: "success",
+          text: "با موفقیت وارد شدید",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      }else {
+        Toast.fire({
+          icon: "error",
+          text: userData.response?.data ? userData.response?.data : "خطای شبکه",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      }
+      
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -107,7 +123,7 @@ function LoginStatic({ setStateLogin, from }) {
           <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
             <div>
               <Link href="/">
-                <Image 
+                <Image
                   src={getImageUrl(
                     settings?.find((item) => item.propertyKey === "site_footer_logo")
                       ?.value

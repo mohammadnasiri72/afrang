@@ -40,22 +40,9 @@ function Loading({ fullScreen = false, navbar = false, slider = false }) {
 
   if (slider) {
     return (
-      <div className="w-full h-[400px] bg-gradient-to-b from-gray-50 to-gray-100 relative overflow-hidden">
-        {/* Shimmer effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer"></div>
-        
-        {/* Content skeleton */}
-        <div className="h-full flex flex-col items-center justify-center gap-4">
-          <div className="w-3/4 h-8 bg-gray-200 rounded-lg animate-pulse"></div>
-          <div className="w-1/2 h-4 bg-gray-200 rounded-lg animate-pulse"></div>
-          <div className="w-2/3 h-4 bg-gray-200 rounded-lg animate-pulse"></div>
-          
-          {/* Navigation dots skeleton */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-            <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse"></div>
-            <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse"></div>
-            <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse"></div>
-          </div>
+      <div className="w-full h-64 bg-gray-200 animate-pulse">
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-12 h-12 border-4 border-[#18d1be] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
     );

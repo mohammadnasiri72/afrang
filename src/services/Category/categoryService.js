@@ -12,13 +12,19 @@ const Toast = Swal.mixin({
     customClass: "toast-modal",
 });
 
-export const getCategory = async () => {
+// اضافه کردن تاخیر مصنوعی
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+export const getCategory = async (params) => {
+    // اضافه کردن تاخیر 3 ثانیه‌ای
+    // await delay(3000);
+    
     try {
-        const params = {
-            TypeId: 4,
-            LangCode: "fa",
-            IsHome: 1,
-        };
+        // const params = {
+        //     TypeId: 4,
+        //     LangCode: "fa",
+        //     IsHome: 1,
+        // };
 
         const response = await axios.get(`${mainDomain}/api/Category`, {
             params,

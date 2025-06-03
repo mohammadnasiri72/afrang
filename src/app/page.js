@@ -1,8 +1,7 @@
-import dynamic from 'next/dynamic';
-import { getBlogs } from "@/services/blogs/blogService";
 import { getCategory } from "@/services/Category/categoryService";
 import { getItem } from "@/services/Item/item";
 import { getProductAction, getProductListId, getProducts } from "@/services/products/productService";
+import dynamic from 'next/dynamic';
 
 const SliderHome = dynamic(() => import("@/components/home/SliderHome"));
 const EidDiscount = dynamic(() => import("@/components/home/EidDiscount"));
@@ -14,7 +13,18 @@ const ArticleHeader = dynamic(() => import("@/components/home/ArticleHeader"));
 const ArticleSlider = dynamic(() => import("@/components/home/ArticleSlider"));
 
 export default async function Home() {
-  const { items: blogs } = await getBlogs();
+  const blogs = await getItem(
+    {
+      TypeId: 5,
+      LangCode: "fa",
+      PageSize: 12,
+      PageIndex: 1,
+      OrderBy: 1,
+    }
+  );
+
+  console.log(blogs);
+  
 
   const newProducts = await getProducts({
     page: 1,
@@ -42,7 +52,13 @@ export default async function Home() {
     ids: actionProducts[0]?.productIds || []
   });
   
-  const category = await getCategory();
+  const category = await getCategory(
+    {
+      TypeId: 4,
+      LangCode: "fa",
+      IsHome: 1,
+    }
+  );
 
   return (
     <div className="bg-[#f6f6f6] overflow-hidden">

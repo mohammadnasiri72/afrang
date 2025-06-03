@@ -48,7 +48,7 @@ export default function CameraAccessories({ category }) {
                       <div className="w-[50px] h-[50px] flex items-center justify-center">
                         <img
                           src={getImageUrl(item.image)}
-                          alt={'🚫'}
+                          alt={item.title}
                           className="w-[50px] h-[50px]"
                         />
                       </div>

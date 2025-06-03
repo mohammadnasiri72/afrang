@@ -2,10 +2,12 @@
 import { Divider } from "antd";
 import React, { useState } from "react";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import Image from "next/image";
 
 // import required modules
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { getImageUrl } from "@/utils/mainDomain";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -27,33 +29,43 @@ Fancybox.bind("[data-fancybox='gallery2']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-function BoxImageGallery() {
+function BoxImageGallery({ imageData }) {
   const [liked, setLiked] = useState(false);
+
+  console.log(imageData);
+  
   return (
     <>
-      <div className="lg:w-1/4 sm:w-1/2 w-full p-2 ">
-        <div className="bg-white p-2 rounded-sm box-circl">
-          <div className="cursor-pointer relative overflow-hidden ">
-            <img
+      <div className="lg:w-1/4 sm:w-1/2 w-full p-2">
+        <div className="bg-white p-2 rounded-sm box-circl z-50 relative">
+          <div className="cursor-pointer relative overflow-hidden">
+            <a
               data-fancybox="gallery2"
-              data-caption="5456"
-              className="w-full "
-              src="/images/gallery/pic-1.jpg"
-              alt=""
-            />
-            <div className="bg-[#fff3] duration-1000 absolute left-1/2 top-1/2 rounded-full -translate-x-1/2 -translate-y-1/2 circl"></div>
+              data-caption={imageData.title}
+              href={getImageUrl(imageData.image)}
+              className="block relative w-full h-[200px]"
+            >
+              <Image
+                src={getImageUrl(imageData.image)}
+                alt={imageData.title}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-white/30 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
           </div>
 
           <div className="my-3 flex items-center text-xs p-2">
             <span>فرستنده : </span>
-            <span className="font-semibold px-1">علیرضا ریاحی</span>
+            <span className="font-semibold px-1">{imageData.title || 'نامشخص'}</span>
           </div>
           <Divider
             style={{ margin: 0, padding: 0, borderColor: "#d1182b55" }}
           />
           <div className="flex justify-between items-center px-1 py-2 mt-2">
             <div className="flex items-center text-xs">
-              <span className="font-bold">134</span>
+              <span className="font-bold">{imageData.visit || 0}</span>
               <span className="px-1">بازدید</span>
             </div>
             <div

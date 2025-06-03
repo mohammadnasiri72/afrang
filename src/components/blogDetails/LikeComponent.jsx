@@ -81,7 +81,7 @@ const LikeComponent = ({ blog }) => {
                 </button>
                 <span className="text-[#18304a]">|</span>
                 <span className="px-2 text-[#18304a]">
-                    تعداد پسندیده شده ها: {likeCount}
+                    تعداد پسندیده شده ها: {isLiked ? Number(blog.score) + 1 : blog.score}
                 </span>
             </div>
         </>

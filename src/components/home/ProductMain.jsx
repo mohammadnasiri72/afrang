@@ -69,7 +69,7 @@ export default function ProductMain({ products }) {
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain flex items-center justify-center"
                       style={{ filter: " brightness(0.95)" }}
                       src={getImageUrl2(product.image)}
-                      alt={'🚫'}
+                      alt={product.title}
                     />
                   </Link>
                   <div className="p-4">

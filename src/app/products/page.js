@@ -81,7 +81,13 @@ export default async function ProductList({ searchParams }) {
   }
 
   // اگر searchParams نداشته باشیم، دسته‌بندی‌ها را نمایش می‌دهیم
-  const categories = await getCategory();
+  const categories = await getCategory(
+    {
+      TypeId: 4,
+      LangCode: "fa",
+      IsHome: 1,
+    }
+  );
 
 
   return (
@@ -119,7 +125,7 @@ export default async function ProductList({ searchParams }) {
                     <div className="flex flex-col items-center text-center">
                       {category.image && (
                         <div className="bg-gray-600 p-10 rounded-full mb-4 group-hover:bg-[#d1182b] transition-colors duration-300 shadow-sm flex items-center justify-center">
-                          <Image 
+                          <Image
                             src={getImageUrl(category.image)}
                             alt={category.title}
                             width={64}

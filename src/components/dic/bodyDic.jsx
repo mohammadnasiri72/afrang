@@ -45,7 +45,7 @@ export default function BodyDic({dics}) {
                             {items.map((item) => (
                                 <Link 
                                     key={item.id}
-                                    href={item.url+`?id=${item.id}`}
+                                    href={item.url}
                                     className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 group transition-colors duration-200 block"
                                 >
                                     <div className="w-full text-right flex items-center gap-2 text-gray-900 group-hover:text-[#18d1be] transition-colors duration-200">

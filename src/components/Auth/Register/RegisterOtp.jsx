@@ -1,4 +1,4 @@
-import { authServiceSendOtp } from "@/services/Auth/authService";
+import { RegisterSendOtp } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
@@ -49,15 +49,29 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
     } else {
       setLoading(true);
       try {
-        const res = await authServiceSendOtp.Register(mobile);
-        setStateRegister(2);
-        Toast.fire({
-          icon: "success",
-          text: "کد ارسال شد",
-          customClass: {
-            container: "toast-modal",
-          },
-        });
+        const res = await RegisterSendOtp(mobile);
+        if (!res) {
+          
+          setStateRegister(2);
+          Toast.fire({
+            icon: "success",
+            text: "کد ارسال شد",
+            customClass: {
+              container: "toast-modal",
+            },
+          });
+        }else {
+          Toast.fire({
+            icon: "error",
+            text: res.response?.data ? res.response?.data : "خطای شبکه",
+            customClass: {
+              container: "toast-modal",
+            },
+          });
+        }
+
+
+
       } catch (err) {
         Toast.fire({
           icon: "error",

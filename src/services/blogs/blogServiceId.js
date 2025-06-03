@@ -40,3 +40,28 @@ export const getBlogsId = async (id) => {
     throw error;
   }
 };
+
+
+export const getBlogsByUrl = async (url) => {
+ 
+    
+  try {
+    const response = await axios.get(`${mainDomain}/api/Item/findByUrl`, {
+      params: {
+        url,
+        langCode: "fa"
+      }
+    });
+
+   return response.data;
+   
+  } catch (error) {
+    console.error('خطای کامل در درخواست:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
+    throw error;
+  }
+};

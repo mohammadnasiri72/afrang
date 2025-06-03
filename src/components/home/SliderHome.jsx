@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 import { fetchSliderItems } from "@/services/sliderService";
-import Loading from "@/components/Loading";
+import { Skeleton } from "antd";
 
 const SliderHome = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -54,7 +54,15 @@ const SliderHome = () => {
   };
 
   if (loading) {
-    return <Loading slider={true} />;
+    return (
+      <div className="w-full h-64 relative bg-gray-200 flex items-center justify-center">
+        <div className=" bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          <Skeleton.Button active size="small" shape="circle" />
+          <Skeleton.Button active size="small" shape="circle" />
+          <Skeleton.Button active size="small" shape="circle" />
+        </div>
+      </div>
+    );
   }
 
   return (

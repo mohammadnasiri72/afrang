@@ -1,3 +1,4 @@
+import { loginOtp } from "@/services/Account/AccountService";
 import { authServiceOtp } from "@/services/Auth/authService";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Alert, Spin } from "antd";
@@ -88,36 +89,52 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     setLoading(true);
     try {
       const englishCode = digits.map((d) => toEnglishNumber(d)).join("");
-      const res = await authServiceOtp.login(mobile, englishCode);
-      const userData = res.data;
-
-      // تنظیم کوکی با زمان انقضا
-      Cookies.set("user", JSON.stringify(userData), {
-        expires: new Date(userData.expiration),
-        secure: true,
-        sameSite: 'strict'
+      const userData = await loginOtp({
+        mobile,
+        code: englishCode,
       });
 
-      // بررسی مسیر ذخیره شده در localStorage
-      const redirectPath = localStorage.getItem('redirectAfterLogin');
-      if (redirectPath) {
-        localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
-        router.push(redirectPath);
-      } else if (!from) {
-        router.push("/");
-      } else {
-        if (from === 'card') {
-          router.push("/cart/infosend");
+      console.log(userData);
+
+      if (userData.token) {
+
+        // تنظیم کوکی با زمان انقضا
+        Cookies.set("user", JSON.stringify(userData), {
+          expires: new Date(userData.expiration),
+          secure: true,
+          sameSite: 'strict'
+        });
+
+        // بررسی مسیر ذخیره شده در localStorage
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
+          router.push(redirectPath);
+        } else if (!from) {
+          router.push("/");
+        } else {
+          if (from === 'card') {
+            router.push("/cart/infosend");
+          }
         }
+
+        Toast.fire({
+          icon: "success",
+          text: "با موفقیت وارد شدید",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          text: userData.response?.data ? userData.response?.data : "کد وارد شده اشتباه است",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
       }
 
-      Toast.fire({
-        icon: "success",
-        text: "با موفقیت وارد شدید",
-        customClass: {
-          container: "toast-modal",
-        },
-      });
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -228,8 +245,8 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                   disabled={loading || !digits.every((digit) => digit !== "")}
                   onClick={submitLogin}
                   className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading || !digits.every((digit) => digit !== "")
-                      ? "cursor-not-allowed"
-                      : "cursor-pointer"
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
                     }`}
                 >
                   {loading ? (

@@ -1,14 +1,16 @@
 import Container from "@/components/container";
-import { getItem, getItemById } from '@/services/Item/item';
 import { Breadcrumb } from "antd";
 import Link from "next/link";
+import { getItemByUrl } from "@/services/Item/item";
 
-export default async function DicItemPage({  searchParams }) {
-    const itemId = parseInt(searchParams.id);
+export default async function DicItemPage({ params }) {
+    const { slug } = params;
+    const encodedUrl = `/dic/${slug.join('/')}`;
+    const url = decodeURIComponent(encodedUrl);
+
 
     // Get all dictionary items
-    const dic = await getItemById(itemId);
-
+    const dic = await getItemByUrl(url);
 
     if (!dic) {
         return (

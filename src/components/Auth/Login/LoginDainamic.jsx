@@ -1,3 +1,4 @@
+import { loginSendOtp } from "@/services/Account/AccountService";
 import { authServiceSendOtp } from "@/services/Auth/authService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
@@ -49,15 +50,28 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
     } else {
       setLoading(true);
       try {
-        const res = await authServiceSendOtp.login(mobile);
-        setStateLogin(3);
-        Toast.fire({
-          icon: "success",
-          text: "کد ارسال شد",
-          customClass: {
-            container: "toast-modal",
-          },
-        });
+        const res = await loginSendOtp(mobile);
+        console.log(res);
+        
+        if (!res) {
+          setStateLogin(3);
+          Toast.fire({
+            icon: "success",
+            text: "کد ارسال شد",
+            customClass: {
+              container: "toast-modal",
+            },
+          });
+          
+        }else{
+          Toast.fire({
+            icon: "error",
+            text: res.response?.data ? res.response?.data : "خطای شبکه",
+            customClass: {
+              container: "toast-modal",
+            },
+          });
+        }
       } catch (err) {
         Toast.fire({
           icon: "error",

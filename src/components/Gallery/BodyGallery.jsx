@@ -1,12 +1,19 @@
 "use client";
 
-import { Pagination, Rate } from "antd";
-import { useState } from "react";
+import { Pagination, Rate, message, Spin } from "antd";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { FaEye, FaRegUser, FaTelegram } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { LuCalendarRange } from "react-icons/lu";
 import Container from "../container";
 import BoxImageGallery from "./BoxImageGallery";
+import { getImageUrl } from "@/utils/mainDomain";
+import Image from "next/image";
+import moment from "moment-jalaali";
+import { getItem, itemVisit } from '@/services/Item/item';
+import { getUserCookie } from "@/utils/cookieUtils";
+import { postLike, postLiked } from "@/services/UserActivity/UserActivityService";
+import { useRouter } from "next/navigation";
 
 // import required modules
 import { Fancybox } from "@fancyapps/ui";
@@ -32,67 +39,176 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-function BodyGallery() {
+function BodyGallery({ ImagesData }) {
   const [liked, setLiked] = useState(false);
-  const [imgSelected, setImgSelected] = useState({
-    id: 1,
-    title: "img1",
-    src: "/images/gallery/gallery-1.jpg",
-  });
+  const [imgSelected, setImgSelected] = useState(ImagesData?.[0] || null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPageImages, setNextPageImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [totalItems, setTotalItems] = useState(0);
+  const [token, setToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const galleryArr = [
-    { id: 1, title: "img1", src: "/images/gallery/gallery-1.jpg" },
-    { id: 2, title: "img2", src: "/images/gallery/nature11.webp" },
-    { id: 3, title: "img3", src: "/images/gallery/nature22.webp" },
-    { id: 4, title: "img4", src: "/images/gallery/nature33.webp" },
-    { id: 5, title: "img5", src: "/images/gallery/gallery-1.jpg" },
-    { id: 6, title: "img6", src: "/images/gallery/gallery-1.jpg" },
-    { id: 7, title: "img7", src: "/images/gallery/gallery-1.jpg" },
-    { id: 8, title: "img8", src: "/images/gallery/gallery-1.jpg" },
-    { id: 9, title: "img9", src: "/images/gallery/gallery-1.jpg" },
-    { id: 10, title: "img10", src: "/images/gallery/gallery-1.jpg" },
-    { id: 11, title: "img11", src: "/images/gallery/gallery-1.jpg" },
-    { id: 12, title: "img12", src: "/images/gallery/gallery-1.jpg" },
-    { id: 13, title: "img13", src: "/images/gallery/gallery-1.jpg" },
-    { id: 14, title: "img14", src: "/images/gallery/gallery-1.jpg" },
-    { id: 15, title: "img15", src: "/images/gallery/gallery-1.jpg" },
-    { id: 16, title: "img16", src: "/images/gallery/gallery-1.jpg" },
-  ];
+  const handleImageVisit = async (id) => {
+    const url = window.location.href;
+    const userAgent = navigator.userAgent;
+    
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      const ip = data.ip;
+      itemVisit(id, url, ip, userAgent);
+    } catch (error) {
+      console.error('Error fetching IP:', error);
+    }
+  };
+
+  useEffect(() => {
+    const userData = getUserCookie();
+    setToken(userData?.token || null);
+  }, []);
+
+  useEffect(() => {
+    if (token && imgSelected) {
+      checkLikeStatus();
+      handleImageVisit(imgSelected.id);
+    }
+  }, [token, imgSelected]);
+
+  const checkLikeStatus = async () => {
+    try {
+      const response = await postLiked(imgSelected.id, token);
+      setLiked(response);
+    } catch (error) {
+      console.error("Error checking like status:", error);
+    }
+  };
+
+  const handleLike = async () => {
+    if (!token) {
+      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      router.push('/login');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await postLike(imgSelected.id, token);
+      setLiked(!liked);
+      
+      message.success({
+        content: liked ? "تصویر از علاقه‌مندی‌ها حذف شد" : "تصویر به علاقه‌مندی‌ها اضافه شد",
+        duration: 3,
+        className: 'custom-success-message'
+      });
+    } catch (error) {
+      message.error({
+        content: error.response?.data || "خطای شبکه",
+        duration: 3,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchNextPage = async (page) => {
+    try {
+      setLoading(true);
+      const nextPageData = await getItem({
+        TypeId: 9,
+        LangCode: 'fa',
+        OrderBy: 9,
+        PageSize: 16,
+        PageIndex: page + 1 // صفحه اول: 2 (آیتم‌های 17-32)، صفحه دوم: 3 (آیتم 33)
+      });
+      
+      if (nextPageData && nextPageData.length > 0) {
+        setNextPageImages(nextPageData);
+        
+        // استفاده از total از خود آبجکت دیتا
+        if (nextPageData[0]?.total) {
+          const totalItems = nextPageData[0].total - 16; // کم کردن 16 آیتم اول
+          setTotalItems(totalItems);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching next page:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNextPage(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const formatPersianDate = (dateString) => {
+    try {
+      const persianMonths = [
+        'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+        'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+      ];
+      
+      const date = moment(dateString);
+      const day = date.jDate();
+      const month = persianMonths[date.jMonth()];
+      const year = date.jYear();
+      
+      return `${day} ${month} ${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'نامشخص';
+    }
+  };
 
   const handleNext = () => {
-    const currentIndex = galleryArr.findIndex(
+    const currentIndex = ImagesData.findIndex(
       (obj) => obj.id === imgSelected.id
     );
-    const nextIndex = (currentIndex + 1) % galleryArr.length; // برای بازگشت به اولین آبجکت در صورت رسیدن به انتها
-    setImgSelected(galleryArr[nextIndex]);
+    const nextIndex = (currentIndex + 1) % ImagesData.length;
+    setImgSelected(ImagesData[nextIndex]);
   };
+
   const handlePrev = () => {
-    const currentIndex = galleryArr.findIndex(
+    const currentIndex = ImagesData.findIndex(
       (obj) => obj.id === imgSelected.id
     );
-    const prevIndex =
-      (currentIndex - 1 + galleryArr.length) % galleryArr.length;
-    setImgSelected(galleryArr[prevIndex]);
+    const prevIndex = (currentIndex - 1 + ImagesData.length) % ImagesData.length;
+    setImgSelected(ImagesData[prevIndex]);
   };
+
+  console.log(ImagesData);
+  
 
   return (
     <>
       <Container>
         <div className="flex lg:flex-nowrap flex-wrap gap-3">
           <div className="rounded-sm bg-white p-4 flex items-center lg:w-5/12 w-full">
-            
-            {galleryArr
-              
-              .map((item) => (
-                <a key={item.id}
-                className={item.id === imgSelected.id ? 'w-full' : 'hidden'}
-                href={item.src}
+            {ImagesData?.map((item) => (
+              <a
+                key={item.id}
+                className={item.id === imgSelected?.id ? 'w-full' : 'hidden'}
+                href={getImageUrl(item.image)}
                 data-fancybox="gallery"
-                data-caption={item.id}
+                data-caption={item.title}
               >
-                <img className="w-full" src={item.src} />
+                <div className="relative w-full h-[400px]">
+                  <Image
+                    src={getImageUrl(item.image)}
+                    alt={item.title}
+                    fill
+                    className="object-contain"
+                    unoptimized
+                  />
+                </div>
               </a>
-              ))}
+            ))}
           </div>
           <div className="rounded-sm bg-white p-4  lg:w-7/12 w-full relative">
             <div className="flex flex-wrap sm:flex-nowrap justify-between px-2 items-center sm:mt-3 mt-0 sm:flex-row flex-col-reverse">
@@ -100,17 +216,21 @@ function BodyGallery() {
                 عکس های برتر بر اساس لایک کاربران
               </h3>
               <div
-                onClick={() => {
-                  setLiked((e) => !e);
-                }}
+                onClick={handleLike}
                 className="bg-[#d1182b] rounded-sm px-3 py-1 flex items-center text-white cursor-pointer mr-auto sm:mr-0"
               >
-                {liked ? (
-                  <IoMdHeart className="text-lg" />
+                {isLoading ? (
+                  <Spin size="small" />
                 ) : (
-                  <IoMdHeartEmpty className="text-lg" />
+                  <>
+                    {liked ? (
+                      <IoMdHeart className="text-lg" />
+                    ) : (
+                      <IoMdHeartEmpty className="text-lg" />
+                    )}
+                    <span className="text-xl font-semibold pr-1">{imgSelected?.score || 0}</span>
+                  </>
                 )}
-                <span className="text-xl font-semibold pr-1">23</span>
               </div>
             </div>
             <div className="flex sm:flex-row flex-col justify-center sm:justify-start sm:gap-3 gap-0 items-center sm:flex-nowrap flex-wrap mt-5">
@@ -121,57 +241,49 @@ function BodyGallery() {
               <Rate
                 style={{ direction: "ltr", color: "#18d1be" }}
                 defaultValue={2}
-                // character={({ index = 0 }) => customIcons[index + 1]}
               />
             </div>
             <div className="flex flex-wrap sm:flex-nowrap items-center mt-5 gap-7">
               <div className="flex items-center gap-2 sm:w-auto w-full">
                 <FaEye className="text-[#444]" />
                 <span className="text-[#444]">بازدیدکنندگان :</span>
-                <span className="font-semibold text-[16px]"> ۱۳۴ نفر </span>
+                <span className="font-semibold text-[16px]"> {imgSelected?.visit || 0} نفر </span>
               </div>
               <div className="flex items-center gap-2 sm:w-auto w-full">
                 <FaRegUser className="text-[#444]" />
                 <span className="text-[#444]">فرستنده :</span>
-                <span className="font-semibold text-[16px]"> علیرضا ریاحی</span>
+                <span className="font-semibold text-[16px]"> {imgSelected?.title || 'نامشخص'}</span>
               </div>
               <div className="flex items-center gap-2 sm:w-auto w-full">
                 <LuCalendarRange className="text-[#444]" />
                 <span className="text-[#444]">زمان عکاسی :</span>
-                <span className="font-semibold text-[16px]">۲۳ اسفند ۱۴۰۰</span>
+                <span className="font-semibold text-[16px]">{imgSelected?.created ? formatPersianDate(imgSelected.created) : 'نامشخص'}</span>
               </div>
             </div>
             <div className="mt-10 flex items-center gap-4">
-              <span className="text-[#312e42] text-[14px]">نام دوربین :</span>
-              <span className="font-bold">Nikon D70</span>
-              <img
-                className="w-16"
-                src="/images/gallery/camera-thumb-5.png"
-                alt=""
-              />
-            </div>
-            <div className="mt-10 flex items-center gap-4">
-              <span className="text-[#312e42] text-[14px]">نوع لنز :</span>
-              <span className="font-bold">
-                Nikon AF-S DX 18-105mm f/3.5-5.6 G ED VR
-              </span>
+              <span className="text-[#312e42] text-[14px]">دسته‌بندی :</span>
+              <span className="font-bold">{imgSelected?.categoryTitle || 'نامشخص'}</span>
             </div>
             <div className="flex flex-wrap sm:flex-nowrap justify-between px-2 items-center mt-10">
               <div className="flex items-center gap-3 sm:w-auto w-full sm:justify-start justify-between">
                 <div
-                  onClick={() => {
-                    setLiked((e) => !e);
-                  }}
+                  onClick={handleLike}
                   className="flex items-center rounded-sm bg-[#f9e3e5] text-[#d1182b] px-3 py-3 cursor-pointer duration-300 hover:bg-[#d1182b] hover:text-[#fff]"
                 >
-                  {liked ? (
-                    <IoMdHeart className="text-lg" />
+                  {isLoading ? (
+                    <Spin size="small" />
                   ) : (
-                    <IoMdHeartEmpty className="text-lg" />
+                    <>
+                      {liked ? (
+                        <IoMdHeart className="text-lg" />
+                      ) : (
+                        <IoMdHeartEmpty className="text-lg" />
+                      )}
+                      <span className="whitespace-nowrap pr-1 font-bold text-sm">
+                        لایک
+                      </span>
+                    </>
                   )}
-                  <span className="whitespace-nowrap pr-1 font-bold text-sm">
-                    لایک
-                  </span>
                 </div>
                 <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                   <FaTelegram className="text-lg" />
@@ -198,7 +310,7 @@ function BodyGallery() {
           </div>
         </div>
         <div className="flex flex-wrap">
-          {galleryArr.map((item) => (
+          {ImagesData?.map((item) => (
             <div
               key={item.id}
               className="lg:w-[12.5%] md:w-1/6 sm:w-1/3 w-1/2 p-2"
@@ -208,12 +320,20 @@ function BodyGallery() {
                   setImgSelected(item);
                 }}
                 className={`bg-white rounded-sm border-4 shadow-lg cursor-pointer ${
-                  imgSelected.id === item.id
+                  imgSelected?.id === item.id
                     ? "border-[#d1182b]"
                     : "border-white"
                 }`}
               >
-                <img src={item.src} alt="" />
+                <div className="relative w-full h-[150px]">
+                  <Image
+                    src={getImageUrl(item.image)}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -221,33 +341,35 @@ function BodyGallery() {
 
         <div className="sm:px-4 mt-20">
           <div className="sm:hidden flex justify-center items-center pb-10">
-            <div className="sm:hidden flex  items-center title-newProduct relative">
-              <h2 className="font-semibold text-xl ">
+            <div className="sm:hidden flex items-center title-newProduct relative">
+              <h2 className="font-semibold text-xl">
                 تصاویری که بیشترین لایک را داشته اند
               </h2>
             </div>
           </div>
-          <div className=" flex justify-between items-center ">
+          <div className="flex justify-between items-center">
             <div className="sm:flex hidden items-center title-newProduct relative">
-              <h2 className="font-semibold text-xl ">
+              <h2 className="font-semibold text-xl">
                 تصاویری که بیشترین لایک را داشته اند
               </h2>
             </div>
           </div>
         </div>
         <div className="flex flex-wrap mt-10">
-          {new Array(16).fill(null).map((item, index) => (
-            <BoxImageGallery key={index} />
+          {nextPageImages.map((item) => (
+            <BoxImageGallery key={item.id} imageData={item} />
           ))}
         </div>
-        <div className="my-10">
+        <div className="my-10 z-50 relative">
           <Pagination
             style={{ direction: "ltr" }}
             align="center"
-            defaultCurrent={1}
-            total={76}
-            defaultPageSize={20}
+            current={currentPage}
+            onChange={handlePageChange}
+            total={totalItems}
+            pageSize={16}
             showSizeChanger={false}
+            loading={loading}
           />
         </div>
       </Container>

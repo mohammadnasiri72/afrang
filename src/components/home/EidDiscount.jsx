@@ -6,10 +6,11 @@ import ProductMain from "./ProductMain";
 import { useRouter } from "next/navigation";
 
 export default function EidDiscount({ actionProducts, products }) {
-  const defaultImage = "";
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const router = useRouter();
+
+ 
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories = products

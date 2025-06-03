@@ -1,6 +1,6 @@
+import { getCategory } from '@/services/Category/categoryService';
+import { getItem } from '@/services/Item/item';
 import dynamic from 'next/dynamic';
-import { getBlogsCat } from "@/services/blogs/blogCategory";
-import { getBlogs } from "@/services/blogs/blogService";
 const BoxImgBlog = dynamic(() => import('@/components/blog/BoxImgBlog'));
 const HeaderBlog = dynamic(() => import('@/components/blog/HeaderBlog'));
 
@@ -15,20 +15,25 @@ export default async function Blog(props) {
     ? parseInt(searchParams.pageSize)
     : 12;
 
-  const { items: category } = await getBlogsCat();
+  const category = await getCategory({
+    TypeId: 5,
+    LangCode: "fa",
+  });
 
-  const { items: blogs, totalCount } = await getBlogs(
-    page,
-    pageSize,
-    searchParams?.category
-  );
+  const blogs = await getItem({
+    TypeId: 5,
+    LangCode: "fa",
+    PageSize: pageSize,
+    PageIndex: page,
+    CategoryIdArray: searchParams?.category,
+    OrderBy: searchParams?.orderBy
+  });
+
 
   return (
     <>
       <div className="bg-[#f6f6f6] overflow-hidden">
         <HeaderBlog
-          page={page}
-          pageSize={pageSize}
           searchParams={searchParams}
           category={category}
           blogs={blogs}
@@ -39,7 +44,7 @@ export default async function Blog(props) {
           searchParams={searchParams}
           category={category}
           blogs={blogs}
-          totalCount={totalCount}
+          totalCount={blogs[0]?.total}
         />
       </div>
     </>

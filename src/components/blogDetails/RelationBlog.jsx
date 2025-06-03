@@ -1,47 +1,38 @@
-import { getEndBlogs } from "@/services/blogs/blogService";
-import Link from "next/link";
+import { getItem } from "@/services/Item/item";
+import { getImageUrl } from "@/utils/mainDomain";
 import moment from "moment-jalaali";
 import Image from "next/image";
+import Link from "next/link";
 
 async function RelationBlog() {
-  const { items: blogs } = await getEndBlogs();
+  const blogs = await getItem({
+    TypeId: 5,
+    LangCode: "fa",
+    PageSize: 3,
+    PageIndex: 1
+  });
+
+  console.log(blogs);
   
-  const convertPersianToEnglish = (str) => {
-    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    
-    return str.split('').map(char => {
-      const index = persianNumbers.indexOf(char);
-      return index !== -1 ? englishNumbers[index] : char;
-    }).join('');
-  };
 
   const formatPersianDate = (dateString) => {
     try {
-      // تبدیل اعداد فارسی به انگلیسی
-      const englishDateString = convertPersianToEnglish(dateString);
-      // تبدیل رشته تاریخ به آبجکت moment
-      const [year, month, day] = englishDateString.split('/').map(Number);
-      
-      // ساخت تاریخ شمسی
-      const date = moment()
-        .jYear(year)
-        .jMonth(month - 1)
-        .jDate(day);
-      
-      // تبدیل به فرمت مورد نظر با استفاده از آرایه ماه‌های فارسی
       const persianMonths = [
         'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
         'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
       ];
-      
-      return `${date.jDate()} ${persianMonths[date.jMonth()]} ${date.jYear()}`;
+
+      const date = moment(dateString);
+      const day = date.jDate();
+      const month = persianMonths[date.jMonth()];
+      const year = date.jYear();
+
+      return `${day} ${month} ${year}`;
     } catch (error) {
       console.error('Error formatting date:', error);
-      return dateString; // در صورت خطا، تاریخ اصلی برگردانده می‌شود
+      return dateString;
     }
   };
-
   return (
     <>
       <div className="lg:w-1/4 w-full p-2 z-50 relative">
@@ -57,7 +48,7 @@ async function RelationBlog() {
                   <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
                     <Image
                       className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-cover"
-                      src={blog.img}
+                      src={getImageUrl(blog.image) || "/images/gallery/blog-img1.jpg"}
                       alt={blog.title}
                       width={224}
                       height={224}

@@ -1,5 +1,5 @@
 import { setUser } from "@/redux/slices/userSlice";
-import { authServiceOtp } from "@/services/Auth/authService";
+import { Register } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
@@ -105,18 +105,28 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
     setLoading(true);
 
     try {
-      const res = await authServiceOtp.register(data);
-      const userData = res.data;
-      Cookies.set("user", JSON.stringify(userData));
-      dispatch(setUser(userData));
-      router.push("/");
-      Toast.fire({
-        icon: "success",
-        text: "ثبت نام شما با موفقیت انجام شد",
-        customClass: {
-          container: "toast-modal",
-        },
-      });
+      const userData = await Register(data);
+
+      if (userData.token) {
+        Cookies.set("user", JSON.stringify(userData));
+        dispatch(setUser(userData));
+        router.push("/");
+        Toast.fire({
+          icon: "success",
+          text: "ثبت نام شما با موفقیت انجام شد",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          text: userData.response?.data ? userData.response?.data : "خطای شبکه",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      }
     } catch (err) {
       Toast.fire({
         icon: "error",
