@@ -43,37 +43,37 @@ import { mainDomain } from "@/utils/mainDomain";
 //   },
 // };
 
-export const authServiceSignOut = {
-  signOut: async (token) => {
-    return axios.post(mainDomain + "/api/Account/signOut", {} , {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  },
-};
+// export const authServiceSignOut = {
+//   signOut: async (token) => {
+//     return axios.post(mainDomain + "/api/Account/signOut", {} , {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//   },
+// };
 
-export const changePassword = async (data, token) => {
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/Account/ChangePassword`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(data)
-        });
+// export const changePassword = async (data, token) => {
+//     try {
+//         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/Account/ChangePassword`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`
+//             },
+//             body: JSON.stringify(data)
+//         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'خطا در تغییر رمز عبور');
-        }
+//         if (!response.ok) {
+//             const errorData = await response.json();
+//             throw new Error(errorData.message || 'خطا در تغییر رمز عبور');
+//         }
 
-        return await response.json();
-    } catch (error) {
-        throw error;
-    }
-};
+//         return await response.json();
+//     } catch (error) {
+//         throw error;
+//     }
+// };
 
 export const getUserProfile = async (token) => {
     try {

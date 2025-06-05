@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCart, getNextCart } from '@/services/cart/cartService';
 import { getUserId } from "@/utils/cookieUtils";
+import { getCart, getNextCart } from '@/services/cart/CartServices';
 
 // اکشن برای دریافت سبد خرید فعلی
 export const fetchCurrentCart = createAsyncThunk(

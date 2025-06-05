@@ -76,44 +76,44 @@ export const getWalletUser = async (token) => {
   }
 };
 
-export const changeUserPassword = async (data, token) => {
-  try {
-    // تبدیل داده‌ها به FormData
-    const formData = new FormData();
-    formData.append('CurrentPassword', data.currentPassword);
-    formData.append('NewPassword', data.newPassword);
-    formData.append('NewPassword2', data.confirmPassword);
+// export const changeUserPassword = async (data, token) => {
+//   try {
+//     // تبدیل داده‌ها به FormData
+//     const formData = new FormData();
+//     formData.append('CurrentPassword', data.currentPassword);
+//     formData.append('NewPassword', data.newPassword);
+//     formData.append('NewPassword2', data.confirmPassword);
 
-    const response = await axios.post(
-      `${mainDomain}/api/Account/ChangePassword`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    if (error.response?.data?.errors) {
-      const errors = error.response.data.errors;
-      const errorMessages = [];
+//     const response = await axios.post(
+//       `${mainDomain}/api/Account/ChangePassword`,
+//       formData,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         }
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     if (error.response?.data?.errors) {
+//       const errors = error.response.data.errors;
+//       const errorMessages = [];
 
-      if (errors.CurrentPassword) {
-        errorMessages.push(errors.CurrentPassword[0]);
-      }
-      if (errors.NewPassword) {
-        errorMessages.push(errors.NewPassword[0]);
-      }
-      if (errors.NewPassword2) {
-        errorMessages.push(errors.NewPassword2[0]);
-      }
+//       if (errors.CurrentPassword) {
+//         errorMessages.push(errors.CurrentPassword[0]);
+//       }
+//       if (errors.NewPassword) {
+//         errorMessages.push(errors.NewPassword[0]);
+//       }
+//       if (errors.NewPassword2) {
+//         errorMessages.push(errors.NewPassword2[0]);
+//       }
 
-      throw errorMessages.join(' | ') || 'خطا در تغییر رمز عبور';
-    }
-    throw error.response?.data || 'خطا در تغییر رمز عبور';
-  }
-};
+//       throw errorMessages.join(' | ') || 'خطا در تغییر رمز عبور';
+//     }
+//     throw error.response?.data || 'خطا در تغییر رمز عبور';
+//   }
+// };
 
 export const updateUserProfile = async (data, token) => {
   try {

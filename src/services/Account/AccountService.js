@@ -25,7 +25,6 @@ export const loginOtp = async (data) => {
     }
 };
 
-
 export const login = async (data) => {
     try {
         const response = await axios.post(`${mainDomain}/api/Account/login`, data);
@@ -46,7 +45,6 @@ export const RegisterSendOtp = async (mobile) => {
     }
 };
 
-
 export const Register = async (data) => {
     try {
 
@@ -54,5 +52,47 @@ export const Register = async (data) => {
         return response.data;
     } catch (err) {
         return err;
+    }
+};
+
+
+
+export const ResetPassword = async (data) => {
+    try {
+        const response = await axios.post(`${mainDomain}/api/Account/ResetPassword`, data);
+        return response.data;
+    } catch (err) {
+        return err;
+    }
+};
+
+
+export const ChangePassword = async (data, token) => {
+    const formData = new FormData();
+    formData.append('CurrentPassword', data.currentPassword);
+    formData.append('NewPassword', data.newPassword);
+    formData.append('NewPassword2', data.confirmPassword);
+    try {
+        const response = await axios.post(`${mainDomain}/api/Account/ChangePassword`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return { ok: true, message: response.data.message };
+    } catch (err) {
+        return { ok: false, message: err.response.data };
+    }
+};
+
+export const SignOut = async (token) => {
+    try {
+        const response = await axios.post(`${mainDomain}/api/Account/signOut`, {} , {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }   
+        });
+        return { ok: true, message: response.data };
+    } catch (err) {
+        return { ok: false, message: err.response.data };
     }
 };

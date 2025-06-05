@@ -7,6 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 import { fetchSliderItems } from "@/services/sliderService";
 import { Skeleton } from "antd";
+import { getItem } from "@/services/Item/item";
+import Swal from "sweetalert2";
 
 const SliderHome = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -14,18 +16,43 @@ const SliderHome = () => {
   const [loading, setLoading] = useState(true);
   const isRequested = useRef(false);
 
+
+  // import sweet alert 2
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
+
+
   useEffect(() => {
     const getSliderItems = async () => {
       if (isRequested.current) return;
       isRequested.current = true;
 
       try {
-        const items = await fetchSliderItems();
-        if (items) {
+        const items = await getItem({
+          TypeId: 6,
+          LangCode: "fa",
+        });
+        if (items.type === 'error') {
+          Toast.fire({
+            icon: "error",
+            text: items.message,
+          });
+          return;
+        }
+       else {
           setSliderItems(items);
         }
       } catch (error) {
-        console.error('Error fetching slider items:', error);
+        Toast.fire({
+          icon: "error",
+          text: error.response?.data ? error.response?.data : "خطای شبکه",
+        });
       } finally {
         setLoading(false);
       }
@@ -56,7 +83,7 @@ const SliderHome = () => {
   if (loading) {
     return (
       <div className="w-full h-64 relative bg-gray-200 flex items-center justify-center">
-        <div className=" bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        <div className="left-1/2 transform -translate-x-1/2 flex gap-2">
           <Skeleton.Button active size="small" shape="circle" />
           <Skeleton.Button active size="small" shape="circle" />
           <Skeleton.Button active size="small" shape="circle" />

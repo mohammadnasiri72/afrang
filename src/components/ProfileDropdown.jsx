@@ -1,6 +1,7 @@
 "use client";
 
 import { clearUser } from "@/redux/slices/userSlice";
+import { SignOut } from "@/services/Account/AccountService";
 import { authServiceSignOut } from "@/services/Auth/authService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl, mainDomain } from "@/utils/mainDomain";
@@ -63,6 +64,11 @@ const ProfileDropdown = () => {
   }, []);
 
   const LogoutHandler = async () => {
+
+
+
+
+    const user = JSON.parse(Cookies.get('user'));
     if (!user?.token) {
       resetUserCookie();
       dispatch(clearUser());
@@ -70,19 +76,35 @@ const ProfileDropdown = () => {
       return;
     }
 
+
+
+
+
+
+
+
+
     setLoading(true);
     try {
-      await authServiceSignOut.signOut(user.token);
-      resetUserCookie();
-      dispatch(clearUser());
-      setIsOpen(false);
-      router.replace("/");
+    const res =   await SignOut(user.token);
+
+      if (res.ok) {
+        resetUserCookie();
+        dispatch(clearUser());
+        setIsOpen(false);
+        router.replace("/");
+
+      }else{
+        Toast.fire({
+          icon: "error",
+          text: res.message || "خروج با مشکل مواجه شد",
+        });
+      }
     } catch (err) {
-      console.error("Logout error:", err);
-      resetUserCookie();
-      dispatch(clearUser());
-      setIsOpen(false);
-      router.replace("/");
+      Toast.fire({
+        icon: "error",
+        text: err.response.data || "خروج با مشکل مواجه شد",
+      });
     } finally {
       setLoading(false);
     }

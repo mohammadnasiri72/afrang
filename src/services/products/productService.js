@@ -18,11 +18,11 @@ export const getProducts = async (data) => {
       LangCode: "fa",  
       PageSize: data.pageSize,  
       PageIndex: data.page,    
+      OrderBy: data.orderBy || "2",
       ...(data.BrandId && { BrandId: data.BrandId }),   
       ...(data.CategoryId && { CategoryId: data.CategoryId }), 
       ...(data.price1 && data.price1 !== 0 && { Price1: data.price1 }), 
       ...(data.price2 && data.price2 !== 100000 && { Price2: data.price2 }), 
-      OrderBy: data.orderBy || "2",
       ...(data.OnlyPrice && { OnlyPrice: data.OnlyPrice }),
       ...(data.OnlyDiscount && { OnlyDiscount: data.OnlyDiscount }),
       ...(data.StatusId && { StatusId: data.StatusId }),
@@ -43,11 +43,7 @@ export const getProducts = async (data) => {
 
     return response.data;
   } catch (error) {
-    Toast.fire({
-      icon: "error",
-      text: error.response?.data ? error.response?.data : "خطای شبکه",
-    });
-    return []
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
 
@@ -70,11 +66,7 @@ export const getProductListId = async (data) => {
     const response = await axios.post(`${mainDomain}/api/Product/GetListByIds` , data);
     return response.data
   } catch (error) {
-    Toast.fire({
-      icon: "error",
-      text: error.response?.data ? error.response?.data : "خطای شبکه",
-    });
-    return {}
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
 
@@ -102,11 +94,7 @@ export const getProductAction = async () => {
     const response = await axios.get(`${mainDomain}/api/Product/Auction?langCode=fa` );
     return response.data
   } catch (error) {
-    Toast.fire({
-      icon: "error",
-      text: error.response?.data ? error.response?.data : "خطای شبکه",
-    });
-    return {}
+   return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
 

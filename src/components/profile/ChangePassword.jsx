@@ -4,9 +4,9 @@ import { Spin } from 'antd';
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash, FaKey } from 'react-icons/fa';
-import { changeUserPassword } from '@/services/dashboard/dashboardService';
+import { ChangePassword } from '@/services/Account/AccountService';
 
-export default function ChangePassword() {
+export default function ChangeUserPassword() {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -65,25 +65,34 @@ export default function ChangePassword() {
         setLoading(true);
         try {
             const user = JSON.parse(Cookies.get('user'));
-            
+
             // اطمینان از وجود مقادیر
             if (!currentPassword || !newPassword || !confirmPassword) {
                 throw new Error('لطفاً تمام فیلدها را پر کنید');
             }
 
-            await changeUserPassword({
+            const res = await ChangePassword({
                 currentPassword: currentPassword.trim(),
                 newPassword: newPassword.trim(),
                 confirmPassword: confirmPassword.trim()
             }, user.token);
 
-            Toast.fire({
-                icon: "success",
-                text: "رمز عبور با موفقیت تغییر کرد",
-                customClass: {
-                    container: "toast-modal",
-                },
-            });
+            console.log(res);
+
+            if (res.ok) {
+                Toast.fire({
+                    icon: "success",
+                    text: res.message || "رمز عبور با موفقیت تغییر کرد",
+                });
+            }
+
+            if (!res.ok) {
+                Toast.fire({
+                    icon: "error",
+                    text: res.message || "رمز عبور با مشکل مواجه شد",
+                });
+            }
+
 
             // پاک کردن فرم
             setCurrentPassword('');
@@ -129,14 +138,14 @@ export default function ChangePassword() {
                                         setErrors({ ...errors, currentPassword: '' });
                                     }
                                 }}
-                                className={`w-full px-4 py-2 rounded-lg border ${
-                                    errors.currentPassword ? 'border-red-500' : 'border-gray-300'
-                                } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+                                className={`w-full px-4 py-2 rounded-lg border ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'
+                                    } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                                 placeholder="رمز عبور فعلی خود را وارد کنید"
                                 dir="rtl"
                             />
                             <button
                                 type="button"
+                                tabIndex="-1"
                                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
                             >
@@ -163,14 +172,14 @@ export default function ChangePassword() {
                                         setErrors({ ...errors, newPassword: '' });
                                     }
                                 }}
-                                className={`w-full px-4 py-2 rounded-lg border ${
-                                    errors.newPassword ? 'border-red-500' : 'border-gray-300'
-                                } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+                                className={`w-full px-4 py-2 rounded-lg border ${errors.newPassword ? 'border-red-500' : 'border-gray-300'
+                                    } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                                 placeholder="رمز عبور جدید را وارد کنید"
                                 dir="rtl"
                             />
                             <button
                                 type="button"
+                                tabIndex="-1"
                                 onClick={() => setShowNewPassword(!showNewPassword)}
                                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
                             >
@@ -197,14 +206,14 @@ export default function ChangePassword() {
                                         setErrors({ ...errors, confirmPassword: '' });
                                     }
                                 }}
-                                className={`w-full px-4 py-2 rounded-lg border ${
-                                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                                } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+                                className={`w-full px-4 py-2 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                                    } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                                 placeholder="رمز عبور جدید را مجدداً وارد کنید"
                                 dir="rtl"
                             />
                             <button
                                 type="button"
+                                tabIndex="-1"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
                             >
@@ -219,9 +228,8 @@ export default function ChangePassword() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-full px-4 py-2 text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${
-                            loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b91626]'
-                        }`}
+                        className={`w-full px-4 py-2 text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b91626]'
+                            }`}
                     >
                         {loading ? (
                             <div className="flex items-center justify-center gap-2">

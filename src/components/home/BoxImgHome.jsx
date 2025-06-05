@@ -1,8 +1,15 @@
+import { getItem } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
 
-export default function BoxImgHome({ mainBanner }) {
+export default async function BoxImgHome() {
 
- 
+  const mainBanner = await getItem({
+    TypeId: 1015,
+    LangCode: 'fa',
+    CategoryIdArray: "3293",
+  });
+
+  
 
   return (
     <>

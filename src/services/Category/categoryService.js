@@ -12,29 +12,15 @@ const Toast = Swal.mixin({
     customClass: "toast-modal",
 });
 
-// اضافه کردن تاخیر مصنوعی
-// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 export const getCategory = async (params) => {
-    // اضافه کردن تاخیر 3 ثانیه‌ای
-    // await delay(3000);
-    
     try {
-        // const params = {
-        //     TypeId: 4,
-        //     LangCode: "fa",
-        //     IsHome: 1,
-        // };
 
         const response = await axios.get(`${mainDomain}/api/Category`, {
             params,
         });
         return response.data;
     } catch (error) {
-        Toast.fire({
-            icon: "error",
-            text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
+        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
     }
 };
 
