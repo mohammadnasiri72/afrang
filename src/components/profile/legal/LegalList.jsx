@@ -8,6 +8,72 @@ import Swal from "sweetalert2";
 import AddLegal from "./AddLegal";
 import DeleteLegal from "./DeleteLegal";
 
+const LegalListSkeleton = () => {
+    return (
+        <div className="space-y-6">
+            {/* Header Skeleton */}
+            <div className="flex items-center justify-between">
+                <div className="h-8 bg-gray-200 animate-pulse rounded w-40" />
+                <div className="h-10 bg-gray-200 animate-pulse rounded w-48" />
+            </div>
+
+            {/* Legal List Skeleton */}
+            <div className="grid grid-cols-1 gap-4">
+                {[...Array(3)].map((_, index) => (
+                    <div
+                        key={index}
+                        className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
+                    >
+                        {/* Legal Info Skeleton */}
+                        <div className="flex items-center gap-4 flex-1">
+                            <div className="flex flex-col w-full">
+                                {/* Organization Name Skeleton */}
+                                <div className="h-5 bg-gray-200 animate-pulse rounded w-48" />
+                                
+                                {/* Grid Info Skeleton */}
+                                <div className="grid grid-cols-2 gap-4 mt-2">
+                                    {/* Economic Code */}
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                    {/* National ID */}
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                    {/* Registration ID */}
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                    {/* Landline Number */}
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                </div>
+                                
+                                {/* Address Skeleton */}
+                                <div className="flex items-center gap-2 mt-2">
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-16" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-48" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons Skeleton */}
+                        <div className="flex items-center gap-1">
+                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
+                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 export default function LegalList() {
   const [legalList, setLegalList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,11 +131,7 @@ export default function LegalList() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <FaSpinner className="text-3xl text-[#d1182b] animate-spin" />
-      </div>
-    );
+    return <LegalListSkeleton />;
   }
 
   return (

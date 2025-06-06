@@ -1,7 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddAddress from "@/components/profile/address/AddAddress";
 import DeleteAddress from "./DeleteAddress";
 import { FaPlus, FaHome, FaCheck, FaMapMarkerAlt } from "react-icons/fa";
+import { getAddress } from "@/services/User/UserServices";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedAddress } from "@/redux/slices/addressSlice";
+import Cookies from "js-cookie";
+
+// کامپوننت اسکلتون برای نمایش در زمان لودینگ
+const BoxAddressSkeleton = () => {
+  return (
+    <div className="w-full space-y-3">
+      {[1, 2].map((item) => (
+        <div
+          key={item}
+          className="w-full flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 animate-pulse"
+        >
+          <div className="w-10 h-10 bg-gray-200 rounded-lg flex-shrink-0" />
+          <div className="flex-grow">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="flex items-center gap-2">
+                <div className="h-4 bg-gray-200 rounded w-16" />
+                <div className="h-4 bg-gray-200 rounded w-32" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 bg-gray-200 rounded w-16" />
+                <div className="h-4 bg-gray-200 rounded w-32" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 bg-gray-200 rounded w-16" />
+                <div className="h-4 bg-gray-200 rounded w-32" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 bg-gray-200 rounded w-16" />
+                <div className="h-4 bg-gray-200 rounded w-32" />
+              </div>
+              <div className="col-span-2 flex items-center gap-2">
+                <div className="h-4 bg-gray-200 rounded w-16" />
+                <div className="h-4 bg-gray-200 rounded w-full" />
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gray-200 rounded" />
+            <div className="w-5 h-5 bg-gray-200 rounded-full" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 // کامپوننت آیکون برای نمایش وضعیت خالی بودن آدرس‌ها
 const EmptyAddressIcon = () => (
@@ -11,15 +59,59 @@ const EmptyAddressIcon = () => (
 );
 
 function BoxAddress({
-  addressList,
-  getAddressFu,
-  selectedAddress,
-  setSelectedAddress,
+
   onAddressDelete
 }) {
+  const selectedAddress = useSelector((state) => state.address.selectedAddress);  
+  const [addressList, setAddressList] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editAddressId, setEditAddressId] = useState(null);
-  const [imgError, setImgError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const user = Cookies.get("user");
+  const token = JSON.parse(user).token;
+  const dispatch = useDispatch();
+
+  // get address
+  const getAddressFu = async () => {
+    try {
+      setIsLoading(true);
+      const items = await getAddress(token);
+
+      if (items.type === 'error') {
+        Toast.fire({
+          icon: "error",
+          text: items.message,
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+        return;
+      }
+
+      else {
+        setAddressList(items);
+        if (items.length === 1) {
+          // اگر فقط یک آدرس وجود دارد، آن را انتخاب کن
+          dispatch(setSelectedAddress(items[0]));
+        } else {
+          // اگر چند آدرس وجود دارد، هیچ کدام را انتخاب نکن
+          dispatch(setSelectedAddress(null));
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching address:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load initial data
+  useEffect(() => {
+    const loadInitialData = async () => {
+      await getAddressFu();
+    };
+    loadInitialData();
+  }, []);
 
   const handleAddClick = () => {
     setEditAddressId(null);
@@ -34,25 +126,27 @@ function BoxAddress({
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
-      <div className="flex items-center justify-between pb-5">
-        <h2 className="text-gray-700 font-bold text-lg">آدرس‌های ثبت شده</h2>
-        <button
-          onClick={handleAddClick}
-          className="flex items-center gap-1 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
-        >
-          <FaPlus className="text-xs" />
-          <span>افزودن</span>
-        </button>
-      </div>
+        <div className="flex items-center justify-between pb-5">
+          <h2 className="text-gray-700 font-bold text-lg">آدرس‌های ثبت شده</h2>
+          <button
+            onClick={handleAddClick}
+            className="flex items-center gap-1 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
+          >
+            <FaPlus className="text-xs" />
+            <span>افزودن</span>
+          </button>
+        </div>
         <div className="w-full space-y-3">
-          {addressList && addressList.length > 0 ? (
+          {isLoading ? (
+            <BoxAddressSkeleton />
+          ) : addressList && addressList.length > 0 ? (
             addressList.map((address) => (
               <div
                 key={address.id}
-                onClick={() => setSelectedAddress(address)}
+                onClick={() => dispatch(setSelectedAddress(address))}
                 className={`
                   w-full flex items-center gap-3 p-4 rounded-lg border-2 transition-all duration-200
-                  ${address.id === selectedAddress?.id 
+                  ${address.id === selectedAddress?.id
                     ? 'border-[#d1182b] bg-red-50'
                     : 'border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer'
                   }

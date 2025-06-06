@@ -34,18 +34,12 @@ export default function BodyPayment() {
         }
     }, [estimateData, router]);
 
-    if (!estimateData) {
-        return (
-            <div className="w-full min-h-[400px] flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-            </div>
-        );
-    }
+   
 
     return (
         <>
             <div className="flex flex-wrap items-start">
-                <TitlePayment estimateData={estimateData} />
+                <TitlePayment />
                 <DescPayment estimateData={estimateData} />
             </div>
         </>

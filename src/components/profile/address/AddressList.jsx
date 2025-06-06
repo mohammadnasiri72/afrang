@@ -8,6 +8,57 @@ import Swal from "sweetalert2";
 import AddAddress from "./AddAddress";
 import DeleteAddress from "./DeleteAddress";
 
+const AddressListSkeleton = () => {
+    return (
+        <div className="space-y-6">
+            {/* Header Skeleton */}
+            <div className="flex items-center justify-between">
+                <div className="h-8 bg-gray-200 animate-pulse rounded w-32" />
+                <div className="h-10 bg-gray-200 animate-pulse rounded w-40" />
+            </div>
+
+            {/* Addresses List Skeleton */}
+            <div className="grid grid-cols-1 gap-4">
+                {[...Array(3)].map((_, index) => (
+                    <div
+                        key={index}
+                        className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
+                    >
+                        {/* Address Info Skeleton */}
+                        <div className="flex items-center gap-4 flex-1">
+                            <div className="flex flex-col space-y-2 w-full">
+                                {/* Name and Mobile Skeleton */}
+                                <div className="flex items-center gap-2">
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                </div>
+                                
+                                {/* Address Text Skeleton */}
+                                <div className="space-y-1">
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2" />
+                                </div>
+                                
+                                {/* Postal Code and National Code Skeleton */}
+                                <div className="flex items-center gap-4">
+                                    <div className="h-3 bg-gray-200 animate-pulse rounded w-32" />
+                                    <div className="h-3 bg-gray-200 animate-pulse rounded w-28" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons Skeleton */}
+                        <div className="flex items-center gap-1">
+                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
+                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 export default function AddressList() {
   const [addresses, setAddresses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,11 +116,7 @@ export default function AddressList() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <FaSpinner className="text-3xl text-[#d1182b] animate-spin" />
-      </div>
-    );
+    return <AddressListSkeleton />;
   }
 
   return (

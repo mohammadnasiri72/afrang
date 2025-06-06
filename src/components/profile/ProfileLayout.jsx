@@ -19,7 +19,6 @@ import {
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slices/userSlice';
-import Loading from '@/components/Loading';
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
@@ -33,6 +32,84 @@ const menuItems = [
 
 const generateRandomUserId = () => {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
+
+const ProfileLayoutSkeleton = () => {
+    return (
+        <div className="min-h-screen bg-[#f6f6f6] flex">
+            {/* Sidebar Skeleton */}
+            <aside className="sticky top-10 h-screen w-64 bg-white shadow-lg z-40 flex-shrink-0 transform transition-transform duration-300 ease-in-out lg:block hidden">
+                <div className="h-full flex flex-col">
+                    {/* User Info Section */}
+                    <div className="p-4 border-b">
+                        <div className="flex items-center gap-3">
+                            {/* Avatar */}
+                            <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+                            {/* User Name and ID */}
+                            <div className="flex-1 min-w-0">
+                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24 mb-2" />
+                                <div className="h-3 bg-gray-200 animate-pulse rounded w-32" />
+                            </div>
+                        </div>
+                        {/* Wallet Balance */}
+                        <div className="mt-3 p-2 bg-gray-50 rounded-lg">
+                            <div className="flex items-center justify-between">
+                                <div className="h-3 bg-gray-200 animate-pulse rounded w-16" />
+                                <div className="h-3 bg-gray-200 animate-pulse rounded w-24" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Menu Items */}
+                    <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+                        {[...Array(7)].map((_, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center gap-3 px-4 py-3 rounded-lg"
+                            >
+                                <div className="w-5 h-5 bg-gray-200 animate-pulse rounded" />
+                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                            </div>
+                        ))}
+                        {/* Logout Button */}
+                        <div className="px-4 py-3">
+                            <div className="flex items-center gap-3">
+                                <div className="w-5 h-5 bg-gray-200 animate-pulse rounded" />
+                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </aside>
+
+            {/* Main Content Skeleton */}
+            <main className="flex-1 min-h-screen">
+                <div className="p-6 lg:p-8">
+                    <div className="max-w-7xl mx-auto">
+                        {/* Content Placeholder */}
+                        <div className="bg-white rounded-lg shadow-sm p-6">
+                            <div className="space-y-4">
+                                {/* Title */}
+                                <div className="h-6 bg-gray-200 animate-pulse rounded w-48" />
+                                {/* Content Blocks */}
+                                <div className="space-y-3">
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-full" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-5/6" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-4/6" />
+                                </div>
+                                {/* Additional Content */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                                    {[...Array(4)].map((_, index) => (
+                                        <div key={index} className="h-32 bg-gray-200 animate-pulse rounded-lg" />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    );
 };
 
 export default function ProfileLayout({ children }) {
@@ -118,9 +195,9 @@ export default function ProfileLayout({ children }) {
         }
     };
     
-    if (!user || !user.token || userStatus === 'loading') {
-        return <Loading />;
-    }
+    // if (!user || !user.token || userStatus === 'loading') {
+    //     return <ProfileLayoutSkeleton />;
+    // }
 
     return (
         <div className="min-h-screen bg-[#f6f6f6] flex">

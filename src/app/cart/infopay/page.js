@@ -1,7 +1,6 @@
 "use client";
 
 import Container from "@/components/container";
-import Loading from '@/components/Loading';
 import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -18,7 +17,6 @@ export default function CompletePay() {
     const { currentItems } = useSelector((state) => state.cart);
     const selectedAddress = useSelector((state) => state.address.selectedAddress);
     const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
-    const [isLoading, setIsLoading] = useState(true);
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -68,7 +66,7 @@ export default function CompletePay() {
                     return;
                 }
 
-                setIsLoading(false);
+
             } catch (error) {
                 console.error('Error checking auth:', error);
                 router.push('/cart');
@@ -78,9 +76,15 @@ export default function CompletePay() {
         checkAuthAndCart();
     }, [dispatch, currentItems, router, selectedAddress, selectedShipping]);
 
-    if (isLoading) {
-        return <Loading fullScreen />;
+
+    if (!selectedAddress || !selectedShipping) {
+        return (
+            <div className="w-full min-h-[400px] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+            </div>
+        );
     }
+
 
     return (
         <div className="bg-[#f6f6f6] overflow-hidden">

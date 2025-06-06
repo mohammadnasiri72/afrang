@@ -29,12 +29,7 @@ function ShoppingDrawer() {
     setToken(userData?.token || null);
   }, []);
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchCurrentCart());
-    }
-  }, [dispatch, userId]);
-
+  
   useEffect(() => {
     if (open) {
       dispatch(fetchCurrentCart());

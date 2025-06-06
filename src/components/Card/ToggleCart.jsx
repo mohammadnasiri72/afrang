@@ -1,20 +1,20 @@
 "use client";
 
+import { fetchCartData, setCartType } from '@/redux/slices/cartSlice';
 import { Segmented } from 'antd';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentCart, fetchNextCart, setCartType } from '@/redux/slices/cartSlice';
 
 function ToggleCart() {
   const [typeArticle, setTypeArticle] = useState("سبد خرید");
+  const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const { cartType } = useSelector((state) => state.cart);
+  
 
   // دریافت هر دو سبد خرید در ابتدای لود کامپوننت
-  useEffect(() => {
-    dispatch(fetchCurrentCart());
-    dispatch(fetchNextCart());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchCartData());
+  // }, [dispatch]);
 
   const handleToggle = (value) => {
     setTypeArticle(value);
@@ -22,20 +22,52 @@ function ToggleCart() {
     dispatch(setCartType(newCartType));
   };
 
+  // ساخت گزینه‌های Segmented با نمایش تعداد محصولات
+  const options = [
+    {
+      label: (
+        <div className="flex items-center justify-center gap-2">
+          <span>خرید بعدی</span>
+          {nextItems.length > 0 && (
+            <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
+              {nextItems.length}
+            </span>
+          )}
+        </div>
+      ),
+      value: "خرید بعدی"
+    },
+    {
+      label: (
+        <div className="flex items-center justify-center gap-2">
+          <span>سبد خرید</span>
+          {currentItems.length > 0 && (
+            <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
+              {currentItems.length}
+            </span>
+          )}
+        </div>
+      ),
+      value: "سبد خرید"
+    }
+  ];
+
   return (
     <>
       <div className="bg-[#ebebeb] my-3 py-2 flex justify-center SegmentedCard">
-        <div className="w-60">
+        <div className="w-72">
           <Segmented
             className="font-semibold text-3xl w-full"
             dir="ltr"
             style={{
               padding: 0,
               fontFamily: "yekan",
+              gap: '8px'
             }}
             value={typeArticle}
             onChange={handleToggle}
-            options={["خرید بعدی", "سبد خرید"]}
+            options={options}
+            block
           />
         </div>
       </div>

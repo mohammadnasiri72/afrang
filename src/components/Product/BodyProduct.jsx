@@ -1,4 +1,3 @@
-"use client";
 
 import ProductTabs from './ProductTabs';
 

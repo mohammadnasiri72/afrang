@@ -12,15 +12,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 
 function Products({ products, layout = "list" }) {
-  const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const isFilterLoading = useSelector((state) => state.filterLoading.isFilterLoading);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (products) {
       dispatch(setFilterLoading(false));
     }
-  }, [products, dispatch]);
+  }, [products, searchParams, dispatch]);
 
   if (isFilterLoading) {
     if (layout === "grid") {

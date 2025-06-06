@@ -63,7 +63,7 @@ export const getProductId = async (id) => {
 
 export const getProductListId = async (data) => {
   try {
-    const response = await axios.post(`${mainDomain}/api/Product/GetListByIds` , data);
+    const response = await axios.post(`${mainDomain}/api/Product/GetListByIds` , data );
     return response.data
   } catch (error) {
     return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}

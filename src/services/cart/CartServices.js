@@ -21,5 +21,22 @@ export const getNextCart = async (userId) => {
   }
 };
 
+export const addToCartNext = async (id) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Cart/next/add?id=${id}`, {});
+    return response.data;
+  } catch (err) {
+    return { type: 'error', message: err.response.data? err.response.data : "خطای شبکه" };
+  }
+};
 
+
+export const moveToCurrentCart = async (id) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Cart/next/back?id=${id}`, {});
+    return response.data;
+  } catch (err) {
+    return { type: 'error', message: err.response.data? err.response.data : "خطای شبکه" };
+  }
+};
 

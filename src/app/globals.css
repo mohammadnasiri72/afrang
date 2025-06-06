@@ -810,3 +810,13 @@ a, li, td, th {
 .custom-success-message .anticon {
     color: #d1182b !important;
 }
+
+/* Skeleton Scrollbar Styles */
+.skeleton-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.skeleton-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

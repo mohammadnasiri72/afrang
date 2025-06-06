@@ -13,9 +13,62 @@ import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchHeader from "./SearchHeader";
 
+const HeaderSkeleton = () => {
+  return (
+    <div className="flex items-center justify-between lg:px-16 px-4 py-5 bg-white">
+      {/* Left Section - Logo and Search */}
+      <div className="flex items-center lg:w-1/2 w-auto">
+        <div className="flex items-center lg:w-2/5 w-auto">
+          {/* Logo */}
+          <div className="w-14 h-14 bg-gray-200 animate-pulse rounded-lg" />
+          {/* Logo Text */}
+          <div className="flex-col px-1 lg:flex hidden">
+            <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
+          </div>
+        </div>
+        {/* Search Bar */}
+        <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">
+          <div className="w-6 h-6 bg-gray-300 animate-pulse rounded-full mx-2" />
+          <div className="h-8 bg-gray-300 animate-pulse rounded w-full" />
+        </div>
+      </div>
+
+      {/* Right Section - Contact, User, Cart */}
+      <div className="flex items-center justify-end lg:w-1/2 w-auto gap-7">
+        {/* Contact Info */}
+        <div className="lg:flex hidden items-center">
+          <div className="bg-slate-200 rounded-lg p-2">
+            <div className="w-5 h-5 bg-gray-300 animate-pulse rounded-full" />
+          </div>
+          <div className="flex flex-col pr-2 gap-1">
+            <div className="h-3 bg-gray-200 animate-pulse rounded w-24" />
+            <div className="h-4 bg-gray-200 animate-pulse rounded w-28" />
+          </div>
+        </div>
+
+        {/* User Section */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
+            <div className="h-4 bg-gray-200 animate-pulse rounded w-12" />
+          </div>
+          <div className="border-r border-[#0005] pr-3">
+            <div className="h-4 bg-gray-200 animate-pulse rounded w-16" />
+          </div>
+        </div>
+
+        {/* Cart Icon */}
+        <div className="relative mt-3">
+          <div className="w-10 h-10 bg-gray-200 animate-pulse rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Header() {
   const user = useSelector((state) => state.user.user);
-  const { settings } = useSelector((state) => state.settings);
+  const { settings, loading } = useSelector((state) => state.settings);
   const { currentItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
@@ -31,6 +84,10 @@ export default function Header() {
       }
     }
   }, []);
+
+  if (loading) {
+    return <HeaderSkeleton />;
+  }
 
   return (
     <div className="flex items-center justify-between lg:px-16 px-4 py-5 bg-white">

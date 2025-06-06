@@ -2,34 +2,22 @@ import TitlePaymentFinal from "./TitlePaymentFinal";
 import DescPaymentFinal from "./DescPaymentFinal";
 import { getOrderTrackCode } from "@/services/order/orderService";
 
-async function getOrderTrackCodeData(trackCode , token) {
-    try {
-      const response = await getOrderTrackCode(trackCode , token);
-      return response;
-    } catch (error) {
-      console.error('Error fetching order data:', error);
-      return null;
-    }
-  }
+
 
 export default async function BodyPaymentFinal({ trackCode , token}) {
 
     let orderDataTrackCode = null;
   if (token) {
-    orderDataTrackCode = await getOrderTrackCodeData(trackCode , token);
+    orderDataTrackCode = await getOrderTrackCode(trackCode , token);
+    if (orderDataTrackCode.type === 'error') {
+      Toast.fire({
+        icon: "error",
+        text: orderDataTrackCode.message,
+      });
+      return null;
+    }
   }
-    // const estimateData = useSelector((state) => state.payment.estimateData);
-    // const router = useRouter();
-    // useEffect(() => {
-    //     if (!estimateData) {
-    //         router.push("/card");
-    //     }
-    // }, [estimateData, router]);
-
-    // if (!estimateData) {
-    //     return null;
-    // }
-
+   
 
     return (
         <>

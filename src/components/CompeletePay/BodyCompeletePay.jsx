@@ -1,53 +1,59 @@
 "use client";
-import { fetchCart } from "@/redux/slices/cartSlice";
-import { getAddress, getWaySend } from "@/services/order/orderService";
-import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import BoxAddress from "./BoxAddress";
-import ShowProductBasket from "./ShowProductBasket";
-import WaySend from "./WaySend";
-import BoxLegal from "./BoxLegal";
 import { setSelectedAddress } from '@/redux/slices/addressSlice';
 import { setSelectedShipping } from '@/redux/slices/shippingSlice';
-import { useRouter } from 'next/navigation';
+import { getWaySend } from "@/services/order/orderService";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import BoxAddress from "./BoxAddress";
+import BoxLegal from "./BoxLegal";
+import ShowProductBasket from "./ShowProductBasket";
+import WaySend from "./WaySend";
+import { getAddress } from '@/services/User/UserServices';
+
+// کامپوننت اسکلتون برای نمایش در زمان لودینگ
+const WaySendSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
+        <div className="flex items-center justify-between pb-5">
+          <div className="h-7 bg-gray-200 rounded w-32 animate-pulse" />
+        </div>
+        <div className="w-full space-y-3">
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className="w-full flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 animate-pulse"
+            >
+              <div className="w-10 h-10 bg-gray-200 rounded-lg flex-shrink-0" />
+              <div className="flex-grow">
+                <div className="flex flex-col gap-2">
+                  <div className="h-5 bg-gray-200 rounded w-40" />
+                  <div className="h-4 bg-gray-200 rounded w-64" />
+                </div>
+              </div>
+              <div className="w-5 h-5 bg-gray-200 rounded-full flex-shrink-0" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function BodyCompeletePay() {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const [addressList, setAddressList] = useState([]);
+  const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const [waySendList, setWaySendList] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [isShippingLoading, setIsShippingLoading] = useState(false);
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
   
-  const selectedAddress = useSelector((state) => state.address.selectedAddress);
+  
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
-  const { currentItems } = useSelector((state) => state.cart);
+ 
 
-  // get address
-  const getAddressFu = async () => {
-    try {
-      setIsLoading(true);
-      const items = await getAddress(token);
-
-      if (items) {
-        setAddressList(items);
-        if (items.length === 1) {
-          // اگر فقط یک آدرس وجود دارد، آن را انتخاب کن
-          dispatch(setSelectedAddress(items[0]));
-        } else {
-          // اگر چند آدرس وجود دارد، هیچ کدام را انتخاب نکن
-          dispatch(setSelectedAddress(null));
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching address:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
 
   // get WaySend
   const WaySendFu = async () => {
@@ -77,13 +83,7 @@ export default function BodyCompeletePay() {
     }
   };
 
-  // Load initial data
-  useEffect(() => {
-    const loadInitialData = async () => {
-      await getAddressFu();
-    };
-    loadInitialData();
-  }, []);
+  
 
   // Load shipping methods when address changes
   useEffect(() => {
@@ -96,21 +96,9 @@ export default function BodyCompeletePay() {
     dispatch(setSelectedShipping(shipping));
   };
 
-  const handleAddressSelect = (address) => {
-    dispatch(setSelectedAddress(address));
-  };
+ 
 
-  if (isLoading) {
-    return (
-      <div className="lg:w-3/4 w-full lg:pl-5">
-        <div className="bg-white rounded-[12px] p-4">
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+ 
 
   return (
     <div className="lg:w-3/4 w-full lg:pl-5">
@@ -119,20 +107,12 @@ export default function BodyCompeletePay() {
       </div>
       <div className="mt-5">
         <BoxAddress
-          addressList={addressList}
-          getAddressFu={getAddressFu}
-          selectedAddress={selectedAddress}
-          setSelectedAddress={handleAddressSelect}
           onAddressDelete={() => setWaySendList({ shippingWays: [] })}
         />
       </div>
       <div className="mt-4">
         {isShippingLoading ? (
-          <div className="bg-white rounded-[12px] p-4">
-            <div className="flex justify-center items-center h-20">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#d1182b]"></div>
-            </div>
-          </div>
+          <WaySendSkeleton />
         ) : (
           <WaySend
             waySendList={waySendList}
@@ -142,7 +122,7 @@ export default function BodyCompeletePay() {
         )}
       </div>
       <div className="mt-5">
-        <ShowProductBasket items={currentItems} />
+        <ShowProductBasket />
       </div>
     </div>
   );

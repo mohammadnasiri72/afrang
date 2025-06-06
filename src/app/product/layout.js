@@ -1,5 +1,4 @@
 import React from "react";
-import BreadcrumbNav from "@/components/BreadcrumbNav";
 
 export const metadata = {
   title: "محصولات",
@@ -9,7 +8,6 @@ export const metadata = {
 export default async function layoutProduct({ children }) {
   return (
     <div>
-      <BreadcrumbNav />
       {children}
     </div>
   );

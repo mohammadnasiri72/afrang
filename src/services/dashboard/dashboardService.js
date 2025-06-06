@@ -24,13 +24,7 @@ export const getdataDashboard = async (token) => {
     });
     return response.data;
   } catch (err) {
-    Toast.fire({
-      icon: "error",
-      text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
-    });
+   return {type:'error',message:err.response?.data ? err.response?.data : "خطای شبکه"}
   }
 };
 

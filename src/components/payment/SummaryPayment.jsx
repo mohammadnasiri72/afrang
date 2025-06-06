@@ -6,7 +6,7 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
 import ShowProductBasket from "../CompeletePay/ShowProductBasket";
 
-export default function SummaryPayment({ estimateData }) {
+export default function SummaryPayment() {
     const { currentItems } = useSelector((state) => state.cart);
     const selectedAddress = useSelector((state) => state.address.selectedAddress);
     const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
@@ -18,18 +18,9 @@ export default function SummaryPayment({ estimateData }) {
         setForceUpdate(prev => prev + 1);
     }, [currentItems, selectedAddress, selectedShipping, selectedLegal]);
 
-    const totalPrice = currentItems?.reduce((sum, item) => {
-        const price = item.price1 || 0;
-        const quantity = item.quantity || 0;
-        return sum + price * quantity;
-    }, 0) || 0;
+  
 
-    const totalDiscount = currentItems?.reduce((sum, item) => {
-        const oldPrice = item.price1 || 0;
-        const price = item.finalPrice || 0;
-        const quantity = item.quantity || 0;
-        return sum + (oldPrice - price) * quantity;
-    }, 0) || 0;
+   
 
     // فقط زمانی loading نمایش داده شود که هیچ داده‌ای در دسترس نباشد
     if (!currentItems?.length && !selectedAddress && !selectedShipping) {

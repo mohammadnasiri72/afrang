@@ -60,6 +60,12 @@ export default function SelectCodeDiscount() {
             };
 
             const response = await estimateOrder(data, token);
+            if (response.type === 'error') {
+                Toast.fire({
+                    icon: "error",
+                    text: response.message,
+                });
+            }
 
             // بررسی مقدار تخفیف
             if (response.discountCodeAmount === 0) {
@@ -67,7 +73,6 @@ export default function SelectCodeDiscount() {
                 Toast.fire({
                     icon: "error",
                     text: "کد تخفیف نامعتبر است",
-                    customClass: "toast-modal",
                 });
                 dispatch(setError("کد تخفیف نامعتبر است"));
                 dispatch(clearDiscount());
@@ -78,7 +83,6 @@ export default function SelectCodeDiscount() {
             Toast.fire({
                 icon: "success",
                 text: `کد تخفیف با موفقیت اعمال شد (${response.discountCodeAmount.toLocaleString()} تومان)`,
-                customClass: "toast-modal",
             });
 
             dispatch(setDiscountCode(code));

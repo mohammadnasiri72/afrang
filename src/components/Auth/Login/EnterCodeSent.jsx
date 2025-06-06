@@ -94,7 +94,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         code: englishCode,
       });
 
-      console.log(userData);
 
       if (userData.token) {
 

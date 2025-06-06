@@ -7,6 +7,27 @@ import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { fetchBrandingItems } from "@/services/brandingService";
 
+const LoadingSkeleton = () => {
+  return (
+    <div className="sm:px-16 px-2 bg-[#f6f6f6] relative z-50">
+      <div className="absolute left-0 -top-52">
+        <img src="/images/gallery/bg-shadow-1.png" />
+      </div>
+      <div className="absolute right-0 top-0">
+        <img src="/images/gallery/bg-shadow-2.png" />
+      </div>
+      <div className="flex gap-2 overflow-hidden justify-between items-center">
+        {[...Array(6)].map((_, index) => (
+          <div
+            key={index}
+            className="w-36 h-36 bg-gray-200 animate-pulse rounded-lg flex-shrink-0"
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function BoxImgBranding() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +54,7 @@ export default function BoxImgBranding() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSkeleton />;
   }
 
   return (

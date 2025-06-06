@@ -11,6 +11,148 @@ import { FaArrowLeft, FaBarcode, FaBox, FaCalendarAlt, FaCheckCircle, FaClock, F
 import { IoIosCard } from 'react-icons/io';
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 
+const OrderDetailsSkeleton = () => {
+    return (
+        <div className="space-y-4">
+            {/* Header Skeleton */}
+            <div className="flex items-center justify-between mb-4">
+                <div className="h-7 bg-gray-200 animate-pulse rounded w-32" />
+                <div className="h-7 bg-gray-200 animate-pulse rounded w-40" />
+            </div>
+
+            {/* Order Status and Date Skeleton */}
+            <div className="bg-white rounded-xl p-4 shadow-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    {[...Array(4)].map((_, index) => (
+                        <div key={index} className="space-y-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
+                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                            </div>
+                            <div className="h-6 bg-gray-200 animate-pulse rounded w-32" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Order Items and Details Grid Skeleton */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                {/* Order Items Skeleton */}
+                <div className="xl:col-span-2 bg-white rounded-xl p-4 shadow-sm">
+                    <div className="h-6 bg-gray-200 animate-pulse rounded w-32 mb-4" />
+                    <div className="space-y-6">
+                        {[...Array(3)].map((_, index) => (
+                            <div key={index} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 p-4 sm:p-6 bg-gray-50 rounded-xl">
+                                {/* Product Image Skeleton */}
+                                <div className="w-full sm:w-24 h-24 bg-gray-200 animate-pulse rounded-xl flex-shrink-0" />
+                                
+                                {/* Product Details Skeleton */}
+                                <div className="flex-1 w-full">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                        <div className="w-full sm:w-auto space-y-2">
+                                            <div className="h-5 bg-gray-200 animate-pulse rounded w-48" />
+                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        </div>
+                                        <div className="w-full sm:w-auto space-y-2">
+                                            <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
+                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-20" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Payment History Skeleton */}
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
+                            <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
+                        </div>
+                        <div className="space-y-3">
+                            {[...Array(2)].map((_, index) => (
+                                <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                                    <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full mt-1" />
+                                    <div className="flex-1">
+                                        <div className="flex justify-between items-start">
+                                            <div className="space-y-2">
+                                                <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                                <div className="h-3 bg-gray-200 animate-pulse rounded w-40" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                                <div className="h-3 bg-gray-200 animate-pulse rounded w-32" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Order Details Sidebar Skeleton */}
+                <div className="space-y-4">
+                    {/* Legal Purchase Information Skeleton */}
+                    <div className="bg-white rounded-xl px-4 py-2 shadow-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                            <div className="h-5 bg-gray-200 animate-pulse rounded w-40" />
+                        </div>
+                        <div className="space-y-2">
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                    <div className="flex-1 flex justify-between">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Shipping Information Skeleton */}
+                    <div className="bg-white rounded-xl p-4 shadow-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                            <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
+                        </div>
+                        <div className="space-y-2">
+                            {[...Array(5)].map((_, index) => (
+                                <div key={index} className="flex items-center gap-2 py-2 border-b border-gray-50">
+                                    <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                    <div className="flex-1 flex justify-between">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Payment Information Skeleton */}
+                    <div className="bg-white rounded-xl p-4 shadow-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                            <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
+                        </div>
+                        <div className="space-y-2">
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className="flex justify-between py-2 border-b border-gray-50">
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function OrderDetails({ trackCode }) {
     const router = useRouter();
     const [orderDetails, setOrderDetails] = useState(null);
@@ -86,7 +228,7 @@ export default function OrderDetails({ trackCode }) {
     }, [trackCode]);
 
     if (loading) {
-        return <Loading />;
+        return <OrderDetailsSkeleton />;
     }
 
     if (!orderDetails) {

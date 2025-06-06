@@ -1,38 +1,111 @@
 "use client";
 
-import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
-import { addToCartNext, moveToCurrentCart } from "@/services/cart/cartService";
+import { fetchCartData } from "@/redux/slices/cartSlice";
+import { addToCartNext, moveToCurrentCart } from "@/services/cart/CartServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsArchive } from "react-icons/bs";
 import { FaAngleLeft, FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
-import { LuMailbox } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import CartCounter from "../Product/CartCounter";
-import Link from "next/link";
+
+// کامپوننت اسکلتون برای نمایش در زمان لودینگ
+const BodyCardSkeleton = () => {
+  return (
+    <div className="flex flex-wrap">
+      <div className="lg:w-3/4 w-full">
+        <div className="flex flex-col gap-5">
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50 animate-pulse"
+            >
+              <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
+                <div className="relative rounded-lg overflow-hidden">
+                  <div className="w-full aspect-square bg-gray-200 rounded-lg" />
+                </div>
+                <div className="mt-5">
+                  <div className="h-6 bg-gray-200 rounded w-20 mx-auto" />
+                </div>
+              </div>
+              <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
+                <div>
+                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-3" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-1/3" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center flex-wrap mt-4">
+                    <div className="flex flex-col gap-2">
+                      <div className="h-5 bg-gray-200 rounded w-24" />
+                      <div className="h-7 bg-gray-200 rounded w-32" />
+                    </div>
+                    <div className="h-6 bg-gray-200 rounded w-32" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
+        <div className="bg-[#ececec] p-3 rounded-lg animate-pulse">
+          <div className="flex justify-between py-1">
+            <div className="h-5 bg-gray-200 rounded w-32" />
+            <div className="h-5 bg-gray-200 rounded w-24" />
+          </div>
+          <div className="flex justify-between py-1 mt-2">
+            <div className="h-5 bg-gray-200 rounded w-28" />
+            <div className="h-5 bg-gray-200 rounded w-20" />
+          </div>
+          <hr className="border-[#6666] my-3" />
+          <div className="bg-white p-3 rounded-lg mb-3">
+            <div className="flex justify-center items-center flex-col gap-2">
+              <div className="h-6 bg-gray-200 rounded w-32" />
+              <div className="h-8 bg-gray-200 rounded w-40" />
+            </div>
+          </div>
+          <div className="h-10 bg-gray-200 rounded-lg mt-3" />
+        </div>
+        <div className="h-4 bg-gray-200 rounded w-full mt-3" />
+      </div>
+    </div>
+  );
+};
 
 const BodyCard = () => {
   const dispatch = useDispatch();
-  const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
+  const { currentItems, nextItems, cartType, loading } = useSelector((state) => state.cart);
   const items = cartType === 'current' ? currentItems : nextItems;
 
+  console.log(loading);
+  
 
-
+  // import sweet alert 2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+  });
 
 
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
 
   useEffect(() => {
     const userData = getUserCookie();
-    setUserId(userData?.userId || null);
     setToken(userData?.token || null);
   }, []);
 
@@ -67,11 +140,20 @@ const BodyCard = () => {
   const handleAddToNextCart = async (id) => {
     try {
       setLoadingItemId(id);
-      await addToCartNext(id);
-      dispatch(fetchCurrentCart());
-      dispatch(fetchNextCart());
+      const res = await addToCartNext(id);
+      if (res.type === "error") {
+        Toast.fire({
+          icon: "error",
+          text: res.message,
+        });
+        return;
+      }
+      dispatch(fetchCartData());
     } catch (error) {
-      console.error("Error adding to next cart:", error);
+      Toast.fire({
+        icon: "error",
+        text: error.response.data ? error.response.data : "خطای شبکه",
+      });
     } finally {
       setLoadingItemId(null);
     }
@@ -80,11 +162,20 @@ const BodyCard = () => {
   const handleMoveToCurrentCart = async (id) => {
     try {
       setLoadingItemId(id);
-      await moveToCurrentCart(id);
-      dispatch(fetchCurrentCart());
-      dispatch(fetchNextCart());
+      const res = await moveToCurrentCart(id);
+      if (res.type === "error") {
+        Toast.fire({
+          icon: "error",
+          text: res.message,
+        });
+        return;
+      }
+      dispatch(fetchCartData());
     } catch (error) {
-      console.error("Error moving to current cart:", error);
+      Toast.fire({
+        icon: "error",
+        text: error.response.data ? error.response.data : "خطای شبکه",
+      });
     } finally {
       setLoadingItemId(null);
     }
@@ -139,6 +230,10 @@ const BodyCard = () => {
     );
   };
 
+  if (loading) {
+    return <BodyCardSkeleton />;
+  }
+
   return (
     <div className="flex flex-wrap">
       {items?.length === 0 ? (
@@ -180,11 +275,6 @@ const BodyCard = () => {
                           {item.discount}٪
                         </span>
                       )}
-                      {/* {item.conditionId === 20 && (
-                        <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/80 text-white text-center py-1 text-sm font-semibold">
-                          کارکرده
-                        </div>
-                      )} */}
                     </div>
                     <div className="mt-5">
                       {renderCartCounter(item)}

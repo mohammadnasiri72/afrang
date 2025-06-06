@@ -8,7 +8,6 @@ import { getOrder } from "@/services/order/orderService";
 import { getdataDashboard } from "@/services/dashboard/dashboardService";
 import Cookies from 'js-cookie';
 import { motion, AnimatePresence } from 'framer-motion';
-import Loading from '@/components/Loading';
 import { FaClipboardList, FaHourglassHalf, FaTruck, FaCheckCircle, FaTimesCircle, FaEye, FaCreditCard, FaCalendarAlt, FaMoneyBillWave, FaShoppingBag, FaInfoCircle } from 'react-icons/fa';
 import { Segmented } from 'antd';
 import React from 'react';
@@ -47,12 +46,98 @@ const ORDER_STATUS_ICONS = {
     [ORDER_STATUS.CANCELLED]: FaTimesCircle
 };
 
-export default function BodyOrder({ orderData: initialOrderData, currentStatus, currentPage }) {
-    const [orderData, setOrderData] = useState(initialOrderData || []);
+const OrderSkeleton = () => {
+    return (
+        <div className="mt-4">
+            <div id="orders-top" className="bg-white rounded-xl p-4 sm:p-6 shadow-lg z-50 relative max-w-full">
+                {/* Title */}
+                <div className="h-7 bg-gray-200 animate-pulse rounded w-48 mb-4 sm:mb-6" />
+
+                {/* Segmented Tabs Skeleton */}
+                <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 absolute w-full left-0 right-0 top-10">
+                    <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
+                        <div className="w-full h-12 bg-gray-200 animate-pulse rounded-lg" />
+                    </div>
+                </div>
+
+                {/* Orders List Skeleton */}
+                <div className="space-y-4 sm:space-y-6 mt-4 mt-36 w-full">
+                    {[...Array(3)].map((_, index) => (
+                        <div key={index} className="border border-gray-200 rounded-lg p-4 sm:p-6">
+                            {/* Order Header */}
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
+                                <div className="h-6 bg-gray-200 animate-pulse rounded w-32" />
+                                <div className="h-10 bg-gray-200 animate-pulse rounded w-40" />
+                            </div>
+
+                            {/* Order Details Grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                {/* First Column */}
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                </div>
+
+                                {/* Second Column */}
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                </div>
+
+                                {/* Third Column */}
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Button */}
+                            <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
+                                <div className="flex justify-end">
+                                    <div className="h-10 bg-gray-200 animate-pulse rounded w-48" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Pagination Skeleton */}
+                    <div className="flex justify-center mt-4 sm:mt-6">
+                        <div className="h-10 bg-gray-200 animate-pulse rounded w-64" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default function BodyOrder() {
+    const [orderData, setOrderData] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [lastStatus, setLastStatus] = useState(currentStatus);
-    const [lastPage, setLastPage] = useState(currentPage);
     const [dashboardData, setDashboardData] = useState({
         Record: 0,
         Pending: 0,
@@ -64,8 +149,8 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
     const router = useRouter();
     const searchParams = useSearchParams();
     const selectedTrackCode = searchParams.get('id');
-    const statusId = searchParams.get('statusId');
-    const page = searchParams.get('page');
+    const statusId = searchParams.get('statusId') || '1'; // Default to 'ثبت شده'
+    const page = searchParams.get('page') || '1';
 
     useEffect(() => {
         setTimeout(() => {
@@ -93,13 +178,21 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
 
         try {
             const data = await getdataDashboard(token);
+            if (data.type === 'error') {
+                Toast.fire({
+                    icon: "error",
+                    text: data.message,
+                    
+                });
+                return;
+            }
             setDashboardData(data);
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         }
     };
 
-    const fetchOrders = async (statusId, page = 1) => {
+    const fetchOrders = async () => {
         const token = getToken();
         if (!token) return;
 
@@ -107,8 +200,8 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         try {
             const response = await getOrder(token, {
                 pageSize: 20,
-                pageIndex: page,
-                statusId: statusId
+                pageIndex: parseInt(page),
+                statusId: parseInt(statusId)
             });
 
             if (response && response.length > 0) {
@@ -127,34 +220,24 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
         }
     };
 
-    // حذف useEffect های قبلی و اضافه کردن یک useEffect جدید برای تغییرات URL
+    // Fetch data when component mounts or URL parameters change
     useEffect(() => {
-        if (!selectedTrackCode && statusId && page) {
-            fetchOrders(parseInt(statusId), parseInt(page));
+        if (!selectedTrackCode) {
+            fetchOrders();
             fetchDashboardData();
         }
     }, [statusId, page, selectedTrackCode]);
-
-    // مقداردهی اولیه
-    useEffect(() => {
-        if (initialOrderData && initialOrderData.length > 0) {
-            setOrderData(initialOrderData);
-            setTotalPages(Math.ceil(initialOrderData[0].total / 20));
-            setLoading(false);
-        }
-        fetchDashboardData();
-    }, [initialOrderData]);
 
     const handlePayment = (trackCode) => {
         router.push(`/profile/orders?trackCode=${trackCode}`);
     };
 
-    const handleTabChange = (event, newValue) => {
-        router.push(`/profile/orders?statusId=${newValue}&page=1`);
+    const handleTabChange = (value) => {
+        router.push(`/profile/orders?statusId=${value}&page=1`);
     };
 
-    const handlePageChange = (event, page) => {
-        router.push(`/profile/orders?statusId=${statusId}&page=${page}`);
+    const handlePageChange = (event, newPage) => {
+        router.push(`/profile/orders?statusId=${statusId}&page=${newPage}`);
     };
 
     const handleViewDetails = (trackCode) => {
@@ -220,10 +303,8 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                                 fontFamily: "yekan",
                                 width: "100%"
                             }}
-                            value={currentStatus}
-                            onChange={(value) => {
-                                handleTabChange(null, value);
-                            }}
+                            value={parseInt(statusId)}
+                            onChange={handleTabChange}
                             options={options}
                         />
                     </div>
@@ -231,13 +312,11 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
 
                 <div className="space-y-4 sm:space-y-6 mt-4 mt-36 w-full">
                     {loading ? (
-                        <div className="flex justify-center items-center py-8 sm:py-12">
-                            <Loading />
-                        </div>
+                        <OrderSkeleton />
                     ) : orderData?.length > 0 ? (
                         <AnimatePresence mode="wait">
                             <motion.div
-                                key={currentPage}
+                                key={page}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
@@ -336,7 +415,7 @@ export default function BodyOrder({ orderData: initialOrderData, currentStatus, 
                     {totalPages > 1 && (
                         <div className="flex justify-center mt-4 sm:mt-6">
                             <Pagination
-                                page={currentPage}
+                                page={parseInt(page)}
                                 count={totalPages}
                                 onChange={handlePageChange}
                                 color="primary"

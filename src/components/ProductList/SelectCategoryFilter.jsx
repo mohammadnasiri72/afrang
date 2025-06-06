@@ -520,7 +520,43 @@ function SelectCategoryFilter() {
         )}
       </div>
       <Divider style={{marginBottom: "0px"}}/>
-      {shouldShowCollapse ? (
+      {loading ? (
+        <div className="space-y-6 mt-4">
+          {/* Category Section Skeleton */}
+          <div>
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+            <div className="space-y-2">
+              {[...Array(5)].map((_, index) => (
+                <div key={index} className="p-2.5 my-1">
+                  <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Brand Section Skeleton */}
+          <div>
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+            <div className="space-y-2">
+              {[...Array(5)].map((_, index) => (
+                <div key={index} className="p-2">
+                  <div className="h-8 bg-gray-200 animate-pulse rounded-md" />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Price Section Skeleton */}
+          <div>
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+            <div className="px-4">
+              <div className="h-2 bg-gray-200 animate-pulse rounded-full mb-4" />
+              <div className="flex flex-col gap-2">
+                <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
+                <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : shouldShowCollapse ? (
         <Collapse
           ghost
           expandIconPosition="end"

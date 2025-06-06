@@ -49,7 +49,7 @@ const cartSlice = createSlice({
     currentItems: [],
     nextItems: [],
     cartType: 'current',
-    loading: false,
+    loading: true,
     error: null
   },
   reducers: {

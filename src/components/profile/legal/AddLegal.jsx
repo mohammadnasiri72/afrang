@@ -5,8 +5,9 @@ import { useState, useEffect, useRef } from "react";
 import { FaBuilding, FaCaretDown, FaTimes } from "react-icons/fa";
 import { MdOutlinePhone } from "react-icons/md";
 import Swal from "sweetalert2";
-import { getProvince, getCity, addLegal, getLegalId } from "@/services/order/orderService";
+import { getProvince, getCity } from "@/services/order/orderService";
 import Cookies from "js-cookie";
+import { addLegal, getLegalId } from "@/services/User/UserServices";
 
 function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null, isOpen = true, onClose }) {
     const [isModalOpen, setIsModalOpen] = useState(isOpen);
@@ -81,7 +82,14 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
                 cityTitle: cityList.find(ev => ev.id === selectedCity).title,
             };
             const response = await addLegal(data, token);
-            if (response) {
+            if (response.type === 'error') {
+                Toast.fire({
+                    icon: "error",
+                    text: response.message,
+                    customClass: { container: "toast-modal" },
+                });
+            }
+            else {
                 if (getLegalFu) getLegalFu();
                 if (onAdd) onAdd(response);
                 Toast.fire({
@@ -95,7 +103,6 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
             Toast.fire({
                 icon: "error",
                 text: err.response?.data || "خطای شبکه",
-                customClass: { container: "toast-modal" },
             });
         } finally {
             setLoading(false);
@@ -113,13 +120,22 @@ function AddLegal({ id = null, editData = null, getLegalFu = null, onAdd = null,
             if (id) {
                 try {
                     const response = await getLegalId(id, token);
-                    if (response) {
+                    if (response.type === 'error') {
+                        Toast.fire({
+                            icon: "error",
+                            text: response.message,
+                        });
+                    }
+                    else {
                         setFormData(response[0]);
                         setSelectedProvince(response[0].provinceId);
                         setSelectedCity(response[0].cityId);
                     }
                 } catch (error) {
-                    console.error("Error fetching legal data:", error);
+                    Toast.fire({
+                        icon: "error",
+                        text: error.response?.data || "خطای شبکه",
+                    });
                 }
             }
         };

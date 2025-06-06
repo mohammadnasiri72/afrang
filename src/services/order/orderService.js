@@ -251,15 +251,10 @@ export const estimateOrder = async (data, token) => {
     });
     return response.data;
   } catch (err) {
-    console.error("Error in estimate order:", err);
-    Toast.fire({
-      icon: "error",
-      text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
-    });
-    throw err;
+   return {
+    type: 'error',
+    message: err.response?.data ? err.response?.data : "خطای شبکه",
+   }
   }
 };
 
@@ -297,7 +292,7 @@ export const getOrder = async (token, params = {}) => {
       params: {
         pageSize: params.pageSize || 10,
         pageIndex: params.pageIndex || 1,
-        statusId: params.statusId || null
+        statusId: params.statusId || 1
       },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -328,13 +323,10 @@ export const getOrderTrackCode = async (trackCode , token) => {
     
     return response.data;
   } catch (err) {
-    Toast.fire({
-      icon: "error",
-      text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
-    });
+    return {
+      type: 'error',
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+    }
   }
 };
 

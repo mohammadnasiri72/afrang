@@ -6,15 +6,15 @@ import SummaryPayment from "./SummaryPayment";
 
 
 
-export default function TitlePayment({ estimateData }) {
+export default function TitlePayment() {
 
-
+    
     return (
         <>
             <div className="lg:w-3/4 w-full lg:pl-5">
-                <SelectWayPayment estimateData={estimateData} />
-                <SelectCodeDiscount estimateData={estimateData} />
-                <SummaryPayment estimateData={estimateData} />
+                <SelectWayPayment />
+                <SelectCodeDiscount />
+                <SummaryPayment />
             </div>
         </>
 

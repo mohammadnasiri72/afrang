@@ -2,7 +2,7 @@
 
 import AddLegal from "@/components/profile/legal/AddLegal";
 import { setLegalEnabled, setSelectedLegal } from "@/redux/slices/legalIdSlice";
-import { getLegal, getLegalId } from "@/services/order/orderService";
+import { getLegal, getLegalId } from "@/services/User/UserServices";
 import { Switch } from "antd";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
@@ -10,6 +10,36 @@ import { FaBuilding, FaCheck, FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteLegal from "./DeleteLegal";
 import EmptyLegalIcon from "./EmptyLegalIcon";
+
+// کامپوننت اسکلتون برای نمایش در زمان لودینگ
+const BoxLegalSkeleton = () => {
+    return (
+        <div className="flex flex-col gap-4">
+            {[1, 2].map((item) => (
+                <div
+                    key={item}
+                    className="w-full flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 animate-pulse"
+                >
+                    <div className="w-10 h-10 bg-gray-200 rounded-lg flex-shrink-0" />
+                    <div className="flex-grow">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {[1, 2, 3, 4, 5, 6].map((field) => (
+                                <div key={field} className="flex items-center gap-2">
+                                    <div className="h-4 bg-gray-200 rounded w-24" />
+                                    <div className="h-4 bg-gray-200 rounded w-32" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-gray-200 rounded" />
+                        <div className="w-5 h-5 bg-gray-200 rounded-full" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 function BoxLegal() {
     const dispatch = useDispatch();
@@ -19,7 +49,6 @@ function BoxLegal() {
     const [legalList, setLegalList] = useState([]);
     const [selectedLegalForEdit, setSelectedLegalForEdit] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [editLoading, setEditLoading] = useState(false);
 
     const user = Cookies.get("user");
     const token = JSON.parse(user).token;
@@ -42,9 +71,18 @@ function BoxLegal() {
         setLoading(true);
         try {
             const data = await getLegal(token);
-            if (data) {
+            if (data.type === 'error') {
+                Toast.fire({
+                    icon: "error",
+                    text: data.message,
+                    customClass: {
+                        container: "toast-modal",
+                    },
+                });
+                return;
+            }
+            else {
                 setLegalList(data);
-
                 // اگر فقط یک اطلاعات حقوقی وجود دارد، آن را انتخاب کن
                 if (data.length === 1) {
                     dispatch(setSelectedLegal(data[0]));
@@ -54,7 +92,10 @@ function BoxLegal() {
                 }
             }
         } catch (error) {
-            console.error("Error fetching legal list:", error);
+            Toast.fire({
+                icon: "error",
+                text: error.response?.data ? error.response?.data : "خطای شبکه",
+            });
         } finally {
             setLoading(false);
         }
@@ -72,18 +113,25 @@ function BoxLegal() {
     };
 
     const handleEditClick = async (legalId) => {
-        setEditLoading(true);
         try {
             const response = await getLegalId(legalId, token);
-            if (response) {
+            if (response.type === 'error') {
+                Toast.fire({
+                    icon: "error",
+                    text: response.message,
+                });
+                return;
+            }
+            else {
                 setSelectedLegalForEdit(response);
                 setShowAddModal(true);
             }
         } catch (error) {
-            console.error("Error fetching legal details:", error);
-        } finally {
-            setEditLoading(false);
-        }
+            Toast.fire({
+                icon: "error",
+                text: error.response?.data ? error.response?.data : "خطای شبکه",
+            });
+        } 
     };
 
     const handleAddLegal = async (newLegal) => {
@@ -143,9 +191,7 @@ function BoxLegal() {
             {isLegalEnabled && (
                 <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
                     {loading ? (
-                        <div className="flex justify-center items-center py-8">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-                        </div>
+                        <BoxLegalSkeleton />
                     ) : legalList.length > 0 ? (
                         <div className="flex flex-col gap-2">
                             {legalList.map((legal) => (

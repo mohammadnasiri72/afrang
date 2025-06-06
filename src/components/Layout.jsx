@@ -1,10 +1,16 @@
 "use client";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { fetchCartData, setCartType } from "@/redux/slices/cartSlice";
 import { setError, setLoading, setMenuItems } from "@/redux/slices/menuResSlice";
-import { fetchCurrentCart, fetchNextCart, setCartType } from "@/redux/slices/cartSlice";
-import { addToCart, deleteCartItem, getCart, getNextCart } from "@/services/cart/cartService";
+import { fetchSettingsData } from "@/redux/slices/settingsSlice";
+import { setUser } from "@/redux/slices/userSlice";
+import { addToCart, getCart } from "@/services/cart/cartService";
 import { fetchMenuItems } from "@/services/menuService";
+import { getUserId } from "@/utils/cookieUtils";
+import { mainDomain } from "@/utils/mainDomain";
+import { syncUserCookieWithRedux } from "@/utils/manageCookie";
+import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -12,12 +18,6 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./../redux/store";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
-import axios from "axios";
-import { mainDomain } from "@/utils/mainDomain";
-import { getUserCookie, getUserId } from "@/utils/cookieUtils";
-import { syncUserCookieWithRedux } from "@/utils/manageCookie";
-import { fetchSettingsData } from "@/redux/slices/settingsSlice";
-import { setUser } from "@/redux/slices/userSlice";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -27,7 +27,6 @@ const generateRandomUserId = () => {
 function InitialDataManager() {
   const dispatch = useDispatch();
   const { cartType } = useSelector(state => state.cart);
-  const { settings } = useSelector(state => state.settings);
   const user = useSelector(state => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const initialized = useRef(false);
@@ -41,13 +40,13 @@ function InitialDataManager() {
         if (!initialized.current) {
           initialized.current = true;
           dispatch(setLoading());
-          
+
           // دریافت منو و تنظیمات به صورت موازی
           const [menuItems, settingsData] = await Promise.all([
             fetchMenuItems(),
             dispatch(fetchSettingsData()).unwrap()
           ]);
-          
+
           dispatch(setMenuItems(menuItems));
         }
 
@@ -80,8 +79,7 @@ function InitialDataManager() {
             }
 
             // دریافت سبد خرید نهایی بعد از ادغام
-            const finalCartItems = await getCart(currentUserId);
-            dispatch(fetchCurrentCart());
+            dispatch(fetchCartData());
 
             // حذف سبد خرید قبلی
             if (previousCartItems && previousCartItems.length > 0) {
@@ -107,11 +105,7 @@ function InitialDataManager() {
 
           if (currentUserId) {
             dispatch(setCartType(cartType));
-            if (cartType === 'next') {
-              dispatch(fetchNextCart());
-            } else {
-              dispatch(fetchCurrentCart());
-            }
+            dispatch(fetchCartData());
           }
         }
       } catch (error) {
@@ -136,8 +130,6 @@ function LayoutContent({ children }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const showHeaderFooter = !pathname.includes("/login") && !pathname.includes("/register");
-  const user = useSelector((state) => state.user.user);
-  const currentUserId = user?.userId || getUserId();
 
   useEffect(() => {
     setMounted(true);

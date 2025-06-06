@@ -19,6 +19,93 @@ import {
     FaUser
 } from "react-icons/fa";
 
+const DashboardSkeleton = () => {
+    return (
+        <div className="space-y-6">
+            {/* Page Header Skeleton */}
+            <div className="flex items-center justify-between">
+                <div className="h-8 bg-gray-200 animate-pulse rounded w-32" />
+            </div>
+
+            {/* Quick Stats Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {[...Array(5)].map((_, index) => (
+                    <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+                        <div className="flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-lg" />
+                        </div>
+                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24 mx-auto mb-2" />
+                        <div className="h-7 bg-gray-200 animate-pulse rounded w-16 mx-auto" />
+                    </div>
+                ))}
+            </div>
+
+            {/* Main Content Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Recent Views Skeleton */}
+                <div className="lg:col-span-2 bg-white rounded-lg shadow-sm">
+                    <div className="p-6 border-b">
+                        <div className="h-6 bg-gray-200 animate-pulse rounded w-32" />
+                    </div>
+                    <div className="p-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm">
+                                    <div className="aspect-square w-full bg-gray-200 animate-pulse" />
+                                    <div className="p-4">
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mb-2" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2 mb-2" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-1/3" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Recent Favorites & Quick Actions Skeleton */}
+                <div className="space-y-6">
+                    {/* Favorites Skeleton */}
+                    <div className="bg-white rounded-lg shadow-sm">
+                        <div className="p-6 border-b">
+                            <div className="flex items-center justify-between">
+                                <div className="h-6 bg-gray-200 animate-pulse rounded w-40" />
+                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                            </div>
+                        </div>
+                        <div className="p-6">
+                            <div className="space-y-4">
+                                {[...Array(3)].map((_, index) => (
+                                    <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                                        <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-lg" />
+                                        <div className="flex-1">
+                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mb-2" />
+                                            <div className="h-3 bg-gray-200 animate-pulse rounded w-1/2" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Actions Skeleton */}
+                    <div className="bg-white rounded-lg shadow-sm p-6">
+                        <div className="h-6 bg-gray-200 animate-pulse rounded w-32 mb-4" />
+                        <div className="grid grid-cols-2 gap-3">
+                            {[...Array(2)].map((_, index) => (
+                                <div key={index} className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg">
+                                    <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function Dashboard() {
     const router = useRouter();
     const [dashboardData, setDashboardData] = useState({
@@ -31,6 +118,7 @@ export default function Dashboard() {
     const [listLiked, setListLiked] = useState([]);
     const [likedItems, setLikedItems] = useState([]);
     const [recentViews, setRecentViews] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const user = Cookies.get("user");
@@ -52,15 +140,12 @@ export default function Dashboard() {
         fetchListLiked();
     }, [])
 
-
-
-
-
     useEffect(() => {
         let isMounted = true;
 
         const fetchData = async () => {
             try {
+                setLoading(true);
                 const user = Cookies.get("user");
                 if (!user) {
                     return;
@@ -88,6 +173,10 @@ export default function Dashboard() {
                 }
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -170,6 +259,10 @@ export default function Dashboard() {
             image: "/placeholder.jpg",
         },
     ];
+
+    if (loading) {
+        return <DashboardSkeleton />;
+    }
 
     return (
         <div className="space-y-6">

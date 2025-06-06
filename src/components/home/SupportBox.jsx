@@ -4,7 +4,6 @@ import { getImageUrl, mainDomain } from "@/utils/mainDomain";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Loading from "../Loading";
 
 // Import Swiper styles
 import "swiper/css";
@@ -12,7 +11,25 @@ import "swiper/css/pagination";
 
 import { Autoplay, Pagination } from "swiper/modules";
 
-
+const LoadingSkeleton = () => {
+  return (
+    <div className="sm:px-16 px-2 bg-[#f6f6f6]">
+      <div className="bg-[#18d1be] p-3 rounded-lg">
+        <div className="flex gap-2 overflow-hidden">
+          {[...Array(4)].map((_, index) => (
+            <div
+              key={index}
+              className="rounded-lg bg-white p-5 flex sm:flex-row flex-col justify-center gap-2 items-center flex-1 min-w-[200px]"
+            >
+              <div className="w-12 h-12 bg-gray-200 animate-pulse rounded-full" />
+              <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const SupportBox = () => {
   const [items, setItems] = useState([]);
@@ -53,7 +70,7 @@ const SupportBox = () => {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    return <LoadingSkeleton />;
   }
 
   return (

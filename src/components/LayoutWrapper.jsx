@@ -17,7 +17,7 @@ export default function LayoutWrapper({ children, showHeaderFooter = true }) {
     <>
       <SubHeader />
       <Header />
-      <NavBar />
+      {/* <NavBar /> */}
       <SocialNetworks />
       {children}
       <BoxImgBranding />

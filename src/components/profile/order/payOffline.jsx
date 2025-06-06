@@ -78,16 +78,25 @@ export default function PayOffline({ orderData }) {
 
         fetchGateways();
     }, [orderData?.order?.paymentId]);
+    
 
     // اضافه کردن useEffect برای تنظیم مبلغ پیش‌فرض
     useEffect(() => {
         if (isPaymentModalOpen && orderData?.order?.orderTotal) {
+            // محاسبه مجموع مبالغ پرداخت شده
+            const totalPaid = orderData.payments?.reduce((sum, payment) => {
+                return sum + (payment.amount || 0);
+            }, 0) || 0;
+
+            // محاسبه مبلغ باقیمانده
+            const remainingAmount = orderData.order.orderTotal - totalPaid;
+
             setPaymentData(prev => ({
                 ...prev,
-                amount: orderData.order.orderTotal
+                amount: remainingAmount > 0 ? remainingAmount : 0
             }));
         }
-    }, [isPaymentModalOpen, orderData?.order?.orderTotal]);
+    }, [isPaymentModalOpen, orderData?.order?.orderTotal, orderData?.payments]);
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -138,6 +147,8 @@ export default function PayOffline({ orderData }) {
                 },
             });
 
+            router.push(`/profile/orders?statusId=1&page=1`);
+            
             // پاک کردن فرم
             setPaymentData({
                 referenceNumber: '',
@@ -148,7 +159,7 @@ export default function PayOffline({ orderData }) {
             setErrors({});
 
             // ریفرش کردن صفحه برای دریافت اطلاعات جدید
-            router.refresh();
+            // router.refresh();
 
         } catch (error) {
            
@@ -163,6 +174,8 @@ export default function PayOffline({ orderData }) {
             setLoading(false);
         }
     };
+
+    
 
     const handleChangeToOnline = async () => {
         try {

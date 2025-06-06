@@ -7,9 +7,107 @@ import { MdMailOutline } from "react-icons/md";
 import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { mainDomainImg } from "@/utils/mainDomain";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "./Loading";
 import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
+
+const FooterSkeleton = () => {
+  return (
+    <div className="footer sm:pb-0 pb-16">
+      <div className="lg:px-16 px-2 pt-10 border-b-8 border-[#d1182b] relative">
+        <div className="flex flex-wrap">
+          {/* Logo and Contact Section */}
+          <div className="lg:w-1/3 sm:w-1/2 w-full p-3 flex flex-col items-center justify-center">
+            <div className="w-full flex sm:justify-start justify-center">
+              <div className="w-20 h-20 bg-gray-200 animate-pulse rounded-lg" />
+            </div>
+            <div className="mt-5 w-full flex sm:justify-start justify-center">
+              <div className="h-4 bg-gray-200 animate-pulse rounded w-48" />
+            </div>
+            <div className="sm:hidden flex justify-center gap-2 items-center mt-3 border-b w-full pb-3 border-[#6666] sm:border-none">
+              <div className="flex gap-2">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg" />
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap sm:justify-between justify-around items-center w-full border-b py-5 border-[#6666] sm:border-none">
+              {/* Phone Section */}
+              <div className="flex items-center sm:flex-row flex-col">
+                <div className="bg-white p-3 rounded-full">
+                  <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
+                </div>
+                <div className="flex flex-col justify-center sm:items-start items-center px-2">
+                  <div className="h-3 bg-gray-200 animate-pulse rounded w-20 sm:mt-0 mt-2" />
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-32 mt-1" />
+                </div>
+              </div>
+              {/* Email Section */}
+              <div className="flex items-center sm:flex-row flex-col">
+                <div className="bg-white p-3 rounded-full">
+                  <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
+                </div>
+                <div className="flex flex-col justify-center sm:items-start items-center px-2">
+                  <div className="h-3 bg-gray-200 animate-pulse rounded w-20 sm:mt-0 mt-2" />
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-40 mt-1" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Newsletter Section */}
+          <div className="lg:w-1/3 sm:w-1/2 w-full p-3">
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-48 sm:mx-0 mx-auto" />
+            <div className="h-4 bg-gray-200 animate-pulse rounded w-full mt-4" />
+            <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mt-2" />
+            <div className="flex items-center justify-between p-2 rounded-[50px] bg-white mt-2">
+              <div className="px-3">
+                <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
+              </div>
+              <div className="w-full h-8 bg-gray-200 animate-pulse rounded mx-2" />
+              <div className="h-8 bg-gray-200 animate-pulse rounded-[50px] w-24" />
+            </div>
+            <div className="flex gap-3 mt-4 justify-center sm:justify-start">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg" />
+              ))}
+            </div>
+          </div>
+
+          {/* Working Hours Section */}
+          <div className="lg:w-1/6 w-1/2 p-3">
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-32" />
+            <div className="mt-3">
+              <div className="h-4 bg-gray-200 animate-pulse rounded w-full" />
+              <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mt-2" />
+            </div>
+          </div>
+
+          {/* Certificates Section */}
+          <div className="lg:w-1/6 w-1/2 p-3">
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-24" />
+            <div className="flex flex-wrap justify-start items-center gap-2 mt-3">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="w-24 h-24 bg-gray-200 animate-pulse rounded-lg" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Copyright and Menu Section */}
+      <div className="sm:px-16 px-2 sm:flex hidden flex-wrap justify-between items-center py-4">
+        <div className="xl:w-1/2 w-full">
+          <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mx-auto" />
+        </div>
+        <div className="flex sm:flex-nowrap flex-wrap justify-center items-center xl:w-1/2 w-full">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-4 bg-gray-200 animate-pulse rounded w-20 mx-2" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Footer = () => {
   const dispatch = useDispatch();
@@ -47,7 +145,7 @@ const Footer = () => {
   }, []);
 
   if (loading || socialNetworksLoading || menuLoading) {
-    return <Loading />;
+    return <FooterSkeleton />;
   }
 
   return (

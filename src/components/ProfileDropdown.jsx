@@ -2,7 +2,6 @@
 
 import { clearUser } from "@/redux/slices/userSlice";
 import { SignOut } from "@/services/Account/AccountService";
-import { authServiceSignOut } from "@/services/Auth/authService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl, mainDomain } from "@/utils/mainDomain";
 import { Spin } from "antd";
