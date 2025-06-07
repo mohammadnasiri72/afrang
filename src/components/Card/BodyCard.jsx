@@ -86,7 +86,6 @@ const BodyCard = () => {
   const { currentItems, nextItems, cartType, loading } = useSelector((state) => state.cart);
   const items = cartType === 'current' ? currentItems : nextItems;
 
-  console.log(loading);
   
 
   // import sweet alert 2

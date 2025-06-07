@@ -15,7 +15,10 @@ import {
     FaSpinner,
     FaKey,
     FaUser,
-    FaHeart
+    FaHeart,
+    FaCamera,
+    FaExclamationTriangle,
+    FaInfoCircle
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slices/userSlice';
@@ -25,6 +28,9 @@ const menuItems = [
     { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
     { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
     { id: 'favorites', title: 'علاقه‌مندی‌های من', icon: FaHeart, path: '/profile/favorites' },
+    { id: 'send-image', title: 'ارسال عکس', icon: FaCamera, path: '/profile/Send-Photo' },
+    { id: 'report-loss', title: 'گزارش مفقودی', icon: FaExclamationTriangle, path: '/profile/Missing-Report' },
+    { id: 'about-me', title: 'درباره من', icon: FaInfoCircle, path: '/profile/About-Me' },
     { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
     { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
     { id: 'change-password', title: 'تغییر رمز عبور', icon: FaKey, path: '/profile/change-password' },

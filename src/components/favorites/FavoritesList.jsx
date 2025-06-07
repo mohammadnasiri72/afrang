@@ -43,7 +43,6 @@ export default function FavoritesList() {
     const [isRemoving, setIsRemoving] = useState(false);
     const [itemToRemove, setItemToRemove] = useState(null);
 
-    console.log(likedItems);
 
     // Toast notification setup
     const Toast = Swal.mixin({
@@ -103,7 +102,7 @@ export default function FavoritesList() {
             
             Toast.fire({
                 icon: "success",
-                text: "محصول با موفقیت از علاقه‌مندی‌ها حذف شد",
+                text: "آیتم با موفقیت از علاقه‌مندی‌ها حذف شد",
                 customClass: {
                     container: "toast-modal",
                 },
@@ -111,7 +110,7 @@ export default function FavoritesList() {
         } catch (error) {
             Toast.fire({
                 icon: "error",
-                text: error.response?.data || "مشکلی در حذف محصول پیش آمده است",
+                text: error.response?.data || "مشکلی در حذف آیتم پیش آمده است",
                 customClass: {
                     container: "toast-modal",
                 },
@@ -142,13 +141,13 @@ export default function FavoritesList() {
                                 className="flex-1"
                             >
                                 <div className="aspect-square w-full bg-gray-100 relative overflow-hidden">
-                                    {item.image && (
+                                    
                                         <img
-                                            src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)}
+                                            src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)|| "/images/gallery/blog-img1.jpg"}
                                             alt={item.title}
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
-                                    )}
+                                  
                                 </div>
                                 <div className="p-3 flex-1 flex flex-col">
                                     <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 text-sm hover:text-[#d1182b] transition-colors duration-300">
@@ -192,7 +191,7 @@ export default function FavoritesList() {
                 onClose={() => setItemToRemove(null)}
                 onConfirm={handleConfirmRemove}
                 title="حذف از علاقه‌مندی‌ها"
-                message="آیا از حذف این محصول از لیست علاقه‌مندی‌ها اطمینان دارید؟"
+                message="آیا از حذف این آیتم از لیست علاقه‌مندی‌ها اطمینان دارید؟"
                 isLoading={isRemoving}
             />
         </div>

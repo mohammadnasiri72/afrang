@@ -52,7 +52,7 @@ export const getItemByIds = async (data, token) => {
     });
     return response.data;
   } catch (err) {
-    console.log(err);
+    return {type:'error',message:err.response?.data ? err.response?.data : "خطای شبکه"}
   }
 };
 

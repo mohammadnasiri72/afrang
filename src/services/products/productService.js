@@ -128,7 +128,6 @@ export const getProductPricing = async (categoryId) => {
     });
     return response.data
   } catch (error) {
-   console.log(error);
-    return []
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };

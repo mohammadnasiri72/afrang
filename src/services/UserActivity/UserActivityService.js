@@ -21,7 +21,7 @@ export const getLikes = async (limit, token) => {
         });
         return response.data;
     } catch (error) {
-        console.log(error);
+        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
     }
 };
 
@@ -52,6 +52,6 @@ export const postLiked = async (id, token) => {
         });
         return response.data
     } catch (error) {
-        console.log(error);
+        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
     }
 };

@@ -6,7 +6,7 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey, FaHeart } from "react-icons/fa";
+import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey, FaHeart, FaCamera, FaExclamationTriangle, FaInfoCircle } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
@@ -16,6 +16,9 @@ const dashboardMenuItems = [
   { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
   { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
   { id: 'favorites', title: 'علاقه‌مندی‌های من', icon: FaHeart, path: '/profile/favorites' },
+  { id: 'send-image', title: 'ارسال عکس', icon: FaCamera, path: '/profile/Send-Photo' },
+  { id: 'report-loss', title: 'گزارش مفقودی', icon: FaExclamationTriangle, path: '/profile/Missing-Report' },
+  { id: 'about-me', title: 'درباره من', icon: FaInfoCircle, path: '/profile/About-Me' },
   { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
   { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
   { id: 'change-password', title: 'تغییر رمز عبور', icon: FaKey, path: '/profile/change-password' },
@@ -224,7 +227,8 @@ function ResponsiveMenu() {
                         transform: 'translateY(0)',
                         transition: 'all 0.3s ease-in-out',
                         maxHeight: '80vh',
-                        overflowY: 'auto'
+                        overflowY: 'auto',
+                        overflowX: 'hidden'
                       }}
                     >
                       <div className="container mx-auto">

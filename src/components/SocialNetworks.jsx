@@ -43,12 +43,12 @@ const SocialNetworks = () => {
           key={item.id}
           href={item.sourceLink || "#"}
           target="_blank"
-          className="bg-[#aaa5] p-2 rounded-lg cursor-pointer duration-300 hover:bg-white hover:text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
+          className="bg-[#aaa5] p-2 rounded-lg cursor-pointer duration-300 hover:bg-white hover:text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent overflow-hidden"
         >
           <img
             src={`https://afrangadmin.aitest2.ir${item.image}`}
             alt={item.title || "social network"}
-            className="w-6 h-6 object-contain"
+            className="w-6 h-6 object-contain "
           />
         </Link>
       ))}

@@ -12,6 +12,15 @@ const Toast = Swal.mixin({
     customClass: "toast-modal",
 });
 
+export const getPropertyItem = async (ids) => {
+    try {
+        const response = await axios.get(`${mainDomain}/api/Property/value/item/${ids}`);
+        return response.data;
+    } catch (error) {
+        return {type: "error", message: error.response?.data ? error.response?.data : "خطای شبکه"};
+    }
+};
+
 export const getCategoryChild = async (categoryId) => {
     try {
         const response = await axios.get(`${mainDomain}/api/Property/value/productfilter/${categoryId}`);

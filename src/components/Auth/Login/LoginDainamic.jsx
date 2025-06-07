@@ -50,9 +50,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
     } else {
       setLoading(true);
       try {
-        const res = await loginSendOtp(mobile);
-        console.log(res);
-        
+        const res = await loginSendOtp(mobile);        
         if (!res) {
           setStateLogin(3);
           Toast.fire({

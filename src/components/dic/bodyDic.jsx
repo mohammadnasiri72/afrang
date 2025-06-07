@@ -38,7 +38,7 @@ export default function BodyDic({dics}) {
             {Object.entries(groupedItems).map(([categoryId, { categoryTitle, items }]) => (
                 <div key={categoryId} className="bg-white rounded-lg shadow-sm z-50 relative">
                     <div className="border-b border-gray-100 p-4">
-                        <h3 className="text-lg font-semibold text-[#0a1d39] text-center">{categoryTitle}</h3>
+                        <h3 className="text-2xl font-semibold text-[#0a1d39] text-center">{categoryTitle}</h3>
                     </div>
                     <div className="p-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -50,7 +50,7 @@ export default function BodyDic({dics}) {
                                 >
                                     <div className="w-full text-right flex items-center gap-2 text-gray-900 group-hover:text-[#18d1be] transition-colors duration-200">
                                         <FaBook className="text-[#18d1be] flex-shrink-0" />
-                                        <span className="line-clamp-2">{item.title}</span>
+                                        <span className="line-clamp-2 font-semibold">{item.title}</span>
                                     </div>
                                 </Link>
                             ))}

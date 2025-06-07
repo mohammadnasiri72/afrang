@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaBox, FaKey, FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaBox, FaKey, FaShoppingCart, FaUser, FaTachometerAlt } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 
@@ -113,24 +113,30 @@ const ProfileDropdown = () => {
   const menuItems = [
     {
       id: 1,
+      label: "داشبورد",
+      icon: <FaTachometerAlt className="text-lg" />,
+      href: "/profile/dashboard",
+    },
+    {
+      id: 2,
       label: "سبد خرید",
       icon: <FaShoppingCart className="text-lg" />,
       href: "/cart",
     },
     {
-      id: 2,
+      id: 3,
       label: "ویرایش پروفایل",
       icon: <FaUser className="text-lg" />,
       href: "/profile/edit-profile",
     },
     {
-      id: 3,
+      id: 4,
       label: "سفارش‌های من",
       icon: <FaBox className="text-lg" />,
       href: "/profile/orders",
     },
     {
-      id: 4,
+      id: 5,
       label: "تغییر رمز عبور",
       icon: <FaKey className="text-lg" />,
       href: "/profile/change-password",

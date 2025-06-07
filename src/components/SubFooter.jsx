@@ -4,6 +4,7 @@ import { FaBars, FaCartShopping } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import SearchSubfooter from "./SearchSubfooter";
 import ShoppingDrawer from "./ShoppingDrawer";
+import Link from "next/link";
 
 export default function SubFooter() {
   const disPatch = useDispatch();
@@ -14,7 +15,9 @@ export default function SubFooter() {
         <ShoppingDrawer />
 
         <SearchSubfooter />
-        <FaUserCircle className="text-3xl" />
+        <Link href="/profile/dashboard">
+          <FaUserCircle className="text-3xl cursor-pointer" />
+        </Link>
 
         <FaBars
           onClick={() => {

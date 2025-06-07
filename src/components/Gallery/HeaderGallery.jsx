@@ -1,14 +1,102 @@
 "use client";
 
-import { Segmented, Select } from "antd";
-import { useState } from "react";
+import { message, Segmented, Select, Skeleton } from "antd";
+import { useEffect, useState } from "react";
 import { FaCaretDown, FaTelegram } from "react-icons/fa6";
 import Container from "../container";
 import ModalSelectCategoryBlog from "./ModalSelectCategoryBlog";
 import ModalSelectSortBlog from "./ModalSelectSortBlog";
+import { getCategory } from "@/services/Category/categoryService";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function HeaderGallery() {
-  const [typeArticle, setTypeArticle] = useState("عکس ها");
+  const [category, setCategory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [selectedSort, setSelectedSort] = useState("1");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const fetchCategory = async () => {
+    try {
+      setLoading(true);
+      const categoryData = await getCategory({
+        TypeId: 9,
+        LangCode: 'fa',
+      });
+
+      if (categoryData.type === 'error') {
+        message.error(categoryData.message);
+        return;
+      }
+
+      setCategory(categoryData)
+    } catch (error) {
+      message.error(error.response?.data || "خطای شبکه");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    fetchCategory();
+  },[])
+
+  // خواندن پارامترهای URL در لود اولیه
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    const orderByParam = searchParams.get('orderBy');
+    
+    if (categoryParam) setSelectedCategory(Number(categoryParam));
+    else setSelectedCategory(0);
+    
+    if (orderByParam) setSelectedSort(orderByParam);
+    else setSelectedSort("1");
+  }, [searchParams]);
+
+  const updateUrlParams = (category, orderBy) => {
+    const params = new URLSearchParams(searchParams.toString());
+    
+    if (category) {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
+    
+    if (orderBy) {
+      params.set('orderBy', orderBy);
+    } else {
+      params.delete('orderBy');
+    }
+
+    router.push(`?${params.toString()}`);
+  };
+
+  const categoryOptions = [
+    { value: 0, label: "همه دسته‌بندی‌ها" },
+    ...category.map(item => ({
+      value: item.id,
+      label: item.title
+    }))
+  ];
+
+  const sortOptions = [
+    { value: "1", label: "جدیدترین" },
+    { value: "2", label: "قدیمی‌ترین" },
+    { value: "3", label: "پربازدیدترین" },
+    { value: "4", label: "پسندیده‌ترین" }
+  ];
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+    updateUrlParams(value === 0 ? null : value, selectedSort);
+  };
+
+  const handleSortChange = (value) => {
+    setSelectedSort(value);
+    updateUrlParams(selectedCategory, value);
+  };
+
   return (
     <>
       <Container>
@@ -23,7 +111,7 @@ function HeaderGallery() {
                   <ModalSelectSortBlog />
                 </div>
               </div>
-              <div className="lg:w-auto w-full SegmentedBlog">
+              {/* <div className="lg:w-auto w-full SegmentedBlog">
                 <Segmented
                   className="font-semibold text-3xl w-full "
                   dir="ltr"
@@ -38,49 +126,45 @@ function HeaderGallery() {
                   }}
                   options={["ویدئو ها", "عکس ها"]}
                 />
-              </div>
+              </div> */}
               <div className="lg:w-[300px] w-full sm:block hidden">
-                <Select
-                  className="custom-select w-full border-none bg-[#f0f0f0] rounded-[8px]"
-                  size="large"
-                  defaultValue="مرتب سازی بر اساس"
-                  onChange={(e) => {
-                  }}
-                  suffixIcon={
-                    <FaCaretDown className="text-[#d1182b] text-lg" />
-                  }
-                  options={[
-                    {
-                      value: "مرتب سازی بر اساس",
-                      label: "مرتب سازی بر اساس",
-                    },
-                    { value: "تست1", label: "تست1" },
-                    { value: "تست2", label: "تست2" },
-                    // { value: "disabled", label: "Disabled", disabled: true },
-                  ]}
-                />
+                {loading ? (
+                  <Skeleton.Input active size="large" className="w-full" />
+                ) : (
+                  <Select
+                    className="custom-select w-full border-none bg-[#f0f0f0] rounded-[8px]"
+                    size="large"
+                    placeholder="مرتب سازی بر اساس"
+                    value={selectedSort}
+                    onChange={handleSortChange}
+                    suffixIcon={
+                      <FaCaretDown className="text-[#d1182b] text-lg" />
+                    }
+                    options={sortOptions}
+                  />
+                )}
               </div>
               <div className="lg:w-[250px] w-full sm:block hidden">
-                <Select
-                  className="custom-select w-full "
-                  size="large"
-                  defaultValue="دسته بندی"
-                  style={{
-                    border: "none",
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: "8px",
-                  }}
-                  onChange={(e) => {
-                  }}
-                  suffixIcon={
-                    <FaCaretDown className="text-[#d1182b] text-lg" />
-                  }
-                  options={[
-                    { value: "دسته بندی", label: "دسته بندی" },
-                    { value: "تست1", label: "تست1" },
-                    { value: "تست2", label: "تست2" },
-                  ]}
-                />
+                {loading ? (
+                  <Skeleton.Input active size="large" className="w-full" />
+                ) : (
+                  <Select
+                    className="custom-select w-full"
+                    size="large"
+                    placeholder="دسته بندی"
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                    style={{
+                      border: "none",
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: "8px",
+                    }}
+                    suffixIcon={
+                      <FaCaretDown className="text-[#d1182b] text-lg" />
+                    }
+                    options={categoryOptions}
+                  />
+                )}
               </div>
             </div>
             <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">

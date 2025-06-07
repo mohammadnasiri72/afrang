@@ -17,10 +17,11 @@ export default function LayoutWrapper({ children, showHeaderFooter = true }) {
     <>
       <SubHeader />
       <Header />
-      {/* <NavBar /> */}
+      <NavBar />
       <SocialNetworks />
       {children}
       <BoxImgBranding />
+      <div className="h-10"></div>
       <SupportBox />
       <Footer />
       <SubFooter />

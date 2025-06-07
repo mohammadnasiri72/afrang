@@ -12,7 +12,6 @@ async function RelationBlog() {
     PageIndex: 1
   });
 
-  console.log(blogs);
   
 
   const formatPersianDate = (dateString) => {

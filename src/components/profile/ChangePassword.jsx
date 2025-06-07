@@ -77,7 +77,6 @@ export default function ChangeUserPassword() {
                 confirmPassword: confirmPassword.trim()
             }, user.token);
 
-            console.log(res);
 
             if (res.ok) {
                 Toast.fire({

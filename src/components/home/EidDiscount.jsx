@@ -5,6 +5,18 @@ import { FaCaretLeft } from "react-icons/fa6";
 import ProductMain from "./ProductMain";
 import { useRouter } from "next/navigation";
 import { getProductAction, getProductListId } from "@/services/products/productService";
+import Swal from "sweetalert2";
+
+
+// import sweet alert 2
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 // اسکلتون لودینگ
 const EidDiscountSkeleton = () => {
