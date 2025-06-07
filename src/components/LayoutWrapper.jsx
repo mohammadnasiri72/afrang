@@ -15,7 +15,6 @@ export default function LayoutWrapper({ children, showHeaderFooter = true }) {
 
   return (
     <>
-    تست
       <SubHeader />
       <Header />
       <NavBar />
