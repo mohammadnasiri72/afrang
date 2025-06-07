@@ -21,6 +21,23 @@ export const getComment = async (id, pageComment = 1 , type = 0) => {
   }
 };
 
+
+export const getUserComments = async (params , token) => {
+  try {
+   
+
+    const response = await axios.get(`${mainDomain}/api/Comment/User` , {
+      params,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  }
+};
+
 export const sendComment = async (data) => {
   try {
     const commentData = {
