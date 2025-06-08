@@ -91,7 +91,7 @@ function BundleProducts({ product }) {
                     style={{ filter: "brightness(0.95)" }}
                     // src={`${mainDomainImg}/${item.image}`}
                     src={getImageUrl2(item.image)}
-                    alt={'🚫'}
+                    alt={item.title}
                   />
                 </Link>
 

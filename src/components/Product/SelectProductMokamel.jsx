@@ -57,16 +57,16 @@ function SelectProductMokamel({ product }) {
           }}
           suffixIcon={<FaCaretDown className="text-[#d1182b] text-lg" />}
           options={optionalProducts.map((product) => ({
-            value: product.id,
+            value: product.product.productId,
             label: (
               <div
-                className={`p-3 duration-300 ${selectedProducts.includes(product.id)
+                className={`p-3 duration-300 ${selectedProducts.includes(product.product.productId)
                     ? 'bg-[#d1182b10] hover:bg-[#d1182b15]'
                     : 'hover:bg-[#f3f3f3]'
                   } flex items-center justify-between`}
               >
                 <span>{product.title}</span>
-                {selectedProducts.includes(product.id) && (
+                {selectedProducts.includes(product.product.productId) && (
                   <span className="text-[#d1182b] text-sm">
                     ✓
                   </span>
@@ -94,15 +94,15 @@ function SelectProductMokamel({ product }) {
       </div>
       <div className="flex flex-wrap items-center mt-3 -mr-2">
         {filteredProducts.map((product) => (
-          <div key={product.id} className="p-2">
+          <div key={product.product.productId} className="p-2">
             <div className="bg-[#f6f6f6] flex items-center justify-center gap-2 rounded-sm border border-[#0002] h-11 px-2">
-              <img src={getImageUrl(product.image)} alt={product.id} className="h-8 w-8 object-contain" />
+              <img src={getImageUrl(product.product.image)} alt={product.product.productId} className="h-8 w-8 object-contain" />
               <span className="whitespace-nowrap">{product.title}</span>
               <div>
                 <IoIosClose
                   onClick={() => {
                     setSelectedProducts(
-                      selectedProducts.filter((id) => id !== product.id)
+                      selectedProducts.filter((id) => id !== product.product.productId)
                     );
                   }}
                   className="cursor-pointer text-xl text-[#0008]"

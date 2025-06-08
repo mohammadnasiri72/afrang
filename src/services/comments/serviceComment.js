@@ -38,27 +38,63 @@ export const getUserComments = async (params , token) => {
   }
 };
 
-export const sendComment = async (data) => {
+export const sendComment = async (data , token) => {
   try {
     const commentData = {
-      userName: "", // برای زمانی که کاربر لاگین کرده باشد
+      userName: "",
       itemId: data.itemId,
       parentId: data.parentId || -1, // اگر parentId نباشد، -1 ارسال می‌شود
-      name: data.name,
+      name: token ? data.name : "",
       type: data.type,
       body: data.body,
       langCode: "fa",
-      email: data.email,
+      email: token ? data.email : "",
       score: 0,
-      userIP: "", // فعلاً خالی
+      userIP: data.userIP|| ""
     };
 
     
-
-    const response = await axios.post(`${mainDomain}/api/Comment`, commentData);
+if(token){
+  const response = await axios.post(`${mainDomain}/api/Comment`, commentData , {
+    headers: {
+      'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
+}else{
+  const response = await axios.post(`${mainDomain}/api/Comment`, commentData);
+  return response.data;
+}
   } catch (error) {
-    console.error('خطا در ارسال کامنت:', error);
-    throw error;
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  }
+};
+
+export const deleteComment = async (id , token) => {
+  try {
+  const response = await axios.delete(`${mainDomain}/api/Comment/${id}` , {
+    headers: {
+      'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+
+  } catch (error) {
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  }
+};
+
+
+export const editComment = async (data , token) => {
+  try {
+  const response = await axios.put(`${mainDomain}/api/Comment/Edit` , data , {
+    headers: {
+      'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+
+  } catch (error) {
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };

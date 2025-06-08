@@ -1,7 +1,9 @@
 "use client";
 
+import { selectUser } from "@/redux/slices/userSlice";
 import { sendComment } from "@/services/comments/serviceComment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 // import sweet alert 2
@@ -14,12 +16,29 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
+function SendCommentBox({ itemId, parentId = -1, onCommentSent, type }) {
+  const user = useSelector(selectUser);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     body: "",
   });
+  const [userIP, setUserIP] = useState("");
+
+  useEffect(() => {
+    const fetchIP = async () => {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        setUserIP(data.ip);
+      } catch (error) {
+        console.error('Error fetching IP:', error);
+      }
+    };
+
+    fetchIP();
+  }, []);
+
 
   const [errors, setErrors] = useState({
     name: "",
@@ -38,19 +57,22 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
     };
     let isValid = true;
 
-    // اعتبارسنجی نام
-    if (!formData.name.trim()) {
-      newErrors.name = "لطفا نام و نام خانوادگی را وارد کنید";
-      isValid = false;
-    }
+    // Only validate name and email if user is not logged in
+    if (!user.token) {
+      // اعتبارسنجی نام
+      if (!formData.name.trim()) {
+        newErrors.name = "لطفا نام و نام خانوادگی را وارد کنید";
+        isValid = false;
+      }
 
-    // اعتبارسنجی ایمیل
-    if (!formData.email.trim()) {
-      newErrors.email = "لطفا ایمیل را وارد کنید";
-      isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "لطفا یک ایمیل معتبر وارد کنید";
-      isValid = false;
+      // اعتبارسنجی ایمیل
+      if (!formData.email.trim()) {
+        newErrors.email = "لطفا ایمیل را وارد کنید";
+        isValid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = "لطفا یک ایمیل معتبر وارد کنید";
+        isValid = false;
+      }
     }
 
     // اعتبارسنجی متن کامنت
@@ -80,7 +102,7 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -94,10 +116,29 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
         itemId,
         parentId,
         type,
+        userIP,
       };
-      
-      await sendComment(commentData);
 
+      if (user.token) {
+        // If user is logged in, use their data
+        commentData.name = user.name || user.fullName;
+        commentData.email = user.email;
+      }
+
+      let response = null;
+
+      if (user.token) {
+        response = await sendComment(commentData, user.token);
+      } else {
+        response = await sendComment(commentData);
+      }
+      if (response.type === 'error') {
+        Toast.fire({
+          icon: "error",
+          text: response.message,
+        });
+        return;
+      }
       Toast.fire({
         icon: "success",
         text: "با موفقیت انجام شد لطفا منتظر تایید ادمین باشید",
@@ -113,10 +154,9 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
         onCommentSent();
       }
     } catch (err) {
-      setError("خطا در ارسال کامنت. لطفاً دوباره تلاش کنید.");
       Toast.fire({
         icon: "error",
-        text: "خطا در ارسال کامنت. لطفاً دوباره تلاش کنید.",
+        text: err.response?.data ? err.response?.data : "خطا در ارسال کامنت. لطفاً دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -133,44 +173,43 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent , type}) {
       )}
 
       <form onSubmit={handleSubmit} className="mt-5">
-        <div className="flex flex-wrap">
-          <div className="sm:w-1/2 w-full sm:pl-3">
-            <input
-              className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
-                errors.name ? "border-2 border-red-500 placeholder-red-500" : ""
-              }`}
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder={errors.name ? errors.name : "*نام و نام خانوادگی"}
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-            )}
+        {!user.token && (
+          <div className="flex flex-wrap">
+            <div className="sm:w-1/2 w-full sm:pl-3">
+              <input
+                className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.name ? "border-2 border-red-500 placeholder-red-500" : ""
+                  }`}
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder={errors.name ? errors.name : "*نام و نام خانوادگی"}
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              )}
+            </div>
+            <div className="sm:w-1/2 w-full sm:pr-3 sm:mt-0 mt-5">
+              <input
+                className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.email ? "border-2 border-red-500 placeholder-red-500" : ""
+                  }`}
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder={errors.email ? errors.email : "*ایمیل"}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
+            </div>
           </div>
-          <div className="sm:w-1/2 w-full sm:pr-3 sm:mt-0 mt-5">
-            <input
-              className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
-                errors.email ? "border-2 border-red-500 placeholder-red-500" : ""
-              }`}
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder={errors.email ? errors.email : "*ایمیل"}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
-        </div>
+        )}
 
         <div className="mt-5">
           <textarea
-            className={`w-full outline-none bg-[#f1f2f2] px-5 py-2 h-36 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
-              errors.body ? "border-2 border-red-500 placeholder-red-500" : ""
-            }`}
+            className={`w-full outline-none bg-[#f1f2f2] px-5 py-2 h-36 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.body ? "border-2 border-red-500 placeholder-red-500" : ""
+              }`}
             name="body"
             value={formData.body}
             onChange={handleChange}

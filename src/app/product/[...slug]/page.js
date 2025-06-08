@@ -1,12 +1,10 @@
+import { itemVisit } from '@/services/Item/item';
+import { getProductId } from "@/services/products/productService";
 import dynamic from 'next/dynamic';
 import { headers } from 'next/headers';
-import { Suspense } from 'react';
+import BreadcrumbNavProduct from './BreadcrumbNavProduct';
 const BodyProduct = dynamic(() => import('@/components/Product/BodyProduct'));
 const TitleProduct = dynamic(() => import('@/components/Product/TitleProduct'));
-import { getProductId } from "@/services/products/productService";
-import { itemVisit } from '@/services/Item/item';
-import BreadcrumbNavProduct from './BreadcrumbNavProduct';
-import { TitleProductSkeleton, BodyProductSkeleton } from '@/components/Product/ProductSkeleton';
 
 export default async function ProductDetails(props) {
   const prop = await props;
@@ -24,7 +22,7 @@ export default async function ProductDetails(props) {
   
   // Record the visit with IP and User Agent
   try {
-    await itemVisit(id, url, ip, userAgent);
+    await itemVisit(product?.product?.productId, url, ip, userAgent);
   } catch (error) {
     console.error('Error recording visit:', error);
   }
@@ -34,11 +32,8 @@ export default async function ProductDetails(props) {
       <BreadcrumbNavProduct breadcrumb={product?.breadcrumb} />
       <div className="bg-[#f6f6f6] overflow-hidden py-10">
         <div className="xl:px-16">
-            <TitleProduct product={{...product, id}} />
-         
-          
-            <BodyProduct product={{...product, id}} />
-         
+            <TitleProduct product={product} />
+            <BodyProduct product={product} />
         </div>
       </div>
     </>

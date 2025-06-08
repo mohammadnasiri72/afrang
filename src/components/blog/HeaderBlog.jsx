@@ -69,7 +69,7 @@ async function HeaderBlog({ searchParams, category, blogs }) {
         </div>
         {blogs.length > 0 && (
           <div>
-            <div className="flex flex-wrap bg-white p-5 rounded-lg overflow-hidden ">
+            <div className="flex flex-wrap bg-white p-5 rounded-lg overflow-hidden items-start">
               <div className="lg:w-1/3 w-full py-3 px-5">
                 <h3 className="text-2xl font-semibold">{blogs[0].title}</h3>
                 <p className="leading-[45px]  text-[17px] text-[#666] mt-2 text-justify">

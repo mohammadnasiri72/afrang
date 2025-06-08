@@ -6,10 +6,11 @@ import BasketBox from "./BasketBox";
 function TitleProduct({ product }) {
 
 
+
   // ساخت آبجکت جدید برای تصویر اصلی با همان ساختار attachments
   const mainImageAttachment = product?.product?.image ? {
     id: 'main-image',
-    itemId: product.product.id,
+    itemId: product.product.productId,
     itemKey: "Image",
     fileUrl: product.product.image,
     priority: 0, // اولویت صفر برای نمایش در اول اسلایدر
@@ -44,7 +45,7 @@ function TitleProduct({ product }) {
             <p className="text-gray-500 text-center text-sm">در حال حاضر تصویری برای این محصول ثبت نشده است.</p>
             <div className="mt-4 p-3 bg-gray-100 rounded-md text-sm text-gray-600">
               <span className="font-semibold ml-1">کد محصول:</span>
-              {product.id || "نامشخص"}
+              {product.product.productId || "نامشخص"}
             </div>
           </div>
         }

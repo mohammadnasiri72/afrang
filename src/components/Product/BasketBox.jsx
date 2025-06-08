@@ -10,7 +10,7 @@ import { FaTruck, FaTruckFast, FaRecycle } from "react-icons/fa6";
 
 function BasketBox({ product }) {
   const { items } = useSelector((state) => state.cart);
-  const isInCart = items?.some(item => item.productId === product.id);
+  const isInCart = items?.some(item => item.productId === product.product.productId);
 
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })

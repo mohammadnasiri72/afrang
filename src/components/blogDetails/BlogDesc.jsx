@@ -1,4 +1,7 @@
-import { getBlogsByUrl } from "@/services/blogs/blogServiceId";
+import { getItemByUrl, itemVisit } from "@/services/Item/item";
+import { getImageUrl } from "@/utils/mainDomain";
+import moment from "moment-jalaali";
+import { headers } from "next/headers";
 import Image from "next/image";
 import { FaCalendarAlt } from "react-icons/fa";
 import {
@@ -12,12 +15,9 @@ import {
 import { IoMdTime } from "react-icons/io";
 import CommentSection from "../comments/CommentSection";
 import LikeComponent from "./LikeComponent";
-import { headers } from "next/headers";
-import moment from "moment-jalaali";
-import { getItemByUrl } from "@/services/Item/item";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getComment } from "@/services/comments/serviceComment";
 
-async function BlogDesc({ id, comments, totalCount, params }) {
+async function BlogDesc({ params , searchParams}) {
   let url;
 
   // First try to get URL from params
@@ -31,9 +31,12 @@ async function BlogDesc({ id, comments, totalCount, params }) {
     const encodedPath = new URL(fullUrl).pathname;
     url = decodeURIComponent(encodedPath);
   }
-
+  const pageComment = searchParams?.pageComment
+  ? parseInt(searchParams.pageComment)
+  : 1;
 
   const blog = await getItemByUrl(url);
+  const { items: comments, totalCount } = await getComment(blog?.id, pageComment);
 
   // Calculate reading time based on content
   const calculateReadingTime = (content) => {
@@ -64,6 +67,20 @@ async function BlogDesc({ id, comments, totalCount, params }) {
       return dateString;
     }
   };
+
+
+
+  const headersList = headers();
+  const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+  const userAgent = headersList.get('user-agent') || 'unknown';
+  const urlVisit = headersList.get('x-url') || headersList.get('referer') || '';
+
+
+  try {
+    await itemVisit(blog?.id, urlVisit, ip, userAgent);
+  } catch (error) {
+    console.error('Error recording visit:', error);
+  }
 
   return (
     <>
@@ -134,7 +151,7 @@ async function BlogDesc({ id, comments, totalCount, params }) {
           </div>
         </div>
 
-        <CommentSection id={id} comments={comments} totalCount={totalCount} />
+        <CommentSection id={blog?.id} type={0} />
       </div>
     </>
   );
