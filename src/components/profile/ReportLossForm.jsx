@@ -51,12 +51,12 @@ const ReportLossForm = ({ categories }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
+    <div className="bg-white p-6 rounded-lg shadow-sm z-50 relative">
       <Alert
         message="راهنمای اعلام مفقودی"
         description={
           <div className="mt-2">           
-           <p>کاربر گرامی لطفا اطلاعات کالای مفقودی خود را در این قسمت وارد نمایید ، در اینصورت  هنگام جستجو در فروش محصولات دست دوم چک می گردد که این کالا به کسی فروخته نشود</p>
+           <p className="text-justify">کاربر گرامی لطفا اطلاعات کالای مفقودی خود را در این قسمت وارد نمایید ، در اینصورت  هنگام جستجو در فروش محصولات دست دوم چک می گردد که این کالا به کسی فروخته نشود</p>
           </div>
         }
         type="info"

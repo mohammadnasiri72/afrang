@@ -19,7 +19,8 @@ import {
     FaCamera,
     FaExclamationTriangle,
     FaInfoCircle,
-    FaComments
+    FaComments,
+    FaNewspaper
 } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slices/userSlice';
@@ -32,6 +33,7 @@ const menuItems = [
     { id: 'send-image', title: 'ارسال عکس', icon: FaCamera, path: '/profile/Send-Photo' },
     { id: 'report-loss', title: 'گزارش مفقودی', icon: FaExclamationTriangle, path: '/profile/Missing-Report' },
     { id: 'user-comments', title: 'نظرات ارسالی', icon: FaComments, path: '/profile/User-Comments' },
+    { id: 'my-articles', title: 'ارسال اخبار و مقالات', icon: FaNewspaper, path: '/profile/My-Articles' },
     { id: 'about-me', title: 'درباره من', icon: FaInfoCircle, path: '/profile/About-Me' },
     { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
     { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
@@ -127,7 +129,6 @@ export default function ProfileLayout({ children }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const userStatus = useSelector(selectUserStatus);    
 
     // import sweet alert 2
     const Toast = Swal.mixin({
@@ -216,7 +217,7 @@ export default function ProfileLayout({ children }) {
             `}>
                 <div className="h-full flex flex-col">
                     {/* بخش اطلاعات کاربر */}
-                    <div className="p-4 border-b">
+                    <div className="p-4 border-b border-gray-200">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
                                 {user?.avatar ? (

@@ -6,7 +6,7 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey, FaHeart, FaCamera, FaExclamationTriangle, FaInfoCircle } from "react-icons/fa";
+import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey, FaHeart, FaCamera, FaExclamationTriangle, FaInfoCircle, FaComment, FaNewspaper } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
@@ -16,6 +16,8 @@ const dashboardMenuItems = [
   { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
   { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
   { id: 'favorites', title: 'علاقه‌مندی‌های من', icon: FaHeart, path: '/profile/favorites' },
+  { id: 'user-comments', title: 'نظرات ارسالی', icon: FaComment, path: '/profile/User-Comments' },
+  { id: 'my-articles', title: 'ارسال اخبار و مقالات', icon: FaNewspaper, path: '/profile/My-Articles' },
   { id: 'send-image', title: 'ارسال عکس', icon: FaCamera, path: '/profile/Send-Photo' },
   { id: 'report-loss', title: 'گزارش مفقودی', icon: FaExclamationTriangle, path: '/profile/Missing-Report' },
   { id: 'about-me', title: 'درباره من', icon: FaInfoCircle, path: '/profile/About-Me' },

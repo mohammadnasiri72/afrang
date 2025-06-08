@@ -246,7 +246,7 @@ export default function OrderDetails({ trackCode }) {
                     onClick={handleBack}
                     className="flex items-center gap-2 text-gray-600 hover:text-[#40768c] transition-colors cursor-pointer"
                 >
-                    <span>بازگشت به لیست سفارشات</span>
+                    <span>بازگشت به لیست </span>
                     <FaArrowLeft />
                 </button>
             </div>

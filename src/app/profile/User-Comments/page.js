@@ -7,41 +7,39 @@ import { selectUser } from '@/redux/slices/userSlice';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { getUserComments, deleteComment, editComment } from '@/services/comments/serviceComment';
 import Link from 'next/link';
-import { message } from 'antd';
 import { createPortal } from 'react-dom';
 import { FaSpinner } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const CommentsSkeleton = () => {
     return (
         <div className="space-y-3">
             {[...Array(3)].map((_, index) => (
                 <Card key={index} className="w-full !p-4 !mt-2">
-                    <div className="flex items-start gap-3">
-                        {/* Avatar Skeleton */}
-                        <div className="w-12 h-12 rounded-lg bg-gray-200 animate-pulse" />
-
-                        <div className="flex-1 min-w-0">
-                            {/* Title and Link Skeleton */}
-                            <div className="flex items-center justify-between mb-1">
-                                <div className="h-5 bg-gray-200 animate-pulse rounded w-48" />
-                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                    <div className="flex-1 min-w-0">
+                        {/* Title and Link Skeleton */}
+                        <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-gray-200 animate-pulse flex-shrink-0" />
+                                <div className="h-5 bg-gray-200 animate-pulse rounded w-3/4 md:w-48" />
                             </div>
-
-                            {/* Name and Rating Skeleton */}
-                            <div className="flex items-center gap-2 mb-1">
-                                <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
-                                <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
-                            </div>
-
-                            {/* Comment Text Skeleton */}
-                            <div className="space-y-1 mb-1">
-                                <div className="h-4 bg-gray-200 animate-pulse rounded w-full" />
-                                <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
-                            </div>
-
-                            {/* Date Skeleton */}
-                            <div className="h-3 bg-gray-200 animate-pulse rounded w-20" />
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
                         </div>
+
+                        {/* Name and Rating Skeleton */}
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                        </div>
+
+                        {/* Comment Text Skeleton */}
+                        <div className="space-y-1 mb-1">
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-full" />
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
+                        </div>
+
+                        {/* Date Skeleton */}
+                        <div className="h-3 bg-gray-200 animate-pulse rounded w-20" />
                     </div>
                 </Card>
             ))}
@@ -133,19 +131,18 @@ const MiniCommentsSkeleton = () => (
     <div className="space-y-2 mt-2">
         {[...Array(3)].map((_, index) => (
             <Card key={index} className="w-full !p-4 !mt-2">
-            <div className="flex items-start gap-3">
-                {/* Avatar Skeleton */}
-                <div className="w-12 h-12 rounded-lg bg-gray-200 animate-pulse" />
-
                 <div className="flex-1 min-w-0">
                     {/* Title and Link Skeleton */}
-                    <div className="flex items-center justify-between mb-1">
-                        <div className="h-5 bg-gray-200 animate-pulse rounded w-48" />
+                    <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg bg-gray-200 animate-pulse flex-shrink-0" />
+                            <div className="h-5 bg-gray-200 animate-pulse rounded w-3/4 md:w-48" />
+                        </div>
                         <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
                     </div>
 
                     {/* Name and Rating Skeleton */}
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
                         <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
                     </div>
@@ -159,8 +156,7 @@ const MiniCommentsSkeleton = () => (
                     {/* Date Skeleton */}
                     <div className="h-3 bg-gray-200 animate-pulse rounded w-20" />
                 </div>
-            </div>
-        </Card>
+            </Card>
         ))}
     </div>
 );
@@ -179,11 +175,21 @@ const UserCommentsPage = () => {
     const [editingComment, setEditingComment] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [commentToDelete, setCommentToDelete] = useState(null);
     const [isEditLoading, setIsEditLoading] = useState(false);
     const [selectedComment, setSelectedComment] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
+    const [deletingIds, setDeletingIds] = useState(new Set());
+
+    // تنظیمات Toast
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-start",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: "toast-modal",
+    });
 
     const fetchCounts = async () => {
         try {
@@ -310,49 +316,53 @@ const UserCommentsPage = () => {
                 <List.Item
                     ref={index === items.length - 1 ? lastElementRef : null}
                 >
-                    <Card className="w-full">
-                        <div className="flex items-start gap-3">
-                            <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center">
-                                <CommentOutlined className="text-2xl text-gray-400" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between mb-1">
+                    <Card 
+                        className={`w-full transition-all duration-500 ${
+                            deletingIds.has(item.id) ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'
+                        }`}
+                    >
+                        <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                        <CommentOutlined className="text-lg text-gray-400" />
+                                    </div>
                                     <Link 
                                         href={item.url} 
                                         target="_blank" 
                                         className="hover:!text-[#d1182b] !text-[#4B5563] transition-colors duration-200 text-decoration-none"
                                     >
-                                        <h3 className="text-base font-bold truncate">{item.title}</h3>
+                                        <h3 className="text-base font-bold break-words">{item.title}</h3>
                                     </Link>
-                                    <div className="flex items-center gap-3">
-                                        <Tooltip title="ویرایش نظر" placement="top">
-                                            <button 
-                                                onClick={() => handleEdit(item)}
-                                                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                                            >
-                                                <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
-                                            </button>
-                                        </Tooltip>
-                                        <Tooltip title="حذف نظر" placement="top">
-                                            <button 
-                                                onClick={() => handleDelete(item)}
-                                                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                                            >
-                                                <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
-                                            </button>
-                                        </Tooltip>
-                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 mb-1">
-                                    {(item.score || item.score===0) && (
-                                        <Rate disabled value={item.score} className="text-sm" />
-                                    )}
+                                <div className="flex items-center gap-3">
+                                    <Tooltip title="ویرایش نظر" placement="top">
+                                        <button 
+                                            onClick={() => handleEdit(item)}
+                                            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                                        >
+                                            <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip title="حذف نظر" placement="top">
+                                        <button 
+                                            onClick={() => handleDelete(item)}
+                                            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                                        >
+                                            <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
+                                        </button>
+                                    </Tooltip>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-1 whitespace-pre-wrap text-justify">{item.body}</p>
-                                <p className="text-xs text-gray-500">
-                                    {new Date(item.created).toLocaleDateString('fa-IR')}
-                                </p>
                             </div>
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                {(item.score || item.score===0) && (
+                                    <Rate disabled value={item.score} className="text-sm" />
+                                )}
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1 whitespace-pre-wrap text-justify break-words">{item.body}</p>
+                            <p className="text-xs text-gray-500">
+                                {new Date(item.created).toLocaleDateString('fa-IR')}
+                            </p>
                         </div>
                     </Card>
                 </List.Item>
@@ -382,20 +392,42 @@ const UserCommentsPage = () => {
         try {
             const response = await deleteComment(selectedComment.id, user.token);
             if (response.type === 'error') {
-                message.error(response.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.message
+                });
                 return;
             }
-            message.success('نظر با موفقیت حذف شد');
-            if (activeTab === 0) {
-                setComments(prev => prev.filter(item => item.id !== selectedComment.id));
-                setCounts(prev => ({ ...prev, comments: prev.comments - 1 }));
-            } else {
-                setQuestions(prev => prev.filter(item => item.id !== selectedComment.id));
-                setCounts(prev => ({ ...prev, questions: prev.questions - 1 }));
-            }
+
+            // Add the ID to deletingIds to trigger animation
+            setDeletingIds(prev => new Set([...prev, selectedComment.id]));
+            
+            // Wait for animation to complete before removing from state
+            setTimeout(() => {
+                if (activeTab === 0) {
+                    setComments(prev => prev.filter(item => item.id !== selectedComment.id));
+                    setCounts(prev => ({ ...prev, comments: prev.comments - 1 }));
+                } else {
+                    setQuestions(prev => prev.filter(item => item.id !== selectedComment.id));
+                    setCounts(prev => ({ ...prev, questions: prev.questions - 1 }));
+                }
+                setDeletingIds(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(selectedComment.id);
+                    return newSet;
+                });
+            }, 500); // Match this with CSS animation duration
+
+            Toast.fire({
+                icon: 'success',
+                title: 'نظر با موفقیت حذف شد'
+            });
             setIsDeleteModalOpen(false);
         } catch (error) {
-            message.error(error.message || 'خطا در حذف نظر');
+            Toast.fire({
+                icon: 'error',
+                title: error.message || 'خطا در حذف نظر'
+            });
         } finally {
             setIsDeleting(false);
             setSelectedComment(null);
@@ -403,6 +435,7 @@ const UserCommentsPage = () => {
     };
 
     const handleModalOk = async () => {
+        setIsEditLoading(true);
         try {
             const response = await editComment({
                 id: editingComment.id,
@@ -410,11 +443,17 @@ const UserCommentsPage = () => {
             }, user.token);
 
             if (response.type === 'error') {
-                message.error(response.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.message
+                });
                 return;
             }
 
-            message.success('نظر با موفقیت ویرایش شد');
+            Toast.fire({
+                icon: 'success',
+                title: 'نظر با موفقیت ویرایش شد'
+            });
             
             if (activeTab === 0) {
                 setComments(prev => prev.map(item => 
@@ -429,7 +468,12 @@ const UserCommentsPage = () => {
             setIsModalOpen(false);
             setEditingComment(null);
         } catch (error) {
-            message.error(error.message || 'خطا در ویرایش نظر');
+            Toast.fire({
+                icon: 'error',
+                title: error.message || 'خطا در ویرایش نظر'
+            });
+        } finally {
+            setIsEditLoading(false);
         }
     };
 
@@ -451,6 +495,8 @@ const UserCommentsPage = () => {
                             padding: "8px",
                             fontFamily: "yekan",
                             width: "100%",
+                            maxWidth: "100%",
+                            overflow: "hidden"
                         }}
                         value={activeTab}
                         onChange={(value) => {

@@ -1,15 +1,16 @@
 "use client";
 
-import { selectUser } from '@/redux/slices/userSlice';
+import { selectUser, selectUserProfile } from '@/redux/slices/userSlice';
 import { Avatar, Card, Descriptions, Divider } from 'antd';
 import { useSelector } from 'react-redux';
 import { UserOutlined } from '@ant-design/icons';
 
 const AboutMePage = () => {
     const user = useSelector(selectUser);
+    const userProfile = useSelector(selectUserProfile);
     return (
         <div className="space-y-6">
-            <Card className="shadow-sm">
+            <Card className="shadow-sm z-50 relative">
                 <div className="flex items-center gap-6 mb-6">
                     <Avatar
                         size={100}
@@ -32,17 +33,15 @@ const AboutMePage = () => {
                         {user?.displayName}
                     </Descriptions.Item>
                     <Descriptions.Item label="ایمیل" span={3}>
-                        {user?.email || 'ثبت نشده'}
+                        {userProfile?.email || 'ثبت نشده'}
                     </Descriptions.Item>
                     <Descriptions.Item label="شماره موبایل" span={3}>
-                        {user?.phoneNumber || 'ثبت نشده'}
+                        {user?.userId || 'ثبت نشده'}
                     </Descriptions.Item>
-                    <Descriptions.Item label="تاریخ عضویت" span={3}>
-                        {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('fa-IR') : 'نامشخص'}
+                    <Descriptions.Item label="تاریخ تولد" span={3}>
+                        {userProfile?.brithDate || 'نامشخص'}
                     </Descriptions.Item>
-                    <Descriptions.Item label="آخرین ورود" span={3}>
-                        {user?.lastLogin ? new Date(user.lastLogin).toLocaleDateString('fa-IR') : 'نامشخص'}
-                    </Descriptions.Item>
+
                 </Descriptions>
             </Card>
         </div>

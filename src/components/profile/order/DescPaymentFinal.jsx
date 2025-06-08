@@ -16,8 +16,8 @@ export default function DescPaymentFinal({ orderData }) {
 
     return (
         <>
-            <div className="lg:w-1/3 w-full lg:pl-5">
-                <div className="bg-white rounded-xl p-6 shadow-lg">
+            <div className="lg:w-1/3 w-full lg:pl-5 sm:mt-0 mt-5">
+                <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
                     <h2 className="text-xl font-bold text-gray-800 mb-6">جزئیات سفارش</h2>
                     {
                         orderData &&

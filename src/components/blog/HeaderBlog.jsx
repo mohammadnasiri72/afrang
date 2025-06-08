@@ -12,11 +12,17 @@ async function HeaderBlog({ searchParams, category, blogs }) {
 
   // تابع برای حذف تگ‌های HTML
   const stripHtmlTags = (html) => {
-    if (typeof document !== "undefined") {
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      return doc.body.textContent || "";
+    if (!html || typeof html !== 'string') return "";
+    try {
+        if (typeof document !== "undefined") {
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            return doc.body.textContent || "";
+        }
+        return html.replace(/<[^>]*>/g, "");
+    } catch (error) {
+        console.error("Error stripping HTML:", error);
+        return "";
     }
-    return html.replace(/<[^>]*>/g, "");
   };
 
   const formatPersianDate = (dateString) => {

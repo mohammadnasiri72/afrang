@@ -436,7 +436,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="bg-white rounded-lg shadow-sm p-6">
+                    <div className="bg-white rounded-lg shadow-sm p-6 z-50 relative">
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
                             دسترسی سریع
                         </h3>
