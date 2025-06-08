@@ -1,36 +1,154 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/slices/userSlice';
-import { Button, Form, Input, Select, message, Modal, Spin, Upload, Alert } from 'antd';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-import { getUserCookie } from '@/utils/cookieUtils';
 import { getCategory } from '@/services/Category/categoryService';
 import { UploadFile } from "@/services/File/FileServices";
+import { getUserNews, postUserNews, deleteUserNews, putUserNews } from '@/services/UserNews/UserNewsServices';
+import { getUserCookie } from '@/utils/cookieUtils';
+import { getImageUrl } from '@/utils/mainDomain';
 import { UploadOutlined } from "@ant-design/icons";
-import { Toast } from "react-hot-toast";
+import { Alert, Button, Form, Input, message, Modal, Select, Spin, Upload } from 'antd';
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { Tooltip } from 'antd';
+import { EyeOutlined, StarOutlined } from '@ant-design/icons';
+import { createPortal } from "react-dom";
+import { FaSpinner } from "react-icons/fa";
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 const { TextArea } = Input;
 const { Option } = Select;
+
+// تنظیمات Fancybox
+Fancybox.defaults.Keyboard = {
+    Escape: "close",
+    ArrowRight: "next",
+    ArrowLeft: "prev",
+};
+
+Fancybox.bind("[data-fancybox='articles-gallery']", {
+    Animation: {
+        duration: 500,
+        easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+    },
+    Toolbar: true,
+    Buttons: true,
+    Thumbs: {
+        autoStart: true,
+    },
+    dragToClose: true,
+});
+
+const DeleteArticleModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
+    if (!isOpen) return null;
+
+    const modalContent = (
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center">
+            <div
+                className="fixed inset-0 bg-black/30 backdrop-blur-[3px] transition-opacity duration-300"
+                onClick={onClose}
+            />
+            <div
+                className="relative bg-white rounded-lg p-6 w-full max-w-sm mx-4 transform transition-all duration-300 scale-100 opacity-100 shadow-xl"
+                style={{
+                    animation: 'modalFadeIn 0.3s ease-out'
+                }}
+            >
+                <div className="text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#d1182b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        <h3 className="text-lg font-bold text-gray-900">حذف مقاله</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-6">آیا از حذف این مقاله اطمینان دارید؟</p>
+                </div>
+                <div className="flex justify-center gap-3">
+                    <button
+                        onClick={onClose}
+                        disabled={isLoading}
+                        className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${isLoading
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-gray-200 cursor-pointer"
+                            }`}
+                    >
+                        انصراف
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        disabled={isLoading}
+                        className={`px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] ${isLoading ? "cursor-not-allowed" : "cursor-pointer hover:bg-[#b91626]"
+                            }`}
+                    >
+                        {isLoading ? (
+                            <div className="flex items-center justify-center gap-1">
+                                <FaSpinner className="animate-spin text-xs" />
+                                <span>در حال حذف</span>
+                            </div>
+                        ) : (
+                            "تایید"
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            <style jsx global>{`
+                @keyframes modalFadeIn {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.95);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+            `}</style>
+        </div>
+    );
+
+    return createPortal(modalContent, document.body);
+};
 
 export default function MyArticles() {
     const [form] = Form.useForm();
     const [articles, setArticles] = useState([]);
     const [categoryNews, setCategoryNews] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [editingLoading, setEditingLoading] = useState({});
     const [editingArticle, setEditingArticle] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fileList, setFileList] = useState([]);
     const user = useSelector(selectUser);
     const userCookie = getUserCookie();
     const router = useRouter();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedArticleId, setSelectedArticleId] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    console.log(articles);
+
+
+
+    // تنظیمات Toast
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-start",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: "toast-modal",
+    });
+
+
 
     // Fetch articles on component mount
     useEffect(() => {
-        if(isModalVisible){
+        if (isModalVisible) {
             fetchCategoryNews();
         }
     }, [isModalVisible]);
@@ -40,8 +158,8 @@ export default function MyArticles() {
             const category = await getCategory({
                 TypeId: 5,
                 LangCode: "fa",
-              })
-              if(category.type === 'error'){
+            })
+            if (category.type === 'error') {
                 message.error(category.message);
                 return;
             }
@@ -53,7 +171,41 @@ export default function MyArticles() {
         }
     };
 
+
+    const fetchArticles = async () => {
+        setLoading(true);
+        try {
+            const response = await getUserNews(userCookie.token);
+
+            if (response.type === 'error') {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.message
+                });
+                return;
+            }
+            setArticles(response);
+        } catch (error) {
+            Toast.fire({
+                icon: 'error',
+                title: 'خطا در دریافت مقالات'
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchArticles();
+    }, []);
+
+
+
+
     const handleSubmit = async (values) => {
+
+
+
         if (!userCookie?.token) {
             Toast.fire({
                 icon: 'error',
@@ -84,29 +236,28 @@ export default function MyArticles() {
                 });
                 return;
             }
-
             // حالا اطلاعات رو با لینک عکس آپلود شده می‌فرستیم
-            const response = await fetch('/api/articles', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userCookie?.token}`
-                },
-                body: JSON.stringify({
-                    ...values,
-                    imageSrc: uploadResult
-                })
-            });
+            const response = await postUserNews({
+                ...values,
+                imageSrc: uploadResult.imageUrl
+            }, userCookie.token);
 
-            if (response.ok) {
-                message.success('مقاله با موفقیت ثبت شد');
-                form.resetFields();
-                setFileList([]);
-                setIsModalVisible(false);
-                fetchArticles();
-            } else {
-                throw new Error('خطا در ثبت مقاله');
+            if (response.type === 'error') {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.message
+                });
+                return;
             }
+
+            Toast.fire({
+                icon: 'success',
+                title: "مقاله با موفقیت ثبت شد"
+            });
+            setFileList([]);
+            setIsModalVisible(false);
+            fetchArticles();
+
         } catch (error) {
             message.error('خطا در ثبت مقاله');
         } finally {
@@ -114,59 +265,136 @@ export default function MyArticles() {
         }
     };
 
-    const handleEdit = (article) => {
-        setEditingArticle(article);
-        form.setFieldsValue(article);
-        setIsModalVisible(true);
-    };
-
-    const handleDelete = async (id) => {
+    const handleEdit = async (article) => {
+        setEditingLoading(prev => ({ ...prev, [article.id]: true }));
         try {
-            // TODO: Replace with actual API call
-            const response = await fetch(`/api/articles/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${userCookie?.token}`
-                }
+            setEditingArticle(article);
+
+            // تنظیم مقادیر فرم با ساختار دقیق داده‌ها
+            form.setFieldsValue({
+                title: article.title,
+                category: article.categoryId,
+                summary: article.summary,
+                content: article.body,
+                source: article.sourceLink,
+                upload: [{
+                    uid: '-1',
+                    name: article.image.split('/').pop(),
+                    status: 'done',
+                    url: getImageUrl(article.image),
+                    thumbUrl: getImageUrl(article.image),
+                }]
             });
 
-            if (response.ok) {
-                message.success('مقاله با موفقیت حذف شد');
-                fetchArticles();
-            } else {
-                throw new Error('خطا در حذف مقاله');
+            setFileList([{
+                uid: '-1',
+                name: article.image.split('/').pop(),
+                status: 'done',
+                url: getImageUrl(article.image),
+                thumbUrl: getImageUrl(article.image),
+                originFileObj: null
+            }]);
+
+            setIsModalVisible(true);
+        } finally {
+            setEditingLoading(prev => ({ ...prev, [article.id]: false }));
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!selectedArticleId) return;
+
+        setIsDeleting(true);
+        try {
+            if (!user?.token) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'لطفا مجددا وارد شوید'
+                });
+                return;
             }
+
+            const response = await deleteUserNews(selectedArticleId, user.token);
+
+            if (response.type === 'error') {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.message || 'خطا در حذف مقاله'
+                });
+                return;
+            }
+
+            Toast.fire({
+                icon: 'success',
+                title: 'مقاله با موفقیت حذف شد'
+            });
+            setIsDeleteModalOpen(false);
+            setSelectedArticleId(null);
+            fetchArticles(); // Refresh the articles list
         } catch (error) {
-            message.error('خطا در حذف مقاله');
+            Toast.fire({
+                icon: 'error',
+                title: 'خطا در حذف مقاله'
+            });
+            console.error('Delete article error:', error);
+        } finally {
+            setIsDeleting(false);
         }
     };
 
     const handleModalOk = async () => {
+        setSubmitting(true);
         try {
-            const values = await form.validateFields();
-            setSubmitting(true);
+            if (editingArticle) {
+                await form.validateFields();
+                const values = form.getFieldsValue();
 
-            // TODO: Replace with actual API call
-            const response = await fetch(`/api/articles/${editingArticle.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userCookie?.token}`
-                },
-                body: JSON.stringify(values)
-            });
+                // اگر فایل جدید انتخاب شده
+                let imageSrc = editingArticle.image;
+                if (fileList.length > 0 && fileList[0].originFileObj) {
+                    const uploadResult = await UploadFile(fileList[0].originFileObj);
+                    if (uploadResult.type === 'error') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: uploadResult.message
+                        });
+                        return;
+                    }
+                    imageSrc = uploadResult.imageUrl;
+                }
 
-            if (response.ok) {
-                message.success('مقاله با موفقیت ویرایش شد');
+                const response = await putUserNews({
+                    id: editingArticle.id,
+                    categoryId: values.category,
+                    imageSrc: imageSrc,
+                    title: values.title,
+                    summary: values.summary,
+                    body: values.content,
+                    sourceLink: values.source,
+                }, user.token);
+
+                if (response.type === 'error') {
+                    Toast.fire({
+                        icon: 'error',
+                        title: response.message
+                    });
+                    return;
+                }
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'مقاله با موفقیت ویرایش شد'
+                });
                 setIsModalVisible(false);
                 setEditingArticle(null);
                 form.resetFields();
+                setFileList([]);
                 fetchArticles();
             } else {
-                throw new Error('خطا در ویرایش مقاله');
+                await form.submit();
             }
         } catch (error) {
-            message.error('خطا در ویرایش مقاله');
+            console.error('Form validation failed:', error);
         } finally {
             setSubmitting(false);
         }
@@ -176,6 +404,7 @@ export default function MyArticles() {
         setIsModalVisible(false);
         setEditingArticle(null);
         form.resetFields();
+        setFileList([]);
     };
 
     const normFile = (e) => {
@@ -205,6 +434,11 @@ export default function MyArticles() {
         return true;
     };
 
+    const openDeleteModal = (id) => {
+        setSelectedArticleId(id);
+        setIsDeleteModalOpen(true);
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -226,41 +460,153 @@ export default function MyArticles() {
             {/* Articles List */}
             <div className="bg-white rounded-lg shadow-sm p-6">
                 {loading ? (
-                    <div className="flex justify-center items-center h-40">
-                        <Spin size="large" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[...Array(6)].map((_, index) => (
+                            <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                                <div className="relative aspect-[4/3]">
+                                    <div className="w-full h-full bg-gray-200 animate-pulse" />
+                                </div>
+                                <div className="p-4 space-y-4">
+                                    {/* Category Badge Skeleton */}
+                                    <div className="w-24 h-6 bg-gray-200 rounded-full animate-pulse" />
+
+                                    {/* Title Skeleton */}
+                                    <div className="space-y-2">
+                                        <div className="h-5 bg-gray-200 rounded animate-pulse w-3/4" />
+                                        <div className="h-5 bg-gray-200 rounded animate-pulse w-1/2" />
+                                    </div>
+
+                                    {/* Summary Skeleton */}
+                                    <div className="space-y-2">
+                                        <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                                        <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6" />
+                                    </div>
+
+                                    {/* Date and Stats Skeleton */}
+                                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                                        <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+                                        <div className="flex gap-4">
+                                            <div className="w-16 h-4 bg-gray-200 rounded animate-pulse" />
+                                            <div className="w-16 h-4 bg-gray-200 rounded animate-pulse" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : articles.length > 0 ? (
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {articles.map((article) => (
                             <div
                                 key={article.id}
-                                className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                                className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative z-50   
+                                    ${article.isActive ? 'border-2 border-green-500' : 'border-2 border-orange-500'}`}
                             >
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-gray-800">{article.title}</h3>
-                                        <p className="text-sm text-gray-500 mt-1">{article.category}</p>
-                                        <p className="text-gray-600 mt-2 line-clamp-2">{article.content}</p>
+                                {/* لیبل وضعیت روی عکس */}
+                                <div className="absolute top-2 right-2 z-10">
+                                    <div className={`px-3 py-1 rounded-full text-sm font-medium
+                                        ${article.isActive
+                                            ? 'bg-green-500 text-white'
+                                            : 'bg-orange-400 text-gray-800'}`}
+                                    >
+                                        {article.isActive ? 'تایید شده' : 'در انتظار تایید'}
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            icon={<FaEdit />}
-                                            onClick={() => handleEdit(article)}
-                                            className="text-blue-600 hover:text-blue-700"
+                                </div>
+
+                                <div className="relative aspect-[4/3]">
+                                    <a
+                                        data-fancybox="articles-gallery"
+                                        data-caption={article.title}
+                                        href={getImageUrl(article.image)}
+                                        className="block relative w-full h-full"
+                                    >
+                                        <img
+                                            src={getImageUrl(article.image)}
+                                            alt={article.title}
+                                            className="w-full h-full object-cover cursor-pointer"
                                         />
-                                        <Button
-                                            icon={<FaTrash />}
-                                            onClick={() => handleDelete(article.id)}
-                                            className="text-red-600 hover:text-red-700"
-                                        />
+                                        <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </a>
+                                </div>
+                                <div className="p-4">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-2">
+                                            <div className="inline-block px-3 py-1 bg-[#d1182b]/10 rounded-full">
+                                                <span className="text-sm font-medium text-[#d1182b]">{article.categoryTitle}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Tooltip title="ویرایش مقاله" placement="bottom">
+                                                <button
+                                                    onClick={() => handleEdit(article)}
+                                                    className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+                                                >
+                                                    <FaEdit className="text-base" />
+                                                </button>
+                                            </Tooltip>
+                                            <Tooltip title="حذف مقاله" placement="bottom">
+                                                <button
+                                                    onClick={() => openDeleteModal(article.id)}
+                                                    className="p-2 text-gray-500 hover:text-[#d1182b] transition-colors cursor-pointer"
+                                                >
+                                                    <FaTrash className="text-base" />
+                                                </button>
+                                            </Tooltip>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.summary}</p>
+                                    <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+                                        <div className="flex items-center gap-1.5 bg-gray-50/50 px-2 py-1 rounded">
+                                            <span className="text-gray-600">تاریخ:</span>
+                                            <span className="text-gray-700">{new Date(article.created).toLocaleDateString('fa-IR')}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t border-gray-100">
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex items-center gap-1">
+                                                <EyeOutlined className="text-xs" />
+                                                <span>{article.visit} بازدید</span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <StarOutlined className="text-xs" />
+                                                <span>{article.comment} نظر</span>
+                                            </div>
+                                        </div>
+                                        {article.sourceLink && (
+                                            <a
+                                                href={article.sourceLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                                            >
+                                                <span className="text-xs">مشاهده منبع</span>
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center text-gray-500 py-8">
-                        هنوز مقاله‌ای ثبت نشده است
+                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                            <UploadOutlined className="text-3xl text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">مقاله‌ای ارسال نشده</h3>
+                        <p className="text-gray-500 mb-4">هنوز هیچ مقاله‌ای ارسال نکرده‌اید</p>
+                        <Button
+                            type="primary"
+                            icon={<FaPlus />}
+                            onClick={() => {
+                                setEditingArticle(null);
+                                form.resetFields();
+                                setIsModalVisible(true);
+                            }}
+                            className="!bg-[#d1182b] hover:!bg-[#b91626]"
+                        >
+                            ارسال مقاله جدید
+                        </Button>
                     </div>
                 )}
             </div>
@@ -269,15 +615,12 @@ export default function MyArticles() {
             <Modal
                 title={editingArticle ? "ویرایش مقاله" : "ارسال مقاله جدید"}
                 open={isModalVisible}
-                onOk={handleModalOk}
                 onCancel={handleModalCancel}
-                confirmLoading={submitting}
-                okText={editingArticle ? "ویرایش" : "ثبت"}
-                cancelText="انصراف"
                 footer={[
                     <Button
                         key="cancel"
                         onClick={handleModalCancel}
+                        disabled={submitting}
                         className="!bg-gray-100 hover:!bg-gray-200 !text-gray-700 !border-0"
                     >
                         انصراف
@@ -287,9 +630,24 @@ export default function MyArticles() {
                         type="primary"
                         onClick={handleModalOk}
                         loading={submitting}
-                        className="!bg-[#d1182b] hover:!bg-[#b91626] !border-0"
+                        disabled={submitting}
+                        className="!bg-[#d1182b] hover:!bg-[#b91626] !border-0 min-w-[100px]"
                     >
-                        {editingArticle ? "ویرایش" : "ارسال مقاله"}
+                        {editingArticle ? (
+                            submitting ? (
+                                <span className="flex items-center gap-2">
+                                    <FaSpinner className="animate-spin" />
+                                    در حال ویرایش
+                                </span>
+                            ) : "ویرایش"
+                        ) : (
+                            submitting ? (
+                                <span className="flex items-center gap-2">
+                                    <FaSpinner className="animate-spin" />
+                                    در حال ارسال
+                                </span>
+                            ) : "ارسال مقاله"
+                        )}
                     </Button>,
                 ]}
                 className="!w-[90%] md:!w-[500px]"
@@ -382,6 +740,14 @@ export default function MyArticles() {
                     </Form.Item>
                 </Form>
             </Modal>
+
+            {/* Delete Article Modal */}
+            <DeleteArticleModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+                isLoading={isDeleting}
+            />
         </div>
     );
 } 

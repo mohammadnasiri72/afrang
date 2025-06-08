@@ -378,7 +378,22 @@ const SendImage = () => {
                 ) : listMyGallery.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {listMyGallery.map((item) => (
-                            <div key={item.id} className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300">
+                            <div 
+                                key={item.id} 
+                                className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative
+                                    ${item.isActive ? 'border-2 border-green-500' : 'border-2 border-orange-500'}`}
+                            >
+                                {/* لیبل وضعیت روی عکس */}
+                                <div className="absolute top-2 right-2 z-10">
+                                    <div className={`px-3 py-1 rounded-full text-sm font-medium
+                                        ${item.isActive 
+                                            ? 'bg-green-500 text-white' 
+                                            : 'bg-orange-400 text-gray-800'}`}
+                                    >
+                                        {item.isActive ? 'تایید شده' : 'در انتظار تایید'}
+                                    </div>
+                                </div>
+
                                 <div className="relative aspect-[4/3]">
                                     <a
                                         data-fancybox="my-gallery"

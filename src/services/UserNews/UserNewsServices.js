@@ -16,12 +16,24 @@ export const getUserNews = async (token) => {
 };
 
 export const postUserNews = async (data , token) => {
+   
+    const mainData={
+        langCode : 'fa',
+        categoryId : data.category,
+        imageSrc : data.imageSrc,
+        title : data.title,
+        summary : data.summary,
+        body : data.content,
+        sourceLink : data.source,
+    }
+    
     try {
-        const response = await axios.post(`${mainDomain}/api/UserNews`, data, {
+        const response = await axios.post(`${mainDomain}/api/UserNews`, mainData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+       
         return response.data;
     } catch (error) {
         return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
