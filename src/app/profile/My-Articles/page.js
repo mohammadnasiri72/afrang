@@ -7,18 +7,19 @@ import { getUserNews, postUserNews, deleteUserNews, putUserNews } from '@/servic
 import { getUserCookie } from '@/utils/cookieUtils';
 import { getImageUrl } from '@/utils/mainDomain';
 import { UploadOutlined } from "@ant-design/icons";
-import { Alert, Button, Form, Input, message, Modal, Select, Spin, Upload } from 'antd';
+import { Alert, Button, Form, Input, message, Modal, Select, Spin, Upload, Rate } from 'antd';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { Tooltip } from 'antd';
-import { EyeOutlined, StarOutlined } from '@ant-design/icons';
+import { EyeOutlined, StarOutlined, HeartOutlined } from '@ant-design/icons';
 import { createPortal } from "react-dom";
 import { FaSpinner } from "react-icons/fa";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import Link from 'next/link';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -117,7 +118,6 @@ const DeleteArticleModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
 export default function MyArticles() {
     const [form] = Form.useForm();
     const [articles, setArticles] = useState([]);
-    const [categoryNews, setCategoryNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [editingLoading, setEditingLoading] = useState({});
@@ -130,9 +130,6 @@ export default function MyArticles() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    console.log(articles);
-
-
 
     // تنظیمات Toast
     const Toast = Swal.mixin({
@@ -143,34 +140,6 @@ export default function MyArticles() {
         timerProgressBar: true,
         customClass: "toast-modal",
     });
-
-
-
-    // Fetch articles on component mount
-    useEffect(() => {
-        if (isModalVisible) {
-            fetchCategoryNews();
-        }
-    }, [isModalVisible]);
-
-    const fetchCategoryNews = async () => {
-        try {
-            const category = await getCategory({
-                TypeId: 5,
-                LangCode: "fa",
-            })
-            if (category.type === 'error') {
-                message.error(category.message);
-                return;
-            }
-            setCategoryNews(category);
-        } catch (error) {
-            message.error('خطا در دریافت مقالات');
-        } finally {
-            setLoading(false);
-        }
-    };
-
 
     const fetchArticles = async () => {
         setLoading(true);
@@ -199,13 +168,7 @@ export default function MyArticles() {
         fetchArticles();
     }, []);
 
-
-
-
     const handleSubmit = async (values) => {
-
-
-
         if (!userCookie?.token) {
             Toast.fire({
                 icon: 'error',
@@ -528,15 +491,11 @@ export default function MyArticles() {
                                         <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </a>
                                 </div>
-                                <div className="p-4">
+                                <div className="p-4 pb-16">
                                     <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="inline-block px-3 py-1 bg-[#d1182b]/10 rounded-full">
-                                                <span className="text-sm font-medium text-[#d1182b]">{article.categoryTitle}</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Tooltip title="ویرایش مقاله" placement="bottom">
+                                        <div className="flex items-center justify-between gap-2 w-full">
+                                          <div className='flex items-center'>
+                                          <Tooltip title="ویرایش مقاله" placement="bottom">
                                                 <button
                                                     onClick={() => handleEdit(article)}
                                                     className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
@@ -552,36 +511,43 @@ export default function MyArticles() {
                                                     <FaTrash className="text-base" />
                                                 </button>
                                             </Tooltip>
+                                          </div>
                                         </div>
                                     </div>
                                     <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
                                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.summary}</p>
-                                    <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-                                        <div className="flex items-center gap-1.5 bg-gray-50/50 px-2 py-1 rounded">
-                                            <span className="text-gray-600">تاریخ:</span>
+                                    <div className="flex flex-wrap gap-2 text-sm mb-3">
+                                        <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
+                                            <span className="text-gray-600">دسته‌بندی :</span>
+                                            <span className="text-gray-700">{article.categoryTitle}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                                            <span className="text-gray-600">تاریخ :</span>
                                             <span className="text-gray-700">{new Date(article.created).toLocaleDateString('fa-IR')}</span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t border-gray-100">
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4">
+                                    <div className="flex items-center justify-between text-sm text-gray-500">
                                         <div className="flex items-center gap-4">
                                             <div className="flex items-center gap-1">
                                                 <EyeOutlined className="text-xs" />
-                                                <span>{article.visit} بازدید</span>
+                                                <span>{article.visit || 0} بازدید</span>
                                             </div>
                                             <div className="flex items-center gap-1">
-                                                <StarOutlined className="text-xs" />
-                                                <span>{article.comment} نظر</span>
+                                                <HeartOutlined className="text-xs" />
+                                                <span>{article.like || 0} لایک</span>
                                             </div>
                                         </div>
                                         {article.sourceLink && (
-                                            <a
+                                            <Link
                                                 href={article.sourceLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
                                             >
                                                 <span className="text-xs">مشاهده منبع</span>
-                                            </a>
+                                            </Link>
                                         )}
                                     </div>
                                 </div>
@@ -683,11 +649,8 @@ export default function MyArticles() {
                         rules={[{ required: true, message: 'لطفا دسته‌بندی را انتخاب کنید' }]}
                     >
                         <Select placeholder="دسته‌بندی را انتخاب کنید">
-                            {categoryNews.map((category) => (
-                                <Option key={category.id} value={category.id}>
-                                    {category.title}
-                                </Option>
-                            ))}
+                            <Option value={3691}>مقالات کاربران</Option>
+                            <Option value={3690}>اخبار کاربران</Option>
                         </Select>
                     </Form.Item>
 

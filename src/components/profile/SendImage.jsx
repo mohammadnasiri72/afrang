@@ -2,18 +2,18 @@
 
 import { getCategory } from "@/services/Category/categoryService";
 import { UploadFile } from "@/services/File/FileServices";
-import { getGalleryUser, sendGallery, deleteGalleryUser } from "@/services/gallery/galleryServices";
+import { deleteGalleryUser, getGalleryUser, sendGallery } from "@/services/gallery/galleryServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
-import { PlusOutlined, UploadOutlined, EyeOutlined, HeartOutlined, StarOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Alert, Button, Form, Input, Modal, Select, Upload, Tooltip, Rate } from "antd";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { createPortal } from "react-dom";
-import { FaSpinner } from "react-icons/fa";
+import { EyeOutlined, HeartOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { Alert, Button, Form, Input, Modal, Rate, Select, Tooltip, Upload } from "antd";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { FaSpinner, FaTrash } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 // تنظیمات Fancybox
 Fancybox.defaults.Keyboard = {
@@ -63,11 +63,11 @@ const DeleteImageModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
 
     const modalContent = (
         <div className="fixed inset-0 z-[999999] flex items-center justify-center">
-            <div 
+            <div
                 className="fixed inset-0 bg-black/30 backdrop-blur-[3px] transition-opacity duration-300"
                 onClick={onClose}
             />
-            <div 
+            <div
                 className="relative bg-white rounded-lg p-6 w-full max-w-sm mx-4 transform transition-all duration-300 scale-100 opacity-100 shadow-xl"
                 style={{
                     animation: 'modalFadeIn 0.3s ease-out'
@@ -86,20 +86,18 @@ const DeleteImageModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
                     <button
                         onClick={onClose}
                         disabled={isLoading}
-                        className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${
-                            isLoading 
-                                ? "opacity-50 cursor-not-allowed" 
-                                : "hover:bg-gray-200 cursor-pointer"
-                        }`}
+                        className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${isLoading
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-gray-200 cursor-pointer"
+                            }`}
                     >
                         انصراف
                     </button>
                     <button
                         onClick={onConfirm}
                         disabled={isLoading}
-                        className={`px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] ${
-                            isLoading ? "cursor-not-allowed" : "cursor-pointer hover:bg-[#b91626]"
-                        }`}
+                        className={`px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] ${isLoading ? "cursor-not-allowed" : "cursor-pointer hover:bg-[#b91626]"
+                            }`}
                     >
                         {isLoading ? (
                             <div className="flex items-center justify-center gap-1">
@@ -145,7 +143,7 @@ const SendImage = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedImageId, setSelectedImageId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    
+
 
     // تنظیمات Toast
     const Toast = Swal.mixin({
@@ -243,7 +241,7 @@ const SendImage = () => {
             form.resetFields();
             setFileList([]);
             setIsModalOpen(false);
-            
+
             // بروزرسانی لیست تصاویر
             await fetchMyGallery();
         } catch (error) {
@@ -323,10 +321,10 @@ const SendImage = () => {
 
     const handleDelete = async () => {
         if (!selectedImageId) return;
-        
+
         setIsDeleting(true);
         try {
-            const response = await deleteGalleryUser(selectedImageId , userData.token);
+            const response = await deleteGalleryUser(selectedImageId, userData.token);
             if (response.type === 'error') {
                 Toast.fire({
                     icon: 'error',
@@ -378,16 +376,16 @@ const SendImage = () => {
                 ) : listMyGallery.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {listMyGallery.map((item) => (
-                            <div 
-                                key={item.id} 
+                            <div
+                                key={item.id}
                                 className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative
                                     ${item.isActive ? 'border-2 border-green-500' : 'border-2 border-orange-500'}`}
                             >
                                 {/* لیبل وضعیت روی عکس */}
                                 <div className="absolute top-2 right-2 z-10">
                                     <div className={`px-3 py-1 rounded-full text-sm font-medium
-                                        ${item.isActive 
-                                            ? 'bg-green-500 text-white' 
+                                        ${item.isActive
+                                            ? 'bg-green-500 text-white'
                                             : 'bg-orange-400 text-gray-800'}`}
                                     >
                                         {item.isActive ? 'تایید شده' : 'در انتظار تایید'}
@@ -401,8 +399,8 @@ const SendImage = () => {
                                         href={getImageUrl(item.image)}
                                         className="block relative w-full h-full"
                                     >
-                                        <img 
-                                            src={getImageUrl(item.image)} 
+                                        <img
+                                            src={getImageUrl(item.image)}
                                             alt={item.categoryTitle}
                                             className="w-full h-full object-cover cursor-pointer"
                                         />
@@ -411,43 +409,45 @@ const SendImage = () => {
                                 </div>
                                 <div className="p-4">
                                     <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="inline-block px-3 py-1 bg-[#d1182b]/10 rounded-full">
-                                                <span className="text-sm font-medium text-[#d1182b]">{item.categoryTitle}</span>
-                                            </div>
-                                        </div>
+                                        {/* <div className="flex items-center gap-2">
                                             <Tooltip title={`امتیاز: ${item.adminScore}`} placement="bottom">
                                                 <div>
-                                                    <Rate 
-                                                        disabled 
-                                                        value={item.adminScore} 
-                                                        allowHalf 
+                                                    <Rate
+                                                        disabled
+                                                        value={item.adminScore}
+                                                        allowHalf
                                                         className="!text-[15px]"
                                                     />
                                                 </div>
                                             </Tooltip>
+                                        </div> */}
                                         <div className="flex items-center gap-2">
                                             <Tooltip title="حذف تصویر" placement="bottom">
                                                 <button
                                                     onClick={() => openDeleteModal(item.id)}
                                                     className="p-2 text-gray-500 hover:text-[#d1182b] transition-colors cursor-pointer"
                                                 >
-                                                    <DeleteOutlined className="text-base" />
+                                                    <FaTrash className="text-base" />
                                                 </button>
                                             </Tooltip>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-                                        <div className="flex items-center gap-1.5 bg-gray-50/50 px-2 py-1 rounded">
-                                            <span className="text-gray-600">دوربین:</span>
+
+                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                                            <span className="text-gray-600">دوربین :</span>
                                             <span className="text-gray-700">{item.cameraType}</span>
                                         </div>
-                                        <div className="flex items-center gap-1.5 bg-gray-50/50 px-2 py-1 rounded">
-                                            <span className="text-gray-600">لنز:</span>
+                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                                            <span className="text-gray-600">لنز :</span>
                                             <span className="text-gray-700">{item.lenzType}</span>
                                         </div>
-                                        <div className="flex items-center gap-1.5 bg-gray-50/50 px-2 py-1 rounded col-span-2">
-                                            <span className="text-gray-600">تاریخ:</span>
+                                        <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
+                                            <span className="text-gray-600">دسته‌بندی :</span>
+                                            <span className="text-gray-700">{item.categoryTitle}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                                            <span className="text-gray-600">تاریخ :</span>
                                             <span className="text-gray-700">{item.photoTime}</span>
                                         </div>
                                     </div>
@@ -592,7 +592,7 @@ const SendImage = () => {
                 </Form>
             </Modal>
 
-            <DeleteImageModal 
+            <DeleteImageModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
                 onConfirm={handleDelete}
