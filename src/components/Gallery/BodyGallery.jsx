@@ -6,7 +6,7 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Empty, message, Pagination, Rate, Skeleton, Spin } from "antd";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEye, FaRegUser, FaTelegram } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
@@ -58,6 +58,7 @@ function BodyGallery() {
   const [propertySelected, setPropertySelected] = useState([]);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
 
   useEffect(() => {
     if (imgSelected) {
@@ -147,7 +148,6 @@ function BodyGallery() {
       setIsLoading(false);
     }
   };
-  const categoryParam = searchParams.get('category');
   const orderByParam = searchParams.get('orderBy');
 
   const fetchNextPage = async (page) => {
@@ -159,9 +159,8 @@ function BodyGallery() {
         PageIndex: page + 1
       };
 
-
-      if (categoryParam) {
-        params.CategoryIdArray = Number(categoryParam);
+      if (params?.slug?.[0]) {
+        params.CategoryIdArray = Number(params.slug[0]);
       }
 
       if (orderByParam) {
@@ -196,8 +195,8 @@ function BodyGallery() {
         PageIndex: 1
       };
 
-      if (categoryParam) {
-        params.CategoryIdArray = Number(categoryParam);
+      if (params?.slug?.[0]) {
+        params.CategoryIdArray = Number(params.slug[0]);
       }
 
       if (orderByParam) {
@@ -226,11 +225,11 @@ function BodyGallery() {
 
   useEffect(() => {
     fetchCurrentPage();
-  }, [categoryParam, orderByParam])
+  }, [params?.slug?.[0], orderByParam])
 
   useEffect(() => {
     fetchNextPage(currentPage);
-  }, [currentPage, categoryParam, orderByParam]);
+  }, [currentPage, params?.slug?.[0], orderByParam]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

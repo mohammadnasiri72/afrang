@@ -18,12 +18,16 @@ function HeaderGallery() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  
+
   const fetchCategory = async () => {
     try {
       setLoading(true);
       const categoryData = await getCategory({
         TypeId: 9,
         LangCode: 'fa',
+        Page: 1,
+        PageSize: 100
       });
 
       if (categoryData.type === 'error') {
@@ -90,7 +94,19 @@ function HeaderGallery() {
 
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
-    updateUrlParams(value === 0 ? null : value, selectedSort);
+    
+    if (value === 0) {
+      // اگر همه دسته‌بندی‌ها انتخاب شده، به صفحه اصلی گالری برو
+      router.push('/gallery');
+    } else {
+      // پیدا کردن عنوان دسته‌بندی انتخاب شده
+      const selectedCategoryData = category.find(item => item.id === value);
+      if (selectedCategoryData) {
+        // ساخت URL با فرمت مورد نظر
+        const categoryUrl = selectedCategoryData.url;
+        router.push(categoryUrl);
+      }
+    }
   };
 
   const handleSortChange = (value) => {
