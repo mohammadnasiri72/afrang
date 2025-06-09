@@ -63,6 +63,7 @@ function SelectCategoryFilter() {
       try {
         const result = await getCategoryChild(mainCategoryId);
         
+        
         if (result) {
           setApiData({
             brands: result.brands || [],
@@ -188,7 +189,7 @@ function SelectCategoryFilter() {
     setActiveKeys(keys);
   };
 
-  const handleCategoryClick = (id, title) => {
+  const handleCategoryClick = (id, title, url) => {
     dispatch(setFilterLoading(true));
     setLoading(true);
     setSelectedCategory(id);
@@ -196,8 +197,7 @@ function SelectCategoryFilter() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('page');
     
-    const newUrl = `/products/${id}/${title}${params.toString() ? `?${params.toString()}` : ''}`;
-    router.push(newUrl);
+    router.push(`${url}${params.toString() ? `?${params.toString()}` : ''}`);
   };
 
   const handleSwitchChange = (type) => {
@@ -241,9 +241,11 @@ function SelectCategoryFilter() {
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  const filteredCategories = Object.entries(apiData.categories).filter(([id, title]) =>
-    title.toLowerCase().includes(categorySearch.toLowerCase())
-  );
+  const filteredCategories = Array.isArray(apiData.categories) 
+    ? apiData.categories.filter((category) =>
+        category.title.toLowerCase().includes(categorySearch.toLowerCase())
+      )
+    : [];
 
   const filteredBrands = apiData.brands.filter((brand) =>
     brand.title.toLowerCase().includes(brandSearch.toLowerCase()) ||
@@ -275,12 +277,12 @@ function SelectCategoryFilter() {
       );
     }
 
-    return filteredCategories.map(([id, title]) => {
-      const isSelected = selectedCategory === id;
+    return filteredCategories.map((category) => {
+      const isSelected = selectedCategory === category.id;
       return (
         <div
-          key={id}
-          onClick={() => handleCategoryClick(id, title)}
+          key={category.id}
+          onClick={() => handleCategoryClick(category.id, category.title, category.url)}
           className={`p-2.5 my-1 rounded-md transition-all duration-300 cursor-pointer text-right
             ${isSelected
               ? 'bg-[#d1182b] text-white hover:bg-[#b31525]'
@@ -288,7 +290,7 @@ function SelectCategoryFilter() {
             }`}
         >
           <span className={isSelected ? 'text-white' : 'text-gray-800'}>
-            {title}
+            {category.title}
           </span>
         </div>
       );

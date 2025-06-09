@@ -14,6 +14,7 @@ import {
     FaBox,
     FaClipboardList,
     FaClock,
+    FaRecycle,
     FaShoppingBag,
     FaTimesCircle,
     FaUser
@@ -115,17 +116,18 @@ export default function Dashboard() {
         Done: 0,
         Cancel: 0
     });
-    const [listLiked, setListLiked] = useState([]);
     const [likedItems, setLikedItems] = useState([]);
     const [recentViews, setRecentViews] = useState([]);
     const [loading, setLoading] = useState(true);
+
+
+
 
     useEffect(() => {
         const user = Cookies.get("user");
         const token = JSON.parse(user).token;
         const fetchListLiked = async () => {
             const response = await getLikes(5, token);
-            setListLiked(response);
 
             // Transform listLiked into required format and fetch items
             if (response && response.length > 0) {
@@ -239,26 +241,7 @@ export default function Dashboard() {
         router.push(`/profile/orders?statusId=${statusId}&page=1`);
     };
 
-    const recentFavorites = [
-        {
-            id: 1,
-            name: "لپ تاپ لنوو",
-            price: "۲۵,۵۰۰,۰۰۰",
-            image: "/placeholder.jpg",
-        },
-        {
-            id: 2,
-            name: "هدفون سامسونگ",
-            price: "۲,۵۰۰,۰۰۰",
-            image: "/placeholder.jpg",
-        },
-        {
-            id: 3,
-            name: "شارژر سریع",
-            price: "۸۵۰,۰۰۰",
-            image: "/placeholder.jpg",
-        },
-    ];
+
 
     if (loading) {
         return <DashboardSkeleton />;
@@ -292,10 +275,9 @@ export default function Dashboard() {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {stats.map((stat, index) => {
                     const Icon = stat.icon;
-                    const TrendIcon = stat.trend === "up" ? FaArrowUp : FaArrowDown;
 
                     return (
                         <div
@@ -318,7 +300,7 @@ export default function Dashboard() {
             {/* Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Recent Views */}
-                <div className="lg:col-span-2 bg-white rounded-lg shadow-sm">
+                <div className="lg:col-span-2 bg-white rounded-lg shadow-sm z-50 relative">
                     <div className="p-6 border-b">
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-semibold text-gray-800">
@@ -327,31 +309,41 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className="p-6">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                             {Array.isArray(recentViews) && recentViews.length > 0 ? (
                                 recentViews.map((item) => (
-                                    <Link
-                                        href={item.url}
+                                    <div
                                         key={item.productId}
-                                        className="group bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+                                        className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                                     >
-                                        <div className="aspect-square w-full bg-white relative overflow-hidden">
-                                            {item.image && (
-                                                <img
-                                                    src={getImageUrl2(item.image)}
-                                                    alt={item.title}
-                                                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                                                />
-                                            )}
-                                        </div>
-                                        <div className="p-4">
-                                            <h4 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12">
-                                                {item.title}
-                                            </h4>
+                                        <Link href={item.url} target="_blank">
+                                            <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+                                                {item.image && (
+                                                    <img
+                                                        src={getImageUrl2(item.image)}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                )}
+                                            </div>
+                                        </Link>
+                                        <div className="flex-1">
+                                            <Link href={item.url} target="_blank">
+                                                <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-1">
+                                                    {item.title}
+                                                </p>
+                                            </Link>
+
                                             <div className="flex flex-col items-start justify-between gap-2">
                                                 <div className="text-xs text-gray-400">
                                                     {item.categoryTitle}
                                                 </div>
+                                                {item.conditionId === 20 && (
+                                                    <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                                                        <FaRecycle className="ml-1.5" />
+                                                        <span className="font-semibold px-1">کالای کارکرده</span>
+                                                    </div>
+                                                )}
                                                 <div className="text-sm text-gray-500">
                                                     {item.finalPrice > 0 ? (
                                                         <span className="text-[#d1182b] font-bold">
@@ -361,10 +353,9 @@ export default function Dashboard() {
                                                         'تماس بگیرید'
                                                     )}
                                                 </div>
-
                                             </div>
                                         </div>
-                                    </Link>
+                                    </div>
                                 ))
                             ) : (
                                 <p className="text-center text-gray-500 col-span-full">
@@ -384,8 +375,8 @@ export default function Dashboard() {
                                 <h3 className="text-lg font-semibold text-gray-800">
                                     آخرین علاقه‌مندی‌ها
                                 </h3>
-                                <Link 
-                                    href="/profile/favorites" 
+                                <Link
+                                    href="/profile/favorites"
                                     className="text-sm text-[#d1182b] hover:text-[#d1182b]/80 transition-colors"
                                 >
                                     مشاهده همه
@@ -413,7 +404,7 @@ export default function Dashboard() {
                                             </Link>
                                             <div className="flex-1">
                                                 <Link href={item.url} target="_blank">
-                                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-2">
+                                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-1">
                                                         {item.title}
                                                     </p>
                                                 </Link>
@@ -423,6 +414,12 @@ export default function Dashboard() {
                                                         {item.categoryTitle}
                                                     </div>
                                                 </div>
+                                                {item.conditionId === 20 && (
+                                                    <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                                                        <FaRecycle className="ml-1.5" />
+                                                        <span className="font-semibold px-1">کالای کارکرده</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))
@@ -443,14 +440,14 @@ export default function Dashboard() {
                         <div className="grid grid-cols-2 gap-3">
                             <Link
                                 href="/profile/orders"
-                                className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                                className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors whitespace-nowrap"
                             >
                                 <FaShoppingBag />
                                 <span>سفارشات من</span>
                             </Link>
                             <Link
                                 href="/profile/edit-profile"
-                                className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                                className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors whitespace-nowrap"
                             >
                                 <FaUser />
                                 <span>ویرایش پروفایل</span>

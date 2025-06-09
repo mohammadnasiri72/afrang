@@ -5,14 +5,14 @@ import { UploadFile } from "@/services/File/FileServices";
 import { deleteGalleryUser, getGalleryUser, sendGallery } from "@/services/gallery/galleryServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
-import { EyeOutlined, HeartOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined, HeartOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Alert, Button, Form, Input, Modal, Rate, Select, Tooltip, Upload } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { FaSpinner, FaTrash } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 // تنظیمات Fancybox
@@ -406,42 +406,40 @@ const SendImage = () => {
                                         />
                                         <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </a>
+                                    <div className="absolute bottom-2 left-2 z-10">
+                                        <Rate
+                                            disabled
+                                            value={item.adminScore || 0}
+                                            allowHalf
+                                            className="!text-gold-500"
+                                            dir="ltr"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="p-4">
-                                    <div className="flex items-center justify-between mb-3">
-                                        {/* <div className="flex items-center gap-2">
-                                            <Tooltip title={`امتیاز: ${item.adminScore}`} placement="bottom">
-                                                <div>
-                                                    <Rate
-                                                        disabled
-                                                        value={item.adminScore}
-                                                        allowHalf
-                                                        className="!text-[15px]"
-                                                    />
-                                                </div>
-                                            </Tooltip>
-                                        </div> */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded font-bold">
+                                                <span className="text-gray-600">دوربین :</span>
+                                                <span className="text-gray-700">{item.cameraType}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded font-bold">
+                                                <span className="text-gray-600">لنز :</span>
+                                                <span className="text-gray-700">{item.lenzType}</span>
+                                            </div>
+                                        </div>
                                         <div className="flex items-center gap-2">
                                             <Tooltip title="حذف تصویر" placement="bottom">
                                                 <button
                                                     onClick={() => openDeleteModal(item.id)}
-                                                    className="p-2 text-gray-500 hover:text-[#d1182b] transition-colors cursor-pointer"
+                                                    className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
                                                 >
-                                                    <FaTrash className="text-base" />
+                                                    <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
                                                 </button>
                                             </Tooltip>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-
-                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
-                                            <span className="text-gray-600">دوربین :</span>
-                                            <span className="text-gray-700">{item.cameraType}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
-                                            <span className="text-gray-600">لنز :</span>
-                                            <span className="text-gray-700">{item.lenzType}</span>
-                                        </div>
+                                    <div className="flex items-center gap-2 text-sm">
                                         <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
                                             <span className="text-gray-600">دسته‌بندی :</span>
                                             <span className="text-gray-700">{item.categoryTitle}</span>

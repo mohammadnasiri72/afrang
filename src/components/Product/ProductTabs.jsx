@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import ProductMain from "../home/ProductMain";
 import AccessoriesProduct from "./AccessoriesProduct";
 import CommentProduct from "./CommentProduct";
-import CriticismProduct from "./CriticismProduct";
 import DetailsProduct from "./DetailsProduct";
 import SpecificationsProduct from "./SpecificationsProduct";
 import BundleProducts from "./BundleProducts";

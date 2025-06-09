@@ -1,35 +1,37 @@
 "use client";
+import { fetchUserProfile, selectUser, setUser } from '@/redux/slices/userSlice';
 import { authServiceSignOut } from "@/services/Auth/authService";
 import { getWalletUser } from '@/services/dashboard/dashboardService';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
     FaAddressBook,
     FaBuilding,
+    FaCamera,
+    FaComments,
+    FaExclamationTriangle,
+    FaHeart,
     FaHome,
+    FaInfoCircle,
+    FaKey,
+    FaNewspaper,
+    FaRecycle,
     FaShoppingBag,
     FaSignOutAlt,
     FaSpinner,
-    FaKey,
-    FaUser,
-    FaHeart,
-    FaCamera,
-    FaExclamationTriangle,
-    FaInfoCircle,
-    FaComments,
-    FaNewspaper
+    FaUser
 } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from "sweetalert2";
-import { fetchUserProfile, selectUser, selectUserStatus, setUser } from '@/redux/slices/userSlice';
 
 const menuItems = [
     { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
     { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
     { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
     { id: 'favorites', title: 'علاقه‌مندی‌های من', icon: FaHeart, path: '/profile/favorites' },
+    { id: 'second-hand', title: 'کالای دسته دوم', icon: FaRecycle, path: '/profile/second-hand' },
     { id: 'send-image', title: 'ارسال عکس', icon: FaCamera, path: '/profile/Send-Photo' },
     { id: 'report-loss', title: 'گزارش مفقودی', icon: FaExclamationTriangle, path: '/profile/Missing-Report' },
     { id: 'user-comments', title: 'نظرات ارسالی', icon: FaComments, path: '/profile/User-Comments' },
@@ -48,7 +50,7 @@ const ProfileLayoutSkeleton = () => {
     return (
         <div className="min-h-screen bg-[#f6f6f6] flex">
             {/* Sidebar Skeleton */}
-            <aside className="sticky top-10 h-screen w-64 bg-white shadow-lg z-40 flex-shrink-0 transform transition-transform duration-300 ease-in-out lg:block hidden">
+            <aside className="sticky top-10 h-screen w-64 bg-white shadow-lg z-40 flex-shrink-0 transform transition-transform duration-300 ease-in-out ">
                 <div className="h-full flex flex-col">
                     {/* User Info Section */}
                     <div className="p-4 border-b">
@@ -209,7 +211,7 @@ export default function ProfileLayout({ children }) {
     // }
 
     return (
-        <div className="min-h-screen bg-[#f6f6f6] flex">
+        <div className="lg:min-h-screen  min-h-auto bg-[#f6f6f6] flex">
             {/* Sidebar */}
             <aside className={`
                 sticky top-10 h-screen w-64 bg-white shadow-lg z-40 flex-shrink-0
@@ -300,7 +302,7 @@ export default function ProfileLayout({ children }) {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 min-h-screen">
+            <main className="flex-1 lg:min-h-screen min-h-auto">
                 <div className="p-6 lg:p-8">
                     <div className="max-w-7xl mx-auto">
                         {children}

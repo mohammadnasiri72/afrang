@@ -68,12 +68,12 @@ export const itemVisit = async (id, url, ip, userAgent) => {
     userAgent
   }
 
+  
   try {
     const response = await axios.post(`${mainDomain}/api/Item/visit`, data);
     return response.data;
   } catch (error) {
-    console.error('Error in itemVisit:', error);
-    throw error;
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
 

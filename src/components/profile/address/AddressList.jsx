@@ -1,62 +1,64 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
 import { getAddress } from "@/services/order/orderService";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
 import AddAddress from "./AddAddress";
 import DeleteAddress from "./DeleteAddress";
 
 const AddressListSkeleton = () => {
-    return (
-        <div className="space-y-6">
-            {/* Header Skeleton */}
-            <div className="flex items-center justify-between">
-                <div className="h-8 bg-gray-200 animate-pulse rounded w-32" />
-                <div className="h-10 bg-gray-200 animate-pulse rounded w-40" />
+  return (
+    <div className="space-y-6">
+      {/* Header Skeleton */}
+      <div className="flex items-center justify-between">
+        <div className="h-8 bg-gray-200 animate-pulse rounded w-32" />
+        <div className="h-10 bg-gray-200 animate-pulse rounded w-40" />
+      </div>
+
+      {/* Addresses List Skeleton */}
+      <div className="grid grid-cols-1 gap-4">
+        {[...Array(3)].map((_, index) => (
+          <div
+            key={index}
+            className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
+          >
+            {/* Address Info Skeleton */}
+            <div className="flex items-center gap-4 flex-1">
+              <div className="flex flex-col space-y-2 w-full">
+                {/* Name and Mobile Skeleton */}
+                <div className="flex items-center gap-2">
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                </div>
+
+                {/* Address Text Skeleton */}
+                <div className="space-y-1">
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2" />
+                </div>
+
+                {/* Postal Code and National Code Skeleton */}
+                <div className="flex items-center gap-4">
+                  <div className="h-3 bg-gray-200 animate-pulse rounded w-32" />
+                  <div className="h-3 bg-gray-200 animate-pulse rounded w-28" />
+                </div>
+              </div>
             </div>
 
-            {/* Addresses List Skeleton */}
-            <div className="grid grid-cols-1 gap-4">
-                {[...Array(3)].map((_, index) => (
-                    <div
-                        key={index}
-                        className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
-                    >
-                        {/* Address Info Skeleton */}
-                        <div className="flex items-center gap-4 flex-1">
-                            <div className="flex flex-col space-y-2 w-full">
-                                {/* Name and Mobile Skeleton */}
-                                <div className="flex items-center gap-2">
-                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
-                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
-                                </div>
-                                
-                                {/* Address Text Skeleton */}
-                                <div className="space-y-1">
-                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
-                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2" />
-                                </div>
-                                
-                                {/* Postal Code and National Code Skeleton */}
-                                <div className="flex items-center gap-4">
-                                    <div className="h-3 bg-gray-200 animate-pulse rounded w-32" />
-                                    <div className="h-3 bg-gray-200 animate-pulse rounded w-28" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Action Buttons Skeleton */}
-                        <div className="flex items-center gap-1">
-                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
-                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
-                        </div>
-                    </div>
-                ))}
+            {/* Action Buttons Skeleton */}
+            <div className="flex items-center gap-1">
+              <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
+              <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
             </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default function AddressList() {
@@ -157,20 +159,22 @@ export default function AddressList() {
             </div>
 
             <div className="flex items-center gap-1">
-              <button
-                onClick={() => handleModalOpen('edit', address.id)}
-                className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
-                title="ویرایش"
-              >
-                <FaEdit size={14} />
-              </button>
-              <button
-                onClick={() => handleModalOpen('delete', address.id)}
-                className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
-                title="حذف"
-              >
-                <FaTrash size={14} />
-              </button>
+              <Tooltip title="ویرایش آدرس" placement="bottom">
+                <button
+                  onClick={() => handleModalOpen('edit', address.id)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                >
+                  <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
+                </button>
+              </Tooltip>
+              <Tooltip title="حذف آدرس" placement="bottom">
+                <button
+                  onClick={() => handleModalOpen('delete', address.id)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                >
+                  <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
+                </button>
+              </Tooltip>
             </div>
           </div>
         ))}
@@ -198,7 +202,7 @@ export default function AddressList() {
           onClose={handleModalClose}
         />
       )}
-      
+
       {activeModal === 'delete' && (
         <DeleteAddress
           id={activeAddressId}

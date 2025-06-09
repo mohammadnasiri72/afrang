@@ -1,6 +1,6 @@
 "use client";
 import { getProductListId } from "@/services/products/productService";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
 import { Select } from "antd";
 import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa6";
@@ -11,11 +11,9 @@ function SelectProductMokamel({ product }) {
   const [optionalProducts, setOptionalProducts] = useState([]);
 
 
-
   useEffect(() => {
     const fetchOptionalProducts = async () => {
       if (product?.product?.optionalId) {
-        // تبدیل رشته به آرایه‌ای از اعداد
         const ids = product.product.optionalId.split(',').map(id => parseInt(id));
         const data = {
           ids: ids
@@ -32,10 +30,8 @@ function SelectProductMokamel({ product }) {
   }, [product]);
 
   const filteredProducts = optionalProducts.filter((item) =>
-    selectedProducts.includes(item.id)
+    selectedProducts.includes(item.productId)
   );
-
-
 
   return (
     <>
@@ -48,25 +44,23 @@ function SelectProductMokamel({ product }) {
           value="برای افزودن کالای مکمل کلیک کنید"
           onChange={(value) => {
             if (selectedProducts.includes(value)) {
-              // اگر قبلاً انتخاب شده، حذفش کن
               setSelectedProducts(selectedProducts.filter(id => id !== value));
             } else {
-              // اگر انتخاب نشده، اضافه‌اش کن
               setSelectedProducts([...selectedProducts, value]);
             }
           }}
           suffixIcon={<FaCaretDown className="text-[#d1182b] text-lg" />}
           options={optionalProducts.map((product) => ({
-            value: product.product.productId,
+            value: product.productId,
             label: (
               <div
-                className={`p-3 duration-300 ${selectedProducts.includes(product.product.productId)
+                className={`p-3 duration-300 ${selectedProducts.includes(product.productId)
                     ? 'bg-[#d1182b10] hover:bg-[#d1182b15]'
                     : 'hover:bg-[#f3f3f3]'
                   } flex items-center justify-between`}
               >
                 <span>{product.title}</span>
-                {selectedProducts.includes(product.product.productId) && (
+                {selectedProducts.includes(product.productId) && (
                   <span className="text-[#d1182b] text-sm">
                     ✓
                   </span>
@@ -94,15 +88,15 @@ function SelectProductMokamel({ product }) {
       </div>
       <div className="flex flex-wrap items-center mt-3 -mr-2">
         {filteredProducts.map((product) => (
-          <div key={product.product.productId} className="p-2">
+          <div key={product.productId} className="p-2">
             <div className="bg-[#f6f6f6] flex items-center justify-center gap-2 rounded-sm border border-[#0002] h-11 px-2">
-              <img src={getImageUrl(product.product.image)} alt={product.product.productId} className="h-8 w-8 object-contain" />
+              <img src={getImageUrl2(product.image)} alt={product.title} className="h-8 w-8 object-contain overflow-hidden" />
               <span className="whitespace-nowrap">{product.title}</span>
               <div>
                 <IoIosClose
                   onClick={() => {
                     setSelectedProducts(
-                      selectedProducts.filter((id) => id !== product.product.productId)
+                      selectedProducts.filter((id) => id !== product.productId)
                     );
                   }}
                   className="cursor-pointer text-xl text-[#0008]"

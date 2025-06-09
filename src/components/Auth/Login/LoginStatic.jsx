@@ -203,14 +203,22 @@ function LoginStatic({ setStateLogin, from }) {
                 )}
               </div>
             </div>
-            <span
-              onClick={() => {
-                setStateLogin(2);
-              }}
-              className="text-[#d1182b] cursor-pointer font-semibold"
-            >
-              ورود با رمز یکبار مصرف
-            </span>
+            <div className="flex justify-start gap-4 items-center mb-4">
+              <span
+                onClick={() => {
+                  setStateLogin(2);
+                }}
+                className="text-[#d1182b] cursor-pointer font-semibold"
+              >
+                ورود با رمز یکبار مصرف
+              </span>
+              <Link 
+                href="/forgot-password" 
+                className="text-[#d1182b] cursor-pointer font-semibold hover:text-[#b91626] transition-colors"
+              >
+                فراموشی رمز عبور
+              </Link>
+            </div>
             <div className="flex flex-wrap mt-5">
               <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
                 <div

@@ -1,77 +1,79 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
 import { getLegal } from "@/services/order/orderService";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
 import AddLegal from "./AddLegal";
 import DeleteLegal from "./DeleteLegal";
 
 const LegalListSkeleton = () => {
-    return (
-        <div className="space-y-6">
-            {/* Header Skeleton */}
-            <div className="flex items-center justify-between">
-                <div className="h-8 bg-gray-200 animate-pulse rounded w-40" />
-                <div className="h-10 bg-gray-200 animate-pulse rounded w-48" />
+  return (
+    <div className="space-y-6">
+      {/* Header Skeleton */}
+      <div className="flex items-center justify-between">
+        <div className="h-8 bg-gray-200 animate-pulse rounded w-40" />
+        <div className="h-10 bg-gray-200 animate-pulse rounded w-48" />
+      </div>
+
+      {/* Legal List Skeleton */}
+      <div className="grid grid-cols-1 gap-4">
+        {[...Array(3)].map((_, index) => (
+          <div
+            key={index}
+            className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
+          >
+            {/* Legal Info Skeleton */}
+            <div className="flex items-center gap-4 flex-1">
+              <div className="flex flex-col w-full">
+                {/* Organization Name Skeleton */}
+                <div className="h-5 bg-gray-200 animate-pulse rounded w-48" />
+
+                {/* Grid Info Skeleton */}
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                  {/* Economic Code */}
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                  </div>
+                  {/* National ID */}
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                  </div>
+                  {/* Registration ID */}
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                  </div>
+                  {/* Landline Number */}
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
+                  </div>
+                </div>
+
+                {/* Address Skeleton */}
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-16" />
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-48" />
+                </div>
+              </div>
             </div>
 
-            {/* Legal List Skeleton */}
-            <div className="grid grid-cols-1 gap-4">
-                {[...Array(3)].map((_, index) => (
-                    <div
-                        key={index}
-                        className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 relative flex items-center justify-between"
-                    >
-                        {/* Legal Info Skeleton */}
-                        <div className="flex items-center gap-4 flex-1">
-                            <div className="flex flex-col w-full">
-                                {/* Organization Name Skeleton */}
-                                <div className="h-5 bg-gray-200 animate-pulse rounded w-48" />
-                                
-                                {/* Grid Info Skeleton */}
-                                <div className="grid grid-cols-2 gap-4 mt-2">
-                                    {/* Economic Code */}
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
-                                    </div>
-                                    {/* National ID */}
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
-                                    </div>
-                                    {/* Registration ID */}
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
-                                    </div>
-                                    {/* Landline Number */}
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
-                                    </div>
-                                </div>
-                                
-                                {/* Address Skeleton */}
-                                <div className="flex items-center gap-2 mt-2">
-                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-16" />
-                                    <div className="h-4 bg-gray-200 animate-pulse rounded w-48" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Action Buttons Skeleton */}
-                        <div className="flex items-center gap-1">
-                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
-                            <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
-                        </div>
-                    </div>
-                ))}
+            {/* Action Buttons Skeleton */}
+            <div className="flex items-center gap-1">
+              <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
+              <div className="w-7 h-7 bg-gray-200 animate-pulse rounded" />
             </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default function LegalList() {
@@ -181,20 +183,22 @@ export default function LegalList() {
             </div>
 
             <div className="flex items-center gap-1">
-              <button
-                onClick={() => handleModalOpen('edit', legal.id)}
-                className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
-                title="ویرایش"
-              >
-                <FaEdit size={14} />
-              </button>
-              <button
-                onClick={() => handleModalOpen('delete', legal.id)}
-                className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
-                title="حذف"
-              >
-                <FaTrash size={14} />
-              </button>
+              <Tooltip title="ویرایش اطلاعات حقوقی" placement="bottom">
+                <button
+                  onClick={() => handleModalOpen('edit', legal.id)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                >
+                  <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
+                </button>
+              </Tooltip>
+              <Tooltip title="حذف اطلاعات حقوقی" placement="bottom">
+                <button
+                  onClick={() => handleModalOpen('delete', legal.id)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                >
+                  <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
+                </button>
+              </Tooltip>
             </div>
           </div>
         ))}
@@ -222,7 +226,7 @@ export default function LegalList() {
           onClose={handleModalClose}
         />
       )}
-      
+
       {activeModal === 'delete' && (
         <DeleteLegal
           id={activeLegalId}

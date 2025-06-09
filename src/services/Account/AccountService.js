@@ -57,12 +57,14 @@ export const Register = async (data) => {
 
 
 
-export const ResetPassword = async (data) => {
+export const ResetPassword = async (userName) => {
+    const data = new FormData();
+    data.append("userName", userName);
     try {
         const response = await axios.post(`${mainDomain}/api/Account/ResetPassword`, data);
         return response.data;
     } catch (err) {
-        return err;
+        return {type: "error", message: err.response.data? err.response.data : "خطا در ارسال لینک بازیابی رمز عبور"};
     }
 };
 

@@ -6,7 +6,7 @@ import { UploadFile } from "@/services/File/FileServices";
 import { getUserNews, postUserNews, deleteUserNews, putUserNews } from '@/services/UserNews/UserNewsServices';
 import { getUserCookie } from '@/utils/cookieUtils';
 import { getImageUrl } from '@/utils/mainDomain';
-import { UploadOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import { Alert, Button, Form, Input, message, Modal, Select, Spin, Upload, Rate } from 'antd';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
@@ -73,8 +73,8 @@ const DeleteArticleModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
                         onClick={onClose}
                         disabled={isLoading}
                         className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${isLoading
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:bg-gray-200 cursor-pointer"
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-gray-200 cursor-pointer"
                             }`}
                     >
                         انصراف
@@ -490,33 +490,38 @@ export default function MyArticles() {
                                         />
                                         <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </a>
+                                    <div className="absolute bottom-2 left-2 z-10">
+                                        <Rate
+                                            disabled
+                                            defaultValue={article.rate || 0}
+                                            className="!text-gold-500"
+                                            dir="ltr"
+                                        />
+                                    </div>
                                 </div>
-                                <div className="p-4 pb-16">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center justify-between gap-2 w-full">
-                                          <div className='flex items-center'>
-                                          <Tooltip title="ویرایش مقاله" placement="bottom">
+                                <div className="px-4 pt-2">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">{article.title}</h3>
+                                        <div className='flex items-center gap-2'>
+                                            <Tooltip title="ویرایش مقاله" placement="bottom">
                                                 <button
                                                     onClick={() => handleEdit(article)}
-                                                    className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+                                                    className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
                                                 >
-                                                    <FaEdit className="text-base" />
+                                                    <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
                                                 </button>
                                             </Tooltip>
                                             <Tooltip title="حذف مقاله" placement="bottom">
                                                 <button
                                                     onClick={() => openDeleteModal(article.id)}
-                                                    className="p-2 text-gray-500 hover:text-[#d1182b] transition-colors cursor-pointer"
+                                                    className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
                                                 >
-                                                    <FaTrash className="text-base" />
+                                                    <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
                                                 </button>
                                             </Tooltip>
-                                          </div>
                                         </div>
                                     </div>
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
-                                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.summary}</p>
-                                    <div className="flex flex-wrap gap-2 text-sm mb-3">
+                                    <div className="flex flex-wrap gap-2 text-sm mb-1">
                                         <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
                                             <span className="text-gray-600">دسته‌بندی :</span>
                                             <span className="text-gray-700">{article.categoryTitle}</span>
@@ -527,7 +532,7 @@ export default function MyArticles() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4">
+                                <div className="bg-white border-t border-gray-100 p-3">
                                     <div className="flex items-center justify-between text-sm text-gray-500">
                                         <div className="flex items-center gap-4">
                                             <div className="flex items-center gap-1">

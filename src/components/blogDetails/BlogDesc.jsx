@@ -15,28 +15,9 @@ import {
 import { IoMdTime } from "react-icons/io";
 import CommentSection from "../comments/CommentSection";
 import LikeComponent from "./LikeComponent";
-import { getComment } from "@/services/comments/serviceComment";
 
-async function BlogDesc({ params , searchParams}) {
-  let url;
-
-  // First try to get URL from params
-  if (params?.slug && Array.isArray(params.slug) && params.slug.length > 0) {
-    const decodedSlug = params.slug.map(part => decodeURIComponent(part));
-    url = `/news/${decodedSlug.join('/')}`;
-  } else {
-    // Fallback to headers if params are not available
-    const headersList = headers();
-    const fullUrl = headersList.get('x-url') || headersList.get('referer') || '';
-    const encodedPath = new URL(fullUrl).pathname;
-    url = decodeURIComponent(encodedPath);
-  }
-  const pageComment = searchParams?.pageComment
-  ? parseInt(searchParams.pageComment)
-  : 1;
-
-  const blog = await getItemByUrl(url);
-  const { items: comments, totalCount } = await getComment(blog?.id, pageComment);
+async function BlogDesc({ blog}) {
+ 
 
   // Calculate reading time based on content
   const calculateReadingTime = (content) => {

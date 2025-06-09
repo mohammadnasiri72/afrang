@@ -3,11 +3,10 @@
 import { Breadcrumb } from "antd";
 import Link from "next/link";
 
-const BreadcrumbComponent = ({ items }) => {
-  // گرفتن آخرین آیتم از آرایه
-  const lastItem = items[items.length - 1];
-  
-  // ساخت آرایه جدید با دو آیتم: خانه و آخرین آیتم
+const BreadcrumbNews = ({ breadcrumb }) => {
+  if (!breadcrumb || !breadcrumb.length) return null;
+
+  console.log(breadcrumb);
   const breadcrumbItems = [
     {
       title: (
@@ -16,15 +15,18 @@ const BreadcrumbComponent = ({ items }) => {
         </Link>
       ),
     },
-    {
-      title: lastItem.href ? (
-        <Link href={lastItem.href} className="text-gray-500 hover:text-[#d1182b] font-[Yekan]">
-          {lastItem.title}
+    ...breadcrumb.map((item, index) => ({
+      title: item.href ? (
+        <Link 
+          href={item.href} 
+          className="text-gray-500 hover:text-[#d1182b] font-[Yekan]"
+        >
+          {item.title}
         </Link>
       ) : (
-        <span className="text-[#d1182b] font-[Yekan]">{lastItem.title}</span>
+        <span className="text-[#d1182b] font-[Yekan]">{item.title}</span>
       ),
-    },
+    })),
   ];
 
   return (
@@ -38,4 +40,4 @@ const BreadcrumbComponent = ({ items }) => {
   );
 };
 
-export default BreadcrumbComponent; 
+export default BreadcrumbNews;

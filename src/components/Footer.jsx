@@ -1,4 +1,3 @@
-"use client";
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +8,7 @@ import { mainDomainImg } from "@/utils/mainDomain";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
+import Newsletter from "./Newsletter";
 
 const FooterSkeleton = () => {
   return (
@@ -293,19 +293,8 @@ const Footer = () => {
               )?.value ||
                 "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
             </p>
-            <div className="flex items-center justify-between p-2 rounded-[50px] bg-white mt-2">
-              <div className="px-3">
-                <MdMailOutline className="text-xl text-[#666] " />
-              </div>
-              <input
-                className="w-full outline-none "
-                type="text"
-                placeholder="ایمیل خود را وارد کنید"
-              />
-              <button className="bg-[#d1182b] rounded-[50px] px-8 py-1.5 text-white cursor-pointer hover:bg-[#18d1be] duration-300">
-                ارسال
-              </button>
-            </div>
+            
+            <Newsletter />
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
               {socialNetworks?.map((item) => (
                 <Link

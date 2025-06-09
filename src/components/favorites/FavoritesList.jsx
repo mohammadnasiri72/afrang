@@ -11,25 +11,13 @@ import Swal from "sweetalert2";
 
 const FavoritesSkeleton = () => {
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4 z-50 relative">
-            {[...Array(12)].map((_, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
-                    {/* Image Skeleton */}
-                    <div className="aspect-square w-full bg-gray-200 animate-pulse" />
-                    
-                    {/* Content Skeleton */}
-                    <div className="p-3 flex-1 flex flex-col">
-                        {/* Title Skeleton */}
-                        <div className="space-y-2 flex-1">
-                            <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
-                            <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2" />
-                        </div>
-                        
-                        {/* Category Skeleton */}
-                        <div className="h-3 bg-gray-200 animate-pulse rounded w-1/3 mt-2" />
-                        
-                        {/* Button Skeleton */}
-                        <div className="h-7 bg-gray-200 animate-pulse rounded w-full mt-3" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, index) => (
+                <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-lg" />
+                    <div className="flex-1">
+                        <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mb-2" />
+                        <div className="h-3 bg-gray-200 animate-pulse rounded w-1/2" />
                     </div>
                 </div>
             ))}
@@ -42,7 +30,6 @@ export default function FavoritesList() {
     const [isLoading, setIsLoading] = useState(true);
     const [isRemoving, setIsRemoving] = useState(false);
     const [itemToRemove, setItemToRemove] = useState(null);
-
 
     // Toast notification setup
     const Toast = Swal.mixin({
@@ -128,45 +115,42 @@ export default function FavoritesList() {
     return (
         <div className="space-y-6">
             {likedItems && likedItems.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4 z-50 relative">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {likedItems
                     .filter(item => item.url !== null)
                     .map((item) => (
                         <div
                             key={item.id}
-                            className="group bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col"
+                            className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg z-50 relative"
                         >
-                            <Link
-                                href={item.url}
-                                className="flex-1"
-                            >
-                                <div className="aspect-square w-full bg-gray-100 relative overflow-hidden">
-                                    
-                                        <img
-                                            src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)|| "/images/gallery/blog-img1.jpg"}
-                                            alt={item.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                  
+                            <Link href={item.url} target="_blank">
+                                <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+                                    <img
+                                        src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)|| "/images/gallery/blog-img1.jpg"}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover"
+                                    />
                                 </div>
-                                <div className="p-3 flex-1 flex flex-col">
-                                    <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 text-sm hover:text-[#d1182b] transition-colors duration-300">
+                            </Link>
+                            <div className="flex-1">
+                                <Link href={item.url} target="_blank">
+                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-1">
                                         {item.title}
-                                    </h3>
+                                    </p>
+                                </Link>
+                                <div className="flex flex-col items-start justify-between gap-2">
                                     <div className="text-xs text-gray-400">
                                         {item.categoryTitle}
                                     </div>
                                 </div>
-                            </Link>
-                            <div className="p-3 pt-0 mt-auto">
-                                <button
-                                    onClick={(e) => handleRemoveClick(e, item)}
-                                    className="w-full flex items-center justify-center gap-1 text-red-500 hover:text-red-600 transition-colors text-xs border border-red-200 hover:border-red-300 rounded px-2 py-1.5 cursor-pointer"
-                                >
-                                    <FaTrash className="text-xs" />
-                                    <span>حذف از علاقه‌مندی‌ها</span>
-                                </button>
                             </div>
+                            <button
+                                onClick={(e) => handleRemoveClick(e, item)}
+                                className="flex items-center justify-center gap-1 text-red-500 hover:text-red-600 transition-colors text-xs border border-red-200 hover:border-red-300 rounded px-2 py-1.5 cursor-pointer whitespace-nowrap"
+                            >
+                                <FaTrash className="text-xs" />
+                                <span>حذف</span>
+                            </button>
                         </div>
                     ))}
                 </div>

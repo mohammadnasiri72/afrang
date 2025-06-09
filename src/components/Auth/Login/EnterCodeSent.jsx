@@ -1,5 +1,4 @@
-import { loginOtp } from "@/services/Account/AccountService";
-import { authServiceOtp } from "@/services/Auth/authService";
+import { loginOtp, loginSendOtp } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Alert, Spin } from "antd";
 import Cookies from "js-cookie";
@@ -26,6 +25,8 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [loading, setLoading] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [countdown, setCountdown] = useState(120); // 2 minutes in seconds
   const inputRefs = useRef([]);
   const { settings } = useSelector((state) => state.settings);
 
@@ -48,6 +49,24 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       inputRefs.current[0].focus();
     }
   }, []);
+
+  // Timer effect
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  // Format time to MM:SS
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   const handleChange = (index, value) => {
     // تبدیل اعداد وارد شده به فارسی
@@ -73,6 +92,43 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace" && !digits[index] && index > 0) {
       inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const handleResendCode = async () => {
+    if (countdown > 0 || resendLoading) return;
+
+    setResendLoading(true);
+    try {
+      const res = await loginSendOtp(mobile);
+      if (!res) {
+        setCountdown(120); // Reset timer
+        Toast.fire({
+          icon: "success",
+          text: "کد جدید ارسال شد",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          text: res.response?.data ? res.response?.data : "خطای شبکه",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      }
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        text: err.response?.data ? err.response?.data : "خطای شبکه",
+        customClass: {
+          container: "toast-modal",
+        },
+      });
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -217,7 +273,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                       focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                       transition-all duration-200"
                     inputMode="numeric"
-                    dir="ltr" // جهت اعداد چپ به راست
+                    dir="ltr"
                   />
                 ))}
               </div>
@@ -225,6 +281,28 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               {error && (
                 <div className="text-red-500 text-sm mt-1">{error}</div>
               )}
+
+              <div className="flex items-center gap-2 mt-2">
+                <button
+                  onClick={handleResendCode}
+                  disabled={countdown > 0 || resendLoading}
+                  className={`text-[#d1182b] text-sm font-semibold ${countdown > 0 || resendLoading
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:text-[#b91626] cursor-pointer"
+                    }`}
+                >
+                  {resendLoading ? (
+                    <div className="flex items-center gap-2">
+                      <span>در حال ارسال</span>
+                      <Spin size="small" />
+                    </div>
+                  ) : countdown > 0 ? (
+                    `ارسال مجدد کد (${formatTime(countdown)})`
+                  ) : (
+                    "ارسال مجدد کد"
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="flex flex-wrap mt-5">

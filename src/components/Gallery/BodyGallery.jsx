@@ -19,6 +19,7 @@ import { getPropertyItem } from "@/services/Property/propertyService";
 import { getGallery } from "@/services/gallery/galleryServices";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import Link from 'next/link';
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -67,7 +68,7 @@ function BodyGallery() {
 
 
   useEffect(() => {
-    if (listProperty.length > 0 && imgSelected.id) {
+    if (listProperty.length > 0 && imgSelected?.id) {
       setPropertySelected(listProperty.filter(item => item.itemId === imgSelected.id));
     }
   }, [listProperty, imgSelected])
@@ -393,12 +394,15 @@ function BodyGallery() {
                         </>
                       )}
                     </div>
+                    <Link href={'/profile/Send-Photo'}>
+                    
                     <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                       <FaTelegram className="text-lg" />
                       <span className="whitespace-nowrap pr-2 font-semibold text-sm">
                         ارسال تصویر
                       </span>
                     </div>
+                    </Link>
                   </div>
                   <div className="flex gap-3 items-center sm:w-auto w-full sm:mt-0 mt-5 sm:justify-start justify-between">
                     <div

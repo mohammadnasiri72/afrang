@@ -129,7 +129,7 @@ function InitialDataManager() {
 function LayoutContent({ children }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const showHeaderFooter = !pathname.includes("/login") && !pathname.includes("/register");
+  const showHeaderFooter = !pathname.includes("/login") && !pathname.includes("/register") && !pathname.includes("/forgot-password");
 
   useEffect(() => {
     setMounted(true);

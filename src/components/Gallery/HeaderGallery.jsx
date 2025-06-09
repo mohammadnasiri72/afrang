@@ -8,6 +8,7 @@ import ModalSelectCategoryBlog from "./ModalSelectCategoryBlog";
 import ModalSelectSortBlog from "./ModalSelectSortBlog";
 import { getCategory } from "@/services/Category/categoryService";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 function HeaderGallery() {
   const [category, setCategory] = useState([]);
@@ -38,31 +39,31 @@ function HeaderGallery() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchCategory();
-  },[])
+  }, [])
 
   // خواندن پارامترهای URL در لود اولیه
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     const orderByParam = searchParams.get('orderBy');
-    
+
     if (categoryParam) setSelectedCategory(Number(categoryParam));
     else setSelectedCategory(0);
-    
+
     if (orderByParam) setSelectedSort(orderByParam);
     else setSelectedSort("1");
   }, [searchParams]);
 
   const updateUrlParams = (category, orderBy) => {
     const params = new URLSearchParams(searchParams.toString());
-    
+
     if (category) {
       params.set('category', category);
     } else {
       params.delete('category');
     }
-    
+
     if (orderBy) {
       params.set('orderBy', orderBy);
     } else {
@@ -82,9 +83,9 @@ function HeaderGallery() {
 
   const sortOptions = [
     { value: "1", label: "جدیدترین" },
-    { value: "2", label: "قدیمی‌ترین" },
-    { value: "3", label: "پربازدیدترین" },
-    { value: "4", label: "پسندیده‌ترین" }
+    { value: "11", label: "قدیمی‌ترین" },
+    { value: "8", label: "پربازدیدترین" },
+    { value: "10", label: "پسندیده‌ترین" }
   ];
 
   const handleCategoryChange = (value) => {
@@ -103,14 +104,14 @@ function HeaderGallery() {
         <div className="rounded-[5px] bg-white py-[10px] px-[15px] my-[25px] flex items-center">
           <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 w-full h-full ">
             <div className="flex items-center w-full gap-4 flex-wrap md:flex-nowrap">
-              <div className="sm:hidden flex w-full">
+              {/* <div className="sm:hidden flex w-full">
                 <div className="w-1/2 px-3">
                   <ModalSelectCategoryBlog />
                 </div>
                 <div className="w-1/2 px-3">
                   <ModalSelectSortBlog />
                 </div>
-              </div>
+              </div> */}
               {/* <div className="lg:w-auto w-full SegmentedBlog">
                 <Segmented
                   className="font-semibold text-3xl w-full "
@@ -127,7 +128,7 @@ function HeaderGallery() {
                   options={["ویدئو ها", "عکس ها"]}
                 />
               </div> */}
-              <div className="lg:w-[300px] w-full sm:block hidden">
+              <div className="lg:w-[300px] w-full">
                 {loading ? (
                   <Skeleton.Input active size="large" className="w-full" />
                 ) : (
@@ -144,7 +145,7 @@ function HeaderGallery() {
                   />
                 )}
               </div>
-              <div className="lg:w-[250px] w-full sm:block hidden">
+              <div className="lg:w-[250px] w-full">
                 {loading ? (
                   <Skeleton.Input active size="large" className="w-full" />
                 ) : (
@@ -167,12 +168,14 @@ function HeaderGallery() {
                 )}
               </div>
             </div>
-            <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
-              <FaTelegram className="text-lg" />
-              <span className="whitespace-nowrap pr-2 font-semibold text-sm">
-                ارسال تصویر
-              </span>
-            </div>
+            <Link href={'/profile/Send-Photo'}>
+              <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
+                <FaTelegram className="text-lg" />
+                <span className="whitespace-nowrap pr-2 font-semibold text-sm">
+                  ارسال تصویر
+                </span>
+              </div>
+            </Link>
           </div>
         </div>
       </Container>
