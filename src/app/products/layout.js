@@ -9,7 +9,7 @@ export const metadata = {
 export default async function layoutProducts({ children }) {
   return (
     <div>
-      <BreadcrumbNav />
+      {/* <BreadcrumbNav /> */}
       {children}
     </div>
   );

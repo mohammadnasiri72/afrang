@@ -131,3 +131,13 @@ export const getProductPricing = async (categoryId) => {
     return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
+
+
+export const getProductCategory = async (categoryId) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Product/Category/${categoryId}`);
+    return response.data
+  } catch (error) {
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  }
+};

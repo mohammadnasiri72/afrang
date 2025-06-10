@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server'
 
 export function middleware(request) {
+    const url = request.nextUrl.clone();
+    
+    // تبدیل URL به حروف کوچک
+    const pathname = url.pathname.toLowerCase();
+    
+    // اگر URL با حروف بزرگ وارد شده باشد، به نسخه کوچک ریدایرکت می‌کنیم
+    if (url.pathname !== pathname) {
+        url.pathname = pathname;
+        return NextResponse.redirect(url);
+    }
+
     // Get the pathname of the request
     const path = request.nextUrl.pathname;
 
@@ -32,10 +43,16 @@ export function middleware(request) {
     return NextResponse.next();
 }
 
-// Configure which routes to run middleware on
+// تنظیم مسیرهایی که middleware باید روی آنها اعمال شود
 export const config = {
     matcher: [
-        '/profile/:path*',
-        '/dashboard/:path*'
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
     ]
 }; 
