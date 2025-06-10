@@ -4,14 +4,13 @@ import dynamic from 'next/dynamic';
 import { FaBoxOpen } from "react-icons/fa6";
 import BreadcrumbNav from "./BreadcrumbNav";
 import { redirect } from 'next/navigation';
-import { Suspense } from 'react';
 
 const BodyProductList = dynamic(() => import("@/components/ProductList/BodyProductList"));
 const FilterProduct = dynamic(() => import("@/components/ProductList/FilterProduct"));
 const PaginationProduct = dynamic(() => import("@/components/ProductList/PaginationProduct"));
-const ProductListSkeleton = dynamic(() => import("@/components/ProductList/ProductListSkeleton"));
 
-async function ProductContent({ params, searchParams }) {
+export default async function ProductList(props) {
+  const { params, searchParams } = props;
   const id = Number(params.slug[params.slug.length - 2]);
 
   // اول چک می‌کنیم که آیا نیاز به ریدایرکت داریم
@@ -28,6 +27,7 @@ async function ProductContent({ params, searchParams }) {
     const currentUrl = searchParamsString ? `${currentPath}?${searchParamsString}` : currentPath;
     const decodedUrl = decodeURIComponent(currentUrl);
 
+    // فقط اگر URL متفاوت باشه ریدایرکت می‌کنیم
     if (productCategory.url !== decodedUrl) {
       redirect(productCategory.url);
     }
@@ -102,13 +102,5 @@ async function ProductContent({ params, searchParams }) {
         </div>
       </div>
     </>
-  );
-}
-
-export default function ProductList(props) {
-  return (
-    <Suspense fallback={<ProductListSkeleton />}>
-      <ProductContent {...props} />
-    </Suspense>
   );
 }

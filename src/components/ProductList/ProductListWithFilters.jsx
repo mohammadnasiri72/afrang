@@ -2,6 +2,7 @@ import { getProducts } from "@/services/products/productService";
 import { getItem } from "@/services/Item/item";
 import { FaBoxOpen } from "react-icons/fa6";
 import dynamic from 'next/dynamic';
+import ErrorProductList from "@/app/products/error";
 
 const FilterProduct = dynamic(() => import("./FilterProduct"));
 const BodyProductList = dynamic(() => import("./BodyProductList"));
@@ -43,7 +44,11 @@ export default async function ProductListWithFilters({ searchParams }) {
     })
   ]);
 
-  if (!products || products.length === 0) {
+
+ 
+  
+
+  if (!products || products.length === 0 || products.type === 'error' || bannerProduct.type === 'error') {
     return (
       <div className="flex justify-center">
         <div className="bg-white p-8 rounded-lg shadow-sm text-center max-w-lg mx-4">
