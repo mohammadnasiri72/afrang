@@ -355,6 +355,7 @@ const SendImage = () => {
         setIsDeleteModalOpen(true);
     };
 
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -409,7 +410,7 @@ const SendImage = () => {
                                     <div className="absolute bottom-2 left-2 z-10">
                                         <Rate
                                             disabled
-                                            value={item.adminScore || 0}
+                                            value={Number(item.adminScore)/2 || 0}
                                             allowHalf
                                             className="!text-gold-500"
                                             dir="ltr"
@@ -417,39 +418,31 @@ const SendImage = () => {
                                     </div>
                                 </div>
                                 <div className="p-4">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded font-bold">
+                                    <div className="flex flex-col gap-2">
+                                        {item.cameraType && (
+                                            <div className="flex items-center gap-1 bg-gray-50/50 py-1 px-2 rounded font-bold">
                                                 <span className="text-gray-600">دوربین :</span>
                                                 <span className="text-gray-700">{item.cameraType}</span>
                                             </div>
-                                            <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded font-bold">
-                                                <span className="text-gray-600">لنز :</span>
+                                        )}
+                                        {item.lenzType && (
+                                            <div className="flex items-start gap-1 bg-gray-50/50 py-1 px-2 rounded font-bold">
+                                                <span className="text-gray-600 whitespace-nowrap pl-1">لنز :</span>
                                                 <span className="text-gray-700">{item.lenzType}</span>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Tooltip title="حذف تصویر" placement="bottom">
-                                                <button
-                                                    onClick={() => openDeleteModal(item.id)}
-                                                    className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                                                >
-                                                    <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
-                                                </button>
-                                            </Tooltip>
-                                        </div>
+                                        )}
                                     </div>
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
+                                    <div className="flex items-center gap-2 text-sm mt-2">
+                                        <div className="flex items-center bg-gray-50/50 gap-1 py-1 px-2 rounded text-xs">
                                             <span className="text-gray-600">دسته‌بندی :</span>
                                             <span className="text-gray-700">{item.categoryTitle}</span>
                                         </div>
-                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 px-2 rounded text-xs">
                                             <span className="text-gray-600">تاریخ :</span>
                                             <span className="text-gray-700">{item.photoTime}</span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t border-gray-100">
+                                    <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t border-gray-100 mt-2">
                                         <div className="flex items-center gap-4">
                                             <div className="flex items-center gap-1">
                                                 <EyeOutlined className="text-xs" />
@@ -460,6 +453,14 @@ const SendImage = () => {
                                                 <span>{item.like} لایک</span>
                                             </div>
                                         </div>
+                                        <Tooltip title="حذف تصویر" placement="bottom">
+                                            <button
+                                                onClick={() => openDeleteModal(item.id)}
+                                                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                                            >
+                                                <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
+                                            </button>
+                                        </Tooltip>
                                     </div>
                                 </div>
                             </div>

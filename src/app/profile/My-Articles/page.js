@@ -131,6 +131,7 @@ export default function MyArticles() {
     const [selectedArticleId, setSelectedArticleId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+
     // تنظیمات Toast
     const Toast = Swal.mixin({
         toast: true,
@@ -421,7 +422,7 @@ export default function MyArticles() {
             </div>
 
             {/* Articles List */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-6 z-50 relative">
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(6)].map((_, index) => (
@@ -493,7 +494,8 @@ export default function MyArticles() {
                                     <div className="absolute bottom-2 left-2 z-10">
                                         <Rate
                                             disabled
-                                            defaultValue={article.rate || 0}
+                                            defaultValue={Number(article.rate)/2 || 0}
+                                            allowHalf
                                             className="!text-gold-500"
                                             dir="ltr"
                                         />

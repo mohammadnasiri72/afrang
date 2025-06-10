@@ -4,7 +4,7 @@ import { itemVisit } from '@/services/Item/item';
 import { postLike, postLiked } from "@/services/UserActivity/UserActivityService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
-import { Empty, message, Pagination, Rate, Skeleton, Spin } from "antd";
+import { Empty, message, Pagination, Rate, Skeleton, Spin, Divider } from "antd";
 import Image from "next/image";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -67,7 +67,6 @@ function BodyGallery() {
     }
   }, [imgSelected])
 
-
   useEffect(() => {
     if (listProperty.length > 0 && imgSelected?.id) {
       setPropertySelected(listProperty.filter(item => item.itemId === imgSelected.id));
@@ -91,9 +90,6 @@ function BodyGallery() {
       fetchPropertyItem();
     }
   }, [imageIds]);
-
-
-
 
   const handleImageVisit = async (id) => {
     const url = window.location.href;
@@ -119,8 +115,6 @@ function BodyGallery() {
       handleImageVisit(imgSelected.id);
     }
   }, [token, imgSelected]);
-
-
 
   const handleLike = async () => {
     if (!token) {
@@ -150,34 +144,38 @@ function BodyGallery() {
   };
   const orderByParam = searchParams.get('orderBy');
 
+  useEffect(() => {
+    if (ImagesData.length > 0) {
+      fetchNextPage(2); // لود کردن صفحه دوم در ابتدا
+    }
+  }, [ImagesData]);
+
   const fetchNextPage = async (page) => {
     try {
       setLoading(true);
-      const params = {
+      const paramsData = {
         LangCode: 'fa',
         PageSize: 16,
-        PageIndex: page + 1
+        PageIndex: page
       };
 
       if (params?.slug?.[0]) {
-        params.CategoryIdArray = Number(params.slug[0]);
+        paramsData.CategoryIdArray = Number(params.slug[0]);
       }
 
-      if (orderByParam) {
-        params.OrderBy = Number(orderByParam);
+      if (!orderByParam || orderByParam === '10') {
+        paramsData.OrderBy = 10;
+      } else {
+        paramsData.OrderBy = Number(orderByParam);
       }
 
-      const nextPageData = await getGallery(params);
+      const nextPageData = await getGallery(paramsData);
 
       if (nextPageData && nextPageData.length > 0) {
         setNextPageImages(nextPageData);
         if (nextPageData[0]?.total) {
-          const totalItems = nextPageData[0].total - 16;
-          setTotalItems(totalItems);
+          setTotalItems(nextPageData[0].total);
         }
-      } else {
-        setNextPageImages([]);
-        setTotalItems(0);
       }
     } catch (error) {
       console.error('Error fetching next page:', error);
@@ -186,24 +184,52 @@ function BodyGallery() {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setNextPageImages([]);
+    
+    // ساخت URL جدید با پارامترهای جستجو
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('page', page);
+    
+    // آپدیت URL بدون رفرش صفحه
+    const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+    
+    fetchNextPage(page + 1);
+  };
+
+  // اضافه کردن useEffect برای خواندن پارامتر page از URL در لود اولیه
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const pageParam = searchParams.get('page');
+    if (pageParam) {
+      setCurrentPage(Number(pageParam));
+      fetchNextPage(Number(pageParam) + 1);
+    }
+  }, []);
+
   const fetchCurrentPage = async () => {
     try {
       setLoadingMain(true);
-      const params = {
+      const paramsData = {
         LangCode: 'fa',
         PageSize: 16,
         PageIndex: 1
       };
+      
 
       if (params?.slug?.[0]) {
-        params.CategoryIdArray = Number(params.slug[0]);
+        paramsData.CategoryIdArray = Number(params.slug[0]);
       }
 
-      if (orderByParam) {
-        params.OrderBy = Number(orderByParam);
+      if (!orderByParam || orderByParam === '10') {
+        paramsData.OrderBy = 10;
+      } else {
+        paramsData.OrderBy = Number(orderByParam);
       }
 
-      const currentPageData = await getGallery(params);
+      const currentPageData = await getGallery(paramsData);
 
       if (currentPageData && currentPageData.length > 0) {
         setImagesData(currentPageData);
@@ -225,16 +251,7 @@ function BodyGallery() {
 
   useEffect(() => {
     fetchCurrentPage();
-  }, [params?.slug?.[0], orderByParam])
-
-  useEffect(() => {
-    fetchNextPage(currentPage);
-  }, [currentPage, params?.slug?.[0], orderByParam]);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
+  }, [params?.slug?.[0], orderByParam]);
 
 
   const handleNext = () => {
@@ -253,14 +270,13 @@ function BodyGallery() {
     setImgSelected(ImagesData[prevIndex]);
   };
 
-
   return (
     <>
       <Container>
         <div className="flex lg:flex-nowrap flex-wrap gap-3">
           {loadingMain ? (
             <div className="rounded-sm bg-white p-4 flex items-center lg:w-5/12 w-full">
-              <Skeleton.Image active className="w-full h-[400px]" />
+              <Skeleton.Image active className="!w-full !h-[400px]" />
             </div>
           ) : ImagesData?.length > 0 ? (
             <div className="rounded-sm bg-white p-4 flex items-center lg:w-5/12 w-full">
@@ -295,10 +311,15 @@ function BodyGallery() {
           <div className="rounded-sm bg-white p-4  lg:w-7/12 w-full relative">
             {loadingMain ? (
               <div className="space-y-4">
-                <Skeleton.Input active size="large" className="w-3/4" />
+                <div className="flex items-center gap-2">
+                  <Skeleton.Avatar active size="large" />
+                  <Skeleton.Input active size="large" className="w-3/4" />
+                </div>
                 <Skeleton.Input active size="default" className="w-1/2" />
-                <Skeleton.Input active size="default" className="w-2/3" />
-                <Skeleton.Input active size="default" className="w-1/3" />
+                <div className="flex items-center gap-2">
+                  <Skeleton.Input active size="small" className="w-1/4" />
+                  <Skeleton.Input active size="small" className="w-1/4" />
+                </div>
               </div>
             ) : ImagesData?.length > 0 ? (
               <>
@@ -331,8 +352,9 @@ function BodyGallery() {
                   </span>
                   <Rate
                     disabled
+                    allowHalf
                     style={{ direction: "ltr", color: "#18d1be" }}
-                    value={Number(propertySelected.find(item => item.propertyKey === 'gal_afrangscore')?.value) || 0}
+                    value={(Number(propertySelected.find(item => item.propertyKey === 'gal_afrangscore')?.value) || 0) / 2}
                   />
                 </div>
                 <div className="flex flex-wrap sm:flex-nowrap items-center mt-5 gap-7">
@@ -431,9 +453,9 @@ function BodyGallery() {
         </div>
         <div className="flex flex-wrap">
           {loadingMain ? (
-            Array(8).fill(null).map((_, index) => (
+            Array(16).fill(null).map((_, index) => (
               <div key={index} className="lg:w-[12.5%] md:w-1/6 sm:w-1/3 w-1/2 p-2">
-                <Skeleton.Image active className="w-full h-[150px]" />
+                <Skeleton.Image active className="!w-full !h-[150px]" />
               </div>
             ))
           ) : ImagesData?.length > 0 ? (
@@ -495,46 +517,62 @@ function BodyGallery() {
           totalItems > 0 &&
           <div className="flex flex-wrap mt-10">
             {loading ? (
-              Array(16).fill(null).map((_, index) => (
-                <div key={index} className="lg:w-[12.5%] md:w-1/6 sm:w-1/3 w-1/2 p-2">
-                  <Skeleton.Image active className="w-full h-[150px]" />
-                </div>
-              ))
-            ) : nextPageImages.length > 0 ? (
-              nextPageImages.map((item) => (
-                <BoxImageGallery key={item.id} imageData={item} />
-              ))
-            ) : (
-              <div className="w-full p-4">
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description="تصویری یافت نشد"
-                />
+              <div className="w-full flex flex-wrap">
+                {Array(8).fill(null).map((_, index) => (
+                  <div key={`skeleton-${index}`} className="lg:w-1/4 sm:w-1/2 w-full p-2">
+                    <div className="bg-white p-2 rounded-sm box-circl z-50 relative">
+                      <div className="cursor-pointer relative overflow-hidden">
+                        <div className="block relative w-full h-[200px]">
+                          <Skeleton.Image active className="w-full h-full !w-full !h-full" />
+                        </div>
+                      </div>
+                      <div className="my-3 flex items-center text-xs p-2">
+                        <Skeleton.Input active size="small" style={{ width: 100 }} />
+                      </div>
+                      <Divider style={{ margin: 0, padding: 0, borderColor: "#d1182b55" }} />
+                      <div className="flex justify-between items-center px-1 py-2 mt-2">
+                        <Skeleton.Input active size="small" style={{ width: 60 }} />
+                        <Skeleton.Input active size="small" style={{ width: 40 }} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
+            ) : nextPageImages.length > 0 && (
+              nextPageImages.map((item) => (
+                <BoxImageGallery 
+                  key={`next-${item.id}`} 
+                  imageData={item} 
+                  data-image-id={item.id} 
+                />
+              ))
             )}
-          </div>
-        }
-        {
-          totalItems > 0 &&
-          <div className="my-10 z-50 relative">
-            <Pagination
-              style={{ direction: "ltr" }}
-              align="center"
-              current={currentPage}
-              onChange={handlePageChange}
-              total={totalItems}
-              pageSize={16}
-              showSizeChanger={false}
-              loading={loading}
-            />
+            <div dir='ltr' className="w-full flex justify-center mt-8 z-50 relative">
+              <Pagination
+                current={currentPage}
+                total={totalItems}
+                pageSize={16}
+                onChange={handlePageChange}
+                showSizeChanger={false}
+                itemRender={(page, type, originalElement) => {
+                  if (type === 'page') {
+                    const searchParams = new URLSearchParams(window.location.search);
+                    searchParams.set('page', page);
+                    return (
+                      <Link href={`${window.location.pathname}?${searchParams.toString()}`}>
+                        {page}
+                      </Link>
+                    );
+                  }
+                  return originalElement;
+                }}
+              />
+            </div>
           </div>
         }
       </Container>
     </>
   );
 }
-
-
-
 
 export default BodyGallery;

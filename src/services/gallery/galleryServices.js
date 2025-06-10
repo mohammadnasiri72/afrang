@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 export const getGallery = async (params) => {
+  
   try {
     const response = await axios.get(`${mainDomain}/api/Gallery`, {
       params

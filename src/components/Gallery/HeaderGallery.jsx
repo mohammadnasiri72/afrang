@@ -7,16 +7,19 @@ import Container from "../container";
 import ModalSelectCategoryBlog from "./ModalSelectCategoryBlog";
 import ModalSelectSortBlog from "./ModalSelectSortBlog";
 import { getCategory } from "@/services/Category/categoryService";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 
 function HeaderGallery() {
   const [category, setCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [selectedSort, setSelectedSort] = useState("1");
+  const [selectedSort, setSelectedSort] = useState("10");
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
+
+  
 
   
 
@@ -47,17 +50,18 @@ function HeaderGallery() {
     fetchCategory();
   }, [])
 
-  // خواندن پارامترهای URL در لود اولیه
+  // تنظیم selectedCategory بر اساس categoryKey موجود در URL
   useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    const orderByParam = searchParams.get('orderBy');
-
-    if (categoryParam) setSelectedCategory(Number(categoryParam));
-    else setSelectedCategory(0);
-
-    if (orderByParam) setSelectedSort(orderByParam);
-    else setSelectedSort("1");
-  }, [searchParams]);
+    if (params?.slug?.[0]) {
+      const categoryId = Number(params.slug[0]);
+      const foundCategory = category.find(item => Number(item.categoryKey) === categoryId);
+      if (foundCategory) {
+        setSelectedCategory(String(foundCategory.categoryKey));
+      }
+    } else {
+      setSelectedCategory(0);
+    }
+  }, [params?.slug, category]);
 
   const updateUrlParams = (category, orderBy) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -80,38 +84,39 @@ function HeaderGallery() {
   const categoryOptions = [
     { value: 0, label: "همه دسته‌بندی‌ها" },
     ...category.map(item => ({
-      value: item.id,
+      value: item.categoryKey,
       label: item.title
     }))
   ];
 
   const sortOptions = [
+    { value: "10", label: "پسندیده‌ترین" },
     { value: "1", label: "جدیدترین" },
     { value: "11", label: "قدیمی‌ترین" },
-    { value: "8", label: "پربازدیدترین" },
-    { value: "10", label: "پسندیده‌ترین" }
+    { value: "8", label: "پربازدیدترین" }
   ];
 
   const handleCategoryChange = (value) => {
+    
     setSelectedCategory(value);
     
     if (value === 0) {
-      // اگر همه دسته‌بندی‌ها انتخاب شده، به صفحه اصلی گالری برو
       router.push('/gallery');
     } else {
-      // پیدا کردن عنوان دسته‌بندی انتخاب شده
-      const selectedCategoryData = category.find(item => item.id === value);
+      const selectedCategoryData = category.find(item => item.categoryKey === value);
       if (selectedCategoryData) {
-        // ساخت URL با فرمت مورد نظر
-        const categoryUrl = selectedCategoryData.url;
-        router.push(categoryUrl);
+        router.push(`/gallery/${selectedCategoryData.categoryKey}`);
       }
     }
   };
 
   const handleSortChange = (value) => {
     setSelectedSort(value);
-    updateUrlParams(selectedCategory, value);
+    
+    // ساخت URL با پارامتر مرتب‌سازی
+    const currentPath = window.location.pathname;
+    const newUrl = `${currentPath}?orderBy=${value}`;
+    router.push(newUrl);
   };
 
   return (
