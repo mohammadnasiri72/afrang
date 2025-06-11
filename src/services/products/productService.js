@@ -1,16 +1,7 @@
 import { mainDomain } from "@/utils/mainDomain";
 import axios from "axios";
-import Swal from "sweetalert2";
 
-// import sweet alert 2
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-start",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  customClass: "toast-modal",
-});
+
 
 export const getProducts = async (data) => {
   try {
@@ -53,11 +44,7 @@ export const getProductId = async (id) => {
     const response = await axios.get(`${mainDomain}/api/Product/${id}`);
     return response.data
   } catch (error) {
-    Toast.fire({
-      icon: "error",
-      text: error.response?.data ? error.response?.data : "خطای شبکه",
-    });
-    return {}
+   return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
 
@@ -132,10 +119,14 @@ export const getProductPricing = async (categoryId) => {
   }
 };
 
+// تابع کمکی برای ایجاد تاخیر
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getProductCategory = async (categoryId) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Product/Category/${categoryId}`);
+    const response = await axios.get(`${mainDomain}/api/Product/Category/${categoryId}`, {
+      cache: 'force-cache'
+    });
     return response.data
   } catch (error) {
     return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}

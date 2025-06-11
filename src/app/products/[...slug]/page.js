@@ -1,38 +1,19 @@
+import Container from "@/components/container";
+import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
 import { getItem } from "@/services/Item/item";
 import { getProductCategory, getProducts } from "@/services/products/productService";
 import dynamic from 'next/dynamic';
+import { Suspense } from "react";
 import { FaBoxOpen } from "react-icons/fa6";
 import BreadcrumbNav from "./BreadcrumbNav";
-import { redirect } from 'next/navigation';
 
 const BodyProductList = dynamic(() => import("@/components/ProductList/BodyProductList"));
 const FilterProduct = dynamic(() => import("@/components/ProductList/FilterProduct"));
 const PaginationProduct = dynamic(() => import("@/components/ProductList/PaginationProduct"));
 
-export default async function ProductList(props) {
-  const { params, searchParams } = props;
-  const id = Number(params.slug[params.slug.length - 2]);
-
-  // اول چک می‌کنیم که آیا نیاز به ریدایرکت داریم
+// کامپوننت اصلی محتوا
+async function ProductContent({ id, searchParams }) {
   const productCategory = await getProductCategory(id);
-  if (productCategory?.url) {
-    const currentPath = `/products/${params.slug.join('/')}`;
-    const searchParamsObj = {};
-    
-    for (const [key, value] of Object.entries(searchParams)) {
-      searchParamsObj[key] = value;
-    }
-    
-    const searchParamsString = new URLSearchParams(searchParamsObj).toString();
-    const currentUrl = searchParamsString ? `${currentPath}?${searchParamsString}` : currentPath;
-    const decodedUrl = decodeURIComponent(currentUrl);
-
-    // فقط اگر URL متفاوت باشه ریدایرکت می‌کنیم
-    if (productCategory.url !== decodedUrl) {
-      redirect(productCategory.url);
-    }
-  }
-
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
   const layout = searchParams?.layout ? searchParams.layout : "list";
@@ -71,7 +52,7 @@ export default async function ProductList(props) {
 
   return (
     <>
-      <BreadcrumbNav breadcrumb={productCategory.breadcrumb} />
+      <BreadcrumbNav breadcrumb={productCategory?.breadcrumb} />
       <div className="bg-[#f6f6f6] overflow-hidden py-10">
         <div className="xl:px-16">
           <div className="flex flex-col lg:flex-row w-full">
@@ -102,5 +83,35 @@ export default async function ProductList(props) {
         </div>
       </div>
     </>
+  );
+}
+
+export default async function ProductList(props) {
+  const { params, searchParams } = props;
+  const param = await params;
+
+  let id = 0;
+  const pathParts = param.slug;
+
+  // پیدا کردن آخرین عدد در URL
+  for (let i = pathParts.length - 1; i >= 0; i--) {
+    const num = Number(pathParts[i]);
+    if (!isNaN(num)) {
+      id = num;
+      break;
+    }
+  }
+
+  return (
+    <Suspense fallback={<div className="bg-[#f6f6f6] overflow-hidden py-10">
+      <Container>
+        <ProductListSkeleton />
+      </Container>
+    </div>}>
+      <ProductContent
+        id={id}
+        searchParams={searchParams}
+      />
+    </Suspense>
   );
 }

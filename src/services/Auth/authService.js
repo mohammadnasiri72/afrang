@@ -43,15 +43,15 @@ import { mainDomain } from "@/utils/mainDomain";
 //   },
 // };
 
-// export const authServiceSignOut = {
-//   signOut: async (token) => {
-//     return axios.post(mainDomain + "/api/Account/signOut", {} , {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//   },
-// };
+export const authServiceSignOut = {
+  signOut: async (token) => {
+    return axios.post(mainDomain + "/api/Account/signOut", {} , {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+};
 
 // export const changePassword = async (data, token) => {
 //     try {

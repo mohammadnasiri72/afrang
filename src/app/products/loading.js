@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic';
 
 // Dynamic imports for skeleton components
-const ProductListSkeleton = dynamic(() => import("@/components/ProductList/ProductListSkeleton"));
+const CategoryListSkeleton = dynamic(() => import("@/components/ProductList/CategoryListSkeleton"));
 
 export default function Loading() {
-  return <ProductListSkeleton />;
+  return <CategoryListSkeleton />;
 } 

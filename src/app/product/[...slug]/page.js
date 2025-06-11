@@ -14,9 +14,7 @@ export default async function ProductDetails(props) {
   // Get IP and User Agent from headers
   const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
   const userAgent = headersList.get('user-agent') || 'unknown';
-  const fullUrl = headersList.get('x-url') || headersList.get('referer') || '';
-  const encodedPath = new URL(fullUrl).pathname;
-  const url = decodeURIComponent(encodedPath);
+ 
 
   const slug = await params;
   const id = Number(slug.slug[0]);
@@ -26,7 +24,7 @@ export default async function ProductDetails(props) {
   
   // Record the visit with IP and User Agent
   try {
-    await itemVisit(product?.product?.productId, url, ip, userAgent);
+    await itemVisit(product?.product?.productId, product?.product?.url, ip, userAgent);
    
   } catch (error) {
     console.error('Error recording visit:', error);
