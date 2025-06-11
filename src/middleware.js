@@ -20,11 +20,21 @@ const staticPaths = [
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get('token')?.value;
+  const userCookie = request.cookies.get('user')?.value;
+  let userToken = null;
+  
+  try {
+    if (userCookie) {
+      const user = JSON.parse(userCookie);
+      userToken = user?.token;
+    }
+  } catch (error) {
+    console.error('Error parsing user cookie:', error);
+  }
 
   // بررسی مسیرهای محافظت شده
   if (protectedRoutes.some(route => pathname.startsWith(route))) {
-    if (!token) {
+    if (!userToken) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }
