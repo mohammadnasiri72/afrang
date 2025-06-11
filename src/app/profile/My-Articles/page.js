@@ -1,25 +1,21 @@
 "use client";
 
 import { selectUser } from '@/redux/slices/userSlice';
-import { getCategory } from '@/services/Category/categoryService';
 import { UploadFile } from "@/services/File/FileServices";
-import { getUserNews, postUserNews, deleteUserNews, putUserNews } from '@/services/UserNews/UserNewsServices';
+import { deleteUserNews, getUserNews, postUserNews, putUserNews } from '@/services/UserNews/UserNewsServices';
 import { getUserCookie } from '@/utils/cookieUtils';
 import { getImageUrl } from '@/utils/mainDomain';
-import { DeleteOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
-import { Alert, Button, Form, Input, message, Modal, Select, Spin, Upload, Rate } from 'antd';
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from 'react';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
-import { Tooltip } from 'antd';
-import { EyeOutlined, StarOutlined, HeartOutlined } from '@ant-design/icons';
-import { createPortal } from "react-dom";
-import { FaSpinner } from "react-icons/fa";
+import { DeleteOutlined, EditOutlined, EyeOutlined, HeartOutlined, UploadOutlined } from "@ant-design/icons";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { Alert, Button, Form, Input, message, Modal, Pagination, Rate, Select, Tooltip, Upload } from 'antd';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { createPortal } from "react-dom";
+import { FaPlus, FaSpinner } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -130,7 +126,8 @@ export default function MyArticles() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(12); // تعداد مقالات در هر صفحه
 
     // تنظیمات Toast
     const Toast = Swal.mixin({
@@ -403,6 +400,26 @@ export default function MyArticles() {
         setIsDeleteModalOpen(true);
     };
 
+    // محاسبه مقالات قابل نمایش در صفحه فعلی
+    const getCurrentPageArticles = () => {
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        return articles.slice(startIndex, endIndex);
+    };
+
+    // تغییر صفحه
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // تغییر تعداد آیتم در هر صفحه
+    const handlePageSizeChange = (current, size) => {
+        setPageSize(size);
+        setCurrentPage(1); // برگشت به صفحه اول
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -459,108 +476,132 @@ export default function MyArticles() {
                         ))}
                     </div>
                 ) : articles.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {articles.map((article) => (
-                            <div
-                                key={article.id}
-                                className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative z-50   
-                                    ${article.isActive ? 'border-2 border-green-500' : 'border-2 border-orange-500'}`}
-                            >
-                                {/* لیبل وضعیت روی عکس */}
-                                <div className="absolute top-2 right-2 z-10">
-                                    <div className={`px-3 py-1 rounded-full text-sm font-medium
-                                        ${article.isActive
-                                            ? 'bg-green-500 text-white'
-                                            : 'bg-orange-400 text-gray-800'}`}
-                                    >
-                                        {article.isActive ? 'تایید شده' : 'در انتظار تایید'}
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {getCurrentPageArticles().map((article) => (
+                                <div
+                                    key={article.id}
+                                    className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative z-50   
+                                        ${article.isActive ? 'border-2 border-green-500' : 'border-2 border-orange-500'}`}
+                                >
+                                    {/* لیبل وضعیت روی عکس */}
+                                    <div className="absolute top-2 right-2 z-10">
+                                        <div className={`px-3 py-1 rounded-full text-sm font-medium
+                                            ${article.isActive
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-orange-400 text-gray-800'}`}
+                                        >
+                                            {article.isActive ? 'تایید شده' : 'در انتظار تایید'}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="relative aspect-[4/3]">
-                                    <a
-                                        data-fancybox="articles-gallery"
-                                        data-caption={article.title}
-                                        href={getImageUrl(article.image)}
-                                        className="block relative w-full h-full"
-                                    >
-                                        <img
-                                            src={getImageUrl(article.image)}
-                                            alt={article.title}
-                                            className="w-full h-full object-cover cursor-pointer"
-                                        />
-                                        <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </a>
-                                    <div className="absolute bottom-2 left-2 z-10">
-                                        <Rate
-                                            disabled
-                                            defaultValue={Number(article.rate)/2 || 0}
-                                            allowHalf
-                                            className="!text-gold-500"
-                                            dir="ltr"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="px-4 pt-2">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">{article.title}</h3>
-                                        <div className='flex items-center gap-2'>
-                                            <Tooltip title="ویرایش مقاله" placement="bottom">
-                                                <button
-                                                    onClick={() => handleEdit(article)}
-                                                    className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                                                >
-                                                    <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip title="حذف مقاله" placement="bottom">
-                                                <button
-                                                    onClick={() => openDeleteModal(article.id)}
-                                                    className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                                                >
-                                                    <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
-                                                </button>
-                                            </Tooltip>
+                                    <div className="relative aspect-[4/3]">
+                                        <a
+                                            data-fancybox="articles-gallery"
+                                            data-caption={article.title}
+                                            href={getImageUrl(article.image)}
+                                            className="block relative w-full h-full"
+                                        >
+                                            <img
+                                                src={getImageUrl(article.image)}
+                                                alt={article.title}
+                                                className="w-full h-full object-cover cursor-pointer"
+                                            />
+                                            <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        </a>
+                                        <div className="absolute bottom-2 left-2 z-10">
+                                            <Rate
+                                                disabled
+                                                defaultValue={Number(article.rate) / 2 || 0}
+                                                allowHalf
+                                                className="!text-gold-500"
+                                                dir="ltr"
+                                            />
                                         </div>
                                     </div>
-                                    <div className="flex flex-wrap gap-2 text-sm mb-1">
-                                        <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
-                                            <span className="text-gray-600">دسته‌بندی :</span>
-                                            <span className="text-gray-700">{article.categoryTitle}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
-                                            <span className="text-gray-600">تاریخ :</span>
-                                            <span className="text-gray-700">{new Date(article.created).toLocaleDateString('fa-IR')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="bg-white border-t border-gray-100 p-3">
-                                    <div className="flex items-center justify-between text-sm text-gray-500">
-                                        <div className="flex items-center gap-4">
-                                            <div className="flex items-center gap-1">
-                                                <EyeOutlined className="text-xs" />
-                                                <span>{article.visit || 0} بازدید</span>
-                                            </div>
-                                            <div className="flex items-center gap-1">
-                                                <HeartOutlined className="text-xs" />
-                                                <span>{article.like || 0} لایک</span>
+                                    <div className="px-4 pt-2">
+                                        <div className="flex items-center justify-between mb-2">
+                                            {
+                                                article?.url ?
+                                                    <Link href={article.url}>
+                                                        <h3 className="text-lg font-semibold text-gray-800 line-clamp-1 hover:text-[#d1182b] duration-300">{article.title}</h3>
+                                                    </Link> :
+                                                    <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">{article.title}</h3>
+                                            }
+                                            <div className='flex items-center gap-2'>
+                                                <Tooltip title="ویرایش مقاله" placement="bottom">
+                                                    <button
+                                                        onClick={() => handleEdit(article)}
+                                                        className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                                                    >
+                                                        <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
+                                                    </button>
+                                                </Tooltip>
+                                                <Tooltip title="حذف مقاله" placement="bottom">
+                                                    <button
+                                                        onClick={() => openDeleteModal(article.id)}
+                                                        className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                                                    >
+                                                        <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
+                                                    </button>
+                                                </Tooltip>
                                             </div>
                                         </div>
-                                        {article.sourceLink && (
-                                            <Link
-                                                href={article.sourceLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
-                                            >
-                                                <span className="text-xs">مشاهده منبع</span>
-                                            </Link>
-                                        )}
+                                        <div className="flex flex-wrap gap-2 text-sm mb-1">
+                                            <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
+                                                <span className="text-gray-600">دسته‌بندی :</span>
+                                                <span className="text-gray-700">{article.categoryTitle}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                                                <span className="text-gray-600">تاریخ :</span>
+                                                <span className="text-gray-700">{new Date(article.created).toLocaleDateString('fa-IR')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white border-t border-gray-100 p-3">
+                                        <div className="flex items-center justify-between text-sm text-gray-500">
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex items-center gap-1">
+                                                    <EyeOutlined className="text-xs" />
+                                                    <span>{article.visit || 0} بازدید</span>
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <HeartOutlined className="text-xs" />
+                                                    <span>{article.like || 0} لایک</span>
+                                                </div>
+                                            </div>
+                                            {article.sourceLink && (
+                                                <Link
+                                                    href={article.sourceLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                                                >
+                                                    <span className="text-xs">مشاهده منبع</span>
+                                                </Link>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        <div dir="ltr" className="mt-8 flex justify-center">
+                            <Pagination
+                                current={currentPage}
+                                total={articles.length}
+                                pageSize={pageSize}
+                                onChange={handlePageChange}
+                                onShowSizeChange={handlePageSizeChange}
+                                showSizeChanger={true}
+                                pageSizeOptions={['12', '24', '36', '48']}
+                                className="custom-pagination"
+                                showLessItems={true}
+                                responsive={true}
+                            />
+                        </div>
+                    </>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-12 text-center">
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -718,6 +759,82 @@ export default function MyArticles() {
                 onConfirm={handleDelete}
                 isLoading={isDeleting}
             />
+
+            <style jsx global>{`
+                .custom-pagination .ant-pagination-item {
+                    border-radius: 8px;
+                    margin: 0 4px;
+                }
+                .custom-pagination .ant-pagination-item-active {
+                    background-color: #d1182b;
+                    border-color: #d1182b;
+                }
+                .custom-pagination .ant-pagination-item-active a {
+                    color: white;
+                }
+                .custom-pagination .ant-pagination-item:hover {
+                    border-color: #d1182b;
+                }
+                .custom-pagination .ant-pagination-item:hover a {
+                    color: #d1182b;
+                }
+                .custom-pagination .ant-pagination-prev .ant-pagination-item-link,
+                .custom-pagination .ant-pagination-next .ant-pagination-item-link {
+                    border-radius: 8px;
+                }
+                .custom-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+                .custom-pagination .ant-pagination-next:hover .ant-pagination-item-link {
+                    border-color: #d1182b;
+                    color: #d1182b;
+                }
+
+                /* Select styles */
+                .custom-pagination .ant-select-selector {
+                    border-radius: 8px !important;
+                }
+                .custom-pagination .ant-select:hover .ant-select-selector {
+                    border-color: #d1182b !important;
+                }
+                .custom-pagination .ant-select-focused .ant-select-selector {
+                    border-color: #d1182b !important;
+                    box-shadow: 0 0 0 2px rgba(209, 24, 43, 0.2) !important;
+                }
+
+                /* Responsive styles - only for mobile */
+                @media (max-width: 640px) {
+                    .custom-pagination .ant-pagination-item {
+                        min-width: 28px;
+                        height: 28px;
+                        line-height: 28px;
+                        margin: 0 2px;
+                    }
+                    .custom-pagination .ant-pagination-prev .ant-pagination-item-link,
+                    .custom-pagination .ant-pagination-next .ant-pagination-item-link {
+                        min-width: 28px;
+                        height: 28px;
+                        line-height: 28px;
+                    }
+                    .custom-pagination .ant-pagination-item a {
+                        padding: 0 4px;
+                        font-size: 12px;
+                    }
+                    .custom-pagination .ant-pagination-jump-prev,
+                    .custom-pagination .ant-pagination-jump-next {
+                        margin: 0 2px;
+                    }
+                    .custom-pagination .ant-pagination-options {
+                        margin-right: 8px;
+                    }
+                    .custom-pagination .ant-select-selector {
+                        height: 28px !important;
+                        line-height: 28px !important;
+                    }
+                    .custom-pagination .ant-select-selection-item {
+                        line-height: 28px !important;
+                        font-size: 12px;
+                    }
+                }
+            `}</style>
         </div>
     );
 } 

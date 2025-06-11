@@ -7,17 +7,37 @@ import Container from "../container";
 import BlogPagination from "./BlogPagination";
 import EmptyBlogs from "./EmptyBlogs";
 import ExpandableText from "./ExpandableText";
+import { getItem } from "@/services/Item/item";
 
 
 async function BoxImgBlog({
-  page,
-  pageSize,
   searchParams,
-  category,
-  blogs,
-  totalCount,
 }) {
-  const activeCategory = searchParams?.category;
+
+  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
+  const pageSize = searchParams?.pageSize
+    ? parseInt(searchParams.pageSize)
+    : 12;
+
+    // دریافت مقالات
+    let blogs;
+    try {
+      blogs = await getItem({
+        TypeId: 5,
+        LangCode: "fa",
+        PageSize: pageSize,
+        PageIndex: page,
+        CategoryIdArray: searchParams?.category,
+        OrderBy: searchParams?.orderBy
+      });
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+      throw new Error('خطا در دریافت مقالات. لطفا دوباره تلاش کنید.');
+    }
+
+   
+
+    const totalCount = blogs[0]?.total;
 
   const formatPersianDate = (dateString) => {
     try {
@@ -41,48 +61,11 @@ async function BoxImgBlog({
 
   return (
     <Container>
-      <div className="flex flex-wrap items-center pt-20">
-        {category.map((cat) => (
-          <div key={cat.id} className="p-4 lg:w-[14.286%] sm:w-1/4 w-1/2">
-            <Link
-              href={`?${(() => {
-                const params = new URLSearchParams(searchParams);
-                params.delete("category");
-                if (activeCategory !== cat.id.toString()) {
-                  params.set("category", cat.id);
-                }
-                return params.toString();
-              })()}`}
-              className="flex flex-col justify-center items-center"
-              scroll={false}
-            >
-              <div
-                className={`rounded-[50px] overflow-hidden cursor-pointer border-4 h-52 ${activeCategory === cat.id.toString()
-                  ? "border-teal-500 shadow-lg"
-                  : "border-transparent"
-                  }`}
-              >
-                <img className="w-full h-full object-cover" src={getImageUrl(cat.image)} alt="" />
-              </div>
-              <p
-                className={`cursor-pointer mt-4 text-lg font-semibold ${activeCategory === cat.id.toString() ? "text-teal-500" : ""
-                  }`}
-              >
-                {cat.title}
-              </p>
-            </Link>
-          </div>
-        ))}
-      </div>
+    
       <div className="flex flex-wrap pt-10">
         {blogs.map((blog) => (
           <div key={blog.id} className="lg:w-1/4 md:w-1/3 sm:w-1/2 w-full p-2">
             <div className="rounded-lg group overflow-hidden bg-white relative z-50">
-              {/* <div className="absolute top-0 left-0 z-50 duration-300">
-                <span className="bg-[#d1182b] text-white px-3 py-1 rounded-br-2xl flex items-center">
-                  2.4 <FaStar className="px-1 text-xl" />
-                </span>
-              </div> */}
               <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
                 <Link href={blog.url} className="flex items-center justify-center">
                   <div className="relative h-[200px] w-full">

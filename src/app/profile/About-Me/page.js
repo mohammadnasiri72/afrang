@@ -29,7 +29,7 @@ const AboutMePage = () => {
                 <Divider />
 
                 <Descriptions title="اطلاعات حساب کاربری" bordered>
-                    <Descriptions.Item label="نام کاربری" span={3}>
+                    <Descriptions.Item label="نام و نام خانوادگی" span={3}>
                         {user?.displayName}
                     </Descriptions.Item>
                     <Descriptions.Item label="ایمیل" span={3}>
