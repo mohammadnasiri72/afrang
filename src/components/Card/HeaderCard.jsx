@@ -43,7 +43,7 @@ function HeaderCard() {
   return (
     <>
      
-      <div className="flex flex-wrap items-center justify-center py-10">
+      <div className="flex flex-wrap items-center justify-center pb-10">
        
 
         <div className="md:w-1/2 w-full md:mt-0 mt-4">
@@ -90,12 +90,12 @@ function HeaderCard() {
 
       <style jsx global>{`
         .ant-steps-item-title {
-          font-size: 12px !important;
+          font-size: 10px !important;
           margin-top: -10px !important;
           text-align: center !important;
         }
         .ant-steps-item-description {
-          font-size: 11px !important;
+          font-size: 10px !important;
           text-align: center !important;
           margin-top: 1px !important;
         }

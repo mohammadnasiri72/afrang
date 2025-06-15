@@ -106,9 +106,7 @@ export async function middleware(request) {
     } catch (error) {
       console.error('Error in product redirect:', error);
     }
-  } else 
-  
-  if (!staticPaths.some(path => pathname.startsWith(path))) {
+  } else if (!staticPaths.some(path => pathname.startsWith(path))) {
     try {
       const decodedPath = decodeURIComponent(pathname);
       const lowerCasePath = decodedPath.toLowerCase();
