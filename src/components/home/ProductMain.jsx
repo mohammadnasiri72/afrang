@@ -53,8 +53,8 @@ export default function ProductMain({ products }) {
         }}
       >
         {products &&
-          products.map((product) => (
-            <SwiperSlide key={product.id}>
+          products.map((product, index) => (
+            <SwiperSlide key={`${product.id || product.productId || index}-${index}`}>
               <div className="relative group w-full h-[25rem] overflow-hidden rounded-lg bg-white">
                 <div className="">
                   {product.discount !== 0 && (

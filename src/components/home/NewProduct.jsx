@@ -109,7 +109,7 @@ const Toast = Swal.mixin({
         const newProducts = await getProducts({
           page: 1,
           pageSize: 12,
-          orderBy: "8",
+          orderBy: "2",
         });
 
         if (newProducts.type === 'error') {
@@ -188,7 +188,7 @@ const Toast = Swal.mixin({
           <div className="overflow-x-auto pb-2">
             <div className="flex items-center gap-2 min-w-max px-2">
               {categories.map((category, index) => (
-                <div key={category} className="flex items-center">
+                <div key={`${category}-${index}`} className="flex items-center">
                   <span
                     onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
                     className={`text-sm cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
@@ -208,7 +208,7 @@ const Toast = Swal.mixin({
         {/* دسته‌بندی‌ها در حالت دسکتاپ */}
         <div className="hidden lg:flex items-center gap-3">
           {categories.map((category, index) => (
-            <div key={category} className="flex items-center">
+            <div key={`${category}-${index}`} className="flex items-center">
               <span
                 onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
                 className={`text-sm cursor-pointer duration-300 font-medium ${category === selectedCategory

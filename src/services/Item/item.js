@@ -6,7 +6,7 @@ import axios from "axios";
 
 export const getItem = async (params) => {
   try {
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // await new Promise(resolve => setTimeout(resolve, 5000));
     
     const response = await axios.get(`${mainDomain}/api/Item`, {
       params

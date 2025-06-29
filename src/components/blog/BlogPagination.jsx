@@ -4,7 +4,7 @@ import { Pagination } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState, useRef } from "react";
 
-const BlogPagination = ({ current, total, pageSize }) => {
+const BlogPagination = ({ current, total, pageSize, onLoading }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const category = searchParams.get("category");
@@ -36,13 +36,15 @@ const BlogPagination = ({ current, total, pageSize }) => {
   }, [localPage, localPageSize, router]);
 
   const handlePageChange = useCallback((page) => {
+    if (onLoading) onLoading();
     setLocalPage(page);
-  }, []);
+  }, [onLoading]);
 
   const handlePageSizeChange = useCallback((_, size) => {
+    if (onLoading) onLoading();
     setLocalPageSize(size);
     setLocalPage(1);
-  }, []);
+  }, [onLoading]);
 
   return (
     <>
