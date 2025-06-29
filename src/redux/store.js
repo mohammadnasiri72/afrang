@@ -23,6 +23,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import { combineReducers } from 'redux';
 import storage from 'redux-persist/lib/storage';
 import filterLoadingReducer from './features/filterLoadingSlice';
+import compareReducer from './features/compareSlice';
 
 const persistedState = {
   user: {
@@ -47,7 +48,8 @@ const rootReducer = combineReducers({
   discount: discountReducer,
   order: orderReducer,
   favorites: favoritesReducer,
-  filterLoading: filterLoadingReducer
+  filterLoading: filterLoadingReducer,
+  compare: compareReducer
 });
 
 const persistConfig = {

@@ -6,6 +6,7 @@ import { Tooltip, Skeleton } from "antd";
 import ExpandableText from "../Product/ExpandableText";
 import AddToCartButton from "./AddToCartButton";
 import PriceProduct from "./PriceProduct";
+import CompareButton from "../common/CompareButton";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +16,8 @@ function Products({ products, layout = "list" }) {
   const dispatch = useDispatch();
   const isFilterLoading = useSelector((state) => state.filterLoading.isFilterLoading);
   const searchParams = useSearchParams();
+
+  
 
   useEffect(() => {
     if (products) {
@@ -127,6 +130,7 @@ function Products({ products, layout = "list" }) {
               ) : (
                 <div className="flex flex-col gap-2">
                   <AddToCartButton productId={product.productId} />
+                  <CompareButton product={product} />
                 </div>
               )}
             </div>
@@ -163,9 +167,13 @@ function Products({ products, layout = "list" }) {
             <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
               <div className="flex flex-col w-full h-full">
                 <PriceProduct product={product} />
-                <div className="flex items-center py-2">
+                {/* <div className="flex items-center py-2">
                   <img src="/images/icons/benchmark.png" alt="" />
                   <span className="px-1"> مقایسه محصول </span>
+                </div> */}
+                {/* دکمه مقایسه */}
+                <div className="mb-3">
+                  <CompareButton product={product} />
                 </div>
                 <div className="flex items-center py-2">
                   <img src="/images/icons/fast-delivery-2.png" alt="" />
@@ -191,6 +199,9 @@ function Products({ products, layout = "list" }) {
                     <span className="font-semibold px-1">کالای کارکرده</span>
                   </div>
                 )}
+                
+                
+                
                 {!product.canAddCart && (
                   <div className="mt-2">
                     <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
@@ -287,7 +298,10 @@ function Products({ products, layout = "list" }) {
             </div>
           )}
           {product.canAddCart ? (
-            <AddToCartButton productId={product.productId} />
+            <>
+              <AddToCartButton productId={product.productId} />
+              <CompareButton product={product} />
+            </>
           ) : (
             <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">
               <FaCartShopping />

@@ -18,12 +18,13 @@ const LikeProduct = ({ productId }) => {
         const checkLikeStatus = async () => {
             try {
                 const user = Cookies.get("user");
-                if (!user) {
+                const token = JSON.parse(user).token;
+                if (!token) {
                     setIsInitialLoading(false);
                     return;
                 }
 
-                const token = JSON.parse(user).token;
+                
                 const response = await postLiked(productId, token);
                 setLiked(response);
             } catch (error) {

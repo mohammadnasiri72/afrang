@@ -6,15 +6,12 @@ import Image from "next/image";
 import { FaCalendarAlt } from "react-icons/fa";
 import {
   FaComments,
-  FaInstagram,
-  FaLinkedin,
-  FaTelegram,
-  FaUser,
-  FaWhatsapp
+  FaUser
 } from "react-icons/fa6";
 import { IoMdTime } from "react-icons/io";
 import CommentSection from "../comments/CommentSection";
 import LikeComponent from "./LikeComponent";
+import ShareButtons from "./ShareButtons";
 
 async function BlogDesc({ blog}) {
  
@@ -48,8 +45,6 @@ async function BlogDesc({ blog}) {
       return dateString;
     }
   };
-
-
 
   const headersList = headers();
   const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
@@ -120,15 +115,7 @@ async function BlogDesc({ blog}) {
           <hr className="mt-10 border-[#40768c55] border-[1.5px]" />
           <div className="flex justify-between items-center p-3 font-semibold">
             <LikeComponent blog={blog} />
-            <div className="flex items-center">
-              <span> اشتراک گذاری : </span>
-              <div className="px-2 flex items-center gap-2">
-                <FaWhatsapp className="text-xl cursor-pointer text-[#40768c88] hover:text-teal-500 duration-300" />
-                <FaInstagram className="text-xl cursor-pointer text-[#40768c88] hover:text-teal-500 duration-300" />
-                <FaLinkedin className="text-xl cursor-pointer text-[#40768c88] hover:text-teal-500 duration-300" />
-                <FaTelegram className="text-xl cursor-pointer text-[#40768c88] hover:text-teal-500 duration-300" />
-              </div>
-            </div>
+            <ShareButtons blog={blog} />
           </div>
         </div>
 
