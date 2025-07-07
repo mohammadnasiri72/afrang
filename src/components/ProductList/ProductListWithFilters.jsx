@@ -10,7 +10,7 @@ const PaginationProduct = dynamic(() => import("./PaginationProduct"));
 
 export default async function ProductListWithFilters({ searchParams }) {
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
-  const orderBy = searchParams?.OrderBy ? parseInt(searchParams.OrderBy) : "";
+  const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
   const layout = searchParams?.layout ? searchParams.layout : "list";
   const price1 = searchParams?.price1 ? parseInt(searchParams.price1) : 0;
   const price2 = searchParams?.price2 ? parseInt(searchParams.price2) : 100000;

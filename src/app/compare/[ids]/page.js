@@ -4,12 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeFromCompare, clearCompare } from "@/redux/features/compareSlice";
 import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
 import { getProductListId } from "@/services/products/productService";
-import { message } from "antd";
+import { Divider, message } from "antd";
 import { FaTrash, FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getItemByIds } from "@/services/Item/item";
+import { getPropertyItem } from "@/services/Property/propertyService";
 
 const DynamicComparePage = () => {
   const dispatch = useDispatch();
@@ -19,10 +21,11 @@ const DynamicComparePage = () => {
 
   // State معمولی برای محصولات مقایسه
   const [compareProducts, setCompareProducts] = useState([]);
+  const [property, setProperty] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(compareProducts);
+  // console.log(compareProducts);
 
   // دریافت ID های محصولات از URL و decode کردن
   const productIds = params.ids
@@ -30,6 +33,10 @@ const DynamicComparePage = () => {
         .split(",")
         .map((id) => parseInt(id.trim()))
     : [];
+
+  const uniqueTitles = [...new Set(property.map((item) => item.title))];
+  console.log(property);
+  console.log(compareProducts);
 
   // دریافت محصولات از API
   useEffect(() => {
@@ -40,10 +47,19 @@ const DynamicComparePage = () => {
 
         try {
           const response = await getProductListId({ ids: productIds });
+          const response2 = await getPropertyItem(
+            decodeURIComponent(params.ids)
+          );
+
           if (response && response.length > 0) {
             setCompareProducts(response);
           } else {
             setCompareProducts([]);
+          }
+          if (response2 && response2.length > 0) {
+            setProperty(response2);
+          } else {
+            setProperty([]);
           }
         } catch (err) {
           setError("خطا در دریافت محصولات");
@@ -135,22 +151,6 @@ const DynamicComparePage = () => {
     );
   }
 
-  // ویژگی‌های قابل مقایسه بر اساس ساختار واقعی داده
-  const comparisonFields = [
-    { key: "price1", label: "قیمت", type: "price" },
-    { key: "finalPrice", label: "قیمت نهایی", type: "price" },
-    { key: "discount", label: "تخفیف", type: "discount" },
-    { key: "categoryTitle", label: "دسته‌بندی", type: "text" },
-    { key: "summary", label: "توضیحات", type: "text" },
-    { key: "statusDesc", label: "وضعیت", type: "status" },
-    { key: "inventoryQty", label: "موجودی", type: "inventory" },
-    { key: "fastShipping", label: "ارسال سریع", type: "boolean" },
-    { key: "freeShipping", label: "ارسال رایگان", type: "boolean" },
-    { key: "conditionId", label: "نوع کالا", type: "condition" },
-    { key: "visit", label: "تعداد بازدید", type: "number" },
-    { key: "comment", label: "تعداد نظرات", type: "number" },
-  ];
-
   // تعداد ستون‌های مقایسه (حداکثر ۴)
   const maxCompareColumns = 4;
   const columnsToShow =
@@ -164,8 +164,8 @@ const DynamicComparePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 py-8 ">
+      <div className="max-w-7xl mx-auto px-4 z-50 relative">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">مقایسه محصولات</h1>
           <button
@@ -211,6 +211,9 @@ const DynamicComparePage = () => {
                       <div className="font-bold mt-2 text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
                         {item.title}
                       </div>
+                      <div className="font-bold mt-2 text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
+                        {item?.price1?.toLocaleString()} تومان
+                      </div>
                     </div>
                   </Link>
                 </div>
@@ -237,48 +240,21 @@ const DynamicComparePage = () => {
             }
           })}
         </div>
-        {comparisonFields.map((e) => (
-          <div key={e.key} className="w-full ">
-            <h4 className="text-lg text-teal-500 font-semibold">{e.label}</h4>
-            <div className="w-full flex gap-6 ">
-              {compareProducts.map((ev) => (
+
+        {uniqueTitles.map((title) => (
+          <div key={title}>
+            <Divider />
+            <h4 className="text-lg text-teal-500 font-semibold">{title}</h4>
+            <div className="w-full flex gap-6">
+              {compareProducts.map((e) => (
                 <div
-                  key={ev.id}
-                  className="w-1/4 p-4 flex flex-col items-center relative font-semibold"
+                  key={e.id}
+                  className="w-1/4 flex flex-col items-center relative font-semibold"
                 >
-                  {e.key === "price1"
-                    ? ev.price1.toLocaleString() + " تومان "
-                    : e.key === "finalPrice"
-                    ? ev.finalPrice.toLocaleString() + " تومان "
-                    : e.key === "discount"
-                    ? " % " + ev.discount
-                    : e.key === "categoryTitle"
-                    ? ev.categoryTitle
-                    : e.key === "summary"
-                    ? ev.summary || "---"
-                    : e.key === "statusDesc"
-                    ? ev.statusDesc || "---"
-                    : e.key === "inventoryQty"
-                    ? ev.inventoryQty + " عدد " || "---"
-                    : e.key === "fastShipping"
-                    ? ev.fastShipping
-                      ? "دارد"
-                      : "ندارد"
-                    : e.key === "freeShipping"
-                    ? ev.freeShipping
-                      ? "دارد"
-                      : "ندارد"
-                    : e.key === "conditionId"
-                    ? ev.conditionId === 10
-                      ? "نو"
-                      : ev.conditionId === 20
-                      ? "دسته دوم"
-                      : ""
-                    : e.key === "visit"
-                    ? ev.visit + ' بازدید '
-                    :  e.key === "comment"
-                    ? ev.comment + ' نظر '
-                    : ""}
+                  {property
+                    .filter((ev) => ev.title === title)
+                    .filter((ev) => ev.itemId === e.productId)[0]?.value ||
+                    "---"}
                 </div>
               ))}
             </div>

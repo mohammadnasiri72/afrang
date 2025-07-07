@@ -8,7 +8,7 @@ const BlogPagination = ({ current, total, pageSize, onLoading }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const category = searchParams.get("category");
-  const [localPage, setLocalPage] = useState(current);
+  const [localPage, setLocalPage] = useState(1);
   const [localPageSize, setLocalPageSize] = useState(pageSize);
   const isInitialMount = useRef(true);
 
