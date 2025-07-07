@@ -10,6 +10,8 @@ import { fetchMenuItems } from "@/services/menuService";
 import { getUserId } from "@/utils/cookieUtils";
 import { mainDomain } from "@/utils/mainDomain";
 import { syncUserCookieWithRedux } from "@/utils/manageCookie";
+import { ConfigProvider } from "antd";
+import fa_IR from 'antd/locale/fa_IR'; // برای فارسی
 import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
@@ -27,12 +29,18 @@ const generateRandomUserId = () => {
 // کامپوننت برای مدیریت داده‌های اولیه
 function InitialDataManager() {
   const dispatch = useDispatch();
-  const { cartType } = useSelector(state => state.cart);
-  const user = useSelector(state => state.user.user);
+  const { cartType } = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const initialized = useRef(false);
   const lastUserId = useRef(null);
   const lastCartType = useRef(null);
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual"; // غیرفعال کردن بازیابی اسکرول
+    }
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -45,7 +53,7 @@ function InitialDataManager() {
           // دریافت منو و تنظیمات به صورت موازی
           const [menuItems, settingsData] = await Promise.all([
             fetchMenuItems(),
-            dispatch(fetchSettingsData()).unwrap()
+            dispatch(fetchSettingsData()).unwrap(),
           ]);
 
           dispatch(setMenuItems(menuItems));
@@ -55,7 +63,11 @@ function InitialDataManager() {
         const isLoggedIn = user?.token; // چک کردن وضعیت لاگین
 
         // اگر کاربر لاگین شده و قبلاً لاگین نبوده (تغییر از حالت مهمان به کاربر)
-        if (isLoggedIn && lastUserId.current && lastUserId.current !== currentUserId) {
+        if (
+          isLoggedIn &&
+          lastUserId.current &&
+          lastUserId.current !== currentUserId
+        ) {
           try {
             // دریافت سبد خرید قبلی (قبل از لاگین)
             const previousCartItems = await getCart(lastUserId.current);
@@ -74,7 +86,7 @@ function InitialDataManager() {
                     item.quantity
                   );
                 } catch (error) {
-                  console.error('Error adding item to new cart:', error);
+                  console.error("Error adding item to new cart:", error);
                 }
               }
             }
@@ -90,7 +102,10 @@ function InitialDataManager() {
                     `${mainDomain}/api/Cart/${lastUserId.current}/${item.id}`
                   );
                 } catch (error) {
-                  console.error('Error deleting item from previous cart:', error);
+                  console.error(
+                    "Error deleting item from previous cart:",
+                    error
+                  );
                 }
               }
             }
@@ -100,7 +115,10 @@ function InitialDataManager() {
         }
 
         // به‌روزرسانی lastUserId و lastCartType
-        if (currentUserId !== lastUserId.current || cartType !== lastCartType.current) {
+        if (
+          currentUserId !== lastUserId.current ||
+          cartType !== lastCartType.current
+        ) {
           lastUserId.current = currentUserId;
           lastCartType.current = cartType;
 
@@ -130,7 +148,10 @@ function InitialDataManager() {
 function LayoutContent({ children }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const showHeaderFooter = !pathname.includes("/login") && !pathname.includes("/register") && !pathname.includes("/forgot-password");
+  const showHeaderFooter =
+    !pathname.includes("/login") &&
+    !pathname.includes("/register") &&
+    !pathname.includes("/forgot-password");
 
   useEffect(() => {
     setMounted(true);
@@ -155,22 +176,24 @@ function LayoutContent({ children }) {
   }, []);
 
   return (
-    <AuthProvider>
-      <DynamicTitle />
-      {mounted ? (
-        <>
-          <InitialDataManager />
-          <LayoutWrapper showHeaderFooter={showHeaderFooter}>
-            {children}
-          </LayoutWrapper>
-          <FloatingCompareIcon />
-        </>
-      ) : (
-        <div className="fixed inset-0 bg-white flex items-center justify-center">
-          <div className="w-16 h-16 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
-    </AuthProvider>
+    <ConfigProvider direction="rtl" locale={fa_IR}>
+      <AuthProvider>
+        <DynamicTitle />
+        {mounted ? (
+          <>
+            <InitialDataManager />
+            <LayoutWrapper showHeaderFooter={showHeaderFooter}>
+              {children}
+            </LayoutWrapper>
+            <FloatingCompareIcon />
+          </>
+        ) : (
+          <div className="fixed inset-0 bg-white flex items-center justify-center">
+            <div className="w-16 h-16 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+      </AuthProvider>
+    </ConfigProvider>
   );
 }
 

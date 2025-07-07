@@ -1,16 +1,19 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaBox } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 
 function SearchSubfooter() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <>
-      <IoSearchSharp
+      <FaBox
         onClick={() => {
-          setOpen(!open);
+          router.push("/profile/orders");
         }}
-        className="text-3xl cursor-pointer"
+        className="text-2xl cursor-pointer"
       />
       <div
         style={{ zIndex: "80" }}

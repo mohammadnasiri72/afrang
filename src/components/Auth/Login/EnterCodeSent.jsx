@@ -65,7 +65,9 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const handleChange = (index, value) => {
@@ -134,7 +136,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
 
   const submitLogin = async () => {
     // بررسی تعداد اعداد وارد شده
-    const filledDigits = digits.filter(digit => digit !== "").length;
+    const filledDigits = digits.filter((digit) => digit !== "").length;
     if (filledDigits < 6) {
       setError("لطفا کد 6 رقمی را کامل وارد کنید");
       return;
@@ -150,25 +152,23 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         code: englishCode,
       });
 
-
       if (userData.token) {
-
         // تنظیم کوکی با زمان انقضا
         Cookies.set("user", JSON.stringify(userData), {
           expires: new Date(userData.expiration),
           secure: true,
-          sameSite: 'strict'
+          sameSite: "strict",
         });
 
         // بررسی مسیر ذخیره شده در localStorage
-        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        const redirectPath = localStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
-          localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
+          localStorage.removeItem("redirectAfterLogin"); // پاک کردن مسیر از localStorage
           router.push(redirectPath);
         } else if (!from) {
           router.push("/");
         } else {
-          if (from === 'card') {
+          if (from === "card") {
             router.push("/cart/infosend");
           }
         }
@@ -183,13 +183,14 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       } else {
         Toast.fire({
           icon: "error",
-          text: userData.response?.data ? userData.response?.data : "کد وارد شده اشتباه است",
+          text: userData.response?.data
+            ? userData.response?.data
+            : "کد وارد شده اشتباه است",
           customClass: {
             container: "toast-modal",
           },
         });
       }
-
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -222,8 +223,9 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               <Link href="/">
                 <Image
                   src={getImageUrl(
-                    settings?.find((item) => item.propertyKey === "site_footer_logo")
-                      ?.value
+                    settings?.find(
+                      (item) => item.propertyKey === "site_footer_logo"
+                    )?.value
                   )}
                   width={57}
                   height={57}
@@ -286,10 +288,11 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                 <button
                   onClick={handleResendCode}
                   disabled={countdown > 0 || resendLoading}
-                  className={`text-[#d1182b] text-sm font-semibold ${countdown > 0 || resendLoading
+                  className={`text-[#d1182b] text-sm font-semibold ${
+                    countdown > 0 || resendLoading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:text-[#b91626] cursor-pointer"
-                    }`}
+                  }`}
                 >
                   {resendLoading ? (
                     <div className="flex items-center gap-2">
@@ -306,35 +309,38 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
             </div>
 
             <div className="flex flex-wrap mt-5">
-              <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
-                <div
-                  onClick={() => {
-                    setStateLogin(2);
-                  }}
-                  className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
-                >
-                  بازگشت
+              <div className="flex flex-col-reverse sm:flex-row w-full">
+                <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                  <div
+                    onClick={() => {
+                      setStateLogin(2);
+                    }}
+                    className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
+                  >
+                    بازگشت
+                  </div>
                 </div>
-              </div>
 
-              <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
-                <button
-                  disabled={loading || !digits.every((digit) => digit !== "")}
-                  onClick={submitLogin}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading || !digits.every((digit) => digit !== "")
-                    ? "cursor-not-allowed"
-                    : "cursor-pointer"
+                <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                  <button
+                    disabled={loading || !digits.every((digit) => digit !== "")}
+                    onClick={submitLogin}
+                    className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                      loading || !digits.every((digit) => digit !== "")
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
                     }`}
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2 justify-center">
-                      <span>درحال ورود</span>
-                      <Spin className="white-spin" size="small" />
-                    </div>
-                  ) : (
-                    "ورود"
-                  )}
-                </button>
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2 justify-center">
+                        <span>درحال ورود</span>
+                        <Spin className="white-spin" size="small" />
+                      </div>
+                    ) : (
+                      "ورود"
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -17,11 +17,12 @@ const DynamicComparePage = () => {
   const params = useParams();
   const { compareItems } = useSelector((state) => state.compare);
 
-  
   // State معمولی برای محصولات مقایسه
   const [compareProducts, setCompareProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  console.log(compareProducts);
 
   // دریافت ID های محصولات از URL و decode کردن
   const productIds = params.ids
@@ -32,7 +33,6 @@ const DynamicComparePage = () => {
 
   // دریافت محصولات از API
   useEffect(() => {
-    
     const fetchProducts = async () => {
       if (productIds.length > 0) {
         setLoading(true);
@@ -50,7 +50,7 @@ const DynamicComparePage = () => {
         } finally {
           setLoading(false);
         }
-      }else{
+      } else {
         setCompareProducts([]);
       }
     };
@@ -137,8 +137,6 @@ const DynamicComparePage = () => {
 
   // ویژگی‌های قابل مقایسه بر اساس ساختار واقعی داده
   const comparisonFields = [
-    { key: "image", label: "تصویر", type: "image" },
-    { key: "title", label: "نام محصول", type: "text" },
     { key: "price1", label: "قیمت", type: "price" },
     { key: "finalPrice", label: "قیمت نهایی", type: "price" },
     { key: "discount", label: "تخفیف", type: "discount" },
@@ -153,6 +151,18 @@ const DynamicComparePage = () => {
     { key: "comment", label: "تعداد نظرات", type: "number" },
   ];
 
+  // تعداد ستون‌های مقایسه (حداکثر ۴)
+  const maxCompareColumns = 4;
+  const columnsToShow =
+    compareProducts.length < maxCompareColumns
+      ? maxCompareColumns
+      : compareProducts.length;
+
+  // هندل افزودن محصول جدید (می‌توانید این را به دلخواه خود پیاده‌سازی کنید)
+  const handleAddProduct = () => {
+    router.push("/products"); // یا یک modal باز کنید یا هر رفتار دلخواه
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
@@ -166,137 +176,114 @@ const DynamicComparePage = () => {
             حذف همه
           </button>
         </div>
-
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-right text-sm font-medium text-gray-700 border-b">
-                    ویژگی
-                  </th>
-                  {compareProducts.map((item, index) => (
-                    <th
-                      key={item.id}
-                      className="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b relative"
-                    >
-                      <button
-                        onClick={() => handleRemoveItem(item.productId)}
-                        className="absolute top-2 left-2 text-gray-400 hover:text-red-500 transition-colors"
-                      >
-                        <FaTimes className="text-sm" />
-                      </button>
-                      <div className="text-xs text-gray-500 mb-2">
-                        محصول {index + 1}
+        <div className="flex gap-6 overflow-x-auto">
+          {/* ستون‌های محصولات و ستون‌های خالی */}
+          {Array.from({ length: columnsToShow }).map((_, idx) => {
+            const item = compareProducts[idx];
+            if (item) {
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg shadow-lg p-4 w-1/4 flex flex-col items-center relative border border-gray-100"
+                >
+                  {/* دکمه حذف */}
+                  <button
+                    onClick={() => handleRemoveItem(item.productId)}
+                    className="absolute top-2 left-2 text-gray-400 hover:text-red-500 transition-colors"
+                    title="حذف از مقایسه"
+                  >
+                    <FaTimes className="text-base" />
+                  </button>
+                  {/* باکس عکس و عنوان */}
+                  <Link href={`/product/${item.productId}`} className="w-full">
+                    <div className="flex flex-col items-center cursor-pointer">
+                      <Image
+                        src={
+                          getImageUrl2(item.image) || "/images/placeholder.jpg"
+                        }
+                        alt={item.title}
+                        width={100}
+                        height={100}
+                        className="rounded-lg object-cover"
+                        priority={false}
+                        unoptimized
+                      />
+                      <div className="font-bold mt-2 text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
+                        {item.title}
                       </div>
-                      <div className="font-medium text-sm">{item.title}</div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonFields.map((field) => (
-                  <tr key={field.key} className="border-b">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50">
-                      {field.label}
-                    </td>
-                    {compareProducts.map((item) => (
-                      <td
-                        key={`${item.id}-${field.key}`}
-                        className="px-4 py-3 text-center"
-                      >
-                        {field.type === "image" ? (
-                          <div className="flex justify-center">
-                            <Image
-                              src={
-                                getImageUrl2(item.image) ||
-                                "/images/placeholder.jpg"
-                              }
-                              alt={item.title}
-                              width={80}
-                              height={80}
-                              className="rounded-lg object-cover"
-                              priority={false}
-                              unoptimized
-                            />
-                          </div>
-                        ) : field.type === "price" ? (
-                          <div className="text-lg font-bold text-green-600">
-                            {item[field.key]
-                              ? `${item[field.key].toLocaleString()} تومان`
-                              : "نامشخص"}
-                          </div>
-                        ) : field.type === "discount" ? (
-                          <div className="text-sm">
-                            {item.discount > 0 ? (
-                              <span className="bg-red-500 text-white px-2 py-1 rounded text-xs">
-                                {item.discount}%
-                              </span>
-                            ) : (
-                              <span className="text-gray-500">بدون تخفیف</span>
-                            )}
-                          </div>
-                        ) : field.type === "status" ? (
-                          <div className="text-sm">
-                            <span
-                              className={`px-2 py-1 rounded text-xs ${
-                                item.statusId === 1
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {item.statusDesc}
-                            </span>
-                          </div>
-                        ) : field.type === "inventory" ? (
-                          <div className="text-sm">
-                            <span
-                              className={`px-2 py-1 rounded text-xs ${
-                                item.inventoryQty > 0
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {item.inventoryQty} {item.inventoryUnit}
-                            </span>
-                          </div>
-                        ) : field.type === "boolean" ? (
-                          <div className="text-sm">
-                            {item[field.key] ? (
-                              <span className="text-green-600">✓</span>
-                            ) : (
-                              <span className="text-red-600">✗</span>
-                            )}
-                          </div>
-                        ) : field.type === "condition" ? (
-                          <div className="text-sm">
-                            <span
-                              className={`px-2 py-1 rounded text-xs ${
-                                item.conditionId === 20
-                                  ? "bg-blue-100 text-blue-800"
-                                  : "bg-green-100 text-green-800"
-                              }`}
-                            >
-                              {item.conditionId === 20 ? "کارکرده" : "نو"}
-                            </span>
-                          </div>
-                        ) : field.type === "number" ? (
-                          <div className="text-sm text-gray-600">
-                            {item[field.key] || 0}
-                          </div>
-                        ) : (
-                          <div className="text-sm text-gray-600">
-                            {item[field.key] || "نامشخص"}
-                          </div>
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </Link>
+                </div>
+              );
+            } else {
+              // ستون خالی برای افزودن محصول جدید
+              return (
+                <div
+                  key={`empty-${idx}`}
+                  className="bg-white rounded-lg shadow-lg p-4 min-w-[260px] flex flex-col items-center justify-center border-2 border-dashed border-blue-300 cursor-pointer hover:bg-blue-50 transition-colors relative"
+                  onClick={handleAddProduct}
+                  title="اضافه کردن محصول به مقایسه"
+                >
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-100 mb-2">
+                      <span className="text-3xl text-blue-500">+</span>
+                    </div>
+                    <div className="text-blue-600 font-bold text-sm">
+                      اضافه کردن محصول
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          })}
         </div>
+        {comparisonFields.map((e) => (
+          <div key={e.key} className="w-full ">
+            <h4 className="text-lg text-teal-500 font-semibold">{e.label}</h4>
+            <div className="w-full flex gap-6 ">
+              {compareProducts.map((ev) => (
+                <div
+                  key={ev.id}
+                  className="w-1/4 p-4 flex flex-col items-center relative font-semibold"
+                >
+                  {e.key === "price1"
+                    ? ev.price1.toLocaleString() + " تومان "
+                    : e.key === "finalPrice"
+                    ? ev.finalPrice.toLocaleString() + " تومان "
+                    : e.key === "discount"
+                    ? " % " + ev.discount
+                    : e.key === "categoryTitle"
+                    ? ev.categoryTitle
+                    : e.key === "summary"
+                    ? ev.summary || "---"
+                    : e.key === "statusDesc"
+                    ? ev.statusDesc || "---"
+                    : e.key === "inventoryQty"
+                    ? ev.inventoryQty + " عدد " || "---"
+                    : e.key === "fastShipping"
+                    ? ev.fastShipping
+                      ? "دارد"
+                      : "ندارد"
+                    : e.key === "freeShipping"
+                    ? ev.freeShipping
+                      ? "دارد"
+                      : "ندارد"
+                    : e.key === "conditionId"
+                    ? ev.conditionId === 10
+                      ? "نو"
+                      : ev.conditionId === 20
+                      ? "دسته دوم"
+                      : ""
+                    : e.key === "visit"
+                    ? ev.visit + ' بازدید '
+                    :  e.key === "comment"
+                    ? ev.comment + ' نظر '
+                    : ""}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

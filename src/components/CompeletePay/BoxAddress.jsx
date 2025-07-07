@@ -58,11 +58,8 @@ const EmptyAddressIcon = () => (
   </div>
 );
 
-function BoxAddress({
-
-  onAddressDelete
-}) {
-  const selectedAddress = useSelector((state) => state.address.selectedAddress);  
+function BoxAddress({ onAddressDelete }) {
+  const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const [addressList, setAddressList] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editAddressId, setEditAddressId] = useState(null);
@@ -77,7 +74,7 @@ function BoxAddress({
       setIsLoading(true);
       const items = await getAddress(token);
 
-      if (items.type === 'error') {
+      if (items.type === "error") {
         Toast.fire({
           icon: "error",
           text: items.message,
@@ -86,9 +83,7 @@ function BoxAddress({
           },
         });
         return;
-      }
-
-      else {
+      } else {
         setAddressList(items);
         if (items.length === 1) {
           // اگر فقط یک آدرس وجود دارد، آن را انتخاب کن
@@ -99,7 +94,7 @@ function BoxAddress({
         }
       }
     } catch (error) {
-      console.error('Error fetching address:', error);
+      console.error("Error fetching address:", error);
     } finally {
       setIsLoading(false);
     }
@@ -145,10 +140,11 @@ function BoxAddress({
                 key={address.id}
                 onClick={() => dispatch(setSelectedAddress(address))}
                 className={`
-                  w-full flex items-center gap-3 p-4 rounded-lg border-2 transition-all duration-200
-                  ${address.id === selectedAddress?.id
-                    ? 'border-[#d1182b] bg-red-50'
-                    : 'border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer'
+                  w-full flex sm:flex-nowrap flex-wrap items-center gap-3 p-4 rounded-lg border-2 transition-all duration-200
+                  ${
+                    address.id === selectedAddress?.id
+                      ? "border-[#d1182b] bg-red-50"
+                      : "border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer"
                   }
                 `}
               >
@@ -156,7 +152,7 @@ function BoxAddress({
                   <FaHome className="text-xl text-[#d1182b]" />
                 </div>
                 <div className="flex-grow">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div className="text-sm">
                       <span className="font-medium text-gray-800">گیرنده:</span>
                       <span className="text-gray-600 mr-2">{address.fullName}</span>
@@ -177,9 +173,50 @@ function BoxAddress({
                       <span className="font-medium text-gray-800">آدرس:</span>
                       <span className="text-gray-600 mr-2">{address.provinceTitle} - {address.cityTitle} - {address.address}</span>
                     </div>
+                  </div> */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">
+                        گیرنده :
+                      </span>
+                      <span className="text-gray-600 mr-2">
+                        {address.fullName}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">
+                        کد ملی :
+                      </span>
+                      <span className="text-gray-600 mr-2">
+                        {address.nationalCode}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">
+                        شماره تماس :
+                      </span>
+                      <span className="text-gray-600 mr-2">
+                        {address.mobile}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-800">
+                        کد پستی :
+                      </span>
+                      <span className="text-gray-600 mr-2">
+                        {address.postalCode}
+                      </span>
+                    </div>
+                    <div className="text-sm text-justify">
+                      <span className="font-medium text-gray-800">آدرس :</span>
+                      <span className="text-gray-600 mx-2 ">
+                        {address.provinceTitle} - {address.cityTitle} -{" "}
+                        {address.address}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 justify-center w-full sm:justify-start sm:w-auto">
                   <div className="flex items-center gap-1">
                     <button
                       onClick={(e) => {
@@ -189,19 +226,29 @@ function BoxAddress({
                       className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
                       title="ویرایش"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
                       </svg>
                     </button>
-                    <DeleteAddress
-                      id={address.id}
-                      onDelete={onAddressDelete}
-                    />
+                    <DeleteAddress id={address.id} onDelete={onAddressDelete} />
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
-                    ${address.id === selectedAddress?.id
-                      ? 'border-[#d1182b] bg-[#d1182b]'
-                      : 'border-gray-300'
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
+                    ${
+                      address.id === selectedAddress?.id
+                        ? "border-[#d1182b] bg-[#d1182b]"
+                        : "border-gray-300"
                     }`}
                   >
                     {address.id === selectedAddress?.id && (

@@ -285,7 +285,7 @@ export default function DescCompeletePay() {
               ) : (
                 <>
                   <FaShoppingCart />
-                  <span>پرداخت و تکمیل خرید</span>
+                  <span>تکمیل اطلاعات پرداخت</span>
                 </>
               )}
             </button>

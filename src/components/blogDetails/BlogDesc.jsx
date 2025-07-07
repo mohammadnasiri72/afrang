@@ -78,7 +78,7 @@ async function BlogDesc({ blog}) {
                 blog?.sourceName &&
                 <span className="px-1 text-[#40768caa]">
                   منتشر شده توسط :{" "}
-                  <span>{blog?.sourceName || ""}</span>
+                  <span>{blog?.sourceName || "خانه عکاسان افرنگ"}</span>
                 </span>
               }
             </div>

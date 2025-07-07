@@ -6,25 +6,106 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { FaAddressBook, FaBuilding, FaHome, FaShoppingBag, FaSignOutAlt, FaUser, FaKey, FaHeart, FaCamera, FaExclamationTriangle, FaInfoCircle, FaComment, FaNewspaper, FaRecycle } from "react-icons/fa";
+import {
+  FaAddressBook,
+  FaBuilding,
+  FaHome,
+  FaShoppingBag,
+  FaSignOutAlt,
+  FaUser,
+  FaKey,
+  FaHeart,
+  FaCamera,
+  FaExclamationTriangle,
+  FaInfoCircle,
+  FaComment,
+  FaNewspaper,
+  FaRecycle,
+} from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
+import { getImageUrl } from "@/utils/mainDomain";
 
 const dashboardMenuItems = [
-  { id: 'dashboard', title: 'داشبورد', icon: FaHome, path: '/profile/dashboard' },
-  { id: 'edit-profile', title: 'ویرایش پروفایل', icon: FaUser, path: '/profile/edit-profile' },
-  { id: 'orders', title: 'سفارشات من', icon: FaShoppingBag, path: '/profile/orders' },
-  { id: 'favorites', title: 'علاقه‌مندی‌های من', icon: FaHeart, path: '/profile/favorites' },
-  { id: 'second-hand', title: 'کالای دسته دوم', icon: FaRecycle, path: '/profile/second-hand' },
-  { id: 'user-comments', title: 'نظرات ارسالی', icon: FaComment, path: '/profile/user-comments' },
-  { id: 'my-articles', title: 'ارسال اخبار و مقالات', icon: FaNewspaper, path: '/profile/my-articles' },
-  { id: 'send-image', title: 'ارسال عکس', icon: FaCamera, path: '/profile/send-photo' },
-  { id: 'report-loss', title: 'گزارش مفقودی', icon: FaExclamationTriangle, path: '/profile/missing-report' },
-  { id: 'about-me', title: 'درباره من', icon: FaInfoCircle, path: '/profile/about-me' },
-  { id: 'addresses', title: 'آدرس‌های من', icon: FaAddressBook, path: '/profile/addresses' },
-  { id: 'legal', title: 'اطلاعات حقوقی', icon: FaBuilding, path: '/profile/legal' },
-  { id: 'change-password', title: 'تغییر رمز عبور', icon: FaKey, path: '/profile/change-password' },
+  {
+    id: "dashboard",
+    title: "داشبورد",
+    icon: FaHome,
+    path: "/profile/dashboard",
+  },
+  {
+    id: "edit-profile",
+    title: "ویرایش پروفایل",
+    icon: FaUser,
+    path: "/profile/edit-profile",
+  },
+  {
+    id: "orders",
+    title: "سفارشات من",
+    icon: FaShoppingBag,
+    path: "/profile/orders",
+  },
+  {
+    id: "favorites",
+    title: "علاقه‌مندی‌های من",
+    icon: FaHeart,
+    path: "/profile/favorites",
+  },
+  {
+    id: "second-hand",
+    title: "کالای دسته دوم",
+    icon: FaRecycle,
+    path: "/profile/second-hand",
+  },
+  {
+    id: "user-comments",
+    title: "نظرات ارسالی",
+    icon: FaComment,
+    path: "/profile/user-comments",
+  },
+  {
+    id: "my-articles",
+    title: "ارسال اخبار و مقالات",
+    icon: FaNewspaper,
+    path: "/profile/my-articles",
+  },
+  {
+    id: "send-image",
+    title: "ارسال عکس",
+    icon: FaCamera,
+    path: "/profile/send-photo",
+  },
+  {
+    id: "report-loss",
+    title: "گزارش مفقودی",
+    icon: FaExclamationTriangle,
+    path: "/profile/missing-report",
+  },
+  {
+    id: "about-me",
+    title: "درباره من",
+    icon: FaInfoCircle,
+    path: "/profile/about-me",
+  },
+  {
+    id: "addresses",
+    title: "آدرس‌های من",
+    icon: FaAddressBook,
+    path: "/profile/addresses",
+  },
+  {
+    id: "legal",
+    title: "اطلاعات حقوقی",
+    icon: FaBuilding,
+    path: "/profile/legal",
+  },
+  {
+    id: "change-password",
+    title: "تغییر رمز عبور",
+    icon: FaKey,
+    path: "/profile/change-password",
+  },
 ];
 
 function ResponsiveMenu() {
@@ -41,6 +122,8 @@ function ResponsiveMenu() {
   const timeoutRef = useRef(null);
   const isCalculatingRef = useRef(false);
 
+  const { settings } = useSelector((state) => state.settings);
+
   useEffect(() => {
     const userData = getUserCookie();
     setUser(userData || {});
@@ -56,7 +139,22 @@ function ResponsiveMenu() {
 
   const Title = () => (
     <div className="flex justify-end">
-      <img className="w-11" src="/images/logo.png" alt="logo" />
+      <Link
+        onClick={onClose}
+        href={
+          settings.find((item) => item.propertyKey === "site_home_url")?.value
+        }
+      >
+        <img
+          className="w-14 "
+          src={getImageUrl(
+            settings.find((item) => item.propertyKey === "site_footer_logo")
+              ?.value
+          )}
+          alt=""
+        />
+      </Link>
+      {/* <img className="w-11" src="/images/logo.png" alt="logo" /> */}
     </div>
   );
 
@@ -76,8 +174,8 @@ function ResponsiveMenu() {
     const normalizedPath = decodeURIComponent(path);
 
     // چک کردن مسیرهای داشبورد
-    if (path.startsWith('/profile/')) {
-      return 'dashboard-group';
+    if (path.startsWith("/profile/")) {
+      return "dashboard-group";
     }
 
     // چک کردن همه آیتم‌های منو
@@ -101,7 +199,10 @@ function ResponsiveMenu() {
           if (child.Children && child.Children.length > 0) {
             for (const subChild of child.Children) {
               const subChildUrl = subChild.url || subChild.pageUrl;
-              if (subChildUrl && decodeURIComponent(subChildUrl) === normalizedPath) {
+              if (
+                subChildUrl &&
+                decodeURIComponent(subChildUrl) === normalizedPath
+              ) {
                 return item.id;
               }
             }
@@ -117,7 +218,7 @@ function ResponsiveMenu() {
   useEffect(() => {
     const currentKey = getAccordionKeyFromPath(pathname);
     if (currentKey) {
-      setOpenKeys(prev => {
+      setOpenKeys((prev) => {
         // اگر کلید قبلاً وجود نداشته، اضافه کن
         if (!prev.includes(currentKey)) {
           return [...prev, currentKey];
@@ -140,7 +241,7 @@ function ResponsiveMenu() {
   // تابع برای چک کردن اینکه آیا آیتم پدر فعال است
   const isParentActive = (items) => {
     if (!items) return false;
-    return items.some(item => {
+    return items.some((item) => {
       if (item.Children) {
         return isParentActive(item.Children);
       }
@@ -191,10 +292,11 @@ function ResponsiveMenu() {
     return (
       <div
         ref={navbarRef}
-        className={`main-navbar  duration-1000 ease-in-out w-full flex text-white ${isSticky
-          ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
-          : "relative"
-          }`}
+        className={`main-navbar  duration-1000 ease-in-out w-full flex text-white ${
+          isSticky
+            ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
+            : "relative"
+        }`}
       >
         <div className="w-full ">
           <div className="flex justify-start w-full whitespace-nowrap overflow-x-auto lg:overflow-visible">
@@ -202,8 +304,9 @@ function ResponsiveMenu() {
               {items.map((item, i) => (
                 <div
                   key={item.id}
-                  className={`hover:bg-[#0002] duration-300 px-0.5 relative group hidden lg:flex items-center ${i === items.length - 1 ? "" : "border-l border-[#fff8]"
-                    }`}
+                  className={`hover:bg-[#0002] duration-300 px-0.5 relative group hidden lg:flex items-center ${
+                    i === items.length - 1 ? "" : "border-l border-[#fff8]"
+                  }`}
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
@@ -222,16 +325,16 @@ function ResponsiveMenu() {
                     <div
                       className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[999]"
                       style={{
-                        position: 'fixed',
+                        position: "fixed",
                         top: `${dropdownPosition.top}px`,
                         left: 0,
                         right: 0,
-                        width: '100%',
-                        transform: 'translateY(0)',
-                        transition: 'all 0.3s ease-in-out',
-                        maxHeight: '80vh',
-                        overflowY: 'auto',
-                        overflowX: 'hidden'
+                        width: "100%",
+                        transform: "translateY(0)",
+                        transition: "all 0.3s ease-in-out",
+                        maxHeight: "80vh",
+                        overflowY: "auto",
+                        overflowX: "hidden",
                       }}
                     >
                       <div className="container mx-auto">
@@ -240,7 +343,9 @@ function ResponsiveMenu() {
                             <div key={child.id} className="w-1/2">
                               <div className="p-3">
                                 {child.Children && child.Children.length > 0 ? (
-                                  <Link href={child.url || child.pageUrl || "#"}>
+                                  <Link
+                                    href={child.url || child.pageUrl || "#"}
+                                  >
                                     <div className="px-3 py-2 rounded-lg mb-3">
                                       <h3 className="whitespace-nowrap font-bold text-[#130f26]">
                                         {child.title}
@@ -248,38 +353,57 @@ function ResponsiveMenu() {
                                     </div>
                                   </Link>
                                 ) : (
-                                  <Link href={child.url || child.pageUrl || "#"}>
+                                  <Link
+                                    href={child.url || child.pageUrl || "#"}
+                                  >
                                     <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
-                                      <img src="/images/icons/Arrow-Left.png" alt="" className="w-4" />
+                                      <img
+                                        src="/images/icons/Arrow-Left.png"
+                                        alt=""
+                                        className="w-4"
+                                      />
                                       <span className="whitespace-nowrap text-sm font-semibold">
                                         {child.title}
                                       </span>
                                     </div>
                                   </Link>
                                 )}
-                                {child.Children && child.Children.length > 0 && (
-                                  <div className="grid grid-cols-3 gap-2 mt-2">
-                                    {child.Children.map((subChild) => (
-                                      <Link
-                                        key={subChild.id}
-                                        href={subChild.url || subChild.pageUrl || "#"}
-                                      >
-                                        <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
-                                          <img src="/images/icons/Arrow-Left.png" alt="" className="w-4" />
-                                          <span className="whitespace-nowrap text-sm font-semibold">
-                                            {subChild.title}
-                                          </span>
-                                        </div>
-                                      </Link>
-                                    ))}
-                                  </div>
-                                )}
+                                {child.Children &&
+                                  child.Children.length > 0 && (
+                                    <div className="grid grid-cols-3 gap-2 mt-2">
+                                      {child.Children.map((subChild) => (
+                                        <Link
+                                          key={subChild.id}
+                                          href={
+                                            subChild.url ||
+                                            subChild.pageUrl ||
+                                            "#"
+                                          }
+                                        >
+                                          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
+                                            <img
+                                              src="/images/icons/Arrow-Left.png"
+                                              alt=""
+                                              className="w-4"
+                                            />
+                                            <span className="whitespace-nowrap text-sm font-semibold">
+                                              {subChild.title}
+                                            </span>
+                                          </div>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
                               </div>
                             </div>
                           ))}
                         </div>
                         <div className="flex justify-end mt-4">
-                          <img src="/images/gallery/best-video-cameras.png" alt="" className="h-24 object-contain" />
+                          <img
+                            src="/images/gallery/best-video-cameras.png"
+                            alt=""
+                            className="h-24 object-contain"
+                          />
                         </div>
                       </div>
                     </div>
@@ -302,8 +426,11 @@ function ResponsiveMenu() {
           return {
             key: item.id,
             label: (
-              <div className={`text-right px-4 py-2 cursor-pointer ${isActive ? 'text-[#d1182b]' : ''
-                }`}>
+              <div
+                className={`text-right px-4 py-2 cursor-pointer ${
+                  isActive ? "text-[#d1182b]" : ""
+                }`}
+              >
                 {item.title}
               </div>
             ),
@@ -315,10 +442,11 @@ function ResponsiveMenu() {
           label: (
             <button
               onClick={() => handleNavigation(item.url || item.pageUrl || "#")}
-              className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${isActivePath(item.url || item.pageUrl)
-                ? 'text-[#d1182b]'
-                : 'text-gray-800 hover:text-[#d1182b]'
-                }`}
+              className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${
+                isActivePath(item.url || item.pageUrl)
+                  ? "text-[#d1182b]"
+                  : "text-gray-800 hover:text-[#d1182b]"
+              }`}
             >
               {item.title}
             </button>
@@ -338,53 +466,63 @@ function ResponsiveMenu() {
     };
 
     // ایجاد آیتم‌های داشبورد برای منو
-    const dashboardItems = user?.token ? [
-      {
-        key: 'dashboard-group',
-        label: (
-          <div className={`text-right px-4 py-2 cursor-pointer ${dashboardMenuItems.some(item => isActivePath(item.path))
-            ? 'text-[#d1182b]'
-            : ''
-            }`}>
-            داشبورد کاربری
-          </div>
-        ),
-        children: dashboardMenuItems.map(item => ({
-          key: item.id,
-          label: (
-            <button
-              onClick={() => handleNavigation(item.path)}
-              className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${isActivePath(item.path)
-                ? 'text-[#d1182b]'
-                : 'text-gray-800 hover:text-[#d1182b]'
+    const dashboardItems = user?.token
+      ? [
+          {
+            key: "dashboard-group",
+            label: (
+              <div
+                className={`text-right px-4 py-2 cursor-pointer ${
+                  dashboardMenuItems.some((item) => isActivePath(item.path))
+                    ? "text-[#d1182b]"
+                    : ""
                 }`}
-            >
-              <item.icon className="text-lg" />
-              <span>{item.title}</span>
-            </button>
-          ),
-        }))
-      }
-    ] : [];
+              >
+                داشبورد کاربری
+              </div>
+            ),
+            children: dashboardMenuItems.map((item) => ({
+              key: item.id,
+              label: (
+                <button
+                  onClick={() => handleNavigation(item.path)}
+                  className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${
+                    isActivePath(item.path)
+                      ? "text-[#d1182b]"
+                      : "text-gray-800 hover:text-[#d1182b]"
+                  }`}
+                >
+                  <item.icon className="text-lg" />
+                  <span>{item.title}</span>
+                </button>
+              ),
+            })),
+          },
+        ]
+      : [];
 
     // ترکیب آیتم‌های منو
     const menuItems = [
       ...dashboardItems,
       ...renderMenuItems(items),
-      ...(user?.token ? [{
-        key: 'logout',
-        label: (
-          <button
-            onClick={() => {
-              handleLogout();
-            }}
-            className="flex items-center gap-3 w-full text-red-600 bg-transparent px-4 py-2 rounded-lg transition-colors cursor-pointer"
-          >
-            <FaSignOutAlt className="text-lg" />
-            <span>خروج از حساب</span>
-          </button>
-        ),
-      }] : [])
+      ...(user?.token
+        ? [
+            {
+              key: "logout",
+              label: (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  className="flex items-center gap-3 w-full text-red-600 bg-transparent px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  <FaSignOutAlt className="text-lg" />
+                  <span>خروج از حساب</span>
+                </button>
+              ),
+            },
+          ]
+        : []),
     ];
 
     // پیدا کردن کلید اکوردئون فعلی
@@ -474,4 +612,4 @@ function ResponsiveMenu() {
   );
 }
 
-export default ResponsiveMenu; 
+export default ResponsiveMenu;

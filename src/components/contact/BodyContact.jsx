@@ -17,14 +17,14 @@ import Swal from "sweetalert2";
 function BodyContact() {
   const [typeArticle, setTypeArticle] = useState("شماره های تماس");
   const { settings, loading } = useSelector((state) => state.settings);
-  
+
   // Form states
   const [formData, setFormData] = useState({
     nameFamily: "",
     part: "فروش",
     tel: "",
     email: "",
-    message: ""
+    message: "",
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -42,13 +42,13 @@ function BodyContact() {
   // Helper function to render phone numbers
   const renderPhoneNumbers = (phoneString) => {
     if (!phoneString) return null;
-    
-    const numbers = phoneString.split('|').map(num => num.trim());
-    
+
+    const numbers = phoneString.split("|").map((num) => num.trim());
+
     return (
       <div className="flex flex-wrap gap-2">
         {numbers.map((number, index) => (
-          <a 
+          <a
             key={index}
             href={`tel:${number}`}
             className="text-[#424242] hover:text-[#18d1be] transition-colors duration-300"
@@ -87,23 +87,23 @@ function BodyContact() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Validate field on change
     const error = validateField(name, value);
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   };
 
   const handleSelectChange = (value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      part: value
+      part: value,
     }));
   };
 
@@ -112,7 +112,7 @@ function BodyContact() {
     let isValid = true;
 
     // Validate all required fields
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) {
         newErrors[key] = error;
@@ -133,11 +133,11 @@ function BodyContact() {
     try {
       const data = {
         langCode: "fa",
-        ...formData
+        ...formData,
       };
-      
+
       const response = await PostContactForm(data);
-      
+
       if (response) {
         Toast.fire({
           icon: "success",
@@ -153,7 +153,7 @@ function BodyContact() {
           part: "فروش",
           tel: "",
           email: "",
-          message: ""
+          message: "",
         });
         setErrors({});
       }
@@ -178,15 +178,33 @@ function BodyContact() {
     return <div>اطلاعاتی یافت نشد</div>;
   }
 
-  const sitePostalCode = settings.find(item => item.propertyKey === "site_postalcode")?.value;
-  const sitePhone = settings.find(item => item.propertyKey === "site_tel")?.value;
-  const siteMobile = settings.find(item => item.propertyKey === "site_social_tel")?.value;
-  const siteManagerName = settings.find(item => item.propertyKey === "site_admin_tel")?.title;
-  const siteManagerMobile = settings.find(item => item.propertyKey === "site_admin_tel")?.value;
-  const siteSalesManagerName = settings.find(item => item.propertyKey === "site_adminsale_tel")?.title;
-  const siteSalesManagerMobile = settings.find(item => item.propertyKey === "site_adminsale_tel")?.value;
-  const siteEmail = settings.find(item => item.propertyKey === "site_email")?.value;
-  const siteWorkingHours = settings.find(item => item.propertyKey === "site_worktime")?.value;
+  const sitePostalCode = settings.find(
+    (item) => item.propertyKey === "site_postalcode"
+  )?.value;
+  const sitePhone = settings.find(
+    (item) => item.propertyKey === "site_tel"
+  )?.value;
+  const siteMobile = settings.find(
+    (item) => item.propertyKey === "site_social_tel"
+  )?.value;
+  const siteManagerName = settings.find(
+    (item) => item.propertyKey === "site_admin_tel"
+  )?.title;
+  const siteManagerMobile = settings.find(
+    (item) => item.propertyKey === "site_admin_tel"
+  )?.value;
+  const siteSalesManagerName = settings.find(
+    (item) => item.propertyKey === "site_adminsale_tel"
+  )?.title;
+  const siteSalesManagerMobile = settings.find(
+    (item) => item.propertyKey === "site_adminsale_tel"
+  )?.value;
+  const siteEmail = settings.find(
+    (item) => item.propertyKey === "site_email"
+  )?.value;
+  const siteWorkingHours = settings.find(
+    (item) => item.propertyKey === "site_worktime"
+  )?.value;
 
   const renderContactCards = () => {
     switch (typeArticle) {
@@ -224,8 +242,6 @@ function BodyContact() {
                 </div>
               </div>
             </div>
-
-
           </>
         );
 
@@ -269,13 +285,13 @@ function BodyContact() {
       case "ساعات کار":
         return (
           <div className="w-full lg:w-1/3 p-3">
-            <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+            <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
               <div className="bg-white ml-[15px] rounded-lg p-[10px]">
                 <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                   <LuTag />
                 </div>
               </div>
-              <div className="py-4 px-2 pl-[50px]">
+              <div className="py-4 px-2 sm:pl-[50px]">
                 <span className="text-[#616161] text-[13px] font-bold">
                   ساعات کاری
                 </span>
@@ -345,33 +361,33 @@ function BodyContact() {
         />
       </div>
 
-      <div className="lg:w-auto w-full SegmentedContact overflow-auto mx-auto flex justify-center">
-        <Segmented
-          className="font-semibold text-3xl w-full "
-          dir="ltr"
-          style={{
-            paddingTop: "8px",
-            paddingBottom: "8px",
-            fontFamily: "yekan",
-          }}
-          value={typeArticle}
-          onChange={(e) => {
-            setTypeArticle(e);
-          }}
-          options={[
-            "ساعات کار",
-            "ایمیل و کد پستی",
-            "فکس و سایر تلفن ها",
-            "شماره های تماس",
-          ]}
-        />
-      </div>
+        <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
+          <Segmented
+            className="font-semibold text-3xl w-full overflow-auto"
+            dir="rtl"
+            style={{
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              fontFamily: "yekan",
+            }}
+            value={typeArticle}
+            onChange={(e) => {
+              setTypeArticle(e);
+            }}
+            options={[
+              "شماره های تماس",
+              "فکس و سایر تلفن ها",
+              "ایمیل و کد پستی",
+              "ساعات کار",
+            ]}
+          />
+        </div>
+     
+
       <div className="mt-8">
         <div className="rounded-lg bg-white p-5">
           <div id="tab-1" className="tab-item">
-            <div className="flex flex-wrap">
-              {renderContactCards()}
-            </div>
+            <div className="flex flex-wrap">{renderContactCards()}</div>
           </div>
         </div>
       </div>
@@ -395,7 +411,9 @@ function BodyContact() {
 
                 <div className="w-full mt-2">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.nameFamily ? 'border border-red-500' : ''}`}
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                      errors.nameFamily ? "border border-red-500" : ""
+                    }`}
                     type="text"
                     name="nameFamily"
                     value={formData.nameFamily}
@@ -403,7 +421,9 @@ function BodyContact() {
                     placeholder="لطفا نام و نام خانوادگی خود را وارد کنید"
                   />
                   {errors.nameFamily && (
-                    <p className="text-red-500 text-sm mt-1">{errors.nameFamily}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.nameFamily}
+                    </p>
                   )}
                 </div>
               </div>
@@ -433,7 +453,9 @@ function BodyContact() {
 
                 <div className="w-full mt-2">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.tel ? 'border border-red-500' : ''}`}
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                      errors.tel ? "border border-red-500" : ""
+                    }`}
                     type="text"
                     name="tel"
                     value={formData.tel}
@@ -450,7 +472,9 @@ function BodyContact() {
 
                 <div className="w-full mt-2">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.email ? 'border border-red-500' : ''}`}
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                      errors.email ? "border border-red-500" : ""
+                    }`}
                     type="text"
                     name="email"
                     value={formData.email}
@@ -466,25 +490,33 @@ function BodyContact() {
                 <p className="font-semibold text-sm">پیام</p>
                 <div className="mt-2">
                   <textarea
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 py-2 h-36 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.message ? 'border border-red-500' : ''}`}
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 py-2 h-36 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                      errors.message ? "border border-red-500" : ""
+                    }`}
                     placeholder="لطفا پیام خود را وارد کنید"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                   ></textarea>
                   {errors.message && (
-                    <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.message}
+                    </p>
                   )}
                 </div>
               </div>
               <div className="flex justify-end w-full p-2">
-                <button 
+                <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className={`w-[260px] bg-[#d1182b] text-white cursor-pointer py-2 relative group ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-[260px] bg-[#d1182b] text-white cursor-pointer py-2 relative group ${
+                    submitting ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   <div className="absolute right-0 top-0 bottom-0 left-full group-hover:left-0 bg-[#18d1be] duration-300"></div>
-                  <span className="relative">{submitting ? 'در حال ارسال...' : 'ارسال'}</span>
+                  <span className="relative">
+                    {submitting ? "در حال ارسال..." : "ارسال"}
+                  </span>
                 </button>
               </div>
             </div>

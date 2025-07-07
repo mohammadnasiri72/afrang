@@ -65,14 +65,14 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await ResetPassword(username);
-      if(response.type === "error"){
+      if (response.type === "error") {
         Toast.fire({
           icon: "error",
           text: response.message,
         });
         return;
       }
-      
+
       Toast.fire({
         icon: "success",
         text: "لینک بازیابی رمز عبور به ایمیل/شماره تلفن شما ارسال شد",
@@ -80,7 +80,7 @@ const ForgotPassword = () => {
           container: "toast-modal",
         },
       });
-      
+
       router.push("/login");
     } catch (err) {
       Toast.fire({
@@ -112,8 +112,9 @@ const ForgotPassword = () => {
                   <Link href="/">
                     <Image
                       src={getImageUrl(
-                        settings?.find((item) => item.propertyKey === "site_footer_logo")
-                          ?.value
+                        settings?.find(
+                          (item) => item.propertyKey === "site_footer_logo"
+                        )?.value
                       )}
                       width={57}
                       height={57}
@@ -159,40 +160,44 @@ const ForgotPassword = () => {
                       />
                     </div>
                     {errors.username && (
-                      <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.username}
+                      </p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex flex-wrap mt-5">
-                  <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
-                    <div
-                      onClick={() => {
-                        router.back();
-                      }}
-                      className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
-                    >
-                      بازگشت
+                  <div className="flex flex-col-reverse sm:flex-row w-full">
+                    <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                      <div
+                        onClick={() => {
+                          router.back();
+                        }}
+                        className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
+                      >
+                        بازگشت
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
-                    <button
-                      disabled={loading}
-                      onClick={handleSubmit}
-                      className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
-                        loading ? "cursor-not-allowed" : "cursor-pointer"
-                      }`}
-                    >
-                      {loading ? (
-                        <div className="flex items-center gap-2 justify-center">
-                          <span>در حال ارسال</span>
-                          <Spin className="white-spin" size="small" />
-                        </div>
-                      ) : (
-                        "ارسال لینک بازیابی"
-                      )}
-                    </button>
+                    <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                      <button
+                        disabled={loading}
+                        onClick={handleSubmit}
+                        className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                          loading ? "cursor-not-allowed" : "cursor-pointer"
+                        }`}
+                      >
+                        {loading ? (
+                          <div className="flex items-center gap-2 justify-center">
+                            <span>در حال ارسال</span>
+                            <Spin className="white-spin" size="small" />
+                          </div>
+                        ) : (
+                          "ارسال لینک بازیابی"
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="w-full flex justify-center text-center text-[#656565] font-[600]">

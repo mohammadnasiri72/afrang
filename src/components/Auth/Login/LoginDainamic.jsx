@@ -50,7 +50,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
     } else {
       setLoading(true);
       try {
-        const res = await loginSendOtp(mobile);        
+        const res = await loginSendOtp(mobile);
         if (!res) {
           setStateLogin(3);
           Toast.fire({
@@ -60,8 +60,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
               container: "toast-modal",
             },
           });
-          
-        }else{
+        } else {
           Toast.fire({
             icon: "error",
             text: res.response?.data ? res.response?.data : "خطای شبکه",
@@ -92,8 +91,9 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
               <Link href="/">
                 <Image
                   src={getImageUrl(
-                    settings?.find((item) => item.propertyKey === "site_footer_logo")
-                      ?.value
+                    settings?.find(
+                      (item) => item.propertyKey === "site_footer_logo"
+                    )?.value
                   )}
                   width={57}
                   height={57}
@@ -122,8 +122,9 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                   شماره تلفن خود را وارد کنید
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errorMobile ? "border border-red-500" : ""
-                    }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
+                    errorMobile ? "border border-red-500" : ""
+                  }`}
                 >
                   <MdOutlinePhoneAndroid className="text-[#656565] text-2xl" />
                   <input
@@ -153,33 +154,36 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
               ورود با رمز ثابت
             </span>
             <div className="flex flex-wrap mt-5">
-              <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
-                <div
-                  onClick={() => {
-                    router.back();
-                  }}
-                  className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
-                >
-                  بازگشت
+              <div className="flex flex-col-reverse sm:flex-row w-full">
+                <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                  <div
+                    onClick={() => {
+                      router.back();
+                    }}
+                    className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
+                  >
+                    بازگشت
+                  </div>
                 </div>
-              </div>
 
-              <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
-                <button
-                  disabled={loading}
-                  onClick={submitLoginSendOtp}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading ? "cursor-not-allowed" : "cursor-pointer"
+                <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                  <button
+                    disabled={loading}
+                    onClick={submitLoginSendOtp}
+                    className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                      loading ? "cursor-not-allowed" : "cursor-pointer"
                     }`}
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2 justify-center">
-                      <span>لطفا صبر کنید</span>
-                      <Spin className="white-spin" size="small" />
-                    </div>
-                  ) : (
-                    "ادامه"
-                  )}
-                </button>
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2 justify-center">
+                        <span>لطفا صبر کنید</span>
+                        <Spin className="white-spin" size="small" />
+                      </div>
+                    ) : (
+                      "ادامه"
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">

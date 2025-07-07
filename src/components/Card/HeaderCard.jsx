@@ -43,7 +43,7 @@ function HeaderCard() {
   return (
     <>
      
-      <div className="flex flex-wrap items-center justify-center pb-10">
+      <div className="flex flex-wrap items-center justify-center py-10">
        
 
         <div className="md:w-1/2 w-full md:mt-0 mt-4">
@@ -53,7 +53,7 @@ function HeaderCard() {
             items={[
               {
                 title: "سبد خرید",
-                description: "انتخاب و بررسی محصولات",
+                // description: "انتخاب و بررسی محصولات",
                 status: "finish",
                 icon: <FaShoppingCart className="text-red-600 text-2xl" />,
                 onClick: () => handleStepClick(0),
@@ -61,7 +61,7 @@ function HeaderCard() {
               },
               {
                 title: "اطلاعات ارسال",
-                description: "ثبت آدرس و روش ارسال",
+                // description: "ثبت آدرس و روش ارسال",
                 status: (isCompleteinfopay || isCompleteinfosend || isCompletepayment) ? "finish" : "wait",
                 icon: <FaMapMarkerAlt className={`text-2xl ${(isCompleteinfosend || isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
                 onClick: () => handleStepClick(1),
@@ -69,7 +69,7 @@ function HeaderCard() {
               },
               {
                 title: "اطلاعات پرداخت",
-                description: "انتخاب روش پرداخت",
+                // description: "انتخاب روش پرداخت",
                 status: (isCompleteinfopay || isCompletepayment) ? "finish" : "wait",
                 icon: <FaCreditCard className={`text-2xl ${(isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
                 onClick: () => handleStepClick(2),
@@ -77,7 +77,7 @@ function HeaderCard() {
               },
               {
                 title: "پرداخت و اتمام",
-                description: "تکمیل و ثبت سفارش",
+                // description: "تکمیل و ثبت سفارش",
                 status: isCompletepayment ? "finish" : "wait",
                 icon: <FaCheckCircle className={`text-2xl ${isCompletepayment ? "text-red-600" : ""}`} />,
                 onClick: () => handleStepClick(3),

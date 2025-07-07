@@ -51,7 +51,6 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
       try {
         const res = await RegisterSendOtp(mobile);
         if (!res) {
-          
           setStateRegister(2);
           Toast.fire({
             icon: "success",
@@ -60,7 +59,7 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
               container: "toast-modal",
             },
           });
-        }else {
+        } else {
           Toast.fire({
             icon: "error",
             text: res.response?.data ? res.response?.data : "خطای شبکه",
@@ -69,9 +68,6 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
             },
           });
         }
-
-
-
       } catch (err) {
         Toast.fire({
           icon: "error",
@@ -89,13 +85,14 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
-        <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
+          <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
             <div>
               <Link href="/">
-                <Image 
+                <Image
                   src={getImageUrl(
-                    settings?.find((item) => item.propertyKey === "site_footer_logo")
-                      ?.value
+                    settings?.find(
+                      (item) => item.propertyKey === "site_footer_logo"
+                    )?.value
                   )}
                   width={57}
                   height={57}
@@ -147,36 +144,38 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
                 )}
               </div>
             </div>
-            
-            <div className="flex flex-wrap mt-5">
-              <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
-                <div
-                  onClick={() => {
-                    router.back();
-                  }}
-                  className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
-                >
-                  بازگشت
-                </div>
-              </div>
 
-              <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
-                <button
-                  disabled={loading}
-                  onClick={submitRegisterSendOtp}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
-                    loading ? "cursor-not-allowed" : "cursor-pointer"
-                  }`}
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2 justify-center">
-                      <span>لطفا صبر کنید</span>
-                      <Spin className="white-spin" size="small" />
-                    </div>
-                  ) : (
-                    "ادامه"
-                  )}
-                </button>
+            <div className="flex flex-wrap mt-5">
+              <div className="flex flex-col-reverse sm:flex-row w-full">
+                <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                  <div
+                    onClick={() => {
+                      router.back();
+                    }}
+                    className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
+                  >
+                    بازگشت
+                  </div>
+                </div>
+
+                <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                  <button
+                    disabled={loading}
+                    onClick={submitRegisterSendOtp}
+                    className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                      loading ? "cursor-not-allowed" : "cursor-pointer"
+                    }`}
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2 justify-center">
+                        <span>لطفا صبر کنید</span>
+                        <Spin className="white-spin" size="small" />
+                      </div>
+                    ) : (
+                      "ادامه"
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">

@@ -36,12 +36,12 @@ function ProductTabs({ product }) {
   }, [product.product?.relatedId, product.product?.similarId]);
 
   const options = [
-    { label: "پرسش و پاسخ", value: 6 },
-    { label: "محصولات مرتبط", value: 5 },
-    { label: "نظرات", value: 4 },
-    { label: "مشخصات فنی", value: 3 },
-    { label: "توضیحات محصول", value: 2 },
     ...(product.product.typeId === 3 ? [{ label: "محصولات دسته ای", value: 1 }] : []),
+    { label: "توضیحات محصول", value: 2 },
+    { label: "مشخصات فنی", value: 3 },
+    { label: "نظرات", value: 4 },
+    { label: "محصولات مرتبط", value: 5 },
+    { label: "پرسش و پاسخ", value: 6 },
   ];
 
   return (
@@ -50,7 +50,7 @@ function ProductTabs({ product }) {
         <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5 ">
           <Segmented
             className="font-semibold text-3xl w-full overflow-auto"
-            dir="ltr"
+            dir="rtl"
             style={{
               padding: "8px",
               fontFamily: "yekan",

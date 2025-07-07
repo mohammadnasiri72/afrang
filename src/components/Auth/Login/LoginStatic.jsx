@@ -70,22 +70,21 @@ function LoginStatic({ setStateLogin, from }) {
         remember: true,
       });
       if (userData.token) {
-
         Cookies.set("user", JSON.stringify(userData));
-  
+
         // بررسی مسیر ذخیره شده در localStorage
-        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        const redirectPath = localStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
-          localStorage.removeItem('redirectAfterLogin'); // پاک کردن مسیر از localStorage
+          localStorage.removeItem("redirectAfterLogin"); // پاک کردن مسیر از localStorage
           router.push(redirectPath);
         } else if (!from) {
           router.push("/");
         } else {
-          if (from === 'card') {
+          if (from === "card") {
             router.push("/card/compeletePay");
           }
         }
-  
+
         Toast.fire({
           icon: "success",
           text: "با موفقیت وارد شدید",
@@ -93,7 +92,7 @@ function LoginStatic({ setStateLogin, from }) {
             container: "toast-modal",
           },
         });
-      }else {
+      } else {
         Toast.fire({
           icon: "error",
           text: userData.response?.data ? userData.response?.data : "خطای شبکه",
@@ -102,7 +101,6 @@ function LoginStatic({ setStateLogin, from }) {
           },
         });
       }
-      
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -125,8 +123,9 @@ function LoginStatic({ setStateLogin, from }) {
               <Link href="/">
                 <Image
                   src={getImageUrl(
-                    settings?.find((item) => item.propertyKey === "site_footer_logo")
-                      ?.value
+                    settings?.find(
+                      (item) => item.propertyKey === "site_footer_logo"
+                    )?.value
                   )}
                   width={57}
                   height={57}
@@ -155,8 +154,9 @@ function LoginStatic({ setStateLogin, from }) {
                   شماره تلفن/آدرس ایمیل
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.username ? "border border-red-500" : ""
-                    }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
+                    errors.username ? "border border-red-500" : ""
+                  }`}
                 >
                   <FaUser className="text-[#656565]" />
                   <input
@@ -181,8 +181,9 @@ function LoginStatic({ setStateLogin, from }) {
                   رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${errors.password ? "border border-red-500" : ""
-                    }`}
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
+                    errors.password ? "border border-red-500" : ""
+                  }`}
                 >
                   <FaLock className="text-[#656565]" />
                   <input
@@ -212,41 +213,44 @@ function LoginStatic({ setStateLogin, from }) {
               >
                 ورود با رمز یکبار مصرف
               </span>
-              <Link 
-                href="/forgot-password" 
+              <Link
+                href="/forgot-password"
                 className="text-[#d1182b] cursor-pointer font-semibold hover:text-[#b91626] transition-colors"
               >
                 فراموشی رمز عبور
               </Link>
             </div>
             <div className="flex flex-wrap mt-5">
-              <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
-                <div
-                  onClick={() => {
-                    router.back();
-                  }}
-                  className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
-                >
-                  بازگشت
+              <div className="flex flex-col-reverse sm:flex-row w-full">
+                <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                  <div
+                    onClick={() => {
+                      router.back();
+                    }}
+                    className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
+                  >
+                    بازگشت
+                  </div>
                 </div>
-              </div>
 
-              <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
-                <button
-                  disabled={loading}
-                  onClick={submitLogin}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${loading ? "cursor-not-allowed" : "cursor-pointer"
+                <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                  <button
+                    disabled={loading}
+                    onClick={submitLogin}
+                    className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                      loading ? "cursor-not-allowed" : "cursor-pointer"
                     }`}
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2 justify-center">
-                      <span>درحال ورود</span>
-                      <Spin className="white-spin" size="small" />
-                    </div>
-                  ) : (
-                    "ورود"
-                  )}
-                </button>
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2 justify-center">
+                        <span>درحال ورود</span>
+                        <Spin className="white-spin" size="small" />
+                      </div>
+                    ) : (
+                      "ورود"
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">

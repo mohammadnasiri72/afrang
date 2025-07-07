@@ -23,19 +23,19 @@ const ORDER_STATUS = {
 
 // تعریف ترتیب دلخواه آیتم‌ها
 const ORDER_STATUS_ORDER = [
-    ORDER_STATUS.REGISTERED,
-    ORDER_STATUS.PENDING,
-    ORDER_STATUS.PROCESSING,
-    ORDER_STATUS.COMPLETED,
     ORDER_STATUS.CANCELLED,
+    ORDER_STATUS.COMPLETED,
+    ORDER_STATUS.PROCESSING,
+    ORDER_STATUS.PENDING,
+    ORDER_STATUS.REGISTERED,
 ];
 
 const ORDER_STATUS_TITLES = {
-    [ORDER_STATUS.REGISTERED]: 'ثبت شده',
-    [ORDER_STATUS.PENDING]: 'منتظر پردازش',
-    [ORDER_STATUS.PROCESSING]: 'درحال انجام',
-    [ORDER_STATUS.COMPLETED]: 'انجام شده',
     [ORDER_STATUS.CANCELLED]: 'لغو شده',
+    [ORDER_STATUS.COMPLETED]: 'انجام شده',
+    [ORDER_STATUS.PROCESSING]: 'درحال انجام',
+    [ORDER_STATUS.PENDING]: 'منتظر پردازش',
+    [ORDER_STATUS.REGISTERED]: 'ثبت شده',
 };
 
 const ORDER_STATUS_ICONS = {
@@ -61,7 +61,7 @@ const OrderSkeleton = () => {
                 </div>
 
                 {/* Orders List Skeleton */}
-                <div className="space-y-4 sm:space-y-6 mt-4 mt-36 w-full">
+                <div className="space-y-4 sm:space-y-6 mt-36 w-full">
                     {[...Array(3)].map((_, index) => (
                         <div key={index} className="border border-gray-200 rounded-lg p-4 sm:p-6">
                             {/* Order Header */}
@@ -152,11 +152,11 @@ export default function BodyOrder() {
     const statusId = searchParams.get('statusId') || '1'; // Default to 'ثبت شده'
     const page = searchParams.get('page') || '1';
 
-    useEffect(() => {
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 100);
-    }, [page]);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         window.scrollTo(0, 0);
+    //     }, 100);
+    // }, [page]);
 
     const getToken = () => {
         const userCookie = Cookies.get('user');
@@ -297,7 +297,7 @@ export default function BodyOrder() {
                     <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
                         <Segmented
                             className="font-semibold text-3xl w-full overflow-auto"
-                            dir="ltr"
+                            dir="rtl"
                             style={{
                                 padding: "8px",
                                 fontFamily: "yekan",
@@ -310,7 +310,7 @@ export default function BodyOrder() {
                     </div>
                 </div>
 
-                <div className="space-y-4 sm:space-y-6 mt-4 mt-36 w-full">
+                <div className="space-y-4 sm:space-y-6 mt-36 w-full">
                     {loading ? (
                         <OrderSkeleton />
                     ) : orderData?.length > 0 ? (

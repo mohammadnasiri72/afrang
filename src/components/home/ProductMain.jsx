@@ -99,7 +99,7 @@ export default function ProductMain({ products }) {
                             </span>
                           )}
                         </div>
-                        <div className="sm:hidden flex  justify-between items-center p-2 mt-3 duration-300 absolute bottom-2 left-0 right-0">
+                        <div className="sm:hidden flex justify-between items-center p-2 mt-3 duration-300  bottom-2 left-0 right-0">
                           <span className="font-bold text-lg text-[#333]">
                             {product.finalPrice.toLocaleString()} تومان
                           </span>

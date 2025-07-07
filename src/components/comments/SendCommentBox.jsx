@@ -173,7 +173,7 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent, type }) {
       )}
 
       <form onSubmit={handleSubmit} className="mt-5">
-        {!user.token && (
+        {!user?.token && (
           <div className="flex flex-wrap">
             <div className="sm:w-1/2 w-full sm:pl-3">
               <input

@@ -16,7 +16,7 @@ import Swal from "sweetalert2";
 // اسکلتون لودینگ
 const CameraAccessoriesSkeleton = () => {
   return (
-    <div className="box-slider-CameraAccessories pt-16 pb-48 mt-3 animate-pulse">
+    <div className="box-slider-CameraAccessories pt-16 pb-48 mt-3">
       <div className="sm:px-16 px-2">
         <div className="mySwiperCamera">
           <div className="flex gap-2 sm:gap-3 lg:gap-4 justify-between">

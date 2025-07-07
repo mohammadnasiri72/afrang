@@ -372,7 +372,7 @@ const BodyCard = () => {
                   className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
                 >
                   <FaShoppingCart />
-                  <span>پرداخت و تکمیل خرید</span>
+                  <span>تسویه حساب</span>
                 </button>
               </div>
               <p className="text-[#444]">

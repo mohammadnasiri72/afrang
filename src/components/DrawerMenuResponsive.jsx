@@ -192,13 +192,7 @@ function DrawerMenuResponsive() {
         }
       >
         <div className="text-[#d1182b] mt-3 font-semibold px-3">صفحه نخست</div>
-        {/* <Menu
-          mode="inline"
-          style={{ width: "100%", direction: "rtl" }}
-          className="custom-menu"
-        >
-          {renderMenuItems(menuData)}
-        </Menu> */}
+       
         <Menu
           mode="inline"
           style={{ width: "100%", direction: "rtl" , zIndex:'1000'}}
