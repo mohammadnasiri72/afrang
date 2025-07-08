@@ -15,7 +15,7 @@ export function TitleProductSkeleton() {
             <Skeleton.Image active className="!w-full !h-[400px]" />
             <div className="flex gap-2 mt-2">
               {[1, 2, 3, 4].map((item) => (
-                <Skeleton.Image key={item} active className="!w-1/4 !h-20" />
+                <Skeleton.Image key={item} active className="!w-full !h-20" />
               ))}
             </div>
           </div>

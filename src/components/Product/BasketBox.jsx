@@ -5,12 +5,15 @@ import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
 import Warranties from "./Warranties";
 import { useState } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { FaTruck, FaTruckFast, FaRecycle } from "react-icons/fa6";
+import CompareButton from "../common/CompareButton";
 
 function BasketBox({ product }) {
   const { items } = useSelector((state) => state.cart);
-  const isInCart = items?.some(item => item.productId === product.product.productId);
+  const isInCart = items?.some(
+    (item) => item.productId === product.product.productId
+  );
 
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
@@ -18,7 +21,6 @@ function BasketBox({ product }) {
   const [selectedWarranty, setSelectedWarranty] = useState(
     warrantiesArray[0]?.value || null
   );
-
 
   return (
     <div className="p-2 h-full">
@@ -34,9 +36,12 @@ function BasketBox({ product }) {
         )}
 
         <Divider />
-        <div className="flex items-center gap-3 mt-3">
+        {/* <div className="flex items-center gap-3 mt-3">
           <img src="/images/icons/benchmark.png" alt="" />
           <span className="text-sm text-[#333]"> مقایسه محصول </span>
+        </div> */}
+        <div className="mb-3">
+          <CompareButton product={product.product} />
         </div>
         <div className="flex items-center gap-3 mt-6">
           <img src="/images/icons/fast-delivery-2.png" alt="" />
@@ -63,23 +68,22 @@ function BasketBox({ product }) {
               <span className="text-sm font-semibold"> ارسال رایگان </span>
             </div>
           )}
-
         </div>
 
-
-
         <PriceProduct product={product.product} />
-        {
-          product?.inventory?.inventorySetting?.showInventory &&
+        {product?.inventory?.inventorySetting?.showInventory && (
           <div className="p-4">
-            {(
+            {
               <span className="text-[#d1182b] font-semibold whitespace-nowrap">
-                تنها <span className="text-lg font-bold px-1">{product?.inventory?.inventoryQtyForView}</span> عدد در انبار افرنگ
-                باقی مانده
+                تنها{" "}
+                <span className="text-lg font-bold px-1">
+                  {product?.inventory?.inventoryQtyForView}
+                </span>{" "}
+                عدد در انبار افرنگ باقی مانده
               </span>
-            )}
+            }
           </div>
-        }
+        )}
         <CartActions product={product} selectedWarranty={selectedWarranty} />
       </div>
     </div>

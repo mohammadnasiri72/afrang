@@ -1,16 +1,19 @@
 "use client";
 
+import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { Select } from "antd";
-import React from "react";
-import { FaCaretDown } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
+import { FaCaretDown } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 function SelectCategory({ category }) {
+  const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeCategory = searchParams?.get("category");
 
   const handleChange = (value) => {
+    dispatch(setLoadingBlog(true));
     const params = new URLSearchParams(searchParams);
     if (value === "all") {
       params.delete("category");

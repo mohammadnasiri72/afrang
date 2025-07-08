@@ -1,29 +1,29 @@
 "use client";
 
-import { configureStore } from "@reduxjs/toolkit";
-import menuResReducer from './slices/menuResSlice'
-import shoppingReducer from './slices/shoppingSlice'
-import userReducer from './slices/userSlice'
-import socialNetworksReducer from './slices/socialNetworksSlice'
-import supportBoxReducer from './slices/supportBoxSlice'
-import settingsReducer from './slices/settingsSlice'
-import Cookies from "js-cookie";
-import cartReducer from './slices/cartSlice';
-import paymentReducer from "./slices/paymentSlice";
-import addressReducer from './slices/addressSlice';
-import shippingReducer from './slices/shippingSlice';
-import legalIdReducer from './slices/legalIdSlice';
-import paymentWayReducer from './slices/paymentWaySlice';
-import discountReducer from './slices/discountSlice';
-import orderReducer from './slices/orderSlice';
-import favoritesReducer from './slices/favoritesSlice';
-import { loadState, saveState } from './middleware/persistState';
 import { getUserCookie } from "@/utils/cookieUtils";
-import { persistStore, persistReducer } from 'redux-persist';
+import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import filterLoadingReducer from './features/filterLoadingSlice';
 import compareReducer from './features/compareSlice';
+import filterLoadingReducer from './features/filterLoadingSlice';
+import { loadState, saveState } from './middleware/persistState';
+import addressReducer from './slices/addressSlice';
+import cartReducer from './slices/cartSlice';
+import blogReducer from './slices/blogSlice';
+import discountReducer from './slices/discountSlice';
+import favoritesReducer from './slices/favoritesSlice';
+import legalIdReducer from './slices/legalIdSlice';
+import menuResReducer from './slices/menuResSlice';
+import orderReducer from './slices/orderSlice';
+import paymentReducer from "./slices/paymentSlice";
+import paymentWayReducer from './slices/paymentWaySlice';
+import settingsReducer from './slices/settingsSlice';
+import shippingReducer from './slices/shippingSlice';
+import shoppingReducer from './slices/shoppingSlice';
+import socialNetworksReducer from './slices/socialNetworksSlice';
+import supportBoxReducer from './slices/supportBoxSlice';
+import userReducer from './slices/userSlice';
 
 const persistedState = {
   user: {
@@ -42,6 +42,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   payment: paymentReducer,
   address: addressReducer,
+  blog: blogReducer,
   shipping: shippingReducer,
   legalId: legalIdReducer,
   paymentWay: paymentWayReducer,

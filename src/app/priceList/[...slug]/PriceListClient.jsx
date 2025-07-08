@@ -88,7 +88,7 @@ export default function PriceListClient({ pricing }) {
             {Object.entries(groupedProducts).map(([categoryId, { categoryTitle, products }]) => {
                 const filteredProducts = filterProducts(products, categoryId);
                 return (
-                    <div key={categoryId} className="bg-white rounded-lg shadow-sm">
+                    <div key={categoryId} className="bg-white rounded-lg shadow-sm z-50 relative">
                         <div className="border-b border-gray-100 p-4">
                             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-0 md:justify-between">
                                 <div className="relative w-full md:w-64">

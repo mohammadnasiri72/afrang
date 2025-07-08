@@ -51,8 +51,8 @@ const ShareButtons = ({ blog }) => {
   };
 
   return (
-    <div className="flex items-center">
-      <span> اشتراک گذاری : </span>
+    <div className="flex items-center sm:mt-0 mt-3 sm:mr-0 mr-5">
+      <span className="whitespace-nowrap"> اشتراک گذاری : </span>
       <div className="px-2 flex items-center gap-2">
         <button
           onClick={shareOnTelegram}

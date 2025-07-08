@@ -37,7 +37,6 @@ async function BoxImgBlog({
 
    
 
-    const totalCount = blogs[0]?.total;
 
   const formatPersianDate = (dateString) => {
     try {
@@ -112,7 +111,7 @@ async function BoxImgBlog({
           </div>
         ))}
       </div>
-      <BlogPagination total={totalCount} pageSize={pageSize} current={page} />
+      <BlogPagination blogs={blogs} />
       {blogs.length === 0 && <EmptyBlogs />}
     </Container>
   );

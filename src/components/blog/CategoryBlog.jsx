@@ -1,50 +1,66 @@
-import { getImageUrl } from '@/utils/mainDomain';
-import Link from 'next/link';
-import React from 'react'
-import Container from '../container';
+"use client";
 
-function CategoryBlog({ category, searchParams }) {
+import { setLoadingBlog } from "@/redux/slices/blogSlice";
+import { getImageUrl } from "@/utils/mainDomain";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import Container from "../container";
 
-    const activeCategory = searchParams?.category;
-    return (
-        <>
-            <Container>
-                <div className="flex flex-wrap items-center pt-20">
-                    {category.map((cat) => (
-                        <div key={cat.id} className="p-4 lg:w-[14.286%] sm:w-1/4 w-1/2">
-                            <Link
-                                href={`?${(() => {
-                                    const params = new URLSearchParams(searchParams);
-                                    params.delete("category");
-                                    if (activeCategory !== cat.id.toString()) {
-                                        params.set("category", cat.id);
-                                    }
-                                    return params.toString();
-                                })()}`}
-                                className="flex flex-col justify-center items-center"
-                                scroll={false}
-                            >
-                                <div
-                                    className={`rounded-[50px] overflow-hidden cursor-pointer border-4 h-52 ${activeCategory === cat.id.toString()
-                                        ? "border-teal-500 shadow-lg"
-                                        : "border-transparent"
-                                        }`}
-                                >
-                                    <img className="w-full h-full object-cover" src={getImageUrl(cat.image)} alt="" />
-                                </div>
-                                <p
-                                    className={`cursor-pointer mt-4 text-lg font-semibold ${activeCategory === cat.id.toString() ? "text-teal-500" : ""
-                                        }`}
-                                >
-                                    {cat.title}
-                                </p>
-                            </Link>
-                        </div>
-                    ))}
+function CategoryBlog({ category }) {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeCategory = searchParams.get("category");
+
+  const handleChangCategory = (cat) => {
+    dispatch(setLoadingBlog(true));
+    const params = new URLSearchParams(searchParams);
+    if (activeCategory && activeCategory === cat.id.toString()) {
+      params.delete("category");
+    } else {
+      params.set("category", cat.id);
+    }
+    router.push(`?${params.toString()}`);
+  };
+  return (
+    <>
+      <Container>
+        <div className="flex flex-wrap items-center pt-20">
+          {category.map((cat) => (
+            <div key={cat.id} className="p-4 lg:w-[14.286%] sm:w-1/4 w-1/2">
+              <div
+                onClick={() => {
+                  handleChangCategory(cat);
+                }}
+                className="flex flex-col justify-center items-center cursor-pointer"
+              >
+                <div
+                  className={`rounded-[50px] overflow-hidden cursor-pointer border-4 h-52 ${
+                    activeCategory === cat.id.toString()
+                      ? "border-teal-500 shadow-lg"
+                      : "border-transparent"
+                  }`}
+                >
+                  <img
+                    className="w-full h-full object-cover"
+                    src={getImageUrl(cat.image)}
+                    alt=""
+                  />
                 </div>
-            </Container>
-        </>
-    )
+                <p
+                  className={`cursor-pointer mt-4 text-lg font-semibold ${
+                    activeCategory === cat.id.toString() ? "text-teal-500" : ""
+                  }`}
+                >
+                  {cat.title}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </>
+  );
 }
 
-export default CategoryBlog
+export default CategoryBlog;

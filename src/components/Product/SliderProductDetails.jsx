@@ -15,6 +15,7 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import LikeProduct from "./LikeProduct";
+import { Skeleton } from "antd";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -104,6 +105,7 @@ export default function SliderProductDetails({ attachments , productId}) {
           )}
         </div>
       </div>
+     
     </>
   );
 }

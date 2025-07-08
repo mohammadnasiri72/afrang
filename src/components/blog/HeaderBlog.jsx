@@ -1,9 +1,6 @@
-import { FaUserCircle } from "react-icons/fa";
-import { FaCalendar, FaStar } from "react-icons/fa6";
 import Container from "../container";
 import SelectCategory from "./SelectCategory";
 import SelectOrder from "./SelectOrder";
-import moment from "moment-jalaali";
 
 async function HeaderBlog({ searchParams, category }) {
 

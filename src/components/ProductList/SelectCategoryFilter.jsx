@@ -34,6 +34,8 @@ function SelectCategoryFilter() {
     maxPrice: 100000
   });
 
+  
+
   const [loading, setLoading] = useState(true);
   const [valuePrice, setValuePrice] = useState([0, 100000]);
   const [defaultMaxPrice, setDefaultMaxPrice] = useState(100000);
@@ -63,6 +65,7 @@ function SelectCategoryFilter() {
       try {
         const result = await getCategoryChild(mainCategoryId);
         
+        console.log(mainCategoryId);
         
         if (result) {
           setApiData({

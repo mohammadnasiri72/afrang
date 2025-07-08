@@ -89,7 +89,7 @@ const LikeComponent = ({ blog }) => {
           <span className="px-2 text-[#18304a]">پسندیدم</span>
         </button>
         <span className="text-[#18304a]">|</span>
-        <span className="px-2 text-[#18304a]">
+        <span className="px-2 text-[#18304a] whitespace-nowrap">
           تعداد پسندیده شده ها:{" "}
           {Number(blog.score) < 0
             ? 0

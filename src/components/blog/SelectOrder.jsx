@@ -1,14 +1,17 @@
 "use client";
+import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { Select } from "antd";
-import React from "react";
-import { FaCaretDown } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
+import { FaCaretDown } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 function SelectOrder({ value }) {
+  const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const handleChange = (value) => {
+    dispatch(setLoadingBlog(true));
     const params = new URLSearchParams(searchParams);
     if (value === 1) {
       params.delete("orderBy");
