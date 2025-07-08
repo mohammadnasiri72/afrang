@@ -311,12 +311,12 @@ function ResponsiveMenu() {
                   onMouseLeave={handleMouseLeave}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <div className="px-2 py-2 cursor-pointer font-semibold whitespace-nowrap">
+                    <div className=" py-2 cursor-pointer font-semibold whitespace-nowrap">
                       {item.title}
                     </div>
                   ) : (
                     <Link href={item.url || item.pageUrl || "#"}>
-                      <div className="px-2 py-2 cursor-pointer font-semibold whitespace-nowrap">
+                      <div className="py-2 cursor-pointer font-semibold whitespace-nowrap">
                         {item.title}
                       </div>
                     </Link>
@@ -346,7 +346,7 @@ function ResponsiveMenu() {
                                   <Link
                                     href={child.url || child.pageUrl || "#"}
                                   >
-                                    <div className="px-3 py-2 rounded-lg mb-3">
+                                    <div className=" py-2 rounded-lg mb-3">
                                       <h3 className="whitespace-nowrap font-bold text-[#130f26]">
                                         {child.title}
                                       </h3>
@@ -427,7 +427,7 @@ function ResponsiveMenu() {
             key: item.id,
             label: (
               <div
-                className={`text-right px-4 py-2 cursor-pointer ${
+                className={`text-right py-2 cursor-pointer ${
                   isActive ? "text-[#d1182b]" : ""
                 }`}
               >
@@ -442,7 +442,7 @@ function ResponsiveMenu() {
           label: (
             <button
               onClick={() => handleNavigation(item.url || item.pageUrl || "#")}
-              className={`w-full text-right px-4 py-2 transition-colors cursor-pointer ${
+              className={`w-full text-right py-2 transition-colors cursor-pointer ${
                 isActivePath(item.url || item.pageUrl)
                   ? "text-[#d1182b]"
                   : "text-gray-800 hover:text-[#d1182b]"
@@ -472,7 +472,7 @@ function ResponsiveMenu() {
             key: "dashboard-group",
             label: (
               <div
-                className={`text-right px-4 py-2 cursor-pointer ${
+                className={`text-right  py-2 cursor-pointer ${
                   dashboardMenuItems.some((item) => isActivePath(item.path))
                     ? "text-[#d1182b]"
                     : ""
@@ -486,7 +486,7 @@ function ResponsiveMenu() {
               label: (
                 <button
                   onClick={() => handleNavigation(item.path)}
-                  className={`flex items-center gap-3 w-full px-4 py-2 transition-colors cursor-pointer ${
+                  className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer ${
                     isActivePath(item.path)
                       ? "text-[#d1182b]"
                       : "text-gray-800 hover:text-[#d1182b]"
@@ -514,7 +514,7 @@ function ResponsiveMenu() {
                   onClick={() => {
                     handleLogout();
                   }}
-                  className="flex items-center gap-3 w-full text-red-600 bg-transparent px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center gap-3 w-full text-red-600 bg-transparent py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   <FaSignOutAlt className="text-lg" />
                   <span>خروج از حساب</span>
@@ -538,7 +538,7 @@ function ResponsiveMenu() {
 
         <Drawer
           zIndex={1001}
-          width={300}
+          width={350}
           title={<Title />}
           onClose={onClose}
           styles={{
@@ -569,6 +569,12 @@ function ResponsiveMenu() {
           />
 
           <style jsx global>{`
+            .custom-menu .ant-menu-item {
+              padding: 0px !important;
+            }
+               .custom-menu .ant-menu-submenu-title {
+              padding: 0px !important;
+            }
             .custom-menu .ant-menu-item-selected {
               background-color: #b91626 !important;
               color: white !important;

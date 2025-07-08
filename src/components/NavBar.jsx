@@ -3,12 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import SearchNavbar from "./SearchNavbar";
+import { getImageUrl } from "@/utils/mainDomain";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const NavBar = () => {
   const [isFixed, setIsFixed] = useState(false);
   const navbarRef = useRef(null);
   const [navbarHeight, setNavbarHeight] = useState(0);
-
+  const { settings } = useSelector((state) => state.settings);
   useEffect(() => {
     // محاسبه ارتفاع و موقعیت navbar
     const calculateNavbarPosition = () => {
@@ -57,7 +60,35 @@ const NavBar = () => {
         `}
           style={{ height: navbarHeight ? `${navbarHeight}px` : 'auto' }}
         >
+
+
+          <div className="px-3">
+          {settings?.find((item) => item.propertyKey === "site_home_url") ? (
+            <Link
+              href={
+                settings.find((item) => item.propertyKey === "site_home_url")
+                  ?.value
+              }
+            >
+              <img
+                className="lg:hidden w-10 "
+                src={
+                  getImageUrl(
+                    settings.find((item) => item.propertyKey === "site_footer_logo")
+                      ?.value
+                  )
+                }
+                alt=""
+              />
+            </Link>
+          ) : (
+            <img className="lg:hidden w-10" src="/images/logo.png" alt="" />
+          )}
+          </div>
+
+
           <SearchNavbar />
+          
           <div className="flex-1">
             <ResponsiveMenu />
           </div>
