@@ -108,12 +108,28 @@ function ShoppingDrawer() {
   return (
     <>
       <div className="relative">
-        <FaCartShopping
+        {/* Custom SVG Cart Icon */}
+        <span
           onClick={() => {
             dispatch(setOpenShopping(true));
           }}
-          className="text-3xl cursor-pointer"
-        />
+          className="text-3xl cursor-pointer inline-block align-middle"
+          style={{ width: '1.5em', height: '1.5em' }}
+        >
+          <svg
+            width="1.5em"
+            height="1.5em"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ display: 'block' }}
+          >
+            <rect width="32" height="32" rx="16" fill="#d1182b" fillOpacity="0.08"/>
+            <path d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1" stroke="#d1182b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="13.5" cy="25" r="1.5" fill="#d1182b"/>
+            <circle cx="21.5" cy="25" r="1.5" fill="#d1182b"/>
+          </svg>
+        </span>
         {currentItems?.length > 0 && (
           <span className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
             {currentItems.length}
@@ -144,7 +160,20 @@ function ShoppingDrawer() {
           {currentItems?.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">
               <div className="text-4xl text-[#d1182b] mb-4">
-                <FaCartShopping />
+                {/* Custom SVG Cart Icon for empty state */}
+                <svg
+                  width="2.5em"
+                  height="2.5em"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ display: 'block' }}
+                >
+                  <rect width="32" height="32" rx="16" fill="#d1182b" fillOpacity="0.08"/>
+                  <path d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1" stroke="#d1182b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="13.5" cy="25" r="1.5" fill="#d1182b"/>
+                  <circle cx="21.5" cy="25" r="1.5" fill="#d1182b"/>
+                </svg>
               </div>
               <p className="text-[#666] text-center">
                 سبد خرید شما خالی است

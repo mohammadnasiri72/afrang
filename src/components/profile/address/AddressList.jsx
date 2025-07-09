@@ -131,7 +131,7 @@ export default function AddressList() {
           className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer"
         >
           <FaPlus className="text-sm" />
-          <span>افزودن آدرس جدید</span>
+          <span>افزودن</span>
         </button>
       </div>
 

@@ -371,8 +371,8 @@ const UserCommentsPage = () => {
     );
 
     const options = [
-        { label: `پرسش‌ها (${counts.questions})`, value: 1 },
         { label: `نظرات (${counts.comments})`, value: 0 },
+        { label: `پرسش‌ها (${counts.questions})`, value: 1 },
     ];
 
     const handleEdit = (comment) => {
@@ -490,7 +490,7 @@ const UserCommentsPage = () => {
                 <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
                     <Segmented
                         className="font-semibold text-3xl w-full overflow-auto"
-                        dir="ltr"
+                        dir="rtl"
                         style={{
                             padding: "8px",
                             fontFamily: "yekan",

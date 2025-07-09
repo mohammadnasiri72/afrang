@@ -8,13 +8,15 @@ import SupportBox from "./home/SupportBox";
 import Footer from "./Footer";
 import SubFooter from "./SubFooter";
 
-export default function LayoutWrapper({ children, showHeaderFooter = true }) {
+export default function LayoutWrapper({ children, showHeaderFooter = true  , showPro = true}) {
   if (!showHeaderFooter) {
     return <>{children}</>;
   }
 
   return (
     <>
+    <div className={showPro?'':'pb-16'}>
+
       <SubHeader />
       <Header />
       <NavBar />
@@ -25,6 +27,7 @@ export default function LayoutWrapper({ children, showHeaderFooter = true }) {
       <SupportBox />
       <Footer />
       <SubFooter />
+    </div>
     </>
   );
 } 

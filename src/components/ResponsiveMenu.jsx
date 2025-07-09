@@ -299,7 +299,7 @@ function ResponsiveMenu() {
         }`}
       >
         <div className="w-full ">
-          <div className="flex justify-start w-full whitespace-nowrap overflow-x-auto lg:overflow-visible">
+          <div className="flex justify-start w-full overflow-x-auto lg:overflow-visible">
             <div className="flex items-center" ref={menuRef}>
               {items.map((item, i) => (
                 <div
@@ -311,12 +311,12 @@ function ResponsiveMenu() {
                   onMouseLeave={handleMouseLeave}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <div className=" py-2 cursor-pointer font-semibold whitespace-nowrap">
+                    <div className=" py-2 cursor-pointer font-semibold">
                       {item.title}
                     </div>
                   ) : (
                     <Link href={item.url || item.pageUrl || "#"}>
-                      <div className="py-2 cursor-pointer font-semibold whitespace-nowrap">
+                      <div className="py-2 cursor-pointer font-semibold">
                         {item.title}
                       </div>
                     </Link>
@@ -347,7 +347,7 @@ function ResponsiveMenu() {
                                     href={child.url || child.pageUrl || "#"}
                                   >
                                     <div className=" py-2 rounded-lg mb-3">
-                                      <h3 className="whitespace-nowrap font-bold text-[#130f26]">
+                                      <h3 className=" font-bold text-[#130f26]">
                                         {child.title}
                                       </h3>
                                     </div>
@@ -362,7 +362,7 @@ function ResponsiveMenu() {
                                         alt=""
                                         className="w-4"
                                       />
-                                      <span className="whitespace-nowrap text-sm font-semibold">
+                                      <span className=" text-sm font-semibold">
                                         {child.title}
                                       </span>
                                     </div>
@@ -386,7 +386,7 @@ function ResponsiveMenu() {
                                               alt=""
                                               className="w-4"
                                             />
-                                            <span className="whitespace-nowrap text-sm font-semibold">
+                                            <span className=" text-sm font-semibold">
                                               {subChild.title}
                                             </span>
                                           </div>
@@ -570,10 +570,10 @@ function ResponsiveMenu() {
 
           <style jsx global>{`
             .custom-menu .ant-menu-item {
-              padding: 0px !important;
+              padding: 10px !important;
             }
                .custom-menu .ant-menu-submenu-title {
-              padding: 0px !important;
+              padding: 10px !important;
             }
             .custom-menu .ant-menu-item-selected {
               background-color: #b91626 !important;

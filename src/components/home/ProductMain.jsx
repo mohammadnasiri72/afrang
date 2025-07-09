@@ -67,7 +67,7 @@ export default function ProductMain({ products }) {
                   <Link href={product.url}>
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain flex items-center justify-center"
-                      style={{ filter: " brightness(0.95)" }}
+                      // style={{ filter: " brightness(0.95)" }}
                       src={getImageUrl2(product.image)}
                       alt={product.title}
                     />
@@ -76,9 +76,11 @@ export default function ProductMain({ products }) {
                     {product.salePlanTimer && <CountdownTimer targetDate={product.salePlanTimer} />}
                     <Link
                       href={product.url}
-                      className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer"
+                      className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer "
                     >
+                      <p className="text-justify">
                       {product.title}
+                      </p>
                     </Link>
                     {product.conditionId === 20 && (
                       <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">

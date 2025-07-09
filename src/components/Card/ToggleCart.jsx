@@ -9,7 +9,7 @@ function ToggleCart() {
   const [typeArticle, setTypeArticle] = useState("سبد خرید");
   const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  
+
 
   // دریافت هر دو سبد خرید در ابتدای لود کامپوننت
   // useEffect(() => {
@@ -24,6 +24,20 @@ function ToggleCart() {
 
   // ساخت گزینه‌های Segmented با نمایش تعداد محصولات
   const options = [
+
+    {
+      label: (
+        <div className="flex items-center justify-center gap-2">
+          <span>سبد خرید</span>
+          {currentItems.length > 0 && (
+            <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
+              {currentItems.length}
+            </span>
+          )}
+        </div>
+      ),
+      value: "سبد خرید"
+    },
     {
       label: (
         <div className="flex items-center justify-center gap-2">
@@ -37,19 +51,6 @@ function ToggleCart() {
       ),
       value: "خرید بعدی"
     },
-    {
-      label: (
-        <div className="flex items-center justify-center gap-2">
-          <span>سبد خرید</span>
-          {currentItems.length > 0 && (
-            <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
-              {currentItems.length}
-            </span>
-          )}
-        </div>
-      ),
-      value: "سبد خرید"
-    }
   ];
 
   return (
@@ -58,7 +59,7 @@ function ToggleCart() {
         <div className="w-72">
           <Segmented
             className="font-semibold text-3xl w-full"
-            dir="ltr"
+            dir="rtl"
             style={{
               padding: 0,
               fontFamily: "yekan",

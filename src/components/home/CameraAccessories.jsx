@@ -93,7 +93,7 @@ const Toast = Swal.mixin({
 
   return (
     <>
-      <div className="box-slider-CameraAccessories pt-16 pb-48 mt-3">
+      <div className="box-slider-CameraAccessories pt-5 pb-48">
         <div className="sm:px-16 px-2">
           <Swiper
             // loop={true}
@@ -128,10 +128,10 @@ const Toast = Swal.mixin({
                         <img
                           src={getImageUrl(item.image)}
                           alt={item.title}
-                          className="w-[50px] h-[50px]"
+                          className="sm:w-[50px] sm:h-[50px] w-[40px] h-[40px]"
                         />
                       </div>
-                      <span className="text-white text-xl mt-3 font-medium text-center">
+                      <span className="text-white sm:text-xl mt-3 font-medium text-center">
                         {item.title}
                       </span>
                     </div>

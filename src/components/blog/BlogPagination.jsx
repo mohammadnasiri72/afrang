@@ -50,7 +50,24 @@ const BlogPagination = ({ blogs }) => {
           dir="ltr"
           className="relative z-50 w-full flex justify-center py-3 sm:flex-row flex-col-reverse items-center"
         >
+          <div className="flex items-center">
+         
           <span className="sm:mt-0 mt-3 select-none">{`مجموع ${blogs[0]?.total} آیتم`}</span>
+          <div className="flex items-center mt-3 sm:hidden ">
+           <Select
+             value={pageSize}
+             style={{ width: 55 }}
+             onChange={handlePageSizeChange}
+             options={[
+               { value: 12, label: "12" },
+               { value: 24, label: "24" },
+               { value: 50, label: "50" },
+               { value: 100, label: "100" },
+             ]}
+           />
+            <span className="px-1">: تعداد در هر صفحه </span>
+         </div>
+          </div>
 
           <Pagination
             current={page}
@@ -61,7 +78,8 @@ const BlogPagination = ({ blogs }) => {
             pageSizeOptions={[12, 24, 50, 100]}
             defaultPageSize={12}
           />
-          <div>
+          <div className="sm:flex hidden items-center">
+           
             <Select
               value={pageSize}
               style={{ width: 55 }}
@@ -73,6 +91,7 @@ const BlogPagination = ({ blogs }) => {
                 { value: 100, label: "100" },
               ]}
             />
+             <span className="px-1">: تعداد در هر صفحه </span>
           </div>
         </div>
       )}

@@ -23,7 +23,7 @@ const FooterSkeleton = () => {
             <div className="mt-5 w-full flex sm:justify-start justify-center">
               <div className="h-4 bg-gray-200 animate-pulse rounded w-48" />
             </div>
-            <div className="sm:hidden flex justify-center gap-2 items-center mt-3 border-b w-full pb-3 border-[#6666] sm:border-none">
+            <div className=" flex justify-center gap-2 items-center mt-3 border-b w-full pb-3 border-[#6666] sm:border-none">
               <div className="flex gap-2">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg" />
@@ -336,7 +336,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="sm:px-16 px-2 sm:flex hidden flex-wrap justify-between items-center">
+      <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center">
         <p className="xl:w-1/2 w-full text-center">
           {settings?.find((item) => item.propertyKey === "site_copyright")?.value ||
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
@@ -346,7 +346,7 @@ const Footer = () => {
             <Link
               key={menuItem.id}
               href={menuItem.url || "#"}
-              className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300 sm:w-auto w-full"
+              className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300"
             >
               {menuItem.title}
             </Link>

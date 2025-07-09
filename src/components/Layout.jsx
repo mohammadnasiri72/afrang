@@ -153,6 +153,10 @@ function LayoutContent({ children }) {
     !pathname.includes("/register") &&
     !pathname.includes("/forgot-password");
 
+  const showPro =
+    !pathname.includes("/product/")
+    
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -182,7 +186,7 @@ function LayoutContent({ children }) {
         {mounted ? (
           <>
             <InitialDataManager />
-            <LayoutWrapper showHeaderFooter={showHeaderFooter}>
+            <LayoutWrapper showHeaderFooter={showHeaderFooter} showPro={showPro}>
               {children}
             </LayoutWrapper>
             <FloatingCompareIcon />
