@@ -29,11 +29,11 @@ export default async function Home() {
         <BoxImgHome />
       </Suspense>
 
-      <div className="sm:px-20 px-2 mt-20">
+      <div className="sm:px-20 px-2">
         <NewProduct />
       </div>
 
-      <div className="secondHand-sec mt-20">
+      <div className="secondHand-sec mt-5">
         <SecondHandProduct />
       </div>
 

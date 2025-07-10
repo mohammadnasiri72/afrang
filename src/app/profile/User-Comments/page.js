@@ -487,7 +487,7 @@ const UserCommentsPage = () => {
             <h1 className="text-2xl font-bold mb-6">نظرات ارسالی</h1>
             
             <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative">
-                <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
+                <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center">
                     <Segmented
                         className="font-semibold text-3xl w-full overflow-auto"
                         dir="rtl"

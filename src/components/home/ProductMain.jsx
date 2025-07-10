@@ -40,14 +40,17 @@ export default function ProductMain({ products }) {
         breakpoints={{
           1024: {
             slidesPerView: 5,
+            slidesPerGroup: 5,
             spaceBetween: 10,
           },
-          640: {
+          850: {
             slidesPerView: 3,
+            slidesPerGroup: 3,
             spaceBetween: 8,
           },
           100: {
-            slidesPerView: 1,
+            slidesPerView: 2,
+            slidesPerGroup: 2,
             spaceBetween: 5,
           },
         }}
@@ -55,7 +58,7 @@ export default function ProductMain({ products }) {
         {products &&
           products.map((product, index) => (
             <SwiperSlide key={`${product.id || product.productId || index}-${index}`}>
-              <div className="relative group w-full h-[25rem] overflow-hidden rounded-lg bg-white">
+              <div className="relative group w-full sm:h-[25rem] xs:h-[28rem] h-[30rem] overflow-hidden rounded-lg bg-white">
                 <div className="">
                   {product.discount !== 0 && (
                     <div className="absolute top-3 left-3 z-50 duration-300">
@@ -79,19 +82,19 @@ export default function ProductMain({ products }) {
                       className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer "
                     >
                       <p className="text-justify">
-                      {product.title}
+                        {product.title}
                       </p>
                     </Link>
                     {product.conditionId === 20 && (
                       <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
                         <FaRecycle className="ml-1.5" />
-                        <span className="font-semibold px-3">کالای کارکرده</span>
+                        <span className="font-semibold whitespace-nowrap">کالای کارکرده</span>
                       </div>
                     )}
                     {
                       !product.callPriceButton && product.finalPrice !== 0 &&
                       <div>
-                        <div className="sm:flex hidden justify-between items-center p-2 mt-3 opacity-100 group-hover:opacity-0 duration-300 absolute bottom-2 left-0 right-0">
+                        <div className="sm:flex flex-wrap hidden justify-between items-center p-2 mt-3 opacity-100 group-hover:opacity-0 duration-300 absolute bottom-2 left-0 right-0">
                           <span className="font-bold text-lg text-[#333]">
                             {product.finalPrice.toLocaleString()} تومان
                           </span>
@@ -101,12 +104,12 @@ export default function ProductMain({ products }) {
                             </span>
                           )}
                         </div>
-                        <div className="sm:hidden flex justify-between items-center p-2 mt-3 duration-300  bottom-2 left-0 right-0">
-                          <span className="font-bold text-lg text-[#333]">
+                        <div className="sm:hidden flex flex-wrap justify-between items-center p-2 mt-3 duration-300  bottom-10 left-0 right-0 absolute">
+                          <span className="font-bold text-lg text-[#333] whitespace-nowrap">
                             {product.finalPrice.toLocaleString()} تومان
                           </span>
                           {product.discount !== 0 && (
-                            <span className="text-[#333a] font-semibold text-lg line-through">
+                            <span className="text-[#333a] font-semibold text-lg line-through whitespace-nowrap">
                               {product.price1.toLocaleString()}
                             </span>
                           )}
@@ -152,8 +155,7 @@ export default function ProductMain({ products }) {
                       product.canAddCart &&
                       <div>
                         <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
-                          {/* <SlBasket className="text-xl" />
-                          <span className="px-1">افزودن به سبد خرید</span> */}
+                         
                           <AddToCartButtonCard productId={product.productId} />
                         </div>
                         <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
@@ -162,6 +164,7 @@ export default function ProductMain({ products }) {
                       </div>
 
                     }
+                   
                     {
                       !product.canAddCart &&
                       <div>

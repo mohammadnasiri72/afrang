@@ -153,8 +153,8 @@ export default function SelectCodeDiscount() {
 
     return (
         <div className="container mx-auto px-4 mt-5">
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
+            <div className="bg-white rounded-xl p-3 shadow-lg">
+                <div className="flex items-center gap-2 mb-4 px-3">
                     <FaTicketAlt className="text-xl text-[#d1182b]" />
                     <h2 className="text-xl font-bold text-gray-800">کد تخفیف</h2>
                 </div>
@@ -166,7 +166,7 @@ export default function SelectCodeDiscount() {
                                 value={code}
                                 onChange={handleInputChange}
                                 placeholder="کد تخفیف خود را وارد کنید"
-                                className={`flex-1 p-2 border rounded-lg focus:outline-none transition-colors duration-200 ${inputError
+                                className={`w-full p-2 border rounded-lg focus:outline-none transition-colors duration-200 ${inputError
                                     ? 'border-red-500 focus:border-red-500 bg-red-50'
                                     : 'border-gray-200 focus:border-[#d1182b] hover:border-[#d1182b]'
                                 }`}

@@ -20,7 +20,7 @@ function BreadcrumbNavProduct({ breadcrumb }) {
       title: item.href ? (
         <Link 
           href={item.href} 
-          className={`font-[Yekan] ${
+          className={`font-[Yekan] !text-xs ${
             item.format === "selftext" 
               ? "text-[#d1182b]" 
               : "text-gray-500 hover:text-[#d1182b]"

@@ -313,7 +313,7 @@ const Footer = () => {
             </div>
           </div>
           
-          <div className="lg:w-1/6 w-1/2 p-3">
+          <div className="lg:w-1/6 sm:w-1/2 w-full p-3 sm:text-start text-center">
             <h4 className="font-semibold text-[16px]">ساعت کاری</h4>
             <div className="mt-3">
               <p>
@@ -323,9 +323,9 @@ const Footer = () => {
               </p>
             </div>
           </div>
-          <div className="lg:w-1/6 w-1/2  p-3">
+          <div className="lg:w-1/6 sm:w-1/2 w-full p-3 sm:text-start text-center">
             <h4 className="font-semibold text-[16px]">مجوزها</h4>
-            <div className="flex flex-wrap justify-start items-center gap-2 mt-3">
+            <div className="flex sm:justify-start justify-center items-center gap-2 mt-3">
               <div className="py-2 px-5 rounded-lg bg-red-300 cursor-pointer duration-300 hover:bg-[#d1182b]">
                 <img src="/images/icons/namad.png" alt="#" />
               </div>
@@ -336,17 +336,17 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center">
-        <p className="xl:w-1/2 w-full text-center">
+      <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
+        <p className="xl:w-1/2 w-full text-justify py-2">
           {settings?.find((item) => item.propertyKey === "site_copyright")?.value ||
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
         </p>
-        <div className="flex sm:flex-nowrap flex-wrap justify-center items-center xl:w-1/2 w-full">
+        <div className="flex sm:flex-nowrap flex-wrap  items-center xl:w-1/2 w-full">
           {footerMenu[0]?.menuItems?.map((menuItem) => (
             <Link
               key={menuItem.id}
               href={menuItem.url || "#"}
-              className="hover:bg-white hover:text-[#d1182b] p-4 cursor-pointer duration-300"
+              className="hover:bg-white hover:text-[#d1182b] px-2 py-2 cursor-pointer duration-300"
             >
               {menuItem.title}
             </Link>

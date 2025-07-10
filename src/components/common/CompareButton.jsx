@@ -33,7 +33,7 @@ const CompareButton = ({ product }) => {
       className={`
         flex items-center cursor-pointer py-2 px-1 rounded-lg transition-all duration-300
         ${isInCompare 
-          ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' 
+          ? 'bg-blue-200 text-gray-700 hover:bg-blue-300' 
           : isFull 
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'

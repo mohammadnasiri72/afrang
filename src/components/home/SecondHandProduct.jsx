@@ -149,11 +149,11 @@ function SecondHandProduct() {
   return (
     <>
       <div className="sm:px-16 px-2">
-      <div className="lg:hidden flex justify-center items-center pb-10">
-        <div className="flex-wrap gap-4 items-center">
-          <h2 className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold"> دست دوم های پیشنهاد افــــرنـــــگ</h2>
+        <div className="lg:hidden flex justify-center items-center pb-5">
+          <div className="flex-wrap gap-4 items-center">
+            <h2 className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold"> دست دوم های پیشنهاد افــــرنـــــگ</h2>
+          </div>
         </div>
-      </div>
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
@@ -172,19 +172,19 @@ function SecondHandProduct() {
 
           {/* لیست دسته‌بندی‌ها */}
           <div className="overflow-x-auto pb-2">
-            <div className="flex items-center gap-2 min-w-max px-2">
+            <div className="flex items-center gap-0 min-w-max px-2">
               {categories.map((category, index) => (
                 <div key={category} className="flex items-center">
                   <span
                     onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                    className={`text-sm cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
+                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
                       ? 'text-[#d1182b] font-bold'
                       : 'text-[#0008] hover:text-[#000]'
                       }`}
                   >
                     {category}
                   </span>
-                  {index < categories.length - 1 && <span className="mx-2">/</span>}
+                  {index < categories.length - 1 && <span className="mx-1">/</span>}
                 </div>
               ))}
             </div>
@@ -227,7 +227,7 @@ function SecondHandProduct() {
             <FaCaretLeft />
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-3">
           <ProductMain products={filteredProducts} />
         </div>
       </div>

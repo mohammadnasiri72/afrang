@@ -44,10 +44,10 @@ export default function SliderProductDetails({ attachments , productId}) {
     <>
       <div className="flex justify-between">
 
-        <div className="w-1/6 mx-auto flex flex-col items-center justify-start">
+        {/* <div className="w-1/6 mx-auto flex flex-col items-center justify-start">
           <LikeProduct productId={productId} />
-        </div>
-        <div className="w-5/6 mx-auto">
+        </div> */}
+        <div className="w-full mx-auto">
           {attachments.length > 0 && (
             <div className="slider-productDetails">
               <Swiper

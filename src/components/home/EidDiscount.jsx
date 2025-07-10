@@ -167,7 +167,7 @@ export default function EidDiscount() {
       {
         filteredProducts.length>0 &&
         <div>
-          <div className="lg:hidden flex justify-center items-center pb-10">
+          <div className="lg:hidden flex justify-center items-center pb-3">
             <div className="flex items-center title-newProduct relative">
               <h2 className="font-semibold text-xl ">{actionProducts?.title || 'محصولات ویژه'}</h2>
               {
@@ -203,19 +203,19 @@ export default function EidDiscount() {
 
               {/* لیست دسته‌بندی‌ها */}
               <div className="overflow-x-auto pb-2">
-                <div className="flex items-center gap-2 min-w-max px-2">
+                <div className="flex items-center gap-0 min-w-max px-2">
                   {categories.map((category, index) => (
                     <div key={`${category}-${index}`} className="flex items-center">
                       <span
                         onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                        className={`text-sm cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
+                        className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
                           ? 'text-[#d1182b] font-bold'
                           : 'text-[#0008] hover:text-[#000]'
                           }`}
                       >
                         {category}
                       </span>
-                      {index < categories.length - 1 && <span className="mx-2">/</span>}
+                      {index < categories.length - 1 && <span className="mx-1">/</span>}
                     </div>
                   ))}
                 </div>

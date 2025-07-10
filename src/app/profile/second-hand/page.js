@@ -8,8 +8,8 @@ const SecondHand = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const options = [
-    { label: "خرید دسته دوم", value: 0 },
-    { label: "فروش دسته دوم", value: 1 },
+    { label: "فروش ", value: 1 },
+    { label: "خرید", value: 0 },
   ];
 
   const renderBuyTab = () => (
@@ -111,17 +111,17 @@ const SecondHand = () => {
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative">
+    <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
       <div className="flex items-center gap-2 mb-6">
         <FaRecycle className="text-gray-800 text-2xl" />
         <h1 className="text-2xl font-bold text-gray-800">کالای دسته دوم</h1>
       </div>
 
       <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative">
-        <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center">
+        <div className="w-full SegmentedProduct !overflow-hidden mx-auto flex justify-center">
           <Segmented
-            className="font-semibold text-3xl w-full overflow-auto"
-            dir="ltr"
+            className="font-semibold text-3xl w-full !overflow-auto"
+            dir="rtl"
             style={{
               padding: "8px",
               fontFamily: "yekan",

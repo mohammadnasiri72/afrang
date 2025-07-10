@@ -24,7 +24,7 @@ const LikeProduct = ({ productId }) => {
                     return;
                 }
 
-                
+
                 const response = await postLiked(productId, token);
                 setLiked(response);
             } catch (error) {
@@ -41,7 +41,7 @@ const LikeProduct = ({ productId }) => {
         try {
             const user = Cookies.get("user");
             const token = user ? JSON.parse(user).token : null;
-            
+
             if (!token) {
                 // ذخیره مسیر فعلی در localStorage
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
@@ -51,7 +51,7 @@ const LikeProduct = ({ productId }) => {
 
             setIsLoading(true);
             await postLike(productId, token);
-            
+
             setLiked(!liked);
 
             message.success({
@@ -87,28 +87,32 @@ const LikeProduct = ({ productId }) => {
     }
 
     return (
-        <Tooltip 
-            title={liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-            placement="top"
-        >
+
+        <div className="w-full">
             <button
                 onClick={handleLike}
-                disabled={isLoading}
-                className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 cursor-pointer ${
-                    liked 
-                        ? "bg-red-50 text-[#d1182b] hover:bg-red-100" 
-                        : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-[#d1182b]"
-                }`}
+                className={`
+               flex items-center cursor-pointer py-2 px-1 rounded-lg transition-all duration-300
+               ${liked
+                        ? 'bg-red-200 text-gray-700 hover:bg-red-300'
+
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }
+             `}
+                title={liked ? 'افزودن به علاقه‌مندی‌ها' : 'حذف از علاقه‌مندی‌ها'}
             >
                 {isLoading ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-[#d1182b]"></div>
                 ) : liked ? (
-                    <FaHeart className="text-lg" />
+                    <FaHeart className="text-lg text-[#d1182b]" />
                 ) : (
                     <FaRegHeart className="text-lg" />
                 )}
+                <span className="whitespace-nowrap px-2">
+                    {liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+                </span>
             </button>
-        </Tooltip>
+        </div>
     );
 };
 

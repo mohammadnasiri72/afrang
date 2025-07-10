@@ -12,7 +12,7 @@ function SearchSubfooter() {
       {/* Custom SVG Box Icon */}
       <span
         onClick={() => {
-          router.push("/profile/orders");
+          router.push("/products");
         }}
         className="text-3xl cursor-pointer inline-block align-middle"
         style={{ width: '1.5em', height: '1.5em' }}

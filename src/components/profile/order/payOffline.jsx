@@ -224,7 +224,7 @@ export default function PayOffline({ orderData }) {
 
                     {/* اطلاعات پرداخت */}
                     <div className="bg-gray-50 rounded-lg p-6 mb-8">
-                        <p className="text-gray-700 mb-6">
+                        <p className="text-gray-700 mb-6 text-justify">
                             {paymentInfo?.summary}
                         </p>
 
@@ -233,11 +233,11 @@ export default function PayOffline({ orderData }) {
                                 <div key={gateway.id} className="space-y-4">
                                     <div 
                                         className={`bg-gray-50 p-4 rounded-lg cursor-pointer transition-colors ${
-                                            selectedGateway === gateway.id ? 'ring-2 ring-[#d1182b]' : ''
+                                            selectedGateway === gateway.id ? 'ring-2 ring-[#d1182b]' : 'ring-2 ring-[#3338]'
                                         }`}
                                         onClick={() => setSelectedGateway(gateway.id)}
                                     >
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-3 mb-3">
                                             <input
                                                 type="radio"
                                                 name="paymentGateway"
@@ -245,7 +245,7 @@ export default function PayOffline({ orderData }) {
                                                 onChange={() => setSelectedGateway(gateway.id)}
                                                 className="w-4 h-4 text-[#d1182b] border-gray-300 focus:ring-[#d1182b]"
                                             />
-                                            <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                            <h3 className="font-bold text-gray-800 flex items-center gap-2">
                                                 <FaCreditCard className="text-[#d1182b]" />
                                                 {gateway.title}
                                             </h3>

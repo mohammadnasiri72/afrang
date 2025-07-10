@@ -102,13 +102,13 @@ const SupportBox = () => {
           spaceBetween={10}
           loop={true}
           grabCursor={true}
-          modules={[Pagination, Autoplay]}
+          modules={[Pagination]}
           className="mySwiperSupport"
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-          }}
-          speed={5000}
+          // autoplay={{
+          //   delay: 0,
+          //   disableOnInteraction: false,
+          // }}
+          // speed={5000}
         >
           {items.map((item) => (
             <SwiperSlide key={item.id}>

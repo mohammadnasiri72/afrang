@@ -137,11 +137,10 @@ function AccessoriesProduct({ product }) {
                     </span>
                   </div>
                 )}
-                <div className="relative rounded-lg group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
+                <div className="relative group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
                   <Link href={item.url} className="flex-grow-0">
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"
-                      style={{ filter: " brightness(0.95)" }}
                       src={getImageUrl2(item.image)}
                       alt={item.title}
                     />

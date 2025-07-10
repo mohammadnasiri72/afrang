@@ -14,6 +14,7 @@ import SuccessModal from './SuccessModal';
 import Cookies from "js-cookie";
 import { Spin } from 'antd';
 import { FaCartShopping } from "react-icons/fa6";
+import LikeProduct from "./LikeProduct";
 
 function BasketBox({ product }) {
   const dispatch = useDispatch();
@@ -80,6 +81,9 @@ function BasketBox({ product }) {
         </div> */}
         <div className="mb-3">
           <CompareButton product={product?.product} />
+        </div>
+        <div className="">
+          <LikeProduct productId={product?.product?.productId} />
         </div>
         <div className="flex items-center gap-3 mt-6">
           <img src="/images/icons/fast-delivery-2.png" alt="" />

@@ -11,10 +11,10 @@ export default function SubFooter() {
   return (
     <>
       <div className="sm:hidden flex justify-around px-2 fixed bottom-0 bg-white left-0 right-0 py-[12px] text-[#666] z-50">
+        <SearchSubfooter />
         
         <ShoppingDrawer />
 
-        <SearchSubfooter />
         <Link href="/profile/dashboard">
           {/* Custom SVG User Icon */}
           <span className="text-3xl cursor-pointer inline-block align-middle" style={{ width: '1em', height: '1em' }}>

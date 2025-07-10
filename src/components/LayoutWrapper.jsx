@@ -15,7 +15,7 @@ export default function LayoutWrapper({ children, showHeaderFooter = true  , sho
 
   return (
     <>
-    <div className={showPro?'':'pb-16'}>
+    <div className={showPro?'':'pb-16 sm:pb-0'}>
 
       <SubHeader />
       <Header />

@@ -68,24 +68,25 @@ export default function BoxImgBranding() {
       <Swiper
         spaceBetween={10}
         loop={true}
-        modules={[Pagination, Autoplay]}
+        modules={[Pagination]}
         className="mySwiper"
-        autoplay={{
-          delay: 0,
-          disableOnInteraction: false,
-        }}
-        speed={5000}
+        // autoplay={{
+        //   delay: 0,
+        //   disableOnInteraction: false,
+        // }}
+        // speed={5000}
+        grabCursor={true}
         breakpoints={{
           1024: {
-            slidesPerView: 6,
+            slidesPerView: 7,
             spaceBetween: 10,
           },
           640: {
-            slidesPerView: 4,
+            slidesPerView: 5,
             spaceBetween: 8,
           },
           100: {
-            slidesPerView: 2,
+            slidesPerView: 3,
             spaceBetween: 5,
           },
         }}
@@ -95,7 +96,7 @@ export default function BoxImgBranding() {
               <img
                 src={`https://afrangadmin.aitest2.ir${brand.image}`}
                 alt={brand.title}
-                className="w-36 h-36 object-contain"
+                className="w-20 h-20 object-contain"
               />
             {/* <div className="rounded-lg bg-white p-5 flex sm:flex-row flex-col justify-center gap-2 items-center">
               <span className="text-sm font-semibold">{brand.title}</span>

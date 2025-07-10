@@ -43,9 +43,7 @@ function HeaderCard() {
   return (
     <>
      
-      <div className="flex flex-wrap items-center justify-center py-10">
-       
-
+      <div className="flex flex-wrap items-center justify-center py-2">
         <div className="md:w-1/2 w-full md:mt-0 mt-4">
           <Steps
             direction="horizontal"

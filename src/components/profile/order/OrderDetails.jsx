@@ -45,7 +45,7 @@ const OrderDetailsSkeleton = () => {
                             <div key={index} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 p-4 sm:p-6 bg-gray-50 rounded-xl">
                                 {/* Product Image Skeleton */}
                                 <div className="w-full sm:w-24 h-24 bg-gray-200 animate-pulse rounded-xl flex-shrink-0" />
-                                
+
                                 {/* Product Details Skeleton */}
                                 <div className="flex-1 w-full">
                                     <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -387,19 +387,22 @@ export default function OrderDetails({ trackCode }) {
                                             <FaMoneyBillWave className="text-[#40768c]" />
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
+                                            <div className="">
+                                                <div className='flex flex-wrap justify-between items-start'>
                                                     <p className="font-medium text-gray-800">{payment.getWay}</p>
+                                                    <p className="font-semibold text-[#40768c]">{payment.amount.toLocaleString()} تومان</p>
+
+                                                </div>
+                                                <div className="flex flex-wrap justify-between items-start">
+                                                    <p className="text-sm text-gray-500 mt-1">کد تراکنش: </p>
                                                     {payment.transactionCode && (
-                                                        <p className="text-sm text-gray-500 mt-1">کد تراکنش: {payment.transactionCode}</p>
+
+                                                        <p>{payment.transactionCode}</p>
                                                     )}
                                                 </div>
-                                                <div className="text-left">
-                                                    <p className="font-semibold text-[#40768c]">{payment.amount.toLocaleString()} تومان</p>
                                                     <p className="text-sm text-gray-500 mt-1">
                                                         {formatPersianDate(payment.created)}
                                                     </p>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -414,7 +417,7 @@ export default function OrderDetails({ trackCode }) {
                     {/* Legal Purchase Information */}
                     {orderDetails.userLegalInfos && (
                         <div className="bg-white rounded-xl px-4 py-2 shadow-sm mb-4">
-                            <Accordion 
+                            <Accordion
                                 expanded={isExpanded}
                                 onChange={(e, expanded) => setIsExpanded(expanded)}
                                 sx={{
@@ -430,8 +433,8 @@ export default function OrderDetails({ trackCode }) {
                                 <AccordionSummary
                                     expandIcon={
                                         <div className='flex items-center gap-2'>
-                                            <Typography 
-                                                sx={{ 
+                                            <Typography
+                                                sx={{
                                                     color: '#d1182b',
                                                     fontSize: '0.775rem',
                                                     fontWeight: 'bold',

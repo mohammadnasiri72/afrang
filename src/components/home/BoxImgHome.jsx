@@ -14,7 +14,7 @@ export default async function BoxImgHome() {
   return (
     <>
       <div className="max-w-[1250px] py-0 px-[10px] my-0 mx-auto text-right">
-        <div className="mt-[-160px] mb-[50px]">
+        <div className="mt-[-160px] mb-[10px]">
           <div className="flex flex-wrap">
             <div className="md:w-1/4 w-1/2 p-2">
               <div className="h-full bg-white border-2 border-gray-200 rounded-lg">

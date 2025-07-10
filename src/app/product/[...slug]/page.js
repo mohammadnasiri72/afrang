@@ -35,7 +35,7 @@ export default async function ProductDetails(props) {
   return (
     <>
       <BreadcrumbNavProduct breadcrumb={product?.breadcrumb} />
-      <div className="bg-[#f6f6f6] overflow-hidden py-10">
+      <div className="bg-[#f6f6f6] overflow-hidden">
         <div className="xl:px-16">
           <TitleProduct product={product} />
           <BodyProduct product={product} />
