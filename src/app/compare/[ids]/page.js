@@ -176,15 +176,15 @@ const DynamicComparePage = () => {
             حذف همه
           </button>
         </div>
-        <div className="flex gap-6 overflow-x-auto">
-          {/* ستون‌های محصولات و ستون‌های خالی */}
+        {/* اسکرول افقی واحد برای همه محصولات و ویژگی‌ها */}
+        <div className="flex gap-6 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 pb-2">
           {Array.from({ length: columnsToShow }).map((_, idx) => {
             const item = compareProducts[idx];
             if (item) {
               return (
                 <div
                   key={item.id}
-                  className="bg-white rounded-lg shadow-lg p-4 w-1/4 flex flex-col items-center relative border border-gray-100"
+                  className="bg-white rounded-lg shadow-lg p-4 w-72 min-w-[260px] flex flex-col items-center relative border border-gray-100 mx-auto"
                 >
                   {/* دکمه حذف */}
                   <button
@@ -194,13 +194,11 @@ const DynamicComparePage = () => {
                   >
                     <FaTimes className="text-base" />
                   </button>
-                  {/* باکس عکس و عنوان */}
+                  {/* عکس و عنوان */}
                   <Link href={`/product/${item.productId}`} className="w-full">
                     <div className="flex flex-col items-center cursor-pointer">
                       <Image
-                        src={
-                          getImageUrl2(item.image) || "/images/placeholder.jpg"
-                        }
+                        src={getImageUrl2(item.image) || "/images/placeholder.jpg"}
                         alt={item.title}
                         width={100}
                         height={100}
@@ -216,6 +214,19 @@ const DynamicComparePage = () => {
                       </div>
                     </div>
                   </Link>
+                  {/* ویژگی‌ها */}
+                  <div className="w-full mt-4">
+                    {uniqueTitles.map((title) => (
+                      <div key={title} className="mb-2">
+                        <span className="text-xs text-teal-500 font-semibold">{title}:</span>
+                        <span className="block font-semibold text-center">
+                          {property
+                            .filter((ev) => ev.title === title)
+                            .filter((ev) => ev.itemId === item.productId)[0]?.value || "---"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               );
             } else {
@@ -223,7 +234,7 @@ const DynamicComparePage = () => {
               return (
                 <div
                   key={`empty-${idx}`}
-                  className="bg-white rounded-lg shadow-lg p-4 min-w-[260px] flex flex-col items-center justify-center border-2 border-dashed border-blue-300 cursor-pointer hover:bg-blue-50 transition-colors relative"
+                  className="bg-white rounded-lg shadow-lg p-4 w-72 min-w-[260px] flex flex-col items-center justify-center border-2 border-dashed border-blue-300 cursor-pointer hover:bg-blue-50 transition-colors relative mx-auto"
                   onClick={handleAddProduct}
                   title="اضافه کردن محصول به مقایسه"
                 >
@@ -240,26 +251,6 @@ const DynamicComparePage = () => {
             }
           })}
         </div>
-
-        {uniqueTitles.map((title) => (
-          <div key={title}>
-            <Divider />
-            <h4 className="text-lg text-teal-500 font-semibold">{title}</h4>
-            <div className="w-full flex gap-6">
-              {compareProducts.map((e) => (
-                <div
-                  key={e.id}
-                  className="w-1/4 flex flex-col items-center relative font-semibold"
-                >
-                  {property
-                    .filter((ev) => ev.title === title)
-                    .filter((ev) => ev.itemId === e.productId)[0]?.value ||
-                    "---"}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );

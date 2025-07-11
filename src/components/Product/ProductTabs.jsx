@@ -184,15 +184,15 @@ function ProductTabs({ product }) {
       }
       {
         relatedProducts.length > 0 &&
-        <div className="mt-5 sm:block hidden">
+        <div className="mt-5">
           <ProductMain products={relatedProducts} />
         </div>
       }
-      {
+      {/* {
         <div className="mt-5 sm:hidden block">
           <RelatedProductsMobile products={relatedProducts}/>
         </div>
-      }
+      } */}
       {
         similarProducts.length > 0 &&
         <div className="sm:px-4 mt-20">
