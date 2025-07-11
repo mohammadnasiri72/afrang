@@ -86,7 +86,7 @@ const BodyCard = () => {
   const { currentItems, nextItems, cartType, loading } = useSelector((state) => state.cart);
   const items = cartType === 'current' ? currentItems : nextItems;
 
-  
+
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -356,7 +356,7 @@ const BodyCard = () => {
                 )}
 
                 <hr className="border-[#6666] my-3" />
-                <div className="bg-white p-3 rounded-lg mb-3">
+                <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
                   <div className="flex justify-center items-center flex-col">
                     <span className="font-bold text-lg">جمع سبد خرید:</span>
                     <div className="flex items-center">
@@ -369,7 +369,7 @@ const BodyCard = () => {
                 </div>
                 <button
                   onClick={compeletePay}
-                  className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                  className="w-full sm:flex hidden justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
                 >
                   <FaShoppingCart />
                   <span>تسویه حساب</span>
@@ -381,6 +381,28 @@ const BodyCard = () => {
               </p>
             </div>
           )}
+
+          <div className="fixed sm:hidden block bottom-14 left-0 right-0 z-[50] bg-[#ececec]">
+            <div className="bg-white p-3 rounded-lg mb-3">
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-lg">جمع سبد خرید:</span>
+                <div className="flex items-center">
+                  <span className="font-bold text-2xl text-[#d1182b]">
+                    {(totalPrice - totalDiscount).toLocaleString()}
+                  </span>
+                  <span className="mr-1">تومان</span>
+                </div>
+              </div>
+              <button
+              onClick={compeletePay}
+              className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+            >
+              <FaShoppingCart />
+              <span>تسویه حساب</span>
+            </button>
+            </div>
+           
+          </div>
         </>
       )}
       <style jsx global>{`

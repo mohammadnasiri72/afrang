@@ -62,7 +62,7 @@ export default function DescCompeletePay() {
   const selectedAddress = useSelector((state) => state.address.selectedAddress);
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
   const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
-  
+
   const [needInvoice, setNeedInvoice] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(true);
   const [estimateData, setEstimateDataLocal] = useState(null);
@@ -72,7 +72,7 @@ export default function DescCompeletePay() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  
+
 
   const totalPrice =
     currentItems?.reduce((sum, item) => {
@@ -186,7 +186,7 @@ export default function DescCompeletePay() {
             }
 
             {
-              estimateData?.walletIsActive  &&
+              estimateData?.walletIsActive &&
               <div className="flex justify-between text-[#444] py-1">
                 <span>موجودی کیف پول</span>
                 <span>{estimateData?.walletAmount ? estimateData.walletAmount.toLocaleString() : 0} تومان</span>
@@ -214,12 +214,12 @@ export default function DescCompeletePay() {
                 <span>{estimateData?.shipmentDesc}</span>
               </div>
             }
-           
+
 
             <hr className="border-[#6666] my-3" />
 
             {/* مبلغ نهایی */}
-            <div className="bg-white p-3 rounded-lg mb-3">
+            <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
               <div className="flex justify-center items-center flex-col">
                 <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
                 <div className="flex items-center">
@@ -275,9 +275,9 @@ export default function DescCompeletePay() {
                   handlePayment();
                 }
               }}
-              className={`w-full flex justify-center items-center gap-2 text-white ${acceptTerms && selectedShipping && selectedAddress && !loading
-                  ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
-                  : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
+              className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${acceptTerms && selectedShipping && selectedAddress && !loading
+                ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
+                : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
                 }  py-2 rounded-lg duration-300 mt-3`}
             >
               {loading ? (
@@ -296,6 +296,48 @@ export default function DescCompeletePay() {
           </p>
         </div>
       )}
+
+      <div className="fixed sm:hidden block bottom-14 left-0 right-0 z-[50] bg-[#ececec]">
+        {/* مبلغ نهایی */}
+        <div className="bg-white p-3 rounded-lg mb-3">
+          <div className="flex justify-between items-center">
+            <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
+            <div className="flex items-center">
+              <span className="font-bold text-2xl text-[#d1182b]">
+                {estimateData?.finalAmount ? estimateData.finalAmount.toLocaleString() : finalPrice.toLocaleString()}
+              </span>
+              <span className="mr-1">تومان</span>
+            </div>
+          </div>
+          <button
+          onClick={() => {
+            if (!acceptTerms) {
+              message.warning("لطفاً قوانین و مقررات سایت را بپذیرید");
+            } else if (!selectedAddress) {
+              message.warning("لطفاً آدرس خود را انتخاب کنید");
+            } else if (!selectedShipping) {
+              message.warning("لطفاً روش ارسال را انتخاب کنید");
+            } else {
+              handlePayment();
+            }
+          }}
+          className={`w-full flex justify-center items-center gap-2 text-white ${acceptTerms && selectedShipping && selectedAddress && !loading
+            ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
+            : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
+            }  py-2 rounded-lg duration-300 mt-3`}
+        >
+          {loading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+          ) : (
+            <>
+              <FaShoppingCart />
+              <span>تکمیل اطلاعات پرداخت</span>
+            </>
+          )}
+        </button>
+        </div>
+        
+      </div>
     </>
   );
 }

@@ -274,11 +274,31 @@ export default function Dashboard() {
                 </div> */}
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {/* Quick Stats - موبایل جمع‌وجور */}
+            <div className="grid grid-cols-3 gap-2 sm:hidden mb-4">
                 {stats.map((stat, index) => {
                     const Icon = stat.icon;
-
+                    return (
+                        <div
+                            key={index}
+                            className="bg-white p-2 rounded-lg shadow-sm flex flex-col items-center justify-center cursor-pointer hover:shadow-md transition-all duration-300"
+                            onClick={() => handleStatClick(stat.statusId)}
+                        >
+                            <div className="flex items-center justify-center mb-1">
+                                <div className={`p-1 bg-${stat.color}-50 rounded-lg`}>
+                                    <Icon className={`text-${stat.color}-500 text-xl`} />
+                                </div>
+                            </div>
+                            <span className="text-xs text-gray-500 text-center">{stat.title}</span>
+                            <span className="text-base font-bold text-gray-800 text-center">{stat.value}</span>
+                        </div>
+                    );
+                })}
+            </div>
+            {/* Quick Stats - دسکتاپ */}
+            <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {stats.map((stat, index) => {
+                    const Icon = stat.icon;
                     return (
                         <div
                             key={index}
@@ -329,7 +349,7 @@ export default function Dashboard() {
                                         </Link>
                                         <div className="flex-1">
                                             <Link href={item.url} target="_blank">
-                                                <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-1">
+                                                <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                                     {item.title}
                                                 </p>
                                             </Link>
@@ -404,7 +424,7 @@ export default function Dashboard() {
                                             </Link>
                                             <div className="flex-1">
                                                 <Link href={item.url} target="_blank">
-                                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-1">
+                                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                                         {item.title}
                                                     </p>
                                                 </Link>

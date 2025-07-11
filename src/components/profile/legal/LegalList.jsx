@@ -205,7 +205,7 @@ export default function LegalList() {
       </div>
 
       {!isLoading && legalList.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg">
+        <div className="text-center py-12 bg-white rounded-lg z-50 relative">
           <p className="text-gray-500">هنوز اطلاعات حقوقی ثبت نشده است</p>
           <button
             onClick={() => handleModalOpen('add')}

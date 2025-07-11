@@ -155,6 +155,9 @@ function LayoutContent({ children }) {
 
   const showPro =
     !pathname.includes("/product/")
+
+  const showCart =
+    !pathname.includes("/cart")
     
 
   useEffect(() => {
@@ -186,7 +189,7 @@ function LayoutContent({ children }) {
         {mounted ? (
           <>
             <InitialDataManager />
-            <LayoutWrapper showHeaderFooter={showHeaderFooter} showPro={showPro}>
+            <LayoutWrapper showHeaderFooter={showHeaderFooter} showPro={showPro} showCart={showCart}>
               {children}
             </LayoutWrapper>
             <FloatingCompareIcon />

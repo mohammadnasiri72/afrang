@@ -304,7 +304,7 @@ function ResponsiveMenu() {
               {items.map((item, i) => (
                 <div
                   key={item.id}
-                  className={`hover:bg-[#0002] duration-300 px-0.5 relative group hidden lg:flex items-center ${
+                  className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
                   onMouseEnter={handleMouseEnter}
@@ -565,7 +565,7 @@ function ResponsiveMenu() {
             }}
             className="custom-menu"
             items={menuItems}
-            defaultOpenKeys={currentAccordionKey ? [currentAccordionKey] : []}
+            defaultOpenKeys={[]}
           />
 
           <style jsx global>{`

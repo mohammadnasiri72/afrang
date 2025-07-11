@@ -14,7 +14,7 @@ import { clearPaymentState } from '@/redux/slices/paymentWaySlice';
 import { fetchCartData } from '@/redux/slices/cartSlice';
 import { message } from "antd";
 
-function DescPayment({estimateData}) {
+function DescPayment({ estimateData }) {
   const { currentItems, cartType } = useSelector((store) => store.cart);
   const [loading, setLoading] = useState(false);
   const selectedPayment = useSelector((state) => state.paymentWay.selectedPayment);
@@ -49,7 +49,7 @@ function DescPayment({estimateData}) {
       };
 
       const response = await estimateOrderSave(data, token);
-      
+
       if (response) {
         dispatch(setOrderData(response));
         router.push(`/profile/orders?trackCode=${response}`);
@@ -86,7 +86,7 @@ function DescPayment({estimateData}) {
             </div>
           )}
           {
-            estimateData?.walletIsActive  &&
+            estimateData?.walletIsActive &&
             <div className="flex justify-between text-[#444] py-1">
               <span>موجودی کیف پول</span>
               <span>{estimateData?.walletAmount ? estimateData.walletAmount.toLocaleString() : 0} تومان</span>
@@ -137,12 +137,12 @@ function DescPayment({estimateData}) {
           }
 
 
-         
+
 
           <hr className="border-[#6666] my-3" />
 
           {/* مبلغ نهایی */}
-          <div className="bg-white p-3 rounded-lg mb-3">
+          <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
             <div className="flex justify-center items-center flex-col">
               <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
               <div className="flex items-center">
@@ -154,7 +154,7 @@ function DescPayment({estimateData}) {
             </div>
           </div>
 
-        
+
           <button
             onClick={() => {
               if (!selectedPayment) {
@@ -163,9 +163,9 @@ function DescPayment({estimateData}) {
                 handlePayment();
               }
             }}
-            className={`w-full flex justify-center items-center gap-2 text-white ${!loading && selectedPayment
-                ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
-                : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
+            className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${!loading && selectedPayment
+              ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
+              : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
               }  py-2 rounded-lg duration-300 mt-3`}
           >
             {loading ? (
@@ -182,6 +182,46 @@ function DescPayment({estimateData}) {
           این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها
           نمی‌باشد.
         </p>
+      </div>
+
+      <div className='fixed sm:hidden block bottom-14 left-0 right-0 z-[50] bg-[#ececec]'>
+        {/* مبلغ نهایی */}
+        <div className="bg-white p-3 rounded-lg mb-3">
+          <div className="flex justify-between items-center">
+            <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
+            <div className="flex items-center">
+              <span className="font-bold text-2xl text-[#d1182b]">
+                {estimateData?.finalAmount ? estimateData.finalAmount.toLocaleString() : 0}
+              </span>
+              <span className="mr-1">تومان</span>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              if (!selectedPayment) {
+                message.warning("لطفاً روش پرداخت را انتخاب کنید");
+              } else {
+                handlePayment();
+              }
+            }}
+            className={`w-full flex justify-center items-center gap-2 text-white ${!loading && selectedPayment
+              ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
+              : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
+              }  py-2 rounded-lg duration-300 mt-3`}
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            ) : (
+              <>
+                <FaShoppingCart />
+                <span>پرداخت و تکمیل خرید</span>
+              </>
+            )}
+          </button>
+        </div>
+
+
+
       </div>
     </>
   );

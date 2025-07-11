@@ -134,7 +134,7 @@ export default function FavoritesList() {
                             </Link>
                             <div className="flex-1">
                                 <Link href={item.url} target="_blank">
-                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-1">
+                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                         {item.title}
                                     </p>
                                 </Link>

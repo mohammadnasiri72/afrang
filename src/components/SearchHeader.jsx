@@ -41,12 +41,13 @@ const SearchHeader = () => {
             return;
         }
 
+        // باکس نتایج را بلافاصله باز کن و لودینگ را فعال کن
+        setShowResults(true);
+        setLoading(true);
         timeoutRef.current = setTimeout(async () => {
-            setLoading(true);
             try {
                 const data = await getProductTerm(value);
                 setResults(data || []);
-                setShowResults(true);
             } catch (error) {
                 console.error("Search error:", error);
                 setResults([]);
@@ -136,11 +137,11 @@ const SearchHeader = () => {
                                         </Link>
                                     ))}
                                 </div>
-                            ) : !loading && (
+                            ) : (!loading && searchTerm.length >= 2) ? (
                                 <div className="h-full flex items-center justify-center">
                                     <div className="text-center text-gray-500">نتیجه‌ای یافت نشد</div>
                                 </div>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </div>

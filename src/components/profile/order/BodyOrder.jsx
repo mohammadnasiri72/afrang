@@ -61,7 +61,7 @@ const OrderSkeleton = () => {
                 </div>
 
                 {/* Orders List Skeleton */}
-                <div className="space-y-4 sm:space-y-6 mt-36 w-full">
+                <div className="space-y-4 sm:space-y-6 w-full mt-0 sm:mt-36">
                     {[...Array(3)].map((_, index) => (
                         <div key={index} className="border border-gray-200 rounded-lg p-4 sm:p-6">
                             {/* Order Header */}
@@ -293,24 +293,48 @@ export default function BodyOrder() {
             <div id="orders-top" className="bg-white rounded-xl p-4 sm:p-6 shadow-lg z-50 relative max-w-full">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">تاریخچه سفارشات من</h2>
 
-                <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 absolute w-full left-0 right-0 top-10">
-                    <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
-                        <Segmented
-                            className="font-semibold text-3xl w-full overflow-auto"
-                            dir="rtl"
-                            style={{
-                                padding: "8px",
-                                fontFamily: "yekan",
-                                width: "100%"
-                            }}
-                            value={parseInt(statusId)}
-                            onChange={handleTabChange}
-                            options={options}
-                        />
-                    </div>
+                {/* تب‌ها: موبایل و دسکتاپ */}
+                {/* دسکتاپ: Segmented */}
+                <div className="hidden sm:block flex-wrap bg-white rounded-lg mt-3 z-50 absolute w-full left-0 right-0 top-10">
+                  <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5">
+                    <Segmented
+                      className="font-semibold text-3xl w-full overflow-auto"
+                      dir="rtl"
+                      style={{
+                        padding: "8px",
+                        fontFamily: "yekan",
+                        width: "100%"
+                      }}
+                      value={parseInt(statusId)}
+                      onChange={handleTabChange}
+                      options={options}
+                    />
+                  </div>
+                </div>
+                {/* موبایل: گرید دو ستونه تب‌ها */}
+                <div className="sm:hidden grid grid-cols-2 gap-2 bg-white rounded-lg mt-3 mb-3 w-full px-2 py-2 shadow">
+                  {options.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => handleTabChange(opt.value)}
+                      className={`flex flex-col cursor-pointer items-center justify-center px-2 py-2 rounded-lg text-xs font-bold transition-all duration-200
+                        ${parseInt(statusId) === opt.value ? 'bg-[#d1182b] text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-[#f6f6f6]'}
+                      `}
+                    >
+                      {React.createElement(options.find(o => o.value === opt.value).label.props.children[1].type, { className: 'text-base mb-1' })}
+                      <span className="whitespace-nowrap">{ORDER_STATUS_TITLES[opt.value]}</span>
+                      <span className="text-[10px] font-normal">({dashboardData[
+                        opt.value === 1 ? 'Record' :
+                        opt.value === 2 ? 'Pending' :
+                        opt.value === 3 ? 'Process' :
+                        opt.value === 4 ? 'Done' :
+                        opt.value === 5 ? 'Cancel' : ''
+                      ] || 0})</span>
+                    </button>
+                  ))}
                 </div>
 
-                <div className="space-y-4 sm:space-y-6 mt-36 w-full">
+                <div className="space-y-4 sm:space-y-6 w-full mt-0 sm:mt-36">
                     {loading ? (
                         <OrderSkeleton />
                     ) : orderData?.length > 0 ? (

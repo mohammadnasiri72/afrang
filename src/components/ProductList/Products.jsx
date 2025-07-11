@@ -100,7 +100,7 @@ function Products({ products, layout = "list" }) {
               {/* اطلاعات محصول */}
               <div className="flex-grow">
                 <Link href={product.url} className="hover:text-[#d1182b] duration-300">
-                  <h5 className="font-semibold text-sm line-clamp-2 mb-1">{product.title}</h5>
+                  <h5 className="font-semibold text-sm line-clamp-3 mb-1">{product.title}</h5>
                 </Link>
                 <PriceProduct product={product} />
                 <div className="flex items-center gap-2 mt-1">
@@ -244,7 +244,7 @@ function Products({ products, layout = "list" }) {
             </div>
           )}
         </div>
-        <Link href={`${product.url}`} className="font-semibold text-lg text-center mb-2 line-clamp-2 hover:text-[#d1182b] duration-300">
+        <Link href={`${product.url}`} className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300">
           {product.title}
         </Link>
         <div className="flex items-center justify-center gap-3 mb-2">

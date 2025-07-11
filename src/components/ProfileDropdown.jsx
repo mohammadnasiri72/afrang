@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaBox, FaKey, FaShoppingCart, FaUser, FaTachometerAlt } from "react-icons/fa";
+import { FaBox, FaKey, FaShoppingCart, FaUser, FaTachometerAlt, FaHome, FaHeart, FaCamera, FaExclamationTriangle, FaInfoCircle, FaComment, FaNewspaper, FaRecycle, FaAddressBook, FaBuilding } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 
@@ -109,38 +109,21 @@ const ProfileDropdown = () => {
     }
   };
 
-  // منوی آیتم‌ها
-  const menuItems = [
-    {
-      id: 1,
-      label: "داشبورد",
-      icon: <FaTachometerAlt className="text-lg" />,
-      href: "/profile/dashboard",
-    },
-    {
-      id: 2,
-      label: "سبد خرید",
-      icon: <FaShoppingCart className="text-lg" />,
-      href: "/cart",
-    },
-    {
-      id: 3,
-      label: "ویرایش پروفایل",
-      icon: <FaUser className="text-lg" />,
-      href: "/profile/edit-profile",
-    },
-    {
-      id: 4,
-      label: "سفارش‌های من",
-      icon: <FaBox className="text-lg" />,
-      href: "/profile/orders",
-    },
-    {
-      id: 5,
-      label: "تغییر رمز عبور",
-      icon: <FaKey className="text-lg" />,
-      href: "/profile/change-password",
-    },
+  // آیتم‌های داشبورد کاربری (مطابق ResponsiveMenu.jsx)
+  const dashboardMenuItems = [
+    { id: "dashboard", label: "داشبورد", icon: <FaHome className="text-lg" />, href: "/profile/dashboard" },
+    { id: "edit-profile", label: "ویرایش پروفایل", icon: <FaUser className="text-lg" />, href: "/profile/edit-profile" },
+    { id: "orders", label: "سفارشات من", icon: <FaBox className="text-lg" />, href: "/profile/orders" },
+    { id: "favorites", label: "علاقه‌مندی‌های من", icon: <FaHeart className="text-lg" />, href: "/profile/favorites" },
+    { id: "second-hand", label: "کالای دسته دوم", icon: <FaRecycle className="text-lg" />, href: "/profile/second-hand" },
+    { id: "user-comments", label: "نظرات ارسالی", icon: <FaComment className="text-lg" />, href: "/profile/user-comments" },
+    { id: "my-articles", label: "ارسال اخبار و مقالات", icon: <FaNewspaper className="text-lg" />, href: "/profile/my-articles" },
+    { id: "send-image", label: "ارسال عکس", icon: <FaCamera className="text-lg" />, href: "/profile/send-photo" },
+    { id: "report-loss", label: "گزارش مفقودی", icon: <FaExclamationTriangle className="text-lg" />, href: "/profile/missing-report" },
+    { id: "about-me", label: "درباره من", icon: <FaInfoCircle className="text-lg" />, href: "/profile/about-me" },
+    { id: "addresses", label: "آدرس‌های من", icon: <FaAddressBook className="text-lg" />, href: "/profile/addresses" },
+    { id: "legal", label: "اطلاعات حقوقی", icon: <FaBuilding className="text-lg" />, href: "/profile/legal" },
+    { id: "change-password", label: "تغییر رمز عبور", icon: <FaKey className="text-lg" />, href: "/profile/change-password" },
   ];
 
   return (
@@ -210,7 +193,7 @@ const ProfileDropdown = () => {
 
             {/* آیتم‌های منو */}
             <div className="py-2">
-              {menuItems.map((item) => (
+              {dashboardMenuItems.map((item) => (
                 <Link
                   key={item.id}
                   href={item.href}

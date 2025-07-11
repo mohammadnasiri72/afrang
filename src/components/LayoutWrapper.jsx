@@ -8,26 +8,28 @@ import SupportBox from "./home/SupportBox";
 import Footer from "./Footer";
 import SubFooter from "./SubFooter";
 
-export default function LayoutWrapper({ children, showHeaderFooter = true  , showPro = true}) {
+export default function LayoutWrapper({ children, showHeaderFooter = true, showPro = true, showCart = true }) {
   if (!showHeaderFooter) {
     return <>{children}</>;
   }
 
   return (
     <>
-    <div className={showPro?'':'pb-16 sm:pb-0'}>
+      <div className={showPro ? '' : 'pb-16 sm:pb-0'}>
+        <div className={showCart ? '' : 'pb-28 sm:pb-0'}>
 
-      <SubHeader />
-      <Header />
-      <NavBar />
-      <SocialNetworks />
-      {children}
-      <BoxImgBranding />
-      <div className="h-10"></div>
-      <SupportBox />
-      <Footer />
-      <SubFooter />
-    </div>
+          <SubHeader />
+          <Header />
+          <NavBar />
+          <SocialNetworks />
+          {children}
+          <BoxImgBranding />
+          <div className="h-10"></div>
+          <SupportBox />
+          <Footer />
+          <SubFooter />
+        </div>
+      </div>
     </>
   );
 } 
