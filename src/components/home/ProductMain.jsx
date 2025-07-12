@@ -25,7 +25,7 @@ export default function ProductMain({ products }) {
   return (
     <>
       <Swiper
-        loop={true}
+        // loop={true}
         grabCursor={true}
         modules={[Pagination, Navigation]}
         className="mySwiperProduct"
@@ -58,130 +58,81 @@ export default function ProductMain({ products }) {
         {products &&
           products.map((product, index) => (
             <SwiperSlide key={`${product.id || product.productId || index}-${index}`}>
-              <div className="relative group w-full sm:h-[25rem] xs:h-[28rem] h-[30rem] overflow-hidden rounded-lg bg-white">
-                <div className="">
-                  {product.discount !== 0 && (
-                    <div className="absolute top-3 left-3 z-50 duration-300">
-                      <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
-                        {product.discount}%
-                      </span>
-                    </div>
-                  )}
-                  <Link href={product.url}>
-                    <img
-                      className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain flex items-center justify-center"
-                      // style={{ filter: " brightness(0.95)" }}
-                      src={getImageUrl2(product.image)}
-                      alt={product.title}
-                    />
+              <div className="relative group w-full sm:h-[25rem] h-[22rem] overflow-hidden rounded-xl bg-white shadow-md flex flex-col">
+                {/* تصویر */}
+                <Link href={product.url} className="block w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc]">
+                  <img
+                    className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
+                    src={getImageUrl2(product.image)}
+                    alt={product.title}
+                  />
+                </Link>
+                {/* محتوا */}
+                <div className="flex flex-col flex-1 justify-between">
+                  {/* تایمر */}
+                  {product.salePlanTimer && <CountdownTimer targetDate={product.salePlanTimer} />}
+                  {/* عنوان */}
+                  <Link
+                    href={product.url}
+                    className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[48px] flex items-center"
+                  >
+                    <p className="text-justify line-clamp-2 w-full">{product.title}</p>
                   </Link>
-                  <div className="p-4">
-                    {product.salePlanTimer && <CountdownTimer targetDate={product.salePlanTimer} />}
-                    <Link
-                      href={product.url}
-                      className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer "
-                    >
-                      <p className="text-justify">
-                        {product.title}
-                      </p>
-                    </Link>
+                  {/* کالای کارکرده */}
+                  <div className="h-6 flex items-center mt-1 mb-2 px-2">
                     {product.conditionId === 20 && (
-                      <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                      <div className="flex items-center text-xs text-[#d1182b]">
                         <FaRecycle className="ml-1.5" />
                         <span className="font-semibold whitespace-nowrap">کالای کارکرده</span>
                       </div>
                     )}
-                    {
-                      !product.callPriceButton && product.finalPrice !== 0 &&
-                      <div>
-                        <div className="sm:flex flex-wrap hidden justify-between items-center p-2 mt-3 opacity-100 group-hover:opacity-0 duration-300 absolute bottom-2 left-0 right-0">
-                          <span className="font-bold text-lg text-[#333]">
-                            {product.finalPrice.toLocaleString()} تومان
-                          </span>
-                          {product.discount !== 0 && (
-                            <span className="text-[#333a] font-semibold text-lg line-through">
-                              {product.price1.toLocaleString()}
-                            </span>
-                          )}
-                        </div>
-                        <div className="sm:hidden flex flex-wrap justify-between items-center p-2 mt-3 duration-300  bottom-10 left-0 right-0 absolute">
-                          <span className="font-bold text-lg text-[#333] whitespace-nowrap">
-                            {product.finalPrice.toLocaleString()} تومان
-                          </span>
-                          {product.discount !== 0 && (
-                            <span className="text-[#333a] font-semibold text-lg line-through whitespace-nowrap">
-                              {product.price1.toLocaleString()}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    }
-                    {
-                      !product.callPriceButton && product.finalPrice === 0 &&
-                      <div>
-                        <div className="sm:flex hidden justify-between items-center p-2 mt-3 opacity-100 group-hover:opacity-0 duration-300 absolute bottom-2 left-0 right-0">
-                          <span className="font-bold text-lg text-[#333]">
-                            بدون قیمت
-                          </span>
+                  </div>
+                  {/* قیمت */}
+                  <div className="h-10  px-2">
+                    {!product.callPriceButton && product.finalPrice !== 0 && (
 
-                        </div>
-                        <div className="sm:hidden flex  justify-between items-center p-2 mt-3 duration-300 absolute bottom-2 left-0 right-0">
-                          <span className="font-bold text-lg text-[#333]">
-                            بدون قیمت
+                      <div className="flex flex-col">
+
+                        <span className="font-bold text-base text-[#333] whitespace-nowrap">
+                          {product.finalPrice.toLocaleString()} تومان
+                        </span>
+                        {product.discount !== 0 && (
+                          <span className="text-[#333a] font-semibold text-sm line-through">
+                            {product.price1.toLocaleString()}
                           </span>
-
-                        </div>
-                      </div>
-                    }
-                    {
-                      product.callPriceButton &&
-                      <div>
-                        <div className="sm:flex hidden justify-between items-center p-2 mt-3 opacity-100 group-hover:opacity-0 duration-300 absolute bottom-2 left-0 right-0">
-                          <span className="font-bold text-lg text-[#333]">
-                            تماس بگیرید
-                          </span>
-
-                        </div>
-                        <div className="sm:hidden flex  justify-between items-center p-2 mt-3 duration-300 absolute bottom-2 left-0 right-0">
-                          <span className="font-bold text-lg text-[#333]">
-                            تماس بگیرید
-                          </span>
-
-                        </div>
-                      </div>
-                    }
-
-                    {
-                      product.canAddCart &&
-                      <div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
-                         
-                          <AddToCartButtonCard productId={product.productId} />
-                        </div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
-                          <AddToCartButtonCard productId={product.productId} />
-                        </div>
+                        )}
                       </div>
 
-                    }
-                   
-                    {
-                      !product.canAddCart &&
-                      <div>
-                        <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold">
-                          <SlBasket className="text-xl text-[#333]" />
-                          <span className="px-1 text-[#666]">{product.statusDesc}</span>
-                        </div>
-                        <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 text-white rounded-b-lg  duration-300 font-bold absolute">
-                          <SlBasket className="text-xl text-[#333]" />
-                          <span className="px-1 text-[#666]">{product.statusDesc}</span>
-                        </div>
+                    )}
+                    {!product.callPriceButton && product.finalPrice === 0 && (
+                      <span className="font-bold text-base text-[#333]">بدون قیمت</span>
+                    )}
+                    {product.callPriceButton && (
+                      <span className="font-bold text-base text-[#333]">تماس بگیرید</span>
+                    )}
+                  </div>
+                  {/* دکمه افزودن به سبد یا وضعیت */}
+                  <div className="mt-2 ">
+                    {product.canAddCart ? (
+                      <div className="bg-[#d1182b] w-full flex justify-center items-center text-white rounded-lg cursor-pointer hover:bg-[#40768c] font-bold duration-300">
+                        <AddToCartButtonCard productId={product.productId} />
                       </div>
-                    }
-
-
+                    ) : (
+                      <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 rounded-lg font-bold">
+                        <SlBasket className="text-xl text-[#333]" />
+                        <span className="px-1 text-[#666]">{product.statusDesc}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
+                {/* تخفیف */}
+                {product.discount !== 0 && (
+                  <div className="absolute top-3 left-3 z-50 duration-300">
+                    <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                      {product.discount}%
+                    </span>
+                  </div>
+                )}
               </div>
             </SwiperSlide>
           ))}

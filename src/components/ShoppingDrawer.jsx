@@ -196,7 +196,7 @@ function ShoppingDrawer() {
                                 alt={item.title}
                               />
                             ) : (
-                              <span className="text-xs text-gray-500 text-center p-1 line-clamp-2">
+                              <span className="text-xs text-gray-500 text-center p-1 line-clamp-1">
                                 {item.title}
                               </span>
                             )}
@@ -217,7 +217,7 @@ function ShoppingDrawer() {
                               className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer"
                               style={{
                                 display: '-webkit-box',
-                                WebkitLineClamp: 2,
+                                WebkitLineClamp: 3,
                                 WebkitBoxOrient: 'vertical',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',

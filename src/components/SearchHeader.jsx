@@ -113,7 +113,7 @@ const SearchHeader = () => {
                                                 />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
+                                                <h3 className="text-sm font-medium text-gray-900 line-clamp-3">
                                                     {product.title}
                                                 </h3>
                                                 {

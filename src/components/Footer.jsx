@@ -130,7 +130,6 @@ const Footer = () => {
   const [footerMenu, setFooterMenu] = useState([]);
   const [menuLoading, setMenuLoading] = useState(false);
 
-  console.log(socialNetworks);
 
   useEffect(() => {
     if (!settings || settings.length === 0) {
@@ -364,7 +363,7 @@ const Footer = () => {
           <div className="lg:w-1/6 sm:w-1/2 w-full p-3 sm:text-start text-center">
             <h4 className="font-semibold text-[16px]">ساعت کاری</h4>
             <div className="mt-3">
-              <p className="text-xs whitespace-nowrap">
+              <p className="text-xs whitespace-nowrap sm:whitespace-normal">
                 {settings?.find((item) => item.propertyKey === "site_worktime")
                   ?.value ||
                   "شنبه تا چهارشنبه از ساعت 10 الی 18 و پنج شنبه از ساعت 10 الی 16"}

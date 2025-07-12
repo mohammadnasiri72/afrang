@@ -8,10 +8,10 @@ export function TitleProductSkeleton() {
       {/* اسکلتون اسلایدر */}
       <div className="lg:w-1/3 w-full p-2">
         <div className="flex justify-between">
-          <div className="w-1/6 mx-auto flex flex-col items-center justify-start">
+          {/* <div className="w-1/6 mx-auto flex flex-col items-center justify-start">
             <Skeleton.Button active size="large" shape="circle" className="!w-12 !h-12" />
-          </div>
-          <div className="w-5/6 mx-auto">
+          </div> */}
+          <div className="w-full mx-auto">
             <Skeleton.Image active className="!w-full !h-[400px]" />
             <div className="flex gap-2 mt-2">
               {[1, 2, 3, 4].map((item) => (
