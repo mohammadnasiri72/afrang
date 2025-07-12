@@ -35,7 +35,7 @@ const SocialNetworks = () => {
 
   return (
     <div
-      style={{ zIndex: "10020" }}
+      style={{ zIndex: "60" }}
       className="fixed bottom-40 right-5 flex flex-col gap-3"
     >
       {/* {socialNetworks?.map((item) => (
@@ -54,7 +54,7 @@ const SocialNetworks = () => {
       ))} */}
       <a
         href={`tel:${settings?.find((item) => item.propertyKey === "site_tel")?.value || "02177615546"}`}
-        className="bg-white p-2 rounded-lg flex items-center justify-center shadow hover:bg-[#f5f5f5] transition duration-200"
+        className="relative bg-white p-2 rounded-lg flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +84,11 @@ const SocialNetworks = () => {
             strokeLinejoin="round"
           />
         </svg>
+        {/* Tooltip */}
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-gray-800 text-white text-xs rounded-lg px-2 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap z-50">
+          تماس با ما
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+        </div>
       </a>
     </div>
   );

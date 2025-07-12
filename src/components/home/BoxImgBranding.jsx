@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { fetchBrandingItems } from "@/services/brandingService";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination, Autoplay } from "swiper/modules";
-import { fetchBrandingItems } from "@/services/brandingService";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const LoadingSkeleton = () => {
   return (
@@ -32,6 +33,8 @@ export default function BoxImgBranding() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
   const isRequested = useRef(false);
+  const router = useRouter();
+
 
   useEffect(() => {
     const getBrandingItems = async () => {
@@ -93,14 +96,13 @@ export default function BoxImgBranding() {
       >
         {brands.map((brand) => (
           <SwiperSlide key={brand.id}>
-              <img
-                src={`https://afrangadmin.aitest2.ir${brand.image}`}
-                alt={brand.title}
-                className="w-20 h-20 object-contain"
-              />
-            {/* <div className="rounded-lg bg-white p-5 flex sm:flex-row flex-col justify-center gap-2 items-center">
-              <span className="text-sm font-semibold">{brand.title}</span>
-            </div> */}
+            <img onClick={() => {
+              router.push(`/products?brandid=${brand.id}`)
+            }}
+              src={`https://afrangadmin.aitest2.ir${brand.image}`}
+              alt={brand.title}
+              className="w-20 h-20 object-contain cursor-pointer"
+            />
           </SwiperSlide>
         ))}
       </Swiper>

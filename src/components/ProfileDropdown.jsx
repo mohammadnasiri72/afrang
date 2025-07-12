@@ -52,10 +52,17 @@ const ProfileDropdown = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    // Disable body scroll when menu is open
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.body.style.overflow = "";
     };
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -192,7 +199,7 @@ const ProfileDropdown = () => {
             </div>
 
             {/* آیتم‌های منو */}
-            <div className="py-2">
+            <div className="py-2 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
               {dashboardMenuItems.map((item) => (
                 <Link
                   key={item.id}

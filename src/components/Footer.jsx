@@ -1,13 +1,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { MdMailOutline } from "react-icons/md";
 
 import { fetchSettingsData } from "@/redux/slices/settingsSlice";
-import { mainDomainImg } from "@/utils/mainDomain";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
+import { mainDomainImg } from "@/utils/mainDomain";
+import { FaInstagram, FaLinkedin, FaTelegram } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import Newsletter from "./Newsletter";
 
 const FooterSkeleton = () => {
@@ -116,7 +116,6 @@ const Footer = () => {
   const hasFetchedSocialNetworks = useRef(false);
   const [footerMenu, setFooterMenu] = useState([]);
   const [menuLoading, setMenuLoading] = useState(false);
-  
 
   useEffect(() => {
     if (!settings || settings.length === 0) {
@@ -176,7 +175,7 @@ const Footer = () => {
                 <img className="w-20" src="/images/logo.png" alt="" />
               )}
             </div>
-            <div className="mt-5 w-full flex sm:justify-start justify-center">
+            <div className="mt-5 w-full flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
               <span className="text-[#d1182b] whitespace-nowrap pl-1">
                 آدرس :{" "}
               </span>
@@ -184,6 +183,25 @@ const Footer = () => {
                 {settings?.find((item) => item.propertyKey === "site_address1")
                   ?.value || "آدرس در دسترس نیست"}
               </span>
+            </div>
+            {/* لینک منو های فوتر در موبایل */}
+            <div className="sm:hidden pt-4">
+              <h4 className="font-semibold text-lg">لینک ها</h4>
+              <ul className="flex sm:hidden flex-wrap items-start w-full px-2">
+                {footerMenu[0]?.menuItems?.map((menuItem) => (
+                  <li
+                    key={menuItem.id}
+                    className="w-full list-none p-1"
+                  >
+                    <Link
+                      href={menuItem.url || "#"}
+                      className="block w-full bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
+                    >
+                      {menuItem.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="sm:hidden flex justify-center gap-2 items-center mt-3 border-b w-full pb-3 border-[#6666] sm:border-none">
               {/* Social networks section */}
@@ -226,10 +244,9 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`tel:${
-                        settings?.find((item) => item.propertyKey === "site_tel")
-                          ?.value || "02177615546"
-                      }`}
+                      href={`tel:${settings?.find((item) => item.propertyKey === "site_tel")
+                        ?.value || "02177615546"
+                        }`}
                     >
                       {settings?.find((item) => item.propertyKey === "site_tel")
                         ?.value || "77615546"}
@@ -270,10 +287,9 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`mailto:${
-                        settings?.find((item) => item.propertyKey === "site_email")
-                          ?.value || "unreal@outlook.com"
-                      }`}
+                      href={`mailto:${settings?.find((item) => item.propertyKey === "site_email")
+                        ?.value || "unreal@outlook.com"
+                        }`}
                     >
                       {settings?.find((item) => item.propertyKey === "site_email")
                         ?.value || "unreal@outlook.com"}
@@ -293,7 +309,7 @@ const Footer = () => {
               )?.value ||
                 "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
             </p>
-            
+
             <Newsletter />
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
               {socialNetworks?.map((item) => (
@@ -301,22 +317,30 @@ const Footer = () => {
                   key={item.id}
                   href={item.sourceLink || "#"}
                   target="_blank"
-                  className="bg-[#aaa5] p-2 overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
+                  className="bg-[#434347] p-2 overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                 >
-                  <img
-                    src={mainDomainImg + item.image}
-                    alt={item.title || "social network"}
-                    className="w-6 h-6 object-contain "
-                  />
+                  {
+                    item.title === 'telegram' ?
+                      <FaTelegram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
+                      : item.title === 'instagram' ?
+                        <FaInstagram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
+                        : item.title === 'Linkdin' ?
+                          <FaLinkedin className="text-white group-hover:text-teal-500 duration-300 text-xl" />
+                          : <img
+                            src={mainDomainImg + item.image}
+                            alt={item.title || "social network"}
+                            className="w-6 h-6 object-contain "
+                          />
+                  }
                 </Link>
               ))}
             </div>
           </div>
-          
+
           <div className="lg:w-1/6 sm:w-1/2 w-full p-3 sm:text-start text-center">
             <h4 className="font-semibold text-[16px]">ساعت کاری</h4>
             <div className="mt-3">
-              <p>
+              <p className="text-xs whitespace-nowrap">
                 {settings?.find((item) => item.propertyKey === "site_worktime")
                   ?.value ||
                   "شنبه تا چهارشنبه از ساعت 10 الی 18 و پنج شنبه از ساعت 10 الی 16"}
@@ -341,7 +365,7 @@ const Footer = () => {
           {settings?.find((item) => item.propertyKey === "site_copyright")?.value ||
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
         </p>
-        <div className="flex sm:flex-nowrap flex-wrap  items-center xl:w-1/2 w-full">
+        <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center xl:w-1/2 w-full">
           {footerMenu[0]?.menuItems?.map((menuItem) => (
             <Link
               key={menuItem.id}
