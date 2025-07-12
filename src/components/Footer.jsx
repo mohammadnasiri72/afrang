@@ -264,11 +264,10 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`tel:${
-                        settings?.find(
-                          (item) => item.propertyKey === "site_tel"
-                        )?.value || "02177615546"
-                      }`}
+                      href={`tel:${settings?.find(
+                        (item) => item.propertyKey === "site_tel"
+                      )?.value || "02177615546"
+                        }`}
                     >
                       {settings?.find((item) => item.propertyKey === "site_tel")
                         ?.value || "77615546"}
@@ -309,11 +308,10 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`mailto:${
-                        settings?.find(
-                          (item) => item.propertyKey === "site_email"
-                        )?.value || "unreal@outlook.com"
-                      }`}
+                      href={`mailto:${settings?.find(
+                        (item) => item.propertyKey === "site_email"
+                      )?.value || "unreal@outlook.com"
+                        }`}
                     >
                       {settings?.find(
                         (item) => item.propertyKey === "site_email"
@@ -342,24 +340,23 @@ const Footer = () => {
                   key={item.id}
                   href={item.sourceLink || "#"}
                   target="_blank"
-                  className="bg-[#434347] p-2 overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
+                  className="bg-[#434347] p-2 flex items-center justify-center overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                 >
-                  {item.title === "telegram" ? (
-                    <FaTelegram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
-                  ) : item.title === "instagram" ? (
-                    <FaInstagram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
-                  ) : item.title === "Linkdin" ? (
-                    <FaLinkedin className="text-white group-hover:text-teal-500 duration-300 text-xl" />
-                  ) : (
+                  {
+                    item.itemKey &&
+                    <i className={`text-white group-hover:text-teal-500 duration-300 text-xl ${item.itemKey}`}></i>
+                  }
+                  {
+                    !item.itemKey &&
                     <img
                       src={mainDomainImg + item.image}
                       alt={item.title || "social network"}
                       className="w-6 h-6 object-contain "
                     />
-                  )}
+                  }
+
                 </Link>
               ))}
-              <i className="fab fa-telegram"></i>
 
             </div>
           </div>
