@@ -14,14 +14,10 @@ import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
-import CountdownTimer from './CountdownTimer';
+import CountdownTimer from "./CountdownTimer";
 import { FaRecycle } from "react-icons/fa";
 
 export default function ProductMain({ products }) {
-
-
-
-
   return (
     <>
       <Swiper
@@ -57,10 +53,15 @@ export default function ProductMain({ products }) {
       >
         {products &&
           products.map((product, index) => (
-            <SwiperSlide key={`${product.id || product.productId || index}-${index}`}>
-              <div className="relative group w-full sm:h-[25rem] h-[22rem] overflow-hidden rounded-xl bg-white shadow-md flex flex-col">
+            <SwiperSlide
+              key={`${product.id || product.productId || index}-${index}`}
+            >
+              <div className="relative group w-full sm:h-[28rem] h-[25rem] overflow-hidden rounded-xl bg-white shadow-md flex flex-col">
                 {/* تصویر */}
-                <Link href={product.url} className="block w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc]">
+                <Link
+                  href={product.url}
+                  className="w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc]"
+                >
                   <img
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
                     src={getImageUrl2(product.image)}
@@ -70,29 +71,33 @@ export default function ProductMain({ products }) {
                 {/* محتوا */}
                 <div className="flex flex-col flex-1 justify-between">
                   {/* تایمر */}
-                  {product.salePlanTimer && <CountdownTimer targetDate={product.salePlanTimer} />}
+                  {product.salePlanTimer && (
+                    <CountdownTimer targetDate={product.salePlanTimer} />
+                  )}
                   {/* عنوان */}
                   <Link
                     href={product.url}
                     className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[48px] flex items-center"
                   >
-                    <p className="text-justify line-clamp-2 w-full">{product.title}</p>
+                    <p className="text-justify line-clamp-2 w-full">
+                      {product.title}
+                    </p>
                   </Link>
                   {/* کالای کارکرده */}
                   <div className="h-6 flex items-center mt-1 mb-2 px-2">
                     {product.conditionId === 20 && (
                       <div className="flex items-center text-xs text-[#d1182b]">
                         <FaRecycle className="ml-1.5" />
-                        <span className="font-semibold whitespace-nowrap">کالای کارکرده</span>
+                        <span className="font-semibold whitespace-nowrap">
+                          کالای کارکرده
+                        </span>
                       </div>
                     )}
                   </div>
                   {/* قیمت */}
-                  <div className="h-10  px-2">
+                  <div className="h-10  px-2 group-hover:opacity-100 group-hover:sm:opacity-0 duration-300 group-hover:visible group-hover:sm:invisible">
                     {!product.callPriceButton && product.finalPrice !== 0 && (
-
                       <div className="flex flex-col">
-
                         <span className="font-bold text-base text-[#333] whitespace-nowrap">
                           {product.finalPrice.toLocaleString()} تومان
                         </span>
@@ -102,25 +107,30 @@ export default function ProductMain({ products }) {
                           </span>
                         )}
                       </div>
-
                     )}
                     {!product.callPriceButton && product.finalPrice === 0 && (
-                      <span className="font-bold text-base text-[#333]">بدون قیمت</span>
+                      <span className="font-bold text-base text-[#333]">
+                        بدون قیمت
+                      </span>
                     )}
                     {product.callPriceButton && (
-                      <span className="font-bold text-base text-[#333]">تماس بگیرید</span>
+                      <span className="font-bold text-base text-[#333]">
+                        تماس بگیرید
+                      </span>
                     )}
                   </div>
                   {/* دکمه افزودن به سبد یا وضعیت */}
                   <div className="mt-2 ">
                     {product.canAddCart ? (
-                      <div className="bg-[#d1182b] w-full flex justify-center items-center text-white rounded-lg cursor-pointer hover:bg-[#40768c] font-bold duration-300">
+                      <div className="bg-[#d1182b] w-full flex justify-center items-center text-white rounded-lg cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
                         <AddToCartButtonCard productId={product.productId} />
                       </div>
                     ) : (
                       <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 rounded-lg font-bold">
                         <SlBasket className="text-xl text-[#333]" />
-                        <span className="px-1 text-[#666]">{product.statusDesc}</span>
+                        <span className="px-1 text-[#666]">
+                          {product.statusDesc}
+                        </span>
                       </div>
                     )}
                   </div>

@@ -90,7 +90,7 @@ export default function Header() {
   }
 
   return (
-    <div className="flex items-center justify-between lg:px-16 px-4 py-1 bg-white">
+    <div className="flex items-center justify-between lg:px-16 px-4 py-1 bg-white ">
       <div className="flex items-center lg:w-1/2 w-auto">
         <div className="flex items-center lg:w-2/5 w-auto">
           {settings?.find((item) => item.propertyKey === "site_home_url") ? (

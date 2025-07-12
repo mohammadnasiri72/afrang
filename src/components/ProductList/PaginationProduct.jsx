@@ -1,27 +1,31 @@
 "use client";
-import React from "react";
+import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { Pagination, Select } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 function PaginationProduct({ total }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentPageSize = Number(searchParams.get("pageSize")) || 20;
+  const dispatch = useDispatch();
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams);
+    dispatch(setFilterLoading(true));
     if (page === 1) {
       params.delete("page");
     } else {
       params.set("page", page);
     }
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`);
     // window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePageSizeChange = (size) => {
     const params = new URLSearchParams(searchParams);
+    dispatch(setFilterLoading(true));
     if (size === 20) {
       params.delete("pageSize");
     } else {

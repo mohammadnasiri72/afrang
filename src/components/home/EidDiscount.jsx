@@ -166,10 +166,10 @@ export default function EidDiscount() {
     <>
       {
         filteredProducts.length>0 &&
-        <div>
+        <div className="mt-5">
           <div className="lg:hidden flex justify-center items-center pb-3">
             <div className="flex items-center title-newProduct relative">
-              <h2 className="font-semibold text-xl ">{actionProducts?.title || 'محصولات ویژه'}</h2>
+              <h2 className="font-semibold text-xl ">{actionProducts?.title || 'فروش ویژه'}</h2>
               {
                 actionProducts?.image &&
                 <img src={getImageUrl(actionProducts.image)} alt={actionProducts.id} />

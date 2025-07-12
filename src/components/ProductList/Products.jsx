@@ -1,7 +1,12 @@
 import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
 import Image from "next/image";
-import { FaCartShopping, FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
+import {
+  FaCartShopping,
+  FaRecycle,
+  FaTruck,
+  FaTruckFast,
+} from "react-icons/fa6";
 import { Tooltip, Skeleton } from "antd";
 import ExpandableText from "../Product/ExpandableText";
 import AddToCartButton from "./AddToCartButton";
@@ -14,10 +19,10 @@ import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 
 function Products({ products, layout = "list" }) {
   const dispatch = useDispatch();
-  const isFilterLoading = useSelector((state) => state.filterLoading.isFilterLoading);
+  const isFilterLoading = useSelector(
+    (state) => state.filterLoading.isFilterLoading
+  );
   const searchParams = useSearchParams();
-
-  
 
   useEffect(() => {
     if (products) {
@@ -29,13 +34,26 @@ function Products({ products, layout = "list" }) {
     if (layout === "grid") {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-          {[...Array(6)].map((_, index) => (
-            <div key={index} className="bg-white rounded-lg p-4 shadow-sm h-full">
+          {[
+            ...Array(
+              searchParams.get("pageSize")
+                ? Number(searchParams.get("pageSize"))
+                : 20
+            ),
+          ].map((_, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg p-4 shadow-sm h-full"
+            >
               <div className="flex flex-col items-center">
                 <div className="w-full flex justify-center mb-4">
                   <Skeleton.Image active className="w-40 h-40" />
                 </div>
-                <Skeleton active paragraph={{ rows: 2 }} className="w-full mb-4" />
+                <Skeleton
+                  active
+                  paragraph={{ rows: 2 }}
+                  className="w-full mb-4"
+                />
                 <div className="w-full space-y-2">
                   <Skeleton.Button active block size="large" />
                   <Skeleton.Button active block size="large" />
@@ -49,17 +67,23 @@ function Products({ products, layout = "list" }) {
 
     return (
       <div className="space-y-5 mt-5">
-        {[...Array(6)].map((_, index) => (
-          <div key={index} className="bg-white rounded-lg p-4">
+        {[
+          ...Array(
+            searchParams.get("pageSize")
+              ? Number(searchParams.get("pageSize"))
+              : 20
+          ),
+        ].map((_, index) => (
+          <div key={index} className="bg-white rounded-lg p-4 h-52 overflow-hidden z-50 relative">
             <div className="flex flex-wrap">
               <div className="p-3 lg:w-1/3 w-full">
                 <Skeleton.Image active className="w-48 h-48" />
               </div>
               <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
-                <Skeleton active paragraph={{ rows: 3 }} />
+                <Skeleton active paragraph={{ rows: 2 }} />
               </div>
               <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
-                <Skeleton active paragraph={{ rows: 4 }} />
+                <Skeleton active paragraph={{ rows: 3 }} />
               </div>
             </div>
           </div>
@@ -99,8 +123,13 @@ function Products({ products, layout = "list" }) {
 
               {/* اطلاعات محصول */}
               <div className="flex-grow">
-                <Link href={product.url} className="hover:text-[#d1182b] duration-300">
-                  <h5 className="font-semibold text-sm line-clamp-3 mb-1">{product.title}</h5>
+                <Link
+                  href={product.url}
+                  className="hover:text-[#d1182b] duration-300"
+                >
+                  <h5 className="font-semibold text-sm line-clamp-3 mb-1">
+                    {product.title}
+                  </h5>
                 </Link>
                 <PriceProduct product={product} />
                 <div className="flex items-center gap-2 mt-1">
@@ -159,8 +188,13 @@ function Products({ products, layout = "list" }) {
               </Link>
             </div>
             <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
-              <Link href={product.url} className="hover:text-[#d1182b] duration-300">
-                <h5 className="font-semibold sm:text-lg text-sm">{product.title}</h5>
+              <Link
+                href={product.url}
+                className="hover:text-[#d1182b] duration-300"
+              >
+                <h5 className="font-semibold sm:text-lg text-sm">
+                  {product.title}
+                </h5>
               </Link>
               {product.summary && <ExpandableText text={product.summary} />}
             </div>
@@ -199,9 +233,7 @@ function Products({ products, layout = "list" }) {
                     <span className="font-semibold px-1">کالای کارکرده</span>
                   </div>
                 )}
-                
-                
-                
+
                 {!product.canAddCart && (
                   <div className="mt-2">
                     <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
@@ -244,7 +276,10 @@ function Products({ products, layout = "list" }) {
             </div>
           )}
         </div>
-        <Link href={`${product.url}`} className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300">
+        <Link
+          href={`${product.url}`}
+          className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
+        >
           {product.title}
         </Link>
         <div className="flex items-center justify-center gap-3 mb-2">
@@ -280,21 +315,19 @@ function Products({ products, layout = "list" }) {
         <div className="mt-auto w-full space-y-2 flex flex-col justify-center items-center">
           {product.statusId === 1 && product.discount === 0 && (
             <div className="flex items-center gap-2 mb-4">
-              {
-                product?.price1 !== 0 &&
+              {product?.price1 !== 0 && (
                 <div>
                   <span className="font-semibold text-xl">
                     {product?.price1?.toLocaleString()}
                   </span>
                   <span className="text-[#555] px-1">تومان</span>
                 </div>
-              }
-              {
-                product?.price1 === 0 &&
+              )}
+              {product?.price1 === 0 && (
                 <div>
                   <span className="text-[#555]">بدون قیمت</span>
                 </div>
-              }
+              )}
             </div>
           )}
           {product.canAddCart ? (
