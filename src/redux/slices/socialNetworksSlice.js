@@ -2,6 +2,25 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getSocialNetworks } from '@/services/socialNetworks/socialNetworksService';
 import { getItem } from '@/services/Item/item';
 
+// اکشن برای پاک کردن state در زمان رفرش صفحه
+export const clearSocialNetworksOnRefresh = createAsyncThunk(
+  'socialNetworks/clearSocialNetworksOnRefresh',
+  async (_, { dispatch }) => {
+    // پاک کردن localStorage برای socialNetworks
+    try {
+      const existingState = localStorage.getItem('reduxState');
+      if (existingState) {
+        const parsedState = JSON.parse(existingState);
+        delete parsedState.socialNetworks;
+        localStorage.setItem('reduxState', JSON.stringify(parsedState));
+      }
+    } catch (error) {
+      console.error('Error clearing socialNetworks from localStorage:', error);
+    }
+    return null;
+  }
+);
+
 // اکشن برای دریافت شبکه‌های اجتماعی
 export const fetchSocialNetworksData = createAsyncThunk(
   'socialNetworks/fetchSocialNetworksData',
@@ -33,6 +52,8 @@ const socialNetworksSlice = createSlice({
         },
         clearSocialNetworks: (state) => {
             state.socialNetworks = [];
+            state.loading = false;
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
@@ -49,6 +70,11 @@ const socialNetworksSlice = createSlice({
             .addCase(fetchSocialNetworksData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+            .addCase(clearSocialNetworksOnRefresh.fulfilled, (state) => {
+                state.socialNetworks = [];
+                state.loading = false;
+                state.error = null;
             });
     }
 });

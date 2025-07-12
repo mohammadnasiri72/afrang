@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -26,7 +25,10 @@ const FooterSkeleton = () => {
             <div className=" flex justify-center gap-2 items-center mt-3 border-b w-full pb-3 border-[#6666] sm:border-none">
               <div className="flex gap-2">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg" />
+                  <div
+                    key={i}
+                    className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg"
+                  />
                 ))}
               </div>
             </div>
@@ -68,7 +70,10 @@ const FooterSkeleton = () => {
             </div>
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg" />
+                <div
+                  key={i}
+                  className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg"
+                />
               ))}
             </div>
           </div>
@@ -87,7 +92,10 @@ const FooterSkeleton = () => {
             <div className="h-6 bg-gray-200 animate-pulse rounded w-24" />
             <div className="flex flex-wrap justify-start items-center gap-2 mt-3">
               {[...Array(2)].map((_, i) => (
-                <div key={i} className="w-24 h-24 bg-gray-200 animate-pulse rounded-lg" />
+                <div
+                  key={i}
+                  className="w-24 h-24 bg-gray-200 animate-pulse rounded-lg"
+                />
               ))}
             </div>
           </div>
@@ -101,7 +109,10 @@ const FooterSkeleton = () => {
         </div>
         <div className="flex sm:flex-nowrap flex-wrap justify-center items-center xl:w-1/2 w-full">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-4 bg-gray-200 animate-pulse rounded w-20 mx-2" />
+            <div
+              key={i}
+              className="h-4 bg-gray-200 animate-pulse rounded w-20 mx-2"
+            />
           ))}
         </div>
       </div>
@@ -112,16 +123,25 @@ const FooterSkeleton = () => {
 const Footer = () => {
   const dispatch = useDispatch();
   const { settings, loading } = useSelector((state) => state.settings);
-  const { socialNetworks, loading: socialNetworksLoading } = useSelector((state) => state.socialNetworks);
+  const { socialNetworks, loading: socialNetworksLoading } = useSelector(
+    (state) => state.socialNetworks
+  );
   const hasFetchedSocialNetworks = useRef(false);
   const [footerMenu, setFooterMenu] = useState([]);
   const [menuLoading, setMenuLoading] = useState(false);
+
+  console.log(socialNetworks);
 
   useEffect(() => {
     if (!settings || settings.length === 0) {
       dispatch(fetchSettingsData());
     }
-    if (!socialNetworks || socialNetworks.length === 0 && !socialNetworksLoading && !hasFetchedSocialNetworks.current) {
+    if (
+      !socialNetworks ||
+      (socialNetworks.length === 0 &&
+        !socialNetworksLoading &&
+        !hasFetchedSocialNetworks.current)
+    ) {
       hasFetchedSocialNetworks.current = true;
       dispatch(fetchSocialNetworksData());
     }
@@ -134,7 +154,7 @@ const Footer = () => {
         const menuData = await getMenuFooter();
         setFooterMenu(menuData);
       } catch (error) {
-        console.error('Error fetching footer menu:', error);
+        console.error("Error fetching footer menu:", error);
       } finally {
         setMenuLoading(false);
       }
@@ -153,11 +173,14 @@ const Footer = () => {
         <div className="flex flex-wrap">
           <div className="lg:w-1/3 sm:w-1/2 w-full p-3 flex flex-col items-center justify-center">
             <div className="w-full flex sm:justify-start justify-center">
-              {settings?.find((item) => item.propertyKey === "site_home_url") ? (
+              {settings?.find(
+                (item) => item.propertyKey === "site_home_url"
+              ) ? (
                 <Link
                   href={
-                    settings?.find((item) => item.propertyKey === "site_home_url")
-                      ?.value || "/"
+                    settings?.find(
+                      (item) => item.propertyKey === "site_home_url"
+                    )?.value || "/"
                   }
                 >
                   <img
@@ -189,10 +212,7 @@ const Footer = () => {
               <h4 className="font-semibold text-lg">لینک ها</h4>
               <ul className="flex sm:hidden flex-wrap items-start w-full px-2">
                 {footerMenu[0]?.menuItems?.map((menuItem) => (
-                  <li
-                    key={menuItem.id}
-                    className="w-full list-none p-1"
-                  >
+                  <li key={menuItem.id} className="w-full list-none p-1">
                     <Link
                       href={menuItem.url || "#"}
                       className="block w-full bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
@@ -244,9 +264,11 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`tel:${settings?.find((item) => item.propertyKey === "site_tel")
-                        ?.value || "02177615546"
-                        }`}
+                      href={`tel:${
+                        settings?.find(
+                          (item) => item.propertyKey === "site_tel"
+                        )?.value || "02177615546"
+                      }`}
                     >
                       {settings?.find((item) => item.propertyKey === "site_tel")
                         ?.value || "77615546"}
@@ -287,12 +309,15 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`mailto:${settings?.find((item) => item.propertyKey === "site_email")
-                        ?.value || "unreal@outlook.com"
-                        }`}
+                      href={`mailto:${
+                        settings?.find(
+                          (item) => item.propertyKey === "site_email"
+                        )?.value || "unreal@outlook.com"
+                      }`}
                     >
-                      {settings?.find((item) => item.propertyKey === "site_email")
-                        ?.value || "unreal@outlook.com"}
+                      {settings?.find(
+                        (item) => item.propertyKey === "site_email"
+                      )?.value || "unreal@outlook.com"}
                     </a>
                   </span>
                 </div>
@@ -319,21 +344,23 @@ const Footer = () => {
                   target="_blank"
                   className="bg-[#434347] p-2 overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                 >
-                  {
-                    item.title === 'telegram' ?
-                      <FaTelegram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
-                      : item.title === 'instagram' ?
-                        <FaInstagram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
-                        : item.title === 'Linkdin' ?
-                          <FaLinkedin className="text-white group-hover:text-teal-500 duration-300 text-xl" />
-                          : <img
-                            src={mainDomainImg + item.image}
-                            alt={item.title || "social network"}
-                            className="w-6 h-6 object-contain "
-                          />
-                  }
+                  {item.title === "telegram" ? (
+                    <FaTelegram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
+                  ) : item.title === "instagram" ? (
+                    <FaInstagram className="text-white group-hover:text-teal-500 duration-300 text-xl" />
+                  ) : item.title === "Linkdin" ? (
+                    <FaLinkedin className="text-white group-hover:text-teal-500 duration-300 text-xl" />
+                  ) : (
+                    <img
+                      src={mainDomainImg + item.image}
+                      alt={item.title || "social network"}
+                      className="w-6 h-6 object-contain "
+                    />
+                  )}
                 </Link>
               ))}
+              <i className="fab fa-telegram"></i>
+
             </div>
           </div>
 
@@ -362,7 +389,8 @@ const Footer = () => {
       </div>
       <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
         <p className="xl:w-1/2 w-full text-justify py-2">
-          {settings?.find((item) => item.propertyKey === "site_copyright")?.value ||
+          {settings?.find((item) => item.propertyKey === "site_copyright")
+            ?.value ||
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
         </p>
         <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center xl:w-1/2 w-full">

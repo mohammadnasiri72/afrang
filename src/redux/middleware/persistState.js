@@ -54,6 +54,7 @@ export const saveState = (state) => {
         delete stateToSave.legalId;
         delete stateToSave.address;
         delete stateToSave.shipping;
+        delete stateToSave.socialNetworks;
         
         const serializedState = JSON.stringify(stateToSave);
         localStorage.setItem('reduxState', serializedState);
