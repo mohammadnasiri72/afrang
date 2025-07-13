@@ -58,6 +58,21 @@ const HeaderNavbarWrapper = () => {
     };
   }, []);
 
+  // محاسبه مجدد ارتفاع وقتی وضعیت fixed تغییر می‌کند
+  useEffect(() => {
+    const calculateHeight = () => {
+      if (navbarRef.current) {
+        const rect = navbarRef.current.getBoundingClientRect();
+        setNavbarHeight(rect.height);
+      }
+    };
+    
+    // کمی تاخیر برای اطمینان از رندر شدن کامل
+    const timeoutId = setTimeout(calculateHeight, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, [navbarFixed]);
+
   // محاسبه موقعیت navbar ثابت بر اساس وضعیت header
   const getNavbarFixedTop = () => {
     if (!navbarFixed) return '-56px';
@@ -106,7 +121,16 @@ const HeaderNavbarWrapper = () => {
       </div>
 
       {/* navbar اصلی که همیشه در جای خودش هست */}
-      <div ref={navbarRef}>
+      <div 
+        ref={navbarRef} 
+        style={{ 
+          visibility: navbarFixed ? 'hidden' : 'visible', 
+          position: navbarFixed ? 'absolute' : 'static', 
+          top: 0, 
+          left: 0, 
+          width: '100%' 
+        }}
+      >
         <NavBar />
       </div>
     </>
