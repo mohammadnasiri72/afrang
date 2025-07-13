@@ -5,7 +5,7 @@ import { Drawer, Menu } from "antd";
 import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import {
   FaAddressBook,
   FaBuilding,
@@ -21,9 +21,6 @@ import {
   FaComment,
   FaNewspaper,
   FaRecycle,
-  FaChevronLeft,
-  FaFolder,
-  FaFile,
 } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,17 +29,11 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { 
   Popper, 
   Paper, 
-  List, 
-  ListItem, 
-  ListItemText, 
-  ListItemIcon,
-  Typography,
   Box,
-  Divider,
-  Fade,
   Grow
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import SubmenuDropdown from "./SubmenuDropdown";
 
 const dashboardMenuItems = [
   {
@@ -131,13 +122,15 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: '0px',
   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
   border: '1px solid rgba(0, 0, 0, 0.08)',
-  width: '100%',
-  maxWidth: '100%',
+  width: '100vw', // عرض کامل viewport
+  maxWidth: '100vw',
   overflow: 'hidden',
   marginTop: '0px',
   paddingTop: '0px',
   fontFamily: 'inherit',
-  position: 'static',
+  position: 'fixed', // فیکس شده
+  left: '0', // چسبیده به لبه چپ
+  right: '0', // چسبیده به لبه راست
   maxHeight: '70vh',
   overflowY: 'auto',
   direction: 'rtl', // راست‌چین برای فارسی
@@ -156,171 +149,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   },
 }));
 
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-  padding: '8px 16px',
-  transition: 'all 0.2s ease-in-out',
-  fontFamily: 'inherit',
-  cursor: 'pointer',
-  minHeight: '40px',
-  position: 'relative',
-  '&:hover': {
-    backgroundColor: 'rgba(209, 24, 43, 0.08)',
-    transform: 'translateX(4px)', // برای راست‌چین
-    '& svg': {
-      transform: 'translateX(-2px)',
-    },
-    '& + .sub-item-container': {
-      display: 'block',
-      opacity: 1,
-      transform: 'translateY(0)',
-    },
-  },
-}));
 
-// استایل برای دروپ‌داون فرزندان
-const ChildDropdown = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: '100%',
-  right: '0',
-  left: '0',
-  backgroundColor: '#fff',
-  border: '1px solid rgba(0, 0, 0, 0.08)',
-  borderRadius: '4px',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-  zIndex: 1000,
-  minWidth: '200px',
-  maxHeight: '300px',
-  overflowY: 'auto',
-  direction: 'rtl',
-  '&::-webkit-scrollbar': {
-    width: '4px',
-  },
-  '&::-webkit-scrollbar-track': {
-    background: '#f1f1f1',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    background: '#d1182b',
-    borderRadius: '2px',
-  },
-}));
-
-const StyledListItemText = styled(ListItemText)(({ theme }) => ({
-  fontFamily: 'inherit',
-  textAlign: 'right', // راست‌چین کردن متن
-  '& .MuiListItemText-primary': {
-    fontSize: '14px',
-    fontWeight: 500,
-    color: '#333',
-    fontFamily: 'inherit',
-    lineHeight: '1.4',
-  },
-}));
-
-const CategoryTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '16px',
-  fontWeight: 600,
-  color: '#d1182b',
-  padding: '12px 16px 8px 16px',
-  borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
-  marginBottom: '4px',
-  fontFamily: 'inherit',
-  textAlign: 'right', // راست‌چین کردن
-}));
-
-// استایل برای آیتم‌های سطح دوم (فرزندان)
-const SubItemContainer = styled(Box)(({ theme }) => ({
-  padding: '6px 12px 8px 12px',
-  backgroundColor: 'rgba(209, 24, 43, 0.02)',
-  borderTop: '1px solid rgba(209, 24, 43, 0.1)',
-  margin: '2px 0',
-  transition: 'all 0.3s ease-in-out',
-  overflow: 'hidden',
-  display: 'none',
-  opacity: 0,
-  transform: 'translateY(-5px)',
-  maxHeight: 0,
-  '&.sub-item-container': {
-    display: 'block',
-    opacity: 1,
-    transform: 'translateY(0)',
-    maxHeight: '500px',
-  },
-}));
-
-// استایل برای container آیتم‌های سطح اول
-const ParentItemWrapper = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  '&:hover .sub-item-container': {
-    display: 'block',
-    opacity: 1,
-    transform: 'translateY(0)',
-    maxHeight: '500px',
-  },
-  '&:hover .sub-item-container:hover': {
-    display: 'block',
-    opacity: 1,
-    transform: 'translateY(0)',
-    maxHeight: '500px',
-  },
-}));
-
-const SubItemGrid = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)', // سه ستون ثابت
-  gap: '8px',
-  direction: 'rtl',
-  '@media (max-width: 768px)': {
-    gridTemplateColumns: 'repeat(2, 1fr)', // دو ستون در موبایل
-  },
-}));
-
-const SubItem = styled(ListItem)(({ theme }) => ({
-  padding: '4px 6px',
-  minHeight: '28px',
-  borderRadius: '4px',
-  transition: 'all 0.2s ease-in-out',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: 'rgba(209, 24, 43, 0.1)',
-    transform: 'translateX(2px)',
-  },
-}));
-
-const SubItemText = styled(ListItemText)(({ theme }) => ({
-  fontFamily: 'inherit',
-  textAlign: 'right',
-  '& .MuiListItemText-primary': {
-    fontSize: '12px',
-    fontWeight: 400,
-    color: '#666',
-    fontFamily: 'inherit',
-    lineHeight: '1.3',
-  },
-}));
-
-// استایل برای آیکون فرزندان
-const ChildrenIcon = styled(FaChevronLeft)(({ theme }) => ({
-  fontSize: '12px',
-  color: '#d1182b',
-  marginLeft: '8px',
-  transition: 'transform 0.2s ease-in-out',
-}));
-
-// استایل برای آیکون آیتم‌های سطح دوم
-const SubItemIcon = styled(FaFile)(({ theme }) => ({
-  fontSize: '10px',
-  color: '#999',
-  marginLeft: '6px',
-  flexShrink: 0,
-}));
-
-// استایل برای آیکون آیتم‌های سطح اول که فرزند دارند
-const ParentItemIcon = styled(FaFolder)(({ theme }) => ({
-  fontSize: '12px',
-  color: '#d1182b',
-  marginLeft: '8px',
-  transition: 'transform 0.2s ease-in-out',
-}));
 
 function ResponsiveMenu() {
   const dispatch = useDispatch();
@@ -331,6 +160,7 @@ function ResponsiveMenu() {
   const [user, setUser] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
+  const [expandedChildren, setExpandedChildren] = useState(new Set());
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
@@ -344,7 +174,7 @@ function ResponsiveMenu() {
 
   // غیرفعال کردن اسکرول صفحه وقتی زیرمنو باز است
   useEffect(() => {
-    if (open) {
+    if (open && activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
       // ذخیره overflow اصلی
       const originalOverflow = document.body.style.overflow;
       // غیرفعال کردن اسکرول
@@ -380,7 +210,7 @@ function ResponsiveMenu() {
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [open]);
+  }, [open, activeMenu]);
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -516,6 +346,16 @@ function ResponsiveMenu() {
 
   // تابع‌های مدیریت dropdown
   const handleMenuOpen = (event, menuItem) => {
+    // اگر آیتم فرزند ندارد، هیچ کاری نکن
+    if (!menuItem.Children || menuItem.Children.length === 0) {
+      return;
+    }
+    
+    // جلوگیری از باز شدن مجدد اگر همان منو باز است
+    if (activeMenu && activeMenu.id === menuItem.id && open) {
+      return;
+    }
+    
     // پیدا کردن موقعیت دقیق navbar
     const navbar = navbarRef.current;
     if (navbar) {
@@ -532,11 +372,9 @@ function ResponsiveMenu() {
           // اگر navbar فیکس شده، dropdown باید دقیقاً زیر navbar فیکس شده باشه
           const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
           topPosition = headerHeight + navbarFixed.offsetHeight;
-          console.log('Navbar fixed - Header height:', headerHeight, 'Navbar height:', navbarFixed.offsetHeight, 'Top position:', topPosition);
         } else {
           // اگر navbar فیکس نشده، dropdown باید زیر navbar اصلی باشه
           topPosition = navbarRect.bottom;
-          console.log('Navbar not fixed - Navbar bottom:', navbarRect.bottom, 'Top position:', topPosition);
         }
         
         const anchorElement = {
@@ -552,7 +390,6 @@ function ResponsiveMenu() {
           })
         };
         
-        console.log('Created anchor element with top position:', topPosition);
         return anchorElement;
       };
       
@@ -573,8 +410,11 @@ function ResponsiveMenu() {
     dropdownTimeoutRef.current = setTimeout(() => {
       setAnchorEl(null);
       setActiveMenu(null);
-      // فعال کردن مجدد اسکرول صفحه
-      document.body.style.overflow = '';
+      setExpandedChildren(new Set()); // Reset expanded children
+      // فعال کردن مجدد اسکرول صفحه فقط اگر dropdown باز بود
+      if (activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
+        document.body.style.overflow = '';
+      }
     }, 100);
   };
 
@@ -590,54 +430,71 @@ function ResponsiveMenu() {
   };
 
   // تابع برای toggle کردن دروپ‌داون فرزندان
-  const handleChildToggle = (childId) => {
-    // This function is no longer needed as expandedChildren state is removed.
-    // The dropdown will now be shown/hidden based on hover.
+  const handleChildToggle = (childId, event) => {
+    // جلوگیری از bubble شدن event
+    event.preventDefault();
+    event.stopPropagation();
+    
+    setExpandedChildren(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(childId)) {
+        newSet.delete(childId);
+      } else {
+        newSet.add(childId);
+      }
+      return newSet;
+    });
   };
 
   // Update dropdown position on scroll and resize
   useEffect(() => {
+    let timeoutId;
+    
     const handleScrollAndResize = () => {
       if (open && anchorEl && activeMenu) {
-        // Recalculate position when scrolling or resizing
-        const navbar = navbarRef.current;
-        if (navbar) {
-          const navbarRect = navbar.getBoundingClientRect();
-          const headerFixed = document.querySelector('[data-header-fixed="true"]');
-          const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-          
-          let topPosition;
-          if (navbarFixed) {
-            const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
-            topPosition = headerHeight + navbarFixed.offsetHeight;
-          } else {
-            topPosition = navbarRect.bottom;
+        // Debounce the position update to prevent excessive re-renders
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          const navbar = navbarRef.current;
+          if (navbar) {
+            const navbarRect = navbar.getBoundingClientRect();
+            const headerFixed = document.querySelector('[data-header-fixed="true"]');
+            const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
+            
+            let topPosition;
+            if (navbarFixed) {
+              const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
+              topPosition = headerHeight + navbarFixed.offsetHeight;
+            } else {
+              topPosition = navbarRect.bottom;
+            }
+            
+            // Update the anchor element position
+            const updatedAnchorEl = {
+              getBoundingClientRect: () => ({
+                top: topPosition,
+                bottom: topPosition,
+                left: 0,
+                right: window.innerWidth,
+                width: window.innerWidth,
+                height: 0,
+                x: 0,
+                y: topPosition,
+              })
+            };
+            setAnchorEl(updatedAnchorEl);
           }
-          
-          // Update the anchor element position
-          const updatedAnchorEl = {
-            getBoundingClientRect: () => ({
-              top: topPosition,
-              bottom: topPosition,
-              left: 0,
-              right: window.innerWidth,
-              width: window.innerWidth,
-              height: 0,
-              x: 0,
-              y: topPosition,
-            })
-          };
-          setAnchorEl(updatedAnchorEl);
-        }
+        }, 16); // ~60fps
       }
     };
 
-    window.addEventListener('scroll', handleScrollAndResize);
-    window.addEventListener('resize', handleScrollAndResize);
+    window.addEventListener('scroll', handleScrollAndResize, { passive: true });
+    window.addEventListener('resize', handleScrollAndResize, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScrollAndResize);
       window.removeEventListener('resize', handleScrollAndResize);
+      clearTimeout(timeoutId);
       // Cleanup timeout on unmount
       if (dropdownTimeoutRef.current) {
         clearTimeout(dropdownTimeoutRef.current);
@@ -655,6 +512,7 @@ function ResponsiveMenu() {
 
   // Desktop Menu Component
   const DesktopMenu = () => {
+
     return (
       <div
         ref={navbarRef}
@@ -669,8 +527,8 @@ function ResponsiveMenu() {
                   className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
-                  onMouseEnter={(e) => handleMenuOpen(e, item)}
-                  onMouseLeave={handleMenuClose}
+                  onMouseEnter={(e) => item.Children && item.Children.length > 0 ? handleMenuOpen(e, item) : null}
+                  onMouseLeave={item.Children && item.Children.length > 0 ? handleMenuClose : null}
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <div className="py-2 cursor-pointer font-semibold">
@@ -695,7 +553,9 @@ function ResponsiveMenu() {
           anchorEl={anchorEl}
           placement="bottom-start"
           transition
-          style={{ zIndex: 1100, width: '100%', position: 'fixed', left: 0 }}
+          keepMounted
+          disablePortal
+          style={{ zIndex: 1100, width: '100vw', position: 'fixed', left: 0, right: 0 }}
           onMouseEnter={handleDropdownMouseEnter}
           onMouseLeave={handleDropdownMouseLeave}
           modifiers={[
@@ -726,106 +586,23 @@ function ResponsiveMenu() {
           ]}
         >
           {({ TransitionProps }) => (
-            <Grow {...TransitionProps} timeout={200}>
+            <Grow {...TransitionProps} timeout={0}>
               <StyledPaper
                 sx={{
-                  width: '100%',
-                  maxWidth: '100%',
+                  width: '100vw',
+                  maxWidth: '100vw',
                   mt: 0,
                   pt: 0,
+                  left: 0,
+                  right: 0,
                 }}
               >
-                {activeMenu && activeMenu.Children && activeMenu.Children.length > 0 && (
-                  <>
-                    <CategoryTitle>
-                      {activeMenu.title}
-                    </CategoryTitle>
-                    <Box sx={{ 
-                      py: 0, 
-                      direction: 'rtl',
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(2, 1fr)', // دو ستون برای آیتم‌های اصلی
-                      gap: '0',
-                      alignItems: 'stretch', // همه ستون‌ها ارتفاع یکسان داشته باشند
-                      '@media (max-width: 768px)': {
-                        gridTemplateColumns: '1fr', // یک ستون در موبایل
-                      },
-                    }}>
-                      {activeMenu.Children.map((child, index) => (
-                        <Box key={child.id} sx={{ 
-                          borderBottom: '1px solid rgba(0, 0, 0, 0.04)',
-                          height: '100%', // ارتفاع کامل
-                          display: 'flex',
-                          flexDirection: 'column',
-                          '&:nth-child(even)': {
-                            borderRight: '1px solid rgba(0, 0, 0, 0.04)',
-                          },
-                        }}>
-                          {child.Children && child.Children.length > 0 ? (
-                            <div key={child.id}>
-                              <StyledListItem
-                                onClick={() => handleNavigation(child.url || child.pageUrl || "#")}
-                                sx={{ 
-                                  borderBottom: 'none',
-                                  '&:hover': {
-                                    backgroundColor: 'rgba(209, 24, 43, 0.08)',
-                                    transform: 'translateX(4px)',
-                                    '& svg': {
-                                      transform: 'translateX(-2px)',
-                                    },
-                                  },
-                                }}
-                              >
-                                <StyledListItemText
-                                  primary={child.title}
-                                  primaryTypographyProps={{
-                                    sx: { 
-                                      fontWeight: 600, 
-                                      color: '#d1182b',
-                                      fontFamily: 'inherit',
-                                      fontSize: '14px',
-                                    }
-                                  }}
-                                />
-                                <ChildrenIcon />
-                              </StyledListItem>
-                              <SubItemContainer className="sub-item-container">
-                                <SubItemGrid>
-                                  {child.Children.map((subChild) => (
-                                    <SubItem
-                                      key={subChild.id}
-                                      onClick={() => handleNavigation(subChild.url || subChild.pageUrl || "#")}
-                                    >
-                                      <SubItemIcon />
-                                      <SubItemText
-                                        primary={subChild.title}
-                                      />
-                                    </SubItem>
-                                  ))}
-                                </SubItemGrid>
-                              </SubItemContainer>
-                            </div>
-                          ) : (
-                            <StyledListItem
-                              onClick={() => handleNavigation(child.url || child.pageUrl || "#")}
-                              sx={{ 
-                                borderBottom: 'none',
-                                '&:hover': {
-                                  backgroundColor: 'rgba(209, 24, 43, 0.08)',
-                                  transform: 'translateX(4px)',
-                                },
-                              }}
-                            >
-                              <StyledListItemText 
-                                primary={child.title}
-                              />
-                            </StyledListItem>
-                          )}
-                        </Box>
-                      ))}
-                    </Box>
-                  </>
-                )}
+                <SubmenuDropdown
+                  activeMenu={activeMenu}
+                  expandedChildren={expandedChildren}
+                  onChildToggle={handleChildToggle}
+                  onNavigation={handleNavigation}
+                />
               </StyledPaper>
             </Grow>
           )}

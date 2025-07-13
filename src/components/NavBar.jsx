@@ -11,7 +11,7 @@ const NavBar = () => {
 
   return (
     <div className="bg-[#d1182b] px-2 flex items-center justify-between text-white">
-      <div className="px-3 ml-2 lg:hidden bg-white h-full flex items-center justify-center">
+      {/* <div className="px-3 ml-2 lg:hidden bg-white h-full flex items-center justify-center">
         {settings?.find((item) => item.propertyKey === "site_home_url") ? (
           <Link
             href={
@@ -33,7 +33,7 @@ const NavBar = () => {
         ) : (
           <img className="lg:hidden w-12" src="/images/logo.png" alt="" />
         )}
-      </div>
+      </div> */}
 
       <SearchNavbar />
 
