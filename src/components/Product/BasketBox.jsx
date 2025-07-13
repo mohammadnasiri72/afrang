@@ -8,11 +8,11 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaTruck, FaTruckFast, FaRecycle } from "react-icons/fa6";
 import CompareButton from "../common/CompareButton";
-import { addToCart } from '../../services/cart/cartService';
-import { fetchCurrentCart } from '@/redux/slices/cartSlice';
-import SuccessModal from './SuccessModal';
+import { addToCart } from "../../services/cart/cartService";
+import { fetchCurrentCart } from "@/redux/slices/cartSlice";
+import SuccessModal from "./SuccessModal";
 import Cookies from "js-cookie";
-import { Spin } from 'antd';
+import { Spin } from "antd";
 import { FaCartShopping } from "react-icons/fa6";
 import LikeProduct from "./LikeProduct";
 
@@ -22,7 +22,9 @@ function BasketBox({ product }) {
   const isInCart = items?.some(
     (item) => item.productId === product?.product?.productId
   );
-  const cartItem = currentItems?.find(item => item.productId === product?.product?.productId);
+  const cartItem = currentItems?.find(
+    (item) => item.productId === product?.product?.productId
+  );
 
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
@@ -46,7 +48,10 @@ function BasketBox({ product }) {
         displayName: "",
         roles: [],
       };
-      Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+      Cookies.set("user", JSON.stringify(initialData), {
+        expires: 7,
+        path: "/",
+      });
     }
     const userId = JSON.parse(Cookies.get("user"))?.userId;
     try {
@@ -55,7 +60,7 @@ function BasketBox({ product }) {
       dispatch(fetchCurrentCart());
       setShowSuccessModal(true);
     } catch (error) {
-      console.error('Failed to add to cart:', error);
+      console.error("Failed to add to cart:", error);
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +79,7 @@ function BasketBox({ product }) {
           />
         )}
 
-        <Divider />
+        <Divider style={{ padding: 0, margin: 0 }} />
         {/* <div className="flex items-center gap-3 mt-3">
           <img src="/images/icons/benchmark.png" alt="" />
           <span className="text-sm text-[#333]"> مقایسه محصول </span>
@@ -127,10 +132,8 @@ function BasketBox({ product }) {
           </div>
         )}
         <div className="sm:block hidden">
-
           <CartActions product={product} selectedWarranty={selectedWarranty} />
         </div>
-         
       </div>
     </div>
   );

@@ -16,6 +16,13 @@ function ProductTabs({ product }) {
   const [tabProDetails, setTabProDetails] = useState(product.product.typeId === 3 ? 1 : 2);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [topPosition, setTopPosition] = useState(0);
+  const [isSticky, setIsSticky] = useState(false);
+  const elementRef = useRef(null);
+
+  console.log(topPosition);
+  
+
 
   // refs for each section
   const bundleRef = useRef(null);
@@ -42,7 +49,7 @@ function ProductTabs({ product }) {
     fetchProducts();
   }, [product.product?.relatedId, product.product?.similarId]);
 
-  // Scroll spy logic (now for internal scroll box)
+  // Scroll spy logic for main page scroll
   useEffect(() => {
     const sectionRefs = [
       product.product.typeId === 3 ? bundleRef : null,
@@ -56,18 +63,38 @@ function ProductTabs({ product }) {
       ...(product.product.typeId === 3 ? [1] : []),
       2, 3, 4, 5, 6
     ];
+    
     let ticking = false;
     function onScroll() {
-      if (!ticking && scrollBoxRef.current) {
+      if (!ticking) {
         window.requestAnimationFrame(() => {
           let found = false;
-          const box = scrollBoxRef.current;
+          const scrollY = window.scrollY;
+          const windowHeight = window.innerHeight;
+          
+          // ابتدا چک کنیم که آیا در محدوده باکس تب‌ها هستیم یا نه
+          if (elementRef.current) {
+            const element = elementRef.current;
+            const absoluteTop = element.offsetTop;
+            const elementHeight = element.offsetHeight;
+            const elementBottom = absoluteTop + elementHeight;
+            
+            // اگر از محدوده باکس تب‌ها خارج شده‌ایم، تب را تغییر ندهیم
+            if (scrollY >= elementBottom - 200) {
+              ticking = false;
+              return;
+            }
+          }
+          
           for (let i = sectionRefs.length - 1; i >= 0; i--) {
             const ref = sectionRefs[i];
-            if (ref.current && box) {
-              const boxRect = box.getBoundingClientRect();
-              const refRect = ref.current.getBoundingClientRect();
-              if (refRect.top - boxRect.top <= 120) { // 120px offset for sticky header
+            if (ref.current) {
+              const rect = ref.current.getBoundingClientRect();
+              const elementTop = rect.top + scrollY;
+              const elementBottom = elementTop + rect.height;
+              
+              // اگر بخش در viewport باشد
+              if (elementTop <= scrollY + 200 && elementBottom >= scrollY + 200) {
                 setTabProDetails(tabValues[i]);
                 found = true;
                 break;
@@ -80,12 +107,10 @@ function ProductTabs({ product }) {
         ticking = true;
       }
     }
-    const box = scrollBoxRef.current;
-    if (box) {
-      box.addEventListener('scroll', onScroll, { passive: true });
-    }
+    
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      if (box) box.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', onScroll);
     };
   }, [product.product.typeId]);
 
@@ -108,7 +133,7 @@ function ProductTabs({ product }) {
     { label: "پرسش و پاسخ", value: 6 },
   ];
 
-  // Scroll to section on tab click (now scrolls inside scrollBoxRef)
+  // Scroll to section on tab click (scrolls to main page)
   const handleTabChange = (val) => {
     setTabProDetails(val);
     let ref = null;
@@ -118,22 +143,69 @@ function ProductTabs({ product }) {
     if (val === 4) ref = commentsRef;
     if (val === 5) ref = accessoriesRef;
     if (val === 6) ref = qaRef;
-    if (ref && ref.current && scrollBoxRef.current) {
-      const box = scrollBoxRef.current;
-      const boxRect = box.getBoundingClientRect();
-      const refRect = ref.current.getBoundingClientRect();
-      const offset = refRect.top - boxRect.top + box.scrollTop - 100; // 100px offset for sticky
-      box.scrollTo({ top: offset, behavior: 'smooth' });
+    if (ref && ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      const scrollY = window.scrollY;
+      const elementTop = rect.top + scrollY;
+      const offset = elementTop - 200; // 200px offset for sticky header
+      window.scrollTo({ top: offset, behavior: 'smooth' });
     }
   };
 
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (elementRef.current) {
+        // محاسبه موقعیت مطلق نسبت به بالای صفحه
+        const element = elementRef.current;
+        const absoluteTop = element.offsetTop;
+        const scrollY = window.scrollY;
+        const elementHeight = element.offsetHeight;
+        const elementBottom = absoluteTop + elementHeight;
+        
+        setTopPosition(absoluteTop);
+        
+        // اگر اسکرول به باکس تب‌ها رسید و هنوز از آن عبور نکرده، آن را فیکس کن
+        if (scrollY >= absoluteTop - 100 && scrollY < elementBottom - 200) {
+          setIsSticky(true);
+        } else {
+          setIsSticky(false);
+        }
+        
+        console.log('Element offsetTop:', absoluteTop, 'Element bottom:', elementBottom, 'Window scrollY:', scrollY, 'Is sticky:', scrollY >= absoluteTop - 100 && scrollY < elementBottom - 200);
+      }
+    };
+
+    // اضافه کردن event listener برای scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // محاسبه مقدار اولیه
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  console.log(isSticky);
+  
+
+
   return (
     <>
-      <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative  overflow-auto">
+      <div ref={elementRef} className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative">
         <div
           ref={segmentedBoxRef}
-          className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5 sticky top-0 bg-white z-50"
-          style={{ position: 'sticky', top: 0, zIndex: 5000, background: 'white' }}
+          className={`w-full SegmentedProduct overflow-hidden mx-auto flex justify-center p-5 bg-white z-50 transition-all duration-300 ${
+            isSticky ? 'fixed top-0 left-0 right-0 shadow-lg' : 'relative'
+          }`}
+          style={{ 
+            zIndex: isSticky ? 5000 : 50, 
+            background: 'white',
+            position: isSticky ? 'fixed' : 'relative',
+            top: isSticky ? 100 : 'auto'
+          }}
         >
           <Segmented
             ref={segmentedRef}
@@ -149,10 +221,7 @@ function ProductTabs({ product }) {
             options={options}
           />
         </div>
-        <div
-          ref={scrollBoxRef}
-          className="w-full h-96 overflow-auto"
-        >
+        <div className="w-full">
           {product.product.typeId === 3 && (
             <div ref={bundleRef} className="tab-section-scroll-anchor"><BundleProducts product={product} /></div>
           )}
