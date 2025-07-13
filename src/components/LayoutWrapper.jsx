@@ -1,7 +1,6 @@
 // این فایل نیازی به "use client" ندارد چون یک Server Component است
 import SubHeader from "./SubHeader";
-import Header from "./Header";
-import NavBar from "./NavBar";
+import HeaderNavbarWrapper from "./HeaderNavbarWrapper";
 import SocialNetworks from "./SocialNetworks";
 import BoxImgBranding from "./home/BoxImgBranding";
 import SupportBox from "./home/SupportBox";
@@ -19,8 +18,7 @@ export default function LayoutWrapper({ children, showHeaderFooter = true, showP
         <div className={showCart ? '' : 'pb-28 sm:pb-0'}>
 
           <SubHeader />
-          <Header />
-          <NavBar />
+          <HeaderNavbarWrapper />
           <SocialNetworks />
           {children}
           <BoxImgBranding />

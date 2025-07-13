@@ -1,3 +1,5 @@
+"use client";
+
 import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { setUser } from "@/redux/slices/userSlice";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -90,7 +92,7 @@ export default function Header() {
   }
 
   return (
-    <div className="flex items-center justify-between lg:px-16 px-4 py-1 bg-white ">
+    <div className="flex items-center justify-between lg:px-16 px-4 py-1 bg-white">
       <div className="flex items-center lg:w-1/2 w-auto">
         <div className="flex items-center lg:w-2/5 w-auto">
           {settings?.find((item) => item.propertyKey === "site_home_url") ? (
@@ -129,14 +131,6 @@ export default function Header() {
             </div>
           </Link>
         </div>
-        {/* <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">
-          <IoSearchSharp className="text-2xl cursor-pointer" />
-          <input
-            className=" bg-transparent border-none outline-none p-2 w-full"
-            type="text"
-            placeholder="جستجو..."
-          />
-        </div> */}
         <SearchHeader />
       </div>
       <div className="flex items-center justify-end lg:w-1/2 w-auto gap-7">

@@ -26,6 +26,20 @@ import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { getImageUrl } from "@/utils/mainDomain";
+import { 
+  Popper, 
+  Paper, 
+  List, 
+  ListItem, 
+  ListItemText, 
+  ListItemIcon,
+  Typography,
+  Box,
+  Divider,
+  Fade,
+  Grow
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const dashboardMenuItems = [
   {
@@ -108,19 +122,61 @@ const dashboardMenuItems = [
   },
 ];
 
+// Styled Components
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#fff',
+  borderRadius: '0px',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
+  width: '100%',
+  maxWidth: '100%',
+  overflow: 'hidden',
+  marginTop: '0px',
+  paddingTop: '0px',
+  fontFamily: 'inherit',
+}));
+
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  padding: '12px 16px',
+  transition: 'all 0.2s ease-in-out',
+  fontFamily: 'inherit',
+  '&:hover': {
+    backgroundColor: 'rgba(209, 24, 43, 0.08)',
+    transform: 'translateX(-4px)',
+  },
+}));
+
+const StyledListItemText = styled(ListItemText)(({ theme }) => ({
+  fontFamily: 'inherit',
+  '& .MuiListItemText-primary': {
+    fontSize: '14px',
+    fontWeight: 500,
+    color: '#333',
+    fontFamily: 'inherit',
+  },
+}));
+
+const CategoryTitle = styled(Typography)(({ theme }) => ({
+  fontSize: '16px',
+  fontWeight: 600,
+  color: '#d1182b',
+  padding: '16px 16px 8px 16px',
+  borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+  marginBottom: '8px',
+  fontFamily: 'inherit',
+}));
+
 function ResponsiveMenu() {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const { items, loading, openMenuRes } = useSelector((state) => state.menuRes);
-  const [isSticky, setIsSticky] = useState(false);
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0 });
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
-  const timeoutRef = useRef(null);
-  const isCalculatingRef = useRef(false);
 
   const { settings } = useSelector((state) => state.settings);
 
@@ -154,7 +210,6 @@ function ResponsiveMenu() {
           alt=""
         />
       </Link>
-      {/* <img className="w-11" src="/images/logo.png" alt="logo" /> */}
     </div>
   );
 
@@ -162,7 +217,9 @@ function ResponsiveMenu() {
   const handleNavigation = (url) => {
     // بستن دراور
     dispatch(setOpenMenuRes(false));
-
+    // بستن dropdown
+    setAnchorEl(null);
+    setActiveMenu(null);
     // هدایت به URL مورد نظر
     router.push(url);
   };
@@ -255,29 +312,61 @@ function ResponsiveMenu() {
     });
   };
 
-  const handleMouseEnter = useCallback((e) => {
-    if (isCalculatingRef.current) return;
-    isCalculatingRef.current = true;
-
+  // تابع‌های مدیریت dropdown
+  const handleMenuOpen = (event, menuItem) => {
+    // پیدا کردن موقعیت دقیق navbar
     const navbar = navbarRef.current;
-    if (!navbar) return;
-
-    const navbarRect = navbar.getBoundingClientRect();
-    const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
-    setDropdownPosition({ top: topPosition });
-  }, []);
-
-  const handleMouseLeave = useCallback((e) => {
-    isCalculatingRef.current = false;
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+    if (navbar) {
+      const navbarRect = navbar.getBoundingClientRect();
+      const headerFixed = document.querySelector('[data-header-fixed="true"]');
+      const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
+      
+      // تنظیم موقعیت dropdown
+      if (navbarFixed) {
+        // اگر navbar فیکس شده، dropdown باید دقیقاً زیر navbar فیکس شده باشه
+        const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
+        const dropdownTop = headerHeight + navbarFixed.offsetHeight;
+        
+        // تنظیم موقعیت anchorEl
+        const rect = event.currentTarget.getBoundingClientRect();
+        const newAnchorEl = {
+          getBoundingClientRect: () => ({
+            ...rect,
+            top: dropdownTop,
+            bottom: dropdownTop,
+            left: 0,
+            right: window.innerWidth,
+            width: window.innerWidth,
+          })
+        };
+        setAnchorEl(newAnchorEl);
+      } else {
+        // اگر navbar فیکس نشده، dropdown باید زیر navbar اصلی باشه
+        const rect = event.currentTarget.getBoundingClientRect();
+        const newAnchorEl = {
+          getBoundingClientRect: () => ({
+            ...rect,
+            top: navbarRect.bottom,
+            bottom: navbarRect.bottom,
+            left: 0,
+            right: window.innerWidth,
+            width: window.innerWidth,
+          })
+        };
+        setAnchorEl(newAnchorEl);
       }
-    };
-  }, []);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+    setActiveMenu(menuItem);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setActiveMenu(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   if (loading) {
     return (
@@ -292,13 +381,9 @@ function ResponsiveMenu() {
     return (
       <div
         ref={navbarRef}
-        className={`main-navbar  duration-1000 ease-in-out w-full flex text-white ${
-          isSticky
-            ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
-            : "relative"
-        }`}
+        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative"
       >
-        <div className="w-full ">
+        <div className="w-full">
           <div className="flex justify-start w-full overflow-x-auto lg:overflow-visible">
             <div className="flex items-center" ref={menuRef}>
               {items.map((item, i) => (
@@ -307,11 +392,11 @@ function ResponsiveMenu() {
                   className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+                  onMouseEnter={(e) => handleMenuOpen(e, item)}
+                  onMouseLeave={handleMenuClose}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <div className=" py-2 cursor-pointer font-semibold">
+                    <div className="py-2 cursor-pointer font-semibold">
                       {item.title}
                     </div>
                   ) : (
@@ -321,98 +406,137 @@ function ResponsiveMenu() {
                       </div>
                     </Link>
                   )}
-                  {item.Children && item.Children.length > 0 && (
-                    <div
-                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[999]"
-                      style={{
-                        position: "fixed",
-                        top: `${dropdownPosition.top}px`,
-                        left: 0,
-                        right: 0,
-                        width: "100%",
-                        transform: "translateY(0)",
-                        transition: "all 0.3s ease-in-out",
-                        maxHeight: "80vh",
-                        overflowY: "auto",
-                        overflowX: "hidden",
-                      }}
-                    >
-                      <div className="container mx-auto">
-                        <div className="flex flex-wrap text-black">
-                          {item.Children.map((child) => (
-                            <div key={child.id} className="w-1/2">
-                              <div className="p-3">
-                                {child.Children && child.Children.length > 0 ? (
-                                  <Link
-                                    href={child.url || child.pageUrl || "#"}
-                                  >
-                                    <div className=" py-2 rounded-lg mb-3">
-                                      <h3 className=" font-bold text-[#130f26]">
-                                        {child.title}
-                                      </h3>
-                                    </div>
-                                  </Link>
-                                ) : (
-                                  <Link
-                                    href={child.url || child.pageUrl || "#"}
-                                  >
-                                    <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
-                                      <img
-                                        src="/images/icons/Arrow-Left.png"
-                                        alt=""
-                                        className="w-4"
-                                      />
-                                      <span className=" text-sm font-semibold">
-                                        {child.title}
-                                      </span>
-                                    </div>
-                                  </Link>
-                                )}
-                                {child.Children &&
-                                  child.Children.length > 0 && (
-                                    <div className="grid grid-cols-3 gap-2 mt-2">
-                                      {child.Children.map((subChild) => (
-                                        <Link
-                                          key={subChild.id}
-                                          href={
-                                            subChild.url ||
-                                            subChild.pageUrl ||
-                                            "#"
-                                          }
-                                        >
-                                          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
-                                            <img
-                                              src="/images/icons/Arrow-Left.png"
-                                              alt=""
-                                              className="w-4"
-                                            />
-                                            <span className=" text-sm font-semibold">
-                                              {subChild.title}
-                                            </span>
-                                          </div>
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex justify-end mt-4">
-                          <img
-                            src="/images/gallery/best-video-cameras.png"
-                            alt=""
-                            className="h-24 object-contain"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Material-UI Dropdown */}
+        <Popper
+          open={open}
+          anchorEl={anchorEl}
+          placement="bottom-start"
+          transition
+          style={{ zIndex: 9999, width: '100%' }}
+          modifiers={[
+            {
+              name: 'offset',
+              options: {
+                offset: [0, 0],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                boundary: 'viewport',
+                padding: 0,
+              },
+            },
+            {
+              name: 'flip',
+              options: {
+                fallbackPlacements: ['bottom-end', 'top-start', 'top-end'],
+              },
+            },
+          ]}
+        >
+          {({ TransitionProps }) => (
+            <Grow {...TransitionProps} timeout={200}>
+              <StyledPaper
+                sx={{
+                  width: '100%',
+                  maxWidth: '100%',
+                  mt: 0,
+                  pt: 0,
+                }}
+              >
+                {activeMenu && activeMenu.Children && activeMenu.Children.length > 0 && (
+                  <>
+                    <CategoryTitle>
+                      {activeMenu.title}
+                    </CategoryTitle>
+                    <List sx={{ py: 0 }}>
+                      {activeMenu.Children.map((child, index) => (
+                        <div key={child.id}>
+                          {child.Children && child.Children.length > 0 ? (
+                            <>
+                              <StyledListItem
+                                button
+                                onClick={() => handleNavigation(child.url || child.pageUrl || "#")}
+                              >
+                                <StyledListItemText
+                                  primary={child.title}
+                                  primaryTypographyProps={{
+                                    sx: { 
+                                      fontWeight: 600, 
+                                      color: '#d1182b',
+                                      fontFamily: 'inherit',
+                                      fontSize: '14px',
+                                    }
+                                  }}
+                                />
+                              </StyledListItem>
+                              <Box sx={{ px: 2, pb: 1 }}>
+                                <div className="grid grid-cols-3 gap-1">
+                                  {child.Children.map((subChild) => (
+                                    <StyledListItem
+                                      key={subChild.id}
+                                      button
+                                      onClick={() => handleNavigation(subChild.url || subChild.pageUrl || "#")}
+                                      sx={{ 
+                                        py: 1, 
+                                        px: 1,
+                                        minHeight: 'auto',
+                                        '&:hover': {
+                                          backgroundColor: 'rgba(209, 24, 43, 0.08)',
+                                        }
+                                      }}
+                                    >
+                                      <StyledListItemText
+                                        primary={subChild.title}
+                                        primaryTypographyProps={{
+                                          sx: { 
+                                            fontSize: '12px', 
+                                            fontWeight: 500,
+                                            fontFamily: 'inherit',
+                                          }
+                                        }}
+                                      />
+                                    </StyledListItem>
+                                  ))}
+                                </div>
+                              </Box>
+                            </>
+                          ) : (
+                            <StyledListItem
+                              button
+                              onClick={() => handleNavigation(child.url || child.pageUrl || "#")}
+                            >
+                              <StyledListItemText 
+                                primary={child.title}
+                                primaryTypographyProps={{
+                                  sx: {
+                                    fontFamily: 'inherit',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                  }
+                                }}
+                              />
+                            </StyledListItem>
+                          )}
+                          {index < activeMenu.Children.length - 1 && (
+                            <Divider sx={{ mx: 2 }} />
+                          )}
+                        </div>
+                      ))}
+                    </List>
+                  </>
+                )}
+              </StyledPaper>
+            </Grow>
+          )}
+        </Popper>
       </div>
     );
   };
