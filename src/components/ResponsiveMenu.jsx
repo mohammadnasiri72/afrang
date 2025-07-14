@@ -527,6 +527,7 @@ function ResponsiveMenu() {
                   className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
+                  style={{ fontSize: '15px' , whiteSpace:'nowrap'}}
                   onMouseEnter={(e) => item.Children && item.Children.length > 0 ? handleMenuOpen(e, item) : null}
                   onMouseLeave={item.Children && item.Children.length > 0 ? handleMenuClose : null}
                 >

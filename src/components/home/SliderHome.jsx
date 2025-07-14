@@ -94,7 +94,7 @@ const Toast = Swal.mixin({
 
   return (
     <div
-      className={`slider-container h-64 ${isDragging ? "dragging" : ""}`}
+      className={`slider-container h-64 overflow-hidden ${isDragging ? "dragging" : ""}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >

@@ -60,7 +60,7 @@ export default function ProductMain({ products }) {
                 {/* تصویر */}
                 <Link
                   href={product.url}
-                  className="w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc]"
+                  className="w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc] overflow-hidden"
                 >
                   <img
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
@@ -122,11 +122,11 @@ export default function ProductMain({ products }) {
                   {/* دکمه افزودن به سبد یا وضعیت */}
                   <div className="mt-2 ">
                     {product.canAddCart ? (
-                      <div className="bg-[#d1182b] w-full flex justify-center items-center text-white rounded-lg cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
+                      <div className="bg-[#d1182b] w-full flex justify-center items-center text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
                         <AddToCartButtonCard productId={product.productId} />
                       </div>
                     ) : (
-                      <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 rounded-lg font-bold">
+                      <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%] cursor-not-allowed">
                         <SlBasket className="text-xl text-[#333]" />
                         <span className="px-1 text-[#666]">
                           {product.statusDesc}

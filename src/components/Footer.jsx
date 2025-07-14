@@ -382,6 +382,17 @@ const Footer = () => {
             </div>
           </div>
         </div>
+      <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center w-full">
+          {footerMenu[0]?.menuItems?.map((menuItem) => (
+            <Link
+              key={menuItem.id}
+              href={menuItem.url || "#"}
+              className="hover:bg-white whitespace-nowrap hover:text-[#d1182b] px-2 py-2 cursor-pointer duration-300"
+            >
+              {menuItem.title}
+            </Link>
+          ))}
+        </div>
       </div>
       <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
         <p className="xl:w-1/2 w-full text-justify py-2">
@@ -389,17 +400,7 @@ const Footer = () => {
             ?.value ||
             "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
         </p>
-        <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center xl:w-1/2 w-full">
-          {footerMenu[0]?.menuItems?.map((menuItem) => (
-            <Link
-              key={menuItem.id}
-              href={menuItem.url || "#"}
-              className="hover:bg-white hover:text-[#d1182b] px-2 py-2 cursor-pointer duration-300"
-            >
-              {menuItem.title}
-            </Link>
-          ))}
-        </div>
+       
       </div>
     </div>
   );
