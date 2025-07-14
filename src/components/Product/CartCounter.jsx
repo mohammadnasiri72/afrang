@@ -58,7 +58,7 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2">
+        <div className="flex gap-2">
           {
             <div className="flex items-center border border-[#d1182b] w-28 rounded-lg">
               <div className="w-1/3">
@@ -95,9 +95,7 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
               </div>
             </div>
           }
-        </div>
-      </div>
-      {pathname !== '/cart' && (
+           {pathname !== '/cart' && (
         <button
           onClick={handleGoToCart}
           className="flex items-center justify-center gap-2 bg-[#d1182b] hover:bg-[#40768c] text-white py-2 px-4 rounded-sm transition-colors w-full cursor-pointer"
@@ -106,6 +104,9 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
           <span>مشاهده سبد خرید</span>
         </button>
       )}
+        </div>
+      </div>
+     
 
       <DeleteProductModal
         isOpen={showDeleteModal}

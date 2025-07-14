@@ -31,7 +31,7 @@ const CompareButton = ({ product }) => {
       onClick={handleCompareToggle}
       disabled={isFull && !isInCompare}
       className={`
-        flex items-center cursor-pointer py-2 px-1 rounded-lg transition-all duration-300
+        flex items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
         ${isInCompare 
           ? 'bg-blue-200 text-gray-700 hover:bg-blue-300' 
           : isFull 
@@ -41,8 +41,8 @@ const CompareButton = ({ product }) => {
       `}
       title={isInCompare ? 'حذف از مقایسه' : isFull ? 'لیست مقایسه پر است' : 'افزودن به مقایسه'}
     >
-      <img src="/images/icons/benchmark.png" alt="" />
-      <span className="text-sm font-medium px-2">
+      <img className='w-4' src="/images/icons/benchmark.png" alt="" />
+      <span className="text-xs font-medium px-2">
         {isInCompare ? 'حذف از مقایسه' : 'مقایسه محصول'}
       </span>
     </button>

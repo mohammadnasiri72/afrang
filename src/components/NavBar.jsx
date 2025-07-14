@@ -34,12 +34,10 @@ const NavBar = () => {
           <img className="lg:hidden w-12" src="/images/logo.png" alt="" />
         )}
       </div> */}
-
-      <SearchNavbar />
-
       <div className="flex-1">
         <ResponsiveMenu />
       </div>
+      <SearchNavbar />
     </div>
   );
 };

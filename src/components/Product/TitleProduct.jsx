@@ -25,7 +25,7 @@ function TitleProduct({ product }) {
     <>
       <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative">
         {allAttachments && allAttachments.length > 0 && (
-          <div className="lg:w-1/3 w-full p-2">
+          <div className="lg:w-[40%] w-full p-2">
             <SliderProductDetails
               attachments={allAttachments}
               productId={product.product.productId}
@@ -63,10 +63,10 @@ function TitleProduct({ product }) {
           </div>
         )}
 
-        <div className="lg:w-5/12 w-full p-2">
+        <div className="lg:w-[60%] w-full p-2">
           <DescProductDetails product={product} />
         </div>
-        <div className="lg:w-1/4 w-full p-2 ">
+        <div className="lg:hidden w-full p-2 ">
           <BasketBox product={product} />
         </div>
       </div>

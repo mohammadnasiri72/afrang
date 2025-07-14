@@ -36,7 +36,9 @@ function DetailsProduct({ product }) {
           <div className="flex justify-center mb-6">
             <FaFileAlt className="text-6xl text-[#d1182b] opacity-80" />
           </div>
-          <h3 className="text-xl font-bold mb-3 text-gray-800">توضیحاتی ثبت نشده!</h3>
+          <h3 className="text-xl font-bold mb-3 text-gray-800">
+            توضیحاتی ثبت نشده!
+          </h3>
           <p className="text-gray-600 text-center">
             در حال حاضر توضیحات تکمیلی برای این محصول ثبت نشده است.
           </p>
@@ -46,12 +48,14 @@ function DetailsProduct({ product }) {
   }
 
   return (
-    <div className="py-9 px-7">
-      <div
-        className="prose max-w-none"
-        dangerouslySetInnerHTML={{ __html: product.product.body }}
-      />
-    </div>
+    <>
+      <div className="py-9 px-7">
+        <div
+          className="prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: product.product.body }}
+        />
+      </div>
+    </>
   );
 }
 

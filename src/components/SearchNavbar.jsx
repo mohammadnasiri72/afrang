@@ -56,8 +56,8 @@ const SearchNavbar = () => {
     };
 
     return (
-        <div className="relative w-full lg:hidden" ref={searchRef}>
-            <div className="flex items-center gap-2 w-full ">
+        <div className="relative w-full lg:hidden " ref={searchRef}>
+            <div className="flex justify-end items-center gap-2 w-full">
                 <input
                     className="outline-none px-3 py-1 bg-white/10 rounded-lg placeholder-white/70 text-sm sm:w-96 lg:hidden"
                     type="text"

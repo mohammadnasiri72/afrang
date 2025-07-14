@@ -5,7 +5,7 @@ import { Drawer, Menu } from "antd";
 import { getUserCookie } from "@/utils/cookieUtils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   FaAddressBook,
   FaBuilding,
@@ -26,14 +26,6 @@ import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { getImageUrl } from "@/utils/mainDomain";
-import { 
-  Popper, 
-  Paper, 
-  Box,
-  Grow
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
-import SubmenuDropdown from "./SubmenuDropdown";
 
 const dashboardMenuItems = [
   {
@@ -116,101 +108,21 @@ const dashboardMenuItems = [
   },
 ];
 
-// Styled Components
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  borderRadius: '0px',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-  border: '1px solid rgba(0, 0, 0, 0.08)',
-  width: '100vw', // عرض کامل viewport
-  maxWidth: '100vw',
-  overflow: 'hidden',
-  marginTop: '0px',
-  paddingTop: '0px',
-  fontFamily: 'inherit',
-  position: 'fixed', // فیکس شده
-  left: '0', // چسبیده به لبه چپ
-  right: '0', // چسبیده به لبه راست
-  maxHeight: '70vh',
-  overflowY: 'auto',
-  direction: 'rtl', // راست‌چین برای فارسی
-  '&::-webkit-scrollbar': {
-    width: '6px',
-  },
-  '&::-webkit-scrollbar-track': {
-    background: '#f1f1f1',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    background: '#d1182b',
-    borderRadius: '3px',
-  },
-  '&::-webkit-scrollbar-thumb:hover': {
-    background: '#b91626',
-  },
-}));
-
-
-
 function ResponsiveMenu() {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const { items, loading, openMenuRes } = useSelector((state) => state.menuRes);
+  const [isSticky, setIsSticky] = useState(false);
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [activeMenu, setActiveMenu] = useState(null);
-  const [expandedChildren, setExpandedChildren] = useState(new Set());
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0 });
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
-  const dropdownTimeoutRef = useRef(null);
-  const childDropdownTimeoutRef = useRef(null);
-  const isHoveringRef = useRef(false);
+  const timeoutRef = useRef(null);
+  const isCalculatingRef = useRef(false);
 
   const { settings } = useSelector((state) => state.settings);
-
-  // باید قبل از هر استفاده‌ای از open تعریف شود
-  const open = Boolean(anchorEl);
-
-  // غیرفعال کردن اسکرول صفحه وقتی زیرمنو باز است
-  useEffect(() => {
-    if (open && activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
-      // ذخیره overflow اصلی
-      const originalOverflow = document.body.style.overflow;
-      // غیرفعال کردن اسکرول
-      document.body.style.overflow = 'hidden';
-      
-      // اضافه کردن event listener برای کلید Escape
-      const handleEscapeKey = (event) => {
-        if (event.key === 'Escape') {
-          handleMenuClose();
-        }
-      };
-      
-      // اضافه کردن event listener برای کلیک خارج از زیرمنو
-      const handleClickOutside = (event) => {
-        // چک کردن اینکه آیا کلیک خارج از navbar و dropdown است
-        const navbar = navbarRef.current;
-        const dropdown = document.querySelector('[data-popper-placement]');
-        
-        if (navbar && !navbar.contains(event.target) && 
-            dropdown && !dropdown.contains(event.target)) {
-          handleMenuClose();
-        }
-      };
-      
-      document.addEventListener('keydown', handleEscapeKey);
-      document.addEventListener('mousedown', handleClickOutside);
-      
-      return () => {
-        // بازگرداندن overflow اصلی
-        document.body.style.overflow = originalOverflow;
-        // حذف event listener
-        document.removeEventListener('keydown', handleEscapeKey);
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [open, activeMenu]);
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -242,6 +154,7 @@ function ResponsiveMenu() {
           alt=""
         />
       </Link>
+      {/* <img className="w-11" src="/images/logo.png" alt="logo" /> */}
     </div>
   );
 
@@ -249,9 +162,7 @@ function ResponsiveMenu() {
   const handleNavigation = (url) => {
     // بستن دراور
     dispatch(setOpenMenuRes(false));
-    // بستن dropdown
-    setAnchorEl(null);
-    setActiveMenu(null);
+
     // هدایت به URL مورد نظر
     router.push(url);
   };
@@ -344,163 +255,29 @@ function ResponsiveMenu() {
     });
   };
 
-  // تابع‌های مدیریت dropdown
-  const handleMenuOpen = (event, menuItem) => {
-    // اگر آیتم فرزند ندارد، هیچ کاری نکن
-    if (!menuItem.Children || menuItem.Children.length === 0) {
-      return;
-    }
-    
-    // جلوگیری از باز شدن مجدد اگر همان منو باز است
-    if (activeMenu && activeMenu.id === menuItem.id && open) {
-      return;
-    }
-    
-    // پیدا کردن موقعیت دقیق navbar
+  const handleMouseEnter = useCallback((e) => {
+    if (isCalculatingRef.current) return;
+    isCalculatingRef.current = true;
+
     const navbar = navbarRef.current;
-    if (navbar) {
-      const navbarRect = navbar.getBoundingClientRect();
-      const headerFixed = document.querySelector('[data-header-fixed="true"]');
-      const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-      
-      // ایجاد یک عنصر anchor مصنوعی برای موقعیت دقیق dropdown
-      const createAnchorElement = () => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        let topPosition;
-        
-        if (navbarFixed) {
-          // اگر navbar فیکس شده، dropdown باید دقیقاً زیر navbar فیکس شده باشه
-          const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
-          topPosition = headerHeight + navbarFixed.offsetHeight;
-        } else {
-          // اگر navbar فیکس نشده، dropdown باید زیر navbar اصلی باشه
-          topPosition = navbarRect.bottom;
-        }
-        
-        const anchorElement = {
-          getBoundingClientRect: () => ({
-            top: topPosition,
-            bottom: topPosition,
-            left: 0,
-            right: window.innerWidth,
-            width: window.innerWidth,
-            height: 0,
-            x: 0,
-            y: topPosition,
-          })
-        };
-        
-        return anchorElement;
-      };
-      
-      setAnchorEl(createAnchorElement());
-    } else {
-      setAnchorEl(event.currentTarget);
-    }
-    setActiveMenu(menuItem);
-  };
+    if (!navbar) return;
 
-  const handleMenuClose = () => {
-    // Clear any existing timeout
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current);
-    }
-    
-    // Add a small delay to prevent immediate closing when moving to dropdown
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setAnchorEl(null);
-      setActiveMenu(null);
-      setExpandedChildren(new Set()); // Reset expanded children
-      // فعال کردن مجدد اسکرول صفحه فقط اگر dropdown باز بود
-      if (activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
-        document.body.style.overflow = '';
-      }
-    }, 100);
-  };
+    const navbarRect = navbar.getBoundingClientRect();
+    const topPosition = isSticky ? navbar.offsetHeight : navbarRect.bottom;
+    setDropdownPosition({ top: topPosition });
+  }, []);
 
-  const handleDropdownMouseEnter = () => {
-    // Clear timeout when entering dropdown
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current);
-    }
-  };
+  const handleMouseLeave = useCallback((e) => {
+    isCalculatingRef.current = false;
+  }, []);
 
-  const handleDropdownMouseLeave = () => {
-    handleMenuClose();
-  };
-
-  // تابع برای toggle کردن دروپ‌داون فرزندان
-  const handleChildToggle = (childId, event) => {
-    // جلوگیری از bubble شدن event
-    event.preventDefault();
-    event.stopPropagation();
-    
-    setExpandedChildren(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(childId)) {
-        newSet.delete(childId);
-      } else {
-        newSet.add(childId);
-      }
-      return newSet;
-    });
-  };
-
-  // Update dropdown position on scroll and resize
   useEffect(() => {
-    let timeoutId;
-    
-    const handleScrollAndResize = () => {
-      if (open && anchorEl && activeMenu) {
-        // Debounce the position update to prevent excessive re-renders
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          const navbar = navbarRef.current;
-          if (navbar) {
-            const navbarRect = navbar.getBoundingClientRect();
-            const headerFixed = document.querySelector('[data-header-fixed="true"]');
-            const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-            
-            let topPosition;
-            if (navbarFixed) {
-              const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
-              topPosition = headerHeight + navbarFixed.offsetHeight;
-            } else {
-              topPosition = navbarRect.bottom;
-            }
-            
-            // Update the anchor element position
-            const updatedAnchorEl = {
-              getBoundingClientRect: () => ({
-                top: topPosition,
-                bottom: topPosition,
-                left: 0,
-                right: window.innerWidth,
-                width: window.innerWidth,
-                height: 0,
-                x: 0,
-                y: topPosition,
-              })
-            };
-            setAnchorEl(updatedAnchorEl);
-          }
-        }, 16); // ~60fps
-      }
-    };
-
-    window.addEventListener('scroll', handleScrollAndResize, { passive: true });
-    window.addEventListener('resize', handleScrollAndResize, { passive: true });
-    
     return () => {
-      window.removeEventListener('scroll', handleScrollAndResize);
-      window.removeEventListener('resize', handleScrollAndResize);
-      clearTimeout(timeoutId);
-      // Cleanup timeout on unmount
-      if (dropdownTimeoutRef.current) {
-        clearTimeout(dropdownTimeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
-  }, [open, anchorEl, activeMenu]);
+  }, []);
 
   if (loading) {
     return (
@@ -512,14 +289,17 @@ function ResponsiveMenu() {
 
   // Desktop Menu Component
   const DesktopMenu = () => {
-
     return (
       <div
         ref={navbarRef}
-        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative"
+        className={`main-navbar  duration-1000 ease-in-out w-full flex text-white ${
+          isSticky
+            ? "fixed top-0 left-0 z-[9998] translate-y-0 shadow-lg"
+            : "relative"
+        }`}
       >
-        <div className="w-full">
-          <div className="flex justify-center w-full overflow-x-auto lg:overflow-visible">
+        <div className="w-full ">
+          <div className="flex justify-start w-full overflow-x-auto lg:overflow-visible">
             <div className="flex items-center" ref={menuRef}>
               {items.map((item, i) => (
                 <div
@@ -527,11 +307,11 @@ function ResponsiveMenu() {
                   className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
-                  onMouseEnter={(e) => item.Children && item.Children.length > 0 ? handleMenuOpen(e, item) : null}
-                  onMouseLeave={item.Children && item.Children.length > 0 ? handleMenuClose : null}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <div className="py-2 cursor-pointer font-semibold">
+                    <div className=" py-2 cursor-pointer font-semibold">
                       {item.title}
                     </div>
                   ) : (
@@ -541,72 +321,98 @@ function ResponsiveMenu() {
                       </div>
                     </Link>
                   )}
+                  {item.Children && item.Children.length > 0 && (
+                    <div
+                      className="bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-300 translate-y-5 group-hover:translate-y-0 p-3 z-[999]"
+                      style={{
+                        position: "fixed",
+                        top: `${dropdownPosition.top}px`,
+                        left: 0,
+                        right: 0,
+                        width: "100%",
+                        transform: "translateY(0)",
+                        transition: "all 0.3s ease-in-out",
+                        maxHeight: "80vh",
+                        overflowY: "auto",
+                        overflowX: "hidden",
+                      }}
+                    >
+                      <div className="container mx-auto">
+                        <div className="columns-1 sm:columns-2 md:columns-2 lg:columns-2 gap-4 text-black">
+                          {item.Children.map((child) => (
+                            <div key={child.id} className="break-inside-avoid mb-4 w-full">
+                              <div className="p-3">
+                                {child.Children && child.Children.length > 0 ? (
+                                  <Link
+                                    href={child.url || child.pageUrl || "#"}
+                                  >
+                                    <div className=" py-2 rounded-lg mb-3">
+                                      <h3 className=" font-bold text-[#130f26]">
+                                        {child.title}
+                                      </h3>
+                                    </div>
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    href={child.url || child.pageUrl || "#"}
+                                  >
+                                    <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
+                                      <img
+                                        src="/images/icons/Arrow-Left.png"
+                                        alt=""
+                                        className="w-4"
+                                      />
+                                      <span className=" text-sm font-semibold">
+                                        {child.title}
+                                      </span>
+                                    </div>
+                                  </Link>
+                                )}
+                                {child.Children &&
+                                  child.Children.length > 0 && (
+                                    <div className="grid grid-cols-3 gap-2 mt-2">
+                                      {child.Children.map((subChild) => (
+                                        <Link
+                                          key={subChild.id}
+                                          href={
+                                            subChild.url ||
+                                            subChild.pageUrl ||
+                                            "#"
+                                          }
+                                        >
+                                          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-[#d1182b] transition-colors">
+                                            <img
+                                              src="/images/icons/Arrow-Left.png"
+                                              alt=""
+                                              className="w-4"
+                                            />
+                                            <span className=" text-sm font-semibold">
+                                              {subChild.title}
+                                            </span>
+                                          </div>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex justify-end mt-4">
+                          <img
+                            src="/images/gallery/best-video-cameras.png"
+                            alt=""
+                            className="h-24 object-contain"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         </div>
-
-        {/* Material-UI Dropdown */}
-        <Popper
-          open={open}
-          anchorEl={anchorEl}
-          placement="bottom-start"
-          transition
-          keepMounted
-          disablePortal
-          style={{ zIndex: 1100, width: '100vw', position: 'fixed', left: 0, right: 0 }}
-          onMouseEnter={handleDropdownMouseEnter}
-          onMouseLeave={handleDropdownMouseLeave}
-          modifiers={[
-            {
-              name: 'offset',
-              options: {
-                offset: [0, 0],
-              },
-            },
-            {
-              name: 'preventOverflow',
-              options: {
-                boundary: 'viewport',
-                padding: 0,
-              },
-            },
-            {
-              name: 'flip',
-              enabled: false,
-            },
-            {
-              name: 'computeStyles',
-              options: {
-                gpuAcceleration: false,
-                adaptive: false,
-              },
-            },
-          ]}
-        >
-          {({ TransitionProps }) => (
-            <Grow {...TransitionProps} timeout={0}>
-              <StyledPaper
-                sx={{
-                  width: '100vw',
-                  maxWidth: '100vw',
-                  mt: 0,
-                  pt: 0,
-                  left: 0,
-                  right: 0,
-                }}
-              >
-                <SubmenuDropdown
-                  activeMenu={activeMenu}
-                  expandedChildren={expandedChildren}
-                  onChildToggle={handleChildToggle}
-                  onNavigation={handleNavigation}
-                />
-              </StyledPaper>
-            </Grow>
-          )}
-        </Popper>
       </div>
     );
   };

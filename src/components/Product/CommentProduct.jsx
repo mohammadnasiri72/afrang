@@ -5,6 +5,7 @@ import CommentSection from "../comments/CommentSection";
 function CommentProduct({ id , type }) {
   return (
     <>
+    
       <CommentSection id={id} type={type} />
     </>
   );
