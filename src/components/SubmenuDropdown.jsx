@@ -65,7 +65,7 @@ const CategoryTitle = styled(Typography)(({ theme }) => ({
 // دو ستون مستقل با column-count
 const ColumnsBox = styled(Box)(({ theme }) => ({
   columnCount: 2,
-  columnGap: "8px", // فاصله بین ستون‌ها را کم کردم
+  columnGap: "0px",
   direction: "rtl",
   "@media (max-width: 768px)": {
     columnCount: 1,
@@ -117,11 +117,12 @@ const ParentArrowIcon = styled(FaCaretLeft)(({ theme }) => ({
 }));
 
 const SubItemGrid = styled(Box)(({ theme }) => ({
-  columnCount: 3,
-  columnGap: "8px", // فاصله بین ستون‌ها را کم کردم
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gap: "8px",
   direction: "rtl",
   "@media (max-width: 768px)": {
-    columnCount: 1,
+    gridTemplateColumns: "1fr",
   },
 }));
 
