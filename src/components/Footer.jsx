@@ -5,7 +5,6 @@ import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
 import { mainDomainImg } from "@/utils/mainDomain";
-import { FaInstagram, FaLinkedin, FaTelegram } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Newsletter from "./Newsletter";
 
@@ -129,7 +128,6 @@ const Footer = () => {
   const hasFetchedSocialNetworks = useRef(false);
   const [footerMenu, setFooterMenu] = useState([]);
   const [menuLoading, setMenuLoading] = useState(false);
-
 
   useEffect(() => {
     if (!settings || settings.length === 0) {
@@ -263,10 +261,11 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`tel:${settings?.find(
-                        (item) => item.propertyKey === "site_tel"
-                      )?.value || "02177615546"
-                        }`}
+                      href={`tel:${
+                        settings?.find(
+                          (item) => item.propertyKey === "site_tel"
+                        )?.value || "02177615546"
+                      }`}
                     >
                       {settings?.find((item) => item.propertyKey === "site_tel")
                         ?.value || "77615546"}
@@ -307,10 +306,11 @@ const Footer = () => {
                   </span>
                   <span className="text-[#d1182b] text-sm font-semibold">
                     <a
-                      href={`mailto:${settings?.find(
-                        (item) => item.propertyKey === "site_email"
-                      )?.value || "unreal@outlook.com"
-                        }`}
+                      href={`mailto:${
+                        settings?.find(
+                          (item) => item.propertyKey === "site_email"
+                        )?.value || "unreal@outlook.com"
+                      }`}
                     >
                       {settings?.find(
                         (item) => item.propertyKey === "site_email"
@@ -341,22 +341,20 @@ const Footer = () => {
                   target="_blank"
                   className="bg-[#434347] p-2 flex items-center justify-center overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                 >
-                  {
-                    item.itemKey &&
-                    <i className={`text-white group-hover:text-teal-500 duration-300 text-xl ${item.itemKey}`}></i>
-                  }
-                  {
-                    !item.itemKey &&
+                  {item.itemKey && (
+                    <i
+                      className={`text-white group-hover:text-teal-500 duration-300 text-xl ${item.itemKey}`}
+                    ></i>
+                  )}
+                  {!item.itemKey && (
                     <img
                       src={mainDomainImg + item.image}
                       alt={item.title || "social network"}
                       className="w-6 h-6 object-contain "
                     />
-                  }
-
+                  )}
                 </Link>
               ))}
-
             </div>
           </div>
 
@@ -382,7 +380,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center w-full">
+        <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center w-full justify-end">
           {footerMenu[0]?.menuItems?.map((menuItem) => (
             <Link
               key={menuItem.id}
@@ -397,10 +395,26 @@ const Footer = () => {
       <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
         <p className="xl:w-1/2 w-full text-justify py-2">
           {settings?.find((item) => item.propertyKey === "site_copyright")
-            ?.value ||
-            "© کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می باشد. طراحی سایت و بهینه سازی سایت : ایده پویا"}
+            ?.value ? (
+            <span>
+              <span>
+                {
+                  settings?.find(
+                    (item) => item.propertyKey === "site_copyright"
+                  )?.value
+                }
+              </span>
+              <span className="text-emerald-700 px-1 font-semibold">
+                طراحی سایت و بهینه سازی سایت : ایده پویا
+              </span>
+            </span>
+          ) : (
+            <span>
+              © کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می
+              باشد. طراحی سایت و بهینه سازی سایت : ایده پویا
+            </span>
+          )}
         </p>
-       
       </div>
     </div>
   );

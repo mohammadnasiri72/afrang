@@ -71,7 +71,7 @@ function BasketFixed({ product }) {
           ref={innerRef}
           className=""
           style={
-            fixed || stuckToBottom ? style : { position: "sticky", top: 16 }
+            fixed || stuckToBottom ? style : { position: "sticky", top: 0 }
           }
         >
           <BasketBox product={product} />

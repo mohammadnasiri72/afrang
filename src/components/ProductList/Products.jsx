@@ -74,7 +74,10 @@ function Products({ products, layout = "list" }) {
               : 20
           ),
         ].map((_, index) => (
-          <div key={index} className="bg-white rounded-lg p-4 h-52 overflow-hidden z-50 relative">
+          <div
+            key={index}
+            className="bg-white rounded-lg p-4 h-52 overflow-hidden z-50 relative"
+          >
             <div className="flex flex-wrap">
               <div className="p-3 lg:w-1/3 w-full">
                 <Skeleton.Image active className="w-48 h-48" />
@@ -127,9 +130,9 @@ function Products({ products, layout = "list" }) {
                   href={product.url}
                   className="hover:text-[#d1182b] duration-300"
                 >
-                  <h5 className="font-semibold text-sm line-clamp-3 mb-1">
+                  <h2 className="font-semibold text-sm line-clamp-3 mb-1 text-justify">
                     {product.title}
-                  </h5>
+                  </h2>
                 </Link>
                 <PriceProduct product={product} />
                 <div className="flex items-center gap-2 mt-1">
@@ -187,16 +190,17 @@ function Products({ products, layout = "list" }) {
                 </div>
               </Link>
             </div>
-            <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full">
+            <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full relative">
               <Link
                 href={product.url}
                 className="hover:text-[#d1182b] duration-300"
               >
-                <h5 className="font-semibold sm:text-lg text-sm">
+                <h2 className="font-semibold sm:text-lg text-sm text-justify">
                   {product.title}
-                </h5>
+                </h2>
               </Link>
-              {product.summary && <ExpandableText text={product.summary} />}
+              {/* {product.summary && <ExpandableText text={product.summary} />} */}
+              {product.summary && <span className="line-clamp-6 text-justify">{product.summary}</span>}
             </div>
             <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
               <div className="flex flex-col w-full h-full">
@@ -280,7 +284,7 @@ function Products({ products, layout = "list" }) {
           href={`${product.url}`}
           className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
         >
-          {product.title}
+          <h2 className="text-justify">{product.title}</h2>
         </Link>
         <div className="flex items-center justify-center gap-3 mb-2">
           {product.fastShipping && (

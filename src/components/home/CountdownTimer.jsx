@@ -59,7 +59,7 @@ function CountdownTimer({ targetDate }) {
           <span className="pr-1">ثانیه</span>
         </div>
       </div>
-      <div className="sm:hidden flex justify-center gap-2 -translate-y-1/2 duration-300 opacity-100">
+      <div className="sm:hidden flex flex-wrap justify-center gap-2 -translate-y-1/2 duration-300 opacity-100">
         <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
           <span className="text-[#d1182b] font-semibold">{String(timeLeft.hours).padStart(2, '0')}</span>
           <span className="pr-1">ساعت</span>

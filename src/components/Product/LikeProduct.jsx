@@ -4,12 +4,12 @@ import {
   postLike,
   postLiked,
 } from "@/services/UserActivity/UserActivityService";
-import { Tooltip, message } from "antd";
+import { Button, message } from "antd";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const LikeProduct = ({ productId }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -98,7 +98,7 @@ const LikeProduct = ({ productId }) => {
 
   return (
     <div className="w-full">
-      <button
+      <Button
         onClick={handleLike}
         className={`
                flex items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
@@ -117,10 +117,10 @@ const LikeProduct = ({ productId }) => {
         ) : (
           <FaRegHeart className="" />
         )}
-        <span className="whitespace-nowrap px-2 text-xs">
+        <span className="whitespace-nowrap px-2 text-xs font-medium">
           {liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
         </span>
-      </button>
+      </Button>
     </div>
   );
 };

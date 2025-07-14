@@ -60,13 +60,20 @@ export default function ProductMain({ products }) {
                 {/* تصویر */}
                 <Link
                   href={product.url}
-                  className="w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc] overflow-hidden"
+                  className="w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc] overflow-hidden relative"
                 >
                   <img
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
                     src={getImageUrl2(product.image)}
                     alt={product.title}
                   />
+                  {/* لیبل کالای کارکرده */}
+                  {product.conditionId === 20 && (
+                    <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                      {/* <FaRecycle className="ml-1 text-base" /> */}
+                      کالای کارکرده
+                    </div>
+                  )}
                 </Link>
                 {/* محتوا */}
                 <div className="flex flex-col flex-1 justify-between">
@@ -79,9 +86,9 @@ export default function ProductMain({ products }) {
                     href={product.url}
                     className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[48px] flex items-center"
                   >
-                    <p className="text-justify line-clamp-2 w-full">
+                    <h3 className="text-justify line-clamp-2 w-full">
                       {product.title}
-                    </p>
+                    </h3>
                   </Link>
                   {/* کالای کارکرده */}
                   <div className="h-6 flex items-center mt-1 mb-2 px-2">

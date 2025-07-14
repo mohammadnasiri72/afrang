@@ -166,6 +166,11 @@ function ResponsiveMenu() {
   const dropdownTimeoutRef = useRef(null);
   const childDropdownTimeoutRef = useRef(null);
   const isHoveringRef = useRef(false);
+  // --- اضافه کردن state برای ارتفاع header و navbar ---
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [navbarHeight, setNavbarHeight] = useState(0);
+  // --- مقدار top زیرمنو را در state نگه می‌دارم ---
+  const [dropdownTop, setDropdownTop] = useState(0);
 
   const { settings } = useSelector((state) => state.settings);
 
@@ -211,6 +216,34 @@ function ResponsiveMenu() {
       };
     }
   }, [open, activeMenu]);
+
+  // --- تابع برای گرفتن ارتفاع header و navbar بعد از لود کامل ---
+  const updateHeaderNavbarHeights = useCallback(() => {
+    setTimeout(() => {
+      const headerFixed = document.querySelector('[data-header-fixed]');
+      const navbarFixed = document.querySelector('[data-navbar-fixed]');
+      const header = document.querySelector('div[ref-header]') || document.querySelector('header');
+      const navbar = navbarRef.current;
+      if (headerFixed && headerFixed.getAttribute('data-header-fixed') === 'true') {
+        setHeaderHeight(headerFixed.offsetHeight || 0);
+      } else if (header) {
+        setHeaderHeight(header.offsetHeight || 0);
+      }
+      if (navbarFixed && navbarFixed.getAttribute('data-navbar-fixed') === 'true') {
+        setNavbarHeight(navbarFixed.offsetHeight || 0);
+      } else if (navbar) {
+        setNavbarHeight(navbar.offsetHeight || 0);
+      }
+    }, 60); // تاخیر کوتاه برای اطمینان از رندر کامل
+  }, []);
+
+  useEffect(() => {
+    updateHeaderNavbarHeights();
+    window.addEventListener('resize', updateHeaderNavbarHeights);
+    return () => {
+      window.removeEventListener('resize', updateHeaderNavbarHeights);
+    };
+  }, [updateHeaderNavbarHeights]);
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -350,53 +383,44 @@ function ResponsiveMenu() {
     if (!menuItem.Children || menuItem.Children.length === 0) {
       return;
     }
-    
-    // جلوگیری از باز شدن مجدد اگر همان منو باز است
     if (activeMenu && activeMenu.id === menuItem.id && open) {
       return;
     }
-    
-    // پیدا کردن موقعیت دقیق navbar
-    const navbar = navbarRef.current;
-    if (navbar) {
-      const navbarRect = navbar.getBoundingClientRect();
-      const headerFixed = document.querySelector('[data-header-fixed="true"]');
-      const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-      
-      // ایجاد یک عنصر anchor مصنوعی برای موقعیت دقیق dropdown
-      const createAnchorElement = () => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        let topPosition;
-        
-        if (navbarFixed) {
-          // اگر navbar فیکس شده، dropdown باید دقیقاً زیر navbar فیکس شده باشه
-          const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
-          topPosition = headerHeight + navbarFixed.offsetHeight;
-        } else {
-          // اگر navbar فیکس نشده، dropdown باید زیر navbar اصلی باشه
-          topPosition = navbarRect.bottom;
-        }
-        
-        const anchorElement = {
-          getBoundingClientRect: () => ({
-            top: topPosition,
-            bottom: topPosition,
-            left: 0,
-            right: window.innerWidth,
-            width: window.innerWidth,
-            height: 0,
-            x: 0,
-            y: topPosition,
-          })
-        };
-        
-        return anchorElement;
-      };
-      
-      setAnchorEl(createAnchorElement());
-    } else {
-      setAnchorEl(event.currentTarget);
+
+    // پیدا کردن نزدیک‌ترین المنت با کلاس main-navbar که قابل مشاهده است
+    let navbar = navbarRef.current;
+    if (navbar && window.getComputedStyle(navbar).visibility === 'hidden') {
+      const navbars = document.querySelectorAll('.main-navbar');
+      navbar = Array.from(navbars).find(el => window.getComputedStyle(el).visibility !== 'hidden');
     }
+
+    const headerFixed = document.querySelector('[data-header-fixed="true"]');
+    const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
+    // --- محاسبه دقیق top برای anchorEl ---
+    let topPosition = 0;
+    if (navbarFixed) {
+      const headerH = headerFixed ? headerFixed.offsetHeight : headerHeight;
+      const navbarH = navbarFixed.offsetHeight || navbarHeight;
+      topPosition = headerH + navbarH;
+    } else if (navbar) {
+      // مقدار bottom المنت navbar منهای window.scrollY برای موقعیت دقیق
+      const navbarRect = navbar.getBoundingClientRect();
+      topPosition = navbarRect.bottom - window.scrollY;
+    }
+    setDropdownTop(topPosition);
+    const createAnchorElement = () => ({
+      getBoundingClientRect: () => ({
+        top: topPosition,
+        bottom: topPosition,
+        left: 0,
+        right: window.innerWidth,
+        width: window.innerWidth,
+        height: 0,
+        x: 0,
+        y: topPosition,
+      })
+    });
+    setAnchorEl(createAnchorElement());
     setActiveMenu(menuItem);
   };
 
@@ -446,61 +470,57 @@ function ResponsiveMenu() {
     });
   };
 
-  // Update dropdown position on scroll and resize
+  // --- همیشه موقعیت anchorEl را با اسکرول به‌روز کن ---
   useEffect(() => {
     let timeoutId;
-    
     const handleScrollAndResize = () => {
       if (open && anchorEl && activeMenu) {
-        // Debounce the position update to prevent excessive re-renders
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-          const navbar = navbarRef.current;
-          if (navbar) {
-            const navbarRect = navbar.getBoundingClientRect();
-            const headerFixed = document.querySelector('[data-header-fixed="true"]');
-            const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-            
-            let topPosition;
-            if (navbarFixed) {
-              const headerHeight = headerFixed ? headerFixed.offsetHeight : 0;
-              topPosition = headerHeight + navbarFixed.offsetHeight;
-            } else {
-              topPosition = navbarRect.bottom;
-            }
-            
-            // Update the anchor element position
-            const updatedAnchorEl = {
-              getBoundingClientRect: () => ({
-                top: topPosition,
-                bottom: topPosition,
-                left: 0,
-                right: window.innerWidth,
-                width: window.innerWidth,
-                height: 0,
-                x: 0,
-                y: topPosition,
-              })
-            };
-            setAnchorEl(updatedAnchorEl);
+          let navbar = navbarRef.current;
+          if (navbar && window.getComputedStyle(navbar).visibility === 'hidden') {
+            const navbars = document.querySelectorAll('.main-navbar');
+            navbar = Array.from(navbars).find(el => window.getComputedStyle(el).visibility !== 'hidden');
           }
-        }, 16); // ~60fps
+          const headerFixed = document.querySelector('[data-header-fixed="true"]');
+          const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
+          let topPosition = 0;
+          if (navbarFixed) {
+            const headerH = headerFixed ? headerFixed.offsetHeight : headerHeight;
+            const navbarH = navbarFixed.offsetHeight || navbarHeight;
+            topPosition = headerH + navbarH;
+          } else if (navbar) {
+            const navbarRect = navbar.getBoundingClientRect();
+            topPosition = navbarRect.bottom - window.scrollY;
+          }
+          setDropdownTop(topPosition);
+          const updatedAnchorEl = {
+            getBoundingClientRect: () => ({
+              top: topPosition,
+              bottom: topPosition,
+              left: 0,
+              right: window.innerWidth,
+              width: window.innerWidth,
+              height: 0,
+              x: 0,
+              y: topPosition,
+            })
+          };
+          setAnchorEl(updatedAnchorEl);
+        }, 16);
       }
     };
-
     window.addEventListener('scroll', handleScrollAndResize, { passive: true });
     window.addEventListener('resize', handleScrollAndResize, { passive: true });
-    
     return () => {
       window.removeEventListener('scroll', handleScrollAndResize);
       window.removeEventListener('resize', handleScrollAndResize);
       clearTimeout(timeoutId);
-      // Cleanup timeout on unmount
       if (dropdownTimeoutRef.current) {
         clearTimeout(dropdownTimeoutRef.current);
       }
     };
-  }, [open, anchorEl, activeMenu]);
+  }, [open, anchorEl, activeMenu, headerHeight, navbarHeight]);
 
   if (loading) {
     return (
@@ -556,7 +576,7 @@ function ResponsiveMenu() {
           transition
           keepMounted
           disablePortal
-          style={{ zIndex: 1100, width: '100vw', position: 'fixed', left: 0, right: 0 }}
+          style={{ zIndex: 1100, width: '100vw', position: 'fixed', left: 0, right: 0, top: dropdownTop }}
           onMouseEnter={handleDropdownMouseEnter}
           onMouseLeave={handleDropdownMouseLeave}
           modifiers={[

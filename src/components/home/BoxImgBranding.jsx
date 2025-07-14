@@ -61,7 +61,7 @@ export default function BoxImgBranding() {
   }
 
   return (
-    <div className="sm:px-16 px-2 bg-[#f6f6f6] relative">
+    <div className="sm:px-16 px-2  relative z-50">
       <div className="absolute left-0 -top-52">
         <img src="/images/gallery/bg-shadow-1.png" />
       </div>
@@ -72,7 +72,7 @@ export default function BoxImgBranding() {
         spaceBetween={10}
         loop={true}
         modules={[Pagination]}
-        className="mySwiper"
+        className="mySwiper bg-white"
         // autoplay={{
         //   delay: 0,
         //   disableOnInteraction: false,
@@ -101,7 +101,7 @@ export default function BoxImgBranding() {
             }}
               src={`https://afrangadmin.aitest2.ir${brand.image}`}
               alt={brand.title}
-              className="w-20 h-20 object-contain cursor-pointer"
+              className="w-36 h-36 object-contain cursor-pointer"
             />
           </SwiperSlide>
         ))}

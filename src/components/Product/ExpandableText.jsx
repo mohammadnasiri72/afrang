@@ -69,7 +69,7 @@ const ExpandableText = ({ text, linesToShow = 3, lineHeight = 1.5 }) => {
       </div>
 
       
-      {
+      {/* {
         showToggle &&
        <div
             onClick={toggleExpand}
@@ -85,7 +85,7 @@ const ExpandableText = ({ text, linesToShow = 3, lineHeight = 1.5 }) => {
               alt=""
             />
           </div>
-      }
+      } */}
     </div>
   );
 };

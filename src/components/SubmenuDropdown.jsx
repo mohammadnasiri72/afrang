@@ -42,7 +42,7 @@ const ParentItemText = styled(ListItemText)(({ theme }) => ({
   transition: "all 0.2s ease-in-out",
   display: "inline !important",
   "& .MuiListItemText-primary": {
-    fontSize: "14px",
+    fontSize: "18px",
     fontWeight: 600,
     color: "#333",
     fontFamily: "inherit",
@@ -65,7 +65,7 @@ const CategoryTitle = styled(Typography)(({ theme }) => ({
 // دو ستون مستقل با column-count
 const ColumnsBox = styled(Box)(({ theme }) => ({
   columnCount: 2,
-  columnGap: "0px",
+  columnGap: "8px", // فاصله بین ستون‌ها را کم کردم
   direction: "rtl",
   "@media (max-width: 768px)": {
     columnCount: 1,
@@ -106,7 +106,7 @@ const LinkItemIcon = styled(FaCaretLeft)(({ theme }) => ({
   fontWeight: "bold",
 }));
 
-const ParentArrowIcon = styled(FaAngleLeft)(({ theme }) => ({
+const ParentArrowIcon = styled(FaCaretLeft)(({ theme }) => ({
   fontSize: "18px",
   color: "#14b8a6", // teal-500
   marginLeft: "8px",
@@ -117,12 +117,11 @@ const ParentArrowIcon = styled(FaAngleLeft)(({ theme }) => ({
 }));
 
 const SubItemGrid = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "repeat(3, 1fr)",
-  gap: "8px",
+  columnCount: 3,
+  columnGap: "8px", // فاصله بین ستون‌ها را کم کردم
   direction: "rtl",
   "@media (max-width: 768px)": {
-    gridTemplateColumns: "1fr",
+    columnCount: 1,
   },
 }));
 
@@ -165,6 +164,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                     },
                   }}
                 >
+                  <ParentArrowIcon className="parent-arrow-icon" />
                   <ParentItemText
                     primary={child.title}
                     primaryTypographyProps={{
@@ -172,12 +172,12 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                         fontWeight: 600,
                         color: "#14b8a6 !important", // همیشه teal-500
                         fontFamily: "inherit",
-                        fontSize: "14px",
+                        fontSize: "18px",
                         transition: "0.5s",
                       },
                     }}
                   />
-                  <ParentArrowIcon className="parent-arrow-icon" />
+                  
                 </StyledListItem>
               ) : (
                 <SubItem

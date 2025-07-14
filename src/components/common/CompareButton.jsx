@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCompare, removeFromCompare } from '@/redux/features/compareSlice';
-import { message } from 'antd';
+import { Button, message } from 'antd';
 import { FaBalanceScale } from 'react-icons/fa';
 
 const CompareButton = ({ product }) => {
@@ -27,7 +27,7 @@ const CompareButton = ({ product }) => {
   };
 
   return (
-    <button
+    <Button
       onClick={handleCompareToggle}
       disabled={isFull && !isInCompare}
       className={`
@@ -45,7 +45,7 @@ const CompareButton = ({ product }) => {
       <span className="text-xs font-medium px-2">
         {isInCompare ? 'حذف از مقایسه' : 'مقایسه محصول'}
       </span>
-    </button>
+    </Button>
   );
 };
 

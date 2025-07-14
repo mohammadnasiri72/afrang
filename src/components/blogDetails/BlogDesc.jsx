@@ -69,7 +69,7 @@ async function BlogDesc({ blog }) {
     <>
       <div className="lg:w-3/4 w-full p-2">
         <div className="bg-white p-4 rounded-lg">
-          <h2 className="font-semibold text-[25px]">{blog?.title || ""}</h2>
+          <h1 className="font-semibold text-[25px]">{blog?.title || ""}</h1>
           <div className="flex flex-wrap gap-3 mt-2">
             <div className="flex items-center">
               <FaCalendarAlt className="text-[#40768c]" />

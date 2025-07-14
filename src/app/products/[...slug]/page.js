@@ -1,15 +1,24 @@
 import Container from "@/components/container";
 import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
 import { getItem } from "@/services/Item/item";
-import { getProductCategory, getProducts } from "@/services/products/productService";
-import dynamic from 'next/dynamic';
+import {
+  getProductCategory,
+  getProducts,
+} from "@/services/products/productService";
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { FaBoxOpen } from "react-icons/fa6";
 import BreadcrumbNav from "./BreadcrumbNav";
 
-const BodyProductList = dynamic(() => import("@/components/ProductList/BodyProductList"));
-const FilterProduct = dynamic(() => import("@/components/ProductList/FilterProduct"));
-const PaginationProduct = dynamic(() => import("@/components/ProductList/PaginationProduct"));
+const BodyProductList = dynamic(() =>
+  import("@/components/ProductList/BodyProductList")
+);
+const FilterProduct = dynamic(() =>
+  import("@/components/ProductList/FilterProduct")
+);
+const PaginationProduct = dynamic(() =>
+  import("@/components/ProductList/PaginationProduct")
+);
 
 // کامپوننت اصلی محتوا
 async function ProductContent({ id, searchParams }) {
@@ -19,7 +28,9 @@ async function ProductContent({ id, searchParams }) {
   const layout = searchParams?.layout ? searchParams.layout : "list";
   const price1 = searchParams?.price1 ? parseInt(searchParams.price1) : 0;
   const price2 = searchParams?.price2 ? parseInt(searchParams.price2) : 100000;
-  const pageSize = searchParams?.pageSize ? parseInt(searchParams.pageSize) : 20;
+  const pageSize = searchParams?.pageSize
+    ? parseInt(searchParams.pageSize)
+    : 20;
   const brandId = searchParams?.brandid || "";
 
   const onlyPrice = searchParams?.onlyprice === "1" ? "1" : undefined;
@@ -41,13 +52,13 @@ async function ProductContent({ id, searchParams }) {
       OnlyDiscount: onlyDiscount,
       StatusId: statusId,
       OnlyFest: onlyfest,
-      ConditionId: conditionId
+      ConditionId: conditionId,
     }),
     getItem({
       TypeId: 1015,
-      LangCode: 'fa',
+      LangCode: "fa",
       CategoryIdArray: "4693",
-    })
+    }),
   ]);
 
   return (
@@ -55,6 +66,16 @@ async function ProductContent({ id, searchParams }) {
       <BreadcrumbNav breadcrumb={productCategory?.breadcrumb} />
       <div className="bg-[#f6f6f6] overflow-hidden py-10">
         <div className="xl:px-16">
+          {productCategory?.breadcrumb[productCategory?.breadcrumb?.length - 1]
+            ?.title && (
+            <h1 className="text-2xl font-bold text-[#d1182b] px-5">
+              {
+                productCategory?.breadcrumb[
+                  productCategory?.breadcrumb?.length - 1
+                ]?.title
+              }
+            </h1>
+          )}
           <div className="flex flex-col lg:flex-row w-full">
             <FilterProduct BannerProduct={BannerProduct} />
             <div className="w-full">
@@ -64,9 +85,12 @@ async function ProductContent({ id, searchParams }) {
                     <div className="flex justify-center mb-6">
                       <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
                     </div>
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800">محصولی یافت نشد!</h2>
+                    <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                      محصولی یافت نشد!
+                    </h2>
                     <p className="text-gray-600 mb-6">
-                      متأسفانه با فیلترهای انتخاب شده محصولی پیدا نکردیم. لطفاً فیلترها را تغییر دهید.
+                      متأسفانه با فیلترهای انتخاب شده محصولی پیدا نکردیم. لطفاً
+                      فیلترها را تغییر دهید.
                     </p>
                   </div>
                 </div>
@@ -103,15 +127,16 @@ export default async function ProductList(props) {
   }
 
   return (
-    <Suspense fallback={<div className="bg-[#f6f6f6] overflow-hidden py-10">
-      <Container>
-        <ProductListSkeleton />
-      </Container>
-    </div>}>
-      <ProductContent
-        id={id}
-        searchParams={searchParams}
-      />
+    <Suspense
+      fallback={
+        <div className="bg-[#f6f6f6] overflow-hidden py-10">
+          <Container>
+            <ProductListSkeleton />
+          </Container>
+        </div>
+      }
+    >
+      <ProductContent id={id} searchParams={searchParams} />
     </Suspense>
   );
 }

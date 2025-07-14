@@ -67,7 +67,7 @@ function BasketBox({ product }) {
   };
 
   return (
-    <div className="p-2 h-full">
+    <div className="px-2 h-full">
       <div className="bg-[#f6f6f6] h-full rounded-lg p-2">
         <h4 className="font-bold text-[#333]">سبد خرید</h4>
         {warrantiesArray && warrantiesArray.length > 0 && (
@@ -84,25 +84,21 @@ function BasketBox({ product }) {
           <img src="/images/icons/benchmark.png" alt="" />
           <span className="text-sm text-[#333]"> مقایسه محصول </span>
         </div> */}
-        <div className="my-1">
-          <CompareButton product={product?.product} />
-        </div>
-        <div className="my-1">
-          <LikeProduct productId={product?.product?.productId} />
+        <div className="flex items-center gap-1 flex-wrap">
+          <div>
+            <CompareButton product={product?.product} />
+          </div>
+          <div>
+            <LikeProduct productId={product?.product?.productId} />
+          </div>
         </div>
         {/* <div className="flex items-center gap-3 mt-6">
           <img src="/images/icons/fast-delivery-2.png" alt="" />
           <span className="text-sm text-[#333]"> ضمانت اصل بودن کالا </span>
         </div> */}
 
-        {product?.product.conditionId === 20 && (
-          <div className="flex items-center gap-2 my-2 px-1 text-[#888]">
-            <FaRecycle className=" " />
-            <span className="text-xs font-bold"> کالای کارکرده</span>
-          </div>
-        )}
 
-        <div className="flex items-center gap-3 px-1">
+        <div className="flex items-center gap-3 px-1 mt-3">
           {product?.product?.fastShipping && (
             <div className="flex items-center gap-2  text-[#d1182b]">
               <FaTruckFast className="" />
@@ -116,6 +112,14 @@ function BasketBox({ product }) {
             </div>
           )}
         </div>
+
+        {product?.product.conditionId === 20 && (
+          <div className="flex items-center gap-2 my-3 px-1 text-[#d1182b]">
+            <FaRecycle className=" " />
+            <span className="text-xs font-bold"> کالای کارکرده</span>
+          </div>
+        )}
+       
 
         <PriceProduct product={product?.product} />
         {product?.inventory?.inventorySetting?.showInventory && (

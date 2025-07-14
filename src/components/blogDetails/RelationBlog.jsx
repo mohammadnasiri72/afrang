@@ -58,10 +58,9 @@ async function RelationBlog() {
                   </div>
 
                   <div className="p-3 bg-white">
-                    <h3 className="">
+                    <h3>
                       <span
                         className="font-bold  group-hover:text-teal-500 duration-300"
-                        href="#"
                       >
                         {blog.title}
                       </span>
