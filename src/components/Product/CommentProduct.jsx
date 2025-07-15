@@ -2,11 +2,10 @@
 
 import CommentSection from "../comments/CommentSection";
 
-function CommentProduct({ id , type }) {
+function CommentProduct({ id, type, onReplyScroll }) {
   return (
     <>
-    
-      <CommentSection id={id} type={type} />
+      <CommentSection id={id} type={type} onReplyScroll={onReplyScroll} />
     </>
   );
 }

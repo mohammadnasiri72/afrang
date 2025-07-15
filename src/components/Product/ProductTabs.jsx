@@ -29,8 +29,8 @@ function ProductTabs({ product, parentRef }) {
   const bundleRef = useRef(null);
   const detailsRef = useRef(null);
   const specsRef = useRef(null);
-  const commentsRef = useRef(null);
   const accessoriesRef = useRef(null);
+  const commentsRef = useRef(null);
   const qaRef = useRef(null);
   const segmentedBoxRef = useRef(null);
   const scrollBoxRef = useRef(null);
@@ -38,12 +38,13 @@ function ProductTabs({ product, parentRef }) {
 
   // Scroll spy logic for main page scroll
   useEffect(() => {
+    // ترتیب جدید: محصولات مرتبط (4)، نظرات (5)
     const sectionRefs = [
       product.product.typeId === 3 ? bundleRef : null,
       detailsRef,
       specsRef,
-      commentsRef,
       accessoriesRef,
+      commentsRef,
       qaRef,
     ].filter(Boolean);
     const tabValues = [
@@ -140,8 +141,8 @@ function ProductTabs({ product, parentRef }) {
       : []),
     { label: "توضیحات محصول", value: 2 },
     { label: "مشخصات فنی", value: 3 },
-    { label: "نظرات", value: 4 },
-    { label: "محصولات مرتبط", value: 5 },
+    { label: "محصولات مرتبط", value: 4 },
+    { label: "نظرات", value: 5 },
     { label: "پرسش و پاسخ", value: 6 },
   ];
 
@@ -154,8 +155,8 @@ function ProductTabs({ product, parentRef }) {
     if (val === 1 && product.product.typeId === 3) ref = bundleRef;
     if (val === 2) ref = detailsRef;
     if (val === 3) ref = specsRef;
-    if (val === 4) ref = commentsRef;
-    if (val === 5) ref = accessoriesRef;
+    if (val === 4) ref = accessoriesRef;
+    if (val === 5) ref = commentsRef;
     if (val === 6) ref = qaRef;
     if (ref && ref.current && elementRef.current) {
       const rect = elementRef.current.getBoundingClientRect();
@@ -241,13 +242,57 @@ function ProductTabs({ product, parentRef }) {
 
   return (
     <>
+      <style jsx global>{`
+        .SegmentedProduct .ant-segmented {
+          background-color: #ebebeb;
+        }
+        .SegmentedProduct .ant-segmented-item {
+          padding-left: 0px;
+          padding-right: 0px;
+          padding-top: 8px;
+          padding-bottom: 8px;
+          margin-right: 10px !important;
+          margin-left: 10px !important;
+          width: 100%;
+          font-weight: 600 !important;
+          font-size: 14px;
+          transition: 0.3s;
+        }
+        .SegmentedProduct .ant-segmented-item-selected {
+          background-color: #fff !important;
+          color: #d1182b !important;
+          border-radius: 6px;
+          font-weight: 900 !important;
+          font-size: 16px !important;
+          transition: 0.3s;
+        }
+        .SegmentedProduct .ant-segmented-item-selected:hover {
+          color: #d1182b !important;
+        }
+        .SegmentedProduct .ant-segmented-thumb {
+          background-color: #fff !important;
+          font-weight: 900 !important;
+        }
+        /* حالت جمع و جورتر در sticky */
+        .SegmentedProduct.sticky .ant-segmented-item {
+          padding-top: 4px;
+          padding-bottom: 4px;
+          font-size: 12px;
+          margin-right: 4px !important;
+          margin-left: 4px !important;
+        }
+        .SegmentedProduct.sticky .ant-segmented-item-selected {
+          font-size: 13px !important;
+          border-radius: 4px;
+        }
+      `}</style>
       <div
         ref={elementRef}
         className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative"
       >
         <div
           ref={segmentedBoxRef}
-          className={`SegmentedProduct overflow-hidden flex justify-center p-5 bg-white z-50 transition-all duration-300 ${
+          className={`SegmentedProduct${isSticky ? ' sticky' : ''} overflow-hidden flex justify-center ${isSticky ? 'p-0' : 'p-5'} bg-white z-50 transition-all duration-300 ${
             isSticky ? "fixed top-0 shadow-lg" : "relative w-full"
           }`}
           style={{
@@ -257,6 +302,12 @@ function ProductTabs({ product, parentRef }) {
             top: isSticky ? 100 : "auto",
             left: isSticky ? boxLeft : "auto",
             width: isSticky ? boxWidth : "100%",
+            paddingTop: isSticky ? 0 : 20,
+            paddingBottom: isSticky ? 0 : 20,
+            paddingLeft: isSticky ? 0 : 20,
+            paddingRight: isSticky ? 0 : 20,
+            marginTop: isSticky ? 8 : undefined,
+            marginBottom: isSticky ? 0 : undefined,
           }}
         >
           <Segmented
@@ -299,13 +350,6 @@ function ProductTabs({ product, parentRef }) {
             <SpecificationsProduct product={product} />
           </div>
           <Divider />
-          <div ref={commentsRef} className="tab-section-scroll-anchor">
-            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
-              نظرات کاربران
-            </h4>
-            <CommentProduct id={product.product.productId} type={0} />
-          </div>
-          <Divider />
           <div>
             <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
               محصولات مرتبط
@@ -315,11 +359,18 @@ function ProductTabs({ product, parentRef }) {
             </div>
           </div>
           <Divider />
+          <div ref={commentsRef} className="tab-section-scroll-anchor">
+            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+              نظرات کاربران
+            </h4>
+            <CommentProduct id={product.product.productId} type={0} onReplyScroll={() => handleTabChange(5)} />
+          </div>
+          <Divider />
           <div ref={qaRef} className="tab-section-scroll-anchor">
             <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
               پرسش و پاسخ
             </h4>
-            <CommentProduct id={product.product.productId} type={1} />
+            <CommentProduct id={product.product.productId} type={1} onReplyScroll={() => handleTabChange(6)} />
           </div>
         </div>
       </div>

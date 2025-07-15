@@ -456,39 +456,6 @@ html {
   background-color: #ebebeb;
 }
 
-.SegmentedProduct .ant-segmented-item-selected:hover {
-  color: #d1182b !important;
-}
-.SegmentedProduct .ant-segmented-item-selected {
-  background-color: #fff !important; /* رنگ تب انتخاب‌شده */
-  color: #d1182b !important; /* رنگ متن تب انتخاب‌شده */
-  border-radius: 6px;
-  font-weight: 900 !important;
-  font-size: 16px !important;
-  transition: 0.4s;
-}
-
-.SegmentedProduct .ant-segmented-thumb {
-  background-color: #fff !important; /* تغییر رنگ پس‌زمینه تب فعال */
-  font-weight: 900 !important;
-}
-.SegmentedProduct .ant-segmented-item {
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  margin-right: 10px !important;
-  margin-left: 10px !important;
-  width: 100%;
-  font-weight: 600 !important;
-  font-size: 14px;
-  /* transition: 0.4s; */
-}
-
-.SegmentedProduct .ant-segmented {
-  background-color: #ebebeb;
-}
-
 
 
 .custom-select .ant-select-selector {

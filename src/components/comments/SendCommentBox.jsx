@@ -2,7 +2,7 @@
 
 import { selectUser } from "@/redux/slices/userSlice";
 import { sendComment } from "@/services/comments/serviceComment";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -16,7 +16,7 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-function SendCommentBox({ itemId, parentId = -1, onCommentSent, type }) {
+const SendCommentBox = forwardRef(({ itemId, parentId = -1, onCommentSent, type }, ref) => {
   const user = useSelector(selectUser);
   const [formData, setFormData] = useState({
     name: "",
@@ -24,6 +24,13 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent, type }) {
     body: "",
   });
   const [userIP, setUserIP] = useState("");
+  const textareaRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    focusTextarea: () => {
+      if (textareaRef.current) textareaRef.current.focus();
+    }
+  }));
 
   useEffect(() => {
     const fetchIP = async () => {
@@ -208,6 +215,7 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent, type }) {
 
         <div className="mt-5">
           <textarea
+            ref={textareaRef}
             className={`w-full outline-none bg-[#f1f2f2] px-5 py-2 h-36 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${errors.body ? "border-2 border-red-500 placeholder-red-500" : ""
               }`}
             name="body"
@@ -235,6 +243,6 @@ function SendCommentBox({ itemId, parentId = -1, onCommentSent, type }) {
       </form>
     </div>
   );
-}
+});
 
 export default SendCommentBox;
