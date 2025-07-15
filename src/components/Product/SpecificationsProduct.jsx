@@ -5,9 +5,7 @@ import { Skeleton } from "antd";
 import { FaClipboardList } from "react-icons/fa";
 
 function SpecificationsProduct({ product }) {
-  const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(true);
-  const contentRef = useRef(null);
 
   useEffect(() => {
     // شبیه‌سازی زمان لودینگ برای نمایش اسکلتون
@@ -30,6 +28,9 @@ function SpecificationsProduct({ product }) {
     );
   }
 
+  console.log(product);
+  
+
   if (!product.properties || product.properties.length === 0) {
     return (
       <div className="flex justify-center p-8">
@@ -46,46 +47,60 @@ function SpecificationsProduct({ product }) {
     );
   }
 
-  return (
-    <div>
-      <div
-        ref={contentRef}
-        style={{
-          maxHeight: showMore
-            ? `${contentRef.current?.scrollHeight}px`
-            : "230px",
-        }}
-        className="mt-5 w-full overflow-hidden duration-500 px-5"
-      >
-        {product.properties.map((property) => (
-          <div
-            key={property.key}
-            className="bg-[#f3f3f3] w-full py-3 px-6 flex items-center mt-3"
-          >
-            <div className="w-1/2">{property.key}</div>
-            <div className="w-1/2 font-semibold">{property.value}</div>
-          </div>
-        ))}
-      </div>
+  // گروه‌بندی مشخصات بر اساس propertyCategoryId
+  const grouped = groupByCategory(product.properties);
 
-      <div
-        onClick={() => {
-          setShowMore((e) => !e);
-        }}
-        className="flex items-center cursor-pointer group mt-3 py-4 px-7"
-      >
-        <span className="group-hover:text-[#18d1be] text-[#40768c] duration-300 font-semibold">
-          {showMore ? "نمایش کمتر" : "نمایش بیشتر"}
-        </span>
-        <img
-          style={{ rotate: showMore ? "90deg" : "0deg" }}
-          className="-translate-x-1 group-hover:translate-x-0 duration-300"
-          src="/images/icons/Arrow-Left.png"
-          alt=""
-        />
-      </div>
+  return (
+    <div className="mt-5 w-full px-5">
+      {grouped.map((group, idx) => (
+        <div key={idx} className="mb-7 bg-white rounded-lg shadow border border-gray-100">
+          <div className="bg-[#f3f3f3] rounded-t-lg px-6 py-3 border-b border-gray-100 flex items-center">
+            <FaClipboardList className="text-[#d1182b] mr-2 text-lg" />
+            <span className="font-bold text-gray-800 text-base">{group.title}</span>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {group.items.map((property) => (
+              <div
+                key={property.id}
+                className="flex items-center py-3 px-6 hover:bg-gray-50 transition"
+              >
+                <div className="w-1/2 text-gray-700 text-sm">{property.title}</div>
+                <div className="w-1/2 font-semibold text-gray-900 text-sm text-left">{property.propertyValue}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
+}
+
+function groupByCategory(properties) {
+  // فقط آیتم‌هایی که isTechnicalProperty=true دارند
+  const filtered = properties.filter((prop) => prop.isTechnicalProperty);
+  const groups = {};
+  filtered.forEach((prop) => {
+    if (!groups[prop.propertyCategoryId]) {
+      groups[prop.propertyCategoryId] = {
+        title: prop.propertyCategoryTitle,
+        propertyCategoryId: prop.propertyCategoryId,
+        propertyCategoryPriority: prop.propertyCategoryPriority ?? 0,
+        items: [],
+      };
+    }
+    groups[prop.propertyCategoryId].items.push(prop);
+  });
+  // مرتب‌سازی آیتم‌های هر گروه بر اساس priority (نزولی)
+  Object.values(groups).forEach((group) => {
+    group.items.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+  });
+  // مرتب‌سازی گروه‌ها بر اساس propertyCategoryPriority (نزولی)، سپس propertyCategoryId (نزولی)
+  return Object.values(groups).sort((a, b) => {
+    if ((b.propertyCategoryPriority ?? 0) !== (a.propertyCategoryPriority ?? 0)) {
+      return (b.propertyCategoryPriority ?? 0) - (a.propertyCategoryPriority ?? 0);
+    }
+    return (b.propertyCategoryId ?? 0) - (a.propertyCategoryId ?? 0);
+  });
 }
 
 export default SpecificationsProduct;

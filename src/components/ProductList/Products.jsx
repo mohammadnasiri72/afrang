@@ -169,12 +169,12 @@ function Products({ products, layout = "list" }) {
           </div>
 
           {/* دسکتاپ: چیدمان اصلی */}
-          <div className="hidden lg:flex w-full">
-            <div className="p-3 lg:w-1/3 w-full relative flex items-start justify-center">
-              <Link href={product.url} className="relative">
+          <div className="hidden lg:flex w-full h-64 overflow-hidden">
+            <div className=" min-w-52 max-w-52 relative flex items-start justify-center pt-5">
+              <Link href={product.url} className="relative ">
                 <div className="relative overflow-hidden rounded-lg group">
                   <Image
-                    className="object-contain rounded-lg w-48 h-48 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                    className="object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
                     src={getImageUrl2(product.image)}
                     alt={product.title}
                     width={200}
@@ -190,7 +190,9 @@ function Products({ products, layout = "list" }) {
                 </div>
               </Link>
             </div>
-            <div className="sm:px-5 sm:py-5 px-5 lg:w-1/3 w-full relative">
+            <div className="w-full flex ">
+
+            <div className="sm:px-5 sm:py-5 px-5 w-7/12 relative flex flex-col h-full">
               <Link
                 href={product.url}
                 className="hover:text-[#d1182b] duration-300"
@@ -200,43 +202,40 @@ function Products({ products, layout = "list" }) {
                 </h2>
               </Link>
               {/* {product.summary && <ExpandableText text={product.summary} />} */}
-              {product.summary && <span className="line-clamp-6 text-justify">{product.summary}</span>}
+              {product.summary && <p className="text-justify flex-1 overflow-hidden text-ellipsis summary-clamp">{product.summary}</p>}
             </div>
-            <div className="lg:w-1/3 w-full bg-[#f9f9f9] lg:px-8">
+            <div className=" w-5/12 bg-[#f9f9f9] lg:px-8">
               <div className="flex flex-col w-full h-full">
                 <PriceProduct product={product} />
-                {/* <div className="flex items-center py-2">
-                  <img src="/images/icons/benchmark.png" alt="" />
-                  <span className="px-1"> مقایسه محصول </span>
-                </div> */}
                 {/* دکمه مقایسه */}
                 <div className="mb-3">
                   <CompareButton product={product} />
                 </div>
-                <div className="flex items-center py-2">
+                {/* <div className="flex items-center py-2">
                   <img src="/images/icons/fast-delivery-2.png" alt="" />
                   <span className="px-1"> ضمانت اصل بودن کالا </span>
-                </div>
-                <div className="flex items-center gap-3 mb-2">
+                </div> */}
+                <div className="flex flex-wrap items-center gap-3">
                   {product.fastShipping && (
-                    <div className="flex items-center py-2">
+                    <div className="flex items-center ">
                       <FaTruckFast className="text-lg text-[#898989]" />
                       <span className="px-1 font-semibold"> ارسال سریع </span>
                     </div>
                   )}
                   {product.freeShipping && (
-                    <div className="flex items-center py-2">
+                    <div className="flex items-center ">
                       <FaTruck className="text-lg text-[#898989]" />
                       <span className="px-1 font-semibold"> ارسال رایگان </span>
                     </div>
                   )}
-                </div>
-                {product.conditionId === 20 && (
-                  <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">
+                  {product.conditionId === 20 && (
+                  <div className="flex items-center text-sm text-[#d1182b] mb-1 px-1">
                     <FaRecycle className="ml-1.5" />
                     <span className="font-semibold px-1">کالای کارکرده</span>
                   </div>
                 )}
+                </div>
+                
 
                 {!product.canAddCart && (
                   <div className="mt-2">
@@ -252,6 +251,7 @@ function Products({ products, layout = "list" }) {
                   </div>
                 )}
               </div>
+            </div>
             </div>
           </div>
         </div>

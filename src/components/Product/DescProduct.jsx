@@ -10,8 +10,8 @@ function DescProduct({ product }) {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (product.product?.relatedId) {
-        const relatedResult = await getRelatedProductsByIdString(product.product.relatedId);
+      if (product.product?.optionalId) {
+        const relatedResult = await getRelatedProductsByIdString(product.product.optionalId);
         setRelatedProducts(relatedResult || []);
       }
       if (product.product?.similarId) {

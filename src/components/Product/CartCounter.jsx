@@ -101,7 +101,7 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
           className="flex items-center justify-center gap-2 bg-[#d1182b] hover:bg-[#40768c] text-white py-2 px-4 rounded-sm transition-colors w-full cursor-pointer"
         >
           <FaShoppingCart />
-          <span>مشاهده سبد خرید</span>
+          <span className="line-clamp-1"> سبد خرید</span>
         </button>
       )}
         </div>

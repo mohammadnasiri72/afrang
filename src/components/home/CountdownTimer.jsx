@@ -45,7 +45,7 @@ function CountdownTimer({ targetDate }) {
 
   return (
     <>
-      <div className="sm:flex hidden justify-center gap-2 -translate-y-1/2 duration-300">
+      <div className="sm:flex hidden justify-center gap-2 duration-300">
         <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
           <span className="text-[#d1182b] font-semibold">{String(timeLeft.hours).padStart(2, '0')}</span>
           <span className="pr-1">ساعت</span>
@@ -68,7 +68,7 @@ function CountdownTimer({ targetDate }) {
           <span className="text-[#d1182b] font-semibold">{String(timeLeft.minutes).padStart(2, '0')}</span>
           <span className="pr-1">دقیقه</span>
         </div>
-        <div className="flex rounded-md justify-center shadow-lg px-2 py-1 bg-white">
+        <div className="sm:flex hidden rounded-md justify-center shadow-lg px-2 py-1 bg-white">
           <span className="text-[#d1182b] font-semibold">{String(timeLeft.seconds).padStart(2, '0')}</span>
           <span className="pr-1">ثانیه</span>
         </div>

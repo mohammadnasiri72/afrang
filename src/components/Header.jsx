@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaCartShopping } from "react-icons/fa6";
-import { IoSearchSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchHeader from "./SearchHeader";
@@ -104,12 +103,11 @@ export default function Header() {
             >
               <img
                 className="lg:w-14 w-24 "
-                src={
-                  getImageUrl(
-                    settings.find((item) => item.propertyKey === "site_footer_logo")
-                      ?.value
-                  )
-                }
+                src={getImageUrl(
+                  settings.find(
+                    (item) => item.propertyKey === "site_footer_logo"
+                  )?.value
+                )}
                 alt=""
               />
             </Link>
@@ -142,12 +140,13 @@ export default function Header() {
             <span className="text-[#0008]"> آیا سوالی دارید </span>
             <span className="text-red-700 font-semibold text-sm">
               <a
-                href={`tel:${settings?.find((item) => item.propertyKey === "site_tel")
+                href={`tel:${
+                  settings?.find((item) => item.propertyKey === "site_tel")
                     ?.value || "02177615546"
-                  }`}
+                }`}
               >
-                {settings?.find((item) => item.propertyKey === "site_tel")?.value ||
-                  "77615546"}
+                {settings?.find((item) => item.propertyKey === "site_tel")
+                  ?.value || "77615546"}
               </a>
             </span>
           </div>
@@ -187,12 +186,18 @@ export default function Header() {
             style={{
               fontSize: "10px",
               fontWeight: "bold",
-              backgroundColor: "#000",
+              backgroundColor:  currentItems?.length !== 0 ? '#d1182b': "#000",
               color: "#fff",
               transform: "translate(-8px, -8px)",
             }}
           >
-            <FaCartShopping className="text-4xl text-[#d1182b]" />
+            <FaCartShopping
+              className={`text-4xl  ${
+                currentItems?.length !== 0
+                  ? "text-emerald-500"
+                  : "text-[#d1182b]"
+              }`}
+            />
           </Badge>
         </div>
       </div>

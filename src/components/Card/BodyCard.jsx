@@ -234,7 +234,7 @@ const BodyCard = () => {
   }
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap z-[50] relative">
       {items?.length === 0 ? (
         <div className="w-full flex flex-col items-center justify-center py-10">
           <div className="text-4xl text-[#d1182b] mb-4">
@@ -344,12 +344,12 @@ const BodyCard = () => {
           {cartType === 'current' && (
             <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
               <div className="bg-[#ececec] p-3 rounded-lg">
-                <div className="flex justify-between text-[#444] py-1">
+                <div className="flex justify-between text-[#444] py-1 font-bold">
                   <span>قیمت کالاها ({items?.length || 0})</span>
                   <span>{totalPrice.toLocaleString()}</span>
                 </div>
                 {totalDiscount > 0 && (
-                  <div className="flex justify-between text-[#444] py-1">
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>سود شما از این خرید</span>
                     <span>{totalDiscount.toLocaleString()}</span>
                   </div>

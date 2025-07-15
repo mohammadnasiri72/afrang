@@ -52,7 +52,6 @@ const AddToCartButtonCard = ({ productId }) => {
       }
       setIsModalOpen(true);
     } catch (error) {
-      console.error('Failed to fetch product details:', error);
       message.error("خطا در دریافت اطلاعات محصول");
     } finally {
       setIsLoading(false);
@@ -105,7 +104,7 @@ const AddToCartButtonCard = ({ productId }) => {
         <button
           onClick={handleAddToCart}
           disabled={isLoading}
-          className="flex items-center  bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full py-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center px-2 bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full py-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FaCartShopping className="" />
           <span className="line-clamp-1">{isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}</span>

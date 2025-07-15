@@ -16,6 +16,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from "./CountdownTimer";
 import { FaRecycle } from "react-icons/fa";
+import { Divider } from "antd";
 
 export default function ProductMain({ products }) {
   return (
@@ -56,11 +57,11 @@ export default function ProductMain({ products }) {
             <SwiperSlide
               key={`${product.id || product.productId || index}-${index}`}
             >
-              <div className="relative group w-full sm:h-[28rem] h-[25rem] overflow-hidden rounded-xl bg-white shadow-md flex flex-col">
+              <div className="relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md">
                 {/* تصویر */}
                 <Link
                   href={product.url}
-                  className="w-full h-40 sm:h-56 flex items-center justify-center bg-[#fafbfc] overflow-hidden relative"
+                  className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
                   <img
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
@@ -74,24 +75,28 @@ export default function ProductMain({ products }) {
                       کالای کارکرده
                     </div>
                   )}
+                   {/* تایمر */}
+                   {product.salePlanTimer && (
+                    <div className="absolute bottom-0 ">
+                      <CountdownTimer targetDate={product.salePlanTimer} />
+                    </div>
+                  )}
                 </Link>
                 {/* محتوا */}
-                <div className="flex flex-col flex-1 justify-between">
-                  {/* تایمر */}
-                  {product.salePlanTimer && (
-                    <CountdownTimer targetDate={product.salePlanTimer} />
-                  )}
+                <div className="flex flex-col flex-1 justify-between mt-2">
+                 
                   {/* عنوان */}
                   <Link
                     href={product.url}
-                    className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[48px] flex items-center"
+                    className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                   >
-                    <h3 className="text-justify line-clamp-2 w-full">
+                    <h3 className="text-justify line-clamp-3 w-full">
                       {product.title}
                     </h3>
                   </Link>
+                  <Divider style={{ margin: 5, padding: 0 }} />
                   {/* کالای کارکرده */}
-                  <div className="h-6 flex items-center mt-1 mb-2 px-2">
+                  {/* <div className="h-6 flex items-center mt-1 mb-2 px-2">
                     {product.conditionId === 20 && (
                       <div className="flex items-center text-xs text-[#d1182b]">
                         <FaRecycle className="ml-1.5" />
@@ -100,9 +105,9 @@ export default function ProductMain({ products }) {
                         </span>
                       </div>
                     )}
-                  </div>
+                  </div> */}
                   {/* قیمت */}
-                  <div className="h-10  px-2 group-hover:opacity-100 group-hover:sm:opacity-0 duration-300 group-hover:visible group-hover:sm:invisible">
+                  <div className="h-14 px-2 group-hover:opacity-100 group-hover:sm:opacity-0 duration-300 group-hover:visible group-hover:sm:invisible">
                     {!product.callPriceButton && product.finalPrice !== 0 && (
                       <div className="flex flex-col">
                         <span className="font-bold text-base text-[#333] whitespace-nowrap">
@@ -127,13 +132,13 @@ export default function ProductMain({ products }) {
                     )}
                   </div>
                   {/* دکمه افزودن به سبد یا وضعیت */}
-                  <div className="mt-2 ">
+                  <div className=" ">
                     {product.canAddCart ? (
                       <div className="bg-[#d1182b] w-full flex justify-center items-center text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
                         <AddToCartButtonCard productId={product.productId} />
                       </div>
                     ) : (
-                      <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%] cursor-not-allowed">
+                      <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%] cursor-not-allowed">
                         <SlBasket className="text-xl text-[#333]" />
                         <span className="px-1 text-[#666]">
                           {product.statusDesc}

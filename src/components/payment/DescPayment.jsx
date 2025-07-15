@@ -69,46 +69,46 @@ function DescPayment({ estimateData }) {
     <>
       <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
         <div className="bg-[#ececec] p-3 rounded-lg">
-          <div className="flex justify-between text-[#444] py-1">
+          <div className="flex justify-between text-[#444] py-1 font-bold">
             <span>قیمت کالاها ({currentItems?.length || 0})</span>
             <span>{estimateData?.productAmount ? estimateData.productAmount.toLocaleString() : 0} تومان</span>
           </div>
           {estimateData?.discountAmount > 0 && (
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>سود شما از این خرید</span>
               <span>{estimateData?.discountAmount ? estimateData.discountAmount.toLocaleString() : 0} تومان</span>
             </div>
           )}
           {estimateData?.discountCodeAmount > 0 && (
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>کد تخفیف</span>
               <span>{estimateData?.discountCodeAmount ? estimateData.discountCodeAmount.toLocaleString() : 0} تومان</span>
             </div>
           )}
           {
             estimateData?.walletIsActive &&
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>موجودی کیف پول</span>
               <span>{estimateData?.walletAmount ? estimateData.walletAmount.toLocaleString() : 0} تومان</span>
             </div>
           }
           {
             estimateData?.taxAmount > 0 &&
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>مالیات({estimateData?.taxPercent}%)</span>
               <span>{estimateData?.taxAmount ? estimateData.taxAmount.toLocaleString() : 0} تومان</span>
             </div>
           }
           {
             estimateData?.shipmentAmount > 0 &&
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>هزینه ارسال</span>
               <span>{estimateData?.shipmentAmount ? estimateData.shipmentAmount.toLocaleString() : 0} تومان</span>
             </div>
           }
           {
             !estimateData?.shipmentAmount &&
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>هزینه ارسال</span>
               <span>رایگان</span>
             </div>
@@ -116,7 +116,7 @@ function DescPayment({ estimateData }) {
 
           {
             selectedShipping &&
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>روش ارسال</span>
               {selectedShipping ? (
                 <span className="text-sm">
@@ -130,7 +130,7 @@ function DescPayment({ estimateData }) {
 
           {
             estimateData?.shipmentDesc &&
-            <div className="flex justify-between text-[#444] py-1">
+            <div className="flex justify-between text-[#444] py-1 font-bold">
               <span>توضیحات ارسال</span>
               <span>{estimateData?.shipmentDesc}</span>
             </div>

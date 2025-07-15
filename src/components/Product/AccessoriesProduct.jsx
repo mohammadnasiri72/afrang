@@ -9,11 +9,27 @@ import { FaBoxOpen } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa6";
 import { SlBasket } from "react-icons/sl";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { useRef } from 'react';
+
+// تابع chunkArray را خارج از کامپوننت تعریف کن
+function chunkArray(array, size) {
+  const result = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+}
 
 function AccessoriesProduct({ product }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
@@ -31,9 +47,15 @@ function AccessoriesProduct({ product }) {
         setLoading(false);
       }
     };
-
     fetchRelatedProducts();
   }, [product?.product?.relatedId]);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Get unique categories from relatedProducts
   const categories = [
@@ -44,6 +66,11 @@ function AccessoriesProduct({ product }) {
   const filteredProducts = relatedProducts.filter(
     (item) => item.categoryTitle === categories[accessoriesProductId - 1]
   );
+
+  // اسلایدر ستونی: هر اسلاید ۵ محصول زیر هم
+  const groupSize = 5;
+  const groupedProducts = chunkArray(filteredProducts, groupSize);
+  const shouldUseSlider = filteredProducts.length > groupSize;
 
   if (loading) {
     return (
@@ -133,123 +160,177 @@ function AccessoriesProduct({ product }) {
         </div>
 
         <div className="md:w-3/4 w-full md:px-5">
-          <div className="flex flex-wrap md:-mt-3 w-full">
-            {filteredProducts.map((item, index) => (
-              <div key={index} className="md:w-1/2 lg:w-1/3 w-full">
-                <div className="w-full p-3 relative h-full">
-                  {item.discount !== 0 && !item.callPriceButton && (
-                    <div className="absolute top-5 left-5 z-50 duration-300">
-                      <span className="bg-[#d1182b] text-white rounded-md px-3 py-1">
-                        {item.discount}%
-                      </span>
+          {shouldUseSlider ? (
+            <>
+              <Swiper
+                modules={[Pagination]}
+                pagination={{
+                  clickable: true,
+                  renderBullet: (index, className) =>
+                    `<span class="${className} custom-swiper-bullet"></span>`
+                }}
+                spaceBetween={16}
+                slidesPerView={1}
+                className="custom-swiper cursor-grab"
+              >
+                {groupedProducts.map((group, idx) => (
+                  <SwiperSlide key={idx}>
+                    <div className="flex flex-col w-full gap-2 min-h-[540px] pb-8">
+                      {group.map((item, index) => (
+                        <div key={index} className="w-full">
+                          <div className="flex items-center gap-3 p-3 border border-gray-100 bg-white rounded-lg relative h-[96px] min-h-[96px] hover:bg-gray-50 transition-all">
+                            <Link href={item.url} className="flex-shrink-0 w-20 h-20 relative overflow-hidden">
+                              <img
+                                className="object-contain w-20 h-20"
+                                src={getImageUrl2(item.image)}
+                                alt={item.title}
+                              />
+                            </Link>
+                            <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
+                              <Link
+                                href={item.url}
+                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2 text-sm mb-1"
+                              >
+                                {item.title}
+                              </Link>
+                              <div className="flex items-center gap-2 mt-auto">
+                                {!item.callPriceButton && item.finalPrice > 0 && (
+                                  <>
+                                    <span className="text-sm font-bold text-[#d1182b]">
+                                      {item.finalPrice.toLocaleString()}
+                                    </span>
+                                    <span className="text-xs text-gray-500">تومان</span>
+                                  </>
+                                )}
+                                {item.callPriceButton && (
+                                  <span className="text-sm font-bold text-[#d1182b]">تماس بگیرید</span>
+                                )}
+                                {!item.callPriceButton && item.finalPrice === 0 && (
+                                  <span className="text-sm font-bold text-[#d1182b]">بدون قیمت</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-end justify-between h-full ml-2">
+                              {item.discount !== 0 && !item.callPriceButton && (
+                                <span className="bg-[#d1182b] text-white rounded-md px-2 py-0.5 text-xs mb-1">
+                                  {item.discount}%
+                                </span>
+                              )}
+                              {item.canAddCart && (
+                                <div className="mt-auto">
+                                  <AddToCartButtonCard productId={item.productId} />
+                                </div>
+                              )}
+                              {!item.canAddCart && (
+                                <div className="mt-auto flex items-center gap-1 text-xs text-[#666] bg-[#e1e1e1] px-2 py-1 rounded">
+                                  <SlBasket className="text-base text-[#333]" />
+                                  <span>{item.statusDesc}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  )}
-                  <div className="relative group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
-                    <Link href={item.url} className="flex-grow-0">
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <style jsx global>{`
+                .custom-swiper {
+                  cursor: grab;
+                }
+                .custom-swiper:active {
+                  cursor: grabbing;
+                }
+                .custom-swiper .swiper-wrapper {
+                  cursor: inherit;
+                }
+                .custom-swiper .swiper-pagination {
+                  position: static;
+                  margin-top: 24px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 8px;
+                }
+                .custom-swiper-bullet {
+                  display: inline-block;
+                  width: 12px;
+                  height: 12px;
+                  background: #000 !important;
+                  border-radius: 999px;
+                  transition: all 0.3s;
+                  margin: 0 4px;
+                  cursor: pointer;
+                }
+                .custom-swiper .swiper-pagination-bullet-active,
+                .custom-swiper-bullet.swiper-pagination-bullet-active {
+                  background: #d1182b !important;
+                  width: 32px;
+                  height: 12px;
+                  border-radius: 999px;
+                }
+              `}</style>
+            </>
+          ) : (
+            <div className="flex flex-col w-full gap-2">
+              {filteredProducts.map((item, index) => (
+                <div key={index} className="w-full">
+                  <div className="flex items-center gap-3 p-3 border border-gray-100 bg-white rounded-lg relative h-[96px] min-h-[96px] hover:bg-gray-50 transition-all">
+                    <Link href={item.url} className="flex-shrink-0 w-20 h-20 relative overflow-hidden">
                       <img
-                        className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"
+                        className="object-contain w-20 h-20"
                         src={getImageUrl2(item.image)}
                         alt={item.title}
                       />
                     </Link>
-
-                    <div className="flex-grow flex flex-col justify-between p-3">
+                    <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
                       <Link
                         href={item.url}
-                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2"
+                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2 text-sm mb-1"
                       >
                         {item.title}
                       </Link>
-                      <div>
-                        {!item.callPriceButton && (
-                          <div>
-                            <div className="sm:flex hidden justify-between items-center mt-3 opacity-100 group-hover:opacity-0 duration-300">
-                              <span className="font-bold text-lg text-[#333]">
-                                {item.finalPrice} تومان
-                              </span>
-                              {item.discount !== 0 && (
-                                <span className="text-[#333a] font-semibold text-lg line-through">
-                                  {item.price1}
-                                </span>
-                              )}
-                            </div>
-                            <div className="sm:hidden flex justify-between items-center mt-3 duration-300">
-                              <span className="font-bold text-lg text-[#333]">
-                                {item.finalPrice} تومان
-                              </span>
-                              {item.discount !== 0 && (
-                                <span className="text-[#333a] font-semibold text-lg line-through">
-                                  {item.price1}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                        {!item.callPriceButton && item.finalPrice === 0 && (
-                          <div>
-                            <div className="sm:flex hidden justify-between items-center mt-3 opacity-100 group-hover:opacity-0 duration-300">
-                              <span className="font-bold text-lg text-[#333]">
-                                بدون قیمت
-                              </span>
-                            </div>
-                            <div className="sm:hidden flex justify-between items-center mt-3 duration-300">
-                              <span className="font-bold text-lg text-[#333]">
-                                بدون قیمت
-                              </span>
-                            </div>
-                          </div>
+                      <div className="flex items-center gap-2 mt-auto">
+                        {!item.callPriceButton && item.finalPrice > 0 && (
+                          <>
+                            <span className="text-sm font-bold text-[#d1182b]">
+                              {item.finalPrice.toLocaleString()}
+                            </span>
+                            <span className="text-xs text-gray-500">تومان</span>
+                          </>
                         )}
                         {item.callPriceButton && (
-                          <div>
-                            <div className="sm:flex hidden justify-between items-center mt-3 opacity-100 group-hover:opacity-0 duration-300">
-                              <span className="font-bold text-lg text-[#333]">
-                                تماس بگیرید
-                              </span>
-                            </div>
-                            <div className="sm:hidden flex justify-between items-center mt-3 duration-300">
-                              <span className="font-bold text-lg text-[#333]">
-                                تماس بگیرید
-                              </span>
-                            </div>
-                          </div>
+                          <span className="text-sm font-bold text-[#d1182b]">تماس بگیرید</span>
                         )}
-                        {item.canAddCart && (
-                          <div>
-                            <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center  text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#d1182b] font-bold">
-                              {/* <SlBasket className="text-xl" />
-                            <span className="px-1">افزودن به سبد خرید</span> */}
-                              <AddToCartButtonCard productId={item.productId} />
-                            </div>
-                            <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:hidden flex justify-center items-center  text-white rounded-b-lg duration-300 cursor-pointer hover:bg-[#d1182b] font-bold">
-                              {/* <SlBasket className="text-xl" />
-                            <span className="px-1">افزودن به سبد خرید</span> */}
-                              <AddToCartButtonCard productId={item.productId} />
-                            </div>
-                          </div>
-                        )}
-                        {!item.canAddCart && (
-                          <div>
-                            <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold cursor-default select-none">
-                              <SlBasket className="text-xl text-[#333]" />
-                              <span className="px-1 text-[#666]">
-                                {item.statusDesc}
-                              </span>
-                            </div>
-                            <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex justify-center items-center py-2 text-white rounded-b-lg duration-300 font-bold cursor-default select-none">
-                              <SlBasket className="text-xl text-[#333]" />
-                              <span className="px-1 text-[#666]">
-                                {item.statusDesc}
-                              </span>
-                            </div>
-                          </div>
+                        {!item.callPriceButton && item.finalPrice === 0 && (
+                          <span className="text-sm font-bold text-[#d1182b]">بدون قیمت</span>
                         )}
                       </div>
                     </div>
+                    <div className="flex flex-col items-end justify-between h-full ml-2">
+                      {item.discount !== 0 && !item.callPriceButton && (
+                        <span className="bg-[#d1182b] text-white rounded-md px-2 py-0.5 text-xs mb-1">
+                          {item.discount}%
+                        </span>
+                      )}
+                      {item.canAddCart && (
+                        <div className="mt-auto">
+                          <AddToCartButtonCard productId={item.productId} />
+                        </div>
+                      )}
+                      {!item.canAddCart && (
+                        <div className="mt-auto flex items-center gap-1 text-xs text-[#666] bg-[#e1e1e1] px-2 py-1 rounded">
+                          <SlBasket className="text-base text-[#333]" />
+                          <span>{item.statusDesc}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>

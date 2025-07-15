@@ -69,7 +69,7 @@ function BasketBox({ product }) {
   return (
     <div className="px-2 h-full">
       <div className="bg-[#f6f6f6] h-full rounded-lg p-2">
-        <h4 className="font-bold text-[#333]">سبد خرید</h4>
+        <h4 className="font-bold text-[#333]">اطلاعات محصول</h4>
         {warrantiesArray && warrantiesArray.length > 0 && (
           <Warranties
             selectedWarranty={selectedWarranty}

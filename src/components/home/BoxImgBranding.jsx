@@ -61,7 +61,7 @@ export default function BoxImgBranding() {
   }
 
   return (
-    <div className="sm:px-16 px-2  relative z-50">
+    <div className="sm:px-16 px-2  relative">
       <div className="absolute left-0 -top-52">
         <img src="/images/gallery/bg-shadow-1.png" />
       </div>

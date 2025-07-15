@@ -820,3 +820,12 @@ a, li, td, th {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.summary-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+  max-height: 100%;
+}
