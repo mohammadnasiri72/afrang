@@ -36,8 +36,6 @@ export default async function ProductDetails(props) {
   } catch (error) {
     console.error("Error recording visit:", error);
   }
-
-  console.log(product);
   
 
   return (

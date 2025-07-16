@@ -223,18 +223,23 @@ function ShoppingDrawer() {
                                 WebkitBoxOrient: 'vertical',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                maxHeight: '2.5em',
                                 lineHeight: '1.25em'
                               }}
                             >
                               {item.title && item.title.includes('|') ? (
                                 (() => {
                                   const [main, color] = item.title.split('|');
-                                  return <>
-                                    <span>{main.trim()}</span>
-                                    <span className="mx-1 text-[#aaa]">|</span>
-                                    <span className="font-bold">{color.trim()}</span>
-                                  </>;
+                                  return (
+                                    <>
+                                      <span>{main.trim()}</span>
+                                      {color && color.trim() && (
+                                        <>
+                                          <span className="mx-1 text-[#aaa]">|</span>
+                                          <span className="font-bold">{color.trim()}</span>
+                                        </>
+                                      )}
+                                    </>
+                                  );
                                 })()
                               ) : (
                                 item.title

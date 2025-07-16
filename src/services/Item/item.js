@@ -57,6 +57,16 @@ export const getItemByIds = async (data, token) => {
 };
 
 
+export const getListItemByIds = async (ids) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Item/ByIds/${ids}`);
+    return response.data;
+  } catch (err) {
+    return {type:'error',message:err.response?.data ? err.response?.data : "خطای شبکه"}
+  }
+};
+
+
 
 
 export const itemVisit = async (id, url, ip, userAgent) => {

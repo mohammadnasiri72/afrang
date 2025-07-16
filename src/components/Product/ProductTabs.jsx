@@ -10,6 +10,7 @@ import SpecificationsProduct from "./SpecificationsProduct";
 import BundleProducts from "./BundleProducts";
 import { useRef } from "react";
 import RelatedProductsMobile from "./RelatedProductsMobile";
+import BoxVideoProduct from "./BoxVideoProduct";
 
 function ProductTabs({ product, parentRef }) {
   const [tabProDetails, setTabProDetails] = useState(
@@ -30,11 +31,17 @@ function ProductTabs({ product, parentRef }) {
   const detailsRef = useRef(null);
   const specsRef = useRef(null);
   const accessoriesRef = useRef(null);
+  const relatedVideosRef = useRef(null); // جدید
   const commentsRef = useRef(null);
   const qaRef = useRef(null);
   const segmentedBoxRef = useRef(null);
   const scrollBoxRef = useRef(null);
   const segmentedRef = useRef(null);
+
+  // شرط وجود ویدئوهای مرتبط
+  const hasRelatedVideos =
+    Array.isArray(product?.properties) &&
+    product.properties.some((p) => p.propertyKey === "related_videos");
 
   // Scroll spy logic for main page scroll
   useEffect(() => {
@@ -44,6 +51,7 @@ function ProductTabs({ product, parentRef }) {
       detailsRef,
       specsRef,
       accessoriesRef,
+      hasRelatedVideos ? relatedVideosRef : null, // اضافه شد
       commentsRef,
       qaRef,
     ].filter(Boolean);
@@ -52,9 +60,10 @@ function ProductTabs({ product, parentRef }) {
       2,
       3,
       4,
+      hasRelatedVideos ? 7 : null, // مقدار جدید برای تب ویدئوها
       5,
       6,
-    ];
+    ].filter(Boolean);
 
     let ticking = false;
     function onScroll() {
@@ -84,7 +93,7 @@ function ProductTabs({ product, parentRef }) {
               const rect = ref.current.getBoundingClientRect();
               const elementTop = rect.top + scrollY;
               const elementBottom = elementTop + rect.height;
-              
+
               // اگر بخش در viewport باشد
               if (
                 elementTop <= scrollY + 300 &&
@@ -113,7 +122,7 @@ function ProductTabs({ product, parentRef }) {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [product.product.typeId, scrollSpyDisabled]);
+  }, [product.product.typeId, scrollSpyDisabled, hasRelatedVideos]);
 
   useEffect(() => {
     // Scroll Segmented horizontally to show active tab on mobile
@@ -142,6 +151,7 @@ function ProductTabs({ product, parentRef }) {
     { label: "توضیحات محصول", value: 2 },
     { label: "مشخصات فنی", value: 3 },
     { label: "محصولات مرتبط", value: 4 },
+    ...(hasRelatedVideos ? [{ label: "ویدئوهای مرتبط", value: 7 }] : []),
     { label: "نظرات", value: 5 },
     { label: "پرسش و پاسخ", value: 6 },
   ];
@@ -158,13 +168,18 @@ function ProductTabs({ product, parentRef }) {
     if (val === 4) ref = accessoriesRef;
     if (val === 5) ref = commentsRef;
     if (val === 6) ref = qaRef;
+    if (val === 7 && hasRelatedVideos) ref = relatedVideosRef;
     if (ref && ref.current && elementRef.current) {
       const rect = elementRef.current.getBoundingClientRect();
       const scrollY = window.scrollY;
       const elementTop = rect.top + scrollY;
       const stickyTop = 100;
       const extraOffset = 150;
-      const offset = ref.current.getBoundingClientRect().top + window.scrollY - stickyTop - extraOffset;
+      const offset =
+        ref.current.getBoundingClientRect().top +
+        window.scrollY -
+        stickyTop -
+        extraOffset;
       window.scrollTo({ top: offset, behavior: "smooth" });
     }
 
@@ -192,8 +207,6 @@ function ProductTabs({ product, parentRef }) {
         } else {
           setIsSticky(false);
         }
-
-       
       }
     };
 
@@ -225,9 +238,9 @@ function ProductTabs({ product, parentRef }) {
       }
     }
     updateBoxPosition();
-    window.addEventListener('resize', updateBoxPosition);
+    window.addEventListener("resize", updateBoxPosition);
     return () => {
-      window.removeEventListener('resize', updateBoxPosition);
+      window.removeEventListener("resize", updateBoxPosition);
     };
   }, []);
 
@@ -283,7 +296,11 @@ function ProductTabs({ product, parentRef }) {
       >
         <div
           ref={segmentedBoxRef}
-          className={`SegmentedProduct${isSticky ? ' sticky' : ''} overflow-hidden flex justify-center ${isSticky ? 'p-0' : 'p-5'} bg-white z-50 transition-all duration-300 ${
+          className={`SegmentedProduct${
+            isSticky ? " sticky" : ""
+          } overflow-hidden flex justify-center ${
+            isSticky ? "p-0" : "p-5"
+          } bg-white z-50 transition-all duration-300 ${
             isSticky ? "fixed top-0 shadow-lg" : "relative w-full"
           }`}
           style={{
@@ -350,6 +367,17 @@ function ProductTabs({ product, parentRef }) {
             </div>
           </div>
           <Divider />
+          {hasRelatedVideos && (
+            <div>
+              <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+                ویدئوهای مرتبط
+              </h4>
+              <div ref={relatedVideosRef} className="tab-section-scroll-anchor">
+               <BoxVideoProduct ids={ product.properties.find((e)=>e.propertyKey === "related_videos")?.value}/>
+              </div>
+            </div>
+          )}
+          {hasRelatedVideos && <Divider />}
           <div ref={commentsRef} className="tab-section-scroll-anchor">
             <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
               نظرات کاربران
