@@ -55,6 +55,7 @@ export const saveState = (state) => {
         delete stateToSave.address;
         delete stateToSave.shipping;
         delete stateToSave.socialNetworks;
+        delete stateToSave.productColor; // جلوگیری از ذخیره شدن رنگ انتخابی
         
         const serializedState = JSON.stringify(stateToSave);
         localStorage.setItem('reduxState', serializedState);

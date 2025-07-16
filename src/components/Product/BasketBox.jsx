@@ -1,20 +1,14 @@
 "use client";
 
 import { Divider } from "antd";
+import { useState } from "react";
+import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import CompareButton from "../common/CompareButton";
 import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
-import Warranties from "./Warranties";
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { FaTruck, FaTruckFast, FaRecycle } from "react-icons/fa6";
-import CompareButton from "../common/CompareButton";
-import { addToCart } from "../../services/cart/cartService";
-import { fetchCurrentCart } from "@/redux/slices/cartSlice";
-import SuccessModal from "./SuccessModal";
-import Cookies from "js-cookie";
-import { Spin } from "antd";
-import { FaCartShopping } from "react-icons/fa6";
 import LikeProduct from "./LikeProduct";
+import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
   const dispatch = useDispatch();
@@ -22,7 +16,6 @@ function BasketBox({ product }) {
   const isInCart = items?.some(
     (item) => item.productId === product?.product?.productId
   );
- 
 
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
@@ -31,10 +24,9 @@ function BasketBox({ product }) {
     warrantiesArray[0]?.value || null
   );
 
- 
-  
-
-  const selectedColor = useSelector(state => state.productColor.selectedColorMode);
+  const selectedColor = useSelector(
+    (state) => state.productColor.selectedColorMode
+  );
 
   return (
     <div className="px-2 h-full">
@@ -50,10 +42,6 @@ function BasketBox({ product }) {
         )}
 
         <Divider style={{ padding: 0, margin: "10px" }} />
-        {/* <div className="flex items-center gap-3 mt-3">
-          <img src="/images/icons/benchmark.png" alt="" />
-          <span className="text-sm text-[#333]"> مقایسه محصول </span>
-        </div> */}
         <div className="flex items-center gap-1 flex-wrap">
           <div>
             <CompareButton product={product?.product} />
@@ -62,11 +50,6 @@ function BasketBox({ product }) {
             <LikeProduct productId={product?.product?.productId} />
           </div>
         </div>
-        {/* <div className="flex items-center gap-3 mt-6">
-          <img src="/images/icons/fast-delivery-2.png" alt="" />
-          <span className="text-sm text-[#333]"> ضمانت اصل بودن کالا </span>
-        </div> */}
-
 
         <div className="flex items-center gap-3 px-1 mt-3">
           {product?.product?.fastShipping && (
@@ -82,25 +65,35 @@ function BasketBox({ product }) {
             </div>
           )}
           {product?.product.conditionId === 20 && (
-          <div className="flex items-center gap-2 px-1 text-[#d1182b]">
-            <FaRecycle className=" " />
-            <span className="text-xs font-semibold"> کالای کارکرده</span>
-          </div>
-        )}
+            <div className="flex items-center gap-2 px-1 text-[#d1182b]">
+              <FaRecycle className=" " />
+              <span className="text-xs font-semibold"> کالای کارکرده</span>
+            </div>
+          )}
         </div>
 
-        
         {/* نمایش رنگ انتخاب شده */}
         {selectedColor && (
           <div className="flex items-center gap-2 my-2 px-1">
             <span
               className="w-6 h-6 rounded-full border border-gray-300 inline-block"
-              style={{ backgroundColor: (() => { try { return JSON.parse(selectedColor.files || '{}').Color || '#eee'; } catch { return '#eee'; } })() }}
+              style={{
+                backgroundColor: (() => {
+                  try {
+                    return (
+                      JSON.parse(selectedColor.files || "{}").Color || "#eee"
+                    );
+                  } catch {
+                    return "#eee";
+                  }
+                })(),
+              }}
             ></span>
-            <span className="text-xs font-semibold text-gray-700">{selectedColor.propertyValue}</span>
+            <span className="text-xs font-semibold text-gray-700">
+              {selectedColor.propertyValue}
+            </span>
           </div>
         )}
-       
 
         <PriceProduct product={product?.product} />
         {product?.inventory?.inventorySetting?.showInventory && (
