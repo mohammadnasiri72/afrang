@@ -28,7 +28,6 @@ function SpecificationsProduct({ product }) {
     );
   }
 
-  console.log(product);
   
 
   if (!product.properties || product.properties.length === 0) {

@@ -23,6 +23,8 @@ function ShoppingDrawer() {
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
 
+  
+
   useEffect(() => {
     const userData = getUserCookie();
     setUserId(userData?.userId || null);
@@ -225,7 +227,18 @@ function ShoppingDrawer() {
                                 lineHeight: '1.25em'
                               }}
                             >
-                              {item.title}
+                              {item.title && item.title.includes('|') ? (
+                                (() => {
+                                  const [main, color] = item.title.split('|');
+                                  return <>
+                                    <span>{main.trim()}</span>
+                                    <span className="mx-1 text-[#aaa]">|</span>
+                                    <span className="font-bold">{color.trim()}</span>
+                                  </>;
+                                })()
+                              ) : (
+                                item.title
+                              )}
                             </div>
 
                             {item.conditionId === 20 && (

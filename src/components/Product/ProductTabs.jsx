@@ -193,16 +193,7 @@ function ProductTabs({ product, parentRef }) {
           setIsSticky(false);
         }
 
-        console.log(
-          "Element offsetTop:",
-          absoluteTop,
-          "Element bottom:",
-          elementBottom,
-          "Window scrollY:",
-          scrollY,
-          "Is sticky:",
-          scrollY >= absoluteTop - 100 && scrollY < elementBottom - 200
-        );
+       
       }
     };
 
@@ -363,14 +354,14 @@ function ProductTabs({ product, parentRef }) {
             <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
               نظرات کاربران
             </h4>
-            <CommentProduct id={product.product.productId} type={0} onReplyScroll={() => handleTabChange(5)} />
+            <CommentProduct id={product.product.productId} type={0} />
           </div>
           <Divider />
           <div ref={qaRef} className="tab-section-scroll-anchor">
             <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
               پرسش و پاسخ
             </h4>
-            <CommentProduct id={product.product.productId} type={1} onReplyScroll={() => handleTabChange(6)} />
+            <CommentProduct id={product.product.productId} type={1} />
           </div>
         </div>
       </div>

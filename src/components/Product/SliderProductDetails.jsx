@@ -37,17 +37,27 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-export default function SliderProductDetails({ attachments , productId}) {
+export default function SliderProductDetails({ attachments , product}) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   return (
     <>
-      <div className="flex justify-between">
-
-        {/* <div className="w-1/6 mx-auto flex flex-col items-center justify-start">
-          <LikeProduct productId={productId} />
-        </div> */}
+      <div className="flex justify-between relative">
         <div className="w-full mx-auto">
+          {/* تخفیف */}
+          {product?.discount !== 0 && (
+            <div className="absolute top-3 left-3 z-50 duration-300">
+              <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                {product.discount}%
+              </span>
+            </div>
+          )}
+          {/* کالای کارکرده */}
+          {product?.conditionId === 20 && (
+            <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+              کالای کارکرده
+            </div>
+          )}
           {attachments.length > 0 && (
             <div className="slider-productDetails">
               <Swiper
@@ -62,9 +72,6 @@ export default function SliderProductDetails({ attachments , productId}) {
                 modules={[FreeMode, Thumbs]}
                 className="mySwiper2"
               >
-
-
-
                 {attachments.map((attachment) => (
                   <SwiperSlide key={attachment.id}>
                     <a

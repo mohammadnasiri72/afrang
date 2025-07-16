@@ -93,9 +93,9 @@ const CommentTree = ({ comments, parentId = null, onReply, depth = 0 , type}) =>
   );
   
   // اگر کامنتی وجود نداشت و در سطح اصلی هستیم، حالت خالی را نمایش می‌دهیم
-  if (filteredComments.length === 0 && currentParentId === null) {
-    return <EmptyComments />;
-  }
+  // if (filteredComments.length === 0 && currentParentId === null) {
+  //   return <EmptyComments />;
+  // }
 
   
   
@@ -126,7 +126,7 @@ function CommentUser({ comments, onReply , type}) {
     <div className="bg-white p-4 mt-3 rounded-lg">
       {/* <h2 className="font-semibold text-[18px]">نظرات کاربران</h2> */}
       {/* <h4 className="px-7 text-2xl font-bold text-[#d1182b]">نظرات کاربران</h4> */}
-      <hr className="mt-4 border-[#40768c55]" />
+      {/* <hr className="mt-4 border-[#40768c55]" /> */}
       <CommentTree comments={comments} onReply={onReply} type={type} />
     </div>
   );

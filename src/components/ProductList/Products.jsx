@@ -115,9 +115,16 @@ function Products({ products, layout = "list" }) {
                       priority={false}
                       unoptimized
                     />
+                    {/* تخفیف سمت چپ */}
                     {product.discount !== 0 && (
-                      <span className="absolute top-1 right-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm text-white text-xs font-bold">
-                        {product.discount}٪
+                      <span className="absolute top-1 left-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+                        {product.discount}%
+                      </span>
+                    )}
+                    {/* کالای کارکرده سمت راست */}
+                    {product.conditionId === 20 && (
+                      <span className="absolute top-1 right-1 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-2 py-0.5 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
+                        کارکرده
                       </span>
                     )}
                   </div>
@@ -182,9 +189,16 @@ function Products({ products, layout = "list" }) {
                     priority={false}
                     unoptimized
                   />
+                  {/* تخفیف سمت چپ */}
                   {product.discount !== 0 && (
-                    <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
-                      {product.discount}٪
+                    <span className="absolute top-2 left-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+                      {product.discount}%
+                    </span>
+                  )}
+                  {/* کالای کارکرده سمت راست */}
+                  {product.conditionId === 20 && (
+                    <span className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
+                      کالای کارکرده
                     </span>
                   )}
                 </div>
@@ -204,8 +218,8 @@ function Products({ products, layout = "list" }) {
               {/* {product.summary && <ExpandableText text={product.summary} />} */}
               {product.summary && <p className="text-justify flex-1 overflow-hidden text-ellipsis summary-clamp">{product.summary}</p>}
             </div>
-            <div className=" w-5/12 bg-[#f9f9f9] lg:px-8">
-              <div className="flex flex-col w-full h-full">
+            <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-64 flex flex-col">
+              <div className="flex flex-col w-full h-full flex-1">
                 <PriceProduct product={product} />
                 {/* دکمه مقایسه */}
                 <div className="mb-3">
@@ -235,18 +249,18 @@ function Products({ products, layout = "list" }) {
                   </div>
                 )}
                 </div>
-                
-
+                <div className="flex-1"></div>
+              </div>
+              {/* دکمه افزودن به سبد خرید یا وضعیت */}
+              <div className="w-full mt-2">
                 {!product.canAddCart && (
-                  <div className="mt-2">
-                    <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
-                      <FaCartShopping className="text-[#333]" />
-                      <span className="text-[#666]">{product.statusDesc}</span>
-                    </button>
-                  </div>
+                  <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
+                    <FaCartShopping className="text-[#333]" />
+                    <span className="text-[#666]">{product.statusDesc}</span>
+                  </button>
                 )}
                 {product.canAddCart && (
-                  <div className="mt-2 flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
                     <AddToCartButton productId={product.productId} />
                   </div>
                 )}
@@ -274,10 +288,17 @@ function Products({ products, layout = "list" }) {
               unoptimized
             />
           </Link>
+          {/* کالای کارکرده سمت راست */}
           {product.conditionId === 20 && (
-            <div className="absolute top-0 right-0 bg-[#40768c] text-white px-3 py-1 rounded-sm transform shadow-md">
+            <span className="absolute top-0 right-0 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-2 py-0.5 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
               کارکرده
-            </div>
+            </span>
+          )}
+          {/* تخفیف سمت چپ */}
+          {product.discount !== 0 && (
+            <span className="absolute top-0 left-0 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+              {product.discount}%
+            </span>
           )}
         </div>
         <Link

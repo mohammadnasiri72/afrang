@@ -28,7 +28,7 @@ function TitleProduct({ product }) {
           <div className="lg:w-[40%] w-full p-2">
             <SliderProductDetails
               attachments={allAttachments}
-              productId={product.product.productId}
+              product={product.product}
             />
           </div>
         )}

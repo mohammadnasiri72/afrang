@@ -13,6 +13,7 @@ import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getProductId } from "@/services/products/productService";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -28,6 +29,7 @@ function SelectProductMokamel({ product }) {
   const [removingProductId, setRemovingProductId] = useState(null);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
+  const [selectedColorId, setSelectedColorId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef(null);
@@ -80,17 +82,19 @@ function SelectProductMokamel({ product }) {
   // مقداردهی اولیه انتخاب‌شده‌ها بر اساس سبد خرید و لیست مکمل
   useEffect(() => {
     if (!optionalProducts.length || !currentItems) return;
+    const itemsArray = Array.isArray(currentItems) ? currentItems : [];
     const selected = optionalProducts
       .map((p) => p.productId)
-      .filter((id) => currentItems.some((item) => item.productId === id));
+      .filter((id) => itemsArray.some((item) => item.productId === id));
     setSelectedProducts(selected);
   }, [optionalProducts, currentItems]);
 
   // هماهنگ‌سازی انتخاب‌ها با سبد خرید
   useEffect(() => {
     if (!currentItems) return;
+    const itemsArray = Array.isArray(currentItems) ? currentItems : [];
     setSelectedProducts((prevSelected) =>
-      prevSelected.filter((id) => currentItems.some((item) => item.productId === id))
+      prevSelected.filter((id) => itemsArray.some((item) => item.productId === id))
     );
   }, [currentItems]);
 
@@ -126,13 +130,18 @@ function SelectProductMokamel({ product }) {
       } else {
         setSelectedWarranty(null);
       }
+      // انتخاب رنگ پیش‌فرض
+      if (productDetails?.productModes && productDetails.productModes.length > 0) {
+        setSelectedColorId(productDetails.productModes[0].id);
+      } else {
+        setSelectedColorId(null);
+      }
       setIsModalOpen(true);
     } catch (error) {
       message.error("خطا در دریافت اطلاعات محصول");
     } finally {
       setIsLoading(false);
       setLoadingProductId(null);
-      // setShowResults(false); // حذف شود، فقط بعد از تایید اضافه شود
     }
   };
 
@@ -159,11 +168,12 @@ function SelectProductMokamel({ product }) {
       } else {
         userId = userData.userId;
       }
-      await addToCart(selectedProductToAdd, selectedWarranty?.id || -1, userId);
+      await addToCart(selectedProductToAdd, selectedWarranty?.id || -1, userId, 1, selectedColorId ?? -1);
       setSelectedProducts([...selectedProducts, selectedProductToAdd]);
       setIsModalOpen(false);
       setSelectedProductDetails(null);
       setSelectedWarranty(null);
+      setSelectedColorId(null);
       dispatch(fetchCurrentCart());
       dispatch(fetchNextCart());
       Swal.fire({
@@ -390,9 +400,8 @@ function SelectProductMokamel({ product }) {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2">{selectedProductDetails.product.title}</h3>
+                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2 pl-2">{selectedProductDetails.product.title}</h3>
                 <p className="text-gray-600 text-xs mb-2 line-clamp-2">{selectedProductDetails.product.description}</p>
-
                 {/* قیمت */}
                 <div>
                   {selectedProductDetails.product.discount > 0 ? (
@@ -415,7 +424,50 @@ function SelectProductMokamel({ product }) {
                     </span>
                   )}
                 </div>
-
+                {/* رنگ‌ها */}
+                {selectedProductDetails?.productModes && selectedProductDetails.productModes.length > 0 && (
+                  <div className="mt-3">
+                    <h4 className="font-semibold text-gray-800 text-sm mb-2">انتخاب رنگ</h4>
+                    <div className="flex gap-4 flex-wrap">
+                      {selectedProductDetails.productModes.map((mode) => {
+                        let color = "#eee";
+                        try {
+                          const filesObj = JSON.parse(mode.files || "{}");
+                          if (filesObj.Color) color = filesObj.Color;
+                        } catch {}
+                        const isSelected = selectedColorId === mode.id;
+                        return (
+                          <button
+                            key={mode.id}
+                            type="button"
+                            onClick={() => setSelectedColorId(mode.id)}
+                            className={`flex flex-col items-center group focus:outline-none cursor-pointer`}
+                          >
+                            <span
+                              className={`w-8 h-8 rounded-full border-2 transition-all duration-200 mb-1 relative flex items-center justify-center ${
+                                isSelected
+                                  ? "border-blue-600 shadow-lg scale-110"
+                                  : "border-gray-300"
+                              }`}
+                              style={{ backgroundColor: color }}
+                            >
+                              {isSelected && (
+                                <svg className="absolute text-white text-base bg-blue-500 rounded-full p-0.5 w-3 h-3 -bottom-1 -left-1 shadow" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
+                              )}
+                            </span>
+                            <span
+                              className={`text-xs text-gray-600 group-hover:text-blue-700 ${
+                                isSelected ? "font-bold text-blue-700" : ""
+                              }`}
+                            >
+                              {mode.propertyValue}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
                 {/* گارانتی‌ها */}
                 {Object.keys(selectedProductDetails.warranties).length > 0 && (
                   <div className="mt-3">
@@ -442,20 +494,22 @@ function SelectProductMokamel({ product }) {
                 )}
               </div>
             </div>
-
-            {/* دکمه تایید */}
-            <div className="mt-2 flex justify-end">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                disabled={isLoading}
-                className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors hover:bg-gray-200"
-              >
-                انصراف
-              </button>
+            {/* دکمه تایید و مشاهده جزئیات */}
+            <div className="mt-2 flex justify-end gap-2">
+              {selectedProductDetails && selectedProductDetails.product && selectedProductDetails.product.url && (
+                <Link href={selectedProductDetails.product.url} target="_blank">
+                <button
+                  type="button"
+                  className="bg-[#40768c] text-white px-4 py-1.5 rounded-lg hover:bg-[#28506a] transition-colors duration-300 text-sm cursor-pointer"
+                >
+                  مشاهده جزئیات محصول
+                </button>
+              </Link>
+              )}
               <button
                 onClick={handleConfirmAdd}
                 disabled={isLoading || !selectedProductDetails.canAddCart}
-                className="bg-[#d1182b] text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer ml-2"
+                className="bg-[#d1182b] text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
               >
                 {isLoading ? "در حال افزودن..." : "تایید و افزودن به سبد خرید"}
               </button>

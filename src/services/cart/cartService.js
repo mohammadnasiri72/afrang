@@ -12,13 +12,19 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-export const addToCart = async (productId, warrantyId = -1, userId, quantity = 1) => {
+export const addToCart = async (
+  productId,
+  warrantyId = -1,
+  userId,
+  quantity = 1,
+  colorId = -1
+) => {
   try {
     const response = await axios.post(`${mainDomain}/api/Cart`, {
       langCode: "fa",
       userId,
       productId: productId,
-      colorId: -1,
+      colorId,
       warrantyId: warrantyId,
       parentId: -1,
       quantity: quantity,
@@ -37,7 +43,10 @@ export const addToCart = async (productId, warrantyId = -1, userId, quantity = 1
 
 export const addToCartNext = async (id) => {
   try {
-    const response = await axios.post(`${mainDomain}/api/Cart/next/add?id=${id}`, {});
+    const response = await axios.post(
+      `${mainDomain}/api/Cart/next/add?id=${id}`,
+      {}
+    );
     return response.data;
   } catch (err) {
     Toast.fire({
@@ -52,7 +61,10 @@ export const addToCartNext = async (id) => {
 
 export const moveToCurrentCart = async (id) => {
   try {
-    const response = await axios.post(`${mainDomain}/api/Cart/next/back?id=${id}`, {});
+    const response = await axios.post(
+      `${mainDomain}/api/Cart/next/back?id=${id}`,
+      {}
+    );
     return response.data;
   } catch (err) {
     Toast.fire({
@@ -86,10 +98,12 @@ export const updateCart = async (cartId, updateType, userId) => {
 
 export const getCart = async (userId, signal) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Cart/${userId}`, { signal });
+    const response = await axios.get(`${mainDomain}/api/Cart/${userId}`, {
+      signal,
+    });
     return response.data;
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error.name === "AbortError") {
       // Request was aborted, handle silently
       return;
     }
@@ -100,10 +114,12 @@ export const getCart = async (userId, signal) => {
 
 export const getNextCart = async (userId, signal) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Cart/${userId}/next`, { signal });
+    const response = await axios.get(`${mainDomain}/api/Cart/${userId}/next`, {
+      signal,
+    });
     return response.data;
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error.name === "AbortError") {
       // Request was aborted, handle silently
       return;
     }

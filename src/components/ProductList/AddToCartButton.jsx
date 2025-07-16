@@ -1,17 +1,18 @@
 "use client";
 
 import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Modal, message } from "antd";
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaCartShopping, FaCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { addToCart } from "../../services/cart/cartService";
 import { getProductId } from "../../services/products/productService";
 import CartCounter from "../Product/CartCounter";
-import { getUserCookie } from "@/utils/cookieUtils";
+import Link from "next/link";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -19,13 +20,15 @@ const generateRandomUserId = () => {
 
 const AddToCartButton = ({ productId }) => {
   const { currentItems } = useSelector((state) => state.cart);
+  const itemsArray = Array.isArray(currentItems) ? currentItems : [];
+  const cartItem = itemsArray.find(item => item.productId === productId);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
+  const [selectedColorId, setSelectedColorId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const cartItem = currentItems?.find(item => item.productId === productId);
-
+  console.log(productId);
   
 
   const Toast = Swal.mixin({
@@ -52,6 +55,12 @@ const AddToCartButton = ({ productId }) => {
           title: productDetails.warranties[firstWarrantyId]
         });
       }
+      // انتخاب رنگ پیش‌فرض
+      if (productDetails?.productModes && productDetails.productModes.length > 0) {
+        setSelectedColorId(productDetails.productModes[0].id);
+      } else {
+        setSelectedColorId(null);
+      }
       setIsModalOpen(true);
     } catch (error) {
       console.error('Failed to fetch product details:', error);
@@ -66,9 +75,7 @@ const AddToCartButton = ({ productId }) => {
       setIsLoading(true);
       const userData = getUserCookie();
       let userId;
-
       if (!userData?.token) {
-        // اگر کاربر مهمان است، چک کن که آیا قبلاً userId داشته یا نه
         if (userData?.userId) {
           userId = userData.userId;
         } else {
@@ -86,8 +93,8 @@ const AddToCartButton = ({ productId }) => {
       } else {
         userId = userData.userId;
       }
-
-      await addToCart(productId, selectedWarranty?.id || -1, userId);
+      await addToCart(productId, selectedWarranty?.id || -1, userId, 1, selectedColorId ?? -1);
+    
       setIsModalOpen(false);
       dispatch(fetchCurrentCart());
       dispatch(fetchNextCart());
@@ -144,9 +151,8 @@ const AddToCartButton = ({ productId }) => {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2">{product.product.title}</h3>
+                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2 pl-2">{product.product.title}</h3>
                 <p className="text-gray-600 text-xs mb-2 line-clamp-2">{product.product.description}</p>
-
                 {/* قیمت */}
                 <div>
                   {product.product.discount > 0 ? (
@@ -169,14 +175,50 @@ const AddToCartButton = ({ productId }) => {
                     </span>
                   )}
                 </div>
-
-                {/* هشدار موجودی کم */}
-                {/* {product.inventory.inventoryQtyForView > 0 && product.inventory.inventoryQtyForView < 10 && (
-                  <div className="mt-1 text-xs text-[#d1182b]">
-                    تنها {product.inventory.inventoryQtyForView} عدد در انبار موجود است
+                {/* رنگ‌ها */}
+                {product?.productModes && product.productModes.length > 0 && (
+                  <div className="mt-3">
+                    <h4 className="font-semibold text-gray-800 text-sm mb-2">انتخاب رنگ</h4>
+                    <div className="flex gap-4 flex-wrap">
+                      {product.productModes.map((mode) => {
+                        let color = "#eee";
+                        try {
+                          const filesObj = JSON.parse(mode.files || "{}");
+                          if (filesObj.Color) color = filesObj.Color;
+                        } catch {}
+                        const isSelected = selectedColorId === mode.id;
+                        return (
+                          <button
+                            key={mode.id}
+                            type="button"
+                            onClick={() => setSelectedColorId(mode.id)}
+                            className={`flex flex-col items-center group focus:outline-none cursor-pointer`}
+                          >
+                            <span
+                              className={`w-8 h-8 rounded-full border-2 transition-all duration-200 mb-1 relative flex items-center justify-center ${
+                                isSelected
+                                  ? "border-blue-600 shadow-lg scale-110"
+                                  : "border-gray-300"
+                              }`}
+                              style={{ backgroundColor: color }}
+                            >
+                              {isSelected && (
+                                <FaCheck className="absolute text-white text-base bg-blue-500 rounded-full p-0.5 w-3 h-3 -bottom-1 -left-1 shadow" />
+                              )}
+                            </span>
+                            <span
+                              className={`text-xs text-gray-600 group-hover:text-blue-700 ${
+                                isSelected ? "font-bold text-blue-700" : ""
+                              }`}
+                            >
+                              {mode.propertyValue}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                )} */}
-
+                )}
                 {/* گارانتی‌ها */}
                 {Object.keys(product.warranties).length > 0 && (
                   <div className="mt-3">
@@ -204,8 +246,18 @@ const AddToCartButton = ({ productId }) => {
               </div>
             </div>
 
-            {/* دکمه تایید */}
-            <div className="mt-2 flex justify-end">
+            {/* دکمه تایید و مشاهده جزئیات */}
+            <div className="mt-2 flex justify-end gap-2">
+              {product && product.product && product.product.url && (
+                <Link href={product.product.url} target="_blank">
+                  <button
+                    type="button"
+                    className="bg-[#40768c] text-white px-4 py-1.5 rounded-lg hover:bg-[#28506a] transition-colors duration-300 text-sm cursor-pointer"
+                  >
+                    مشاهده جزئیات محصول
+                  </button>
+                </Link>
+              )}
               <button
                 onClick={handleConfirm}
                 disabled={isLoading || !product.canAddCart}

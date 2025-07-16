@@ -231,7 +231,7 @@ export default function OrderDetails({ trackCode }) {
         return <OrderDetailsSkeleton />;
     }
 
-    if (!orderDetails) {
+    if (orderDetails.type === 'error') {
         return null;
     }
 
@@ -325,7 +325,18 @@ export default function OrderDetails({ trackCode }) {
                                                     rel="noopener noreferrer"
                                                     className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors line-clamp-2"
                                                 >
-                                                    {item.title}
+                                                    {item.title && item.title.includes('|') ? (
+                                                        (() => {
+                                                            const [main, color] = item.title.split('|');
+                                                            return <>
+                                                                <span>{main.trim()}</span>
+                                                                <span className="mx-1 text-[#aaa]">|</span>
+                                                                <span className="font-bold">{color.trim()}</span>
+                                                            </>;
+                                                        })()
+                                                    ) : (
+                                                        item.title
+                                                    )}
                                                 </a>
                                             </div>
                                             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">

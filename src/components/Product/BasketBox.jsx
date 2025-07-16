@@ -22,9 +22,7 @@ function BasketBox({ product }) {
   const isInCart = items?.some(
     (item) => item.productId === product?.product?.productId
   );
-  const cartItem = currentItems?.find(
-    (item) => item.productId === product?.product?.productId
-  );
+ 
 
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
@@ -33,38 +31,10 @@ function BasketBox({ product }) {
     warrantiesArray[0]?.value || null
   );
 
-  // Mobile add to cart states
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+ 
+  
 
-  const handleAddToCartMobile = async () => {
-    const userCookie = Cookies.get("user");
-    if (!userCookie) {
-      const initialData = {
-        token: "",
-        refreshToken: "",
-        expiration: "",
-        userId: null,
-        displayName: "",
-        roles: [],
-      };
-      Cookies.set("user", JSON.stringify(initialData), {
-        expires: 7,
-        path: "/",
-      });
-    }
-    const userId = JSON.parse(Cookies.get("user"))?.userId;
-    try {
-      setIsLoading(true);
-      await addToCart(product?.product?.productId, selectedWarranty, userId);
-      dispatch(fetchCurrentCart());
-      setShowSuccessModal(true);
-    } catch (error) {
-      console.error("Failed to add to cart:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const selectedColor = useSelector(state => state.productColor.selectedColorMode);
 
   return (
     <div className="px-2 h-full">
@@ -111,12 +81,23 @@ function BasketBox({ product }) {
               <span className="text-xs font-semibold"> ارسال رایگان </span>
             </div>
           )}
+          {product?.product.conditionId === 20 && (
+          <div className="flex items-center gap-2 px-1 text-[#d1182b]">
+            <FaRecycle className=" " />
+            <span className="text-xs font-semibold"> کالای کارکرده</span>
+          </div>
+        )}
         </div>
 
-        {product?.product.conditionId === 20 && (
-          <div className="flex items-center gap-2 my-3 px-1 text-[#d1182b]">
-            <FaRecycle className=" " />
-            <span className="text-xs font-bold"> کالای کارکرده</span>
+        
+        {/* نمایش رنگ انتخاب شده */}
+        {selectedColor && (
+          <div className="flex items-center gap-2 my-2 px-1">
+            <span
+              className="w-6 h-6 rounded-full border border-gray-300 inline-block"
+              style={{ backgroundColor: (() => { try { return JSON.parse(selectedColor.files || '{}').Color || '#eee'; } catch { return '#eee'; } })() }}
+            ></span>
+            <span className="text-xs font-semibold text-gray-700">{selectedColor.propertyValue}</span>
           </div>
         )}
        

@@ -31,14 +31,12 @@ const CommentSkeleton = () => {
   );
 };
 
-function CommentSection({ id, type, onReplyScroll }) {
+function CommentSection({ id, type }) {
   const [comments, setComments] = useState([]);
   const [isloading, setIsLoading] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [replyLoading, setReplyLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const commentBoxRef = useRef(null);
 
   console.log(comments);

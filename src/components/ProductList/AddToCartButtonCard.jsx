@@ -19,13 +19,13 @@ const generateRandomUserId = () => {
 
 const AddToCartButtonCard = ({ productId }) => {
   const { currentItems } = useSelector((state) => state.cart);
+  const itemsArray = Array.isArray(currentItems) ? currentItems : [];
+  const cartItem = itemsArray.find(item => item.productId === productId);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  const cartItem = currentItems?.find(item => item.productId === productId);
 
   const Toast = Swal.mixin({
     toast: true,

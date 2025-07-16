@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function PriceFixed({product}) {
     const { items, currentItems } = useSelector((state) => state.cart);
-    const cartItem = currentItems?.find(item => item.productId === product?.product?.productId);
+    const itemsArray = Array.isArray(currentItems) ? currentItems : [];
+    const cartItem = itemsArray.find(item => item.productId === product?.product?.productId);
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const warrantiesArray = Object.entries(product.warranties).map(

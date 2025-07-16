@@ -40,13 +40,11 @@ function DescProductDetails({ product }) {
         </h1>
         {product?.product?.summary && (
           <div className="mb-4">
-            <ExpandableText text={product.product.summary} />
+            {/* <ExpandableText text={product.product.summary} /> */}
+            <p className="text-justify">{product.product.summary}</p>
           </div>
         )}
-        {/* <div className="flex gap-2 items-center">
-          <span className="font-semibold">رنگ محصول : </span>
-          <SelectColorProduct product={product} />
-        </div> */}
+
         <div className="flex items-center gap-1 flex-wrap ">
           {product?.product?.categoryTitle && (
             <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
@@ -65,12 +63,17 @@ function DescProductDetails({ product }) {
         <div className="flex items-center gap-1 flex-wrap ">
           {product?.product?.visit && (
             <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
-             <FaRegEye className="text-sm" />
+              <FaRegEye className="text-sm" />
               <span className="text-xs">{product?.product?.visit}</span>
             </div>
           )}
-         
         </div>
+        {product?.productModes && product?.productModes.length > 0 && (
+          <div className="flex gap-5 items-center">
+            <span className="font-semibold whitespace-nowrap">رنگ محصول : </span>
+            <SelectColorProduct product={product} />
+          </div>
+        )}
         {product?.product?.optionalId && (
           <SelectProductMokamel product={product} />
         )}
