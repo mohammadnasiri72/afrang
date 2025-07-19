@@ -5,7 +5,8 @@ import { Box, ListItem, ListItemText, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FaCaretLeft, FaAngleLeft } from "react-icons/fa";
 
-const ITEM_HEIGHT = 33; // ارتفاع تقریبی هر آیتم (px)
+const ITEM_HEIGHT_PARENT = 34; // ارتفاع آیتم والد
+const ITEM_HEIGHT_CHILD = 32; // ارتفاع آیتم فرزند
 const COLUMN_GAP = 32;
 const CONTAINER_HEIGHT = 420; // ارتفاع ثابت کل منو
 const COLUMN_WIDTH = 230;
@@ -29,7 +30,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
     });
 
     // محاسبه تعداد ستون مورد نیاز (بدون اسکرول عمودی)
-    const itemsPerColumn = Math.floor(CONTAINER_HEIGHT / ITEM_HEIGHT);
+    const itemsPerColumn = Math.floor(CONTAINER_HEIGHT / ITEM_HEIGHT_PARENT);
     const columnCount = Math.ceil(flatList.length / itemsPerColumn);
 
     const columns = Array.from({ length: columnCount }, (_, i) =>
@@ -55,7 +56,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
             display: "flex",
             flexDirection: "row",
             gap: `${COLUMN_GAP}px`,
-            height: CONTAINER_HEIGHT,
+            height: "100%",
             direction: "rtl",
             alignItems: "stretch",
             overflowX: "auto", // اگر ستون زیاد شد اسکرول افقی بخورد
@@ -69,16 +70,10 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                 flexDirection: "column",
                 minWidth: COLUMN_WIDTH,
                 maxWidth: COLUMN_WIDTH,
-                height: CONTAINER_HEIGHT,
                 flex: `0 0 ${COLUMN_WIDTH}px`,
               }}
             >
-              <div
-                
-                style={{
-                  height: CONTAINER_HEIGHT,
-                }}
-              >
+              <div>
                 {col.map((item, idx) =>
                   item.isParent ? (
                     <div
@@ -93,6 +88,8 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                         fontFamily: "inherit",
                         cursor: "pointer",
                         transition: "font-size 0.2s",
+                        height: `${ITEM_HEIGHT_PARENT}px`,
+                        lineHeight: `${ITEM_HEIGHT_PARENT}px`,
                       }}
                       onClick={() =>
                         item.url &&
@@ -119,8 +116,9 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                         textAlign: "right",
                         padding: "2px 0",
                         transition: "color 0.2s, font-size 0.2s",
-
                         fontFamily: "inherit",
+                        height: `${ITEM_HEIGHT_CHILD}px`,
+                        lineHeight: `${ITEM_HEIGHT_CHILD}px`,
                       }}
                       onClick={() =>
                         onNavigation(item.url || item.pageUrl || "#")
@@ -154,6 +152,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                 height: "100%",
                 marginRight: "auto",
                 paddingLeft: 0,
+                marginLeft: 100,
                 paddingRight: 0,
               }}
             >

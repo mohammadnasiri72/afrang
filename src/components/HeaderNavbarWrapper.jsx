@@ -93,7 +93,7 @@ const HeaderNavbarWrapper = () => {
         fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ease-out
         ${headerFixed ? "translate-y-0" : "-translate-y-full"}
       `}
-        style={{ height: headerHeight ? `${headerHeight}px` : "auto" }}
+       
         data-header-fixed={headerFixed ? "true" : "false"}
       >
         <div
@@ -107,6 +107,7 @@ const HeaderNavbarWrapper = () => {
             height: "100%",
             display: "flex",
             alignItems: "center",
+            padding: 0, // حذف پدینگ اضافی
           }}
         >
           <Header />
