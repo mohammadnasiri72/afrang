@@ -11,6 +11,7 @@ import "swiper/css/pagination";
 
 import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
+import Image from "next/image";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
@@ -35,6 +36,11 @@ export default function ProductMain({ products }) {
         }}
         speed={1000}
         breakpoints={{
+          1724: {
+            slidesPerView: 7,
+            slidesPerGroup: 7,
+            spaceBetween: 15,
+          },
           1024: {
             slidesPerView: 5,
             slidesPerGroup: 5,
@@ -63,10 +69,14 @@ export default function ProductMain({ products }) {
                   href={product.url}
                   className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
-                  <img
+                  <Image
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
                     src={getImageUrl2(product.image)}
                     alt={product.title}
+                   
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    unoptimized
                   />
                   {/* لیبل کالای کارکرده */}
                   {product.conditionId === 20 && (

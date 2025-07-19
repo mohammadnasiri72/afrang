@@ -169,6 +169,8 @@ html {
 
 .box-slider-CameraAccessories {
   background-image: url("./../../public/images/gallery/bg-pattern.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .title-newProduct:after,

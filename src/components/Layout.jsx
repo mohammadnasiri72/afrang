@@ -2,7 +2,11 @@
 
 import { AuthProvider } from "@/context/AuthContext";
 import { fetchCartData, setCartType } from "@/redux/slices/cartSlice";
-import { setError, setLoading, setMenuItems } from "@/redux/slices/menuResSlice";
+import {
+  setError,
+  setLoading,
+  setMenuItems,
+} from "@/redux/slices/menuResSlice";
 import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { setUser } from "@/redux/slices/userSlice";
 import { addToCart, getCart } from "@/services/cart/cartService";
@@ -11,7 +15,7 @@ import { getUserId } from "@/utils/cookieUtils";
 import { mainDomain } from "@/utils/mainDomain";
 import { syncUserCookieWithRedux } from "@/utils/manageCookie";
 import { ConfigProvider } from "antd";
-import fa_IR from 'antd/locale/fa_IR'; // برای فارسی
+import fa_IR from "antd/locale/fa_IR"; // برای فارسی
 import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
@@ -153,12 +157,9 @@ function LayoutContent({ children }) {
     !pathname.includes("/register") &&
     !pathname.includes("/forgot-password");
 
-  const showPro =
-    !pathname.includes("/product/")
+  const showPro = !pathname.includes("/product/");
 
-  const showCart =
-    !pathname.includes("/cart")
-    
+  const showCart = !pathname.includes("/cart");
 
   useEffect(() => {
     setMounted(true);
@@ -189,7 +190,11 @@ function LayoutContent({ children }) {
         {mounted ? (
           <>
             <InitialDataManager />
-            <LayoutWrapper showHeaderFooter={showHeaderFooter} showPro={showPro} showCart={showCart}>
+            <LayoutWrapper
+              showHeaderFooter={showHeaderFooter}
+              showPro={showPro}
+              showCart={showCart}
+            >
               {children}
             </LayoutWrapper>
             <FloatingCompareIcon />
@@ -208,7 +213,15 @@ function LayoutContent({ children }) {
 function Layout({ children }) {
   return (
     <Provider store={store}>
-      <LayoutContent>{children}</LayoutContent>
+      <div
+        style={{
+          maxWidth: "2000px",
+          margin: "auto",
+          overflow: "hidden",
+        }}
+      >
+        <LayoutContent>{children}</LayoutContent>
+      </div>
     </Provider>
   );
 }

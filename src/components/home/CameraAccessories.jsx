@@ -105,6 +105,11 @@ const Toast = Swal.mixin({
             }}
             speed={1000}
             breakpoints={{
+              1724: {
+                slidesPerView: 7,
+                slidesPerGroup: 7,
+                spaceBetween: 15,
+              },
               1024: {
                 slidesPerView: 5,
                 slidesPerGroup: 3,

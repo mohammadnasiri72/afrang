@@ -5,126 +5,10 @@ import { Box, ListItem, ListItemText, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FaCaretLeft, FaAngleLeft } from "react-icons/fa";
 
-// Styled Components
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-  padding: "8px 16px",
-  transition: "all 0.2s ease-in-out !important",
-  fontFamily: "inherit",
-  cursor: "pointer",
-  minHeight: "40px",
-  position: "relative",
-  "&:hover": {
-    backgroundColor: "rgba(209, 24, 43, 0.08)",
-    transition: "all 0.2s ease-in-out",
-    transform: "translateX(4px)",
-    "& svg": {
-      transform: "translateX(-2px)",
-      transition: "all 0.2s ease-in-out",
-    },
-  },
-}));
-
-const StyledListItemText = styled(ListItemText)(({ theme }) => ({
-  fontFamily: "inherit",
-  textAlign: "right",
-  "& .MuiListItemText-primary": {
-    fontSize: "14px",
-    fontWeight: 500,
-    color: "#333",
-    fontFamily: "inherit",
-    lineHeight: "1.4",
-  },
-}));
-
-const ParentItemText = styled(ListItemText)(({ theme }) => ({
-  fontFamily: "inherit",
-  textAlign: "right",
-  transition: "all 0.2s ease-in-out",
-  display: "inline !important",
-  "& .MuiListItemText-primary": {
-    fontSize: "18px",
-    fontWeight: 600,
-    color: "#333",
-    fontFamily: "inherit",
-    lineHeight: "1.4",
-    transition: "all 0.2s ease-in-out",
-  },
-}));
-
-const CategoryTitle = styled(Typography)(({ theme }) => ({
-  fontSize: "16px",
-  fontWeight: 600,
-  color: "#d1182b",
-  padding: "12px 16px 8px 16px",
-  borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
-  marginBottom: "4px",
-  fontFamily: "inherit",
-  textAlign: "right",
-}));
-
-// دو ستون مستقل با column-count
-const ColumnsBox = styled(Box)(({ theme }) => ({
-  columnCount: 2,
-  columnGap: "0px",
-  direction: "rtl",
-  "@media (max-width: 768px)": {
-    columnCount: 1,
-  },
-}));
-
-const SubItem = styled(ListItem)(({ theme }) => ({
-  padding: "4px 6px",
-  minHeight: "28px",
-  borderRadius: "4px",
-  transition: "all 0.2s ease-in-out",
-  cursor: "pointer",
-  display: "block",
-  breakInside: "avoid",
-  "&:hover": {
-    backgroundColor: "rgba(209, 24, 43, 0.1)",
-    transform: "translateX(2px)",
-  },
-}));
-
-const SubItemText = styled(ListItemText)(({ theme }) => ({
-  fontFamily: "inherit",
-  textAlign: "right",
-  "& .MuiListItemText-primary": {
-    fontSize: "12px",
-    fontWeight: 700,
-    color: "#000",
-    fontFamily: "inherit",
-    lineHeight: "1.3",
-  },
-}));
-
-const LinkItemIcon = styled(FaCaretLeft)(({ theme }) => ({
-  fontSize: "15px",
-  color: "#d1182b",
-  marginLeft: "8px",
-  flexShrink: 0,
-  fontWeight: "bold",
-}));
-
-const ParentArrowIcon = styled(FaCaretLeft)(({ theme }) => ({
-  fontSize: "18px",
-  color: "#14b8a6", // teal-500
-  marginLeft: "8px",
-  marginRight: 0,
-  flexShrink: 0,
-  fontWeight: "bold",
-  transition: "color 0.2s, transform 0.2s",
-}));
-
-const SubItemGrid = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "repeat(3, 1fr)",
-  gap: "8px",
-  direction: "rtl",
-  "@media (max-width: 768px)": {
-    gridTemplateColumns: "1fr",
-  },
-}));
+const ITEM_HEIGHT = 33; // ارتفاع تقریبی هر آیتم (px)
+const COLUMN_GAP = 32;
+const CONTAINER_HEIGHT = 420; // ارتفاع ثابت کل منو
+const COLUMN_WIDTH = 230;
 
 const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
   const dropdownContent = useMemo(() => {
@@ -135,109 +19,156 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
     ) {
       return null;
     }
+    // آرایه خطی از والد و فرزند
+    const flatList = [];
+    activeMenu.Children.forEach((parent) => {
+      flatList.push({ ...parent, isParent: true });
+      (parent.Children || []).forEach((child) => {
+        flatList.push({ ...child, isParent: false });
+      });
+    });
+
+    // محاسبه تعداد ستون مورد نیاز (بدون اسکرول عمودی)
+    const itemsPerColumn = Math.floor(CONTAINER_HEIGHT / ITEM_HEIGHT);
+    const columnCount = Math.ceil(flatList.length / itemsPerColumn);
+
+    const columns = Array.from({ length: columnCount }, (_, i) =>
+      flatList.slice(i * itemsPerColumn, (i + 1) * itemsPerColumn)
+    );
+
+    // یک عکس انتهایی (فقط اگر ستون خالی داریم)
+    const maxColumns = 4;
+    const emptyColumns = Math.max(0, maxColumns - columnCount);
+    const showImage = emptyColumns > 0;
+    const imageWidth = Math.max(COLUMN_WIDTH, emptyColumns * COLUMN_WIDTH);
 
     return (
-      <div className="pb-5">
-        <CategoryTitle>{activeMenu.title}</CategoryTitle>
-        <ColumnsBox>
-          {activeMenu.Children.map((child) => (
-            <div key={child.id} style={{ breakInside: "avoid" }}>
-              {child.Children && child.Children.length > 0 ? (
-                <StyledListItem
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onNavigation(child.url || child.pageUrl || "#");
-                  }}
-                  sx={{
-                    borderBottom: "none",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    backgroundColor: "transparent",
-                    transition: "color 0.2s, background 0.2s",
-                    "&:hover": {
-                      backgroundColor: "#14b8a610",
-                    },
-                    "&:hover .parent-arrow-icon": {
-                      color: "#14b8a6 !important",
-                      transform: "rotate(-90deg)",
-                    },
-                  }}
-                >
-                  <ParentArrowIcon className="parent-arrow-icon" />
-                  <ParentItemText
-                    primary={child.title}
-                    primaryTypographyProps={{
-                      sx: {
-                        fontWeight: 600,
-                        color: "#14b8a6 !important", // همیشه teal-500
-                        fontFamily: "inherit",
-                        fontSize: "18px",
-                        transition: "0.5s",
-                      },
-                    }}
-                  />
-                  
-                </StyledListItem>
-              ) : (
-                <SubItem
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onNavigation(child.url || child.pageUrl || "#");
-                  }}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <LinkItemIcon />
-                  <SubItemText
-                    primary={child.title}
-                    primaryTypographyProps={{
-                      sx: {
+      <div
+        style={{
+          height: CONTAINER_HEIGHT,
+          overflowY: "hidden", // جلوگیری از اسکرول عمودی
+          padding: "0 10px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: `${COLUMN_GAP}px`,
+            height: CONTAINER_HEIGHT,
+            direction: "rtl",
+            alignItems: "stretch",
+            overflowX: "auto", // اگر ستون زیاد شد اسکرول افقی بخورد
+          }}
+        >
+          {columns.map((col, colIdx) => (
+            <div
+              key={colIdx}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                minWidth: COLUMN_WIDTH,
+                maxWidth: COLUMN_WIDTH,
+                height: CONTAINER_HEIGHT,
+                flex: `0 0 ${COLUMN_WIDTH}px`,
+              }}
+            >
+              <div
+                
+                style={{
+                  height: CONTAINER_HEIGHT,
+                }}
+              >
+                {col.map((item, idx) =>
+                  item.isParent ? (
+                    <div
+                      key={`parent-${item.id}-${idx}`}
+                      className="line-clamp-1"
+                      style={{
+                        color: "#d1182b",
                         fontWeight: 700,
-                        color: "#000",
+                        fontSize: 16,
+                        paddingTop: 10,
+                        whiteSpace: "nowrap",
                         fontFamily: "inherit",
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                </SubItem>
-              )}
-              {child.Children && child.Children.length > 0 && (
-                <SubItemGrid>
-                  {child.Children.map((subChild) => (
-                    <SubItem
-                      key={subChild.id}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onNavigation(subChild.url || subChild.pageUrl || "#");
+                        cursor: "pointer",
+                        transition: "font-size 0.2s",
                       }}
-                      sx={{ display: "flex", alignItems: "center" }}
+                      onClick={() =>
+                        item.url &&
+                        onNavigation(item.url || item.pageUrl || "#")
+                      }
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.fontSize = "18px")
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.fontSize = "16px")
+                      }
                     >
-                      <LinkItemIcon />
-                      <SubItemText
-                        primary={subChild.title}
-                        primaryTypographyProps={{
-                          sx: {
-                            fontWeight: 700,
-                            color: "#000",
-                            fontFamily: "inherit",
-                            fontSize: "14px",
-                          },
-                        }}
-                      />
-                    </SubItem>
-                  ))}
-                </SubItemGrid>
-              )}
+                      {item.title}
+                    </div>
+                  ) : (
+                    <div
+                      key={`child-${item.id}-${idx}`}
+                      className="line-clamp-1"
+                      style={{
+                        color: "#222",
+                        fontWeight: 500,
+                        fontSize: 15,
+                        cursor: "pointer",
+                        textAlign: "right",
+                        padding: "2px 0",
+                        transition: "color 0.2s, font-size 0.2s",
+
+                        fontFamily: "inherit",
+                      }}
+                      onClick={() =>
+                        onNavigation(item.url || item.pageUrl || "#")
+                      }
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.color = "#d1182b";
+                        e.currentTarget.style.fontSize = "17px";
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.color = "#222";
+                        e.currentTarget.style.fontSize = "15px";
+                      }}
+                    >
+                      {item.title}
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           ))}
-        </ColumnsBox>
+          {/* فقط یک عکس و سایز متناسب با ستون‌های خالی */}
+          {showImage && (
+            <div
+              style={{
+                minWidth: imageWidth,
+                flex: `0 0 ${imageWidth}px`,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                marginRight: "auto",
+                paddingLeft: 0,
+                paddingRight: 0,
+              }}
+            >
+              {/* <EmptyColumnSVG width={imageWidth} /> */}
+              <img
+                src="/images/gallery/best-video-cameras.png"
+                alt=""
+                style={{ width: "100%", maxWidth: "500px", height: "auto" }}
+              />
+            </div>
+          )}
+        </div>
       </div>
     );
   }, [activeMenu, onNavigation]);
-
   return dropdownContent;
 };
 

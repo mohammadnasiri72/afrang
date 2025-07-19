@@ -26,12 +26,7 @@ import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { getImageUrl } from "@/utils/mainDomain";
-import { 
-  Popper, 
-  Paper, 
-  Box,
-  Grow
-} from "@mui/material";
+import { Popper, Paper, Box, Grow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SubmenuDropdown from "./SubmenuDropdown";
 
@@ -118,38 +113,36 @@ const dashboardMenuItems = [
 
 // Styled Components
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  borderRadius: '0px',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-  border: '1px solid rgba(0, 0, 0, 0.08)',
-  width: '100vw', // عرض کامل viewport
-  maxWidth: '100vw',
-  overflow: 'hidden',
-  marginTop: '0px',
-  paddingTop: '0px',
-  fontFamily: 'inherit',
-  position: 'fixed', // فیکس شده
-  left: '0', // چسبیده به لبه چپ
-  right: '0', // چسبیده به لبه راست
-  maxHeight: '70vh',
-  overflowY: 'auto',
-  direction: 'rtl', // راست‌چین برای فارسی
-  '&::-webkit-scrollbar': {
-    width: '6px',
+  backgroundColor: "#fff",
+  borderRadius: "0px",
+  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
+  border: "1px solid rgba(0, 0, 0, 0.08)",
+  width: "auto",
+  maxWidth: "calc(100vw - 200px)",
+  overflow: "hidden",
+  marginTop: "0px",
+  paddingTop: "0px",
+  fontFamily: "inherit",
+  position: "fixed", // فیکس شده
+  left: "100px", // فاصله از لبه چپ
+  right: "100px", // فاصله از لبه راست
+  maxHeight: "70vh",
+  overflowY: "auto",
+  direction: "rtl", // راست‌چین برای فارسی
+  "&::-webkit-scrollbar": {
+    width: "6px",
   },
-  '&::-webkit-scrollbar-track': {
-    background: '#f1f1f1',
+  "&::-webkit-scrollbar-track": {
+    background: "#f1f1f1",
   },
-  '&::-webkit-scrollbar-thumb': {
-    background: '#d1182b',
-    borderRadius: '3px',
+  "&::-webkit-scrollbar-thumb": {
+    background: "#d1182b",
+    borderRadius: "3px",
   },
-  '&::-webkit-scrollbar-thumb:hover': {
-    background: '#b91626',
+  "&::-webkit-scrollbar-thumb:hover": {
+    background: "#b91626",
   },
 }));
-
-
 
 function ResponsiveMenu() {
   const dispatch = useDispatch();
@@ -171,6 +164,10 @@ function ResponsiveMenu() {
   const [navbarHeight, setNavbarHeight] = useState(0);
   // --- مقدار top زیرمنو را در state نگه می‌دارم ---
   const [dropdownTop, setDropdownTop] = useState(0);
+  // --- اضافه کردن refs برای اولین و آخرین آیتم navbar ---
+  const firstNavItemRef = useRef(null);
+  const lastNavItemRef = useRef(null);
+  const [dropdownOffsets, setDropdownOffsets] = useState({ right: 100, left: 100 });
 
   const { settings } = useSelector((state) => state.settings);
 
@@ -179,40 +176,56 @@ function ResponsiveMenu() {
 
   // غیرفعال کردن اسکرول صفحه وقتی زیرمنو باز است
   useEffect(() => {
-    if (open && activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
+    if (
+      open &&
+      activeMenu &&
+      activeMenu.Children &&
+      activeMenu.Children.length > 0
+    ) {
       // ذخیره overflow اصلی
       const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
       // غیرفعال کردن اسکرول
-      document.body.style.overflow = 'hidden';
-      
+      // محاسبه عرض اسکرول‌بار
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = "hidden";
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+
       // اضافه کردن event listener برای کلید Escape
       const handleEscapeKey = (event) => {
-        if (event.key === 'Escape') {
+        if (event.key === "Escape") {
           handleMenuClose();
         }
       };
-      
+
       // اضافه کردن event listener برای کلیک خارج از زیرمنو
       const handleClickOutside = (event) => {
         // چک کردن اینکه آیا کلیک خارج از navbar و dropdown است
         const navbar = navbarRef.current;
-        const dropdown = document.querySelector('[data-popper-placement]');
-        
-        if (navbar && !navbar.contains(event.target) && 
-            dropdown && !dropdown.contains(event.target)) {
+        const dropdown = document.querySelector("[data-popper-placement]");
+
+        if (
+          navbar &&
+          !navbar.contains(event.target) &&
+          dropdown &&
+          !dropdown.contains(event.target)
+        ) {
           handleMenuClose();
         }
       };
-      
-      document.addEventListener('keydown', handleEscapeKey);
-      document.addEventListener('mousedown', handleClickOutside);
-      
+
+      document.addEventListener("keydown", handleEscapeKey);
+      document.addEventListener("mousedown", handleClickOutside);
+
       return () => {
-        // بازگرداندن overflow اصلی
+        // بازگرداندن overflow و padding اصلی
         document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
         // حذف event listener
-        document.removeEventListener('keydown', handleEscapeKey);
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener("keydown", handleEscapeKey);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
     }
   }, [open, activeMenu]);
@@ -220,16 +233,24 @@ function ResponsiveMenu() {
   // --- تابع برای گرفتن ارتفاع header و navbar بعد از لود کامل ---
   const updateHeaderNavbarHeights = useCallback(() => {
     setTimeout(() => {
-      const headerFixed = document.querySelector('[data-header-fixed]');
-      const navbarFixed = document.querySelector('[data-navbar-fixed]');
-      const header = document.querySelector('div[ref-header]') || document.querySelector('header');
+      const headerFixed = document.querySelector("[data-header-fixed]");
+      const navbarFixed = document.querySelector("[data-navbar-fixed]");
+      const header =
+        document.querySelector("div[ref-header]") ||
+        document.querySelector("header");
       const navbar = navbarRef.current;
-      if (headerFixed && headerFixed.getAttribute('data-header-fixed') === 'true') {
+      if (
+        headerFixed &&
+        headerFixed.getAttribute("data-header-fixed") === "true"
+      ) {
         setHeaderHeight(headerFixed.offsetHeight || 0);
       } else if (header) {
         setHeaderHeight(header.offsetHeight || 0);
       }
-      if (navbarFixed && navbarFixed.getAttribute('data-navbar-fixed') === 'true') {
+      if (
+        navbarFixed &&
+        navbarFixed.getAttribute("data-navbar-fixed") === "true"
+      ) {
         setNavbarHeight(navbarFixed.offsetHeight || 0);
       } else if (navbar) {
         setNavbarHeight(navbar.offsetHeight || 0);
@@ -239,9 +260,9 @@ function ResponsiveMenu() {
 
   useEffect(() => {
     updateHeaderNavbarHeights();
-    window.addEventListener('resize', updateHeaderNavbarHeights);
+    window.addEventListener("resize", updateHeaderNavbarHeights);
     return () => {
-      window.removeEventListener('resize', updateHeaderNavbarHeights);
+      window.removeEventListener("resize", updateHeaderNavbarHeights);
     };
   }, [updateHeaderNavbarHeights]);
 
@@ -389,9 +410,11 @@ function ResponsiveMenu() {
 
     // پیدا کردن نزدیک‌ترین المنت با کلاس main-navbar که قابل مشاهده است
     let navbar = navbarRef.current;
-    if (navbar && window.getComputedStyle(navbar).visibility === 'hidden') {
-      const navbars = document.querySelectorAll('.main-navbar');
-      navbar = Array.from(navbars).find(el => window.getComputedStyle(el).visibility !== 'hidden');
+    if (navbar && window.getComputedStyle(navbar).visibility === "hidden") {
+      const navbars = document.querySelectorAll(".main-navbar");
+      navbar = Array.from(navbars).find(
+        (el) => window.getComputedStyle(el).visibility !== "hidden"
+      );
     }
 
     const headerFixed = document.querySelector('[data-header-fixed="true"]');
@@ -418,10 +441,20 @@ function ResponsiveMenu() {
         height: 0,
         x: 0,
         y: topPosition,
-      })
+      }),
     });
     setAnchorEl(createAnchorElement());
     setActiveMenu(menuItem);
+    // --- در handleMenuOpen محاسبه داینامیک فاصله‌ها ---
+    if (firstNavItemRef.current && lastNavItemRef.current && navbarRef.current) {
+      const firstRect = firstNavItemRef.current.getBoundingClientRect();
+      const lastRect = lastNavItemRef.current.getBoundingClientRect();
+      const right = window.innerWidth - firstRect.right; // فاصله اولین آیتم تا راست صفحه
+      const left = lastRect.left; // فاصله آخرین آیتم تا چپ صفحه
+      setDropdownOffsets({ right, left });
+    } else {
+      setDropdownOffsets({ right: 100, left: 100 });
+    }
   };
 
   const handleMenuClose = () => {
@@ -429,7 +462,7 @@ function ResponsiveMenu() {
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
     }
-    
+
     // Add a small delay to prevent immediate closing when moving to dropdown
     dropdownTimeoutRef.current = setTimeout(() => {
       setAnchorEl(null);
@@ -437,7 +470,7 @@ function ResponsiveMenu() {
       setExpandedChildren(new Set()); // Reset expanded children
       // فعال کردن مجدد اسکرول صفحه فقط اگر dropdown باز بود
       if (activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
-        document.body.style.overflow = '';
+        document.body.style.overflow = "";
       }
     }, 100);
   };
@@ -458,8 +491,8 @@ function ResponsiveMenu() {
     // جلوگیری از bubble شدن event
     event.preventDefault();
     event.stopPropagation();
-    
-    setExpandedChildren(prev => {
+
+    setExpandedChildren((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(childId)) {
         newSet.delete(childId);
@@ -478,15 +511,26 @@ function ResponsiveMenu() {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
           let navbar = navbarRef.current;
-          if (navbar && window.getComputedStyle(navbar).visibility === 'hidden') {
-            const navbars = document.querySelectorAll('.main-navbar');
-            navbar = Array.from(navbars).find(el => window.getComputedStyle(el).visibility !== 'hidden');
+          if (
+            navbar &&
+            window.getComputedStyle(navbar).visibility === "hidden"
+          ) {
+            const navbars = document.querySelectorAll(".main-navbar");
+            navbar = Array.from(navbars).find(
+              (el) => window.getComputedStyle(el).visibility !== "hidden"
+            );
           }
-          const headerFixed = document.querySelector('[data-header-fixed="true"]');
-          const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
+          const headerFixed = document.querySelector(
+            '[data-header-fixed="true"]'
+          );
+          const navbarFixed = document.querySelector(
+            '[data-navbar-fixed="true"]'
+          );
           let topPosition = 0;
           if (navbarFixed) {
-            const headerH = headerFixed ? headerFixed.offsetHeight : headerHeight;
+            const headerH = headerFixed
+              ? headerFixed.offsetHeight
+              : headerHeight;
             const navbarH = navbarFixed.offsetHeight || navbarHeight;
             topPosition = headerH + navbarH;
           } else if (navbar) {
@@ -504,17 +548,17 @@ function ResponsiveMenu() {
               height: 0,
               x: 0,
               y: topPosition,
-            })
+            }),
           };
           setAnchorEl(updatedAnchorEl);
         }, 16);
       }
     };
-    window.addEventListener('scroll', handleScrollAndResize, { passive: true });
-    window.addEventListener('resize', handleScrollAndResize, { passive: true });
+    window.addEventListener("scroll", handleScrollAndResize, { passive: true });
+    window.addEventListener("resize", handleScrollAndResize, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScrollAndResize);
-      window.removeEventListener('resize', handleScrollAndResize);
+      window.removeEventListener("scroll", handleScrollAndResize);
+      window.removeEventListener("resize", handleScrollAndResize);
       clearTimeout(timeoutId);
       if (dropdownTimeoutRef.current) {
         clearTimeout(dropdownTimeoutRef.current);
@@ -532,7 +576,6 @@ function ResponsiveMenu() {
 
   // Desktop Menu Component
   const DesktopMenu = () => {
-
     return (
       <div
         ref={navbarRef}
@@ -544,12 +587,37 @@ function ResponsiveMenu() {
               {items.map((item, i) => (
                 <div
                   key={item.id}
+                  ref={i === 0 ? firstNavItemRef : i === items.length - 1 ? lastNavItemRef : null}
                   className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
-                  style={{ fontSize: '15px' , whiteSpace:'nowrap'}}
-                  onMouseEnter={(e) => item.Children && item.Children.length > 0 ? handleMenuOpen(e, item) : null}
-                  onMouseLeave={item.Children && item.Children.length > 0 ? handleMenuClose : null}
+                  style={{
+                    fontSize: "15px",
+                    whiteSpace: "nowrap",
+                    background: activeMenu && activeMenu.id === item.id ? '#fff' : undefined,
+                    color: activeMenu && activeMenu.id === item.id ? '#d1182b' : undefined,
+                    zIndex: activeMenu && activeMenu.id === item.id ? 1200 : undefined,
+                    cursor: item.url || item.pageUrl ? 'pointer' : undefined,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (item.Children && item.Children.length > 0) {
+                      if (window.__navbarHoverTimer) clearTimeout(window.__navbarHoverTimer);
+                      window.__navbarHoverTimer = setTimeout(() => {
+                        handleMenuOpen(e, item);
+                      }, 100);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (item.Children && item.Children.length > 0) {
+                      if (window.__navbarHoverTimer) clearTimeout(window.__navbarHoverTimer);
+                      handleMenuClose();
+                    }
+                  }}
+                  onClick={() => {
+                    if (item.url || item.pageUrl) {
+                      handleNavigation(item.url || item.pageUrl);
+                    }
+                  }}
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <div className="py-2 cursor-pointer font-semibold">
@@ -576,29 +644,37 @@ function ResponsiveMenu() {
           transition
           keepMounted
           disablePortal
-          style={{ zIndex: 1100, width: '100vw', position: 'fixed', left: 0, right: 0, top: dropdownTop }}
+          style={{
+            zIndex: 11000,
+            width: 'auto',
+            position: "fixed",
+            left: dropdownOffsets.left,
+            right: dropdownOffsets.right,
+            top: dropdownTop,
+            maxWidth: `calc(100vw - ${dropdownOffsets.left + dropdownOffsets.right}px)`
+          }}
           onMouseEnter={handleDropdownMouseEnter}
           onMouseLeave={handleDropdownMouseLeave}
           modifiers={[
             {
-              name: 'offset',
+              name: "offset",
               options: {
                 offset: [0, 0],
               },
             },
             {
-              name: 'preventOverflow',
+              name: "preventOverflow",
               options: {
-                boundary: 'viewport',
+                boundary: "viewport",
                 padding: 0,
               },
             },
             {
-              name: 'flip',
+              name: "flip",
               enabled: false,
             },
             {
-              name: 'computeStyles',
+              name: "computeStyles",
               options: {
                 gpuAcceleration: false,
                 adaptive: false,
@@ -607,15 +683,16 @@ function ResponsiveMenu() {
           ]}
         >
           {({ TransitionProps }) => (
-            <Grow {...TransitionProps} timeout={0}>
+            <Grow {...TransitionProps} timeout={300}>
               <StyledPaper
                 sx={{
-                  width: '100vw',
-                  maxWidth: '100vw',
+                  width: 'auto',
+                  maxWidth: `calc(100vw - ${dropdownOffsets.left + dropdownOffsets.right}px)`,
                   mt: 0,
-                  pt: 0,
-                  left: 0,
-                  right: 0,
+                  pb: 2,
+                  pt: 1,
+                  left: dropdownOffsets.left,
+                  right: dropdownOffsets.right,
                 }}
               >
                 <SubmenuDropdown
@@ -752,7 +829,7 @@ function ResponsiveMenu() {
         </div>
 
         <Drawer
-          zIndex={1001}
+          zIndex={10010}
           width={350}
           title={<Title />}
           onClose={onClose}
@@ -775,7 +852,7 @@ function ResponsiveMenu() {
             style={{
               width: "100%",
               direction: "rtl",
-              zIndex: "1000",
+              zIndex: "100000",
               backgroundColor: "#fff",
             }}
             className="custom-menu"
@@ -787,7 +864,7 @@ function ResponsiveMenu() {
             .custom-menu .ant-menu-item {
               padding: 10px !important;
             }
-               .custom-menu .ant-menu-submenu-title {
+            .custom-menu .ant-menu-submenu-title {
               padding: 10px !important;
             }
             .custom-menu .ant-menu-item-selected {

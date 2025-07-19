@@ -91,114 +91,116 @@ export default function Header() {
   }
 
   return (
-    <div className="flex items-center justify-between lg:px-16 px-4 py-1 bg-white">
-      <div className="flex items-center lg:w-1/2 w-auto">
-        <div className="flex items-center lg:w-2/5 w-auto">
-          {settings?.find((item) => item.propertyKey === "site_home_url") ? (
+    <div className="bg-white w-full">
+      <div style={{ maxWidth: '2000px', margin: '0 auto', width: '100%' }} className="flex items-center justify-between lg:px-16 px-4 py-1">
+        <div className="flex items-center lg:w-1/2 w-auto">
+          <div className="flex items-center lg:w-2/5 w-auto">
+            {settings?.find((item) => item.propertyKey === "site_home_url") ? (
+              <Link
+                href={
+                  settings.find((item) => item.propertyKey === "site_home_url")
+                    ?.value
+                }
+              >
+                <img
+                  className="lg:w-14 w-24 "
+                  src={getImageUrl(
+                    settings.find(
+                      (item) => item.propertyKey === "site_footer_logo"
+                    )?.value
+                  )}
+                  alt=""
+                />
+              </Link>
+            ) : (
+              <img className="lg:w-14 w-24" src="/images/logo.png" alt="" />
+            )}
+
             <Link
               href={
-                settings.find((item) => item.propertyKey === "site_home_url")
-                  ?.value
+                settings?.find((item) => item.propertyKey === "site_home_url")
+                  ?.value || "/"
               }
             >
-              <img
-                className="lg:w-14 w-24 "
-                src={getImageUrl(
-                  settings.find(
-                    (item) => item.propertyKey === "site_footer_logo"
-                  )?.value
-                )}
-                alt=""
-              />
+              <div className="flex-col px-1 font-extrabold logo-text lg:flex hidden">
+                <span className="w-20">
+                  {settings?.find((item) => item.propertyKey === "site_title")
+                    ?.value || "خانه عکاسان افرنگ"}
+                </span>
+              </div>
             </Link>
+          </div>
+          <SearchHeader />
+        </div>
+        <div className="flex items-center justify-end lg:w-1/2 w-auto gap-7">
+          <div className="lg:flex hidden items-center">
+            <div className="bg-slate-200 rounded-lg p-2">
+              <BiPhoneCall className="text-xl text-[#0008]" />
+            </div>
+            <div className="flex flex-col pr-2 text-xs">
+              <span className="text-[#0008]"> آیا سوالی دارید </span>
+              <span className="text-red-700 font-semibold text-sm">
+                <a
+                  href={`tel:${
+                    settings?.find((item) => item.propertyKey === "site_tel")
+                      ?.value || "02177615546"
+                  }`}
+                >
+                  {settings?.find((item) => item.propertyKey === "site_tel")
+                    ?.value || "77615546"}
+                </a>
+              </span>
+            </div>
+          </div>
+
+          {user?.token ? (
+            <ProfileDropdown />
           ) : (
-            <img className="lg:w-14 w-24" src="/images/logo.png" alt="" />
-          )}
-
-          <Link
-            href={
-              settings?.find((item) => item.propertyKey === "site_home_url")
-                ?.value || "/"
-            }
-          >
-            <div className="flex-col px-1 font-extrabold logo-text lg:flex hidden">
-              <span className="w-20">
-                {settings?.find((item) => item.propertyKey === "site_title")
-                  ?.value || "خانه عکاسان افرنگ"}
-              </span>
-            </div>
-          </Link>
-        </div>
-        <SearchHeader />
-      </div>
-      <div className="flex items-center justify-end lg:w-1/2 w-auto gap-7">
-        <div className="lg:flex hidden items-center">
-          <div className="bg-slate-200 rounded-lg p-2">
-            <BiPhoneCall className="text-xl text-[#0008]" />
-          </div>
-          <div className="flex flex-col pr-2 text-xs">
-            <span className="text-[#0008]"> آیا سوالی دارید </span>
-            <span className="text-red-700 font-semibold text-sm">
-              <a
-                href={`tel:${
-                  settings?.find((item) => item.propertyKey === "site_tel")
-                    ?.value || "02177615546"
-                }`}
+            <div className="flex items-center gap-3 font-semibold">
+              <div
+                onClick={() => {
+                  route.push("/login");
+                }}
+                className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
               >
-                {settings?.find((item) => item.propertyKey === "site_tel")
-                  ?.value || "77615546"}
-              </a>
-            </span>
-          </div>
-        </div>
-
-        {user?.token ? (
-          <ProfileDropdown />
-        ) : (
-          <div className="flex items-center gap-3 font-semibold">
-            <div
-              onClick={() => {
-                route.push("/login");
-              }}
-              className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
-            >
-              <img src="/images/icons/arrow-login.png" alt="" />
-              <span>ورود</span>
+                <img src="/images/icons/arrow-login.png" alt="" />
+                <span>ورود</span>
+              </div>
+              <div
+                onClick={() => {
+                  route.push("/register");
+                }}
+                className="border-r border-[#0005] pr-3"
+              >
+                <span className="cursor-pointer hover:text-[#d1182b] duration-300">
+                  عضویت
+                </span>
+              </div>
             </div>
-            <div
-              onClick={() => {
-                route.push("/register");
-              }}
-              className="border-r border-[#0005] pr-3"
-            >
-              <span className="cursor-pointer hover:text-[#d1182b] duration-300">
-                عضویت
-              </span>
-            </div>
-          </div>
-        )}
-        <div
-          onClick={() => disPatch(setOpenShopping(true))}
-          className="cursor-pointer relative mt-3"
-        >
-          <Badge
-            count={currentItems?.length || 0}
-            style={{
-              fontSize: "10px",
-              fontWeight: "bold",
-              backgroundColor:  currentItems?.length !== 0 ? '#d1182b': "#000",
-              color: "#fff",
-              transform: "translate(-8px, -8px)",
-            }}
+          )}
+          <div
+            onClick={() => disPatch(setOpenShopping(true))}
+            className="cursor-pointer relative mt-3"
           >
-            <FaCartShopping
-              className={`text-4xl  ${
-                currentItems?.length !== 0
-                  ? "text-emerald-500"
-                  : "text-[#d1182b]"
-              }`}
-            />
-          </Badge>
+            <Badge
+              count={currentItems?.length || 0}
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                backgroundColor:  currentItems?.length !== 0 ? '#d1182b': "#000",
+                color: "#fff",
+                transform: "translate(-8px, -8px)",
+              }}
+            >
+              <FaCartShopping
+                className={`text-4xl  ${
+                  currentItems?.length !== 0
+                    ? "text-emerald-500"
+                    : "text-[#d1182b]"
+                }`}
+              />
+            </Badge>
+          </div>
         </div>
       </div>
     </div>
