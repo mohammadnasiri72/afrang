@@ -67,7 +67,7 @@ const HeaderSkeleton = () => {
   );
 };
 
-export default function Header() {
+export default function Header(props) {
   const user = useSelector((state) => state.user.user);
   const { settings, loading } = useSelector((state) => state.settings);
   const { currentItems } = useSelector((state) => state.cart);
@@ -85,6 +85,12 @@ export default function Header() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (!loading && props.onLoaded) {
+      props.onLoaded();
+    }
+  }, [loading]);
 
   if (loading) {
     return <HeaderSkeleton />;

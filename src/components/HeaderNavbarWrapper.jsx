@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import { useSelector } from "react-redux";
 
 const HeaderNavbarWrapper = () => {
   const [headerFixed, setHeaderFixed] = useState(false);
@@ -11,9 +12,34 @@ const HeaderNavbarWrapper = () => {
   const navbarRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const [headerLoaded, setHeaderLoaded] = useState(false);
+  const {  loading } = useSelector((state) => state.settings);
+
+  // فقط بعد از لود شدن هدر اصلی، ارتفاع را محاسبه کن
+  useEffect(() => {
+    if (!headerLoaded) return;
+    // اندازه‌گیری اولیه
+    if (headerRef.current) {
+      setHeaderHeight(headerRef.current.getBoundingClientRect().height);
+    }
+    if (navbarRef.current) {
+      setNavbarHeight(navbarRef.current.getBoundingClientRect().height);
+    }
+    // اندازه‌گیری مجدد بعد از ۵ ثانیه
+    const timeout = setTimeout(() => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.getBoundingClientRect().height);
+      }
+      if (navbarRef.current) {
+        setNavbarHeight(navbarRef.current.getBoundingClientRect().height);
+      }
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [loading]);
 
   useEffect(() => {
-    // محاسبه ارتفاع و موقعیت header و navbar با تاخیر برای اطمینان از لود شدن دیتاها
+    if (!headerLoaded) return;
+    // محاسبه موقعیت و وضعیت فیکس فقط بعد از لود هدر اصلی
     const calculatePositions = () => {
       if (headerRef.current) {
         const rect = headerRef.current.getBoundingClientRect();
@@ -24,25 +50,18 @@ const HeaderNavbarWrapper = () => {
         setNavbarHeight(rect.height);
       }
     };
-
-    // با تاخیر اولیه محاسبه کن
     const initialTimeout = setTimeout(() => {
       calculatePositions();
-    }, 300); // 300ms تاخیر برای اطمینان از لود شدن دیتاها
-
+    }, 300);
     const handleScroll = () => {
       if (headerRef.current && navbarRef.current) {
         const headerRect = headerRef.current.getBoundingClientRect();
         const navbarRect = navbarRef.current.getBoundingClientRect();
-
-        // وقتی header کاملاً از دید خارج شد
         if (headerRect.top + headerRect.height < 0) {
           setHeaderFixed(true);
         } else {
           setHeaderFixed(false);
         }
-
-        // وقتی navbar کاملاً از دید خارج شد
         if (navbarRect.top + navbarRect.height < 0) {
           setNavbarFixed(true);
         } else {
@@ -50,38 +69,20 @@ const HeaderNavbarWrapper = () => {
         }
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", calculatePositions);
-
     return () => {
       clearTimeout(initialTimeout);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", calculatePositions);
     };
-  }, []);
+  }, [headerLoaded]);
 
-  // محاسبه مجدد ارتفاع وقتی وضعیت fixed تغییر می‌کند
-  useEffect(() => {
-    const calculateHeight = () => {
-      if (navbarRef.current) {
-        const rect = navbarRef.current.getBoundingClientRect();
-        setNavbarHeight(rect.height);
-      }
-    };
-
-    // کمی تاخیر برای اطمینان از رندر شدن کامل
-    const timeoutId = setTimeout(calculateHeight, 100);
-
-    return () => clearTimeout(timeoutId);
-  }, [navbarFixed]);
-
-  // محاسبه موقعیت navbar ثابت بر اساس وضعیت header
+  // محاسبه موقعیت navbar ثابت بر اساس وضعیت header و لود شدن هدر اصلی
   const getNavbarFixedTop = () => {
     if (!navbarFixed) return "-56px";
-    // اگر هر دو فیکس هستند، navbar باید دقیقا زیر header فیکس قرار بگیرد
-    if (headerFixed) return `${headerHeight}px`;
-    // اگر فقط navbar فیکس است (header فیکس نیست)، باید بالای صفحه باشد
+    if (headerFixed && headerLoaded) return `${headerHeight}px`;
+    if (headerFixed && !headerLoaded) return "56px"; // ارتفاع اسکلتون
     return "0px";
   };
 
@@ -89,11 +90,9 @@ const HeaderNavbarWrapper = () => {
     <>
       {/* header ثابت که با اسکرول ظاهر می‌شود */}
       <div
-        className={`
-        fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ease-out
-        ${headerFixed ? "translate-y-0" : "-translate-y-full"}
-      `}
-       
+        className={
+          `fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ease-out ${headerFixed ? "translate-y-0" : "-translate-y-full"}`
+        }
         data-header-fixed={headerFixed ? "true" : "false"}
       >
         <div
@@ -107,19 +106,17 @@ const HeaderNavbarWrapper = () => {
             height: "100%",
             display: "flex",
             alignItems: "center",
-            padding: 0, // حذف پدینگ اضافی
+            padding: 0,
           }}
         >
-          <Header />
+          <Header onLoaded={() => setHeaderLoaded(true)} />
         </div>
       </div>
-
       {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
       <div
-        className={`
-        fixed left-0 right-0 z-[9999] transition-all duration-300 ease-out
-        ${navbarFixed ? "translate-y-0" : "-translate-y-full"}
-      `}
+        className={
+          `fixed left-0 right-0 z-[9999] transition-all duration-300 ease-out ${navbarFixed ? "translate-y-0" : "-translate-y-full"}`
+        }
         style={{
           top: getNavbarFixedTop(),
           height: navbarHeight ? `${navbarHeight}px` : "auto",
@@ -146,12 +143,10 @@ const HeaderNavbarWrapper = () => {
           <NavBar />
         </div>
       </div>
-
       {/* header اصلی که همیشه در جای خودش هست */}
       <div ref={headerRef}>
-        <Header />
+        <Header onLoaded={() => setHeaderLoaded(true)} />
       </div>
-
       {/* navbar اصلی که همیشه در جای خودش هست */}
       <div
         ref={navbarRef}

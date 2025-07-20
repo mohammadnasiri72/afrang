@@ -43,14 +43,13 @@ export default async function ProductDetails(props) {
       <BreadcrumbNavProduct breadcrumb={product?.breadcrumb} />
       <div className="bg-[#f6f6f6] overflow-hidden">
         <div className="xl:px-16">
-          <div className="flex ">
+          <div className="flex">
             <div className="lg:w-3/4 w-full">
               <TitleProduct product={product} />
               <BodyProduct product={product} />
             </div>
             <BasketFixed product={product} />
           </div>
-
           <DescProduct product={product} />
         </div>
       </div>
