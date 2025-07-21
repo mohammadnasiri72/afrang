@@ -13,7 +13,8 @@ const HeaderNavbarWrapper = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [headerLoaded, setHeaderLoaded] = useState(false);
-  const {  loading } = useSelector((state) => state.settings);
+  const { loading } = useSelector((state) => state.settings);
+  const [activeMenu, setActiveMenu] = useState(null);
 
   // فقط بعد از لود شدن هدر اصلی، ارتفاع را محاسبه کن
   useEffect(() => {
@@ -90,9 +91,9 @@ const HeaderNavbarWrapper = () => {
     <>
       {/* header ثابت که با اسکرول ظاهر می‌شود */}
       <div
-        className={
-          `fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ease-out ${headerFixed ? "translate-y-0" : "-translate-y-full"}`
-        }
+        className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ease-out ${
+          headerFixed ? "translate-y-0" : "-translate-y-full"
+        }`}
         data-header-fixed={headerFixed ? "true" : "false"}
       >
         <div
@@ -114,9 +115,9 @@ const HeaderNavbarWrapper = () => {
       </div>
       {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
       <div
-        className={
-          `fixed left-0 right-0 z-[9999] transition-all duration-300 ease-out ${navbarFixed ? "translate-y-0" : "-translate-y-full"}`
-        }
+        className={`fixed left-0 right-0 z-[9999] transition-all duration-300 ease-out ${
+          navbarFixed ? "translate-y-0" : "-translate-y-full"
+        }`}
         style={{
           top: getNavbarFixedTop(),
           height: navbarHeight ? `${navbarHeight}px` : "auto",
@@ -140,26 +141,33 @@ const HeaderNavbarWrapper = () => {
             justifyContent: "center",
           }}
         >
-          <NavBar />
+          <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
         </div>
       </div>
       {/* header اصلی که همیشه در جای خودش هست */}
-      <div ref={headerRef}>
+      <div ref={headerRef} className="z-[1500] relative">
         <Header onLoaded={() => setHeaderLoaded(true)} />
       </div>
       {/* navbar اصلی که همیشه در جای خودش هست */}
       <div
+        className="z-[1500] relative"
         ref={navbarRef}
         style={{
           visibility: navbarFixed ? "hidden" : "visible",
-          position: navbarFixed ? "absolute" : "static",
+          position: navbarFixed ? "absolute" : "relative",
           top: 0,
           left: 0,
           width: "100%",
         }}
       >
-        <NavBar />
+        <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
       </div>
+      {activeMenu?.id && (
+        <div
+          className={`fixed top-0 right-0 left-0 bottom-0 transition-all duration-300 backdrop-blur-sm bg-[#000a]`}
+          style={{ zIndex: 1000 }}
+        />
+      )}
     </>
   );
 };

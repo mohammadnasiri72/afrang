@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Box, ListItem, ListItemText, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { FaCaretLeft, FaAngleLeft } from "react-icons/fa";
+import { getImageUrl } from "@/utils/mainDomain";
+import { useMemo } from "react";
 
 const ITEM_HEIGHT_PARENT = 34; // ارتفاع آیتم والد
 const ITEM_HEIGHT_CHILD = 32; // ارتفاع آیتم فرزند
 const COLUMN_GAP = 32;
 const CONTAINER_HEIGHT = 420; // ارتفاع ثابت کل منو
-const COLUMN_WIDTH = 230;
+const COLUMN_WIDTH = 300;
+const MAX_COLUMNS = 4;
 
 const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
   const dropdownContent = useMemo(() => {
@@ -29,141 +28,129 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
       });
     });
 
-    // محاسبه تعداد ستون مورد نیاز (بدون اسکرول عمودی)
-    const itemsPerColumn = Math.floor(CONTAINER_HEIGHT / ITEM_HEIGHT_PARENT);
-    const columnCount = Math.ceil(flatList.length / itemsPerColumn);
+    // ارتفاع منو و آیتم
+    const MENU_HEIGHT =
+      typeof window !== "undefined"
+        ? Math.round(window.innerHeight * 0.7)
+        : 500;
+    const ITEM_HEIGHT = 34; // می‌توانید این مقدار را داینامیک‌تر کنید
+    const maxRows = Math.floor(MENU_HEIGHT / ITEM_HEIGHT);
 
-    const columns = Array.from({ length: columnCount }, (_, i) =>
-      flatList.slice(i * itemsPerColumn, (i + 1) * itemsPerColumn)
-    );
+    // محاسبه تعداد ستون مورد نیاز (ممکن است بیشتر از ۴ شود)
+    let columnCount = Math.ceil(flatList.length / maxRows);
+    let rows = maxRows;
 
-    // یک عکس انتهایی (فقط اگر ستون خالی داریم)
-    const maxColumns = 4;
-    const emptyColumns = Math.max(0, maxColumns - columnCount);
-    const showImage = emptyColumns > 0;
-    const imageWidth = Math.max(COLUMN_WIDTH, emptyColumns * COLUMN_WIDTH);
+    // تقسیم آیتم‌ها به صورت column-major
+    const columns = Array.from({ length: columnCount }, (_, colIdx) => {
+      return flatList.slice(colIdx * rows, (colIdx + 1) * rows);
+    });
+    // اگر ستون کمتر از ۴ تا بود، ستون‌های خالی اضافه کن تا همیشه ۴ ستون اول داشته باشیم
+    while (columns.length < 4) {
+      columns.push([]);
+    }
+    // اگر ستون بیشتر از ۴ تا بود، بقیه ستون‌ها را هم اضافه کن (برای اسکرول افقی)
+    if (columnCount > 4) {
+      for (let i = 4; i < columnCount; i++) {
+        columns[i] = columns[i] || [];
+      }
+    }
+
+    // تعداد ستون‌های پر شده و خالی (فقط برای ۴ ستون اول)
+    const filledColumns = columns
+      .slice(0, 4)
+      .filter((col) => col.length > 0).length;
+    const emptyColumns = 4 - filledColumns;
+
+    // اگر ستون‌ها بیشتر از ۴ شد، اسکرول افقی فعال شود و عکس نمایش داده نشود
+    const needsHorizontalScroll = columnCount > 4;
+
+    // عکس فقط زمانی نمایش داده شود که اسکرول افقی فعال نیست و حداقل یک ستون خالی داریم
+    let showImage = false;
+    let imageColStart = filledColumns;
+    let imageColSpan = emptyColumns;
+    if (!needsHorizontalScroll && emptyColumns > 0) {
+      showImage = true;
+    }
 
     return (
-      <div
+      <div className="rounded-b-xl"
         style={{
-          height: CONTAINER_HEIGHT,
-          overflowY: "hidden", // جلوگیری از اسکرول عمودی
+          height: MENU_HEIGHT,
+          overflowY: "hidden",
+          overflowX: needsHorizontalScroll ? "auto" : "hidden",
           padding: "0 10px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: `${COLUMN_GAP}px`,
-            height: "100%",
-            direction: "rtl",
-            alignItems: "stretch",
-            overflowX: "auto", // اگر ستون زیاد شد اسکرول افقی بخورد
-          }}
-        >
-          {columns.map((col, colIdx) => (
-            <div
-              key={colIdx}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                minWidth: COLUMN_WIDTH,
-                maxWidth: COLUMN_WIDTH,
-                flex: `0 0 ${COLUMN_WIDTH}px`,
-              }}
-            >
-              <div>
-                {col.map((item, idx) =>
-                  item.isParent ? (
-                    <div
-                      key={`parent-${item.id}-${idx}`}
-                      className="line-clamp-1"
-                      style={{
-                        color: "#d1182b",
-                        fontWeight: 700,
-                        fontSize: 16,
-                        paddingTop: 10,
-                        whiteSpace: "nowrap",
-                        fontFamily: "inherit",
-                        cursor: "pointer",
-                        transition: "font-size 0.2s",
-                        height: `${ITEM_HEIGHT_PARENT}px`,
-                        lineHeight: `${ITEM_HEIGHT_PARENT}px`,
-                      }}
-                      onClick={() =>
-                        item.url &&
-                        onNavigation(item.url || item.pageUrl || "#")
-                      }
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.fontSize = "18px")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.fontSize = "16px")
-                      }
-                    >
-                      {item.title}
-                    </div>
-                  ) : (
-                    <div
-                      key={`child-${item.id}-${idx}`}
-                      className="line-clamp-1"
-                      style={{
-                        color: "#222",
-                        fontWeight: 500,
-                        fontSize: 15,
-                        cursor: "pointer",
-                        textAlign: "right",
-                        padding: "2px 0",
-                        transition: "color 0.2s, font-size 0.2s",
-                        fontFamily: "inherit",
-                        height: `${ITEM_HEIGHT_CHILD}px`,
-                        lineHeight: `${ITEM_HEIGHT_CHILD}px`,
-                      }}
-                      onClick={() =>
-                        onNavigation(item.url || item.pageUrl || "#")
-                      }
-                      onMouseOver={(e) => {
+        <div className="flex flex-row gap-8 rtl items-start min-w-full w-full">
+          {columns.map((col, colIdx) => {
+            // منطق نمایش عکس و حذف ستون چهارم در حالت دو ستونه
+            let shouldShowImageHere = false;
+            let imageClass = "";
+            let hideThisColumn = false;
+
+            if (showImage) {
+              if ((filledColumns === 1 || filledColumns === 2) && colIdx === 2) {
+                shouldShowImageHere = true;
+                imageClass = "w-1/2 h-full flex items-end justify-center flex-col ml-0";
+              } else if (filledColumns === 3 && colIdx === 3) {
+                shouldShowImageHere = true;
+                imageClass = "w-1/4 h-full flex items-end justify-center flex-col ml-0";
+              }
+              // اگر فقط یک یا دو ستون دیتا داریم، ستون چهارم را نساز
+              if ((filledColumns === 1 || filledColumns === 2) && colIdx === 3) {
+                hideThisColumn = true;
+              }
+            }
+            if (hideThisColumn) return null;
+
+            return (
+              <div
+                className={`h-[68vh] relative flex flex-col min-w-0 ${shouldShowImageHere ? imageClass : 'w-1/4'}`}
+                key={colIdx}
+              >
+                {col.map((item, idx) => (
+                  <div
+                    key={`${item.isParent ? "parent" : "child"}-${item.id}-${idx}`}
+                    className={`line-clamp-1 pb-2 ${item.isParent ? 'text-[#d1182b] font-bold text-[16px] pt-2' : 'text-[#222] font-medium text-[15px]'} whitespace-nowrap font-inherit cursor-pointer transition-all duration-200`}
+                    style={{height: `${ITEM_HEIGHT}px`, lineHeight: `${ITEM_HEIGHT}px`, textAlign: item.isParent ? undefined : "right"}}
+                    onClick={() => onNavigation(item.url || item.pageUrl || "#")}
+                    onMouseOver={e => {
+                      if (item.isParent) {
+                        e.currentTarget.style.fontSize = "18px";
+                      } else {
                         e.currentTarget.style.color = "#d1182b";
                         e.currentTarget.style.fontSize = "17px";
-                      }}
-                      onMouseOut={(e) => {
+                      }
+                    }}
+                    onMouseOut={e => {
+                      if (item.isParent) {
+                        e.currentTarget.style.fontSize = "16px";
+                      } else {
                         e.currentTarget.style.color = "#222";
                         e.currentTarget.style.fontSize = "15px";
-                      }}
-                    >
-                      {item.title}
-                    </div>
-                  )
+                      }
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                ))}
+                {/* عکس فقط در ستون مناسب و با کلاس مناسب */}
+                {shouldShowImageHere && (
+                  <div className="w-full h-[68vh] flex  items-end justify-center flex-col ml-0">
+                    <img
+                      src={
+                        activeMenu?.image
+                          ? getImageUrl(activeMenu.image)
+                          : "/images/gallery/best-video-cameras.png"
+                      }
+                      alt=""
+                      className="w-full object-contain "
+                    />
+                  </div>
                 )}
               </div>
-            </div>
-          ))}
-          {/* فقط یک عکس و سایز متناسب با ستون‌های خالی */}
-          {showImage && (
-            <div
-              style={{
-                minWidth: imageWidth,
-                flex: `0 0 ${imageWidth}px`,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                marginRight: "auto",
-                paddingLeft: 0,
-                marginLeft: 100,
-                paddingRight: 0,
-              }}
-            >
-              {/* <EmptyColumnSVG width={imageWidth} /> */}
-              <img
-                src="/images/gallery/best-video-cameras.png"
-                alt=""
-                style={{ width: "100%", maxWidth: "500px", height: "auto" }}
-              />
-            </div>
-          )}
+            );
+          })}
         </div>
       </div>
     );

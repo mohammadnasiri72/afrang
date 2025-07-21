@@ -127,8 +127,9 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   left: "100px", // فاصله از لبه چپ
   right: "100px", // فاصله از لبه راست
   maxHeight: "70vh",
-  overflowY: "auto",
+  overflow: "hidden",
   direction: "rtl", // راست‌چین برای فارسی
+  zIndex: 1200, // باید بالاتر از overlay باشد
   "&::-webkit-scrollbar": {
     width: "6px",
   },
@@ -144,7 +145,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   },
 }));
 
-function ResponsiveMenu() {
+function ResponsiveMenu({ activeMenu, setActiveMenu }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -152,7 +153,7 @@ function ResponsiveMenu() {
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
-  const [activeMenu, setActiveMenu] = useState(null);
+
   const [expandedChildren, setExpandedChildren] = useState(new Set());
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
@@ -167,7 +168,10 @@ function ResponsiveMenu() {
   // --- اضافه کردن refs برای اولین و آخرین آیتم navbar ---
   const firstNavItemRef = useRef(null);
   const lastNavItemRef = useRef(null);
-  const [dropdownOffsets, setDropdownOffsets] = useState({ right: 100, left: 100 });
+  const [dropdownOffsets, setDropdownOffsets] = useState({
+    right: 100,
+    left: 100,
+  });
 
   const { settings } = useSelector((state) => state.settings);
 
@@ -187,7 +191,8 @@ function ResponsiveMenu() {
       const originalPaddingRight = document.body.style.paddingRight;
       // غیرفعال کردن اسکرول
       // محاسبه عرض اسکرول‌بار
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
       if (scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
@@ -446,7 +451,11 @@ function ResponsiveMenu() {
     setAnchorEl(createAnchorElement());
     setActiveMenu(menuItem);
     // --- در handleMenuOpen محاسبه داینامیک فاصله‌ها ---
-    if (firstNavItemRef.current && lastNavItemRef.current && navbarRef.current) {
+    if (
+      firstNavItemRef.current &&
+      lastNavItemRef.current &&
+      navbarRef.current
+    ) {
       const firstRect = firstNavItemRef.current.getBoundingClientRect();
       const lastRect = lastNavItemRef.current.getBoundingClientRect();
       const right = window.innerWidth - firstRect.right; // فاصله اولین آیتم تا راست صفحه
@@ -579,7 +588,7 @@ function ResponsiveMenu() {
     return (
       <div
         ref={navbarRef}
-        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative"
+        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative z-[1200]" // اضافه کردن z-index
       >
         <div className="w-full">
           <div className="flex justify-center w-full overflow-x-auto lg:overflow-visible">
@@ -587,21 +596,37 @@ function ResponsiveMenu() {
               {items.map((item, i) => (
                 <div
                   key={item.id}
-                  ref={i === 0 ? firstNavItemRef : i === items.length - 1 ? lastNavItemRef : null}
+                  ref={
+                    i === 0
+                      ? firstNavItemRef
+                      : i === items.length - 1
+                      ? lastNavItemRef
+                      : null
+                  }
                   className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
                     i === items.length - 1 ? "" : "border-l border-[#fff8]"
                   }`}
                   style={{
                     fontSize: "15px",
                     whiteSpace: "nowrap",
-                    background: activeMenu && activeMenu.id === item.id ? '#fff' : undefined,
-                    color: activeMenu && activeMenu.id === item.id ? '#d1182b' : undefined,
-                    zIndex: activeMenu && activeMenu.id === item.id ? 1200 : undefined,
-                    cursor: item.url || item.pageUrl ? 'pointer' : undefined,
+                    background:
+                      activeMenu && activeMenu.id === item.id
+                        ? "#fff"
+                        : undefined,
+                    color:
+                      activeMenu && activeMenu.id === item.id
+                        ? "#d1182b"
+                        : undefined,
+                    zIndex:
+                      activeMenu && activeMenu.id === item.id
+                        ? 1200
+                        : undefined,
+                    cursor: item.url || item.pageUrl ? "pointer" : undefined,
                   }}
                   onMouseEnter={(e) => {
                     if (item.Children && item.Children.length > 0) {
-                      if (window.__navbarHoverTimer) clearTimeout(window.__navbarHoverTimer);
+                      if (window.__navbarHoverTimer)
+                        clearTimeout(window.__navbarHoverTimer);
                       window.__navbarHoverTimer = setTimeout(() => {
                         handleMenuOpen(e, item);
                       }, 100);
@@ -609,7 +634,8 @@ function ResponsiveMenu() {
                   }}
                   onMouseLeave={() => {
                     if (item.Children && item.Children.length > 0) {
-                      if (window.__navbarHoverTimer) clearTimeout(window.__navbarHoverTimer);
+                      if (window.__navbarHoverTimer)
+                        clearTimeout(window.__navbarHoverTimer);
                       handleMenuClose();
                     }
                   }}
@@ -645,13 +671,15 @@ function ResponsiveMenu() {
           keepMounted
           disablePortal
           style={{
-            zIndex: 11000,
-            width: 'auto',
+            zIndex: 1200, // باید بالاتر از overlay باشد
+            width: "auto",
             position: "fixed",
             left: dropdownOffsets.left,
             right: dropdownOffsets.right,
             top: dropdownTop,
-            maxWidth: `calc(100vw - ${dropdownOffsets.left + dropdownOffsets.right}px)`
+            maxWidth: `calc(100vw - ${
+              dropdownOffsets.left + dropdownOffsets.right
+            }px)`,
           }}
           onMouseEnter={handleDropdownMouseEnter}
           onMouseLeave={handleDropdownMouseLeave}
@@ -686,13 +714,17 @@ function ResponsiveMenu() {
             <Grow {...TransitionProps} timeout={300}>
               <StyledPaper
                 sx={{
-                  width: 'auto',
-                  maxWidth: `calc(100vw - ${dropdownOffsets.left + dropdownOffsets.right}px)`,
+                  width: "auto",
+                  maxWidth: `calc(100vw - ${
+                    dropdownOffsets.left + dropdownOffsets.right
+                  }px)`,
                   mt: 0,
-                  pb: 2,
+                  pb: 5,
                   pt: 1,
                   left: dropdownOffsets.left,
                   right: dropdownOffsets.right,
+                  borderBottomLeftRadius: "20px",
+                  borderBottomRightRadius: "20px",
                 }}
               >
                 <SubmenuDropdown
