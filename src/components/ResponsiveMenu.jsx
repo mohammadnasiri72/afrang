@@ -674,6 +674,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
             zIndex: 1200, // باید بالاتر از overlay باشد
             width: "auto",
             position: "fixed",
+            margin:0,
             left: dropdownOffsets.left,
             right: dropdownOffsets.right,
             top: dropdownTop,
@@ -711,7 +712,11 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
           ]}
         >
           {({ TransitionProps }) => (
-            <Grow {...TransitionProps} timeout={300}>
+            <Grow
+              style={{ margin: 0, padding: 0 }}
+              {...TransitionProps}
+              timeout={300}
+            >
               <StyledPaper
                 sx={{
                   width: "auto",

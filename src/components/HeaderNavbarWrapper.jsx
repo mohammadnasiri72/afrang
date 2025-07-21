@@ -131,7 +131,6 @@ const HeaderNavbarWrapper = () => {
             width: "100%",
             background: "#d1182b",
             boxShadow: navbarFixed ? "0 2px 16px #0002" : "none",
-            borderRadius: "0 0 16px 16px",
             paddingLeft: 16,
             paddingRight: 16,
             transition: "box-shadow 0.3s",

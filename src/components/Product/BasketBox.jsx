@@ -3,6 +3,7 @@
 import { Divider } from "antd";
 import { useState } from "react";
 import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
+import { FaCreditCard } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import CompareButton from "../common/CompareButton";
 import PriceProduct from "../ProductList/PriceProduct";
@@ -16,6 +17,7 @@ function BasketBox({ product }) {
   const isInCart = items?.some(
     (item) => item.productId === product?.product?.productId
   );
+
 
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
@@ -42,15 +44,23 @@ function BasketBox({ product }) {
         )}
 
         <Divider style={{ padding: 0, margin: "10px" }} />
-        <div className="flex items-center gap-1 flex-wrap">
-          <div>
+        <div className="flex items-center gap-1 flex-wrap w-full">
+          <div className="w-full">
             <CompareButton product={product?.product} />
           </div>
-          <div>
+          <div className="w-full">
             <LikeProduct productId={product?.product?.productId} />
           </div>
         </div>
-
+        {/* قابلیت خرید قسطی */}
+        {product?.product?.isInstallmentSale && (
+          <div className="flex items-center gap-2 px-1 mt-1 bg-blue-50 rounded-md py-1 pr-2 text-blue-700 border border-blue-200">
+            <FaCreditCard className="text-blue-500 text-base" />
+            <span className="text-xs font-semibold">
+              امکان خرید قسطی این محصول فعال است
+            </span>
+          </div>
+        )}
         <div className="flex items-center gap-3 px-1 mt-3">
           {product?.product?.fastShipping && (
             <div className="flex items-center gap-2  text-[#d1182b]">

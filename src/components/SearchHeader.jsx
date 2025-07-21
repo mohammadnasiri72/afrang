@@ -5,6 +5,7 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import ReactDOM from 'react-dom';
 import { IoClose, IoSearchSharp } from "react-icons/io5";
 
 const SearchHeader = () => {
@@ -14,7 +15,11 @@ const SearchHeader = () => {
     const [showResults, setShowResults] = useState(false);
     const searchRef = useRef(null);
     const timeoutRef = useRef(null);
+    const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
+    const MIN_WIDTH = 600;
+    const MAX_WIDTH = 900;
 
+    
 
 
     useEffect(() => {
@@ -27,6 +32,18 @@ const SearchHeader = () => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    // محاسبه موقعیت باکس سرچ هنگام باز شدن
+    useEffect(() => {
+        if (showResults && searchRef.current) {
+            const rect = searchRef.current.getBoundingClientRect();
+            setDropdownPos({
+                top: rect.bottom,
+                right: window.innerWidth - (rect.left + rect.width),
+                width: rect.width,
+            });
+        }
+    }, [showResults]);
 
     const handleSearch = async (value) => {
         setSearchTerm(value);
@@ -47,7 +64,13 @@ const SearchHeader = () => {
         timeoutRef.current = setTimeout(async () => {
             try {
                 const data = await getProductTerm(value);
-                setResults(data || []);
+                // سورت: اول آنهایی که finalPrice != 0، بعد آنهایی که 0 هستند
+                const sorted = (data || []).slice().sort((a, b) => {
+                    if ((a.finalPrice === 0 || a.finalPrice === "0") && (b.finalPrice !== 0 && b.finalPrice !== "0")) return 1;
+                    if ((a.finalPrice !== 0 && a.finalPrice !== "0") && (b.finalPrice === 0 || b.finalPrice === "0")) return -1;
+                    return 0;
+                });
+                setResults(sorted);
             } catch (error) {
                 console.error("Search error:", error);
                 setResults([]);
@@ -83,9 +106,20 @@ const SearchHeader = () => {
                 )}
             </div>
 
-            {/* Results Dropdown */}
-            {showResults && (searchTerm.length >= 2) && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] h-[400px] overflow-y-auto z-[9999] w-[800px]">
+            {/* Results Dropdown با پورتال */}
+            {showResults && (searchTerm.length >= 2) && typeof window !== 'undefined' && ReactDOM.createPortal(
+                <div
+                    className="fixed bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] h-[400px] overflow-y-auto z-[99999]"
+                    style={{
+                        top: dropdownPos.top,
+                        right: dropdownPos.right,
+                        width: Math.max(dropdownPos.width, MIN_WIDTH),
+                        minWidth: MIN_WIDTH,
+                        maxWidth: MAX_WIDTH,
+                        marginTop: 4,
+                        overflowX: 'hidden',
+                    }}
+                >
                     <div className="p-4 bg-white relative min-h-[400px]">
                         {loading && (
                             <div className="absolute top-0 inset-0 bg-white/80 backdrop-blur-sm flex  justify-center z-10">
@@ -144,7 +178,8 @@ const SearchHeader = () => {
                             ) : null}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

@@ -1,6 +1,6 @@
 "use client";
 
-import { IoSearch } from "react-icons/io5";
+import { IoSearch, IoClose } from "react-icons/io5";
 import { useState, useEffect, useRef } from "react";
 import { getProductTerm } from "@/services/products/productService";
 import { getImageUrl2 } from "@/utils/mainDomain";
@@ -45,7 +45,13 @@ const SearchNavbar = () => {
         timeoutRef.current = setTimeout(async () => {
             try {
                 const data = await getProductTerm(value);
-                setResults(data || []);
+                // سورت: اول آنهایی که finalPrice != 0، بعد آنهایی که 0 هستند
+                const sorted = (data || []).slice().sort((a, b) => {
+                    if ((a.finalPrice === 0 || a.finalPrice === "0") && (b.finalPrice !== 0 && b.finalPrice !== "0")) return 1;
+                    if ((a.finalPrice !== 0 && a.finalPrice !== "0") && (b.finalPrice === 0 || b.finalPrice === "0")) return -1;
+                    return 0;
+                });
+                setResults(sorted);
             } catch (error) {
                 console.error("Search error:", error);
                 setResults([]);
@@ -56,16 +62,29 @@ const SearchNavbar = () => {
     };
 
     return (
-        <div className="relative w-full lg:hidden " ref={searchRef}>
-            <div className="flex justify-end items-center gap-2 w-full">
+        <div className="relative w-full lg:hidden flex justify-end" ref={searchRef}>
+            <div className="flex justify-center items-center gap-2 w-full bg-white/10 sm:w-96 rounded-lg px-3 py-1 ">
                 <input
-                    className="outline-none px-3 py-1 bg-white/10 rounded-lg placeholder-white/70 text-sm sm:w-96 lg:hidden"
+                    className="outline-none    placeholder-white/70 text-sm   w-full"
                     type="text"
                     placeholder="جستجو..."
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
                     onFocus={() => searchTerm.length >= 2 && setShowResults(true)}
                 />
+                {searchTerm && (
+                    <button
+                        onClick={() => {
+                            setSearchTerm("");
+                            setResults([]);
+                            setShowResults(false);
+                        }}
+                        className="text-white/70 hover:text-white transition-colors cursor-pointer"
+                        tabIndex={-1}
+                    >
+                        <IoClose className="text-xl" />
+                    </button>
+                )}
                 <IoSearch className="text-xl cursor-pointer hover:text-white/80 transition-colors" />
             </div>
 

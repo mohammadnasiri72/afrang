@@ -18,8 +18,16 @@ function DeleteProductModal({ isOpen, onClose, cartId }) {
     setMounted(true);
     const userData = getUserCookie();
     setUserId(userData?.userId || null);
+    // Disable scroll when modal is open
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
     return () => setMounted(false);
-  }, []);
+  }, [isOpen]);
 
   const Toast = Swal.mixin({
     toast: true,

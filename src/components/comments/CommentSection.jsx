@@ -39,7 +39,6 @@ function CommentSection({ id, type }) {
   const [replyLoading, setReplyLoading] = useState(false);
   const commentBoxRef = useRef(null);
 
-  console.log(comments);
 
   useEffect(() => {
     const fetchComments = async () => {

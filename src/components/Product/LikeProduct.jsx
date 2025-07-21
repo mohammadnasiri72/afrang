@@ -101,7 +101,7 @@ const LikeProduct = ({ productId }) => {
       <Button
         onClick={handleLike}
         className={`
-               flex items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
+               flex w-full items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
                ${
                  liked
                    ? "bg-red-200 text-gray-700 hover:bg-red-300"

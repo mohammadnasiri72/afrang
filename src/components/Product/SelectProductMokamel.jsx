@@ -374,7 +374,7 @@ function SelectProductMokamel({ product }) {
               </div>
               <IoIosClose
                 onClick={() => handleRemoveFromCart(product.productId)}
-                className="cursor-pointer text-2xl text-[#d1182b] hover:bg-[#f3f3f3] rounded-full transition p-0.5"
+                className="cursor-pointer sm:relative absolute top-3 left-0 text-2xl text-[#d1182b] hover:bg-[#f3f3f3] rounded-full transition p-0.5"
                 title="حذف از سبد خرید"
               />
             </div>

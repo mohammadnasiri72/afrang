@@ -28,7 +28,6 @@ const AddToCartButton = ({ productId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log(productId);
   
 
   const Toast = Swal.mixin({

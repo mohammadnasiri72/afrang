@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { FaBalanceScale } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ReactDOM from 'react-dom';
 
 const FloatingCompareIcon = () => {
   const { compareItems } = useSelector((state) => state.compare);
@@ -23,8 +24,8 @@ const FloatingCompareIcon = () => {
     return null; // اگر محصولی در مقایسه نباشد، آیکون نمایش داده نمی‌شود
   }
 
-  return (
-    <div className="fixed bottom-40 left-6 z-50">
+  const icon = (
+    <div className="fixed bottom-40 left-6 z-[100000]">
       <button
         onClick={handleClick}
         className="relative group cursor-pointer bg-white p-2 rounded-lg flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200"
@@ -42,6 +43,8 @@ const FloatingCompareIcon = () => {
       </button>
     </div>
   );
+  if (typeof window === 'undefined') return null;
+  return ReactDOM.createPortal(icon, document.body);
 };
 
 export default FloatingCompareIcon; 

@@ -22,40 +22,7 @@ Fancybox.bind("[data-fancybox='video-gallery']", {
   dragToClose: true,
 });
 
-// ScriptInjector: اجرا و تزریق اسکریپت داینامیک برای ویدئوهای embed
-function ScriptInjector({ scriptHtml }) {
-  const containerRef = useRef(null);
 
-  useEffect(() => {
-    if (containerRef.current && scriptHtml) {
-      // ایجاد یک div موقت برای اجرای اسکریپت
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = scriptHtml;
-
-      // پاک کردن محتوای قبلی
-      containerRef.current.innerHTML = "";
-
-      // اضافه کردن اسکریپت جدید
-      const scriptElement = tempDiv.querySelector("script");
-      if (scriptElement) {
-        const newScript = document.createElement("script");
-        newScript.src = scriptElement.src;
-        newScript.async = true;
-        containerRef.current.appendChild(newScript);
-      } else {
-        // اگر اسکریپت inline باشد
-        containerRef.current.innerHTML = scriptHtml;
-      }
-    }
-  }, [scriptHtml]);
-
-  return (
-    <div
-      ref={containerRef}
-      style={{ width: "100%", maxWidth: 500, minHeight: 280 }}
-    />
-  );
-}
 
 function BoxVideoProduct({ ids }) {
   const [listVideo, setListVideo] = useState([]);
@@ -83,10 +50,21 @@ function BoxVideoProduct({ ids }) {
     };
   }, []);
 
-  // تابع استخراج src از iframe
-  const extractIframeSrc = (html) => {
-    const match = html.match(/<iframe[^>]*src=["']([^"']+)["']/);
-    return match ? match[1] : null;
+  // تابع استخراج تگ iframe از HTML
+  const extractIframeTag = (html) => {
+    const match = html.match(/<iframe[\s\S]*?<\/iframe>/);
+    if (match) {
+      // iframe را داخل یک div با aspect-ratio قرار بده
+      return `
+        <div style="position:relative;max-width:100%;aspect-ratio:16/9;overflow:hidden;">
+          ${match[0].replace(
+            '<iframe',
+            '<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"'
+          )}
+        </div>
+      `;
+    }
+    return null;
   };
 
   // ویدئوهایی که videoScript دارند اولویت دارند
@@ -127,11 +105,15 @@ function BoxVideoProduct({ ids }) {
     let videoContent = null;
 
     if (videoFile && !videoScript) {
+      // ویدئوی غیر اسکریپتی: لینک فایل ویدئو
+      // Fancybox به صورت پیش‌فرض ویدئو را با تگ <video> یا <img> باز می‌کند
+      // ما به لینک ویدئو data-width و data-height می‌دهیم
       videoContent = getImageUrl(videoFile.propertyValue);
     } else if (videoScript) {
-      const iframeSrc = extractIframeSrc(videoScript);
-      if (iframeSrc) {
-        videoContent = videoScript;
+      // اگر اسکریپت HTML با iframe بود فقط iframe را استخراج کن
+      const iframeTag = extractIframeTag(videoScript);
+      if (iframeTag) {
+        videoContent = iframeTag;
       } else {
         videoContent = videoScript;
       }
@@ -146,23 +128,58 @@ function BoxVideoProduct({ ids }) {
         </div>
         <div className="relative w-full max-w-[500px]">
           {/* کاور ویدئو */}
-          <div className="relative w-full aspect-video bg-gray-200 rounded-lg overflow-hidden">
+          <div
+            style={{
+              position: 'relative',
+              aspectRatio: '16/9',
+              width: '100%',
+              overflow: 'hidden',
+              borderRadius: '0.75rem',
+              background: '#e5e7eb',
+            }}
+            className="group"
+          >
             {coverImage ? (
               <img
                 src={getImageUrl(coverImage)}
                 alt={video.title}
-                className="w-full h-full object-cover"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                }}
+                className="bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center"
+              >
                 <span className="text-gray-600 text-sm">بدون کاور</span>
               </div>
             )}
 
             {/* دکمه پخش */}
             {videoContent && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-black bg-opacity-50 rounded-full p-4 cursor-pointer hover:bg-opacity-70 transition-all duration-300">
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <div className="bg-black bg-opacity-50 rounded-full p-4 cursor-pointer group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
                   <FaPlay className="text-white text-2xl" />
                 </div>
               </div>
@@ -171,14 +188,16 @@ function BoxVideoProduct({ ids }) {
             {/* لینک Fancybox */}
             {videoContent && (
               <a
-                href={videoContent}
+                href={videoFile && !videoScript ? videoContent : undefined}
                 data-fancybox="video-gallery"
                 data-caption={video.title}
-                className="absolute inset-0 block"
+                className="absolute top-0 bottom-0 right-0 left-0 block cursor-pointer"
                 style={{ zIndex: 10 }}
+                {...(videoScript
+                  ? { 'data-type': 'html', 'data-src': videoContent }
+                  : {})}
               />
             )}
-             
           </div>
         </div>
         {!videoFile && !videoScript && (
@@ -186,7 +205,6 @@ function BoxVideoProduct({ ids }) {
             ویدئویی برای این آیتم ثبت نشده است.
           </div>
         )}
-        <div> {videoContent}</div>
       </div>
     );
   };
@@ -261,9 +279,29 @@ function BoxVideoProduct({ ids }) {
 
   // اگر ۶ یا کمتر بود، گرید ساده
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {sortedVideos.map((video) => renderVideo(video))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {sortedVideos.map((video) => renderVideo(video))}
+      </div>
+      <style jsx global>{`
+        .fancybox__slide.has-html {
+          padding: 0 !important;
+        }
+        .fancybox__content {
+          padding: 0 !important;
+          background: #000 !important;
+        }
+        .fancybox__content img, .fancybox__content video {
+         
+        
+         
+          object-fit: contain !important;
+          background: #000 !important;
+          margin: 0 auto;
+          display: block;
+        }
+      `}</style>
+    </>
   );
 }
 

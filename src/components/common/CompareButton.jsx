@@ -31,7 +31,7 @@ const CompareButton = ({ product }) => {
       onClick={handleCompareToggle}
       disabled={isFull && !isInCompare}
       className={`
-        flex items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
+        flex w-full items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
         ${isInCompare 
           ? 'bg-blue-200 text-gray-700 hover:bg-blue-300' 
           : isFull 

@@ -117,10 +117,10 @@ export default function ProductMain({ products }) {
                     )}
                   </div> */}
                   {/* قیمت */}
-                  <div className="h-14 px-2 group-hover:opacity-100 group-hover:sm:opacity-0 duration-300 group-hover:visible group-hover:sm:invisible">
+                  <div className="h-[4.5rem] px-2 duration-300">
                     {!product.callPriceButton && product.finalPrice !== 0 && (
                       <div className="flex flex-col">
-                        <span className="font-bold text-base text-[#333] whitespace-nowrap">
+                        <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300 group-hover:text-lg ">
                           {product.finalPrice.toLocaleString()} تومان
                         </span>
                         {product.discount !== 0 && (
