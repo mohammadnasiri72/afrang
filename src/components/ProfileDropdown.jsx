@@ -38,9 +38,12 @@ const ProfileDropdown = () => {
   const profileBtnRef = useRef(null);
   const [user, setUser] = useState(null);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
+  const [menuAnimate, setMenuAnimate] = useState(false); // <-- new state
 
   const router = useRouter();
   const dispatch = useDispatch();
+
+  
 
   // تابع به‌روزرسانی موقعیت منو
   const updateMenuPos = () => {
@@ -53,6 +56,11 @@ const ProfileDropdown = () => {
     }
   };
 
+  useEffect(()=>{
+    updateMenuPos()
+    
+  },[])
+
   // بستن منو هنگام کلیک خارج از آن
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target) && isOpen) {
@@ -63,14 +71,18 @@ const ProfileDropdown = () => {
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     if (isOpen) {
+      setMenuAnimate(false); // reset before showing
       document.body.style.overflow = "hidden";
       updateMenuPos();
       window.addEventListener('scroll', updateMenuPos, true);
       window.addEventListener('resize', updateMenuPos, true);
+      // Always trigger animation after mount
+      setTimeout(() => setMenuAnimate(true), 10);
     } else {
       document.body.style.overflow = "";
       window.removeEventListener('scroll', updateMenuPos, true);
       window.removeEventListener('resize', updateMenuPos, true);
+      setMenuAnimate(false); // reset on close
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -160,7 +172,8 @@ const ProfileDropdown = () => {
       {/* منو */}
       <div
         ref={dropdownRef}
-        className="fixed w-64 bg-white/95 shadow-lg rounded-lg z-[99999] animate-fadeIn"
+        className={`fixed w-64 bg-white/95 shadow-lg rounded-lg z-[99999] transition-all duration-300 ease-out
+          ${menuAnimate ? 'opacity-100 scale-105 translate-y-5' : 'opacity-0 scale-95 pointer-events-none translate-y-0'}`}
         style={{ top: menuPos.top, left: menuPos.left }}
       >
         {/* هدر منو */}
@@ -227,7 +240,7 @@ const ProfileDropdown = () => {
   ) : null;
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block z-[1000000]">
       {/* آیکون پروفایل */}
       <div
         ref={profileBtnRef}
@@ -235,7 +248,7 @@ const ProfileDropdown = () => {
         style={{ cursor: 'pointer' }}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <div className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg p-2 ${isOpen ? "ring-2 ring-[#d1182b]" : ""}`}> 
+        <div className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg ${isOpen ? "" : ""}`}> 
           <FaUser
             className={isOpen ? "text-2xl text-[#d1182b]" : "text-2xl text-gray-500"}
           />

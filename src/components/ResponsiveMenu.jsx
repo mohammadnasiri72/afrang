@@ -26,7 +26,7 @@ import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { getImageUrl } from "@/utils/mainDomain";
-import { Popper, Paper, Box, Grow } from "@mui/material";
+import { Popper, Paper, Box, Grow, Fade } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SubmenuDropdown from "./SubmenuDropdown";
 
@@ -194,9 +194,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       const scrollbarWidth =
         window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
-      if (scrollbarWidth > 0) {
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-      }
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      
 
       // اضافه کردن event listener برای کلید Escape
       const handleEscapeKey = (event) => {
@@ -226,8 +225,9 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
 
       return () => {
         // بازگرداندن overflow و padding اصلی
-        document.body.style.overflow = originalOverflow;
-        document.body.style.paddingRight = originalPaddingRight;
+        // document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = '0px';
+        
         // حذف event listener
         document.removeEventListener("keydown", handleEscapeKey);
         document.removeEventListener("mousedown", handleClickOutside);
@@ -480,6 +480,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       // فعال کردن مجدد اسکرول صفحه فقط اگر dropdown باز بود
       if (activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
         document.body.style.overflow = "";
+        document.body.style.paddingRight = '0px';
       }
     }, 100);
   };
@@ -712,10 +713,11 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
           ]}
         >
           {({ TransitionProps }) => (
-            <Grow
+            <Fade
               style={{ margin: 0, padding: 0 }}
               {...TransitionProps}
-              timeout={300}
+              timeout={650}
+              
             >
               <StyledPaper
                 sx={{
@@ -739,7 +741,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                   onNavigation={handleNavigation}
                 />
               </StyledPaper>
-            </Grow>
+            </Fade>
           )}
         </Popper>
       </div>

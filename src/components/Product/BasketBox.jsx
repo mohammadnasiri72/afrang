@@ -2,21 +2,23 @@
 
 import { Divider } from "antd";
 import { useState } from "react";
-import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
 import { FaCreditCard } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 import CompareButton from "../common/CompareButton";
 import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
 import LikeProduct from "./LikeProduct";
 import Warranties from "./Warranties";
+import NotifyAvailable from "./NotifyAvailable";
 
 function BasketBox({ product }) {
-  const dispatch = useDispatch();
-  const { items, currentItems } = useSelector((state) => state.cart);
+  const { items } = useSelector((state) => state.cart);
   const isInCart = items?.some(
     (item) => item.productId === product?.product?.productId
   );
+
+  
 
 
   const warrantiesArray = Object.entries(product.warranties).map(
@@ -46,11 +48,12 @@ function BasketBox({ product }) {
         <Divider style={{ padding: 0, margin: "10px" }} />
         <div className="flex items-center gap-1 flex-wrap w-full">
           <div className="w-full">
-            <CompareButton product={product?.product} />
+            <CompareButton id={product?.product?.productId} />
           </div>
           <div className="w-full">
             <LikeProduct productId={product?.product?.productId} />
           </div>
+          
         </div>
         {/* قابلیت خرید قسطی */}
         {product?.product?.isInstallmentSale && (
@@ -122,6 +125,10 @@ function BasketBox({ product }) {
         <div className="sm:block hidden">
           <CartActions product={product} selectedWarranty={selectedWarranty} />
         </div>
+        {product?.product?.statusId !== 1 && (
+            
+            <NotifyAvailable id={product?.product?.productId}/>
+          )}
       </div>
     </div>
   );

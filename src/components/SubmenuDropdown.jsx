@@ -3,11 +3,6 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import { useMemo } from "react";
 
-const ITEM_HEIGHT_PARENT = 34; // ارتفاع آیتم والد
-const ITEM_HEIGHT_CHILD = 32; // ارتفاع آیتم فرزند
-const COLUMN_GAP = 32;
-const CONTAINER_HEIGHT = 420; // ارتفاع ثابت کل منو
-const COLUMN_WIDTH = '25%'; // تغییر به درصد برای ریسپانسیو بودن
 const MAX_COLUMNS = 4;
 const COLUMN_PIXEL_WIDTH = 300;
 
@@ -119,7 +114,10 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                       lineHeight: `${ITEM_HEIGHT}px`,
                       textAlign: item.isParent ? undefined : "right",
                     }}
-                    onClick={() => onNavigation(item.url || item.pageUrl || "#")}
+                    onClick={() => {
+                      document.body.style.overflow = "";
+                      onNavigation(item.url || item.pageUrl || "#")
+                    }}
                     onMouseOver={e => {
                       if (item.isParent) {
                         e.currentTarget.style.fontSize = "18px";

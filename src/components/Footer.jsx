@@ -168,8 +168,8 @@ const Footer = () => {
     <div className="footer sm:pb-0 pb-16 ">
       <div className="lg:px-16 px-2 pt-10 border-b-8 border-[#d1182b] relative">
         <div className="flex flex-wrap">
-          <div className="lg:w-1/3 sm:w-1/2 w-full p-3 flex flex-col items-center justify-center">
-            <div className="w-full flex sm:justify-start justify-center">
+          <div className="lg:w-1/3 sm:w-1/2 w-full px-3 flex flex-col items-center justify-start">
+            <div className="w-full flex sm:justify-start justify-center ">
               {settings?.find(
                 (item) => item.propertyKey === "site_home_url"
               ) ? (
@@ -194,15 +194,29 @@ const Footer = () => {
               ) : (
                 <img className="w-20" src="/images/logo.png" alt="" />
               )}
-            </div>
-            <div className="mt-5 w-full flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
-              <span className="text-[#d1182b] whitespace-nowrap pl-1">
-                آدرس :{" "}
-              </span>
-              <span>
-                {settings?.find((item) => item.propertyKey === "site_address1")
-                  ?.value || "آدرس در دسترس نیست"}
-              </span>
+              <div className="">
+                <div className="w-full px-3 mt-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
+                  <span>
+                    <span className="text-[#d1182b] whitespace-nowrap pl-1">
+                      آدرس :{" "}
+                    </span>
+                    {settings?.find(
+                      (item) => item.propertyKey === "site_address1"
+                    )?.value || "آدرس در دسترس نیست"}
+                  </span>
+                </div>
+                <div className="w-full px-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
+                  <span>
+                    <span className="text-[#d1182b] whitespace-nowrap pl-1">
+                      ساعت کاری :{" "}
+                    </span>
+                    {settings?.find(
+                      (item) => item.propertyKey === "site_worktime"
+                    )?.value ||
+                      "شنبه تا چهارشنبه از ساعت 10 الی 18 و پنج شنبه از ساعت 10 الی 16"}
+                  </span>
+                </div>
+              </div>
             </div>
             {/* لینک منو های فوتر در موبایل */}
             <div className="sm:hidden pt-4">
@@ -358,19 +372,27 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="lg:w-1/6 sm:w-1/2 w-full p-3 sm:text-start text-center">
-            <h4 className="font-semibold text-[16px]">ساعت کاری</h4>
-            <div className="mt-3">
-              <p className="text-xs whitespace-nowrap sm:whitespace-normal">
-                {settings?.find((item) => item.propertyKey === "site_worktime")
-                  ?.value ||
-                  "شنبه تا چهارشنبه از ساعت 10 الی 18 و پنج شنبه از ساعت 10 الی 16"}
-              </p>
+          <div className="lg:w-1/4 sm:w-1/2 w-full p-3 sm:text-start text-center">
+            <div className="sm:flex hidden flex-wrap  items-center w-full justify-end">
+              <div className="">
+                <ul className="flex flex-wrap items-start w-full px-2">
+                  {footerMenu[0]?.menuItems?.map((menuItem) => (
+                    <li key={menuItem.id} className="list-none p-1">
+                      <Link
+                        href={menuItem.url || "#"}
+                        className="block bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
+                      >
+                        {menuItem.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-          <div className="lg:w-1/6 sm:w-1/2 w-full p-3 sm:text-start text-center">
+          <div className="lg:w-1/12 sm:w-1/2 w-full p-3 sm:text-start text-center">
             <h4 className="font-semibold text-[16px]">مجوزها</h4>
-            <div className="flex sm:justify-start justify-center items-center gap-2 mt-3">
+            <div className="flex flex-wrap sm:justify-start justify-center items-center gap-2 mt-3">
               <div className="py-2 px-5 rounded-lg bg-red-300 cursor-pointer duration-300 hover:bg-[#d1182b]">
                 <img src="/images/icons/namad.png" alt="#" />
               </div>
@@ -379,17 +401,6 @@ const Footer = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="sm:flex hidden sm:flex-nowrap flex-wrap  items-center w-full justify-end">
-          {footerMenu[0]?.menuItems?.map((menuItem) => (
-            <Link
-              key={menuItem.id}
-              href={menuItem.url || "#"}
-              className="hover:bg-white whitespace-nowrap hover:text-[#d1182b] px-2 py-2 cursor-pointer duration-300"
-            >
-              {menuItem.title}
-            </Link>
-          ))}
         </div>
       </div>
       <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">

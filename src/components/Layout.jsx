@@ -24,7 +24,6 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./../redux/store";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
-import FloatingCompareIcon from "./common/FloatingCompareIcon";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -197,7 +196,6 @@ function LayoutContent({ children }) {
             >
               {children}
             </LayoutWrapper>
-            <FloatingCompareIcon />
           </>
         ) : (
           <div className="fixed inset-0 bg-white flex items-center justify-center">

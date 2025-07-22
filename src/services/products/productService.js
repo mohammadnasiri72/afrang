@@ -132,3 +132,17 @@ export const getProductCategory = async (categoryId) => {
     return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
   }
 };
+
+
+export const fetchNotifyAvailable = async (id , token) => {
+  try {
+    const response = await axios.post(`${mainDomain}/api/Product/NotifyAvailable/${id}` , {} , {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+  } catch (error) {
+    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  }
+};

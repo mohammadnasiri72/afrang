@@ -1,42 +1,37 @@
 "use client";
 
-import { useSelector, useDispatch } from "react-redux";
-import { removeFromCompare, clearCompare } from "@/redux/features/compareSlice";
-import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
+import AddProductToCompareModal from "@/components/compare/AddProductToCompareModal";
+import AddToCartButton from "@/components/ProductList/AddToCartButton";
 import { getProductListId } from "@/services/products/productService";
-import { Divider, message } from "antd";
-import { FaTrash, FaTimes } from "react-icons/fa";
+import { getPropertyItem } from "@/services/Property/propertyService";
+import { getImageUrl2 } from "@/utils/mainDomain";
+import { Affix, message } from "antd";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { getItemByIds } from "@/services/Item/item";
-import { getPropertyItem } from "@/services/Property/propertyService";
+import { FaTimes } from "react-icons/fa";
 
 const DynamicComparePage = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
-  const { compareItems } = useSelector((state) => state.compare);
-
-  // State معمولی برای محصولات مقایسه
   const [compareProducts, setCompareProducts] = useState([]);
   const [property, setProperty] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  // console.log(compareProducts);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // دریافت ID های محصولات از URL و decode کردن
   const productIds = params.ids
     ? decodeURIComponent(params.ids)
         .split(",")
         .map((id) => parseInt(id.trim()))
+        .filter((id) => !isNaN(id))
     : [];
 
   const uniqueTitles = [...new Set(property.map((item) => item.title))];
-  console.log(property);
-  console.log(compareProducts);
+
+  
 
   // دریافت محصولات از API
   useEffect(() => {
@@ -46,18 +41,37 @@ const DynamicComparePage = () => {
         setError(null);
 
         try {
+          // گرفتن لیست محصولات
           const response = await getProductListId({ ids: productIds });
-          const response2 = await getPropertyItem(
-            decodeURIComponent(params.ids)
-          );
-
-          if (response && response.length > 0) {
+          if (Array.isArray(response)) {
             setCompareProducts(response);
+            // بعد از گرفتن محصولات، اگر productIdها با URL فرق داشت، URL را اصلاح کن
+            if (response.length !== productIds.length) {
+              const fetchedIds = response
+                .map((p) => p.productId)
+                .filter(Boolean);
+              const sortedFetchedIds = [...new Set(fetchedIds)].sort(
+                (a, b) => a - b
+              );
+              const urlIds = [...new Set(productIds)].sort((a, b) => a - b);
+              if (sortedFetchedIds.join(",") !== urlIds.join(",")) {
+                const newUrl =
+                  sortedFetchedIds.length > 0
+                    ? `/compare/${sortedFetchedIds.join(",")}`
+                    : "/compare";
+                router.push(newUrl);
+              }
+            }
           } else {
             setCompareProducts([]);
           }
-          if (response2 && response2.length > 0) {
-            setProperty(response2);
+
+          // گرفتن property ها
+          const response2 = await getPropertyItem(productIds.join(","));
+          if (Array.isArray(response2)) {
+            setProperty(
+              response2.filter((ev) => ev.propertyKey !== "related_videos")
+            );
           } else {
             setProperty([]);
           }
@@ -74,28 +88,13 @@ const DynamicComparePage = () => {
     fetchProducts();
   }, [params.ids]);
 
+  // حذف محصول از URL
   const handleRemoveItem = (productId) => {
-    // حذف از Redux
-    dispatch(
-      removeFromCompare(
-        compareItems.find((ev) => ev.productId === productId)?.id
-      )
-    );
-
-    // به‌روزرسانی URL
     const updatedIds = productIds.filter((id) => id !== productId);
-    if (updatedIds) {
-      const newUrl = `/compare/${updatedIds.join(",")}`;
-      router.push(newUrl);
-    }
-
+    const newUrl =
+      updatedIds.length > 0 ? `/compare/${updatedIds.join(",")}` : "/compare";
+    router.push(newUrl);
     message.success("محصول از مقایسه حذف شد");
-  };
-
-  const handleClearAll = () => {
-    dispatch(clearCompare());
-    setCompareProducts([]);
-    message.success("تمام محصولات از مقایسه حذف شدند");
   };
 
   if (loading) {
@@ -129,7 +128,7 @@ const DynamicComparePage = () => {
     );
   }
 
-  if (!compareProducts || compareProducts.length === 0) {
+  if (!productIds || productIds.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center z-50 relative">
         <div className="text-center">
@@ -154,103 +153,127 @@ const DynamicComparePage = () => {
   // تعداد ستون‌های مقایسه (حداکثر ۴)
   const maxCompareColumns = 4;
   const columnsToShow =
-    compareProducts.length < maxCompareColumns
+    productIds.length < maxCompareColumns
       ? maxCompareColumns
-      : compareProducts.length;
+      : productIds.length;
 
-  // هندل افزودن محصول جدید (می‌توانید این را به دلخواه خود پیاده‌سازی کنید)
   const handleAddProduct = () => {
-    router.push("/products"); // یا یک modal باز کنید یا هر رفتار دلخواه
+    setIsModalVisible(true);
   };
+
+ 
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 ">
       <div className="max-w-7xl mx-auto px-4 z-50 relative">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">مقایسه محصولات</h1>
-          <button
-            onClick={handleClearAll}
-            className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-          >
-            <FaTrash className="text-sm" />
-            حذف همه
-          </button>
-        </div>
         {/* اسکرول افقی واحد برای همه محصولات و ویژگی‌ها */}
-        <div className="flex gap-6 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 pb-2">
-          {Array.from({ length: columnsToShow }).map((_, idx) => {
-            const item = compareProducts[idx];
-            if (item) {
-              return (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-lg shadow-lg p-4 w-72 min-w-[260px] flex flex-col items-center relative border border-gray-100 mx-auto"
-                >
-                  {/* دکمه حذف */}
-                  <button
-                    onClick={() => handleRemoveItem(item.productId)}
-                    className="absolute top-2 left-2 text-gray-400 hover:text-red-500 transition-colors"
-                    title="حذف از مقایسه"
+        <div className="flex items-start gap-6 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 pb-2">
+          {(() => {
+            let addBoxRendered = false;
+            const arr = Array.from({ length: columnsToShow }).map((_, idx) => {
+              const item = compareProducts[idx];
+              if (item) {
+                return (
+                  <div
+                    key={`${item.productId || item.id}-${idx}`}
+                    className="bg-white rounded-lg shadow-lg w-72 min-w-[260px] flex flex-col items-center relative border border-gray-100"
                   >
-                    <FaTimes className="text-base" />
-                  </button>
-                  {/* عکس و عنوان */}
-                  <Link href={`/product/${item.productId}`} className="w-full">
-                    <div className="flex flex-col items-center cursor-pointer">
-                      <Image
-                        src={getImageUrl2(item.image) || "/images/placeholder.jpg"}
-                        alt={item.title}
-                        width={100}
-                        height={100}
-                        className="rounded-lg object-cover"
-                        priority={false}
-                        unoptimized
-                      />
-                      <div className="font-bold mt-2 text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
-                        {item.title}
-                      </div>
-                      <div className="font-bold mt-2 text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
-                        {item?.price1?.toLocaleString()} تومان
+                    {/* دکمه حذف */}
+                    {compareProducts.length > 1 && (
+                      <button
+                        onClick={() => handleRemoveItem(item.productId)}
+                        className="absolute cursor-pointer top-2 left-2 text-gray-400 hover:text-red-500 transition-colors"
+                        title="حذف از مقایسه"
+                      >
+                        <FaTimes className="text-base" />
+                      </button>
+                    )}
+
+                    {/* عکس و عنوان */}
+                    <div className="w-full ">
+                      <div className="flex flex-col items-center w-full">
+                        <Link href={`/product/${item.productId}`}>
+                          <Image
+                            src={
+                              getImageUrl2(item.image) ||
+                              "/images/placeholder.jpg"
+                            }
+                            alt={item.title}
+                            width={100}
+                            height={100}
+                            className="rounded-lg object-cover"
+                            priority={false}
+                            unoptimized
+                          />
+                        </Link>
+                        <div className="bg-white w-full">
+                              <Link href={`/product/${item.productId}`}>
+                                <div className="font-bold mt-2 text-center text-sm !line-clamp-2 h-10 flex items-center justify-center text-black">
+                                  {item.title}
+                                </div>
+                              </Link>
+                              <div className="font-bold text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
+                                {item?.finalPrice?.toLocaleString()} تومان
+                              </div>
+                              <AddToCartButton productId={item.productId} />
+                            </div>
                       </div>
                     </div>
-                  </Link>
-                  {/* ویژگی‌ها */}
-                  <div className="w-full mt-4">
-                    {uniqueTitles.map((title) => (
-                      <div key={title} className="mb-2">
-                        <span className="text-xs text-teal-500 font-semibold">{title}:</span>
-                        <span className="block font-semibold text-center">
-                          {property
-                            .filter((ev) => ev.title === title)
-                            .filter((ev) => ev.itemId === item.productId)[0]?.value || "---"}
-                        </span>
-                      </div>
-                    ))}
+                    {/* ویژگی‌ها */}
+                    <div className="w-full mt-4">
+                      {uniqueTitles.map((title) => (
+                        <div
+                          key={`${item.productId}-${title}`}
+                          className="mb-2"
+                        >
+                          <span className="text-xs text-teal-500 font-semibold">
+                            {title}:
+                          </span>
+                          <span className="block font-semibold text-center">
+                            {property
+                              .filter((ev) => ev.title === title)
+                              .filter((ev) => ev.itemId === item.productId)[0]
+                              ?.value || "---"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            } else {
-              // ستون خالی برای افزودن محصول جدید
-              return (
-                <div
-                  key={`empty-${idx}`}
-                  className="bg-white rounded-lg shadow-lg p-4 w-72 min-w-[260px] flex flex-col items-center justify-center border-2 border-dashed border-blue-300 cursor-pointer hover:bg-blue-50 transition-colors relative mx-auto"
-                  onClick={handleAddProduct}
-                  title="اضافه کردن محصول به مقایسه"
-                >
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-100 mb-2">
-                      <span className="text-3xl text-blue-500">+</span>
-                    </div>
-                    <div className="text-blue-600 font-bold text-sm">
-                      اضافه کردن محصول
+                );
+              } else if (
+                !addBoxRendered &&
+                productIds.length < maxCompareColumns
+              ) {
+                addBoxRendered = true;
+                return (
+                  <div
+                    key={`empty-add-box`}
+                    className="bg-white rounded-lg shadow-lg p-4 w-72 min-w-[260px] flex flex-col items-center justify-center border-2 border-dashed border-blue-300 cursor-pointer hover:bg-blue-50 transition-colors relative"
+                    onClick={handleAddProduct}
+                    title="اضافه کردن محصول به مقایسه"
+                  >
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-100 mb-2">
+                        <span className="text-3xl text-blue-500">+</span>
+                      </div>
+                      <div className="text-blue-600 font-bold text-sm">
+                        اضافه کردن محصول
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            }
-          })}
+                );
+              } else {
+                return null;
+              }
+            });
+            return arr;
+          })()}
         </div>
+        <AddProductToCompareModal
+          visible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+        />
       </div>
     </div>
   );

@@ -1,21 +1,20 @@
+import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import Link from "next/link";
+import { Skeleton, Tooltip } from "antd";
 import Image from "next/image";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import {
   FaCartShopping,
   FaRecycle,
   FaTruck,
   FaTruckFast,
 } from "react-icons/fa6";
-import { Tooltip, Skeleton } from "antd";
-import ExpandableText from "../Product/ExpandableText";
+import { useDispatch, useSelector } from "react-redux";
+import CompareButton from "../common/CompareButton";
 import AddToCartButton from "./AddToCartButton";
 import PriceProduct from "./PriceProduct";
-import CompareButton from "../common/CompareButton";
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 
 function Products({ products, layout = "list" }) {
   const dispatch = useDispatch();
@@ -169,7 +168,7 @@ function Products({ products, layout = "list" }) {
               ) : (
                 <div className="flex flex-col gap-2">
                   <AddToCartButton productId={product.productId} />
-                  <CompareButton product={product} />
+                  <CompareButton id={product?.productId} />
                 </div>
               )}
             </div>
@@ -205,67 +204,75 @@ function Products({ products, layout = "list" }) {
               </Link>
             </div>
             <div className="w-full flex ">
-
-            <div className="sm:px-5 sm:py-5 px-5 w-7/12 relative flex flex-col h-full">
-              <Link
-                href={product.url}
-                className="hover:text-[#d1182b] duration-300"
-              >
-                <h2 className="font-semibold sm:text-lg text-sm text-justify">
-                  {product.title}
-                </h2>
-              </Link>
-              {/* {product.summary && <ExpandableText text={product.summary} />} */}
-              {product.summary && <p className="text-justify flex-1 overflow-hidden text-ellipsis summary-clamp">{product.summary}</p>}
-            </div>
-            <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-64 flex flex-col">
-              <div className="flex flex-col w-full h-full flex-1">
-                <PriceProduct product={product} />
-                {/* دکمه مقایسه */}
-                <div className="mb-3">
-                  <CompareButton product={product} />
-                </div>
-                {/* <div className="flex items-center py-2">
+              <div className="sm:px-5 sm:py-5 px-5 w-7/12 relative flex flex-col h-full">
+                <Link
+                  href={product.url}
+                  className="hover:text-[#d1182b] duration-300"
+                >
+                  <h2 className="font-semibold sm:text-lg text-sm text-justify">
+                    {product.title}
+                  </h2>
+                </Link>
+                {/* {product.summary && <ExpandableText text={product.summary} />} */}
+                {product.summary && (
+                  <p className="text-justify flex-1 overflow-hidden text-ellipsis summary-clamp">
+                    {product.summary}
+                  </p>
+                )}
+              </div>
+              <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-64 flex flex-col">
+                <div className="flex flex-col w-full h-full flex-1">
+                  <PriceProduct product={product} />
+                  {/* دکمه مقایسه */}
+                  <div className="mb-3">
+                    <CompareButton id={product?.productId} />
+                  </div>
+                  {/* <div className="flex items-center py-2">
                   <img src="/images/icons/fast-delivery-2.png" alt="" />
                   <span className="px-1"> ضمانت اصل بودن کالا </span>
                 </div> */}
-                <div className="flex flex-wrap items-center gap-3">
-                  {product.fastShipping && (
-                    <div className="flex items-center ">
-                      <FaTruckFast className="text-lg text-[#898989]" />
-                      <span className="px-1 font-semibold"> ارسال سریع </span>
-                    </div>
-                  )}
-                  {product.freeShipping && (
-                    <div className="flex items-center ">
-                      <FaTruck className="text-lg text-[#898989]" />
-                      <span className="px-1 font-semibold"> ارسال رایگان </span>
-                    </div>
-                  )}
-                  {product.conditionId === 20 && (
-                  <div className="flex items-center text-sm text-[#d1182b] mb-1 px-1">
-                    <FaRecycle className="ml-1.5" />
-                    <span className="font-semibold px-1">کالای کارکرده</span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {product.fastShipping && (
+                      <div className="flex items-center ">
+                        <FaTruckFast className="text-lg text-[#898989]" />
+                        <span className="px-1 font-semibold"> ارسال سریع </span>
+                      </div>
+                    )}
+                    {product.freeShipping && (
+                      <div className="flex items-center ">
+                        <FaTruck className="text-lg text-[#898989]" />
+                        <span className="px-1 font-semibold">
+                          {" "}
+                          ارسال رایگان{" "}
+                        </span>
+                      </div>
+                    )}
+                    {product.conditionId === 20 && (
+                      <div className="flex items-center text-sm text-[#d1182b] mb-1 px-1">
+                        <FaRecycle className="ml-1.5" />
+                        <span className="font-semibold px-1">
+                          کالای کارکرده
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="flex-1"></div>
                 </div>
-                <div className="flex-1"></div>
+                {/* دکمه افزودن به سبد خرید یا وضعیت */}
+                <div className="w-full mt-2">
+                  {!product.canAddCart && (
+                    <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
+                      <FaCartShopping className="text-[#333]" />
+                      <span className="text-[#666]">{product.statusDesc}</span>
+                    </button>
+                  )}
+                  {product.canAddCart && (
+                    <div className="flex flex-col gap-2">
+                      <AddToCartButton productId={product.productId} />
+                    </div>
+                  )}
+                </div>
               </div>
-              {/* دکمه افزودن به سبد خرید یا وضعیت */}
-              <div className="w-full mt-2">
-                {!product.canAddCart && (
-                  <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
-                    <FaCartShopping className="text-[#333]" />
-                    <span className="text-[#666]">{product.statusDesc}</span>
-                  </button>
-                )}
-                {product.canAddCart && (
-                  <div className="flex flex-col gap-2">
-                    <AddToCartButton productId={product.productId} />
-                  </div>
-                )}
-              </div>
-            </div>
             </div>
           </div>
         </div>
@@ -358,7 +365,7 @@ function Products({ products, layout = "list" }) {
           {product.canAddCart ? (
             <>
               <AddToCartButton productId={product.productId} />
-              <CompareButton product={product} />
+              <CompareButton id={product?.productId} />
             </>
           ) : (
             <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">

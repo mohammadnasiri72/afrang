@@ -274,7 +274,8 @@ html {
 }
 
 .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  color: #d1182b !important; /* رنگ متن سفید */
+  background-color: #b91626 !important;
+  color: white !important;
 }
 .custom-menu .ant-menu-submenu .ant-menu {
   padding-right: 20px; /* انتقال زیرمجموعه‌ها به سمت راست */
@@ -796,4 +797,8 @@ a, li, td, th {
   text-overflow: ellipsis;
   height: 100%;
   max-height: 100%;
+}
+
+.ant-message {
+  z-index: 99999 !important;
 }
