@@ -24,7 +24,7 @@ function DescProduct({ product }) {
 
   return (
     <>
-      {
+      {/* {
         relatedProducts.length > 0 &&
         <div className="sm:px-4 mt-20">
           <div className="sm:hidden flex justify-center items-center pb-10">
@@ -44,7 +44,7 @@ function DescProduct({ product }) {
         <div className="mt-5">
           <ProductMain products={relatedProducts} />
         </div>
-      }
+      } */}
       {
         similarProducts.length > 0 &&
         <div className="sm:px-4 mt-20">

@@ -1,5 +1,5 @@
 import Container from "@/components/container";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 const ToggleCart = dynamic(() => import("@/components/Card/ToggleCart"));
 const HeaderCard = dynamic(() => import("@/components/Card/HeaderCard"));
@@ -11,7 +11,9 @@ export default function Cart() {
       <Container>
         <ToggleCart />
         <HeaderCard />
-        <BodyCard />
+        <div className="pb-10">
+          <BodyCard />
+        </div>
       </Container>
     </div>
   );

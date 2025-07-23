@@ -4,11 +4,11 @@ import { fetchCartData } from "@/redux/slices/cartSlice";
 import { addToCartNext, moveToCurrentCart } from "@/services/cart/CartServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import { Spin } from "antd";
+import { Affix, Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { BsArchive } from "react-icons/bs";
 import { FaAngleLeft, FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
@@ -83,10 +83,10 @@ const BodyCardSkeleton = () => {
 
 const BodyCard = () => {
   const dispatch = useDispatch();
-  const { currentItems, nextItems, cartType, loading } = useSelector((state) => state.cart);
-  const items = cartType === 'current' ? currentItems : nextItems;
-
-
+  const { currentItems, nextItems, cartType, loading } = useSelector(
+    (state) => state.cart
+  );
+  const items = cartType === "current" ? currentItems : nextItems;
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -97,7 +97,6 @@ const BodyCard = () => {
     timerProgressBar: true,
     customClass: "toast-modal",
   });
-
 
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
@@ -124,12 +123,10 @@ const BodyCard = () => {
       return sum + (oldPrice - price) * quantity;
     }, 0) || 0;
 
-
-
   const compeletePay = () => {
     if (!token) {
       // ذخیره مسیر فعلی در localStorage
-      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
       router.push("/login");
     } else {
       router.push("/cart/infosend");
@@ -181,7 +178,7 @@ const BodyCard = () => {
   };
 
   const renderCartCounter = (item) => {
-    if (cartType === 'next') {
+    if (cartType === "next") {
       return (
         <div className="flex items-center justify-center mt-2 text-gray-600">
           <span className="text-sm">تعداد: {item.quantity}</span>
@@ -189,30 +186,28 @@ const BodyCard = () => {
       );
     }
 
-    return (
-      <CartCounter
-        quantity={item.quantity}
-        cartId={item.id}
-      />
-    );
+    return <CartCounter quantity={item.quantity} cartId={item.id} />;
   };
 
   const renderActionButton = (item) => {
     const isLoading = loadingItemId === item.id;
-    const buttonProps = cartType === 'next'
-      ? {
-        onClick: () => !isLoading && handleMoveToCurrentCart(item.id),
-        text: isLoading ? "در حال انتقال..." : "برگشت به سبد خرید",
-      }
-      : {
-        onClick: () => !isLoading && handleAddToNextCart(item.id),
-        text: isLoading ? "در حال افزودن..." : "افزودن به سبد خرید بعدی",
-      };
+    const buttonProps =
+      cartType === "next"
+        ? {
+            onClick: () => !isLoading && handleMoveToCurrentCart(item.id),
+            text: isLoading ? "در حال انتقال..." : "برگشت به سبد خرید",
+          }
+        : {
+            onClick: () => !isLoading && handleAddToNextCart(item.id),
+            text: isLoading ? "در حال افزودن..." : "افزودن به سبد خرید بعدی",
+          };
 
     return (
       <div
         onClick={buttonProps.onClick}
-        className={`cursor-pointer text-[#d1182b] text-xs font-semibold flex items-center gap-2 whitespace-nowrap ${isLoading ? 'opacity-50' : 'hover:opacity-80'}`}
+        className={`cursor-pointer text-[#d1182b] text-xs font-semibold flex items-center gap-2 whitespace-nowrap ${
+          isLoading ? "opacity-50" : "hover:opacity-80"
+        }`}
       >
         {isLoading ? (
           <>
@@ -229,6 +224,66 @@ const BodyCard = () => {
     );
   };
 
+  // اضافه کردن منطق فیکس و اسکرول شدن باکس سبد خرید
+  const containerRef = useRef(null);
+  const innerRef = useRef(null);
+  const [fixed, setFixed] = useState(false);
+  const [stuckToBottom, setStuckToBottom] = useState(false);
+  const [style, setStyle] = useState({});
+
+ 
+  
+
+  useEffect(() => {
+    function handleScroll() {
+      // فقط در دسکتاپ فعال باشد
+      if (window.innerWidth < 1024) return;
+      if (!containerRef.current || !innerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+       console.log(containerRect);
+      const innerRect = innerRef.current.getBoundingClientRect();
+      const stickyTop = 150; // مثل offsetTop قبلی Affix
+      if (containerRect.bottom <= stickyTop) {
+        setFixed(false);
+        setStuckToBottom(false);
+        setStyle({});
+      }
+      else if (containerRect.bottom <= innerRect.height + stickyTop) {
+        setFixed(false);
+        setStuckToBottom(true);
+        setStyle({
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: containerRect.width -15,
+          zIndex: 100,
+        });
+      }
+      else if (containerRect.top <= stickyTop) {
+        setFixed(true);
+        setStuckToBottom(false);
+        setStyle({
+          position: "fixed",
+          top: stickyTop,
+          left: containerRect.left,
+          width: containerRect.width -15,
+          zIndex: 100,
+        });
+      } else {
+        setFixed(false);
+        setStuckToBottom(false);
+        setStyle({});
+      }
+    }
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
   if (loading) {
     return <BodyCardSkeleton />;
   }
@@ -241,7 +296,7 @@ const BodyCard = () => {
             <FaShoppingCart />
           </div>
           <h2 className="text-2xl font-semibold text-[#333] mb-2">
-            {cartType === 'next' ? 'لیست خرید بعدی' : 'سبد خرید'} شما خالی است
+            {cartType === "next" ? "لیست خرید بعدی" : "سبد خرید"} شما خالی است
           </h2>
           <p className="text-[#666]">
             برای مشاهده محصولات به صفحه اصلی مراجعه کنید
@@ -275,9 +330,7 @@ const BodyCard = () => {
                         </span>
                       )}
                     </div>
-                    <div className="mt-5">
-                      {renderCartCounter(item)}
-                    </div>
+                    <div className="mt-5">{renderCartCounter(item)}</div>
                   </div>
                   <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                     <div>
@@ -306,12 +359,6 @@ const BodyCard = () => {
                           <span className="font-semibold">کالای کارکرده</span>
                         </div>
                       )}
-                      {/* <div className="flex items-center mt-2">
-                        <LuMailbox className="text-[#666]" />
-                        <span className="px-2 sm:text-[13px] text-xs">
-                          ارسال از 3 روز کاری دیگر
-                        </span>
-                      </div> */}
                     </div>
                     <div>
                       <div className="flex justify-between items-center flex-wrap">
@@ -341,44 +388,90 @@ const BodyCard = () => {
               ))}
             </div>
           </div>
-          {cartType === 'current' && (
-            <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
+          {/* نمایش جمع و سود خرید برای موبایل و تبلت (بین sm و lg) */}
+          {cartType === "current" && (
+            <div className="w-full mt-3 lg:hidden">
               <div className="bg-[#ececec] p-3 rounded-lg">
-                <div className="flex justify-between text-[#444] py-1 font-bold">
+                <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
                   <span>قیمت کالاها ({items?.length || 0})</span>
                   <span>{totalPrice.toLocaleString()}</span>
                 </div>
                 {totalDiscount > 0 && (
-                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                  <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
                     <span>سود شما از این خرید</span>
                     <span>{totalDiscount.toLocaleString()}</span>
                   </div>
                 )}
-
-                <hr className="border-[#6666] my-3" />
-                <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
-                  <div className="flex justify-center items-center flex-col">
-                    <span className="font-bold text-lg">جمع سبد خرید:</span>
-                    <div className="flex items-center">
-                      <span className="font-bold text-2xl text-[#d1182b]">
-                        {(totalPrice - totalDiscount).toLocaleString()}
-                      </span>
-                      <span className="mr-1">تومان</span>
+                {/* جمع سبد خرید و دکمه فقط در md و پایین‌تر از lg اما بالاتر از sm نمایش داده شود */}
+                <div className="hidden md:block sm:block mt-3">
+                  <div className="bg-white p-3 rounded-lg mb-3">
+                    <div className="flex justify-center items-center flex-col gap-2">
+                      <span className="font-bold text-lg">جمع سبد خرید:</span>
+                      <div className="flex items-center">
+                        <span className="font-bold text-2xl text-[#d1182b]">
+                          {(totalPrice - totalDiscount).toLocaleString()}
+                        </span>
+                        <span className="mr-1">تومان</span>
+                      </div>
                     </div>
+                    <button
+                      onClick={compeletePay}
+                      className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                    >
+                      <FaShoppingCart />
+                      <span>تسویه حساب</span>
+                    </button>
                   </div>
                 </div>
-                <button
-                  onClick={compeletePay}
-                  className="w-full sm:flex hidden justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
-                >
-                  <FaShoppingCart />
-                  <span>تسویه حساب</span>
-                </button>
               </div>
-              <p className="text-[#444]">
-                این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
-                آنها نمی‌باشد.
-              </p>
+            </div>
+          )}
+          {/* جمع سبد خرید و دکمه فقط در دسکتاپ (lg و بالاتر) داخل باکس فیکس شده */}
+          {cartType === "current" && (
+            <div
+              ref={containerRef}
+              className="w-1/4 pr-5 lg:mt-0 mt-3 relative z-50 hidden lg:block"
+              style={{ position: "relative" }}
+            >
+              <div
+                ref={innerRef}
+                style={fixed || stuckToBottom ? style : { position: "sticky", top: 150 }}
+              >
+                <div className="bg-[#ececec] p-3 rounded-lg">
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>قیمت کالاها ({items?.length || 0})</span>
+                    <span>{totalPrice.toLocaleString()}</span>
+                  </div>
+                  {totalDiscount > 0 && (
+                    <div className="flex justify-between text-[#444] py-1 font-bold">
+                      <span>سود شما از این خرید</span>
+                      <span>{totalDiscount.toLocaleString()}</span>
+                    </div>
+                  )}
+                  <hr className="border-[#6666] my-3" />
+                  <div className="bg-white p-3 rounded-lg mb-3">
+                    <div className="flex justify-center items-center flex-col">
+                      <span className="font-bold text-lg">جمع سبد خرید:</span>
+                      <div className="flex items-center">
+                        <span className="font-bold text-2xl text-[#d1182b]">
+                          {(totalPrice - totalDiscount).toLocaleString()}
+                        </span>
+                        <span className="mr-1">تومان</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={compeletePay}
+                    className="w-full sm:flex hidden justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                  >
+                    <FaShoppingCart />
+                    <span>تسویه حساب</span>
+                  </button>
+                </div>
+                <p className="text-[#444]">
+                  این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها نمی‌باشد.
+                </p>
+              </div>
             </div>
           )}
 
@@ -394,14 +487,13 @@ const BodyCard = () => {
                 </div>
               </div>
               <button
-              onClick={compeletePay}
-              className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
-            >
-              <FaShoppingCart />
-              <span>تسویه حساب</span>
-            </button>
+                onClick={compeletePay}
+                className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+              >
+                <FaShoppingCart />
+                <span>تسویه حساب</span>
+              </button>
             </div>
-           
           </div>
         </>
       )}
@@ -415,20 +507,3 @@ const BodyCard = () => {
 };
 
 export default BodyCard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

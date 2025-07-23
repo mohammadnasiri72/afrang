@@ -16,13 +16,11 @@ function BasketFixed({ product }) {
       const containerRect = containerRef.current.getBoundingClientRect();
       const innerRect = innerRef.current.getBoundingClientRect();
       const stickyTop = 120; // px
-      // اگر کل باکس قرمز از صفحه خارج شد
       if (containerRect.bottom <= stickyTop) {
         setFixed(false);
         setStuckToBottom(false);
         setStyle({});
       }
-      // اگر انتهای باکس داخلی به انتهای باکس قرمز رسید
       else if (containerRect.bottom <= innerRect.height + stickyTop) {
         setFixed(false);
         setStuckToBottom(true);
