@@ -87,12 +87,13 @@ export const getProductAction = async () => {
 
 
 
-export const getProductTerm = async (term) => {
+export const getProductTerm = async (term , catIds) => {
   try {
     const response = await axios.get(`${mainDomain}/api/Product/FindByTerm` , {
       params:{
         langCode:'fa',
         term,
+        catIds,
         pageSize:50,
         page:1
       }

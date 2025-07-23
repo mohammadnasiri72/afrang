@@ -18,13 +18,19 @@ const SearchHeader = () => {
     const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
     const MIN_WIDTH = 600;
     const MAX_WIDTH = 900;
+    const dropdownRef = useRef(null); // اضافه کردن رفرنس برای دراپ‌داون
 
     
 
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (searchRef.current && !searchRef.current.contains(event.target)) {
+            if (
+                searchRef.current &&
+                !searchRef.current.contains(event.target) &&
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
                 setShowResults(false);
             }
         };
@@ -109,6 +115,7 @@ const SearchHeader = () => {
             {/* Results Dropdown با پورتال */}
             {showResults && (searchTerm.length >= 2) && typeof window !== 'undefined' && ReactDOM.createPortal(
                 <div
+                    ref={dropdownRef} // اضافه کردن ref به دراپ‌داون
                     className="fixed bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] h-[400px] overflow-y-auto z-[99999]"
                     style={{
                         top: dropdownPos.top,
@@ -131,7 +138,7 @@ const SearchHeader = () => {
                                 <div className="grid grid-cols-2 gap-4">
                                     {results.map((product) => (
                                         <Link
-                                            key={product.id}
+                                            key={product.productId}
                                             href={product.url}
                                             className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"
                                             onClick={() => setShowResults(false)}

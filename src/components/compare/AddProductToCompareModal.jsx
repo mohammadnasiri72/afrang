@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const AddProductToCompareModal = ({ visible, onClose }) => {
+const AddProductToCompareModal = ({ visible, onClose , catIds}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ const AddProductToCompareModal = ({ visible, onClose }) => {
     setLoading(true);
     timeoutRef.current = setTimeout(async () => {
       try {
-        const data = await getProductTerm(value);
+        const data = await getProductTerm(value , catIds);
         setResults(data || []);
       } catch (error) {
         console.error("Search error:", error);
@@ -90,7 +90,8 @@ const AddProductToCompareModal = ({ visible, onClose }) => {
             <div>
               {results.map((product) => (
                 <div
-                  key={product.id}
+                  key={product.productId}
+                  style={{ cursor: "pointer" }}
                   className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg cursor-pointer"
                   onClick={() => handleSelectProduct(product)}
                 >
