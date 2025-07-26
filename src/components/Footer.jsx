@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
+import "./../../public/fa/css/all.css";
 import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
@@ -174,6 +174,7 @@ const Footer = () => {
                 (item) => item.propertyKey === "site_home_url"
               ) ? (
                 <Link
+                aria-label="صفحه اصلی"
                   href={
                     settings?.find(
                       (item) => item.propertyKey === "site_home_url"
@@ -349,7 +350,8 @@ const Footer = () => {
             <Newsletter />
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
               {socialNetworks?.map((item) => (
-                <Link
+                <Link 
+                aria-label="شبکه های اجتماعی"
                   key={item.id}
                   href={item.sourceLink || "#"}
                   target="_blank"

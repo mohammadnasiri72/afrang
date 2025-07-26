@@ -109,6 +109,9 @@ export default function Header(props) {
     return <HeaderSkeleton />;
   }
 
+  
+  
+
   return (
     <div className="bg-white w-full">
       <div
@@ -121,15 +124,16 @@ export default function Header(props) {
               <Link
                 href={
                   settings.find((item) => item.propertyKey === "site_home_url")
-                    ?.value
+                    ?.value || "/"
                 }
+                aria-label="صفحه اصلی"
               >
                 <img
                   className="lg:w-14 w-24 "
                   src={getImageUrl(
                     settings.find(
                       (item) => item.propertyKey === "site_footer_logo"
-                    )?.value
+                    )?.value 
                   )}
                   alt=""
                 />
@@ -138,7 +142,8 @@ export default function Header(props) {
               <img className="lg:w-14 w-24" src="/images/logo.png" alt="" />
             )}
 
-            <Link
+            <Link 
+            aria-label="صفحه اصلی"
               href={
                 settings?.find((item) => item.propertyKey === "site_home_url")
                   ?.value || "/"

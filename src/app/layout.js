@@ -1,7 +1,6 @@
 import Layout from "@/components/Layout";
 import "@ant-design/v5-patch-for-react-19";
 import "./globals.css";
-import "./../../public/fa/css/all.css";
 import { mainDomainImg } from "@/utils/mainDomain";
 import '@/styles/leaflet.css';
 import { Toaster } from "react-hot-toast";

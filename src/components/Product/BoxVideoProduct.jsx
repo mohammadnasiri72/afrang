@@ -8,7 +8,6 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { FaPlay } from "react-icons/fa";
 
 // تنظیمات Fancybox برای گالری ویدئو
@@ -56,7 +55,7 @@ function BoxVideoProduct({ ids }) {
     if (match) {
       // iframe را داخل یک div با aspect-ratio قرار بده
       return `
-        <div style="position:relative;max-width:100%;aspect-ratio:16/9;overflow:hidden;">
+        <div style="position:relative;height:100%;max-width:100%;aspect-ratio:16/9;overflow:hidden;">
           ${match[0].replace(
             '<iframe',
             '<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"'

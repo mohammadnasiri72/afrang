@@ -14,7 +14,7 @@ const Toast = Swal.mixin({
 
 export const getCategory = async (params) => {
     try {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        // await new Promise(resolve => setTimeout(resolve, 5000));
         const response = await axios.get(`${mainDomain}/api/Category`, {
             params,
         });

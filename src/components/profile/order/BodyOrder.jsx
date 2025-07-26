@@ -289,6 +289,51 @@ export default function BodyOrder() {
     }
 
     return (
+        <>
+        <style jsx global>{`
+        .SegmentedProduct .ant-segmented {
+          background-color: #ebebeb;
+        }
+        .SegmentedProduct .ant-segmented-item {
+          padding-left: 0px;
+          padding-right: 0px;
+          padding-top: 8px;
+          padding-bottom: 8px;
+          margin-right: 10px !important;
+          margin-left: 10px !important;
+          width: 100%;
+          font-weight: 600 !important;
+          font-size: 14px;
+          transition: 0.3s;
+        }
+        .SegmentedProduct .ant-segmented-item-selected {
+          background-color: #fff !important;
+          color: #d1182b !important;
+          border-radius: 6px;
+          font-weight: 900 !important;
+          font-size: 16px !important;
+          transition: 0.3s;
+        }
+        .SegmentedProduct .ant-segmented-item-selected:hover {
+          color: #d1182b !important;
+        }
+        .SegmentedProduct .ant-segmented-thumb {
+          background-color: #fff !important;
+          font-weight: 900 !important;
+        }
+        /* حالت جمع و جورتر در sticky */
+        .SegmentedProduct.sticky .ant-segmented-item {
+          padding-top: 4px;
+          padding-bottom: 4px;
+          font-size: 12px;
+          margin-right: 4px !important;
+          margin-left: 4px !important;
+        }
+        .SegmentedProduct.sticky .ant-segmented-item-selected {
+          font-size: 13px !important;
+          border-radius: 4px;
+        }
+      `}</style>
         <div className="mt-4">
             <div id="orders-top" className="bg-white rounded-xl p-4 sm:p-6 shadow-lg z-50 relative max-w-full">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">تاریخچه سفارشات من</h2>
@@ -461,5 +506,6 @@ export default function BodyOrder() {
                 </div>
             </div>
         </div>
+        </>
     );
 }

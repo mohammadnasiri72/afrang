@@ -9,6 +9,9 @@ const BodyProduct = dynamic(() => import("@/components/Product/BodyProduct"));
 const TitleProduct = dynamic(() => import("@/components/Product/TitleProduct"));
 const DescProduct = dynamic(() => import("@/components/Product/DescProduct"));
 
+
+
+
 export default async function ProductDetails(props) {
   const prop = await props;
   const params = await prop.params;

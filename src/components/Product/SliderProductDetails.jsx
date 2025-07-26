@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 // import required modules
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { useEffect } from "react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import LikeProduct from "./LikeProduct";
 import { Skeleton } from "antd";
@@ -39,6 +39,20 @@ Fancybox.bind("[data-fancybox='gallery']", {
 
 export default function SliderProductDetails({ attachments , product}) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+  useEffect(() => {
+    import("@fancyapps/ui/dist/fancybox/fancybox.css");
+  }, []);
+
+   // افزایش z-index fancybox
+   useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `.fancybox__container { z-index: 999999 !important; }`;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   return (
     <>

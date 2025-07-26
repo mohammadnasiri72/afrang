@@ -192,8 +192,8 @@ function SelectCategoryFilter() {
   };
 
   const handleCategoryClick = (id, title, url) => {
-    dispatch(setFilterLoading(true));
-    setLoading(true);
+    // dispatch(setFilterLoading(true));
+    // setLoading(true);
     setSelectedCategory(id);
     
     const params = new URLSearchParams(searchParams.toString());

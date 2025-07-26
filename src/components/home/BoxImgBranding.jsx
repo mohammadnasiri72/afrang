@@ -63,10 +63,10 @@ export default function BoxImgBranding() {
   return (
     <div className="sm:px-16 px-2  relative">
       <div className="absolute left-0 -top-52">
-        <img src="/images/gallery/bg-shadow-1.png" />
+        <img src="/images/gallery/bg-shadow-1.png" alt=""/>
       </div>
       <div className="absolute right-0 top-0">
-        <img src="/images/gallery/bg-shadow-2.png" />
+        <img src="/images/gallery/bg-shadow-2.png" alt=""/>
       </div>
       <Swiper
         spaceBetween={10}

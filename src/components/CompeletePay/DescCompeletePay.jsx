@@ -1,7 +1,7 @@
 "use client";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Switch } from "@headlessui/react";
 import { estimateOrder } from "@/services/order/orderService";
 import Cookies from "js-cookie";
@@ -69,6 +69,10 @@ export default function DescCompeletePay() {
   const [acceptTerms, setAcceptTerms] = useState(true);
   const [estimateData, setEstimateDataLocal] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fixed, setFixed] = useState(false);
+  const [stuckToBottom, setStuckToBottom] = useState(false);
+  const [style, setStyle] = useState({});
+
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
   const router = useRouter();
@@ -150,325 +154,427 @@ export default function DescCompeletePay() {
     }
   };
 
+  const containerRef = useRef(null);
+  const innerRef = useRef(null);
+
+  useEffect(() => {
+    function handleScroll() {
+      // فقط در دسکتاپ فعال باشد
+      if (window.innerWidth < 1024) return;
+      if (!containerRef.current || !innerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const innerRect = innerRef.current.getBoundingClientRect();
+      const stickyTop = 130; // مثل offsetTop قبلی Affix
+      if (containerRect.bottom <= stickyTop) {
+        setFixed(false);
+        setStuckToBottom(false);
+        setStyle({});
+      } else if (containerRect.bottom <= innerRect.height + stickyTop) {
+        setFixed(false);
+        setStuckToBottom(true);
+        setStyle({
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: containerRect.width,
+          zIndex: 100,
+        });
+      } else if (containerRect.top <= stickyTop) {
+        setFixed(true);
+        setStuckToBottom(false);
+        setStyle({
+          position: "fixed",
+          top: stickyTop,
+          left: containerRect.left,
+
+          width: containerRect.width,
+          zIndex: 100,
+        });
+      } else {
+        setFixed(false);
+        setStuckToBottom(false);
+        setStyle({});
+      }
+    }
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       {loading ? (
         <DescCompeletePaySkeleton />
       ) : (
-        // <div className="lg:w-1/4 w-full lg:pr-5 lg:mt-0 mt-3 relative z-50">
-        //   <div className="bg-[#ececec] p-3 rounded-lg">
-        //     <div className="flex justify-between text-[#444] py-1 font-bold">
-        //       <span>قیمت کالاها ({currentItems?.length || 0})</span>
-        //       <span>{estimateData?.productAmount ? estimateData.productAmount.toLocaleString() : totalPrice.toLocaleString()} تومان</span>
-        //     </div>
-        //     {totalDiscount > 0 && (
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>سود شما از این خرید</span>
-        //         <span>{estimateData?.discountAmount ? estimateData.discountAmount.toLocaleString() : totalDiscount.toLocaleString()} تومان</span>
-        //       </div>
-        //     )}
-        //     {
-        //       estimateData?.taxAmount > 0 &&
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>مالیات({estimateData?.taxPercent}%)</span>
-        //         <span>{estimateData?.taxAmount ? estimateData.taxAmount.toLocaleString() : 0} تومان</span>
-        //       </div>
-        //     }
-        //     {
-        //       estimateData?.shipmentAmount > 0 &&
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>هزینه ارسال</span>
-        //         <span>{estimateData?.shipmentAmount ? estimateData.shipmentAmount.toLocaleString() : 0} تومان</span>
-        //       </div>
-        //     }
-        //     {
-        //       !estimateData?.shipmentAmount &&
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>هزینه ارسال</span>
-        //         <span>رایگان</span>
-        //       </div>
-        //     }
-
-        //     {
-        //       estimateData?.walletIsActive &&
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>موجودی کیف پول</span>
-        //         <span>{estimateData?.walletAmount ? estimateData.walletAmount.toLocaleString() : 0} تومان</span>
-        //       </div>
-        //     }
-
-        //     {
-        //       selectedShipping &&
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>روش ارسال</span>
-        //         {selectedShipping ? (
-        //           <span className="text-sm">
-        //             {selectedShipping.title}
-        //           </span>
-        //         ) : (
-        //           <span className="text-sm">لطفاً یک روش ارسال انتخاب کنید</span>
-        //         )}
-        //       </div>
-        //     }
-
-        //     {
-        //       estimateData?.shipmentDesc &&
-        //       <div className="flex justify-between text-[#444] py-1 font-bold">
-        //         <span>توضیحات ارسال</span>
-        //         <span>{estimateData?.shipmentDesc}</span>
-        //       </div>
-        //     }
-
-        //     <hr className="border-[#6666] my-3" />
-
-        //     {/* مبلغ نهایی */}
-        //     <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
-        //       <div className="flex justify-center items-center flex-col">
-        //         <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
-        //         <div className="flex items-center">
-        //           <span className="font-bold text-2xl text-[#d1182b]">
-        //             {estimateData?.finalAmount ? estimateData.finalAmount.toLocaleString() : finalPrice.toLocaleString()}
-        //           </span>
-        //           <span className="mr-1">تومان</span>
-        //         </div>
-        //       </div>
-        //     </div>
-
-        //     {/* سوئیچ‌ها */}
-        //     <div dir="ltr" className="space-y-3 mb-3">
-        //       <div className="flex items-center justify-end">
-        //         <span className="text-[#444] px-1">درخواست فاکتور رسمی</span>
-        //         <Switch
-        //           checked={needInvoice}
-        //           onChange={setNeedInvoice}
-        //           className={`${needInvoice ? 'bg-[#d1182b]' : 'bg-gray-300'
-        //             } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
-        //         >
-        //           <span
-        //             className={`${needInvoice ? 'translate-x-1' : 'translate-x-6'
-        //               } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-        //           />
-        //         </Switch>
-        //       </div>
-        //       <div className="flex items-center justify-end">
-        //         <span className="text-[#444] px-1">قوانین و مقررات سایت را می‌پذیرم</span>
-        //         <Switch
-        //           checked={acceptTerms}
-        //           onChange={setAcceptTerms}
-        //           className={`${acceptTerms ? 'bg-[#d1182b]' : 'bg-gray-300'
-        //             } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
-        //         >
-        //           <span
-        //             className={`${acceptTerms ? 'translate-x-1' : 'translate-x-6'
-        //               } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-        //           />
-        //         </Switch>
-        //       </div>
-        //     </div>
-
-        //     <button
-        //       onClick={() => {
-        //         if (!acceptTerms) {
-        //           message.warning("لطفاً قوانین و مقررات سایت را بپذیرید");
-        //         } else if (!selectedAddress) {
-        //           message.warning("لطفاً آدرس خود را انتخاب کنید");
-        //         } else if (!selectedShipping) {
-        //           message.warning("لطفاً روش ارسال را انتخاب کنید");
-        //         } else {
-        //           handlePayment();
-        //         }
-        //       }}
-        //       className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${acceptTerms && selectedShipping && selectedAddress && !loading
-        //         ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
-        //         : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
-        //         }  py-2 rounded-lg duration-300 mt-3`}
-        //     >
-        //       {loading ? (
-        //         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-        //       ) : (
-        //         <>
-        //           <FaShoppingCart />
-        //           <span>تکمیل اطلاعات پرداخت</span>
-        //         </>
-        //       )}
-        //     </button>
-        //   </div>
-        //   <p className="text-[#444] mt-2">
-        //     این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها
-        //     نمی‌باشد.
-        //   </p>
-        // </div>
-        <div className="relative w-1/4">
-          <div className="w-full lg:pr-5 lg:mt-0 mt-3 absolute bottom-0 top-0 z-50 ">
-            <div className="bg-[#ececec] p-3 rounded-lg ">
-              <div className="flex justify-between text-[#444] py-1 font-bold">
-                <span>قیمت کالاها ({currentItems?.length || 0})</span>
-                <span>
-                  {estimateData?.productAmount
-                    ? estimateData.productAmount.toLocaleString()
-                    : totalPrice.toLocaleString()}{" "}
-                  تومان
-                </span>
-              </div>
-              {totalDiscount > 0 && (
+        <div ref={containerRef} className="relative lg:w-1/4 w-full z-50">
+          <div
+            ref={innerRef}
+            style={
+              fixed || stuckToBottom ? style : { position: "sticky" }
+            }
+            className="w-full lg:block hidden"
+          >
+            <div className="w-full lg:mt-0 mt-3">
+              <div className="bg-[#ececec] p-3 rounded-lg ">
                 <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>سود شما از این خرید</span>
+                  <span>قیمت کالاها ({currentItems?.length || 0})</span>
                   <span>
-                    {estimateData?.discountAmount
-                      ? estimateData.discountAmount.toLocaleString()
-                      : totalDiscount.toLocaleString()}{" "}
+                    {estimateData?.productAmount
+                      ? estimateData.productAmount.toLocaleString()
+                      : totalPrice.toLocaleString()}{" "}
                     تومان
                   </span>
                 </div>
-              )}
-              {estimateData?.taxAmount > 0 && (
-                <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>مالیات({estimateData?.taxPercent}%)</span>
-                  <span>
-                    {estimateData?.taxAmount
-                      ? estimateData.taxAmount.toLocaleString()
-                      : 0}{" "}
-                    تومان
-                  </span>
-                </div>
-              )}
-              {estimateData?.shipmentAmount > 0 && (
-                <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>هزینه ارسال</span>
-                  <span>
-                    {estimateData?.shipmentAmount
-                      ? estimateData.shipmentAmount.toLocaleString()
-                      : 0}{" "}
-                    تومان
-                  </span>
-                </div>
-              )}
-              {!estimateData?.shipmentAmount && (
-                <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>هزینه ارسال</span>
-                  <span>رایگان</span>
-                </div>
-              )}
-
-              {estimateData?.walletIsActive && (
-                <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>موجودی کیف پول</span>
-                  <span>
-                    {estimateData?.walletAmount
-                      ? estimateData.walletAmount.toLocaleString()
-                      : 0}{" "}
-                    تومان
-                  </span>
-                </div>
-              )}
-
-              {selectedShipping && (
-                <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>روش ارسال</span>
-                  {selectedShipping ? (
-                    <span className="text-sm">{selectedShipping.title}</span>
-                  ) : (
-                    <span className="text-sm">
-                      لطفاً یک روش ارسال انتخاب کنید
+                {totalDiscount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>سود شما از این خرید</span>
+                    <span>
+                      {estimateData?.discountAmount
+                        ? estimateData.discountAmount.toLocaleString()
+                        : totalDiscount.toLocaleString()}{" "}
+                      تومان
                     </span>
-                  )}
-                </div>
-              )}
-
-              {estimateData?.shipmentDesc && (
-                <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>توضیحات ارسال</span>
-                  <span>{estimateData?.shipmentDesc}</span>
-                </div>
-              )}
-
-              <hr className="border-[#6666] my-3" />
-
-              {/* مبلغ نهایی */}
-              <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
-                <div className="flex justify-center items-center flex-col">
-                  <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
-                  <div className="flex items-center">
-                    <span className="font-bold text-2xl text-[#d1182b]">
-                      {estimateData?.finalAmount
-                        ? estimateData.finalAmount.toLocaleString()
-                        : finalPrice.toLocaleString()}
+                  </div>
+                )}
+                {estimateData?.taxAmount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>مالیات({estimateData?.taxPercent}%)</span>
+                    <span>
+                      {estimateData?.taxAmount
+                        ? estimateData.taxAmount.toLocaleString()
+                        : 0}{" "}
+                      تومان
                     </span>
-                    <span className="mr-1">تومان</span>
+                  </div>
+                )}
+                {estimateData?.shipmentAmount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>هزینه ارسال</span>
+                    <span>
+                      {estimateData?.shipmentAmount
+                        ? estimateData.shipmentAmount.toLocaleString()
+                        : 0}{" "}
+                      تومان
+                    </span>
+                  </div>
+                )}
+                {!estimateData?.shipmentAmount && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>هزینه ارسال</span>
+                    <span>رایگان</span>
+                  </div>
+                )}
+
+                {estimateData?.walletIsActive && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>موجودی کیف پول</span>
+                    <span>
+                      {estimateData?.walletAmount
+                        ? estimateData.walletAmount.toLocaleString()
+                        : 0}{" "}
+                      تومان
+                    </span>
+                  </div>
+                )}
+
+                {selectedShipping && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>روش ارسال</span>
+                    {selectedShipping ? (
+                      <span className="text-sm">{selectedShipping.title}</span>
+                    ) : (
+                      <span className="text-sm">
+                        لطفاً یک روش ارسال انتخاب کنید
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {estimateData?.shipmentDesc && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>توضیحات ارسال</span>
+                    <span>{estimateData?.shipmentDesc}</span>
+                  </div>
+                )}
+
+                <hr className="border-[#6666] my-3" />
+
+                {/* مبلغ نهایی */}
+                <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
+                  <div className="flex justify-center items-center flex-col">
+                    <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
+                    <div className="flex items-center">
+                      <span className="font-bold text-2xl text-[#d1182b]">
+                        {estimateData?.finalAmount
+                          ? estimateData.finalAmount.toLocaleString()
+                          : finalPrice.toLocaleString()}
+                      </span>
+                      <span className="mr-1">تومان</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* سوئیچ‌ها */}
-              <div dir="ltr" className="space-y-3 mb-3">
-                <div className="flex items-center justify-end">
-                  <span className="text-[#444] px-1">درخواست فاکتور رسمی</span>
-                  <Switch
-                    checked={needInvoice}
-                    onChange={setNeedInvoice}
-                    className={`${
-                      needInvoice ? "bg-[#d1182b]" : "bg-gray-300"
-                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
-                  >
-                    <span
+                {/* سوئیچ‌ها */}
+                <div dir="ltr" className="space-y-3 mb-3">
+                  <div className="flex items-center justify-end">
+                    <span className="text-[#444] px-1">
+                      درخواست فاکتور رسمی
+                    </span>
+                    <Switch
+                      checked={needInvoice}
+                      onChange={setNeedInvoice}
                       className={`${
-                        needInvoice ? "translate-x-1" : "translate-x-6"
-                      } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                    />
-                  </Switch>
-                </div>
-                <div className="flex items-center justify-end">
-                  <span className="text-[#444] px-1">
-                    قوانین و مقررات سایت را می‌پذیرم
-                  </span>
-                  <Switch
-                    checked={acceptTerms}
-                    onChange={setAcceptTerms}
-                    className={`${
-                      acceptTerms ? "bg-[#d1182b]" : "bg-gray-300"
-                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
-                  >
-                    <span
+                        needInvoice ? "bg-[#d1182b]" : "bg-gray-300"
+                      } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
+                    >
+                      <span
+                        className={`${
+                          needInvoice ? "translate-x-1" : "translate-x-6"
+                        } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="flex items-center justify-end">
+                    <span className="text-[#444] px-1">
+                      قوانین و مقررات سایت را می‌پذیرم
+                    </span>
+                    <Switch
+                      checked={acceptTerms}
+                      onChange={setAcceptTerms}
                       className={`${
-                        acceptTerms ? "translate-x-1" : "translate-x-6"
-                      } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                    />
-                  </Switch>
+                        acceptTerms ? "bg-[#d1182b]" : "bg-gray-300"
+                      } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
+                    >
+                      <span
+                        className={`${
+                          acceptTerms ? "translate-x-1" : "translate-x-6"
+                        } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                      />
+                    </Switch>
+                  </div>
                 </div>
-              </div>
 
-              <button
-                onClick={() => {
-                  if (!acceptTerms) {
-                    message.warning("لطفاً قوانین و مقررات سایت را بپذیرید");
-                  } else if (!selectedAddress) {
-                    message.warning("لطفاً آدرس خود را انتخاب کنید");
-                  } else if (!selectedShipping) {
-                    message.warning("لطفاً روش ارسال را انتخاب کنید");
-                  } else {
-                    handlePayment();
-                  }
-                }}
-                className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${
-                  acceptTerms && selectedShipping && selectedAddress && !loading
-                    ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
-                    : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
-                }  py-2 rounded-lg duration-300 mt-3`}
-              >
-                {loading ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                ) : (
-                  <>
-                    <FaShoppingCart />
-                    <span>تکمیل اطلاعات پرداخت</span>
-                  </>
-                )}
-              </button>
+                <button
+                  onClick={() => {
+                    if (!acceptTerms) {
+                      message.warning("لطفاً قوانین و مقررات سایت را بپذیرید");
+                    } else if (!selectedAddress) {
+                      message.warning("لطفاً آدرس خود را انتخاب کنید");
+                    } else if (!selectedShipping) {
+                      message.warning("لطفاً روش ارسال را انتخاب کنید");
+                    } else {
+                      handlePayment();
+                    }
+                  }}
+                  className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${
+                    acceptTerms &&
+                    selectedShipping &&
+                    selectedAddress &&
+                    !loading
+                      ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
+                      : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
+                  }  py-2 rounded-lg duration-300 mt-3`}
+                >
+                  {loading ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  ) : (
+                    <>
+                      <FaShoppingCart />
+                      <span>تکمیل اطلاعات پرداخت</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-[#444] mt-2">
+                این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
+                آنها نمی‌باشد.
+              </p>
             </div>
-            <p className="text-[#444] mt-2">
-              این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
-              آنها نمی‌باشد.
-            </p>
+          </div>
+          <div
+            className="w-full lg:hidden block "
+          >
+            <div className="w-full lg:mt-0 mt-3">
+              <div className="bg-[#ececec] p-3 rounded-lg ">
+                <div className="flex justify-between text-[#444] py-1 font-bold">
+                  <span>قیمت کالاها ({currentItems?.length || 0})</span>
+                  <span>
+                    {estimateData?.productAmount
+                      ? estimateData.productAmount.toLocaleString()
+                      : totalPrice.toLocaleString()}{" "}
+                    تومان
+                  </span>
+                </div>
+                {totalDiscount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>سود شما از این خرید</span>
+                    <span>
+                      {estimateData?.discountAmount
+                        ? estimateData.discountAmount.toLocaleString()
+                        : totalDiscount.toLocaleString()}{" "}
+                      تومان
+                    </span>
+                  </div>
+                )}
+                {estimateData?.taxAmount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>مالیات({estimateData?.taxPercent}%)</span>
+                    <span>
+                      {estimateData?.taxAmount
+                        ? estimateData.taxAmount.toLocaleString()
+                        : 0}{" "}
+                      تومان
+                    </span>
+                  </div>
+                )}
+                {estimateData?.shipmentAmount > 0 && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>هزینه ارسال</span>
+                    <span>
+                      {estimateData?.shipmentAmount
+                        ? estimateData.shipmentAmount.toLocaleString()
+                        : 0}{" "}
+                      تومان
+                    </span>
+                  </div>
+                )}
+                {!estimateData?.shipmentAmount && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>هزینه ارسال</span>
+                    <span>رایگان</span>
+                  </div>
+                )}
+
+                {estimateData?.walletIsActive && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>موجودی کیف پول</span>
+                    <span>
+                      {estimateData?.walletAmount
+                        ? estimateData.walletAmount.toLocaleString()
+                        : 0}{" "}
+                      تومان
+                    </span>
+                  </div>
+                )}
+
+                {selectedShipping && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>روش ارسال</span>
+                    {selectedShipping ? (
+                      <span className="text-sm">{selectedShipping.title}</span>
+                    ) : (
+                      <span className="text-sm">
+                        لطفاً یک روش ارسال انتخاب کنید
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {estimateData?.shipmentDesc && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>توضیحات ارسال</span>
+                    <span>{estimateData?.shipmentDesc}</span>
+                  </div>
+                )}
+
+                <hr className="border-[#6666] my-3" />
+
+                {/* مبلغ نهایی */}
+                <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
+                  <div className="flex justify-center items-center flex-col">
+                    <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
+                    <div className="flex items-center">
+                      <span className="font-bold text-2xl text-[#d1182b]">
+                        {estimateData?.finalAmount
+                          ? estimateData.finalAmount.toLocaleString()
+                          : finalPrice.toLocaleString()}
+                      </span>
+                      <span className="mr-1">تومان</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* سوئیچ‌ها */}
+                <div dir="ltr" className="space-y-3 mb-3">
+                  <div className="flex items-center justify-end">
+                    <span className="text-[#444] px-1">
+                      درخواست فاکتور رسمی
+                    </span>
+                    <Switch
+                      checked={needInvoice}
+                      onChange={setNeedInvoice}
+                      className={`${
+                        needInvoice ? "bg-[#d1182b]" : "bg-gray-300"
+                      } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
+                    >
+                      <span
+                        className={`${
+                          needInvoice ? "translate-x-1" : "translate-x-6"
+                        } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="flex items-center justify-end">
+                    <span className="text-[#444] px-1">
+                      قوانین و مقررات سایت را می‌پذیرم
+                    </span>
+                    <Switch
+                      checked={acceptTerms}
+                      onChange={setAcceptTerms}
+                      className={`${
+                        acceptTerms ? "bg-[#d1182b]" : "bg-gray-300"
+                      } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none cursor-pointer`}
+                    >
+                      <span
+                        className={`${
+                          acceptTerms ? "translate-x-1" : "translate-x-6"
+                        } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                      />
+                    </Switch>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (!acceptTerms) {
+                      message.warning("لطفاً قوانین و مقررات سایت را بپذیرید");
+                    } else if (!selectedAddress) {
+                      message.warning("لطفاً آدرس خود را انتخاب کنید");
+                    } else if (!selectedShipping) {
+                      message.warning("لطفاً روش ارسال را انتخاب کنید");
+                    } else {
+                      handlePayment();
+                    }
+                  }}
+                  className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${
+                    acceptTerms &&
+                    selectedShipping &&
+                    selectedAddress &&
+                    !loading
+                      ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
+                      : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
+                  }  py-2 rounded-lg duration-300 mt-3`}
+                >
+                  {loading ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  ) : (
+                    <>
+                      <FaShoppingCart />
+                      <span>تکمیل اطلاعات پرداخت</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-[#444] mt-2">
+                این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
+                آنها نمی‌باشد.
+              </p>
+            </div>
           </div>
         </div>
       )}

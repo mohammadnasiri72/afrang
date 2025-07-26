@@ -25,6 +25,7 @@ import socialNetworksReducer from './slices/socialNetworksSlice';
 import supportBoxReducer from './slices/supportBoxSlice';
 import userReducer from './slices/userSlice';
 import productColorReducer from './slices/productColorSlice';
+import layoutProductsReducer from './slices/layoutProducts';
 
 const persistedState = {
   user: {
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   filterLoading: filterLoadingReducer,
   compare: compareReducer,
   productColor: productColorReducer,
+  layoutProducts: layoutProductsReducer,
 });
 
 const persistConfig = {

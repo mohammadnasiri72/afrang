@@ -7,9 +7,10 @@ import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 
 const SocialNetworks = () => {
   const dispatch = useDispatch();
-  const { socialNetworks, loading } = useSelector((state) => state.socialNetworks);
+  const { socialNetworks, loading } = useSelector(
+    (state) => state.socialNetworks
+  );
   const { settings } = useSelector((state) => state.settings);
-  
 
   useEffect(() => {
     if (!socialNetworks || socialNetworks.length === 0) {
@@ -52,8 +53,12 @@ const SocialNetworks = () => {
           />
         </Link>
       ))} */}
-      <a
-        href={`tel:${settings?.find((item) => item.propertyKey === "site_tel")?.value || "02177615546"}`}
+      <Link
+        aria-label="تماس با ما"
+        href={`tel:${
+          settings?.find((item) => item.propertyKey === "site_tel")?.value ||
+          "02177615546"
+        }`}
         className="relative bg-white p-2 rounded-lg flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group"
       >
         <svg
@@ -89,7 +94,7 @@ const SocialNetworks = () => {
           تماس با ما
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };

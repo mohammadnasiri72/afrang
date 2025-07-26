@@ -6,7 +6,6 @@ import Image from "next/image";
 
 // import required modules
 import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { getImageUrl } from "@/utils/mainDomain";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { postLike } from "@/services/UserActivity/UserActivityService";
@@ -36,6 +35,16 @@ function BoxImageGallery({ imageData }) {
   const [likedNumber, setLikedNumber] = useState(0);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+   // افزایش z-index fancybox
+   useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `.fancybox__container { z-index: 999999 !important; }`;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
 
   useEffect(() => {

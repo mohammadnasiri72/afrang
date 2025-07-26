@@ -5,6 +5,11 @@ import { Avatar, Card, Descriptions, Divider } from 'antd';
 import { useSelector } from 'react-redux';
 import { UserOutlined } from '@ant-design/icons';
 
+// export const metadata = {
+//     title: "درباره من | پروفایل کاربری | خانه عکاسان افرنگ",
+//     description: "مشاهده و ویرایش اطلاعات حساب کاربری، ایمیل، شماره موبایل و سایر جزئیات پروفایل در خانه عکاسان افرنگ.",
+//   };
+
 const AboutMePage = () => {
     const user = useSelector(selectUser);
     const userProfile = useSelector(selectUserProfile);

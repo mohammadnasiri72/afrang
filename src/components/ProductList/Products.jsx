@@ -16,7 +16,9 @@ import CompareButton from "../common/CompareButton";
 import AddToCartButton from "./AddToCartButton";
 import PriceProduct from "./PriceProduct";
 
-function Products({ products, layout = "list" }) {
+function Products({ products }) {
+  const layoutProducts = useSelector((state) => state.layoutProducts.layoutProducts);
+  
   const dispatch = useDispatch();
   const isFilterLoading = useSelector(
     (state) => state.filterLoading.isFilterLoading
@@ -30,7 +32,7 @@ function Products({ products, layout = "list" }) {
   }, [products, searchParams, dispatch]);
 
   if (isFilterLoading) {
-    if (layout === "grid") {
+    if (layoutProducts === "grid") {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
           {[
@@ -281,7 +283,7 @@ function Products({ products, layout = "list" }) {
   );
 
   const GridProductCard = ({ product }) => (
-    <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
+    <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col relative z-50">
       <div className="flex flex-col items-center flex-grow">
         <div className="relative w-full flex justify-center items-center">
           <Link href={`${product.url}`}>
@@ -381,14 +383,14 @@ function Products({ products, layout = "list" }) {
   return (
     <div
       className={
-        layout === "grid"
+        layoutProducts === "grid"
           ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"
           : "space-y-5 mt-5"
       }
     >
       {products.map((product) => (
-        <div key={product.id} className={layout === "grid" ? "h-full" : ""}>
-          {layout === "grid" ? (
+        <div key={product.id} className={layoutProducts === "grid" ? "h-full" : ""}>
+          {layoutProducts === "grid" ? (
             <GridProductCard product={product} />
           ) : (
             <ProductCard product={product} />

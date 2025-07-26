@@ -38,7 +38,7 @@ export default function BodyPayment() {
 
     return (
         <>
-            <div className="flex flex-wrap items-start">
+            <div className="flex flex-wrap pb-5">
                 <TitlePayment />
                 <DescPayment estimateData={estimateData} />
             </div>

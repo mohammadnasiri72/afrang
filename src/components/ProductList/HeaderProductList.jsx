@@ -3,19 +3,21 @@ import { FaSortAmountUp } from "react-icons/fa";
 import { FaList, FaTableCells } from "react-icons/fa6";
 import FilterResponsive from "./FilterResponsive";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
+import { setLayoutProducts } from "@/redux/slices/layoutProducts";
 
-function HeaderProductList({ onLayoutChange }) {
+function HeaderProductList() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const currentOrderBy = searchParams.get("orderby");
-  const currentLayout = searchParams.get("layout") || "list";
+  const layoutProducts = useSelector((state) => state.layoutProducts.layoutProducts);
+
+   const params = new URLSearchParams(searchParams);
 
   const handleSort = (orderBy) => {
     dispatch(setFilterLoading(true));
-    const params = new URLSearchParams(searchParams);
     if (orderBy) {
       params.set("orderby", orderBy);
     } else {
@@ -28,16 +30,10 @@ function HeaderProductList({ onLayoutChange }) {
   };
 
   const handleLayoutChange = (layout) => {
-    dispatch(setFilterLoading(true));
-    const params = new URLSearchParams(searchParams);
-    if (layout === "grid") {
-      params.set("layout", "grid");
-    } else {
-      params.delete("layout");
-    }
-    router.push(`?${params.toString()}`);
-    onLayoutChange?.(layout);
+    dispatch(setLayoutProducts(layout));
   };
+
+
 
   const sortOptions = [
     { label: "جدیدترین", value: "2" },
@@ -81,13 +77,13 @@ function HeaderProductList({ onLayoutChange }) {
             <FaList
               onClick={() => handleLayoutChange("list")}
               className={`text-2xl cursor-pointer ${
-                currentLayout === "list" ? "text-[#d1182b]" : "text-gray-400"
+                layoutProducts === "list" ? "text-[#d1182b]" : "text-gray-400"
               }`}
             />
             <FaTableCells
               onClick={() => handleLayoutChange("grid")}
               className={`text-2xl cursor-pointer ${
-                currentLayout === "grid" ? "text-[#d1182b]" : "text-gray-400"
+                layoutProducts === "grid" ? "text-[#d1182b]" : "text-gray-400"
               }`}
             />
           </div>
