@@ -227,7 +227,7 @@ function SecondHandProduct() {
             <FaCaretLeft />
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-5">
           <ProductMain products={filteredProducts} />
         </div>
       </div>

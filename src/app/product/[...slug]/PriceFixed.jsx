@@ -71,7 +71,7 @@ export default function PriceFixed({product}) {
                   <button
                     onClick={handleAddToCartMobile}
                     disabled={isLoading}
-                    className="flex !text-sm items-center bg-gradient-to-l from-[#d1182b] to-[#ff4d6d] text-white p-3 cursor-pointer rounded-lg font-bold shadow-md hover:scale-105 transition-all duration-200 gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="flex !text-xs items-center bg-gradient-to-l from-[#d1182b] to-[#ff4d6d] text-white p-3 cursor-pointer rounded-lg font-bold shadow-md hover:scale-105 transition-all duration-200 gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <>

@@ -70,7 +70,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
           height: MENU_HEIGHT,
           overflowX: needsHorizontalScroll ? "auto" : "hidden",
           overflowY: "hidden",
-          padding: "0 10px",
+          padding: "0 50px",
         }}
       >
         <div 

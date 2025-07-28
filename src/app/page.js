@@ -33,7 +33,7 @@ export default async function Home() {
         <NewProduct />
       </div>
 
-      <div className="secondHand-sec mt-5">
+      <div className="secondHand-sec">
         <SecondHandProduct />
       </div>
 

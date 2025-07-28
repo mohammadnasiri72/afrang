@@ -166,8 +166,8 @@ export default function EidDiscount() {
     <>
       {
         filteredProducts.length>0 &&
-        <div className="mt-10">
-          <div className="lg:hidden flex justify-center items-center pb-3">
+        <div className="mt-5">
+          <div className="lg:hidden flex justify-center items-center">
             <div className="flex items-center title-newProduct relative">
               <h2 className="font-semibold text-xl ">{actionProducts?.title || 'فروش ویژه'}</h2>
               {
@@ -202,7 +202,7 @@ export default function EidDiscount() {
               </div>
 
               {/* لیست دسته‌بندی‌ها */}
-              <div className="overflow-x-auto pb-2">
+              <div className="overflow-x-auto">
                 <div className="flex items-center gap-0 min-w-max px-2">
                   {categories.map((category, index) => (
                     <div key={`${category}-${index}`} className="flex items-center">
@@ -251,7 +251,7 @@ export default function EidDiscount() {
               <FaCaretLeft />
             </div>
           </div>
-          <div className="mt-10">
+          <div className="mt-5">
             <ProductMain products={filteredProducts} />
           </div>
         </div>
