@@ -85,13 +85,13 @@ async function BoxImgBlog({
               <div className="p-3">
                 <h2 className="h-12 line-clamp-2">
                   <Link
-                    className="font-bold hover:text-[#d1182b] duration-300"
+                    className="font-bold hover:text-[#d1182b] duration-300 text-justify"
                     href={blog.url}
                   >
                     {blog.title}
                   </Link>
                 </h2>
-                <div className="min-h-[100px]">
+                <div className="min-h-[100px] text-justify">
                   <ExpandableText text={blog.summary} />
                 </div>
 

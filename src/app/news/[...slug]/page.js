@@ -9,7 +9,6 @@ const Container = dynamic(() => import('@/components/container'));
 export default async function BlogDetails(props) {
   const prop = await props;
   const params = await prop.params;
-  const searchParams = await prop.searchParams;
 
 
   let url;

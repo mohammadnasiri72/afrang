@@ -4,17 +4,16 @@ import { getRelatedProductsByIdString } from "@/services/products/productService
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Skeleton } from "antd";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa6";
 import { SlBasket } from "react-icons/sl";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import { useRef } from 'react';
 
 // تابع chunkArray را خارج از کامپوننت تعریف کن
 function chunkArray(array, size) {
@@ -54,8 +53,8 @@ function AccessoriesProduct({ product }) {
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Get unique categories from relatedProducts
@@ -134,7 +133,6 @@ function AccessoriesProduct({ product }) {
 
   return (
     <>
-      
       <div className="p-5 flex flex-wrap items-start">
         <div className="md:w-1/4 w-full border rounded-lg border-[#0003] p-3">
           <h5 className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</h5>
@@ -144,10 +142,12 @@ function AccessoriesProduct({ product }) {
                 onClick={() => {
                   setAccessoriesProductId(index + 1);
                   if (window.innerWidth < 768 && productsSectionRef.current) {
-                    const rect = productsSectionRef.current.getBoundingClientRect();
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const rect =
+                      productsSectionRef.current.getBoundingClientRect();
+                    const scrollTop =
+                      window.pageYOffset || document.documentElement.scrollTop;
                     const top = rect.top + scrollTop - 150; // 100px بالاتر
-                    window.scrollTo({ top, behavior: 'smooth' });
+                    window.scrollTo({ top, behavior: "smooth" });
                   }
                 }}
                 className={`flex items-center justify-between px-5 py-3 cursor-pointer mt-3 border rounded-sm ${
@@ -166,7 +166,7 @@ function AccessoriesProduct({ product }) {
           ))}
         </div>
 
-        <div ref={productsSectionRef} className="md:w-3/4 w-full md:px-5">
+        <div ref={productsSectionRef} className="md:w-3/4 w-full md:px-5 mt-2">
           {shouldUseSlider ? (
             <>
               <Swiper
@@ -174,7 +174,7 @@ function AccessoriesProduct({ product }) {
                 pagination={{
                   clickable: true,
                   renderBullet: (index, className) =>
-                    `<span class="${className} custom-swiper-bullet"></span>`
+                    `<span class="${className} custom-swiper-bullet"></span>`,
                 }}
                 spaceBetween={16}
                 slidesPerView={1}
@@ -182,50 +182,66 @@ function AccessoriesProduct({ product }) {
               >
                 {groupedProducts.map((group, idx) => (
                   <SwiperSlide key={idx}>
-                    <div className="flex flex-col w-full gap-2 min-h-[540px] pb-8">
+                    <div className="flex flex-col w-full min-h-[540px] pb-8 gap-2">
                       {group.map((item, index) => (
-                        <div key={index} className="w-full">
-                          <div className="flex items-center gap-3 p-3 border border-gray-100 bg-white rounded-lg relative h-[96px] min-h-[96px] hover:bg-gray-50 transition-all">
-                            <Link href={item.url} className="flex-shrink-0 w-20 h-20 relative overflow-hidden">
+                        <div
+                          key={index}
+                          className="w-full border border-gray-200 rounded-lg"
+                        >
+                          <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
+                            <Link
+                              href={item.url}
+                              className="flex-shrink-0 w-20 h-20 relative overflow-hidden "
+                            >
                               <img
                                 className="object-contain w-20 h-20"
                                 src={getImageUrl2(item.image)}
                                 alt={item.title}
                               />
                             </Link>
-                            <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
+                            <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                               <Link
                                 href={item.url}
-                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2 text-sm mb-1"
+                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm mb-1"
                               >
                                 {item.title}
                               </Link>
                               <div className="flex items-center gap-2 mt-auto">
-                                {!item.callPriceButton && item.finalPrice > 0 && (
-                                  <>
-                                    <span className="text-sm font-bold text-[#d1182b]">
-                                      {item.finalPrice.toLocaleString()}
-                                    </span>
-                                    <span className="text-xs text-gray-500">تومان</span>
-                                  </>
-                                )}
+                                {!item.callPriceButton &&
+                                  item.finalPrice > 0 && (
+                                    <>
+                                      <span className="text-sm font-bold text-[#d1182b]">
+                                        {item.finalPrice.toLocaleString()}
+                                      </span>
+                                      <span className="text-xs text-gray-500">
+                                        تومان
+                                      </span>
+                                    </>
+                                  )}
                                 {item.callPriceButton && (
-                                  <span className="text-sm font-bold text-[#d1182b]">تماس بگیرید</span>
+                                  <span className="text-sm font-bold text-[#d1182b]">
+                                    تماس بگیرید
+                                  </span>
                                 )}
-                                {!item.callPriceButton && item.finalPrice === 0 && (
-                                  <span className="text-sm font-bold text-[#d1182b]">بدون قیمت</span>
-                                )}
+                                {!item.callPriceButton &&
+                                  item.finalPrice === 0 && (
+                                    <span className="text-sm font-bold text-[#d1182b]">
+                                      بدون قیمت
+                                    </span>
+                                  )}
                               </div>
                             </div>
-                            <div className="flex flex-col items-end justify-between h-full ml-2">
+                            <div className="flex flex-col items-end justify-between h-full ml-2 ">
                               {item.discount !== 0 && !item.callPriceButton && (
                                 <span className="bg-[#d1182b] text-white rounded-md px-2 py-0.5 text-xs mb-1">
                                   {item.discount}%
                                 </span>
                               )}
                               {item.canAddCart && (
-                                <div className="mt-auto">
-                                  <AddToCartButtonCard productId={item.productId} />
+                                <div className="mt-auto sm:block hidden ">
+                                  <AddToCartButtonCard
+                                    productId={item.productId}
+                                  />
                                 </div>
                               )}
                               {!item.canAddCart && (
@@ -236,6 +252,11 @@ function AccessoriesProduct({ product }) {
                               )}
                             </div>
                           </div>
+                          {item.canAddCart && (
+                            <div className="mt-auto sm:hidden block ">
+                              <AddToCartButtonCard productId={item.productId} />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -282,19 +303,25 @@ function AccessoriesProduct({ product }) {
           ) : (
             <div className="flex flex-col w-full gap-2">
               {filteredProducts.map((item, index) => (
-                <div key={index} className="w-full">
-                  <div className="flex items-center gap-3 p-3 border border-gray-100 bg-white rounded-lg relative h-[96px] min-h-[96px] hover:bg-gray-50 transition-all">
-                    <Link href={item.url} className="flex-shrink-0 w-20 h-20 relative overflow-hidden">
+                <div
+                  key={index}
+                  className="w-full border border-gray-200 rounded-lg"
+                >
+                  <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
+                    <Link
+                      href={item.url}
+                      className="flex-shrink-0 w-20 h-20 relative overflow-hidden "
+                    >
                       <img
                         className="object-contain w-20 h-20"
                         src={getImageUrl2(item.image)}
                         alt={item.title}
                       />
                     </Link>
-                    <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
+                    <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                       <Link
                         href={item.url}
-                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2 text-sm mb-1"
+                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm mb-1"
                       >
                         {item.title}
                       </Link>
@@ -308,21 +335,25 @@ function AccessoriesProduct({ product }) {
                           </>
                         )}
                         {item.callPriceButton && (
-                          <span className="text-sm font-bold text-[#d1182b]">تماس بگیرید</span>
+                          <span className="text-sm font-bold text-[#d1182b]">
+                            تماس بگیرید
+                          </span>
                         )}
                         {!item.callPriceButton && item.finalPrice === 0 && (
-                          <span className="text-sm font-bold text-[#d1182b]">بدون قیمت</span>
+                          <span className="text-sm font-bold text-[#d1182b]">
+                            بدون قیمت
+                          </span>
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col items-end justify-between h-full ml-2">
+                    <div className="flex flex-col items-end justify-between h-full ml-2 ">
                       {item.discount !== 0 && !item.callPriceButton && (
                         <span className="bg-[#d1182b] text-white rounded-md px-2 py-0.5 text-xs mb-1">
                           {item.discount}%
                         </span>
                       )}
                       {item.canAddCart && (
-                        <div className="mt-auto">
+                        <div className="mt-auto sm:block hidden ">
                           <AddToCartButtonCard productId={item.productId} />
                         </div>
                       )}
@@ -334,6 +365,11 @@ function AccessoriesProduct({ product }) {
                       )}
                     </div>
                   </div>
+                  {item.canAddCart && (
+                    <div className="mt-auto sm:hidden block ">
+                      <AddToCartButtonCard productId={item.productId} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

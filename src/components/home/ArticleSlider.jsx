@@ -204,14 +204,14 @@ export default function ArticleSlider() {
                     <div className="p-3 bg-white flex-grow flex flex-col">
                       <h3 className="mb-2">
                         <Link
-                          className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1"
+                          className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1 text-justify"
                           href={blog.url}
                         >
                           {blog.title}
                         </Link>
                       </h3>
                       <div className="flex-grow">
-                        <div className="text-[#000a] text-[13px] min-h-[80px] overflow-hidden">
+                        <div className="text-[#000a] text-[13px] min-h-[80px] overflow-hidden !text-justify">
                           <ExpandableText text={blog.summary} maxLength={120} />
                         </div>
                       </div>

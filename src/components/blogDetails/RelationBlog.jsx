@@ -60,13 +60,13 @@ async function RelationBlog() {
                   <div className="p-3 bg-white">
                     <h3>
                       <span
-                        className="font-bold  group-hover:text-teal-500 duration-300"
+                        className="font-bold  group-hover:text-teal-500 duration-300 text-justify"
                       >
                         {blog.title}
                       </span>
                     </h3>
                     <div className="">
-                      <p className="text-[#000a] text-[13px]">
+                      <p className="text-[#000a] text-[13px] text-justify">
                         {formatPersianDate(blog.dateProduct)}
                       </p>
                     </div>

@@ -1,10 +1,10 @@
 import Container from '@/components/container';
 import { getCategory } from '@/services/Category/categoryService';
 import dynamic from 'next/dynamic';
-const BoxImgBlog = dynamic(() => import('@/components/blog/BoxImgBlog'));
 const HeaderBlog = dynamic(() => import('@/components/blog/HeaderBlog'));
 const FeaturedBlog = dynamic(() => import('@/components/blog/FeaturedBlog'));
 const CategoryBlog = dynamic(() => import('@/components/blog/CategoryBlog'));
+const BoxImgBlog = dynamic(() => import('@/components/blog/BoxImgBlog'));
 
 
 

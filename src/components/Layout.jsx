@@ -238,25 +238,24 @@ function ScrollToTopButton() {
     <div
       style={{
         position: "fixed",
-        bottom: 32,
         left: 32,
         zIndex: 9999999,
-        width: 56,
-        height: 56,
+        width: 36,
+        height: 36,
         display: visible ? "flex" : "none",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(255,255,255,0.95)",
+        background: "#fff",
         borderRadius: "50%",
-        boxShadow: "0 2px 16px 0 rgba(0,0,0,0.12)",
+        boxShadow: "0 2px 16px 2px rgba(0,0,0,0.22)",
         cursor: "pointer",
         transition: "box-shadow 0.2s",
       }}
       onClick={handleClick}
-      title="برو بالا"
-      className="group"
+      aria-label="scroll to top"
+      className="group bottom-40 sm:bottom-[32px]"
     >
-      <div style={{ position: "absolute", width: 56, height: 56 }}>
+      <div style={{ position: "absolute", width: 36, height: 36 }}>
         <CircularProgressbar
           value={progress}
           strokeWidth={7}
@@ -275,8 +274,8 @@ function ScrollToTopButton() {
           top: 0,
           bottom: 0,
           margin: "auto",
-          width: 24,
-          height: 24,
+          width: 15,
+          height: 15,
           color: "#d1182b",
           zIndex: 2,
           transition: "color 0.2s",

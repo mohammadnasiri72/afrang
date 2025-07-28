@@ -91,7 +91,7 @@ function CommentItem({ comment, onReply, replyTo, onReplySent, depth = 0 }) {
               {formatPersianDate(comment.created)}
             </span>
           </div>
-          <div className="mt-1 text-gray-800">{comment.body}</div>
+          <div className="mt-1 text-gray-800 text-justify">{comment.body}</div>
           {comment.parentId === -1 && (
             <button
               className="mt-3 flex cursor-pointer items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full shadow-sm border border-blue-200 hover:bg-blue-100 hover:text-blue-900 hover:shadow-md transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"

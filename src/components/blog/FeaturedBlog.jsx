@@ -71,8 +71,8 @@ async function FeaturedBlog() {
           <div>
             <div className="flex flex-wrap bg-white p-5 rounded-lg overflow-hidden items-start">
               <div className="lg:w-1/3 w-full py-3 px-5">
-                <h1 className="text-2xl font-semibold">{blogs[0].title}</h1>
-                <p className="leading-[45px]  text-[17px] text-[#666] mt-2 text-justify">
+                <h1 className="text-2xl font-semibold text-justify">{blogs[0].title}</h1>
+                <p className="leading-[45px]  text-[17px] text-[#666] mt-2 text-justify ">
                   {stripHtmlTags(blogs[0].summary)}
                 </p>
                 <div className="flex items-center mt-8">

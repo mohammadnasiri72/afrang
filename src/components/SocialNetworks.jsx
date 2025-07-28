@@ -37,7 +37,7 @@ const SocialNetworks = () => {
   return (
     <div
       style={{ zIndex: "60" }}
-      className="fixed bottom-40 right-5 flex flex-col gap-3"
+      className="fixed sm:bottom-[32px] bottom-40 right-5 flex flex-col gap-3"
     >
       {/* {socialNetworks?.map((item) => (
         <Link
@@ -59,7 +59,7 @@ const SocialNetworks = () => {
           settings?.find((item) => item.propertyKey === "site_tel")?.value ||
           "02177615546"
         }`}
-        className="relative bg-white p-2 rounded-lg flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group"
+        className="relative bg-white p-2 rounded-full flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
