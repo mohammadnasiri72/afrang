@@ -804,7 +804,17 @@ th {
 }
 
 .ant-message {
-  z-index: 99999 !important;
+  z-index: 110000 !important;
   
+}
+
+.ant-modal {
+  z-index: 110000 !important;
+}
+.ant-modal-wrap {
+  z-index: 110000 !important;
+}
+.ant-modal-mask {
+  z-index: 109999 !important;
 }
 

@@ -239,7 +239,7 @@ function SelectProductMokamel({ product }) {
     <>
       <div className="mt-5 custom-select-productDetails">
         <div className="text-2xl font-bold py-3 text-[#d1182b]">کالای مکمل</div>
-        <div className="" ref={searchRef}>
+        <div className="" ref={searchRef} style={{ position: 'relative' }}>
           <input
             className="w-full border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#d1182b]"
             type="text"
@@ -251,6 +251,19 @@ function SelectProductMokamel({ product }) {
             }}
             onClick={() => setShowResults(true)}
           />
+          {/* دکمه ضربدر برای بستن باکس نتایج */}
+          {showResults && (
+            <button
+              type="button"
+              onClick={() => setShowResults(false)}
+              className="absolute cursor-pointer left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#d1182b] bg-white rounded-full p-1 transition-colors z-10"
+              style={{ direction: 'ltr' }}
+              tabIndex={-1}
+              aria-label="بستن جستجو"
+            >
+              <IoIosClose size={22} />
+            </button>
+          )}
           {showResults && typeof window !== 'undefined' && createPortal(
             <div
               ref={dropdownRef}
