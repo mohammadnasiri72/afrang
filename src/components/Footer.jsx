@@ -417,9 +417,9 @@ const Footer = () => {
                   )?.value
                 }
               </span>
-              <span className="text-emerald-700 px-1 font-semibold">
+              <Link target="_blank" href='https://activeidea.net/' className=" px-1 font-semibold">
                 طراحی سایت و بهینه سازی سایت : ایده پویا
-              </span>
+              </Link>
             </span>
           ) : (
             <span>

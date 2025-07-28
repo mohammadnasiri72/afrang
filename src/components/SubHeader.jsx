@@ -30,6 +30,8 @@ export default function SubHeader() {
 
   return (
     <>
+    <div className="z-[999999999] relative">
+
       {
         settings?.find((item) => item.propertyKey === "site_marquee")
           ?.value &&
@@ -43,6 +45,7 @@ export default function SubHeader() {
           </Marquee>
         </div>
       }
+    </div>
     </>
   );
 }

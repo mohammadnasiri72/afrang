@@ -30,6 +30,12 @@ import { Popper, Paper, Box, Grow, Fade } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SubmenuDropdown from "./SubmenuDropdown";
 
+
+import { keyframes } from '@emotion/react';
+
+
+
+
 const dashboardMenuItems = [
   {
     id: "dashboard",
@@ -145,6 +151,15 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   },
 }));
 
+const slideDown = keyframes`
+  0% { height: 0; }
+  100% {  height: 70vh; }
+`;
+
+const AnimatedPaper = styled(StyledPaper)`
+  animation: ${slideDown} 0.3s ease-in;
+`;
+
 function ResponsiveMenu({ activeMenu, setActiveMenu }) {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -186,15 +201,12 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       activeMenu.Children &&
       activeMenu.Children.length > 0
     ) {
-      // ذخیره overflow اصلی
-      const originalOverflow = document.body.style.overflow;
-      const originalPaddingRight = document.body.style.paddingRight;
-      // غیرفعال کردن اسکرول
+     
       // محاسبه عرض اسکرول‌بار
       const scrollbarWidth =
         window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      // document.body.style.paddingRight = `${scrollbarWidth}px`;
       
 
       // اضافه کردن event listener برای کلید Escape
@@ -716,10 +728,10 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
             <Fade
               style={{ margin: 0, padding: 0 }}
               {...TransitionProps}
-              timeout={650}
+              timeout={200}
               
             >
-              <StyledPaper
+              <AnimatedPaper
                 sx={{
                   width: "auto",
                   maxWidth: `calc(100vw - ${
@@ -740,7 +752,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                   onChildToggle={handleChildToggle}
                   onNavigation={handleNavigation}
                 />
-              </StyledPaper>
+              </AnimatedPaper>
             </Fade>
           )}
         </Popper>

@@ -1,12 +1,9 @@
 "use client";
 
-import { Button } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
 import { deleteLegal } from "@/services/order/orderService";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import Swal from "sweetalert2";
 
@@ -21,6 +18,17 @@ function DeleteLegal({ id, onDelete, getLegalFu }) {
         setMounted(true);
         return () => setMounted(false);
     }, []);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isModalOpen]);
 
     const Toast = Swal.mixin({
         toast: true,

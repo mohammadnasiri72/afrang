@@ -4,14 +4,14 @@ import {
   postLike,
   postLiked,
 } from "@/services/UserActivity/UserActivityService";
-import { Button, message } from "antd";
+import { message, Tooltip } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const LikeProduct = ({ productId }) => {
+const LikeProductBtn = ({ productId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [liked, setLiked] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -97,32 +97,34 @@ const LikeProduct = ({ productId }) => {
   }
 
   return (
-    <div className="w-full">
-      <Button
-        onClick={handleLike}
-        className={`
-               flex w-full items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
+    <div className="w-full flex items-center justify-center">
+      <Tooltip
+        placement="left"
+        title={!liked ? "افزودن به علاقه‌مندی‌ها" : "حذف از علاقه‌مندی‌ها"}
+        trigger={['hover']}
+      >
+        <button
+          onClick={handleLike}
+          className={`
+               flex w-full justify-center items-center cursor-pointer py-2 px-2 transition-all duration-300
                ${
                  liked
                    ? "bg-red-200 text-gray-700 hover:bg-red-300"
-                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                   : "bg-gray-100 text-gray-700 hover:bg-gray-300"
                }
              `}
-        title={!liked ? "افزودن به علاقه‌مندی‌ها" : "حذف از علاقه‌مندی‌ها"}
-      >
-        {isLoading ? (
-          <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-[#d1182b]"></div>
-        ) : liked ? (
-          <FaHeart className=" text-[#d1182b]" />
-        ) : (
-          <FaRegHeart className="" />
-        )}
-        <span className="whitespace-nowrap px-2 text-xs font-medium">
-          {liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-        </span>
-      </Button>
+        >
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-[#d1182b]"></div>
+          ) : liked ? (
+            <FaHeart className=" text-[#d1182b]" />
+          ) : (
+            <FaRegHeart className="" />
+          )}
+        </button>
+      </Tooltip>
     </div>
   );
 };
 
-export default LikeProduct;
+export default LikeProductBtn;

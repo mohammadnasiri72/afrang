@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const LoadingSkeleton = () => {
@@ -71,13 +71,13 @@ export default function BoxImgBranding() {
       <Swiper
         spaceBetween={10}
         loop={true}
-        modules={[Pagination]}
+        modules={[Autoplay, Pagination]}
         className="mySwiper bg-white"
-        // autoplay={{
-        //   delay: 0,
-        //   disableOnInteraction: false,
-        // }}
-        // speed={5000}
+        autoplay={{
+          delay: 0,
+          disableOnInteraction: false,
+        }}
+        speed={5000}
         grabCursor={true}
         breakpoints={{
           1024: {

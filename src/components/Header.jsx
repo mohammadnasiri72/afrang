@@ -149,8 +149,8 @@ export default function Header(props) {
                   ?.value || "/"
               }
             >
-              <div className="flex-col px-1  logo-text lg:flex hidden">
-                <span className="w-28 logo-text !font-stretch-150%">
+              <div className="flex-col px-1 lg:flex hidden">
+                <span className="w-28 font-semibold text-lg">
                   {"خانــه عکاســــان افــــــــــرنـگ" ||
                     settings?.find((item) => item.propertyKey === "site_title")
                       ?.value}

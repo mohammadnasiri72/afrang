@@ -3,7 +3,7 @@ import { setSelectedAddress } from '@/redux/slices/addressSlice';
 import { setSelectedShipping } from '@/redux/slices/shippingSlice';
 import { getWaySend } from "@/services/order/orderService";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BoxAddress from "./BoxAddress";
 import BoxLegal from "./BoxLegal";
@@ -52,6 +52,24 @@ export default function BodyCompeletePay() {
   
   const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
  
+
+  const [highlightShipping, setHighlightShipping] = useState(false);
+  const waySendRef = useRef(null);
+
+  // Highlight and scroll to shipping after address selection
+  useEffect(() => {
+    if (selectedAddress && selectedAddress.id) {
+      setHighlightShipping(true);
+      if (waySendRef.current) {
+        const rect = waySendRef.current.getBoundingClientRect();
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const top = rect.top + scrollTop - 150;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+      const timer = setTimeout(() => setHighlightShipping(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedAddress]);
 
   
 
@@ -110,15 +128,17 @@ export default function BodyCompeletePay() {
           onAddressDelete={() => setWaySendList({ shippingWays: [] })}
         />
       </div>
-      <div className="mt-4">
+      <div className="mt-4" ref={waySendRef}>
         {isShippingLoading ? (
           <WaySendSkeleton />
         ) : (
-          <WaySend
-            waySendList={waySendList}
-            selectedShipping={selectedShipping}
-            setSelectedShipping={handleShippingChange}
-          />
+          <div className={highlightShipping ? "ring-4 ring-[#d1182b] rounded-xl transition-all duration-500" : "transition-all duration-500"}>
+            <WaySend
+              waySendList={waySendList}
+              selectedShipping={selectedShipping}
+              setSelectedShipping={handleShippingChange}
+            />
+          </div>
         )}
       </div>
       <div className="mt-5">

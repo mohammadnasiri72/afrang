@@ -12,13 +12,16 @@ import {
   FaTruckFast,
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import CompareButton from "../common/CompareButton";
 import AddToCartButton from "./AddToCartButton";
+import CompareButtonBtn from "./CompareButtonBtn";
+import LikeProductBtn from "./LikeProductBtn";
 import PriceProduct from "./PriceProduct";
 
 function Products({ products }) {
-  const layoutProducts = useSelector((state) => state.layoutProducts.layoutProducts);
-  
+  const layoutProducts = useSelector(
+    (state) => state.layoutProducts.layoutProducts
+  );
+
   const dispatch = useDispatch();
   const isFilterLoading = useSelector(
     (state) => state.filterLoading.isFilterLoading
@@ -105,8 +108,8 @@ function Products({ products }) {
             <div className="flex gap-3 p-3">
               {/* تصویر محصول */}
               <div className="relative flex-shrink-0">
-                <Link href={product.url} className="relative">
-                  <div className="relative overflow-hidden rounded-lg group">
+                <div className="relative overflow-hidden rounded-lg group">
+                  <Link href={product.url} className="relative">
                     <Image
                       className="object-contain rounded-lg w-24 h-24 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
                       src={getImageUrl2(product.image)}
@@ -116,20 +119,29 @@ function Products({ products }) {
                       priority={false}
                       unoptimized
                     />
-                    {/* تخفیف سمت چپ */}
-                    {product.discount !== 0 && (
-                      <span className="absolute top-1 left-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm text-white text-xs font-bold z-10">
-                        {product.discount}%
-                      </span>
-                    )}
-                    {/* کالای کارکرده سمت راست */}
-                    {product.conditionId === 20 && (
-                      <span className="absolute top-1 right-1 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-2 py-0.5 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
-                        کارکرده
-                      </span>
-                    )}
+                  </Link>
+                  {/* تخفیف سمت چپ */}
+                  {product.discount !== 0 && (
+                    <span className="absolute top-1 left-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+                      {product.discount}%
+                    </span>
+                  )}
+                  {/* کالای کارکرده سمت راست */}
+                  {product.conditionId === 20 && (
+                    <span className="absolute top-1 right-1 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-2 py-0.5 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
+                      کارکرده
+                    </span>
+                  )}
+                </div>
+                {/* دکمه های عملیاتی */}
+                <div className="absolute right-2 bottom-0 overflow-hidden duration-300  flex items-center justify-center bg-white  rounded-xl shadow-lg ">
+                  <div className="w-full border-l border-[#0003]">
+                    <LikeProductBtn productId={product?.productId} />
                   </div>
-                </Link>
+                  <div className="w-full">
+                    <CompareButtonBtn id={product?.productId} />
+                  </div>
+                </div>
               </div>
 
               {/* اطلاعات محصول */}
@@ -169,18 +181,19 @@ function Products({ products }) {
                 </button>
               ) : (
                 <div className="flex flex-col gap-2">
+                  {/* <CompareButton id={product?.productId} /> */}
+                  {/* <LikeProduct productId={product?.productId} /> */}
                   <AddToCartButton productId={product.productId} />
-                  <CompareButton id={product?.productId} />
                 </div>
               )}
             </div>
           </div>
 
           {/* دسکتاپ: چیدمان اصلی */}
-          <div className="hidden lg:flex w-full h-64 overflow-hidden">
+          <div className="hidden lg:flex w-full h-52 overflow-hidden">
             <div className=" min-w-52 max-w-52 relative flex items-start justify-center pt-5">
-              <Link href={product.url} className="relative ">
-                <div className="relative overflow-hidden rounded-lg group">
+              <div className="relative overflow-hidden rounded-lg group">
+                <Link href={product.url} className="relative ">
                   <Image
                     className="object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
                     src={getImageUrl2(product.image)}
@@ -190,20 +203,29 @@ function Products({ products }) {
                     priority={false}
                     unoptimized
                   />
-                  {/* تخفیف سمت چپ */}
-                  {product.discount !== 0 && (
-                    <span className="absolute top-2 left-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold z-10">
-                      {product.discount}%
-                    </span>
-                  )}
-                  {/* کالای کارکرده سمت راست */}
-                  {product.conditionId === 20 && (
-                    <span className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
-                      کالای کارکرده
-                    </span>
-                  )}
+                </Link>
+                {/* تخفیف سمت چپ */}
+                {product.discount !== 0 && (
+                  <span className="absolute top-2 left-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+                    {product.discount}%
+                  </span>
+                )}
+                {/* کالای کارکرده سمت راست */}
+                {product.conditionId === 20 && (
+                  <span className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
+                    کالای کارکرده
+                  </span>
+                )}
+                {/* دکمه های عملیاتی */}
+                <div className="absolute right-0 bottom-0 -translate-y-1/2 overflow-hidden translate-x-full duration-300 group-hover:-translate-x-2 flex flex-col items-center justify-center w-10 bg-white  rounded-xl shadow-lg ">
+                  <div className="w-full border-b border-[#0003]">
+                    <LikeProductBtn productId={product?.productId} />
+                  </div>
+                  <div className="w-full">
+                    <CompareButtonBtn id={product?.productId} />
+                  </div>
                 </div>
-              </Link>
+              </div>
             </div>
             <div className="w-full flex ">
               <div className="sm:px-5 sm:py-5 px-5 w-7/12 relative flex flex-col h-full">
@@ -222,13 +244,16 @@ function Products({ products }) {
                   </p>
                 )}
               </div>
-              <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-64 flex flex-col">
+              <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-52 flex flex-col">
                 <div className="flex flex-col w-full h-full flex-1">
                   <PriceProduct product={product} />
                   {/* دکمه مقایسه */}
-                  <div className="mb-3">
+                  {/* <div className="">
                     <CompareButton id={product?.productId} />
                   </div>
+                  <div className="w-full my-1">
+                    <LikeProduct productId={product?.productId} />
+                  </div> */}
                   {/* <div className="flex items-center py-2">
                   <img src="/images/icons/fast-delivery-2.png" alt="" />
                   <span className="px-1"> ضمانت اصل بودن کالا </span>
@@ -285,7 +310,7 @@ function Products({ products }) {
   const GridProductCard = ({ product }) => (
     <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col relative z-50">
       <div className="flex flex-col items-center flex-grow">
-        <div className="relative w-full flex justify-center items-center">
+        <div className="relative w-full flex justify-center items-center group overflow-hidden">
           <Link href={`${product.url}`}>
             <Image
               className="w-40 h-40 object-contain rounded-lg mb-4"
@@ -309,6 +334,15 @@ function Products({ products }) {
               {product.discount}%
             </span>
           )}
+          {/* دکمه های عملیاتی */}
+          <div className="absolute right-0 bottom-0 -translate-y-1/2 overflow-hidden sm:translate-x-full -translate-x-2 duration-300 group-hover:-translate-x-2 flex flex-col items-center justify-center w-10 bg-white  rounded-xl shadow-lg ">
+            <div className="w-full border-b border-[#0003]">
+              <LikeProductBtn productId={product?.productId} />
+            </div>
+            <div className="w-full">
+              <CompareButtonBtn id={product?.productId} />
+            </div>
+          </div>
         </div>
         <Link
           href={`${product.url}`}
@@ -367,7 +401,7 @@ function Products({ products }) {
           {product.canAddCart ? (
             <>
               <AddToCartButton productId={product.productId} />
-              <CompareButton id={product?.productId} />
+              {/* <CompareButton id={product?.productId} /> */}
             </>
           ) : (
             <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">
@@ -389,7 +423,10 @@ function Products({ products }) {
       }
     >
       {products.map((product) => (
-        <div key={product.id} className={layoutProducts === "grid" ? "h-full" : ""}>
+        <div
+          key={product.id}
+          className={layoutProducts === "grid" ? "h-full" : ""}
+        >
           {layoutProducts === "grid" ? (
             <GridProductCard product={product} />
           ) : (

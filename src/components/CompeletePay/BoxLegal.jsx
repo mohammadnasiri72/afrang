@@ -274,6 +274,7 @@ function BoxLegal() {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
+                          onClick={e => e.stopPropagation()}
                         >
                           <path
                             strokeLinecap="round"
@@ -283,11 +284,13 @@ function BoxLegal() {
                           />
                         </svg>
                       </button>
-                      <DeleteLegal
-                        id={legal.id}
-                        onDelete={handleDeleteLegal}
-                        getLegalFu={fetchLegalList}
-                      />
+                      <span onClick={e => e.stopPropagation()}>
+                        <DeleteLegal
+                          id={legal.id}
+                          onDelete={handleDeleteLegal}
+                          getLegalFu={fetchLegalList}
+                        />
+                      </span>
                     </div>
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center

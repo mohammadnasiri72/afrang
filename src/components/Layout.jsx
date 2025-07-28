@@ -20,6 +20,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { FaChevronUp } from "react-icons/fa";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./../redux/store";
 import DynamicTitle from "./DynamicTitle";
@@ -207,6 +210,83 @@ function LayoutContent({ children }) {
   );
 }
 
+// ScrollToTopButton component
+function ScrollToTopButton() {
+  const [visible, setVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || window.pageYOffset;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const percent =
+        docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+      setProgress(percent);
+      setVisible(scrollTop > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: 32,
+        left: 32,
+        zIndex: 9999999,
+        width: 56,
+        height: 56,
+        display: visible ? "flex" : "none",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgba(255,255,255,0.95)",
+        borderRadius: "50%",
+        boxShadow: "0 2px 16px 0 rgba(0,0,0,0.12)",
+        cursor: "pointer",
+        transition: "box-shadow 0.2s",
+      }}
+      onClick={handleClick}
+      title="برو بالا"
+      className="group"
+    >
+      <div style={{ position: "absolute", width: 56, height: 56 }}>
+        <CircularProgressbar
+          value={progress}
+          strokeWidth={7}
+          styles={buildStyles({
+            pathColor: "#d1182b",
+            trailColor: "#f3f3f3",
+            backgroundColor: "#fff",
+          })}
+        />
+      </div>
+      <FaChevronUp
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          margin: "auto",
+          width: 24,
+          height: 24,
+          color: "#d1182b",
+          zIndex: 2,
+          transition: "color 0.2s",
+        }}
+        className="group-hover:text-[#b91626]"
+      />
+    </div>
+  );
+}
+
 // کامپوننت اصلی که Provider را فراهم می‌کند
 function Layout({ children }) {
   return (
@@ -219,6 +299,7 @@ function Layout({ children }) {
         }}
       >
         <LayoutContent>{children}</LayoutContent>
+        <ScrollToTopButton />
       </div>
     </Provider>
   );

@@ -163,7 +163,7 @@ const HeaderNavbarWrapper = () => {
       </div>
       {activeMenu?.id && (
         <div
-          className={`fixed top-0 right-0 left-0 bottom-0 transition-all duration-300 backdrop-blur-sm bg-[#000a]`}
+          className={`fixed top-0 right-0 left-0 bottom-0 transition-all duration-300 backdrop-blur-sm bg-[#0005]`}
           style={{ zIndex: 1000 }}
         />
       )}

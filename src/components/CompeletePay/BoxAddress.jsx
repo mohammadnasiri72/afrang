@@ -232,6 +232,7 @@ function BoxAddress({ onAddressDelete }) {
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        onClick={e => e.stopPropagation()}
                       >
                         <path
                           strokeLinecap="round"
@@ -241,7 +242,9 @@ function BoxAddress({ onAddressDelete }) {
                         />
                       </svg>
                     </button>
-                    <DeleteAddress id={address.id} onDelete={onAddressDelete} />
+                    <span onClick={e => e.stopPropagation()}>
+                      <DeleteAddress id={address.id} onDelete={onAddressDelete} getAddressFu={getAddressFu} />
+                    </span>
                   </div>
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center

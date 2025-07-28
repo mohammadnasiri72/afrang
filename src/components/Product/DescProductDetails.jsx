@@ -35,9 +35,18 @@ function DescProductDetails({ product }) {
   return (
     <>
       <div className="px-3">
-        <h1 className="py-[15px] font-semibold text-lg">
-          {product.product.title}
-        </h1>
+        <div className="flex items-center justify-between flex-wrap ">
+          <h1 className="py-[15px] font-semibold text-lg">
+            {product.product.title}
+          </h1>
+          {product?.product?.visit && (
+            <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+              <FaRegEye className="text-sm" />
+              <span className="text-xs">{product?.product?.visit}</span>
+            </div>
+          )}
+          
+        </div>
         {product?.product?.summary && (
           <div className="mb-4">
             {/* <ExpandableText text={product.product.summary} /> */}
@@ -60,17 +69,11 @@ function DescProductDetails({ product }) {
           )}
         </div>
 
-        <div className="flex items-center gap-1 flex-wrap ">
-          {product?.product?.visit && (
-            <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
-              <FaRegEye className="text-sm" />
-              <span className="text-xs">{product?.product?.visit}</span>
-            </div>
-          )}
-        </div>
         {product?.productModes && product?.productModes.length > 0 && (
           <div className="flex gap-5 items-center">
-            <span className="font-semibold whitespace-nowrap">رنگ محصول : </span>
+            <span className="font-semibold whitespace-nowrap">
+              رنگ محصول :{" "}
+            </span>
             <SelectColorProduct product={product} />
           </div>
         )}
