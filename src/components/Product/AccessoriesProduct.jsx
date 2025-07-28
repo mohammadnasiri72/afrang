@@ -30,6 +30,7 @@ function AccessoriesProduct({ product }) {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [windowWidth, setWindowWidth] = useState(1200);
+  const productsSectionRef = useRef(null);
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
@@ -142,6 +143,12 @@ function AccessoriesProduct({ product }) {
               <div
                 onClick={() => {
                   setAccessoriesProductId(index + 1);
+                  if (window.innerWidth < 768 && productsSectionRef.current) {
+                    const rect = productsSectionRef.current.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const top = rect.top + scrollTop - 150; // 100px بالاتر
+                    window.scrollTo({ top, behavior: 'smooth' });
+                  }
                 }}
                 className={`flex items-center justify-between px-5 py-3 cursor-pointer mt-3 border rounded-sm ${
                   accessoriesProductId === index + 1
@@ -159,7 +166,7 @@ function AccessoriesProduct({ product }) {
           ))}
         </div>
 
-        <div className="md:w-3/4 w-full md:px-5">
+        <div ref={productsSectionRef} className="md:w-3/4 w-full md:px-5">
           {shouldUseSlider ? (
             <>
               <Swiper
