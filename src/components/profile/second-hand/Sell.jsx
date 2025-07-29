@@ -1,7 +1,9 @@
 "use client";
 
+import { selectUser } from "@/redux/slices/userSlice";
 import { UploadFile } from "@/services/File/FileServices";
 import { getUserAdFilter } from "@/services/UserAd/UserAdServices";
+import { PostUserSellAd } from "@/services/UserSellAd/UserSellAdServices";
 import {
   Alert,
   Button,
@@ -12,17 +14,19 @@ import {
   Upload,
   message,
 } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { FaTimes } from "react-icons/fa";
 import DatePicker from "react-multi-date-picker";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 const { TextArea } = Input;
 
 function Sell() {
   const [loading, setLoading] = useState(false);
   const [loadingFile, setLoadingFile] = useState(false);
+  const [loadingForm, setLoadingForm] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -34,14 +38,38 @@ function Sell() {
   const [usageDuration, setUsageDuration] = useState("");
   const [appearance, setAppearance] = useState("");
   const [warrantyStatus, setWarrantyStatus] = useState(false);
-  const [warrantyMonths, setWarrantyMonths] = useState(0);
+  const [warrantyMonths, setWarrantyMonths] = useState(null);
   const [insuranceStatus, setInsuranceStatus] = useState(false);
-  const [insuranceMonths, setInsuranceMonths] = useState(0);
+  const [insuranceMonths, setInsuranceMonths] = useState(null);
   const [errors, setErrors] = useState({});
   const [fileList, setFileList] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [body, setBody] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
+
+  console.log(fileList);
+
+  const resetState = () => {
+    setSelectedCategory(undefined);
+    setProductName("");
+    setProductType("");
+    setSuggestedPrice("");
+    setSerialNumber("");
+    setShutterCount("");
+    setUsageDuration("");
+    setAppearance("");
+    setBody("");
+    setPurchaseDate("");
+    setWarrantyStatus(false);
+    setInsuranceStatus(false);
+    setWarrantyMonths(null);
+    setInsuranceMonths(null);
+    setErrors({});
+    setFileList([]);
+    setImageList([]);
+  };
+
+  const user = useSelector(selectUser);
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -62,10 +90,11 @@ function Sell() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newErrors = {};
     if (!productName.trim()) newErrors.productName = true;
     if (!serialNumber.trim()) newErrors.serialNumber = true;
+    if (selectedCategory === undefined) newErrors.selectedCategory = true;
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
       // message.error("لطفا فیلدهای اجباری را تکمیل کنید");
@@ -87,13 +116,33 @@ function Sell() {
       type: productType,
       usageCount: shutterCount,
       usageTime: usageDuration,
-      warranty: Number(warrantyMonths),
-      insurance: Number(insuranceMonths),
+      warranty: warrantyMonths ? Number(warrantyMonths) : 0,
+      insurance: insuranceMonths ? Number(insuranceMonths) : 0,
       appearance,
       body,
     };
-    console.log(data);
-    
+
+    try {
+      setLoadingForm(true);
+      const response = await PostUserSellAd(data, user?.token);
+
+      if (response.type === "error") {
+        Toast.fire({
+          icon: "error",
+          title: response.message,
+        });
+        return;
+      }
+      Toast.fire({
+        icon: "success",
+        title: "آگهی شما با موفقیت ثبت شد",
+      });
+      resetState();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoadingForm(false);
+    }
   };
 
   // تنظیمات Toast
@@ -119,6 +168,7 @@ function Sell() {
         return;
       }
       setImageList([...imageList, uploadResult?.imageUrl]);
+      
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -128,8 +178,7 @@ function Sell() {
 
   const handleRemoveImage = (img) => {
     const index = fileList.findIndex((item) => item.uid === img.uid);
-    setImageList(item => item.filter((_, i) => i !== index));
-
+    setImageList((item) => item.filter((_, i) => i !== index));
   };
 
   return (
@@ -162,8 +211,12 @@ function Sell() {
         </div>
         {/* دسته بندی محصول */}
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            دسته‌بندی کالا
+          <label
+            className={`block text-gray-700 text-sm font-bold mb-2${
+              errors.selectedCategory ? " text-red-important" : ""
+            }`}
+          >
+            دسته‌بندی کالا <span className="text-red-500">*</span>
           </label>
           <Select
             allowClear
@@ -171,7 +224,12 @@ function Sell() {
             placeholder="انتخاب دسته‌بندی"
             loading={loading}
             value={selectedCategory}
-            onChange={(value) => setSelectedCategory(value === undefined ? undefined : value)}
+            onChange={(value) => {
+              setSelectedCategory(value === undefined ? undefined : value);
+              if (errors.selectedCategory && value !== undefined) {
+                setErrors((prev) => ({ ...prev, selectedCategory: false }));
+              }
+            }}
             optionFilterProp="children"
             className="w-full"
             notFoundContent={
@@ -263,8 +321,16 @@ function Sell() {
             قیمت پیشنهادی
           </label>
           <Input
-            value={suggestedPrice}
-            onChange={(e) => setSuggestedPrice(e.target.value)}
+            suffix="تومان"
+            value={suggestedPrice.toLocaleString()}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/,/g, "");
+              if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
+                const formatted =
+                  raw === "" ? "" : Number(raw).toLocaleString();
+                setSuggestedPrice(formatted);
+              }
+            }}
             placeholder="قیمت پیشنهادی را وارد کنید"
             className="w-full"
           />
@@ -334,9 +400,14 @@ function Sell() {
           <label className="block text-gray-700 text-sm font-bold mb-2">
             وضعیت گارانتی
           </label>
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-wrap gap-2 items-center">
             <Radio.Group
-              onChange={(e) => setWarrantyStatus(e.target.value)}
+              onChange={(e) => {
+                setWarrantyStatus(e.target.value);
+                if (!e.target.value) {
+                  setWarrantyMonths(null);
+                }
+              }}
               value={warrantyStatus}
               optionType="button"
               buttonStyle="solid"
@@ -348,20 +419,19 @@ function Sell() {
             {warrantyStatus === true && (
               <div className="flex items-center gap-2">
                 <Input
-                  type="number"
-                  min={1}
+                  suffix="ماه"
                   value={warrantyMonths}
                   onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*$/.test(val)) {
-                      setWarrantyMonths(val);
+                    const raw = e.target.value.replace(/,/g, "");
+                    if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
+                      const formatted =
+                        raw === "" ? "" : Number(raw).toLocaleString();
+                      setWarrantyMonths(formatted);
                     }
                   }}
                   placeholder="تعداد ماه‌های باقی‌مانده گارانتی"
                   className="w-40"
-                  inputMode="numeric"
                 />
-                <span className="text-gray-600">ماه</span>
               </div>
             )}
           </div>
@@ -371,9 +441,14 @@ function Sell() {
           <label className="block text-gray-700 text-sm font-bold mb-2">
             وضعیت بیمه
           </label>
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-wrap gap-2 items-center">
             <Radio.Group
-              onChange={(e) => setInsuranceStatus(e.target.value)}
+              onChange={(e) => {
+                setInsuranceStatus(e.target.value);
+                if (!e.target.value) {
+                  setInsuranceMonths(null);
+                }
+              }}
               value={insuranceStatus}
               className=""
               optionType="button"
@@ -385,28 +460,26 @@ function Sell() {
             {insuranceStatus === true && (
               <div className=" flex items-center gap-2 ">
                 <Input
-                  type="number"
-                  min={1}
+                  suffix="ماه"
                   value={insuranceMonths}
                   onChange={(e) => {
-                    // فقط اعداد مثبت و بدون اعشار
-                    const val = e.target.value;
-                    if (/^\d*$/.test(val)) {
-                      setInsuranceMonths(val);
+                    const raw = e.target.value.replace(/,/g, "");
+                    if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
+                      const formatted =
+                        raw === "" ? "" : Number(raw).toLocaleString();
+                      setInsuranceMonths(formatted);
                     }
                   }}
                   placeholder="تعداد ماه‌های باقی‌مانده بیمه"
                   className="w-40"
-                  inputMode="numeric"
                 />
-                <span className="text-gray-600">ماه </span>
               </div>
             )}
           </div>
         </div>
         {/* تصاویر محصول  */}
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+        <div className="mb-6 border-2 border-[#0001] rounded-lg p-4 duration-300 hover:border-blue-500 shadow-lg hover:shadow-2xl">
+          <label className="block text-gray-700 text-sm font-bold mb-5">
             تصاویر محصول (حداکثر 10 عکس)
           </label>
           <Upload
@@ -465,6 +538,12 @@ function Sell() {
           .border-red-important {
             border: 1px solid #ef4444 !important;
           }
+          .ant-select-selector {
+            border: ${errors.selectedCategory
+              ? "1px solid red !important"
+              : ""};
+          }
+
           .ant-spin-dot-item {
             background-color: #d1182b !important;
           }
@@ -473,7 +552,6 @@ function Sell() {
             color: #ef4444 !important;
           }
           .custom-upload-grid .ant-upload-list-picture-card {
-            display: grid !important;
             grid-template-columns: repeat(5, 1fr) !important;
             gap: 12px !important;
           }
@@ -485,12 +563,14 @@ function Sell() {
           @media (max-width: 600px) {
             .custom-upload-grid .ant-upload-list-picture-card {
               grid-template-columns: repeat(2, 1fr) !important;
+              gap: 5px !important;
             }
           }
         `}</style>
         <div className="flex justify-end">
           <Button
-            disabled={loadingFile}
+            loading={loadingForm}
+            disabled={loadingFile || loadingForm}
             type="primary"
             className="bg-[#d1182b] hover:bg-[#b91626]"
             onClick={handleSubmit}
