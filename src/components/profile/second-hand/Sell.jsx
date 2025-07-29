@@ -1,21 +1,28 @@
 "use client";
 
+import { UploadFile } from "@/services/File/FileServices";
 import { getUserAdFilter } from "@/services/UserAd/UserAdServices";
 import {
   Alert,
+  Button,
+  Input,
+  Radio,
   Select,
   Spin,
-  message,
-  Input,
-  Button,
-  Radio,
   Upload,
+  message,
 } from "antd";
 import { useState } from "react";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import { FaTimes } from "react-icons/fa";
+import DatePicker from "react-multi-date-picker";
+import Swal from "sweetalert2";
 const { TextArea } = Input;
 
 function Sell() {
   const [loading, setLoading] = useState(false);
+  const [loadingFile, setLoadingFile] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,6 +39,9 @@ function Sell() {
   const [insuranceMonths, setInsuranceMonths] = useState("");
   const [errors, setErrors] = useState({});
   const [fileList, setFileList] = useState([]);
+  const [imageList, setImageList] = useState([]);
+  const [body, setBody] = useState("");
+  const [purchaseDate, setPurchaseDate] = useState("");
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -66,14 +76,46 @@ function Sell() {
     message.success("محصول با موفقیت ثبت شد!");
   };
 
+  // تنظیمات Toast
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+  });
+
+  const uploadHandler = async (file) => {
+    setLoadingFile(true);
+    try {
+      const uploadResult = await UploadFile(file);
+
+      if (uploadResult.type === "error") {
+        Toast.fire({
+          icon: "error",
+          title: uploadResult.message,
+        });
+        return;
+      }
+      setImageList([...imageList, uploadResult.imageUrl]);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    } finally {
+      setLoadingFile(false);
+    }
+  };
+
   return (
     <div className="bg-white p-5 rounded-lg">
       <div className="max-w-2xl mx-auto">
+        {/* عنوان */}
         <div className="text-center">
           <h2 className="text-xl font-bold text-gray-800 mb-2 ">
             فروش کالای دسته دوم
           </h2>
         </div>
+        {/* راهنما */}
         <div className="mb-8">
           <Alert
             message={
@@ -92,6 +134,7 @@ function Sell() {
             showIcon
           />
         </div>
+        {/* دسته بندی محصول */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             دسته‌بندی کالا
@@ -117,7 +160,38 @@ function Sell() {
             ))}
           </Select>
         </div>
-        {/* سایر فیلدهای فرم اینجا قرار می‌گیرند */}
+        {/* تاریخ خرید محصول */}
+        <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            تاریخ خرید محصول
+          </label>
+          <div className="relative">
+            <DatePicker
+              calendar={persian}
+              locale={persian_fa}
+              value={purchaseDate}
+              onChange={(date) => {
+                setPurchaseDate(
+                  date?.isValid ? date.format("YYYY-MM-DD") : null
+                );
+              }}
+              format="YYYY/MM/DD"
+              inputClass={`w-full px-4 py-1`}
+              placeholder="انتخاب تاریخ خرید"
+              calendarPosition="bottom-right"
+            />
+            {purchaseDate && (
+              <button
+                type="button"
+                onClick={() => setPurchaseDate(null)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FaTimes />
+              </button>
+            )}
+          </div>
+        </div>
+        {/* عنوان محصول */}
         <div className="mb-6">
           <label
             className={`block text-gray-700 text-sm font-bold mb-2${
@@ -140,6 +214,7 @@ function Sell() {
             }`}
           />
         </div>
+        {/* نوع محصول */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             نوع محصول
@@ -151,6 +226,7 @@ function Sell() {
             className="w-full"
           />
         </div>
+        {/* قیمت پیشنهادی */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             قیمت پیشنهادی
@@ -162,6 +238,7 @@ function Sell() {
             className="w-full"
           />
         </div>
+        {/* شماره سریال محصول */}
         <div className="mb-6">
           <label
             className={`block text-gray-700 text-sm font-bold mb-2${
@@ -184,6 +261,7 @@ function Sell() {
             }`}
           />
         </div>
+        {/* کارکرد شاتر */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             کارکرد شاتر (فقط دوربین SLR)
@@ -195,6 +273,7 @@ function Sell() {
             className="w-full"
           />
         </div>
+        {/* مدت زمان استفاده */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             مدت زمان استفاده
@@ -206,6 +285,7 @@ function Sell() {
             className="w-full"
           />
         </div>
+        {/* وضعیت ظاهری */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             وضعیت ظاهری
@@ -218,6 +298,7 @@ function Sell() {
             className="w-full"
           />
         </div>
+        {/* وضعیت گارانتی */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             وضعیت گارانتی
@@ -254,6 +335,7 @@ function Sell() {
             )}
           </div>
         </div>
+        {/* وضعیت بیمه */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             وضعیت بیمه
@@ -291,6 +373,7 @@ function Sell() {
             )}
           </div>
         </div>
+        {/* تصاویر محصول  */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             تصاویر محصول (حداکثر 10 عکس)
@@ -299,10 +382,10 @@ function Sell() {
             listType="picture-card"
             fileList={fileList}
             onChange={({ fileList }) => {
-              console.log(fileList);
               setFileList(fileList);
             }}
             beforeUpload={(file) => {
+              uploadHandler(file);
               const isImage = file.type.startsWith("image/");
               if (!isImage) {
                 message.error("فقط فایل تصویری مجاز است!");
@@ -325,6 +408,19 @@ function Sell() {
               </div>
             )}
           </Upload>
+        </div>
+        {/* شرح کامل */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            شرح کامل
+          </label>
+          <TextArea
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="توضیحی درباره شرح کامل محصول بنویسید"
+            autoSize={{ minRows: 6, maxRows: 10 }}
+            className="w-full"
+          />
         </div>
         <style jsx global>{`
           .border-red-important {
@@ -351,6 +447,7 @@ function Sell() {
         `}</style>
         <div className="flex justify-end">
           <Button
+            disabled={loadingFile}
             type="primary"
             className="bg-[#d1182b] hover:bg-[#b91626]"
             onClick={handleSubmit}
@@ -359,10 +456,6 @@ function Sell() {
           </Button>
         </div>
       </div>
-      <input type="file"  onChange={(e)=>{
-        console.log(e.target.files[0]);
-        
-      }}/>
     </div>
   );
 }

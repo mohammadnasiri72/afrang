@@ -243,7 +243,7 @@ export default function EditProfile() {
                             <button
                                 type="button"
                                 onClick={() => setBirthDate(null)}
-                                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                className="absolute cursor-pointer left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                             >
                                 <FaTimes />
                             </button>
