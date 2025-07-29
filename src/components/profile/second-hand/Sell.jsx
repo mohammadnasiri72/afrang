@@ -91,7 +91,9 @@ function Sell() {
       insurance: Number(insuranceMonths),
       appearance,
       body,
-    };    
+    };
+    console.log(data);
+    
   };
 
   // تنظیمات Toast
