@@ -57,7 +57,11 @@ function Sell() {
   useEffect(() => {
     setImageList(
       fileList
-        .map((file) => file.uploadedData && file.uploadedData.imageUrl ? file.uploadedData.imageUrl : null)
+        .map((file) =>
+          file.uploadedData && file.uploadedData.imageUrl
+            ? file.uploadedData.imageUrl
+            : null
+        )
         .filter((url) => url !== null && url !== undefined)
     );
   }, [fileList]);
@@ -217,18 +221,31 @@ function Sell() {
   // هنگام ارسال به بک‌اند، عکس اصلی را اول قرار بده
   const getImageListForBackend = () => {
     if (fileList.length === 0) return [];
-    if (mainImageIdx === 0) return fileList.map(f => f.uploadedData?.imageUrl).filter(Boolean);
+    if (mainImageIdx === 0)
+      return fileList.map((f) => f.uploadedData?.imageUrl).filter(Boolean);
     const arr = [...fileList];
     const [main] = arr.splice(mainImageIdx, 1);
     arr.unshift(main);
-    return arr.map(f => f.uploadedData?.imageUrl).filter(Boolean);
+    return arr.map((f) => f.uploadedData?.imageUrl).filter(Boolean);
   };
 
   // تابع باز کردن Fancybox برای کروسل عکس‌ها
   const openGallery = (idx) => {
-    const images = fileList.map(file => file.thumbUrl || file.url || (file.uploadedData && getImageUrl(file.uploadedData.imageUrl))).filter(Boolean);
+    const images = fileList
+      .map(
+        (file) =>
+          file.thumbUrl ||
+          file.url ||
+          (file.uploadedData && getImageUrl(file.uploadedData.imageUrl))
+      )
+      .filter(Boolean);
     Fancybox.show(
-      images.map((src, i) => ({ src, thumb: src, type: "image", alt: `عکس ${i + 1}` })),
+      images.map((src, i) => ({
+        src,
+        thumb: src,
+        type: "image",
+        alt: `عکس ${i + 1}`,
+      })),
       { startIndex: idx }
     );
   };
@@ -538,10 +555,12 @@ function Sell() {
             listType="picture-card"
             fileList={fileList}
             onChange={({ fileList: newFileList }) => {
-              setFileList(prevList =>
-                newFileList.map(file => {
-                  const old = prevList.find(f => f.uid === file.uid);
-                  return old ? { ...file, uploadedData: old.uploadedData } : file;
+              setFileList((prevList) =>
+                newFileList.map((file) => {
+                  const old = prevList.find((f) => f.uid === file.uid);
+                  return old
+                    ? { ...file, uploadedData: old.uploadedData }
+                    : file;
                 })
               );
             }}
@@ -571,13 +590,22 @@ function Sell() {
                 key={file.uid}
                 onClick={() => openGallery(idx)}
                 className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${
-                  mainImageIdx === idx ? "ring-2 ring-[#d1182b] border-[#d1182b]" : "border-gray-200"
+                  mainImageIdx === idx
+                    ? "ring-2 ring-[#d1182b] border-[#d1182b]"
+                    : "border-gray-200"
                 }`}
                 style={{ width: 110, height: 110 }}
               >
-                {file.thumbUrl || file.url || (file.uploadedData && file.uploadedData.imageUrl) ? (
+                {file.thumbUrl ||
+                file.url ||
+                (file.uploadedData && file.uploadedData.imageUrl) ? (
                   <img
-                    src={file.thumbUrl || file.url || (file.uploadedData && getImageUrl(file.uploadedData.imageUrl))}
+                    src={
+                      file.thumbUrl ||
+                      file.url ||
+                      (file.uploadedData &&
+                        getImageUrl(file.uploadedData.imageUrl))
+                    }
                     alt={file.name}
                     className="w-full h-full object-cover rounded-lg"
                   />
@@ -589,20 +617,37 @@ function Sell() {
                   </div>
                 )}
                 {/* آیکون حذف بالا چپ با سطل آشغال */}
-                <button
-                  type="button"
-                  onClick={e => { e.stopPropagation(); handleRemoveImage(file); }}
-                  className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
-                  title="حذف عکس"
-                >
-                  <FaTrash size={16} />
-                </button>
-                {/* آیکون ستاره برای انتخاب عکس اصلی */}
-                <Tooltip title={mainImageIdx === idx ? 'عکس اصلی':"انتخاب به عنوان عکس اصلی"}>
+                <Tooltip title="حذف عکس">
                   <button
                     type="button"
-                    onClick={e => { e.stopPropagation(); handleSetMainImage(idx); }}
-                    className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${mainImageIdx === idx ? "text-yellow-400" : "text-[#333] hover:text-yellow-400"}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveImage(file);
+                    }}
+                    className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
+                  >
+                    <FaTrash size={16} />
+                  </button>
+                </Tooltip>
+                {/* آیکون ستاره برای انتخاب عکس اصلی */}
+                <Tooltip
+                  title={
+                    mainImageIdx === idx
+                      ? "عکس اصلی"
+                      : "انتخاب به عنوان عکس اصلی"
+                  }
+                >
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSetMainImage(idx);
+                    }}
+                    className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${
+                      mainImageIdx === idx
+                        ? "text-yellow-400"
+                        : "text-[#333] hover:text-yellow-400"
+                    }`}
                   >
                     <FaStar size={16} />
                   </button>
@@ -611,8 +656,13 @@ function Sell() {
             ))}
             {/* دکمه آپلود فقط اگر عکس در حال آپلود نیست */}
             {!loadingFile && fileList.length < 10 && (
-              <div className="flex flex-col justify-center items-center border rounded-lg h-[110px] w-[110px] cursor-pointer hover:border-[#d1182b] bg-white"
-                onClick={() => document.querySelector('.custom-upload-grid input[type=\"file\"]').click()}
+              <div
+                className="flex flex-col justify-center items-center border rounded-lg h-[110px] w-[110px] cursor-pointer hover:border-[#d1182b] bg-white"
+                onClick={() =>
+                  document
+                    .querySelector('.custom-upload-grid input[type="file"]')
+                    .click()
+                }
               >
                 <span className="text-[#d1182b] text-2xl">+</span>
                 <div style={{ marginTop: 8 }}>آپلود</div>
