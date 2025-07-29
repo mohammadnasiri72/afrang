@@ -166,11 +166,12 @@ function Sell() {
             دسته‌بندی کالا
           </label>
           <Select
+            allowClear
             showSearch
             placeholder="انتخاب دسته‌بندی"
             loading={loading}
             value={selectedCategory}
-            onChange={setSelectedCategory}
+            onChange={(value) => setSelectedCategory(value === undefined ? undefined : value)}
             optionFilterProp="children"
             className="w-full"
             notFoundContent={
@@ -206,6 +207,7 @@ function Sell() {
               }}
               format="YYYY/MM/DD"
               inputClass={`w-full px-4 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
+              inputProps={{ readOnly: true }}
               placeholder="انتخاب تاریخ خرید"
               calendarPosition="bottom-right"
             />
