@@ -43,7 +43,6 @@ function Sell() {
   const [body, setBody] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
 
-  console.log(imageList);
   
   
 
@@ -97,7 +96,6 @@ function Sell() {
       appearance,
       body,
     };
-    console.log(data);
     
   };
 
