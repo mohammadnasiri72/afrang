@@ -176,7 +176,7 @@ function Sell() {
                 );
               }}
               format="YYYY/MM/DD"
-              inputClass={`w-full px-4 py-1`}
+              inputClass={`w-full px-4 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="انتخاب تاریخ خرید"
               calendarPosition="bottom-right"
             />
