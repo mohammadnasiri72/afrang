@@ -13,14 +13,18 @@ import {
   Spin,
   Upload,
   message,
+  Tooltip,
 } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaEye, FaTrash, FaStar } from "react-icons/fa";
+import { Fancybox } from "@fancyapps/ui";
 import DatePicker from "react-multi-date-picker";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { getImageUrl } from "@/utils/mainDomain";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 const { TextArea } = Input;
 
 function Sell() {
@@ -48,6 +52,25 @@ function Sell() {
   const [purchaseDate, setPurchaseDate] = useState("");
 
   console.log(fileList);
+
+  // همگام‌سازی imageList با fileList
+  useEffect(() => {
+    setImageList(
+      fileList
+        .map((file) => file.uploadedData && file.uploadedData.imageUrl ? file.uploadedData.imageUrl : null)
+        .filter((url) => url !== null && url !== undefined)
+    );
+  }, [fileList]);
+
+  // افزایش z-index fancybox (مشابه BoxImageGallery)
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `.fancybox__container { z-index: 999999 !important; }`;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const resetState = () => {
     setSelectedCategory(undefined);
@@ -108,7 +131,7 @@ function Sell() {
       langCode: "fa",
       id: 0,
       categoryId: selectedCategory ? selectedCategory : 0,
-      imageList,
+      imageList: getImageListForBackend(),
       title: productName,
       serialNumber,
       price: Number(suggestedPrice),
@@ -159,16 +182,19 @@ function Sell() {
     setLoadingFile(true);
     try {
       const uploadResult = await UploadFile(file);
-
-      if (uploadResult.type === "error") {
-        Toast.fire({
-          icon: "error",
-          title: uploadResult.message,
-        });
-        return;
-      }
-      setImageList([...imageList, uploadResult?.imageUrl]);
-      
+      setFileList((prevList) =>
+        prevList.map((item) =>
+          item.uid === file.uid
+            ? {
+                ...item,
+                uploadedData: uploadResult,
+                url: uploadResult.imageUrl,
+                thumbUrl: getImageUrl(uploadResult.imageUrl),
+              }
+            : item
+        )
+      );
+      // setImageList دیگر نیاز نیست
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -178,7 +204,33 @@ function Sell() {
 
   const handleRemoveImage = (img) => {
     const index = fileList.findIndex((item) => item.uid === img.uid);
-    setImageList((item) => item.filter((_, i) => i !== index));
+    setFileList((prev) => prev.filter((_, i) => i !== index));
+    // setImageList دیگر نیاز نیست
+  };
+
+  // تابع تغییر عکس اصلی (فقط ترتیب ارسال به بک‌اند را تغییر می‌دهد)
+  const [mainImageIdx, setMainImageIdx] = useState(0);
+  const handleSetMainImage = (index) => {
+    setMainImageIdx(index);
+  };
+
+  // هنگام ارسال به بک‌اند، عکس اصلی را اول قرار بده
+  const getImageListForBackend = () => {
+    if (fileList.length === 0) return [];
+    if (mainImageIdx === 0) return fileList.map(f => f.uploadedData?.imageUrl).filter(Boolean);
+    const arr = [...fileList];
+    const [main] = arr.splice(mainImageIdx, 1);
+    arr.unshift(main);
+    return arr.map(f => f.uploadedData?.imageUrl).filter(Boolean);
+  };
+
+  // تابع باز کردن Fancybox برای کروسل عکس‌ها
+  const openGallery = (idx) => {
+    const images = fileList.map(file => file.thumbUrl || file.url || (file.uploadedData && getImageUrl(file.uploadedData.imageUrl))).filter(Boolean);
+    Fancybox.show(
+      images.map((src, i) => ({ src, thumb: src, type: "image", alt: `عکس ${i + 1}` })),
+      { startIndex: idx }
+    );
   };
 
   return (
@@ -485,8 +537,13 @@ function Sell() {
           <Upload
             listType="picture-card"
             fileList={fileList}
-            onChange={({ fileList }) => {
-              setFileList(fileList);
+            onChange={({ fileList: newFileList }) => {
+              setFileList(prevList =>
+                newFileList.map(file => {
+                  const old = prevList.find(f => f.uid === file.uid);
+                  return old ? { ...file, uploadedData: old.uploadedData } : file;
+                })
+              );
             }}
             beforeUpload={(file) => {
               const isImage = file.type.startsWith("image/");
@@ -505,21 +562,63 @@ function Sell() {
             maxCount={10}
             multiple
             className="custom-upload-grid"
-            showUploadList={{ showRemoveIcon: true }}
-          >
-            {fileList.length < 10 &&
-              (loadingFile ? (
-                <div className="flex flex-col justify-center items-center text-[#d1182b]">
-                  <Spin size="large" />
-                  <div className="mt-5">در حال آپلود...</div>
-                </div>
-              ) : (
-                <div>
-                  <span className="text-[#d1182b] text-2xl">+</span>
-                  <div style={{ marginTop: 8 }}>آپلود</div>
-                </div>
-              ))}
-          </Upload>
+            showUploadList={false}
+          />
+          {/* گرید سفارشی عکس‌ها */}
+          <div className="flex flex-wrap gap-3 w-full mt-2">
+            {fileList.map((file, idx) => (
+              <div
+                key={file.uid}
+                onClick={() => openGallery(idx)}
+                className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${
+                  mainImageIdx === idx ? "ring-2 ring-[#d1182b] border-[#d1182b]" : "border-gray-200"
+                }`}
+                style={{ width: 110, height: 110 }}
+              >
+                {file.thumbUrl || file.url || (file.uploadedData && file.uploadedData.imageUrl) ? (
+                  <img
+                    src={file.thumbUrl || file.url || (file.uploadedData && getImageUrl(file.uploadedData.imageUrl))}
+                    alt={file.name}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                ) : null}
+                {/* اسپینر فقط روی عکس در حال آپلود */}
+                {loadingFile && idx === fileList.length - 1 && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-20">
+                    <Spin size="large" />
+                  </div>
+                )}
+                {/* آیکون حذف بالا چپ با سطل آشغال */}
+                <button
+                  type="button"
+                  onClick={e => { e.stopPropagation(); handleRemoveImage(file); }}
+                  className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
+                  title="حذف عکس"
+                >
+                  <FaTrash size={16} />
+                </button>
+                {/* آیکون ستاره برای انتخاب عکس اصلی */}
+                <Tooltip title={mainImageIdx === idx ? 'عکس اصلی':"انتخاب به عنوان عکس اصلی"}>
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); handleSetMainImage(idx); }}
+                    className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${mainImageIdx === idx ? "text-yellow-400" : "text-[#333] hover:text-yellow-400"}`}
+                  >
+                    <FaStar size={16} />
+                  </button>
+                </Tooltip>
+              </div>
+            ))}
+            {/* دکمه آپلود فقط اگر عکس در حال آپلود نیست */}
+            {!loadingFile && fileList.length < 10 && (
+              <div className="flex flex-col justify-center items-center border rounded-lg h-[110px] w-[110px] cursor-pointer hover:border-[#d1182b] bg-white"
+                onClick={() => document.querySelector('.custom-upload-grid input[type=\"file\"]').click()}
+              >
+                <span className="text-[#d1182b] text-2xl">+</span>
+                <div style={{ marginTop: 8 }}>آپلود</div>
+              </div>
+            )}
+          </div>
         </div>
         {/* شرح کامل */}
         <div className="mb-6">
@@ -565,6 +664,11 @@ function Sell() {
               grid-template-columns: repeat(2, 1fr) !important;
               gap: 5px !important;
             }
+          }
+          /* استایل عکس اصلی */
+          .custom-upload-grid .ant-upload-list-item:first-child {
+            border: 2px solid #d1182b !important;
+            box-shadow: 0 0 0 2px #d1182b33;
           }
         `}</style>
         <div className="flex justify-end">
