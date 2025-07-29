@@ -34,14 +34,19 @@ function Sell() {
   const [usageDuration, setUsageDuration] = useState("");
   const [appearance, setAppearance] = useState("");
   const [warrantyStatus, setWarrantyStatus] = useState(false);
-  const [warrantyMonths, setWarrantyMonths] = useState("");
+  const [warrantyMonths, setWarrantyMonths] = useState(0);
   const [insuranceStatus, setInsuranceStatus] = useState(false);
-  const [insuranceMonths, setInsuranceMonths] = useState("");
+  const [insuranceMonths, setInsuranceMonths] = useState(0);
   const [errors, setErrors] = useState({});
   const [fileList, setFileList] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [body, setBody] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
+
+  console.log(imageList);
+  
+  
+
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -66,14 +71,34 @@ function Sell() {
     const newErrors = {};
     if (!productName.trim()) newErrors.productName = true;
     if (!serialNumber.trim()) newErrors.serialNumber = true;
-    if (!appearance.trim()) newErrors.appearance = true;
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      message.error("لطفا فیلدهای اجباری را تکمیل کنید");
+      // message.error("لطفا فیلدهای اجباری را تکمیل کنید");
+      Toast.fire({
+        icon: "error",
+        title: "لطفا فیلدهای اجباری را تکمیل کنید",
+      });
       return;
     }
-    // اینجا می‌توانی ارسال به سرور یا سایر منطق‌ها را اضافه کنی
-    message.success("محصول با موفقیت ثبت شد!");
+    const data = {
+      langCode: "fa",
+      id: 0,
+      categoryId: selectedCategory ? selectedCategory : 0,
+      imageList,
+      title: productName,
+      serialNumber,
+      price: Number(suggestedPrice),
+      purchaseDate,
+      type: productType,
+      usageCount: shutterCount,
+      usageTime: usageDuration,
+      warranty: Number(warrantyMonths),
+      insurance: Number(insuranceMonths),
+      appearance,
+      body,
+    };
+    console.log(data);
+    
   };
 
   // تنظیمات Toast
@@ -87,6 +112,8 @@ function Sell() {
   });
 
   const uploadHandler = async (file) => {
+    
+    
     setLoadingFile(true);
     try {
       const uploadResult = await UploadFile(file);
@@ -98,7 +125,7 @@ function Sell() {
         });
         return;
       }
-      setImageList([...imageList, uploadResult.imageUrl]);
+      setImageList([...imageList, uploadResult]);
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -161,7 +188,7 @@ function Sell() {
           </Select>
         </div>
         {/* تاریخ خرید محصول */}
-        <div>
+        <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             تاریخ خرید محصول
           </label>
@@ -170,6 +197,9 @@ function Sell() {
               calendar={persian}
               locale={persian_fa}
               value={purchaseDate}
+              containerStyle={{
+                width: "100%",
+              }}
               onChange={(date) => {
                 setPurchaseDate(
                   date?.isValid ? date.format("YYYY-MM-DD") : null
@@ -184,7 +214,7 @@ function Sell() {
               <button
                 type="button"
                 onClick={() => setPurchaseDate(null)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute cursor-pointer left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <FaTimes />
               </button>
@@ -382,10 +412,10 @@ function Sell() {
             listType="picture-card"
             fileList={fileList}
             onChange={({ fileList }) => {
-              setFileList(fileList);
+              setFileList(fileList);              
             }}
             beforeUpload={(file) => {
-              uploadHandler(file);
+             
               const isImage = file.type.startsWith("image/");
               if (!isImage) {
                 message.error("فقط فایل تصویری مجاز است!");
@@ -395,6 +425,7 @@ function Sell() {
                 message.error("حداکثر 10 عکس می‌توانید آپلود کنید.");
                 return Upload.LIST_IGNORE;
               }
+               uploadHandler(file);
               return true;
             }}
             maxCount={10}
