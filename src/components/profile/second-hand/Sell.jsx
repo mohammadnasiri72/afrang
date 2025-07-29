@@ -12,7 +12,7 @@ import {
   Upload,
   message,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { FaTimes } from "react-icons/fa";
@@ -42,10 +42,6 @@ function Sell() {
   const [imageList, setImageList] = useState([]);
   const [body, setBody] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
-
-  
-  
-
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -95,9 +91,7 @@ function Sell() {
       insurance: Number(insuranceMonths),
       appearance,
       body,
-    };
-    console.log(data);
-    
+    };    
   };
 
   // تنظیمات Toast
@@ -111,8 +105,6 @@ function Sell() {
   });
 
   const uploadHandler = async (file) => {
-    
-    
     setLoadingFile(true);
     try {
       const uploadResult = await UploadFile(file);
@@ -124,12 +116,18 @@ function Sell() {
         });
         return;
       }
-      setImageList([...imageList, uploadResult]);
+      setImageList([...imageList, uploadResult?.imageUrl]);
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
       setLoadingFile(false);
     }
+  };
+
+  const handleRemoveImage = (img) => {
+    const index = fileList.findIndex((item) => item.uid === img.uid);
+    setImageList(item => item.filter((_, i) => i !== index));
+
   };
 
   return (
@@ -411,10 +409,9 @@ function Sell() {
             listType="picture-card"
             fileList={fileList}
             onChange={({ fileList }) => {
-              setFileList(fileList);              
+              setFileList(fileList);
             }}
             beforeUpload={(file) => {
-             
               const isImage = file.type.startsWith("image/");
               if (!isImage) {
                 message.error("فقط فایل تصویری مجاز است!");
@@ -424,19 +421,27 @@ function Sell() {
                 message.error("حداکثر 10 عکس می‌توانید آپلود کنید.");
                 return Upload.LIST_IGNORE;
               }
-               uploadHandler(file);
+              uploadHandler(file);
               return true;
             }}
+            onRemove={handleRemoveImage}
             maxCount={10}
             multiple
             className="custom-upload-grid"
+            showUploadList={{ showRemoveIcon: true }}
           >
-            {fileList.length < 10 && (
-              <div>
-                <span className="text-[#d1182b] text-2xl">+</span>
-                <div style={{ marginTop: 8 }}>آپلود</div>
-              </div>
-            )}
+            {fileList.length < 10 &&
+              (loadingFile ? (
+                <div className="flex flex-col justify-center items-center text-[#d1182b]">
+                  <Spin size="large" />
+                  <div className="mt-5">در حال آپلود...</div>
+                </div>
+              ) : (
+                <div>
+                  <span className="text-[#d1182b] text-2xl">+</span>
+                  <div style={{ marginTop: 8 }}>آپلود</div>
+                </div>
+              ))}
           </Upload>
         </div>
         {/* شرح کامل */}
@@ -456,6 +461,10 @@ function Sell() {
           .border-red-important {
             border: 1px solid #ef4444 !important;
           }
+          .ant-spin-dot-item {
+            background-color: #d1182b !important;
+          }
+
           .text-red-important {
             color: #ef4444 !important;
           }
