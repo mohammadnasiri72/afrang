@@ -96,6 +96,7 @@ function Sell() {
       appearance,
       body,
     };
+    console.log(data);
     
   };
 
