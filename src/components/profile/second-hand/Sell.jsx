@@ -71,11 +71,11 @@ function Sell() {
       setBody(productEdit.body);
       setAppearance(productEdit.appearance);
       setSelectedCategory(productEdit.categoryId);
-      setInsuranceMonths(productEdit.insurance);
+      setInsuranceMonths(productEdit.insurance.toLocaleString());
       if (productEdit.insurance !== 0) {
         setInsuranceStatus(true);
       }
-      setWarrantyMonths(productEdit.warranty);
+      setWarrantyMonths(productEdit.warranty.toLocaleString());
       if (productEdit.warranty !== 0) {
         setWarrantyStatus(true);
       }
@@ -84,8 +84,21 @@ function Sell() {
       setProductName(productEdit.title);
       setProductType(productEdit.type);
       setShutterCount(productEdit.usageCount);
-      setSuggestedPrice(productEdit.price);
+      setSuggestedPrice(productEdit.price.toLocaleString());
       setPurchaseDate(productEdit.purchaseDate);
+      // مقداردهی اولیه عکس‌ها در حالت ویرایش
+      if (Array.isArray(productEdit.imageList)) {
+        const mappedImages = productEdit.imageList.map((imgUrl, idx) => ({
+          uid: `product-edit-img-${idx}`,
+          name: imgUrl.split('/').pop() || `image-${idx}`,
+          status: "done",
+          url: imgUrl,
+          thumbUrl: getImageUrl(imgUrl),
+          uploadedData: { imageUrl: imgUrl },
+        }));
+        setFileList(mappedImages);
+        setMainImageIdx(0); // اولین عکس را عکس اصلی قرار بده
+      }
     }
   }, [productEdit]);
 
@@ -155,6 +168,8 @@ function Sell() {
     setInsuranceMonths(null);
     setErrors({});
     setFileList([]);
+    setProductEdit({})
+    setIdEdit(0)
   };
 
   const fetchCategories = async () => {
@@ -198,7 +213,7 @@ function Sell() {
     }
     const data = {
       langCode: "fa",
-      id: 0,
+      id: idEdit ? idEdit : 0,
       categoryId: selectedCategory ? selectedCategory : 0,
       imageList: getImageListForBackend(),
       title: productName,
@@ -229,9 +244,10 @@ function Sell() {
       }
       Toast.fire({
         icon: "success",
-        title: "آگهی شما با موفقیت ثبت شد",
+        title: `آگهی شما با موفقیت ${idEdit ? 'ویرایش' : 'ثبت'} شد`,
       });
       setFlag((e) => !e);
+      setStepPage(0)
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -258,11 +274,11 @@ function Sell() {
         prevList.map((item) =>
           item.uid === file.uid
             ? {
-                ...item,
-                uploadedData: uploadResult,
-                url: uploadResult.imageUrl,
-                thumbUrl: getImageUrl(uploadResult.imageUrl),
-              }
+              ...item,
+              uploadedData: uploadResult,
+              url: uploadResult.imageUrl,
+              thumbUrl: getImageUrl(uploadResult.imageUrl),
+            }
             : item
         )
       );
@@ -323,7 +339,7 @@ function Sell() {
           <Spin />
         </div>
       )}
-      {}
+      { }
       {!loadingEdit && (
         <div>
           {stepPage === 0 && (
@@ -375,9 +391,8 @@ function Sell() {
                 {/* دسته بندی محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.selectedCategory ? " text-red-important" : ""
-                    }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${errors.selectedCategory ? " text-red-important" : ""
+                      }`}
                   >
                     دسته‌بندی کالا <span className="text-red-500">*</span>
                   </label>
@@ -451,9 +466,8 @@ function Sell() {
                 {/* عنوان محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.productName ? " text-red-important" : ""
-                    }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${errors.productName ? " text-red-important" : ""
+                      }`}
                   >
                     نام محصول <span className="text-red-500">*</span>
                   </label>
@@ -466,9 +480,8 @@ function Sell() {
                       }
                     }}
                     placeholder="نام محصول را وارد کنید"
-                    className={`w-full${
-                      errors.productName ? " border-red-important" : ""
-                    }`}
+                    className={`w-full${errors.productName ? " border-red-important" : ""
+                      }`}
                   />
                 </div>
                 {/* نوع محصول */}
@@ -506,9 +519,8 @@ function Sell() {
                 {/* شماره سریال محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.serialNumber ? " text-red-important" : ""
-                    }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${errors.serialNumber ? " text-red-important" : ""
+                      }`}
                   >
                     سریال محصول <span className="text-red-500">*</span>
                   </label>
@@ -521,9 +533,8 @@ function Sell() {
                       }
                     }}
                     placeholder="سریال محصول را وارد کنید"
-                    className={`w-full${
-                      errors.serialNumber ? " border-red-important" : ""
-                    }`}
+                    className={`w-full${errors.serialNumber ? " border-red-important" : ""
+                      }`}
                   />
                 </div>
                 {/* کارکرد شاتر */}
@@ -688,16 +699,15 @@ function Sell() {
                       <div
                         key={file.uid}
                         onClick={() => openGallery(idx)}
-                        className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${
-                          mainImageIdx === idx
-                            ? "ring-2 ring-[#d1182b] border-[#d1182b]"
-                            : "border-gray-200"
-                        }`}
+                        className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${mainImageIdx === idx
+                          ? "ring-2 ring-[#d1182b] border-[#d1182b]"
+                          : "border-gray-200"
+                          }`}
                         style={{ width: 110, height: 110 }}
                       >
                         {file.thumbUrl ||
-                        file.url ||
-                        (file.uploadedData && file.uploadedData.imageUrl) ? (
+                          file.url ||
+                          (file.uploadedData && file.uploadedData.imageUrl) ? (
                           <img
                             src={
                               file.thumbUrl ||
@@ -742,11 +752,10 @@ function Sell() {
                               e.stopPropagation();
                               handleSetMainImage(idx);
                             }}
-                            className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${
-                              mainImageIdx === idx
-                                ? "text-yellow-400"
-                                : "text-[#333] hover:text-yellow-400"
-                            }`}
+                            className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${mainImageIdx === idx
+                              ? "text-yellow-400"
+                              : "text-[#333] hover:text-yellow-400"
+                              }`}
                           >
                             <FaStar size={16} />
                           </button>
@@ -790,8 +799,8 @@ function Sell() {
                   }
                   .ant-select-selector {
                     border: ${errors.selectedCategory
-                      ? "1px solid red !important"
-                      : ""};
+                    ? "1px solid red !important"
+                    : ""};
                   }
 
                   .ant-spin-dot-item {
@@ -830,7 +839,9 @@ function Sell() {
                     className="bg-[#d1182b] hover:bg-[#b91626]"
                     onClick={handleSubmit}
                   >
-                    ثبت درخواست
+                    {
+                      idEdit ? 'ویرایش' : 'ثبت درخواست'
+                    }
                   </Button>
                 </div>
               </div>
