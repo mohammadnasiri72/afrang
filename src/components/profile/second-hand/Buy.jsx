@@ -102,7 +102,6 @@ function Buy() {
     setIdEdit(0);
     setContactInfoType(1);
   };
-
   const fetchCategories = async () => {
     setLoading(true);
     try {
