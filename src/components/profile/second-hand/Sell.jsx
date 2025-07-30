@@ -63,8 +63,7 @@ function Sell() {
   const [productEdit, setProductEdit] = useState({});
   const user = useSelector(selectUser);
 
-  console.log(productEdit);
-  console.log(fileList);
+ 
 
   useEffect(() => {
     if (productEdit?.id) {
@@ -339,7 +338,6 @@ function Sell() {
           <Spin />
         </div>
       )}
-      { }
       {!loadingEdit && (
         <div>
           {stepPage === 0 && (

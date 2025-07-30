@@ -14,3 +14,16 @@ export const getUserAdFilter = async () => {
         return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
     }
 };
+
+export const getUserAdFilter2 = async () => {
+    try {
+        const response = await axios.get(`${mainDomain}/api/UserAd/Buy/Filter`, {
+            params:{
+                langCode:'fa'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+    }
+};
