@@ -187,14 +187,6 @@ function Buy() {
   });
 
   return (
-    // <div className="bg-white p-5 rounded-lg z-50 relative ">
-    //   <div className=" gap-4 flex justify-center items-center h-full">
-    //     <Empty
-    //       description="در حال حاضر کالای دسته دومی موجود نیست"
-    //       className="my-8"
-    //     />
-    //   </div>
-    // </div>
     <>
       {loadingEdit && (
         <div className="flex justify-center items-center h-screen">
@@ -282,29 +274,7 @@ function Buy() {
                     ))}
                   </Select>
                 </div>
-                {/* اطلاعات تماس */}
-                <div className="mb-6">
-                  <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${errors.contactInfoType ? " text-red-important" : ""}`}
-                  >
-                    اطلاعات تماس <span className="text-red-500">*</span>
-                  </label>
-                  <Select
-                    value={contactInfoType}
-                    onChange={(value) => {
-                      setContactInfoType(value);
-                      if (errors.contactInfoType) {
-                        setErrors((prev) => ({ ...prev, contactInfoType: false }));
-                      }
-                    }}
-                    className="w-full"
-                    options={[
-                      { value: 0, label: "نمایش ایمیل و موبایل" },
-                      { value: 1, label: "فقط نمایش موبایل" },
-                      { value: 2, label: "فقط نمایش ایمیل" },
-                    ]}
-                  />
-                </div>
+                
                 {/* عنوان محصول */}
                 <div className="mb-6">
                   <label
@@ -326,6 +296,18 @@ function Buy() {
                     className={`w-full${
                       errors.productName ? " border-red-important" : ""
                     }`}
+                  />
+                </div>
+                {/* نوع محصول */}
+                <div className="mb-6">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    نوع محصول
+                  </label>
+                  <Input
+                    value={productType}
+                    onChange={(e) => setProductType(e.target.value)}
+                    placeholder="نوع محصول را وارد کنید"
+                    className="w-full"
                   />
                 </div>
                 {/* نام کاربر */}
@@ -352,16 +334,27 @@ function Buy() {
                     }`}
                   />
                 </div>
-                {/* نوع محصول */}
+                {/* اطلاعات تماس */}
                 <div className="mb-6">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    نوع محصول
+                  <label
+                    className={`block text-gray-700 text-sm font-bold mb-2${errors.contactInfoType ? " text-red-important" : ""}`}
+                  >
+                    اطلاعات تماس <span className="text-red-500">*</span>
                   </label>
-                  <Input
-                    value={productType}
-                    onChange={(e) => setProductType(e.target.value)}
-                    placeholder="نوع محصول را وارد کنید"
+                  <Select
+                    value={contactInfoType}
+                    onChange={(value) => {
+                      setContactInfoType(value);
+                      if (errors.contactInfoType) {
+                        setErrors((prev) => ({ ...prev, contactInfoType: false }));
+                      }
+                    }}
                     className="w-full"
+                    options={[
+                      { value: 0, label: "نمایش ایمیل و موبایل" },
+                      { value: 1, label: "فقط نمایش موبایل" },
+                      { value: 2, label: "فقط نمایش ایمیل" },
+                    ]}
                   />
                 </div>
 
@@ -378,6 +371,7 @@ function Buy() {
                     className="w-full"
                   />
                 </div>
+                
                 <style jsx global>{`
                   .border-red-important {
                     border: 1px solid #ef4444 !important;
