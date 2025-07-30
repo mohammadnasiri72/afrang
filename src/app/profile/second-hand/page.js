@@ -7,11 +7,11 @@ import Buy from "@/components/profile/second-hand/Buy";
 import Sell from "@/components/profile/second-hand/Sell";
 
 const SecondHand = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
 
   const options = [
-    { label: "خرید", value: 0 },
     { label: "فروش ", value: 1 },
+    { label: "خرید", value: 0 },
   ];
 
  

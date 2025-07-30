@@ -259,17 +259,30 @@ function Sell() {
   return (
     <>
       {stepPage === 0 && (
-        <ListProductSec productsSec={productsSec} setStepPage={setStepPage} loadingList={loadingList}/>
+        <ListProductSec
+          productsSec={productsSec}
+          setStepPage={setStepPage}
+          loadingList={loadingList}
+          setFlag={setFlag}
+        />
       )}
       {stepPage === 1 && (
         <div className="bg-white p-5 rounded-lg">
-          <div className="max-w-2xl mx-auto">
             {/* عنوان */}
-            <div className="text-center">
-              <h2 className="text-xl font-bold text-gray-800 mb-2 ">
-                فروش کالای دسته دوم
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-800">
+                فرم فروش کالای دسته دوم
               </h2>
+              <button
+                onClick={() => {
+                  setStepPage(0);
+                }}
+                className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+              >
+                بازگشت به لیست
+              </button>
             </div>
+          <div className="max-w-2xl mx-auto">
             {/* راهنما */}
             <div className="mb-8">
               <Alert

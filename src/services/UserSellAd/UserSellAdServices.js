@@ -31,3 +31,35 @@ export const getUserSellAd = async (token) => {
     };
   }
 };
+
+
+export const deleteUserSellAd = async (id , token) => {
+  try {
+    const response = await axios.delete(`${mainDomain}/api/UserSellAd/${id}` , {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });    
+    return response;
+  } catch (err) {
+   console.error(err)
+  }
+};
+
+
+export const getUserSellAdId = async (id , token) => {
+
+  try {
+    const response = await axios.get(`${mainDomain}/api/UserSellAd/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return {
+      type: "error",
+      message: error.response?.data ? error.response?.data : "خطای شبکه",
+    };
+  }
+};
