@@ -1,10 +1,11 @@
 import { getImageUrl } from "@/utils/mainDomain";
-import React, { useState } from "react";
+import { Empty, Popover } from "antd";
+import { HiDotsVertical } from "react-icons/hi";
 import ModalDelete from "./ModalDelete";
-import { Empty } from "antd";
 import ModalShowDetails from "./ModalShowDetails";
+import EditeProductSec from "./EditeProductSec";
 
-function ListProductSec({ productsSec, setStepPage, loadingList, setFlag }) {
+function ListProductSec({ productsSec, setStepPage, loadingList, setFlag , setIdEdit}) {
   const skeleton = Array(6)
     .fill(0)
     .map((_, i) => (
@@ -44,13 +45,27 @@ function ListProductSec({ productsSec, setStepPage, loadingList, setFlag }) {
               {productsSec.map((pr) => (
                 <div
                   key={pr.id}
-                  data-id = {pr.id}
+                  data-id={pr.id}
                   className="relative flex items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
                 >
-                  
-                  <div className="absolute top-2 left-2 flex gap-2">
-                    <ModalDelete id={pr.id} setFlag={setFlag} />
-                    <ModalShowDetails id={pr.id}/>
+                  <div className="absolute top-2 left-2">
+                    <Popover
+                      placement="bottom"
+                      content={
+                        <>
+                          <div className="flex flex-col gap-2 w-full">
+                            <ModalDelete id={pr.id} setFlag={setFlag} />
+                            <ModalShowDetails id={pr.id} />
+                            <EditeProductSec setStepPage={setStepPage} id={pr.id} setIdEdit={setIdEdit}/>
+                          </div>
+                        </>
+                      }
+                      trigger="click"
+                    >
+                      <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
+                    </Popover>
+                    {/* <ModalDelete id={pr.id} setFlag={setFlag} />
+                    <ModalShowDetails id={pr.id}/> */}
                   </div>
                   {pr.image ? (
                     <img

@@ -6,22 +6,21 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Button, Modal, Tooltip } from "antd";
+import moment from "moment-jalaali";
 import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-cards';
+import "swiper/css";
+import "swiper/css/effect-cards";
+import { EffectCards } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 function ModalShowDetails({ id }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [productDetails, setProductDetails] = useState({});
   const user = useSelector(selectUser);
-
-  console.log(productDetails);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -98,9 +97,7 @@ function ModalShowDetails({ id }) {
       <Modal
         title={<p className="text-xl font-semibold">جزئیات آگهی</p>}
         footer={
-          <Button type="primary" onClick={() => setIsModalOpen(false)}>
-            بستن
-          </Button>
+         <></>
         }
         loading={isLoading}
         open={isModalOpen}
@@ -112,17 +109,17 @@ function ModalShowDetails({ id }) {
           <div className="space-y-4">
             {/* تصویر محصول */}
             {productDetails?.imageList?.length > 0 && (
-              <div className="flex justify-center">
+              <div className="flex">
                 <Swiper
-                  effect={'cards'}
+                  effect={"cards"}
                   grabCursor={true}
                   modules={[EffectCards]}
                   className="w-[150px] h-auto"
                 >
                   {productDetails.imageList.map((image, index) => (
-                    <SwiperSlide 
-                      key={index} 
-                      style={{width:'150px' , height:'auto'}}
+                    <SwiperSlide
+                      key={index}
+                      style={{ width: "150px", height: "auto" }}
                       onClick={() => openGallery(index)}
                       className="cursor-pointer"
                     >
@@ -143,49 +140,75 @@ function ModalShowDetails({ id }) {
               <span className="text-teal-600 font-semibold text-base">
                 {productDetails.price?.toLocaleString()} تومان
               </span>
-              <span className="text-gray-500 text-sm">{productDetails.categoryTitle}</span>
+              <span className="text-gray-500 text-sm">
+                {productDetails.categoryTitle}
+              </span>
             </div>
 
-            {/* جدول مشخصات */}
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <tbody>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">سریال محصول :</td>
-                    <td className="py-1">{productDetails.serialNumber || "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">نوع محصول :</td>
-                    <td className="py-1">{productDetails.type || "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">تاریخ خرید محصول :</td>
-                    <td className="py-1">{productDetails.purchaseDate || "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">کارکرد شاتر(فقط دوربین SLR) :</td>
-                    <td className="py-1">{productDetails.usageCount || "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">مدت زمان استفاده:</td>
-                    <td className="py-1">{productDetails.usageTime || "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">وضعیت بیمه :</td>
-                    <td className="py-1">{productDetails.insurance ? productDetails.insurance + " ماه" : "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">وضعیت گارانتی :</td>
-                    <td className="py-1">{productDetails.warranty ? productDetails.warranty + " ماه" : "–"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium py-1 pr-2">وضعیت ظاهری :</td>
-                    <td className="py-1">{productDetails.appearance || "–"}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="w-full">
+              <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
+                <span className="font-medium py-1 pr-2">سریال محصول :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.serialNumber || "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-100 px-4 py-1">
+                <span className="font-medium py-1 pr-2">نوع محصول :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.type || "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
+                <span className="font-medium py-1 pr-2">
+                  تاریخ خرید محصول :
+                </span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.purchaseDate || "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-100 px-4 py-1">
+                <span className="font-medium py-1 pr-2">
+                  کارکرد شاتر(فقط دوربین SLR) :
+                </span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.usageCount || "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
+                <span className="font-medium py-1 pr-2">
+                  مدت زمان استفاده :
+                </span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.usageTime || "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-100 px-4 py-1">
+                <span className="font-medium py-1 pr-2">وضعیت بیمه :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.insurance
+                    ? productDetails.insurance + " ماه"
+                    : "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
+                <span className="font-medium py-1 pr-2">وضعیت گارانتی :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.warranty
+                    ? productDetails.warranty + " ماه"
+                    : "–"}
+                </span>
+              </div>
             </div>
 
+            {/* وضعیت ظاهری */}
+            {productDetails.appearance && (
+              <div>
+                <div className="font-medium mb-1">وضعیت ظاهری :</div>
+                <div className="bg-gray-50 rounded p-2 text-justify text-gray-700 leading-relaxed">
+                  {productDetails.appearance}
+                </div>
+              </div>
+            )}
             {/* توضیحات بدنه */}
             {productDetails.body && (
               <div>
