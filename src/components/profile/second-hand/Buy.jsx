@@ -33,6 +33,7 @@ function Buy() {
   const [body, setBody] = useState("");
   const [productsSec, setProductsSec] = useState([]);
   const [productEdit, setProductEdit] = useState({});
+  const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
   useEffect(() => {
@@ -45,9 +46,10 @@ function Buy() {
     if (productEdit?.id) {
       setBody(productEdit.body);
       setSelectedCategory(productEdit.categoryId);
-
       setProductName(productEdit.title);
       setProductType(productEdit.type);
+      // مقداردهی اولیه contactInfoType اگر از سرور می‌آید اینجا ست کن، فعلاً مقدار پیش‌فرض 1
+      setContactInfoType(1);
     }
   }, [productEdit]);
 
@@ -98,6 +100,7 @@ function Buy() {
     setErrors({});
     setProductEdit({});
     setIdEdit(0);
+    setContactInfoType(1);
   };
 
   const fetchCategories = async () => {
@@ -130,6 +133,7 @@ function Buy() {
     if (!productName.trim()) newErrors.productName = true;
     if (!nickname.trim()) newErrors.nickname = true;
     if (selectedCategory === undefined) newErrors.selectedCategory = true;
+    if (contactInfoType === undefined || contactInfoType === null) newErrors.contactInfoType = true;
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
       Toast.fire({
@@ -145,6 +149,7 @@ function Buy() {
       title: productName,
       type: productType,
       body,
+      contactInfoType, // ارسال مقدار انتخاب شده
     };
 
     try {
@@ -241,9 +246,8 @@ function Buy() {
                 {/* دسته بندی محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.selectedCategory ? " text-red-important" : ""
-                    }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${errors.selectedCategory ? " text-red-important" : ""
+                      }`}
                   >
                     دسته‌بندی کالا <span className="text-red-500">*</span>
                   </label>
@@ -278,6 +282,29 @@ function Buy() {
                       </Select.Option>
                     ))}
                   </Select>
+                </div>
+                {/* اطلاعات تماس */}
+                <div className="mb-6">
+                  <label
+                    className={`block text-gray-700 text-sm font-bold mb-2${errors.contactInfoType ? " text-red-important" : ""}`}
+                  >
+                    اطلاعات تماس <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    value={contactInfoType}
+                    onChange={(value) => {
+                      setContactInfoType(value);
+                      if (errors.contactInfoType) {
+                        setErrors((prev) => ({ ...prev, contactInfoType: false }));
+                      }
+                    }}
+                    className="w-full"
+                    options={[
+                      { value: 0, label: "نمایش ایمیل و موبایل" },
+                      { value: 1, label: "فقط نمایش موبایل" },
+                      { value: 2, label: "فقط نمایش ایمیل" },
+                    ]}
+                  />
                 </div>
                 {/* عنوان محصول */}
                 <div className="mb-6">
