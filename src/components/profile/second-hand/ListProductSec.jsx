@@ -44,6 +44,7 @@ function ListProductSec({ productsSec, setStepPage, loadingList, setFlag }) {
               {productsSec.map((pr) => (
                 <div
                   key={pr.id}
+                  data-id = {pr.id}
                   className="relative flex items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
                 >
                   <div className="absolute top-2 left-2 flex gap-2">
