@@ -259,7 +259,7 @@ function Sell() {
   return (
     <>
       {stepPage === 0 && (
-        <ListProductSec productsSec={productsSec} setStepPage={setStepPage} />
+        <ListProductSec productsSec={productsSec} setStepPage={setStepPage} loadingList={loadingList}/>
       )}
       {stepPage === 1 && (
         <div className="bg-white p-5 rounded-lg">
