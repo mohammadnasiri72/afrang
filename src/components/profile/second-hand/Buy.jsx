@@ -3,20 +3,22 @@
 import { selectUser } from "@/redux/slices/userSlice";
 import { getUserAdFilter2 } from "@/services/UserAd/UserAdServices";
 import {
-  getUserSellAd,
-  getUserSellAdId,
-  PostUserSellAd,
+  getUserBuyAd,
+  getUserBuyAdId,
+  PostUserBuyAd,
 } from "@/services/UserSellAd/UserSellAdServices";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
-import { Alert, Button, Input, Select, Spin } from "antd";
+import { Alert, Avatar, Button, Input, Segmented, Select, Spin } from "antd";
 import { useEffect, useState } from "react";
+import { FaMobile, FaVoicemail } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import ListProductSec from "./ListProductSec";
+import ListProductBuy from "./ListProductBuy";
 const { TextArea } = Input;
 
 function Buy() {
-  const [stepPage, setStepPage] = useState(1);
+  const [stepPage, setStepPage] = useState(0);
   const [idEdit, setIdEdit] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
@@ -36,20 +38,22 @@ function Buy() {
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
+
   useEffect(() => {
-    if (user?.displayName) {
+    if (user?.displayName && idEdit === 0) {
       setNickname(user?.displayName);
     }
   }, [user]);
 
   useEffect(() => {
     if (productEdit?.id) {
-      setBody(productEdit.body);
+      setBody(productEdit.description);
       setSelectedCategory(productEdit.categoryId);
       setProductName(productEdit.title);
       setProductType(productEdit.type);
-      // مقداردهی اولیه contactInfoType اگر از سرور می‌آید اینجا ست کن، فعلاً مقدار پیش‌فرض 1
-      setContactInfoType(1);
+      setContactInfoType(0);
+      setNickname(productEdit.nickname);
+      setContactInfoType(productEdit.contactInfo);
     }
   }, [productEdit]);
 
@@ -57,7 +61,7 @@ function Buy() {
     const fetchProductsSec = async () => {
       setLoadingEdit(true);
       try {
-        const productsData = await getUserSellAdId(idEdit, user?.token);
+        const productsData = await getUserBuyAdId(idEdit, user?.token);
         if (productsData.type === "error") {
           Toast.fire({
             icon: "error",
@@ -81,7 +85,7 @@ function Buy() {
     const fetchProductsSec = async () => {
       setLoadingList(true);
       try {
-        const productsData = await getUserSellAd(user?.token);
+        const productsData = await getUserBuyAd(user?.token);
         setProductsSec(productsData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -100,7 +104,7 @@ function Buy() {
     setErrors({});
     setProductEdit({});
     setIdEdit(0);
-    setContactInfoType(1);
+    setContactInfoType(0);
   };
   const fetchCategories = async () => {
     setLoading(true);
@@ -132,7 +136,6 @@ function Buy() {
     if (!productName.trim()) newErrors.productName = true;
     if (!nickname.trim()) newErrors.nickname = true;
     if (selectedCategory === undefined) newErrors.selectedCategory = true;
-    if (contactInfoType === undefined || contactInfoType === null) newErrors.contactInfoType = true;
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
       Toast.fire({
@@ -147,13 +150,14 @@ function Buy() {
       categoryId: selectedCategory ? selectedCategory : 0,
       title: productName,
       type: productType,
-      body,
-      contactInfoType, // ارسال مقدار انتخاب شده
+      description: body,
+      contactInfo: contactInfoType,
+      nickname,
     };
 
     try {
       setLoadingForm(true);
-      const response = await PostUserSellAd(data, user?.token);
+      const response = await PostUserBuyAd(data, user?.token);
 
       if (response.type === "error") {
         Toast.fire({
@@ -196,7 +200,7 @@ function Buy() {
       {!loadingEdit && (
         <div>
           {stepPage === 0 && (
-            <ListProductSec
+            <ListProductBuy
               productsSec={productsSec}
               setStepPage={setStepPage}
               loadingList={loadingList}
@@ -237,8 +241,9 @@ function Buy() {
                 {/* دسته بندی محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${errors.selectedCategory ? " text-red-important" : ""
-                      }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${
+                      errors.selectedCategory ? " text-red-important" : ""
+                    }`}
                   >
                     دسته‌بندی کالا <span className="text-red-500">*</span>
                   </label>
@@ -274,7 +279,7 @@ function Buy() {
                     ))}
                   </Select>
                 </div>
-                
+
                 {/* عنوان محصول */}
                 <div className="mb-6">
                   <label
@@ -317,8 +322,7 @@ function Buy() {
                       errors.nickname ? " text-red-important" : ""
                     }`}
                   >
-                    نام کاربری قابل نمایش{" "}
-                    <span className="text-red-500">*</span>
+                    نام کاربر قابل نمایش <span className="text-red-500">*</span>
                   </label>
                   <Input
                     value={nickname}
@@ -335,9 +339,9 @@ function Buy() {
                   />
                 </div>
                 {/* اطلاعات تماس */}
-                <div className="mb-6">
+                <div className="mb-6 sm:hidden block">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${errors.contactInfoType ? " text-red-important" : ""}`}
+                    className={`block text-gray-700 text-sm font-bold mb-2`}
                   >
                     اطلاعات تماس <span className="text-red-500">*</span>
                   </label>
@@ -345,15 +349,68 @@ function Buy() {
                     value={contactInfoType}
                     onChange={(value) => {
                       setContactInfoType(value);
-                      if (errors.contactInfoType) {
-                        setErrors((prev) => ({ ...prev, contactInfoType: false }));
-                      }
                     }}
                     className="w-full"
                     options={[
                       { value: 0, label: "نمایش ایمیل و موبایل" },
                       { value: 1, label: "فقط نمایش موبایل" },
                       { value: 2, label: "فقط نمایش ایمیل" },
+                    ]}
+                  />
+                </div>
+                <div className="SegmentedBuy mb-6 overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
+                  <Segmented
+                    className="w-full overflow-auto"
+                    onChange={(value) => {
+                      setContactInfoType(value);
+                    }}
+                    options={[
+                      {
+                        label: (
+                          <div style={{ padding: 4 }}>
+                            <Avatar
+                              style={{
+                                backgroundColor:
+                                  contactInfoType === 0 ? "#d1182b" : "#3338",
+                              }}
+                              icon={<FaVoicemail />}
+                            />
+                            <div className="pt-2">نمایش ایمیل و موبایل</div>
+                          </div>
+                        ),
+                        value: 0,
+                      },
+                      {
+                        label: (
+                          <div style={{ padding: 4 }}>
+                            <Avatar
+                              style={{
+                                backgroundColor:
+                                  contactInfoType === 1 ? "#d1182b" : "#3338",
+                              }}
+                              icon={<FaMobile />}
+                            />
+
+                            <div className="pt-2">نمایش موبایل</div>
+                          </div>
+                        ),
+                        value: 1,
+                      },
+                      {
+                        label: (
+                          <div style={{ padding: 4 }}>
+                            <Avatar
+                              style={{
+                                backgroundColor:
+                                  contactInfoType === 2 ? "#d1182b" : "#3338",
+                              }}
+                              icon={<MdEmail />}
+                            />
+                            <div className="pt-2">نمایش ایمیل</div>
+                          </div>
+                        ),
+                        value: 2,
+                      },
                     ]}
                   />
                 </div>
@@ -371,7 +428,7 @@ function Buy() {
                     className="w-full"
                   />
                 </div>
-                
+
                 <style jsx global>{`
                   .border-red-important {
                     border: 1px solid #ef4444 !important;
@@ -408,6 +465,39 @@ function Buy() {
                   .custom-upload-grid .ant-upload-list-item:first-child {
                     border: 2px solid #d1182b !important;
                     box-shadow: 0 0 0 2px #d1182b33;
+                  }
+
+                  .SegmentedBuy .ant-segmented {
+                    background-color: #ebebeb;
+                  }
+                  .SegmentedBuy .ant-segmented-item {
+                    width: 100%;
+                    font-weight: 600 !important;
+                    font-size: 14px;
+                    transition: 0.3s;
+                  }
+                  .SegmentedBuy .ant-segmented-item-selected {
+                    background-color: #fff !important;
+                    color: #d1182b !important;
+                    border-radius: 6px;
+                    font-weight: 900 !important;
+                    font-size: 16px !important;
+                    transition: 0.3s;
+                  }
+                  .SegmentedBuy .ant-segmented-item-selected:hover {
+                    color: #d1182b !important;
+                  }
+                  .SegmentedBuy .ant-segmented-thumb {
+                    background-color: #fff !important;
+                    font-weight: 900 !important;
+                  }
+                  /* حالت جمع و جورتر در sticky */
+                  .SegmentedBuy.sticky .ant-segmented-item {
+                    font-size: 12px;
+                  }
+                  .SegmentedBuy.sticky .ant-segmented-item-selected {
+                    font-size: 13px !important;
+                    border-radius: 4px;
                   }
                 `}</style>
                 <div className="flex justify-end">

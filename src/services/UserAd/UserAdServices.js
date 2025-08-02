@@ -27,3 +27,15 @@ export const getUserAdFilter2 = async () => {
         return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
     }
 };
+
+export const getUserAdSell = async (data) => {
+    try {
+        const response = await axios.get(`${mainDomain}/api/UserAd/Sell`, {
+            params:data
+        });
+        return response.data;
+    } catch (error) {
+        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+    }
+};
+

@@ -1,12 +1,11 @@
-import { getImageUrl } from "@/utils/mainDomain";
 import { Empty, Popover } from "antd";
 import { HiDotsVertical } from "react-icons/hi";
-import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
-import ModalDelete from "./ModalDelete";
-import ModalShowDetails from "./ModalShowDetails";
+import ModalDeleteBuy from "./ModalDeleteBuy";
+import ModalShowDetailsBuy from "./ModalShowDetailsBuy";
+import { MdDone, MdOutlineTimer } from "react-icons/md";
 
-function ListProductSec({
+function ListProductBuy({
   productsSec,
   setStepPage,
   loadingList,
@@ -32,7 +31,7 @@ function ListProductSec({
     <>
       <div className="flex justify-between items-center px-4 pt-4">
         <h3 className="text-xl font-semibold text-gray-800">
-          آگهی های فروش شما
+          آگهی های خرید شما
         </h3>
         <button
           onClick={() => {
@@ -61,13 +60,13 @@ function ListProductSec({
                       content={
                         <>
                           <div className="flex flex-col gap-2 w-full">
-                            <ModalShowDetails id={pr.id} />
+                            <ModalShowDetailsBuy id={pr.id} />
                             <EditeProductSec
                               setStepPage={setStepPage}
                               id={pr.id}
                               setIdEdit={setIdEdit}
                             />
-                            <ModalDelete id={pr.id} setFlag={setFlag} />
+                            <ModalDeleteBuy id={pr.id} setFlag={setFlag} />
                           </div>
                         </>
                       }
@@ -75,43 +74,33 @@ function ListProductSec({
                     >
                       <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
                     </Popover>
-                    {/* <ModalDelete id={pr.id} setFlag={setFlag} />
-                    <ModalShowDetails id={pr.id}/> */}
                   </div>
-                  {pr.image ? (
-                    <img
-                      src={getImageUrl(pr.image)}
-                      alt={pr.title}
-                      className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-100"
-                    />
-                  ) : (
-                    <img
-                      src={"/images/icons/camera-bag.png"}
-                      alt={pr.title}
-                      className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
-                    />
-                  )}
-                  <div className="flex flex-col items-start flex-1 min-w-0 gap-1">
+                  <img
+                    src={"/images/icons/camera-bag.png"}
+                    alt={pr.title}
+                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
+                  />
+                  <div className="flex flex-col items-start gap-1">
                     <span className="font-bold text-base truncate">
                       {pr.title}
                     </span>
                     <span className="text-gray-500 text-sm truncate">
                       دسته‌بندی: {pr.categoryTitle}
                     </span>
-                    <span className="text-[#d1182b] font-bold text-sm">
-                      قیمت: {pr.price.toLocaleString()} تومان
+                    <span className="text-gray-500 text-sm font-semibold">
+                     
+                      {pr.isActive ? (
+                        <span className="text-emerald-600 flex items-center gap-1 bg-emerald-100 rounded-lg px-3">
+                            <MdDone />
+                            <span>تایید شده</span>
+                        </span>
+                      ) : (
+                        <span className="text-amber-600 flex items-center gap-1 bg-amber-100 rounded-lg px-3">
+                            <MdOutlineTimer />
+                            <span>منتظر تایید</span>
+                        </span>
+                      )}
                     </span>
-                    {pr.isActive ? (
-                      <span className="text-emerald-600 flex items-center gap-1 bg-emerald-100 rounded-lg px-3">
-                        <MdDone />
-                        <span>تایید شده</span>
-                      </span>
-                    ) : (
-                      <span className="text-amber-600 flex items-center gap-1 bg-amber-100 rounded-lg px-3">
-                        <MdOutlineTimer />
-                        <span>منتظر تایید</span>
-                      </span>
-                    )}
                   </div>
                 </div>
               ))}
@@ -132,4 +121,4 @@ function ListProductSec({
   );
 }
 
-export default ListProductSec;
+export default ListProductBuy;

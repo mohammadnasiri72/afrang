@@ -805,7 +805,6 @@ th {
 
 .ant-message {
   z-index: 110000 !important;
-  
 }
 
 .ant-modal {
@@ -817,4 +816,5 @@ th {
 .ant-modal-mask {
   z-index: 109999 !important;
 }
+
 
