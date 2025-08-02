@@ -817,4 +817,23 @@ th {
   z-index: 109999 !important;
 }
 
-
+.used-icon-thumb.icon3 span {
+  background-position: -105px 0;
+}
+.used-icon-thumb.icon2 span {
+  background-position: -52px 0;
+}
+.used-icon-thumb span {
+  background-image: url('./../../public/images/used_icons.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: block;
+  width: 53px;
+  height: 52px;
+  margin: 10px auto;
+  z-index: 65465465465;
+}
+.used-icon-thumb {
+  text-align: center;
+  font-size: 13px;
+}
