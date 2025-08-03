@@ -24,7 +24,7 @@ function FilterSec() {
   const price1 = searchParams.get("price1") || undefined;
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
-  
+
 
   useEffect(() => {
     if (categoryChecked.length > 0) {
