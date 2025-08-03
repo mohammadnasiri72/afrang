@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import { Pagination, Select } from "antd";
 import { getImageUrl } from "@/utils/mainDomain";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
@@ -33,22 +34,26 @@ function BoxSellSec() {
   const [loading, setLoading] = useState(true);
   const [productList, setProductList] = useState([]);
   const [viewMode, setViewMode] = useState("list");
-  const [orderBy, setOrderBy] = useState(1);
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+
+  const orderBy = searchParams.get("orderby") || "1";
+  const pageIndex = searchParams.get("page") || "1";
+  const pageSize = searchParams.get("pageSize") || "20";
+  const price1 = searchParams.get("price1") || undefined;
+  const price2 = searchParams.get("price2") || undefined;
 
   const orginalData = {
     LangCode: "fa",
-    CategoryIdArray: [],
-    // Amount1: "",
-    // Amount2: "",
+    // CategoryIdArray: [],
     // IsActive: true,
-    OrderBy: orderBy,
-    OrderOn: 1,
-    PageSize: pageSize,
-    PageIndex: pageIndex,
+    OrderBy: Number(orderBy),
+    // OrderOn: 1,
+    PageSize: Number(pageSize),
+    PageIndex: Number(pageIndex),
   };
-  console.log(productList);
 
   const isMobile = useIsMobile();
 
@@ -89,8 +94,19 @@ function BoxSellSec() {
     }
   };
   useEffect(() => {
-    fetchProductsSec(orginalData);
-  }, []);
+    if (price1 && price2) {
+      fetchProductsSec({ ...orginalData, Amount1: price1 , Amount2: price2});
+    }
+    if (price1 && !price2) {
+      fetchProductsSec({ ...orginalData, Amount1: price1 });
+    }
+    if (!price1 && price2) {
+      fetchProductsSec({ ...orginalData, Amount2: price2 });
+    }
+    if (!price1 && !price2) {
+      fetchProductsSec(orginalData);
+    }
+  }, [searchParams]);
 
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
@@ -217,10 +233,11 @@ function BoxSellSec() {
               نمایش بر اساس :
             </label>
             <Select
-              value={orderBy}
+              value={Number(orderBy)}
               onChange={(value) => {
-                setOrderBy(value);
-                fetchProductsSec({ ...orginalData, OrderBy: value , PageIndex:1 });
+                params.set("orderby", value);
+                params.delete("page");
+                router.push(`${window.location.pathname}?${params.toString()}`);
               }}
               className="sm:w-36 w-28"
               options={[
@@ -236,10 +253,17 @@ function BoxSellSec() {
               تعداد در صفحه :
             </label>
             <Select
-              value={pageSize}
+              value={Number(pageSize)}
               onChange={(value) => {
-                setPageSize(value);
-                fetchProductsSec({ ...orginalData, PageSize: value , PageIndex:1});
+                params.set("pageSize", value);
+                params.delete("page");
+                router.push(`${window.location.pathname}?${params.toString()}`);
+                // setPageSize(value);
+                // fetchProductsSec({
+                //   ...orginalData,
+                //   PageSize: value,
+                //   PageIndex: 1,
+                // });
               }}
               className="sm:w-20 w-14"
               options={[
@@ -348,13 +372,13 @@ function BoxSellSec() {
       {productList.length > 0 && (
         <div className="flex justify-center mt-4">
           <Pagination
-            current={pageIndex}
-            onChange={(val) => {
-              setPageIndex(val);
-              fetchProductsSec({ ...orginalData, PageIndex: val });
+            current={Number(pageIndex)}
+            onChange={(value) => {
+              params.set("page", value);
+              router.push(`${window.location.pathname}?${params.toString()}`);
             }}
             total={productList[0].total}
-            pageSize={pageSize}
+            pageSize={Number(pageSize)}
             showSizeChanger={false}
             className="rtl"
             showLessItems
