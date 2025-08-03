@@ -1,4 +1,5 @@
 import Container from "@/components/container";
+import BodyProductSec from "@/components/UserAdd/BodyProductSec";
 import SliderProductSecImg from "@/components/UserAdd/SliderProductSecImg";
 import { getProductSecId } from "@/services/UserAd/UserAdServices";
 import { redirect } from "next/navigation";
@@ -10,7 +11,7 @@ export default async function UserAddDetails(props) {
   const id = Number(slug.slug[0]);
 
   const product = await getProductSecId(id);
-console.log(product);
+
 
 
   let url = "/used/";
@@ -30,6 +31,9 @@ console.log(product);
             {product.imageList.length > 0 && (
               <SliderProductSecImg attachments={product.imageList} />
             )}
+          </div>
+          <div className="lg:w-[70%] w-full p-2">
+            <BodyProductSec product={product} />
           </div>
         </div>
       </Container>
