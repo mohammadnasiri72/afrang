@@ -15,8 +15,6 @@ function CheckBoxCaterory({ category, categoryChecked, setCategoryChecked }) {
     setChecked(isInUrl);
   }, [searchParams, category.id]);
 
-  console.log(categoryChecked);
-
   return (
     <>
       <FormControlLabel

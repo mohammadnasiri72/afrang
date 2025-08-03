@@ -44,10 +44,13 @@ function BoxSellSec() {
   const pageSize = searchParams.get("pageSize") || "20";
   const price1 = searchParams.get("price1") || undefined;
   const price2 = searchParams.get("price2") || undefined;
+  const categoryParams = searchParams.getAll("category");
+
+  console.log(categoryParams);
 
   const orginalData = {
     LangCode: "fa",
-    // CategoryIdArray: [],
+    CategoryIdArray: categoryParams,
     // IsActive: true,
     OrderBy: Number(orderBy),
     // OrderOn: 1,
@@ -95,13 +98,7 @@ function BoxSellSec() {
   };
   useEffect(() => {
     if (price1 && price2) {
-      fetchProductsSec({ ...orginalData, Amount1: price1 , Amount2: price2});
-    }
-    if (price1 && !price2) {
-      fetchProductsSec({ ...orginalData, Amount1: price1 });
-    }
-    if (!price1 && price2) {
-      fetchProductsSec({ ...orginalData, Amount2: price2 });
+      fetchProductsSec({ ...orginalData, Amount1: price1, Amount2: price2 });
     }
     if (!price1 && !price2) {
       fetchProductsSec(orginalData);
