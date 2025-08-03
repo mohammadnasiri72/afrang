@@ -43,7 +43,7 @@ function BoxBuySec() {
 
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
-  const pageSize = searchParams.get("pageSize") || "1";
+  const pageSize = searchParams.get("pageSize") || "20";
   const price1 = searchParams.get("price1") || undefined;
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
