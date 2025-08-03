@@ -26,7 +26,6 @@ function FilterSec() {
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
 
-
   useEffect(() => {
     // فقط بعد از مقداردهی اولیه، تغییرات categoryChecked را اعمال کن
     if (isInitialized) {
