@@ -23,6 +23,8 @@ function FilterSec() {
 
   const price1 = searchParams.get("price1") || undefined;
   const price2 = searchParams.get("price2") || undefined;
+  const categoryParams = searchParams.getAll("category");
+  
 
   useEffect(() => {
     if (categoryChecked.length > 0) {
@@ -63,6 +65,17 @@ function FilterSec() {
     };
     fetchFilterData();
   }, []);
+
+  // مقداردهی اولیه categoryChecked بر اساس پارامترهای URL
+  useEffect(() => {
+    if (filterList?.categories?.length > 0) {
+      
+      const initialCategories = filterList.categories.filter(cat => 
+        categoryParams.includes(cat.id.toString())
+      );
+      setCategoryChecked(initialCategories);
+    }
+  }, [filterList, searchParams]);
 
   return (
     <>

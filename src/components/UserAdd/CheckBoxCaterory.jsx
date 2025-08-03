@@ -1,8 +1,19 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 function CheckBoxCaterory({ category, categoryChecked, setCategoryChecked }) {
   const [checked, setChecked] = useState(false);
+  const searchParams = useSearchParams();
+  
+
+
+  // بررسی اینکه آیا این category در URL موجود است
+  useEffect(() => {
+    const categoryParams = searchParams.getAll("category");
+    const isInUrl = categoryParams.includes(category.id.toString());
+    setChecked(isInUrl);
+  }, [searchParams, category.id]);
 
   console.log(categoryChecked);
 
@@ -20,9 +31,9 @@ function CheckBoxCaterory({ category, categoryChecked, setCategoryChecked }) {
             checked={checked}
             onChange={() => {
               setChecked((e) => !e);
-              if (categoryChecked.length >0 && categoryChecked.filter((e)=> e === category).length>0) {
+              if (categoryChecked.length > 0 && categoryChecked.filter((e) => e.id === category.id).length > 0) {
                 setCategoryChecked(
-                  categoryChecked.filter((e) => e !== category)
+                  categoryChecked.filter((e) => e.id !== category.id)
                 );
               } else {
                 setCategoryChecked([...categoryChecked, category]);
