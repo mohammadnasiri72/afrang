@@ -50,7 +50,7 @@ function BoxSellSec() {
 
   const orginalData = {
     LangCode: "fa",
-    CategoryIdArray: categoryParams,
+    CategoryIdArray: categoryParams.length > 0 ? categoryParams.join(',') : undefined,
     // IsActive: true,
     OrderBy: Number(orderBy),
     // OrderOn: 1,
