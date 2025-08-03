@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import { useEffect } from "react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
@@ -35,15 +35,16 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-export default function SliderProductDetails({ attachments , product}) {
+export default function SliderProductSecImg({ attachments }) {
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   useEffect(() => {
     import("@fancyapps/ui/dist/fancybox/fancybox.css");
   }, []);
 
-   // افزایش z-index fancybox
-   useEffect(() => {
+  // افزایش z-index fancybox
+  useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `.fancybox__container { z-index: 999999 !important; }`;
     document.head.appendChild(style);
@@ -56,25 +57,14 @@ export default function SliderProductDetails({ attachments , product}) {
     <>
       <div className="flex justify-between relative">
         <div className="w-full mx-auto">
-          {/* تخفیف */}
-          {product?.discount !== 0 && (
-            <div className="absolute top-3 left-3 z-50 duration-300">
-              <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
-                {product.discount}%
-              </span>
-            </div>
-          )}
-          {/* کالای کارکرده */}
-          {product?.conditionId === 20 && (
-            <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-              کالای کارکرده
-            </div>
-          )}
           {attachments.length > 0 && (
             <div className="slider-productDetails">
               <Swiper
                 style={{
                   cursor: "pointer",
+                  height: "300px",
+                  border: "1px solid #3331",
+                  borderRadius: "10px",
                 }}
                 loop={true}
                 spaceBetween={10}
@@ -85,24 +75,28 @@ export default function SliderProductDetails({ attachments , product}) {
                 className="mySwiper2"
               >
                 {attachments.map((attachment) => (
-                  <SwiperSlide key={attachment.id}>
+                  <SwiperSlide key={attachment}>
                     <a
-                      className="w-full"
-                      href={getImageUrl2(attachment.fileUrl)}
+                      className=" h-full relative"
+                      href={getImageUrl(attachment)}
                       data-fancybox="gallery"
-                      data-caption="Caption Images 4"
+                      //   data-caption="Caption Images 4"
                     >
-                      <img
-                        className="w-full border rounded-sm border-[#3331]"
-                        src={getImageUrl2(attachment.fileUrl)}
-                      />
+                      <img className="" src={getImageUrl(attachment)} />
                     </a>
                   </SwiperSlide>
                 ))}
+                {/* کالای کارکرده */}
+                <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  کالای کارکرده
+                </div>
               </Swiper>
               <Swiper
+                style={{
+                  height: "100px",
+                  width:'100%'
+                }}
                 onSwiper={setThumbsSwiper}
-                loop={true}
                 grabCursor={true}
                 spaceBetween={10}
                 slidesPerView={4}
@@ -112,10 +106,15 @@ export default function SliderProductDetails({ attachments , product}) {
                 className="mySwiper"
               >
                 {attachments.map((attachment) => (
-                  <SwiperSlide key={attachment.id}>
+                  <SwiperSlide
+                    style={{
+                     cursor:'pointer'
+                    }}
+                    key={attachment}
+                  >
                     <img
-                      className="w-full border rounded-sm border-[#3331]"
-                      src={getImageUrl2(attachment.fileUrl)}
+                      className="h-full border rounded-sm border-[#3331]"
+                      src={getImageUrl(attachment)}
                     />
                   </SwiperSlide>
                 ))}
@@ -124,7 +123,6 @@ export default function SliderProductDetails({ attachments , product}) {
           )}
         </div>
       </div>
-     
     </>
   );
 }

@@ -46,7 +46,6 @@ function BoxSellSec() {
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
 
-  console.log(categoryParams);
 
   const orginalData = {
     LangCode: "fa",
