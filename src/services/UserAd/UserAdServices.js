@@ -47,3 +47,18 @@ export const getProductSecId = async (id) => {
         return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
     }
 };
+
+
+export const getUserAdBuy = async (data) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/UserAd/Buy`, {
+      params: data,
+    });
+    return response.data;
+  } catch (error) {
+    return {
+      type: "error",
+      message: error.response?.data ? error.response?.data : "خطای شبکه",
+    };
+  }
+};

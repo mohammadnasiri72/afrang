@@ -36,7 +36,6 @@ Fancybox.bind("[data-fancybox='gallery']", {
 });
 
 export default function SliderProductSecImg({ attachments }) {
-
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   useEffect(() => {
@@ -55,7 +54,7 @@ export default function SliderProductSecImg({ attachments }) {
 
   return (
     <>
-      <div className="flex justify-between relative">
+      <div className="flex justify-between relative h-full">
         <div className="w-full mx-auto">
           {attachments.length > 0 && (
             <div className="slider-productDetails">
@@ -94,7 +93,7 @@ export default function SliderProductSecImg({ attachments }) {
               <Swiper
                 style={{
                   height: "100px",
-                  width:'100%'
+                  width: "100%",
                 }}
                 onSwiper={setThumbsSwiper}
                 grabCursor={true}
@@ -108,7 +107,7 @@ export default function SliderProductSecImg({ attachments }) {
                 {attachments.map((attachment) => (
                   <SwiperSlide
                     style={{
-                     cursor:'pointer'
+                      cursor: "pointer",
                     }}
                     key={attachment}
                   >

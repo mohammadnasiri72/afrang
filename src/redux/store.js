@@ -26,6 +26,7 @@ import supportBoxReducer from './slices/supportBoxSlice';
 import userReducer from './slices/userSlice';
 import productColorReducer from './slices/productColorSlice';
 import layoutProductsReducer from './slices/layoutProducts';
+import activeTabReducer from './slices/activeTab';
 
 const persistedState = {
   user: {
@@ -41,10 +42,10 @@ const rootReducer = combineReducers({
   socialNetworks: socialNetworksReducer,
   supportBox: supportBoxReducer,
   settings: settingsReducer,
-  cart: cartReducer,
   payment: paymentReducer,
   address: addressReducer,
   blog: blogReducer,
+  cart: cartReducer,
   shipping: shippingReducer,
   legalId: legalIdReducer,
   paymentWay: paymentWayReducer,
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   compare: compareReducer,
   productColor: productColorReducer,
   layoutProducts: layoutProductsReducer,
+  activeTab: activeTabReducer,
 });
 
 const persistConfig = {

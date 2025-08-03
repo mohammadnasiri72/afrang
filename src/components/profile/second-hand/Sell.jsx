@@ -441,7 +441,7 @@ function Sell() {
                       }}
                       onChange={(date) => {
                         setPurchaseDate(
-                          date?.isValid ? date.format("YYYY-MM-DD") : null
+                          date?.isValid ? date.format("YYYY/MM/DD") : null
                         );
                       }}
                       format="YYYY/MM/DD"
