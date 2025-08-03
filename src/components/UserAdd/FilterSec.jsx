@@ -26,9 +26,17 @@ function FilterSec() {
 
   useEffect(() => {
     if (categoryChecked.length > 0) {
-      categoryChecked.map((cat)=>{
-        params.set("category", cat.id);
-      })
+      // حذف تمام پارامترهای category قبلی
+      params.delete("category");
+      // اضافه کردن هر category ID به عنوان پارامتر جداگانه
+      categoryChecked.forEach((cat) => {
+        params.append("category", cat.id);
+      });
+      params.delete("page");
+      router.push(`${window.location.pathname}?${params.toString()}`);
+    } else {
+      // اگر هیچ category انتخاب نشده، پارامتر category را حذف کن
+      params.delete("category");
       params.delete("page");
       router.push(`${window.location.pathname}?${params.toString()}`);
     }
