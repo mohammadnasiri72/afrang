@@ -17,6 +17,7 @@ function FilterSec() {
   const [openCollapsePrice, setOpenCollapsePrice] = useState(true);
   const [openCollapseCategory, setOpenCollapseCategory] = useState(true);
   const [categoryChecked, setCategoryChecked] = useState([]);
+  const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
@@ -27,22 +28,25 @@ function FilterSec() {
 
 
   useEffect(() => {
-    if (categoryChecked.length > 0) {
-      // حذف تمام پارامترهای category قبلی
-      params.delete("category");
-      // اضافه کردن هر category ID به عنوان پارامتر جداگانه
-      categoryChecked.forEach((cat) => {
-        params.append("category", cat.id);
-      });
-      params.delete("page");
-      router.push(`${window.location.pathname}?${params.toString()}`);
-    } else {
-      // اگر هیچ category انتخاب نشده، پارامتر category را حذف کن
-      params.delete("category");
-      params.delete("page");
-      router.push(`${window.location.pathname}?${params.toString()}`);
+    // فقط بعد از مقداردهی اولیه، تغییرات categoryChecked را اعمال کن
+    if (isInitialized) {
+      if (categoryChecked.length > 0) {
+        // حذف تمام پارامترهای category قبلی
+        params.delete("category");
+        // اضافه کردن هر category ID به عنوان پارامتر جداگانه
+        categoryChecked.forEach((cat) => {
+          params.append("category", cat.id);
+        });
+        params.delete("page");
+        router.push(`${window.location.pathname}?${params.toString()}`);
+      } else {
+        // اگر هیچ category انتخاب نشده، پارامتر category را حذف کن
+        params.delete("category");
+        params.delete("page");
+        router.push(`${window.location.pathname}?${params.toString()}`);
+      }
     }
-  }, [categoryChecked]);
+  }, [categoryChecked, isInitialized]);
 
   useEffect(() => {
     if (price1 && price2) {
@@ -74,6 +78,7 @@ function FilterSec() {
         categoryParams.includes(cat.id.toString())
       );
       setCategoryChecked(initialCategories);
+      setIsInitialized(true); // علامت‌گذاری که مقداردهی اولیه انجام شده
     }
   }, [filterList, searchParams]);
 
