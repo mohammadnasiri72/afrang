@@ -22,7 +22,6 @@ function BoxTabDetailsProduct({ product }) {
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
 
-  console.log(modalData);
 
   const showModal = () => {
     setIsModalOpen(true);

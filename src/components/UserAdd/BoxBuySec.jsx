@@ -1,8 +1,5 @@
 "use client";
-import { getUserAdBuy } from "@/services/UserAd/UserAdServices";
-import { getImageUrl } from "@/utils/mainDomain";
 import { Pagination, Select } from "antd";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -30,34 +27,22 @@ function useIsMobile(breakpoint = 768) {
   return isMobile;
 }
 
-function BoxBuySec() {
-  const [loading, setLoading] = useState(true);
-  const [productList, setProductList] = useState([]);
-  console.log(productList);
+function BoxBuySec({productList , loading}) {
+ 
 
   const [viewMode, setViewMode] = useState("list");
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
-
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
-  const pageSize = searchParams.get("pageSize") || "20";
+  const pageSize = searchParams.get("pageSize") || "1";
   const price1 = searchParams.get("price1") || undefined;
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
 
-  const orginalData = {
-    LangCode: "fa",
-    CategoryIdArray:
-      categoryParams.length > 0 ? categoryParams.join(",") : undefined,
-    // IsActive: 1,
-    OrderBy: Number(orderBy),
-    // OrderOn: 1,
-    PageSize: Number(pageSize),
-    PageIndex: Number(pageIndex),
-  };
+ 
 
   const isMobile = useIsMobile();
 
@@ -69,53 +54,15 @@ function BoxBuySec() {
     }
   }, [isMobile]);
 
-  // تنظیمات Toast
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
-
-  const fetchProductsSec = async (data) => {
-    setLoading(true);
-    try {
-      const productsData = await getUserAdBuy(data);
-      if (productsData.type === "error") {
-        Toast.fire({
-          icon: "error",
-          title: productsData.message,
-        });
-        return;
-      }
-      setProductList(productsData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (price1 && price2) {
-      fetchProductsSec({ ...orginalData, Amount1: price1, Amount2: price2 });
-    }
-    if (!price1 && !price2) {
-      fetchProductsSec(orginalData);
-    }
-  }, [searchParams]);
-
-  // تابع تبدیل قیمت به فرمت قابل خواندن
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("fa-IR").format(price);
-  };
+  
+  
 
   // کامپوننت محصول برای حالت لیست
   const ProductListItem = ({ product }) => (
     <div className="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow">
+    <h3 className="text-lg font-bold text-[#d1182b] mb-3">{product.nickname}</h3>
       <div className="flex items-center space-x-4 space-x-reverse">
-        <div className="flex-shrink-0 px-3">
+        {/* <div className="flex-shrink-0 px-3">
           <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
             <svg
               className="w-8 h-8 text-gray-400"
@@ -131,14 +78,19 @@ function BoxBuySec() {
               />
             </svg>
           </div>
-        </div>
+        </div> */}
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-gray-900 mb-1">
             <span>{product.title}</span>
           </h3>
           <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
+          
         </div>
       </div>
+          <div className="flex items-start py-2 text-xs text-gray-600 gap-1">
+            <span className="text-black font-bold whitespace-nowrap">توضیحات :</span>
+            <p>{product.description}</p>
+          </div>
     </div>
   );
 

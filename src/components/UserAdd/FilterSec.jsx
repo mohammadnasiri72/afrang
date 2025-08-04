@@ -1,5 +1,8 @@
 "use client";
-import { getUserAdFilter, getUserAdFilter2 } from "@/services/UserAd/UserAdServices";
+import {
+  getUserAdFilter,
+  getUserAdFilter2,
+} from "@/services/UserAd/UserAdServices";
 import { Checkbox, Collapse, Slider } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -7,6 +10,17 @@ import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import CheckBoxCaterory from "./CheckBoxCaterory";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+
+ // تنظیمات Toast
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+  });
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
@@ -18,7 +32,6 @@ function FilterSec() {
   const [openCollapsePrice, setOpenCollapsePrice] = useState(true);
   const [openCollapseCategory, setOpenCollapseCategory] = useState(true);
   const [categoryChecked, setCategoryChecked] = useState([]);
-  const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
@@ -29,26 +42,7 @@ function FilterSec() {
 
   const { activeTab } = useSelector((state) => state.activeTab);
 
-  useEffect(() => {
-    // فقط بعد از مقداردهی اولیه، تغییرات categoryChecked را اعمال کن
-    if (isInitialized) {
-      if (categoryChecked.length > 0) {
-        // حذف تمام پارامترهای category قبلی
-        params.delete("category");
-        // اضافه کردن هر category ID به عنوان پارامتر جداگانه
-        categoryChecked.forEach((cat) => {
-          params.append("category", cat.id);
-        });
-        params.delete("page");
-        router.push(`${window.location.pathname}?${params.toString()}`);
-      } else {
-        // اگر هیچ category انتخاب نشده، پارامتر category را حذف کن
-        params.delete("category");
-        params.delete("page");
-        router.push(`${window.location.pathname}?${params.toString()}`);
-      }
-    }
-  }, [categoryChecked, isInitialized]);
+  
 
   useEffect(() => {
     if (price1 && price2) {
@@ -62,7 +56,19 @@ function FilterSec() {
   useEffect(() => {
     const fetchFilterData = async () => {
       try {
-        const filtersData = activeTab===1 ? await getUserAdFilter() : await getUserAdFilter2();
+        const filtersData =
+          activeTab === 1
+            ? await getUserAdFilter()
+            : activeTab === 2
+            ? await getUserAdFilter2()
+            : [];
+            if (filtersData?.type === "error") {
+        Toast.fire({
+          icon: "error",
+          title: productsData.message,
+        });
+        return;
+      }
         setFilterList(filtersData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -70,7 +76,7 @@ function FilterSec() {
       }
     };
     fetchFilterData();
-  }, []);
+  }, [activeTab]);
 
   // مقداردهی اولیه categoryChecked بر اساس پارامترهای URL
   useEffect(() => {
@@ -79,7 +85,6 @@ function FilterSec() {
         categoryParams.includes(cat.id.toString())
       );
       setCategoryChecked(initialCategories);
-      setIsInitialized(true); // علامت‌گذاری که مقداردهی اولیه انجام شده
     }
   }, [filterList, searchParams]);
 

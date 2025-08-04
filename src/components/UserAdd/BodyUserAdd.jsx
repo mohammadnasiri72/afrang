@@ -1,16 +1,84 @@
 "use client";
 
+import { setActiveTab } from "@/redux/slices/activeTab";
 import { Divider } from "antd";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaRecycle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import BoxBuySec from "./BoxBuySec";
 import BoxSellSec from "./BoxSellSec";
-import { useDispatch, useSelector } from "react-redux";
-import { setActiveTab } from "@/redux/slices/activeTab";
+import { getUserAdBuy, getUserAdSell } from "@/services/UserAd/UserAdServices";
+import Swal from "sweetalert2";
 
 function BodyUserAdd() {
+  const [productList, setProductList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { activeTab } = useSelector((state) => state.activeTab);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  const orderBy = searchParams.get("orderby") || "1";
+  const pageIndex = searchParams.get("page") || "1";
+  const pageSize = searchParams.get("pageSize") || "1";
+  const price1 = searchParams.get("price1") || undefined;
+  const price2 = searchParams.get("price2") || undefined;
+  const categoryParams = searchParams.getAll("category");
+
+  // تنظیمات Toast
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+  });
+
+  console.log(productList);
+
+  const orginalData = {
+    LangCode: "fa",
+    CategoryIdArray:
+      categoryParams.length > 0 ? categoryParams.join(",") : undefined,
+    ...(price1 && { price1: price1 }),
+    ...(price2 && { price2: price2 }),
+    // IsActive: 1,
+    OrderBy: Number(orderBy),
+    // OrderOn: 1,
+    PageSize: Number(pageSize),
+    PageIndex: Number(pageIndex),
+  };
+
+  const fetchProductsSec = async (data) => {
+    setLoading(true);
+    try {
+      const productsData =
+        activeTab === 1
+          ? await getUserAdSell(data)
+          : activeTab === 2
+          ? await getUserAdBuy(data)
+          : [];
+      if (productsData?.type === "error") {
+        Toast.fire({
+          icon: "error",
+          title: productsData.message,
+        });
+        return;
+      }
+      setProductList(productsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    setProductList([]);
+    fetchProductsSec(orginalData);
+  }, [searchParams , activeTab]);
+
 
 
   return (
@@ -24,7 +92,10 @@ function BodyUserAdd() {
         <div className="flex flex-wrap items-center ">
           <div className="p-3 sm:w-1/2 lg:w-1/4 w-full relative">
             <div
-              onClick={() => dispatch(setActiveTab(1))}
+              onClick={() => {
+                dispatch(setActiveTab(1));
+                router.replace("/used");
+              }}
               className={` cursor-pointer text-white rounded-lg  p-3 flex flex-col items-center justify-start gap-2 relative z-50 duration-300 ${
                 activeTab === 1 ? "bg-amber-500" : "bg-amber-400"
               }`}
@@ -48,7 +119,10 @@ function BodyUserAdd() {
 
           <div className="p-3 sm:w-1/2 lg:w-1/4 w-full relative">
             <div
-              onClick={() => dispatch(setActiveTab(2))}
+              onClick={() => {
+                dispatch(setActiveTab(2));
+                router.replace("/used");
+              }}
               className={` cursor-pointer text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 ${
                 activeTab === 2 ? "bg-teal-500" : "bg-teal-400"
               }`}
@@ -71,8 +145,12 @@ function BodyUserAdd() {
           </div>
         </div>
         <Divider style={{ marginBottom: 0, paddingBottom: 0 }} />
-        {activeTab === 1 && <BoxSellSec />}
-        {activeTab === 2 && <BoxBuySec />}
+        {activeTab === 1 && (
+          <BoxSellSec productList={productList} loading={loading} />
+        )}
+        {activeTab === 2 && (
+          <BoxBuySec productList={productList} loading={loading} />
+        )}
       </div>
     </>
   );
