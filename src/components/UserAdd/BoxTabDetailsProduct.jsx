@@ -1,11 +1,23 @@
 "use client";
 
 import { getItemById } from "@/services/Item/item";
+import { getUserAdContact } from "@/services/UserAd/UserAdServices";
 import { Box, Tab, Tabs } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Alert, Button, Modal } from "antd";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+
+// تنظیمات Toast
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 const theme = createTheme({
   typography: {
@@ -18,17 +30,37 @@ function BoxTabDetailsProduct({ product }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingConfirm, setLoadingConfirm] = useState(false);
+  const [dataContact, setDataContact] = useState({});
+
+  console.log(dataContact);
 
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
-
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const handleOk = async () => {
+  
+    setLoadingConfirm(true);
+    try {
+      const response = await getUserAdContact(product.id);
+      if (response.type === "error") {
+        Toast.fire({
+          icon: "error",
+          title: response?.message,
+        });
+        return;
+      }
+      setDataContact(response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoadingConfirm(false);
+      setIsModalOpen(false);
+    }
   };
 
   const handleCancel = () => {
@@ -80,44 +112,66 @@ function BoxTabDetailsProduct({ product }) {
             </Box>
             <div>
               {valTab === 0 && (
-                <div className="pt-4">
-                  <Button type="primary" onClick={showModal}>
-                    نمایش اطلاعات تماس
-                  </Button>
-                  <Modal
-                    loading={loading}
-                    footer={
-                      <div className="flex justify-start gap-2 border-t border-[#3335] pt-3">
-                        <Button
-                          className="!bg-green-600 duration-300 hover:!bg-green-700 !font-semibold"
-                          type="primary"
-                          onClick={handleOk}
-                        >
-                          مورد تایید است
-                        </Button>
-                        <Button type="primary" onClick={handleCancel}>
-                          بستن
-                        </Button>
-                      </div>
-                    }
-                    title={
-                      <span className="font-semibold text-lg">
-                        {modalData?.title}
-                      </span>
-                    }
-                    closable={{ "aria-label": "Custom Close Button" }}
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                  >
-                    <div className="overflow-auto max-h-[50vh] p-2">
-                      <div
-                        className="text-gray-700 leading-relaxed prose prose-sm max-w-none !text-justify"
-                        dangerouslySetInnerHTML={renderHTML(modalData.body)}
-                      />
+                <>
+                  {!dataContact.contactInfoType && (
+                    <div className="pt-4">
+                      <Button type="primary" onClick={showModal}>
+                        نمایش اطلاعات تماس
+                      </Button>
+                      <Modal
+                        loading={loading}
+                        footer={
+                          <div className="flex justify-start gap-2 border-t border-[#3335] pt-3">
+                            <Button
+                              className="!bg-green-600 duration-300 hover:!bg-green-700 !font-semibold"
+                              type="primary"
+                              onClick={handleOk}
+                              loading={loadingConfirm}
+                              disabled={loadingConfirm}
+                            >
+                              مورد تایید است
+                            </Button>
+                            <Button type="primary" onClick={handleCancel}>
+                              بستن
+                            </Button>
+                          </div>
+                        }
+                        title={
+                          <span className="font-semibold text-lg">
+                            {modalData?.title}
+                          </span>
+                        }
+                        closable={{ "aria-label": "Custom Close Button" }}
+                        open={isModalOpen}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                      >
+                        <div className="overflow-auto max-h-[50vh] p-2">
+                          <div
+                            className="text-gray-700 leading-relaxed prose prose-sm max-w-none !text-justify"
+                            dangerouslySetInnerHTML={renderHTML(modalData.body)}
+                          />
+                        </div>
+                      </Modal>
                     </div>
-                  </Modal>
-                </div>
+                  )}
+                  {dataContact.contactInfoType && (
+                    <div className="flex flex-col gap-2 pt-4 text-lg font-bold">
+                      <div className="flex items-center gap-2">
+                        <span>شماره تماس :</span>
+                        <span>
+                          {dataContact.mobile ? dataContact.mobile : "ثبت نشده"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span>ایمیل :</span>
+                        <span>
+                          {dataContact.email ? dataContact.email : "ثبت نشده"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
               {valTab === 1 && (
                 <div className="bg-gray-50 p-4 rounded-lg">

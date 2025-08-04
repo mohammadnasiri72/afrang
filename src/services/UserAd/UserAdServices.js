@@ -62,3 +62,13 @@ export const getUserAdBuy = async (data) => {
     };
   }
 };
+
+
+export const getUserAdContact = async (id) => {
+    try {
+        const response = await axios.get(`${mainDomain}/api/UserAd/Contact/${id}`);
+        return response.data;
+    } catch (error) {
+        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+    }
+};

@@ -204,7 +204,7 @@ function FilterSec() {
             </span>
           </div>
           <Collapse in={openCollapseCategory} timeout="auto" unmountOnExit>
-            <div className="flex flex-col items-start ">
+            <div className="flex flex-col items-start h-64 overflow-auto">
               {filterList?.categories?.length > 0 &&
                 filterList.categories.map((item) => (
                   <CheckBoxCaterory

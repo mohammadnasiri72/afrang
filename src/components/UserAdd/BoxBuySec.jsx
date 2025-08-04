@@ -1,8 +1,10 @@
 "use client";
-import { Pagination, Select } from "antd";
+import { getUserAdContact } from "@/services/UserAd/UserAdServices";
+import { Button, Pagination, Select } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import ShowInfoContact from "./ShowInfoContact";
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
@@ -27,9 +29,7 @@ function useIsMobile(breakpoint = 768) {
   return isMobile;
 }
 
-function BoxBuySec({productList , loading}) {
- 
-
+function BoxBuySec({ productList, loading }) {
   const [viewMode, setViewMode] = useState("list");
 
   const router = useRouter();
@@ -38,11 +38,6 @@ function BoxBuySec({productList , loading}) {
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
   const pageSize = searchParams.get("pageSize") || "1";
-  const price1 = searchParams.get("price1") || undefined;
-  const price2 = searchParams.get("price2") || undefined;
-  const categoryParams = searchParams.getAll("category");
-
- 
 
   const isMobile = useIsMobile();
 
@@ -54,13 +49,12 @@ function BoxBuySec({productList , loading}) {
     }
   }, [isMobile]);
 
-  
-  
-
   // کامپوننت محصول برای حالت لیست
   const ProductListItem = ({ product }) => (
     <div className="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow">
-    <h3 className="text-lg font-bold text-[#d1182b] mb-3">{product.nickname}</h3>
+      <h3 className="text-lg font-bold text-[#d1182b] mb-3">
+        {product.nickname}
+      </h3>
       <div className="flex items-center space-x-4 space-x-reverse">
         {/* <div className="flex-shrink-0 px-3">
           <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -84,41 +78,41 @@ function BoxBuySec({productList , loading}) {
             <span>{product.title}</span>
           </h3>
           <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
-          
         </div>
       </div>
-          <div className="flex items-start py-2 text-xs text-gray-600 gap-1">
-            <span className="text-black font-bold whitespace-nowrap">توضیحات :</span>
-            <p>{product.description}</p>
-          </div>
+      <div className="flex items-start py-2 text-xs text-gray-600 gap-1">
+        <span className="text-black font-bold whitespace-nowrap">
+          توضیحات :
+        </span>
+        <p className="text-justify">
+          {product.description ? product.description : "توضیحاتی ثبت نشده"}
+        </p>
+      </div>
+      <div className="mt-2">
+        <ShowInfoContact id={product.id} />
+      </div>
     </div>
   );
 
   // کامپوننت محصول برای حالت گرید
   const ProductGridItem = ({ product }) => (
     <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="mb-3">
-        <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <svg
-            className="w-12 h-12 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-        </div>
-      </div>
+      <h3 className="text-lg font-bold text-[#d1182b] mb-3">
+        {product.nickname}
+      </h3>
       <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
         <span>{product.title}</span>
       </h3>
       <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
-     
+      <div className="flex flex-col items-start py-2 text-xs text-gray-600 gap-1">
+        <span className="text-black font-bold whitespace-nowrap">
+          توضیحات :
+        </span>
+        <p className="text-justify">
+          {product.description ? product.description : "توضیحاتی ثبت نشده"}
+        </p>
+      </div>
+      <ShowInfoContact id={product.id} />
     </div>
   );
 

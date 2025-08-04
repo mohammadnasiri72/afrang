@@ -38,6 +38,12 @@ function Buy() {
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
+  useEffect(()=>{
+    if (stepPage ===0) {
+      resetState()
+    }
+  },[stepPage])
+
 
   useEffect(() => {
     if (user?.displayName && idEdit === 0) {
@@ -51,7 +57,6 @@ function Buy() {
       setSelectedCategory(productEdit.categoryId);
       setProductName(productEdit.title);
       setProductType(productEdit.type);
-      setContactInfoType(0);
       setNickname(productEdit.nickname);
       setContactInfoType(productEdit.contactInfo);
     }
@@ -105,6 +110,7 @@ function Buy() {
     setProductEdit({});
     setIdEdit(0);
     setContactInfoType(0);
+    setNickname(user?.displayName);
   };
   const fetchCategories = async () => {
     setLoading(true);
@@ -361,6 +367,7 @@ function Buy() {
                 <div className="SegmentedBuy mb-6 overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
                   <Segmented
                     className="w-full overflow-auto"
+                    value={contactInfoType}
                     onChange={(value) => {
                       setContactInfoType(value);
                     }}

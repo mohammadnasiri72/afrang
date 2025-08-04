@@ -77,9 +77,7 @@ function BodyUserAdd() {
   useEffect(() => {
     setProductList([]);
     fetchProductsSec(orginalData);
-  }, [searchParams , activeTab]);
-
-
+  }, [searchParams]);
 
   return (
     <>
@@ -94,7 +92,10 @@ function BodyUserAdd() {
             <div
               onClick={() => {
                 dispatch(setActiveTab(1));
-                router.replace("/used");
+                if (activeTab !== 1) {
+                  setLoading(true);
+                }
+                router.replace("/used?tab=1");
               }}
               className={` cursor-pointer text-white rounded-lg  p-3 flex flex-col items-center justify-start gap-2 relative z-50 duration-300 ${
                 activeTab === 1 ? "bg-amber-500" : "bg-amber-400"
@@ -121,7 +122,10 @@ function BodyUserAdd() {
             <div
               onClick={() => {
                 dispatch(setActiveTab(2));
-                router.replace("/used");
+                if (activeTab !== 2) {
+                  setLoading(true);
+                }
+                router.replace("/used?tab=2");
               }}
               className={` cursor-pointer text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 ${
                 activeTab === 2 ? "bg-teal-500" : "bg-teal-400"

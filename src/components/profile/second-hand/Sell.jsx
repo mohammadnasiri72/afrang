@@ -13,10 +13,12 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import {
   Alert,
+  Avatar,
   Button,
   Input,
   message,
   Radio,
+  Segmented,
   Select,
   Spin,
   Tooltip,
@@ -25,11 +27,12 @@ import {
 import { useEffect, useState } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import { FaStar, FaTimes, FaTrash } from "react-icons/fa";
+import { FaMobile, FaStar, FaTimes, FaTrash, FaVoicemail } from "react-icons/fa";
 import DatePicker from "react-multi-date-picker";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductSec from "./ListProductSec";
+import { MdEmail } from "react-icons/md";
 const { TextArea } = Input;
 
 function Sell() {
@@ -61,9 +64,16 @@ function Sell() {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [productsSec, setProductsSec] = useState([]);
   const [productEdit, setProductEdit] = useState({});
+  const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
- 
+   useEffect(()=>{
+      if (stepPage ===0) {
+        resetState()
+      }
+    },[stepPage])
+
+  
 
   useEffect(() => {
     if (productEdit?.id) {
@@ -85,11 +95,12 @@ function Sell() {
       setShutterCount(productEdit.usageCount);
       setSuggestedPrice(productEdit.price.toLocaleString());
       setPurchaseDate(productEdit.purchaseDate);
+      setContactInfoType(productEdit.contactInfo);
       // مقداردهی اولیه عکس‌ها در حالت ویرایش
       if (Array.isArray(productEdit.imageList)) {
         const mappedImages = productEdit.imageList.map((imgUrl, idx) => ({
           uid: `product-edit-img-${idx}`,
-          name: imgUrl.split('/').pop() || `image-${idx}`,
+          name: imgUrl.split("/").pop() || `image-${idx}`,
           status: "done",
           url: imgUrl,
           thumbUrl: getImageUrl(imgUrl),
@@ -167,8 +178,9 @@ function Sell() {
     setInsuranceMonths(null);
     setErrors({});
     setFileList([]);
-    setProductEdit({})
-    setIdEdit(0)
+    setProductEdit({});
+    setIdEdit(0);
+    setContactInfoType(0);
   };
 
   const fetchCategories = async () => {
@@ -228,6 +240,7 @@ function Sell() {
         : 0,
       appearance,
       body,
+      contactInfo: contactInfoType,
     };
 
     try {
@@ -243,10 +256,10 @@ function Sell() {
       }
       Toast.fire({
         icon: "success",
-        title: `آگهی شما با موفقیت ${idEdit ? 'ویرایش' : 'ثبت'} شد`,
+        title: `آگهی شما با موفقیت ${idEdit ? "ویرایش" : "ثبت"} شد`,
       });
       setFlag((e) => !e);
-      setStepPage(0)
+      setStepPage(0);
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -273,11 +286,11 @@ function Sell() {
         prevList.map((item) =>
           item.uid === file.uid
             ? {
-              ...item,
-              uploadedData: uploadResult,
-              url: uploadResult.imageUrl,
-              thumbUrl: getImageUrl(uploadResult.imageUrl),
-            }
+                ...item,
+                uploadedData: uploadResult,
+                url: uploadResult.imageUrl,
+                thumbUrl: getImageUrl(uploadResult.imageUrl),
+              }
             : item
         )
       );
@@ -389,8 +402,9 @@ function Sell() {
                 {/* دسته بندی محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${errors.selectedCategory ? " text-red-important" : ""
-                      }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${
+                      errors.selectedCategory ? " text-red-important" : ""
+                    }`}
                   >
                     دسته‌بندی کالا <span className="text-red-500">*</span>
                   </label>
@@ -464,8 +478,9 @@ function Sell() {
                 {/* عنوان محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${errors.productName ? " text-red-important" : ""
-                      }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${
+                      errors.productName ? " text-red-important" : ""
+                    }`}
                   >
                     نام محصول <span className="text-red-500">*</span>
                   </label>
@@ -478,8 +493,9 @@ function Sell() {
                       }
                     }}
                     placeholder="نام محصول را وارد کنید"
-                    className={`w-full${errors.productName ? " border-red-important" : ""
-                      }`}
+                    className={`w-full${
+                      errors.productName ? " border-red-important" : ""
+                    }`}
                   />
                 </div>
                 {/* نوع محصول */}
@@ -517,8 +533,9 @@ function Sell() {
                 {/* شماره سریال محصول */}
                 <div className="mb-6">
                   <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${errors.serialNumber ? " text-red-important" : ""
-                      }`}
+                    className={`block text-gray-700 text-sm font-bold mb-2${
+                      errors.serialNumber ? " text-red-important" : ""
+                    }`}
                   >
                     سریال محصول <span className="text-red-500">*</span>
                   </label>
@@ -531,8 +548,9 @@ function Sell() {
                       }
                     }}
                     placeholder="سریال محصول را وارد کنید"
-                    className={`w-full${errors.serialNumber ? " border-red-important" : ""
-                      }`}
+                    className={`w-full${
+                      errors.serialNumber ? " border-red-important" : ""
+                    }`}
                   />
                 </div>
                 {/* کارکرد شاتر */}
@@ -570,6 +588,83 @@ function Sell() {
                     placeholder="توضیحی درباره وضعیت ظاهری محصول بنویسید"
                     autoSize={{ minRows: 4, maxRows: 8 }}
                     className="w-full"
+                  />
+                </div>
+                {/* اطلاعات تماس */}
+                <div className="mb-6 sm:hidden block">
+                  <label
+                    className={`block text-gray-700 text-sm font-bold mb-2`}
+                  >
+                    اطلاعات تماس <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    value={contactInfoType}
+                    onChange={(value) => {
+                      setContactInfoType(value);
+                    }}
+                    className="w-full"
+                    options={[
+                      { value: 0, label: "نمایش ایمیل و موبایل" },
+                      { value: 1, label: "فقط نمایش موبایل" },
+                      { value: 2, label: "فقط نمایش ایمیل" },
+                    ]}
+                  />
+                </div>
+                <div className="SegmentedBuy mb-6 overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
+                  <Segmented
+                    className="w-full overflow-auto"
+                    value={contactInfoType}
+                    onChange={(value) => {
+                      setContactInfoType(value);
+                    }}
+                    options={[
+                      {
+                        label: (
+                          <div style={{ padding: 4 }}>
+                            <Avatar
+                              style={{
+                                backgroundColor:
+                                  contactInfoType === 0 ? "#d1182b" : "#3338",
+                              }}
+                              icon={<FaVoicemail />}
+                            />
+                            <div className="pt-2">نمایش ایمیل و موبایل</div>
+                          </div>
+                        ),
+                        value: 0,
+                      },
+                      {
+                        label: (
+                          <div style={{ padding: 4 }}>
+                            <Avatar
+                              style={{
+                                backgroundColor:
+                                  contactInfoType === 1 ? "#d1182b" : "#3338",
+                              }}
+                              icon={<FaMobile />}
+                            />
+
+                            <div className="pt-2">نمایش موبایل</div>
+                          </div>
+                        ),
+                        value: 1,
+                      },
+                      {
+                        label: (
+                          <div style={{ padding: 4 }}>
+                            <Avatar
+                              style={{
+                                backgroundColor:
+                                  contactInfoType === 2 ? "#d1182b" : "#3338",
+                              }}
+                              icon={<MdEmail />}
+                            />
+                            <div className="pt-2">نمایش ایمیل</div>
+                          </div>
+                        ),
+                        value: 2,
+                      },
+                    ]}
                   />
                 </div>
                 {/* وضعیت گارانتی */}
@@ -697,15 +792,16 @@ function Sell() {
                       <div
                         key={file.uid}
                         onClick={() => openGallery(idx)}
-                        className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${mainImageIdx === idx
-                          ? "ring-2 ring-[#d1182b] border-[#d1182b]"
-                          : "border-gray-200"
-                          }`}
+                        className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${
+                          mainImageIdx === idx
+                            ? "ring-2 ring-[#d1182b] border-[#d1182b]"
+                            : "border-gray-200"
+                        }`}
                         style={{ width: 110, height: 110 }}
                       >
                         {file.thumbUrl ||
-                          file.url ||
-                          (file.uploadedData && file.uploadedData.imageUrl) ? (
+                        file.url ||
+                        (file.uploadedData && file.uploadedData.imageUrl) ? (
                           <img
                             src={
                               file.thumbUrl ||
@@ -750,10 +846,11 @@ function Sell() {
                               e.stopPropagation();
                               handleSetMainImage(idx);
                             }}
-                            className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${mainImageIdx === idx
-                              ? "text-yellow-400"
-                              : "text-[#333] hover:text-yellow-400"
-                              }`}
+                            className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${
+                              mainImageIdx === idx
+                                ? "text-yellow-400"
+                                : "text-[#333] hover:text-yellow-400"
+                            }`}
                           >
                             <FaStar size={16} />
                           </button>
@@ -797,8 +894,8 @@ function Sell() {
                   }
                   .ant-select-selector {
                     border: ${errors.selectedCategory
-                    ? "1px solid red !important"
-                    : ""};
+                      ? "1px solid red !important"
+                      : ""};
                   }
 
                   .ant-spin-dot-item {
@@ -828,6 +925,38 @@ function Sell() {
                     border: 2px solid #d1182b !important;
                     box-shadow: 0 0 0 2px #d1182b33;
                   }
+                     .SegmentedBuy .ant-segmented {
+                    background-color: #ebebeb;
+                  }
+                  .SegmentedBuy .ant-segmented-item {
+                    width: 100%;
+                    font-weight: 600 !important;
+                    font-size: 14px;
+                    transition: 0.3s;
+                  }
+                  .SegmentedBuy .ant-segmented-item-selected {
+                    background-color: #fff !important;
+                    color: #d1182b !important;
+                    border-radius: 6px;
+                    font-weight: 900 !important;
+                    font-size: 16px !important;
+                    transition: 0.3s;
+                  }
+                  .SegmentedBuy .ant-segmented-item-selected:hover {
+                    color: #d1182b !important;
+                  }
+                  .SegmentedBuy .ant-segmented-thumb {
+                    background-color: #fff !important;
+                    font-weight: 900 !important;
+                  }
+                  /* حالت جمع و جورتر در sticky */
+                  .SegmentedBuy.sticky .ant-segmented-item {
+                    font-size: 12px;
+                  }
+                  .SegmentedBuy.sticky .ant-segmented-item-selected {
+                    font-size: 13px !important;
+                    border-radius: 4px;
+                  }
                 `}</style>
                 <div className="flex justify-end">
                   <Button
@@ -837,9 +966,7 @@ function Sell() {
                     className="bg-[#d1182b] hover:bg-[#b91626]"
                     onClick={handleSubmit}
                   >
-                    {
-                      idEdit ? 'ویرایش' : 'ثبت درخواست'
-                    }
+                    {idEdit ? "ویرایش" : "ثبت درخواست"}
                   </Button>
                 </div>
               </div>
