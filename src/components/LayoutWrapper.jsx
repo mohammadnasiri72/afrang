@@ -43,7 +43,7 @@ export default function LayoutWrapper({
       setOpenModal(true);
       
     }, 3000);
-  }, []);
+  }, [pathname]);
 
   // تابع نمایش HTML content
   const renderHTML = (htmlContent) => {

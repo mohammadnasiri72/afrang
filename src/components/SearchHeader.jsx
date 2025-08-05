@@ -87,7 +87,7 @@ const SearchHeader = () => {
     };
 
     return (
-        <div className="relative lg:w-3/5 w-4/5" ref={searchRef}>
+        <div className="relative w-full" ref={searchRef}>
             <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 w-full">
                 <IoSearchSharp className="text-2xl cursor-pointer" />
                 <input
