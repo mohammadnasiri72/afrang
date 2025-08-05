@@ -3,24 +3,25 @@ import {
   getUserAdFilter,
   getUserAdFilter2,
 } from "@/services/UserAd/UserAdServices";
-import { Checkbox, Collapse, Slider } from "@mui/material";
+import { Collapse, Slider } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Skeleton } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import CheckBoxCaterory from "./CheckBoxCaterory";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import CheckBoxCaterory from "./CheckBoxCaterory";
 
- // تنظیمات Toast
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
+// تنظیمات Toast
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
@@ -29,6 +30,7 @@ const theme = createTheme({
 function FilterSec() {
   const [valuePrice, setValuePrice] = useState([0, 1000000000]);
   const [filterList, setFilterList] = useState({});
+  const [loading, setLoading] = useState(false);
   const [openCollapsePrice, setOpenCollapsePrice] = useState(true);
   const [openCollapseCategory, setOpenCollapseCategory] = useState(true);
   const [categoryChecked, setCategoryChecked] = useState([]);
@@ -42,8 +44,6 @@ function FilterSec() {
 
   const { activeTab } = useSelector((state) => state.activeTab);
 
-  
-
   useEffect(() => {
     if (price1 && price2) {
       setValuePrice([price1, price2]);
@@ -55,6 +55,8 @@ function FilterSec() {
 
   useEffect(() => {
     const fetchFilterData = async () => {
+      setFilterList([]);
+      setLoading(true);
       try {
         const filtersData =
           activeTab === 1
@@ -62,17 +64,18 @@ function FilterSec() {
             : activeTab === 2
             ? await getUserAdFilter2()
             : [];
-            if (filtersData?.type === "error") {
-        Toast.fire({
-          icon: "error",
-          title: productsData.message,
-        });
-        return;
-      }
+        if (filtersData?.type === "error") {
+          Toast.fire({
+            icon: "error",
+            title: productsData.message,
+          });
+          return;
+        }
         setFilterList(filtersData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
+        setLoading(false);
       }
     };
     fetchFilterData();
@@ -204,17 +207,29 @@ function FilterSec() {
             </span>
           </div>
           <Collapse in={openCollapseCategory} timeout="auto" unmountOnExit>
-            <div className="flex flex-col items-start h-64 overflow-auto">
-              {filterList?.categories?.length > 0 &&
-                filterList.categories.map((item) => (
-                  <CheckBoxCaterory
-                    key={item.id}
-                    category={item}
-                    categoryChecked={categoryChecked}
-                    setCategoryChecked={setCategoryChecked}
-                  />
-                ))}
-            </div>
+            {!loading && (
+              <div className="flex flex-col items-start h-64 overflow-auto">
+                {filterList?.categories?.length > 0 &&
+                  filterList.categories.map((item) => (
+                    <CheckBoxCaterory
+                      key={item.id}
+                      category={item}
+                      categoryChecked={categoryChecked}
+                      setCategoryChecked={setCategoryChecked}
+                    />
+                  ))}
+              </div>
+            )}
+            {loading && (
+              <div className="flex flex-col gap-2">
+                <Skeleton.Input className="!w-full" />
+                <Skeleton.Input className="!w-full" />
+                <Skeleton.Input className="!w-full" />
+                <Skeleton.Input className="!w-full" />
+                <Skeleton.Input className="!w-full" />
+                <Skeleton.Input className="!w-full" />
+              </div>
+            )}
           </Collapse>
         </div>
       </div>

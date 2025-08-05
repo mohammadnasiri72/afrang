@@ -1,51 +1,60 @@
 "use client";
 
-import React from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { useSelector } from "react-redux";
 
-const SubHeaderSkeleton = () => {
-  return (
-    <div className="marquee flex items-center py-3 w-full bg-teal-500 text-white text-sm">
-      <div className="flex items-center gap-4 animate-pulse">
-        {[...Array(3)].map((_, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <div className="h-4 bg-white/30 rounded w-32" />
-            <div className="h-4 bg-white/30 rounded w-48" />
-            <div className="h-4 bg-white/30 rounded w-40" />
-            <div className="h-4 bg-white/30 rounded w-36" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 export default function SubHeader() {
-  const { settings, loading } = useSelector((state) => state.settings);
+  const popupsList = useSelector((state) => state.popups.popupsList);
+  const [dataSubHeader, setDataSubHeader] = useState({});
+  const pathname = usePathname();
+  
+  // تابع نمایش HTML content
+  const renderHTML = (htmlContent) => {
+    return { __html: htmlContent };
+  };
 
-  if (loading) {
-    return <SubHeaderSkeleton />;
-  }
+  useEffect(() => {
+    if (popupsList.length > 0) {
+      setDataSubHeader(popupsList.find((e) => e.category === "popup_header"));
+    }
+  }, [popupsList]);
 
   return (
     <>
-    <div className="z-[1200] relative">
-
-      {
-        settings?.find((item) => item.propertyKey === "site_marquee")
-          ?.value &&
-        <div
-          className="marquee flex items-center py-3 w-full bg-teal-500 text-white text-sm"
-          style={{ direction: "ltr" }}
-        >
-          <Marquee speed={50} gradient={false} direction="right">
-            {settings.find((item) => item.propertyKey === "site_marquee")
-              ?.value}
-          </Marquee>
+      {(dataSubHeader.showInPage === "all" ||
+        (dataSubHeader.showInPage === "main" && pathname === "/")) && (
+        <div className="z-[1200] relative">
+          {dataSubHeader.id && (
+            <div
+              className={`marquee flex items-center py-3 w-full text-white text-sm`}
+              style={{
+                direction: "ltr",
+                backgroundColor: dataSubHeader.backgroundColor,
+              }}
+            >
+              <Marquee speed={50} gradient={false} direction="right">
+                <div style={{
+                  color:dataSubHeader.color
+                }}
+                  className="sm:block hidden"
+                  dangerouslySetInnerHTML={renderHTML(
+                    dataSubHeader.desktopBody
+                  )}
+                />
+                <div style={{
+                  color:dataSubHeader.color
+                }}
+                  className="sm:hidden block"
+                  dangerouslySetInnerHTML={renderHTML(dataSubHeader.mobileBody)}
+                />
+              </Marquee>
+            </div>
+          )}
         </div>
-      }
-    </div>
+      )}
+     
     </>
   );
 }

@@ -27,6 +27,7 @@ import userReducer from './slices/userSlice';
 import productColorReducer from './slices/productColorSlice';
 import layoutProductsReducer from './slices/layoutProducts';
 import activeTabReducer from './slices/activeTab';
+import popupsReducer from './slices/popupsSlice';
 
 const persistedState = {
   user: {
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
   productColor: productColorReducer,
   layoutProducts: layoutProductsReducer,
   activeTab: activeTabReducer,
+  popups: popupsReducer,
 });
 
 const persistConfig = {

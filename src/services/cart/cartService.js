@@ -151,3 +151,26 @@ export const deleteCartItem = async (cartItemId, userId) => {
     });
   }
 };
+export const deleteCartItemAll = async ( userId) => {
+  try {
+    const response = await axios.post(
+      `${mainDomain}/api/Cart/Clear/${userId}`
+    );
+    Toast.fire({
+      icon: "success",
+      text: "محصولات از سبد خرید حذف شدند",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      text: err.response?.data ? err.response?.data : "خطای شبکه",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+  }
+};

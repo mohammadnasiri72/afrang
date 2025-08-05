@@ -818,11 +818,17 @@ th {
   z-index: 109999 !important;
 }
 
+.used-icon-thumb.icon4 span {
+  background-position: -158px 0;
+}
 .used-icon-thumb.icon3 span {
   background-position: -105px 0;
 }
 .used-icon-thumb.icon2 span {
   background-position: -52px 0;
+}
+.used-icon-thumb.icon1 span {
+  background-position: 0 0;
 }
 .used-icon-thumb span {
   background-image: url('./../../public/images/used_icons.png');

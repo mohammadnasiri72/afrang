@@ -32,18 +32,13 @@ function useIsMobile(breakpoint = 768) {
 function BoxSellSec({ productList, loading }) {
   const [viewMode, setViewMode] = useState("list");
 
-  
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
-  const pageSize = searchParams.get("pageSize") || "1";
-  const categoryParams = searchParams.getAll("category");
-
-  
+  const pageSize = searchParams.get("pageSize") || "20";
 
   const isMobile = useIsMobile();
 
@@ -54,8 +49,6 @@ function BoxSellSec({ productList, loading }) {
       setViewMode("list");
     }
   }, [isMobile]);
-
- 
 
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
@@ -68,12 +61,14 @@ function BoxSellSec({ productList, loading }) {
       <div className="flex items-center space-x-4 space-x-reverse">
         <div className="flex-shrink-0 px-3">
           <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-            {product.image ? (
-              <img
-                src={getImageUrl(product.image)}
-                alt={product.title}
-                className="w-full h-full object-cover rounded-lg"
-              />
+            {product.image && product.url ? (
+              <Link href={product.url} className="w-full h-full">
+                <img
+                  src={getImageUrl(product.image)}
+                  alt={product.title}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </Link>
             ) : (
               <svg
                 className="w-8 h-8 text-gray-400"
@@ -129,12 +124,14 @@ function BoxSellSec({ productList, loading }) {
     <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="mb-3">
         <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          {product.image ? (
-            <img
-              src={getImageUrl(product.image)}
-              alt={product.title}
-              className="w-full h-full object-cover rounded-lg"
-            />
+          {product.image && product.url ? (
+            <Link href={product.url} className="w-full h-full">
+              <img
+                src={getImageUrl(product.image)}
+                alt={product.title}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </Link>
           ) : (
             <svg
               className="w-12 h-12 text-gray-400"
