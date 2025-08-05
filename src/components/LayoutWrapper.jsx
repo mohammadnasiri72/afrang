@@ -118,14 +118,14 @@ export default function LayoutWrapper({
             }}
             keepMounted
             sx={{
-              zIndex: 1500,
+              zIndex: 15000,
               "& .MuiPaper-root": {
                 backgroundColor: dataPopup.backgroundColor,
                 color: dataPopup.color,
               },
             }}
             open={openModal}
-            onClose={handleClose}
+            // onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="توضیحات popup"
           >

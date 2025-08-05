@@ -3,9 +3,8 @@
 import { getUserAdBuy, getUserAdSell } from "@/services/UserAd/UserAdServices";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Input, Spin } from "antd";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { useSelector } from "react-redux";
@@ -32,9 +31,7 @@ function SearchProductSec() {
   const boxResultsSearch = useRef(null);
   const timeoutRef = useRef(null);
 
-  console.log(results);
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
