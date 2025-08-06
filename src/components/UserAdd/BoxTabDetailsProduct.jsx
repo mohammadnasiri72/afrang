@@ -33,7 +33,6 @@ function BoxTabDetailsProduct({ product }) {
   const [loadingConfirm, setLoadingConfirm] = useState(false);
   const [dataContact, setDataContact] = useState({});
 
-  console.log(dataContact);
 
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;

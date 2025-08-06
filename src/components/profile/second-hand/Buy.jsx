@@ -12,17 +12,17 @@ import { Alert, Avatar, Button, Input, Segmented, Select, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FaMobile, FaVoicemail } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductBuy from "./ListProductBuy";
+import { usePathname, useRouter } from "next/navigation";
+import { setIdEdit } from "@/redux/slices/idEditSec";
 const { TextArea } = Input;
 
-function Buy() {
-  const [stepPage, setStepPage] = useState(0);
-  const [idEdit, setIdEdit] = useState(0);
+function Buy({productsSec}) {
   const [loading, setLoading] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
-  const [loadingList, setLoadingList] = useState(false);
+  
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(undefined);
@@ -33,17 +33,23 @@ function Buy() {
   const [errors, setErrors] = useState({});
   const [flag, setFlag] = useState(false);
   const [body, setBody] = useState("");
-  const [productsSec, setProductsSec] = useState([]);
+  
   const [productEdit, setProductEdit] = useState({});
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
-  useEffect(()=>{
-    if (stepPage ===0) {
-      resetState()
-    }
-  },[stepPage])
+  const { idEdit } = useSelector((state) => state.idEdit);
 
+  const pathname = usePathname();
+  const router = useRouter();
+  const disPatch = useDispatch();
+
+  useEffect(() => {
+    if (pathname === "/profile/second-hand") {
+      disPatch(setIdEdit(0));
+      resetState();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (user?.displayName && idEdit === 0) {
@@ -51,9 +57,14 @@ function Buy() {
     }
   }, [user]);
 
+  const htmlToText = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString, "text/html");
+    return doc.body.textContent || "";
+  };
+
   useEffect(() => {
     if (productEdit?.id) {
-      setBody(productEdit.description);
+      setBody(htmlToText(productEdit.description));
       setSelectedCategory(productEdit.categoryId);
       setProductName(productEdit.title);
       setProductType(productEdit.type);
@@ -86,20 +97,7 @@ function Buy() {
     }
   }, [idEdit]);
 
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingList(true);
-      try {
-        const productsData = await getUserBuyAd(user?.token);
-        setProductsSec(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingList(false);
-      }
-    };
-    fetchProductsSec();
-  }, [flag]);
+ 
 
   const resetState = () => {
     setSelectedCategory(undefined);
@@ -108,7 +106,6 @@ function Buy() {
     setBody("");
     setErrors({});
     setProductEdit({});
-    setIdEdit(0);
     setContactInfoType(0);
     setNickname(user?.displayName);
   };
@@ -177,7 +174,7 @@ function Buy() {
         title: `آگهی شما با موفقیت ${idEdit ? "ویرایش" : "ثبت"} شد`,
       });
       setFlag((e) => !e);
-      setStepPage(0);
+      router.push("/profile/second-hand");
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -205,16 +202,14 @@ function Buy() {
       )}
       {!loadingEdit && (
         <div>
-          {stepPage === 0 && (
+          {pathname === "/profile/second-hand" && (
             <ListProductBuy
               productsSec={productsSec}
-              setStepPage={setStepPage}
-              loadingList={loadingList}
               setFlag={setFlag}
-              setIdEdit={setIdEdit}
             />
           )}
-          {stepPage === 1 && (
+          {(pathname === "/profile/second-hand/add" ||
+            pathname === "/profile/second-hand/edit") && (
             <div className="bg-white p-5 rounded-lg">
               {/* عنوان */}
               <div className="flex justify-between items-center mb-4">
@@ -223,7 +218,7 @@ function Buy() {
                 </h2>
                 <button
                   onClick={() => {
-                    setStepPage(0);
+                    router.back();
                   }}
                   className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
                 >
@@ -364,7 +359,9 @@ function Buy() {
                     ]}
                   />
                 </div>
-                <div className="SegmentedBuy mb-6 overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
+                <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+                  <span className="mb-2 font-bold text-gray-700">اطلاعات تماس</span>
+                <div className="SegmentedBuy overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
                   <Segmented
                     className="w-full overflow-auto"
                     value={contactInfoType}
@@ -420,6 +417,7 @@ function Buy() {
                       },
                     ]}
                   />
+                </div>
                 </div>
 
                 {/* شرح کامل */}

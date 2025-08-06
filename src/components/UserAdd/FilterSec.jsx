@@ -6,7 +6,7 @@ import {
 import { Collapse, Slider } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Skeleton } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -43,6 +43,7 @@ function FilterSec() {
   const categoryParams = searchParams.getAll("category");
 
   const { activeTab } = useSelector((state) => state.activeTab);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (price1 && price2) {
@@ -58,12 +59,11 @@ function FilterSec() {
       setFilterList([]);
       setLoading(true);
       try {
-        const filtersData =
-          activeTab === 1
-            ? await getUserAdFilter()
-            : activeTab === 2
-            ? await getUserAdFilter2()
-            : [];
+        const filtersData = pathname.includes("useds")
+          ? await getUserAdFilter()
+          : pathname.includes("buyers")
+          ? await getUserAdFilter2()
+          : [];
         if (filtersData?.type === "error") {
           Toast.fire({
             icon: "error",
@@ -79,7 +79,7 @@ function FilterSec() {
       }
     };
     fetchFilterData();
-  }, [activeTab]);
+  }, [pathname]);
 
   // مقداردهی اولیه categoryChecked بر اساس پارامترهای URL
   useEffect(() => {
@@ -99,7 +99,7 @@ function FilterSec() {
           src="/images/gallery/news-thumb-large.jpg"
           alt=""
         />
-        {activeTab === 1 && (
+        {pathname.includes("useds") && (
           <div>
             <div
               onClick={() => {

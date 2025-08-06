@@ -1,15 +1,8 @@
-import { getItem } from "@/services/Item/item";
+import { getListItemBanner } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
 
 export default async function BoxImgHome() {
-
-  const mainBanner = await getItem({
-    TypeId: 1015,
-    LangCode: 'fa',
-    CategoryIdArray: "3293",
-  });
-
-  
+  const mainBanner = await getListItemBanner(3293);
 
   return (
     <>
@@ -34,7 +27,7 @@ export default async function BoxImgHome() {
                   <img
                     className="w-full min-h-[50px] object-contain"
                     src={getImageUrl(mainBanner[1]?.image)}
-                      alt={mainBanner[1]?.categoryTitle}
+                    alt={mainBanner[1]?.categoryTitle}
                   />
                 </a>
               </div>

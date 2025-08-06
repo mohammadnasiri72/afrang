@@ -4,13 +4,11 @@ import EditeProductSec from "./EditeProductSec";
 import ModalDeleteBuy from "./ModalDeleteBuy";
 import ModalShowDetailsBuy from "./ModalShowDetailsBuy";
 import { MdDone, MdOutlineTimer } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 function ListProductBuy({
   productsSec,
-  setStepPage,
-  loadingList,
   setFlag,
-  setIdEdit,
 }) {
   const skeleton = Array(6)
     .fill(0)
@@ -27,6 +25,8 @@ function ListProductBuy({
       </div>
     ));
 
+    const router = useRouter();
+
   return (
     <>
       <div className="flex justify-between items-center px-4 pt-4">
@@ -35,7 +35,7 @@ function ListProductBuy({
         </h3>
         <button
           onClick={() => {
-            setStepPage(1);
+           router.push("/profile/second-hand/add");
           }}
           className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
@@ -44,11 +44,9 @@ function ListProductBuy({
       </div>
       <div className=" min-h-screen py-8">
         <div className="w-full max-w-5xl mx-auto">
-          {loadingList ? (
-            <div className="flex flex-wrap gap-2 w-full">{skeleton}</div>
-          ) : productsSec.length > 0 ? (
+          {   productsSec.length > 0 ? (
             <div className="flex flex-wrap gap-2 w-full">
-              {productsSec.map((pr) => (
+              {[...productsSec].map((pr) => (
                 <div
                   key={pr.id}
                   data-id={pr.id}
@@ -62,9 +60,7 @@ function ListProductBuy({
                           <div className="flex flex-col gap-2 w-full">
                             <ModalShowDetailsBuy id={pr.id} />
                             <EditeProductSec
-                              setStepPage={setStepPage}
                               id={pr.id}
-                              setIdEdit={setIdEdit}
                             />
                             <ModalDeleteBuy id={pr.id} setFlag={setFlag} />
                           </div>
@@ -88,16 +84,15 @@ function ListProductBuy({
                       دسته‌بندی: {pr.categoryTitle}
                     </span>
                     <span className="text-gray-500 text-sm font-semibold">
-                     
                       {pr.isActive ? (
                         <span className="text-emerald-600 flex items-center gap-1 bg-emerald-100 rounded-lg px-3">
-                            <MdDone />
-                            <span>تایید شده</span>
+                          <MdDone />
+                          <span>تایید شده</span>
                         </span>
                       ) : (
                         <span className="text-amber-600 flex items-center gap-1 bg-amber-100 rounded-lg px-3">
-                            <MdOutlineTimer />
-                            <span>منتظر تایید</span>
+                          <MdOutlineTimer />
+                          <span>منتظر تایید</span>
                         </span>
                       )}
                     </span>

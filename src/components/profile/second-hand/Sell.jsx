@@ -27,17 +27,23 @@ import {
 import { useEffect, useState } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import { FaMobile, FaStar, FaTimes, FaTrash, FaVoicemail } from "react-icons/fa";
+import {
+  FaMobile,
+  FaStar,
+  FaTimes,
+  FaTrash,
+  FaVoicemail,
+} from "react-icons/fa";
 import DatePicker from "react-multi-date-picker";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductSec from "./ListProductSec";
 import { MdEmail } from "react-icons/md";
+import { usePathname, useRouter } from "next/navigation";
+import { setIdEdit } from "@/redux/slices/idEditSec";
 const { TextArea } = Input;
 
 function Sell() {
-  const [stepPage, setStepPage] = useState(0);
-  const [idEdit, setIdEdit] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingFile, setLoadingFile] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
@@ -67,17 +73,27 @@ function Sell() {
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
-   useEffect(()=>{
-      if (stepPage ===0) {
-        resetState()
-      }
-    },[stepPage])
+  const { idEdit } = useSelector((state) => state.idEdit);
 
-  
+  const pathname = usePathname();
+  const router = useRouter();
+  const disPatch = useDispatch();
+
+  useEffect(() => {
+    if (pathname === "/profile/second-hand") {
+      disPatch(setIdEdit(0));
+      resetState();
+    }
+  }, [pathname]);
+
+  const htmlToText = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString, "text/html");
+    return doc.body.textContent || "";
+  };
 
   useEffect(() => {
     if (productEdit?.id) {
-      setBody(productEdit.body);
+      setBody(htmlToText(productEdit.body));
       setAppearance(productEdit.appearance);
       setSelectedCategory(productEdit.categoryId);
       setInsuranceMonths(productEdit.insurance.toLocaleString());
@@ -179,7 +195,6 @@ function Sell() {
     setErrors({});
     setFileList([]);
     setProductEdit({});
-    setIdEdit(0);
     setContactInfoType(0);
   };
 
@@ -259,7 +274,7 @@ function Sell() {
         title: `آگهی شما با موفقیت ${idEdit ? "ویرایش" : "ثبت"} شد`,
       });
       setFlag((e) => !e);
-      setStepPage(0);
+      router.push("/profile/second-hand");
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -353,16 +368,15 @@ function Sell() {
       )}
       {!loadingEdit && (
         <div>
-          {stepPage === 0 && (
+          {pathname === "/profile/second-hand" && (
             <ListProductSec
               productsSec={productsSec}
-              setStepPage={setStepPage}
               loadingList={loadingList}
               setFlag={setFlag}
-              setIdEdit={setIdEdit}
             />
           )}
-          {stepPage === 1 && (
+          {(pathname === "/profile/second-hand/add" ||
+            pathname === "/profile/second-hand/edit") && (
             <div className="bg-white p-5 rounded-lg">
               {/* عنوان */}
               <div className="flex justify-between items-center mb-4">
@@ -371,7 +385,7 @@ function Sell() {
                 </h2>
                 <button
                   onClick={() => {
-                    setStepPage(0);
+                    router.back();
                   }}
                   className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
                 >
@@ -610,62 +624,65 @@ function Sell() {
                     ]}
                   />
                 </div>
-                <div className="SegmentedBuy mb-6 overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
-                  <Segmented
-                    className="w-full overflow-auto"
-                    value={contactInfoType}
-                    onChange={(value) => {
-                      setContactInfoType(value);
-                    }}
-                    options={[
-                      {
-                        label: (
-                          <div style={{ padding: 4 }}>
-                            <Avatar
-                              style={{
-                                backgroundColor:
-                                  contactInfoType === 0 ? "#d1182b" : "#3338",
-                              }}
-                              icon={<FaVoicemail />}
-                            />
-                            <div className="pt-2">نمایش ایمیل و موبایل</div>
-                          </div>
-                        ),
-                        value: 0,
-                      },
-                      {
-                        label: (
-                          <div style={{ padding: 4 }}>
-                            <Avatar
-                              style={{
-                                backgroundColor:
-                                  contactInfoType === 1 ? "#d1182b" : "#3338",
-                              }}
-                              icon={<FaMobile />}
-                            />
+                <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+                  <span className="mb-2 font-bold text-gray-700">اطلاعات تماس</span>
+                  <div className="SegmentedBuy  overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
+                    <Segmented
+                      className="w-full overflow-auto"
+                      value={contactInfoType}
+                      onChange={(value) => {
+                        setContactInfoType(value);
+                      }}
+                      options={[
+                        {
+                          label: (
+                            <div style={{ padding: 4 }}>
+                              <Avatar
+                                style={{
+                                  backgroundColor:
+                                    contactInfoType === 0 ? "#d1182b" : "#3338",
+                                }}
+                                icon={<FaVoicemail />}
+                              />
+                              <div className="pt-2">ایمیل و موبایل</div>
+                            </div>
+                          ),
+                          value: 0,
+                        },
+                        {
+                          label: (
+                            <div style={{ padding: 4 }}>
+                              <Avatar
+                                style={{
+                                  backgroundColor:
+                                    contactInfoType === 1 ? "#d1182b" : "#3338",
+                                }}
+                                icon={<FaMobile />}
+                              />
 
-                            <div className="pt-2">نمایش موبایل</div>
-                          </div>
-                        ),
-                        value: 1,
-                      },
-                      {
-                        label: (
-                          <div style={{ padding: 4 }}>
-                            <Avatar
-                              style={{
-                                backgroundColor:
-                                  contactInfoType === 2 ? "#d1182b" : "#3338",
-                              }}
-                              icon={<MdEmail />}
-                            />
-                            <div className="pt-2">نمایش ایمیل</div>
-                          </div>
-                        ),
-                        value: 2,
-                      },
-                    ]}
-                  />
+                              <div className="pt-2">فقط موبایل</div>
+                            </div>
+                          ),
+                          value: 1,
+                        },
+                        {
+                          label: (
+                            <div style={{ padding: 4 }}>
+                              <Avatar
+                                style={{
+                                  backgroundColor:
+                                    contactInfoType === 2 ? "#d1182b" : "#3338",
+                                }}
+                                icon={<MdEmail />}
+                              />
+                              <div className="pt-2">فقط ایمیل</div>
+                            </div>
+                          ),
+                          value: 2,
+                        },
+                      ]}
+                    />
+                  </div>
                 </div>
                 {/* وضعیت گارانتی */}
                 <div className="mb-6">
@@ -925,7 +942,7 @@ function Sell() {
                     border: 2px solid #d1182b !important;
                     box-shadow: 0 0 0 2px #d1182b33;
                   }
-                     .SegmentedBuy .ant-segmented {
+                  .SegmentedBuy .ant-segmented {
                     background-color: #ebebeb;
                   }
                   .SegmentedBuy .ant-segmented-item {

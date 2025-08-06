@@ -1,6 +1,6 @@
 import Container from "@/components/container";
 import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
-import { getItem } from "@/services/Item/item";
+import { getItem, getListItemBanner } from "@/services/Item/item";
 import {
   getProductCategory,
   getProducts,
@@ -53,12 +53,8 @@ async function ProductContent({ id, searchParams }) {
       StatusId: statusId,
       OnlyFest: onlyfest,
       ConditionId: conditionId,
-    }),
-    getItem({
-      TypeId: 1015,
-      LangCode: "fa",
-      CategoryIdArray: "4693",
-    }),
+    }),  
+    getListItemBanner(4693),
   ]);
 
   return (
@@ -77,7 +73,7 @@ async function ProductContent({ id, searchParams }) {
             </h1>
           )}
           <div className="flex flex-col lg:flex-row w-full">
-            <FilterProduct BannerProduct={BannerProduct} />
+            <FilterProduct BannerProduct={BannerProduct} id={id}/>
             <div className="w-full">
               {!products || products.length === 0 ? (
                 <div className="flex justify-center">
@@ -116,6 +112,7 @@ export default async function ProductList(props) {
 
   let id = 0;
   const pathParts = param.slug;
+ 
 
   // پیدا کردن آخرین عدد در URL
   for (let i = pathParts.length - 1; i >= 0; i--) {

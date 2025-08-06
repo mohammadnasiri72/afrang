@@ -6,7 +6,6 @@ import Link from "next/link";
 const BreadcrumbNews = ({ breadcrumb }) => {
   if (!breadcrumb || !breadcrumb.length) return null;
 
-  console.log(breadcrumb);
   const breadcrumbItems = [
     {
       title: (

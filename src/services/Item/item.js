@@ -95,5 +95,20 @@ export const itemVisit = async (id, url, ip, userAgent) => {
 
 
 
+export const getListItemBanner = async (id) => {
+  try {
+    const response = await axios.get(`${mainDomain}/api/Item/Banner` , {
+      params: {
+        langCode:'fa',
+        categoryId: id,
+      }
+    });
+    return response.data;
+  } catch (err) {
+    return {type:'error',message:err.response?.data ? err.response?.data : "خطای شبکه"}
+  }
+};
+
+
 
 

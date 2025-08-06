@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import AddToCartButton from "./AddToCartButton";
 import CompareButtonBtn from "./CompareButtonBtn";
-import LikeProductBtn from "./LikeProductBtn";
+import ShowImgProduct from "./ShowImgProduct";
 import PriceProduct from "./PriceProduct";
 
 function Products({ products }) {
@@ -136,7 +136,7 @@ function Products({ products }) {
                 {/* دکمه های عملیاتی */}
                 <div className="absolute right-2 bottom-0 overflow-hidden duration-300  flex items-center justify-center bg-white  rounded-xl shadow-lg ">
                   <div className="w-full border-l border-[#0003]">
-                    <LikeProductBtn productId={product?.productId} />
+                    <ShowImgProduct product={product} />
                   </div>
                   <div className="w-full">
                     <CompareButtonBtn id={product?.productId} />
@@ -219,7 +219,7 @@ function Products({ products }) {
                 {/* دکمه های عملیاتی */}
                 <div className="absolute right-0 bottom-0 -translate-y-1/2 overflow-hidden translate-x-full duration-300 group-hover:-translate-x-2 flex flex-col items-center justify-center w-10 bg-white  rounded-xl shadow-lg ">
                   <div className="w-full border-b border-[#0003]">
-                    <LikeProductBtn productId={product?.productId} />
+                    <ShowImgProduct product={product} />
                   </div>
                   <div className="w-full">
                     <CompareButtonBtn id={product?.productId} />
@@ -337,7 +337,7 @@ function Products({ products }) {
           {/* دکمه های عملیاتی */}
           <div className="absolute right-0 bottom-0 -translate-y-1/2 overflow-hidden sm:translate-x-full -translate-x-2 duration-300 group-hover:-translate-x-2 flex flex-col items-center justify-center w-10 bg-white  rounded-xl shadow-lg ">
             <div className="w-full border-b border-[#0003]">
-              <LikeProductBtn productId={product?.productId} />
+              <ShowImgProduct product={product} />
             </div>
             <div className="w-full">
               <CompareButtonBtn id={product?.productId} />

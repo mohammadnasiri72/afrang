@@ -5,14 +5,15 @@ import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
 import ModalDelete from "./ModalDelete";
 import ModalShowDetails from "./ModalShowDetails";
+import { useRouter } from "next/navigation";
 
 function ListProductSec({
   productsSec,
-  setStepPage,
   loadingList,
   setFlag,
-  setIdEdit,
 }) {
+
+
   const skeleton = Array(6)
     .fill(0)
     .map((_, i) => (
@@ -28,6 +29,8 @@ function ListProductSec({
       </div>
     ));
 
+    const router = useRouter();
+
   return (
     <>
       <div className="flex justify-between items-center px-4 pt-4">
@@ -36,7 +39,8 @@ function ListProductSec({
         </h3>
         <button
           onClick={() => {
-            setStepPage(1);
+            // setStepPage(1);
+            router.push("/profile/second-hand/add");
           }}
           className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
@@ -49,7 +53,7 @@ function ListProductSec({
             <div className="flex flex-wrap gap-2 w-full">{skeleton}</div>
           ) : productsSec.length > 0 ? (
             <div className="flex flex-wrap gap-2 w-full">
-              {productsSec.map((pr) => (
+              {[...productsSec].map((pr) => (
                 <div
                   key={pr.id}
                   data-id={pr.id}
@@ -63,9 +67,7 @@ function ListProductSec({
                           <div className="flex flex-col gap-2 w-full">
                             <ModalShowDetails id={pr.id} />
                             <EditeProductSec
-                              setStepPage={setStepPage}
                               id={pr.id}
-                              setIdEdit={setIdEdit}
                             />
                             <ModalDelete id={pr.id} setFlag={setFlag} />
                           </div>

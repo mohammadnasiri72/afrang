@@ -17,7 +17,6 @@ function ShowInfoContact({id}) {
     const [dataContact, setDataContact] = useState({});
       const [loadingBtn, setLoadingBtn] = useState(false);
 
-      console.log(dataContact);
       
 
 

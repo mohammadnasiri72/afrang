@@ -19,6 +19,11 @@ function ModalShowDetailsBuy({ id }) {
   const [productDetails, setProductDetails] = useState({});
   const user = useSelector(selectUser);
 
+  const htmlToText = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString, "text/html");
+    return doc.body.textContent || "";
+  };
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -130,6 +135,12 @@ function ModalShowDetailsBuy({ id }) {
                     : "–"}
                 </span>
               </div>
+              <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
+                <span className="font-medium py-1 pr-2">تاریخ درج آگهی :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.date || "–"}
+                </span>
+              </div>
             </div>
 
             {/* توضیحات  */}
@@ -137,7 +148,7 @@ function ModalShowDetailsBuy({ id }) {
               <div>
                 <div className="font-medium mb-1">شرح کامل :</div>
                 <div className="bg-gray-50 rounded p-2 text-justify text-gray-700 leading-relaxed">
-                  {productDetails.description}
+                  {htmlToText(productDetails.description)}
                 </div>
               </div>
             )}

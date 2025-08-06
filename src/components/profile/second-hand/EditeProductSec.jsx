@@ -1,22 +1,23 @@
 "use client";
 
+import { setIdEdit } from "@/redux/slices/idEditSec";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Tooltip } from "antd";
+import { useRouter } from "next/navigation";
 import { BiEdit } from "react-icons/bi";
+import { useDispatch } from "react-redux";
 
-function EditeProductSec({ setStepPage , id , setIdEdit}) {
- 
-
-
+function EditeProductSec({ id }) {
+  const router = useRouter();
+  const disPatch = useDispatch();
 
   return (
     <>
       <Tooltip placement="top" title={"ویرایش آگهی"} arrow={true}>
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIdEdit(id);
-            setStepPage(1);
+          onClick={() => {
+            disPatch(setIdEdit(id));
+            router.push("/profile/second-hand/edit");
           }}
           className="p-1.5 text-gray-400 hover:text-teal-500 transition-colors cursor-pointer"
         >

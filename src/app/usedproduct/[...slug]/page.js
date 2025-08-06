@@ -14,15 +14,15 @@ export default async function UserAddDetails(props) {
 
 
 
-  let url = "/used/";
+  // let url = "/used/";
 
-  slug.slug.map((slug) => {
-    url = url + decodeURIComponent(slug) + "/";
-  });
+  // slug.slug.map((slug) => {
+  //   url = url + decodeURIComponent(slug) + "/";
+  // });
 
-  if (product.url + "/" !== url) {
-    redirect(product.url);
-  }
+  // if (product.url + "/" !== url) {
+  //   redirect(product.url);
+  // }
   return (
     <>
       <Container>

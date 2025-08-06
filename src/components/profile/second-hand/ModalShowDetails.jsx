@@ -21,6 +21,13 @@ function ModalShowDetails({ id }) {
   const [productDetails, setProductDetails] = useState({});
   const user = useSelector(selectUser);
 
+  const htmlToText = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString, "text/html");
+    return doc.body.textContent || "";
+  };
+
+  
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -95,9 +102,7 @@ function ModalShowDetails({ id }) {
       </Tooltip>
       <Modal
         title={<p className="text-xl font-semibold">جزئیات آگهی</p>}
-        footer={
-         <></>
-        }
+        footer={<></>}
         loading={isLoading}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
@@ -197,6 +202,24 @@ function ModalShowDetails({ id }) {
                     : "–"}
                 </span>
               </div>
+              <div className="flex items-center justify-between bg-slate-100 px-4 py-1">
+                <span className="font-medium py-1 pr-2">اطلاعات تماس :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.contactInfo === 0
+                    ? "نمایش ایمیل و موبایل"
+                    : productDetails.contactInfo === 1
+                    ? "فقط نمایش موبایل"
+                    : productDetails.contactInfo === 2
+                    ? "فقط نمایش ایمیل"
+                    : "–"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
+                <span className="font-medium py-1 pr-2">تاریخ درج آگهی :</span>
+                <span className="font-medium py-1 pr-2">
+                  {productDetails.date || "–"}
+                </span>
+              </div>
             </div>
 
             {/* وضعیت ظاهری */}
@@ -213,7 +236,7 @@ function ModalShowDetails({ id }) {
               <div>
                 <div className="font-medium mb-1">شرح کامل :</div>
                 <div className="bg-gray-50 rounded p-2 text-justify text-gray-700 leading-relaxed">
-                  {productDetails.body}
+                  {htmlToText(productDetails.body)}
                 </div>
               </div>
             )}

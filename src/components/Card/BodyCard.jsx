@@ -240,7 +240,6 @@ const BodyCard = () => {
       if (window.innerWidth < 1024) return;
       if (!containerRef.current || !innerRef.current) return;
       const containerRect = containerRef.current.getBoundingClientRect();
-       console.log(containerRect);
       const innerRect = innerRef.current.getBoundingClientRect();
       const stickyTop = 150; // مثل offsetTop قبلی Affix
       if (containerRect.bottom <= stickyTop) {

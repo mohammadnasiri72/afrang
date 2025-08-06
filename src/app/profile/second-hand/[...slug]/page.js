@@ -1,91 +1,27 @@
 "use client";
 
+import { Segmented, Empty } from "antd";
+import { useState } from "react";
+import { FaRecycle } from "react-icons/fa";
 import Buy from "@/components/profile/second-hand/Buy";
 import Sell from "@/components/profile/second-hand/Sell";
-import { setActiveTab, setIdEdit } from "@/redux/slices/idEditSec";
-import { selectUser } from "@/redux/slices/userSlice";
-import {
-  getUserBuyAd,
-  getUserSellAd,
-} from "@/services/UserSellAd/UserSellAdServices";
-import { Segmented } from "antd";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FaRecycle } from "react-icons/fa";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { setActiveTab, setIdEdit } from "@/redux/slices/idEditSec";
 
 const SecondHand = () => {
   const { activeTab } = useSelector((state) => state.idEdit);
-  const [loadingList, setLoadingList] = useState(false);
-  const [productsSec, setProductsSec] = useState([]);
-  const [productsBuy, setProductsBuy] = useState([]);
-
-  console.log(productsSec);
-   
 
   const disPatch = useDispatch();
   const router = useRouter();
-  const user = useSelector(selectUser);
 
   const options = [
     { label: "فروش ", value: 1 },
     { label: "خرید", value: 0 },
   ];
 
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingList(true);
-      try {
-        const productsData = await getUserSellAd(user?.token);
-        setProductsSec(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingList(false);
-      }
-    };
-    if (user?.token) {
-      fetchProductsSec();
-    }
-  }, [user, activeTab]);
-
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingList(true);
-      try {
-        const productsData =  await getUserBuyAd(user?.token)
-            
-        setProductsBuy(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingList(false);
-      }
-    };
-    if (user?.token) {
-      fetchProductsSec();
-    }
-  }, [user, activeTab]);
-
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingList(true);
-      try {
-        const productsData =
-          activeTab === 1
-            ? await getUserBuyAd(user?.token)
-            : await getUserSellAd(user?.token);
-        setProductsSec(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingList(false);
-      }
-    };
-    if (user?.token) {
-      fetchProductsSec();
-    }
-  }, [user, activeTab]);
+ 
+  
 
   return (
     <>
@@ -153,21 +89,15 @@ const SecondHand = () => {
               onChange={(value) => {
                 disPatch(setIdEdit(0));
                 router.push("/profile/second-hand");
-                disPatch(setActiveTab(value));
-                setProductsSec([]);
+                disPatch(setActiveTab(value))
               }}
               options={options}
             />
           </div>
-          {productsSec.length > 0 && (
-            <div className="w-full">
-              {activeTab === 0 ? (
-                <Buy productsSec={productsSec} />
-              ) : (
-                <Sell productsSec={productsBuy} />
-              )}
-            </div>
-          )}
+
+          <div className="w-full">
+            {activeTab === 0 ? <Buy /> : <Sell />}
+          </div>
         </div>
       </div>
     </>
