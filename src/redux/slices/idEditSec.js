@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     idEdit: 0,
-   activeTab:0
+   activeTab:0,
+   flag:true
 };
 
 const idEditSlice = createSlice({
@@ -15,9 +16,12 @@ const idEditSlice = createSlice({
         setActiveTab: (state, action) => {
             state.activeTab = action.payload;
         },
+        setFlag: (state, action) => {
+            state.flag = action.payload;
+        },
        
     }
 });
 
-export const { setIdEdit , setActiveTab} = idEditSlice.actions;
+export const { setIdEdit , setActiveTab , setFlag} = idEditSlice.actions;
 export default idEditSlice.reducer; 

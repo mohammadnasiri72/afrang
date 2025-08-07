@@ -1,26 +1,101 @@
 "use client";
 
 import { Segmented, Empty } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRecycle } from "react-icons/fa";
 import Buy from "@/components/profile/second-hand/Buy";
 import Sell from "@/components/profile/second-hand/Sell";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab, setIdEdit } from "@/redux/slices/idEditSec";
+import {
+  getUserBuyAdId,
+  getUserSellAdId,
+} from "@/services/UserSellAd/UserSellAdServices";
+import { selectUser } from "@/redux/slices/userSlice";
+import Swal from "sweetalert2";
+
+// تنظیمات Toast
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 const SecondHand = () => {
   const { activeTab } = useSelector((state) => state.idEdit);
+  const [id, setId] = useState(0);
+  const [loadingEdit, setLoadingEdit] = useState(false);
+  const [productEdit, setProductEdit] = useState({});
+  const [productEditSell, setProductEditSell] = useState({});
 
   const disPatch = useDispatch();
   const router = useRouter();
+  const params = useParams();
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    if (params?.slug[1]) {
+      setId(Number(params.slug[1]));
+    }
+  }, [params]);
 
   const options = [
     { label: "فروش ", value: 1 },
-    { label: "خرید", value: 0 },
+    { label: "خرید", value: 2 },
   ];
 
- 
+  useEffect(() => {
+    const fetchProductsSec = async () => {
+      setLoadingEdit(true);
+      try {
+        const productsData = await getUserBuyAdId(id, user?.token);
+        if (productsData.type === "error") {
+          Toast.fire({
+            icon: "error",
+            title: productsData.message,
+          });
+          return;
+        }
+        setProductEdit(productsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoadingEdit(false);
+      }
+    };
+    if (id !== 0 && activeTab === 2) {
+      fetchProductsSec();
+    }
+  }, [user, id, activeTab]);
+
+  useEffect(() => {
+    const fetchProductsSec = async () => {
+      setLoadingEdit(true);
+      try {
+        const productsData = await getUserSellAdId(id, user?.token);
+        if (productsData.type === "error") {
+          Toast.fire({
+            icon: "error",
+            title: productsData.message,
+          });
+          return;
+        }
+        setProductEditSell(productsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoadingEdit(false);
+      }
+    };
+    if (id !== 0 && activeTab === 1) {
+      fetchProductsSec();
+    }
+  }, [user, id, activeTab]);
+
   
 
   return (
@@ -89,14 +164,18 @@ const SecondHand = () => {
               onChange={(value) => {
                 disPatch(setIdEdit(0));
                 router.push("/profile/second-hand");
-                disPatch(setActiveTab(value))
+                disPatch(setActiveTab(value));
               }}
               options={options}
             />
           </div>
 
           <div className="w-full">
-            {activeTab === 0 ? <Buy /> : <Sell />}
+            {activeTab === 2 ? (
+              <Buy productEdit={productEdit} loading={loadingEdit} id={id} />
+            ) : (
+              <Sell productEdit={productEditSell} loading={loadingEdit} id={id}/>
+            )}
           </div>
         </div>
       </div>

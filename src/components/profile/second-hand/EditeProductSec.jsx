@@ -17,7 +17,7 @@ function EditeProductSec({ id }) {
         <button
           onClick={() => {
             disPatch(setIdEdit(id));
-            router.push("/profile/second-hand/edit");
+            router.push(`/profile/second-hand/edit/${id}`);
           }}
           className="p-1.5 text-gray-400 hover:text-teal-500 transition-colors cursor-pointer"
         >

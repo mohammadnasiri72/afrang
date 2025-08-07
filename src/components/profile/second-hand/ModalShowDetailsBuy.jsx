@@ -19,6 +19,8 @@ function ModalShowDetailsBuy({ id }) {
   const [productDetails, setProductDetails] = useState({});
   const user = useSelector(selectUser);
 
+  
+
   const htmlToText = (htmlString) => {
     const doc = new DOMParser().parseFromString(htmlString, "text/html");
     return doc.body.textContent || "";

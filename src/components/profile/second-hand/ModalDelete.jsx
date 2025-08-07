@@ -1,5 +1,6 @@
 "use client";
 
+import { setFlag } from "@/redux/slices/idEditSec";
 import { deleteUserSellAd } from "@/services/UserSellAd/UserSellAdServices";
 import { Tooltip } from "antd";
 import Cookies from "js-cookie";
@@ -7,14 +8,17 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { FaSpinner } from "react-icons/fa";
 import { HiOutlineTrash } from "react-icons/hi2";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
-function ModalDelete({ id, setFlag }) {
+function ModalDelete({ id }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
+
+  const disPatch = useDispatch();
 
   useEffect(() => {
     setMounted(true);
@@ -47,7 +51,7 @@ function ModalDelete({ id, setFlag }) {
       const response = await deleteUserSellAd(id, token);
 
       if (response.status === 200) {
-        setFlag((e) => !e);
+        disPatch(setFlag((e) => !e));
         Toast.fire({
           icon: "success",
           text: "آگهی با موفقیت حذف شد",

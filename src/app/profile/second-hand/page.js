@@ -16,12 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 const SecondHand = () => {
   const { activeTab } = useSelector((state) => state.idEdit);
+  const { flag } = useSelector((state) => state.idEdit);
   const [loadingList, setLoadingList] = useState(false);
   const [productsSec, setProductsSec] = useState([]);
   const [productsBuy, setProductsBuy] = useState([]);
 
-  console.log(productsSec);
-   
 
   const disPatch = useDispatch();
   const router = useRouter();
@@ -29,7 +28,7 @@ const SecondHand = () => {
 
   const options = [
     { label: "فروش ", value: 1 },
-    { label: "خرید", value: 0 },
+    { label: "خرید", value: 2 },
   ];
 
   useEffect(() => {
@@ -44,17 +43,17 @@ const SecondHand = () => {
         setLoadingList(false);
       }
     };
-    if (user?.token) {
+    if (user?.token && activeTab === 1) {
       fetchProductsSec();
     }
-  }, [user, activeTab]);
+  }, [user, activeTab , flag]);
 
   useEffect(() => {
     const fetchProductsSec = async () => {
       setLoadingList(true);
       try {
-        const productsData =  await getUserBuyAd(user?.token)
-            
+        const productsData = await getUserBuyAd(user?.token);
+
         setProductsBuy(productsData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -62,30 +61,10 @@ const SecondHand = () => {
         setLoadingList(false);
       }
     };
-    if (user?.token) {
+    if (user?.token && activeTab === 2) {
       fetchProductsSec();
     }
-  }, [user, activeTab]);
-
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingList(true);
-      try {
-        const productsData =
-          activeTab === 1
-            ? await getUserBuyAd(user?.token)
-            : await getUserSellAd(user?.token);
-        setProductsSec(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingList(false);
-      }
-    };
-    if (user?.token) {
-      fetchProductsSec();
-    }
-  }, [user, activeTab]);
+  }, [user, activeTab , flag]);
 
   return (
     <>
@@ -159,14 +138,11 @@ const SecondHand = () => {
               options={options}
             />
           </div>
-          {productsSec.length > 0 && (
-            <div className="w-full">
-              {activeTab === 0 ? (
-                <Buy productsSec={productsSec} />
-              ) : (
-                <Sell productsSec={productsBuy} />
-              )}
-            </div>
+          {activeTab === 2 && productsBuy.length > 0 && (
+            <Buy productsSec={productsBuy} loading={loadingList}/>
+          )}
+          {activeTab === 1 && productsSec.length > 0 && (
+            <Sell productsSec={productsSec} loading={loadingList}/>
           )}
         </div>
       </div>

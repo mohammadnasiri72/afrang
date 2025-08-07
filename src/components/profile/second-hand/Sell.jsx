@@ -40,15 +40,13 @@ import Swal from "sweetalert2";
 import ListProductSec from "./ListProductSec";
 import { MdEmail } from "react-icons/md";
 import { usePathname, useRouter } from "next/navigation";
-import { setIdEdit } from "@/redux/slices/idEditSec";
+import { setFlag } from "@/redux/slices/idEditSec";
 const { TextArea } = Input;
 
-function Sell() {
-  const [loading, setLoading] = useState(false);
+function Sell({ productsSec, productEdit, loading, id }) {
+  const [loadingCat, setLoadingCat] = useState(false);
   const [loadingFile, setLoadingFile] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
-  const [loadingList, setLoadingList] = useState(false);
-  const [loadingEdit, setLoadingEdit] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -65,15 +63,10 @@ function Sell() {
   const [insuranceMonths, setInsuranceMonths] = useState(null);
   const [errors, setErrors] = useState({});
   const [fileList, setFileList] = useState([]);
-  const [flag, setFlag] = useState(false);
   const [body, setBody] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
-  const [productsSec, setProductsSec] = useState([]);
-  const [productEdit, setProductEdit] = useState({});
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
-
-  const { idEdit } = useSelector((state) => state.idEdit);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -81,7 +74,6 @@ function Sell() {
 
   useEffect(() => {
     if (pathname === "/profile/second-hand") {
-      disPatch(setIdEdit(0));
       resetState();
     }
   }, [pathname]);
@@ -128,45 +120,6 @@ function Sell() {
     }
   }, [productEdit]);
 
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingEdit(true);
-      try {
-        const productsData = await getUserSellAdId(idEdit, user?.token);
-        if (productsData.type === "error") {
-          Toast.fire({
-            icon: "error",
-            title: productsData.message,
-          });
-          return;
-        }
-        setProductEdit(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingEdit(false);
-      }
-    };
-    if (idEdit !== 0) {
-      fetchProductsSec();
-    }
-  }, [idEdit]);
-
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingList(true);
-      try {
-        const productsData = await getUserSellAd(user?.token);
-        setProductsSec(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingList(false);
-      }
-    };
-    fetchProductsSec();
-  }, [flag]);
-
   // افزایش z-index fancybox (مشابه BoxImageGallery)
   useEffect(() => {
     const style = document.createElement("style");
@@ -194,31 +147,30 @@ function Sell() {
     setInsuranceMonths(null);
     setErrors({});
     setFileList([]);
-    setProductEdit({});
     setContactInfoType(0);
   };
 
   const fetchCategories = async () => {
-    setLoading(true);
+    setLoadingCat(true);
     try {
       const categoryData = await getUserAdFilter();
       setCategoryList(categoryData?.categories);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     } finally {
-      setLoading(false);
+      setLoadingCat(false);
     }
   };
 
   useEffect(() => {
-    if (idEdit !== 0) {
+    if (productEdit?.id) {
       fetchCategories();
     }
-  }, [idEdit]);
+  }, [productEdit]);
 
   const handleDropdownVisibleChange = (open) => {
     setDropdownOpen(open);
-    if (open && categoryList.length === 0 && !loading) {
+    if (open && categoryList.length === 0 && !loadingCat) {
       fetchCategories();
     }
   };
@@ -239,7 +191,7 @@ function Sell() {
     }
     const data = {
       langCode: "fa",
-      id: idEdit ? idEdit : 0,
+      id: id ? id : 0,
       categoryId: selectedCategory ? selectedCategory : 0,
       imageList: getImageListForBackend(),
       title: productName,
@@ -271,9 +223,9 @@ function Sell() {
       }
       Toast.fire({
         icon: "success",
-        title: `آگهی شما با موفقیت ${idEdit ? "ویرایش" : "ثبت"} شد`,
+        title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
-      setFlag((e) => !e);
+      disPatch(setFlag((e) => !e));
       router.push("/profile/second-hand");
       resetState();
     } catch (error) {
@@ -361,22 +313,18 @@ function Sell() {
 
   return (
     <>
-      {loadingEdit && (
+      {loading && (
         <div className="flex justify-center items-center h-screen">
           <Spin />
         </div>
       )}
-      {!loadingEdit && (
-        <div>
+      {!loading && (
+        <div className="w-full">
           {pathname === "/profile/second-hand" && (
-            <ListProductSec
-              productsSec={productsSec}
-              loadingList={loadingList}
-              setFlag={setFlag}
-            />
+            <ListProductSec productsSec={productsSec} loadingList={loading} />
           )}
           {(pathname === "/profile/second-hand/add" ||
-            pathname === "/profile/second-hand/edit") && (
+            pathname.includes("/profile/second-hand/edit")) && (
             <div className="bg-white p-5 rounded-lg">
               {/* عنوان */}
               <div className="flex justify-between items-center mb-4">
@@ -426,7 +374,7 @@ function Sell() {
                     allowClear
                     showSearch
                     placeholder="انتخاب دسته‌بندی"
-                    loading={loading}
+                    loading={loadingCat}
                     value={selectedCategory}
                     onChange={(value) => {
                       setSelectedCategory(
@@ -442,7 +390,7 @@ function Sell() {
                     optionFilterProp="children"
                     className="w-full"
                     notFoundContent={
-                      loading ? <Spin size="small" /> : "دسته‌بندی یافت نشد"
+                      loadingCat ? <Spin size="small" /> : "دسته‌بندی یافت نشد"
                     }
                     open={dropdownOpen}
                     onOpenChange={handleDropdownVisibleChange}
@@ -625,7 +573,9 @@ function Sell() {
                   />
                 </div>
                 <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
-                  <span className="mb-2 font-bold text-gray-700">اطلاعات تماس</span>
+                  <span className="mb-2 font-bold text-gray-700">
+                    اطلاعات تماس
+                  </span>
                   <div className="SegmentedBuy  overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
                     <Segmented
                       className="w-full overflow-auto"
@@ -983,7 +933,7 @@ function Sell() {
                     className="bg-[#d1182b] hover:bg-[#b91626]"
                     onClick={handleSubmit}
                   >
-                    {idEdit ? "ویرایش" : "ثبت درخواست"}
+                    {id ? "ویرایش" : "ثبت درخواست"}
                   </Button>
                 </div>
               </div>

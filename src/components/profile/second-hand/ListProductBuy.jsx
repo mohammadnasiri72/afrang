@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 function ListProductBuy({
   productsSec,
-  setFlag,
 }) {
   const skeleton = Array(6)
     .fill(0)
@@ -62,7 +61,7 @@ function ListProductBuy({
                             <EditeProductSec
                               id={pr.id}
                             />
-                            <ModalDeleteBuy id={pr.id} setFlag={setFlag} />
+                            <ModalDeleteBuy id={pr.id} />
                           </div>
                         </>
                       }

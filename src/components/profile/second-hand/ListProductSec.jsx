@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 function ListProductSec({
   productsSec,
   loadingList,
-  setFlag,
 }) {
 
 
@@ -69,7 +68,7 @@ function ListProductSec({
                             <EditeProductSec
                               id={pr.id}
                             />
-                            <ModalDelete id={pr.id} setFlag={setFlag} />
+                            <ModalDelete id={pr.id} />
                           </div>
                         </>
                       }
@@ -77,8 +76,7 @@ function ListProductSec({
                     >
                       <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
                     </Popover>
-                    {/* <ModalDelete id={pr.id} setFlag={setFlag} />
-                    <ModalShowDetails id={pr.id}/> */}
+                   
                   </div>
                   {pr.image ? (
                     <img

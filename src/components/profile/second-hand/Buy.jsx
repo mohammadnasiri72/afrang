@@ -16,14 +16,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductBuy from "./ListProductBuy";
 import { usePathname, useRouter } from "next/navigation";
-import { setIdEdit } from "@/redux/slices/idEditSec";
+import { setFlag } from "@/redux/slices/idEditSec";
 const { TextArea } = Input;
 
-function Buy({productsSec}) {
-  const [loading, setLoading] = useState(false);
+function Buy({productsSec , productEdit , loading , id}) {
+  
+  const [loadingCat, setLoadingCat] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
   
-  const [loadingEdit, setLoadingEdit] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -31,28 +31,25 @@ function Buy({productsSec}) {
   const [nickname, setNickname] = useState("");
   const [productType, setProductType] = useState("");
   const [errors, setErrors] = useState({});
-  const [flag, setFlag] = useState(false);
+ 
   const [body, setBody] = useState("");
   
-  const [productEdit, setProductEdit] = useState({});
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
-  const { idEdit } = useSelector((state) => state.idEdit);
-
+  const { flag } = useSelector((state) => state.idEdit);
   const pathname = usePathname();
   const router = useRouter();
   const disPatch = useDispatch();
 
   useEffect(() => {
     if (pathname === "/profile/second-hand") {
-      disPatch(setIdEdit(0));
       resetState();
     }
   }, [pathname]);
 
   useEffect(() => {
-    if (user?.displayName && idEdit === 0) {
+    if (user?.displayName && id === 0) {
       setNickname(user?.displayName);
     }
   }, [user]);
@@ -73,29 +70,7 @@ function Buy({productsSec}) {
     }
   }, [productEdit]);
 
-  useEffect(() => {
-    const fetchProductsSec = async () => {
-      setLoadingEdit(true);
-      try {
-        const productsData = await getUserBuyAdId(idEdit, user?.token);
-        if (productsData.type === "error") {
-          Toast.fire({
-            icon: "error",
-            title: productsData.message,
-          });
-          return;
-        }
-        setProductEdit(productsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingEdit(false);
-      }
-    };
-    if (idEdit !== 0) {
-      fetchProductsSec();
-    }
-  }, [idEdit]);
+ 
 
  
 
@@ -105,31 +80,30 @@ function Buy({productsSec}) {
     setProductType("");
     setBody("");
     setErrors({});
-    setProductEdit({});
     setContactInfoType(0);
     setNickname(user?.displayName);
   };
   const fetchCategories = async () => {
-    setLoading(true);
+    setLoadingCat(true);
     try {
       const categoryData = await getUserAdFilter2();
       setCategoryList(categoryData?.categories);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     } finally {
-      setLoading(false);
+      setLoadingCat(false);
     }
   };
 
   useEffect(() => {
-    if (idEdit !== 0) {
+    if (productEdit?.id) {
       fetchCategories();
     }
-  }, [idEdit]);
+  }, [productEdit]);
 
   const handleDropdownVisibleChange = (open) => {
     setDropdownOpen(open);
-    if (open && categoryList.length === 0 && !loading) {
+    if (open && categoryList.length === 0 && !loadingCat) {
       fetchCategories();
     }
   };
@@ -149,7 +123,7 @@ function Buy({productsSec}) {
     }
     const data = {
       langCode: "fa",
-      id: idEdit ? idEdit : 0,
+      id: id ? id : 0,
       categoryId: selectedCategory ? selectedCategory : 0,
       title: productName,
       type: productType,
@@ -171,10 +145,10 @@ function Buy({productsSec}) {
       }
       Toast.fire({
         icon: "success",
-        title: `آگهی شما با موفقیت ${idEdit ? "ویرایش" : "ثبت"} شد`,
+        title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
-      setFlag((e) => !e);
       router.push("/profile/second-hand");
+      disPatch(setFlag(!flag)) ;
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -195,21 +169,21 @@ function Buy({productsSec}) {
 
   return (
     <>
-      {loadingEdit && (
+      {loading && (
         <div className="flex justify-center items-center h-screen">
           <Spin />
         </div>
       )}
-      {!loadingEdit && (
-        <div>
+      {!loading && (
+        <div className="w-full">
           {pathname === "/profile/second-hand" && (
             <ListProductBuy
               productsSec={productsSec}
-              setFlag={setFlag}
+             
             />
           )}
           {(pathname === "/profile/second-hand/add" ||
-            pathname === "/profile/second-hand/edit") && (
+            pathname.includes("/profile/second-hand/edit/") ) && (
             <div className="bg-white p-5 rounded-lg">
               {/* عنوان */}
               <div className="flex justify-between items-center mb-4">
@@ -252,7 +226,7 @@ function Buy({productsSec}) {
                     allowClear
                     showSearch
                     placeholder="انتخاب دسته‌بندی"
-                    loading={loading}
+                    loading={loadingCat}
                     value={selectedCategory}
                     onChange={(value) => {
                       setSelectedCategory(
@@ -268,7 +242,7 @@ function Buy({productsSec}) {
                     optionFilterProp="children"
                     className="w-full"
                     notFoundContent={
-                      loading ? <Spin size="small" /> : "دسته‌بندی یافت نشد"
+                      loadingCat ? <Spin size="small" /> : "دسته‌بندی یافت نشد"
                     }
                     open={dropdownOpen}
                     onOpenChange={handleDropdownVisibleChange}
@@ -513,7 +487,7 @@ function Buy({productsSec}) {
                     className="bg-[#d1182b] hover:bg-[#b91626]"
                     onClick={handleSubmit}
                   >
-                    {idEdit ? "ویرایش" : "ثبت درخواست"}
+                    {id ? "ویرایش" : "ثبت درخواست"}
                   </Button>
                 </div>
               </div>
