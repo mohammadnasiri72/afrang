@@ -7,28 +7,8 @@ import ModalDelete from "./ModalDelete";
 import ModalShowDetails from "./ModalShowDetails";
 import { useRouter } from "next/navigation";
 
-function ListProductSec({
-  productsSec,
-  loadingList,
-}) {
-
-
-  const skeleton = Array(6)
-    .fill(0)
-    .map((_, i) => (
-      <div
-        key={i}
-        className="relative flex items-center gap-4 bg-gray-200 rounded-xl p-3 w-full sm:w-1/2 lg:w-1/3 max-w-xs animate-pulse min-h-[80px]"
-      >
-        <div className="w-16 h-16 bg-gray-300 rounded-lg flex-shrink-0" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 w-2/3 bg-gray-300 rounded" />
-          <div className="h-3 w-1/2 bg-gray-300 rounded" />
-        </div>
-      </div>
-    ));
-
-    const router = useRouter();
+function ListProductSec({ productsSec }) {
+  const router = useRouter();
 
   return (
     <>
@@ -46,11 +26,9 @@ function ListProductSec({
           ثبت آگهی جدید
         </button>
       </div>
-      <div className=" min-h-screen py-8">
+      <div className="py-8">
         <div className="w-full max-w-5xl mx-auto">
-          {loadingList ? (
-            <div className="flex flex-wrap gap-2 w-full">{skeleton}</div>
-          ) : productsSec.length > 0 ? (
+          {productsSec.length > 0 ? (
             <div className="flex flex-wrap gap-2 w-full">
               {[...productsSec].map((pr) => (
                 <div
@@ -65,9 +43,7 @@ function ListProductSec({
                         <>
                           <div className="flex flex-col gap-2 w-full">
                             <ModalShowDetails id={pr.id} />
-                            <EditeProductSec
-                              id={pr.id}
-                            />
+                            <EditeProductSec id={pr.id} />
                             <ModalDelete id={pr.id} />
                           </div>
                         </>
@@ -76,7 +52,6 @@ function ListProductSec({
                     >
                       <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
                     </Popover>
-                   
                   </div>
                   {pr.image ? (
                     <img

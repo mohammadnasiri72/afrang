@@ -9,20 +9,7 @@ import { useRouter } from "next/navigation";
 function ListProductBuy({
   productsSec,
 }) {
-  const skeleton = Array(6)
-    .fill(0)
-    .map((_, i) => (
-      <div
-        key={i}
-        className="relative flex items-center gap-4 bg-gray-200 rounded-xl p-3 w-full sm:w-1/2 lg:w-1/3 max-w-xs animate-pulse min-h-[80px]"
-      >
-        <div className="w-16 h-16 bg-gray-300 rounded-lg flex-shrink-0" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 w-2/3 bg-gray-300 rounded" />
-          <div className="h-3 w-1/2 bg-gray-300 rounded" />
-        </div>
-      </div>
-    ));
+  
 
     const router = useRouter();
 
@@ -41,7 +28,7 @@ function ListProductBuy({
           ثبت آگهی جدید
         </button>
       </div>
-      <div className=" min-h-screen py-8">
+      <div className=" py-8">
         <div className="w-full max-w-5xl mx-auto">
           {   productsSec.length > 0 ? (
             <div className="flex flex-wrap gap-2 w-full">

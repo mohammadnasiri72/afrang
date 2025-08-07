@@ -1,6 +1,6 @@
 "use client";
 
-import { Segmented, Empty } from "antd";
+import { Segmented, Empty, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FaRecycle } from "react-icons/fa";
 import Buy from "@/components/profile/second-hand/Buy";
@@ -70,7 +70,7 @@ const SecondHand = () => {
     if (id !== 0 && activeTab === 2) {
       fetchProductsSec();
     }
-  }, [user, id, activeTab]);
+  }, [user, id]);
 
   useEffect(() => {
     const fetchProductsSec = async () => {
@@ -94,9 +94,7 @@ const SecondHand = () => {
     if (id !== 0 && activeTab === 1) {
       fetchProductsSec();
     }
-  }, [user, id, activeTab]);
-
-  
+  }, [user, id]);
 
   return (
     <>
@@ -169,14 +167,20 @@ const SecondHand = () => {
               options={options}
             />
           </div>
-
-          <div className="w-full">
-            {activeTab === 2 ? (
-              <Buy productEdit={productEdit} loading={loadingEdit} id={id} />
-            ) : (
-              <Sell productEdit={productEditSell} loading={loadingEdit} id={id}/>
-            )}
-          </div>
+          {!loadingEdit && (
+            <div className="w-full">
+              {activeTab === 2 ? (
+                <Buy productEdit={productEdit} id={id} />
+              ) : (
+                <Sell productEdit={productEditSell} id={id} />
+              )}
+            </div>
+          )}
+          {loadingEdit && (
+            <div className="flex justify-center items-center w-full h-48">
+              <Spin />
+            </div>
+          )}
         </div>
       </div>
     </>

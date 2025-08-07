@@ -8,7 +8,7 @@ import {
   getUserBuyAd,
   getUserSellAd,
 } from "@/services/UserSellAd/UserSellAdServices";
-import { Segmented } from "antd";
+import { Segmented, Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaRecycle } from "react-icons/fa";
@@ -20,7 +20,6 @@ const SecondHand = () => {
   const [loadingList, setLoadingList] = useState(false);
   const [productsSec, setProductsSec] = useState([]);
   const [productsBuy, setProductsBuy] = useState([]);
-
 
   const disPatch = useDispatch();
   const router = useRouter();
@@ -46,7 +45,7 @@ const SecondHand = () => {
     if (user?.token && activeTab === 1) {
       fetchProductsSec();
     }
-  }, [user, activeTab , flag]);
+  }, [user, activeTab, flag]);
 
   useEffect(() => {
     const fetchProductsSec = async () => {
@@ -64,7 +63,7 @@ const SecondHand = () => {
     if (user?.token && activeTab === 2) {
       fetchProductsSec();
     }
-  }, [user, activeTab , flag]);
+  }, [user, activeTab, flag]);
 
   return (
     <>
@@ -138,11 +137,20 @@ const SecondHand = () => {
               options={options}
             />
           </div>
-          {activeTab === 2 && productsBuy.length > 0 && (
-            <Buy productsSec={productsBuy} loading={loadingList}/>
+          {!loadingList && (
+            <div className="w-full">
+              {activeTab === 2 && productsBuy.length > 0 && (
+                <Buy productsSec={productsBuy}  />
+              )}
+              {activeTab === 1 && productsSec.length > 0 && (
+                <Sell productsSec={productsSec}  />
+              )}
+            </div>
           )}
-          {activeTab === 1 && productsSec.length > 0 && (
-            <Sell productsSec={productsSec} loading={loadingList}/>
+          {loadingList && (
+            <div className="flex justify-center items-center w-full h-48">
+              <Spin />
+            </div>
           )}
         </div>
       </div>

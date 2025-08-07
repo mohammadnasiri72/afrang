@@ -19,11 +19,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { setFlag } from "@/redux/slices/idEditSec";
 const { TextArea } = Input;
 
-function Buy({productsSec , productEdit , loading , id}) {
-  
+function Buy({ productsSec, productEdit, id }) {
   const [loadingCat, setLoadingCat] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
-  
+
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -31,9 +30,9 @@ function Buy({productsSec , productEdit , loading , id}) {
   const [nickname, setNickname] = useState("");
   const [productType, setProductType] = useState("");
   const [errors, setErrors] = useState({});
- 
+
   const [body, setBody] = useState("");
-  
+
   const [contactInfoType, setContactInfoType] = useState(0);
   const user = useSelector(selectUser);
 
@@ -69,10 +68,6 @@ function Buy({productsSec , productEdit , loading , id}) {
       setContactInfoType(productEdit.contactInfo);
     }
   }, [productEdit]);
-
- 
-
- 
 
   const resetState = () => {
     setSelectedCategory(undefined);
@@ -148,7 +143,7 @@ function Buy({productsSec , productEdit , loading , id}) {
         title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
       router.push("/profile/second-hand");
-      disPatch(setFlag(!flag)) ;
+      disPatch(setFlag(!flag));
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -169,172 +164,163 @@ function Buy({productsSec , productEdit , loading , id}) {
 
   return (
     <>
-      {loading && (
-        <div className="flex justify-center items-center h-screen">
-          <Spin />
-        </div>
-      )}
-      {!loading && (
-        <div className="w-full">
-          {pathname === "/profile/second-hand" && (
-            <ListProductBuy
-              productsSec={productsSec}
-             
-            />
-          )}
-          {(pathname === "/profile/second-hand/add" ||
-            pathname.includes("/profile/second-hand/edit/") ) && (
-            <div className="bg-white p-5 rounded-lg">
-              {/* عنوان */}
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  فرم خرید کالای دسته دوم
-                </h2>
-                <button
-                  onClick={() => {
-                    router.back();
-                  }}
-                  className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
-                >
-                  بازگشت به لیست
-                </button>
+      <div className="w-full">
+        {pathname === "/profile/second-hand" && (
+          <ListProductBuy productsSec={productsSec} />
+        )}
+        {(pathname === "/profile/second-hand/add" ||
+          pathname.includes("/profile/second-hand/edit/")) && (
+          <div className="bg-white p-5 rounded-lg">
+            {/* عنوان */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-800">
+                فرم خرید کالای دسته دوم
+              </h2>
+              <button
+                onClick={() => {
+                  router.back();
+                }}
+                className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+              >
+                بازگشت به لیست
+              </button>
+            </div>
+            <div className="max-w-2xl mx-auto">
+              {/* راهنما */}
+              <div className="mb-8">
+                <Alert
+                  message={
+                    <span className="font-bold">
+                      کاربر گرامی در صورتیکه تمایل به نمایش تلفن خود در سایت
+                      دارید گزینه مربوط در قسمت پایین فرم را انتخاب نمایید.
+                    </span>
+                  }
+                  type="info"
+                  showIcon
+                />
               </div>
-              <div className="max-w-2xl mx-auto">
-                {/* راهنما */}
-                <div className="mb-8">
-                  <Alert
-                    message={
-                      <span className="font-bold">
-                        کاربر گرامی در صورتیکه تمایل به نمایش تلفن خود در سایت
-                        دارید گزینه مربوط در قسمت پایین فرم را انتخاب نمایید.
-                      </span>
+              {/* دسته بندی محصول */}
+              <div className="mb-6">
+                <label
+                  className={`block text-gray-700 text-sm font-bold mb-2${
+                    errors.selectedCategory ? " text-red-important" : ""
+                  }`}
+                >
+                  دسته‌بندی کالا <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  allowClear
+                  showSearch
+                  placeholder="انتخاب دسته‌بندی"
+                  loading={loadingCat}
+                  value={selectedCategory}
+                  onChange={(value) => {
+                    setSelectedCategory(
+                      value === undefined ? undefined : value
+                    );
+                    if (errors.selectedCategory && value !== undefined) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        selectedCategory: false,
+                      }));
                     }
-                    type="info"
-                    showIcon
-                  />
-                </div>
-                {/* دسته بندی محصول */}
-                <div className="mb-6">
-                  <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.selectedCategory ? " text-red-important" : ""
-                    }`}
-                  >
-                    دسته‌بندی کالا <span className="text-red-500">*</span>
-                  </label>
-                  <Select
-                    allowClear
-                    showSearch
-                    placeholder="انتخاب دسته‌بندی"
-                    loading={loadingCat}
-                    value={selectedCategory}
-                    onChange={(value) => {
-                      setSelectedCategory(
-                        value === undefined ? undefined : value
-                      );
-                      if (errors.selectedCategory && value !== undefined) {
-                        setErrors((prev) => ({
-                          ...prev,
-                          selectedCategory: false,
-                        }));
-                      }
-                    }}
-                    optionFilterProp="children"
-                    className="w-full"
-                    notFoundContent={
-                      loadingCat ? <Spin size="small" /> : "دسته‌بندی یافت نشد"
-                    }
-                    open={dropdownOpen}
-                    onOpenChange={handleDropdownVisibleChange}
-                  >
-                    {categoryList?.map((item) => (
-                      <Select.Option key={item.id} value={item.id}>
-                        {item.title}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </div>
+                  }}
+                  optionFilterProp="children"
+                  className="w-full"
+                  notFoundContent={
+                    loadingCat ? <Spin size="small" /> : "دسته‌بندی یافت نشد"
+                  }
+                  open={dropdownOpen}
+                  onOpenChange={handleDropdownVisibleChange}
+                >
+                  {categoryList?.map((item) => (
+                    <Select.Option key={item.id} value={item.id}>
+                      {item.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
 
-                {/* عنوان محصول */}
-                <div className="mb-6">
-                  <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.productName ? " text-red-important" : ""
-                    }`}
-                  >
-                    نام محصول <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    value={productName}
-                    onChange={(e) => {
-                      setProductName(e.target.value);
-                      if (errors.productName && e.target.value.trim()) {
-                        setErrors((prev) => ({ ...prev, productName: false }));
-                      }
-                    }}
-                    placeholder="نام محصول را وارد کنید"
-                    className={`w-full${
-                      errors.productName ? " border-red-important" : ""
-                    }`}
-                  />
-                </div>
-                {/* نوع محصول */}
-                <div className="mb-6">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    نوع محصول
-                  </label>
-                  <Input
-                    value={productType}
-                    onChange={(e) => setProductType(e.target.value)}
-                    placeholder="نوع محصول را وارد کنید"
-                    className="w-full"
-                  />
-                </div>
-                {/* نام کاربر */}
-                <div className="mb-6">
-                  <label
-                    className={`block text-gray-700 text-sm font-bold mb-2${
-                      errors.nickname ? " text-red-important" : ""
-                    }`}
-                  >
-                    نام کاربر قابل نمایش <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    value={nickname}
-                    onChange={(e) => {
-                      setNickname(e.target.value);
-                      if (errors.nickname && e.target.value.trim()) {
-                        setErrors((prev) => ({ ...prev, nickname: false }));
-                      }
-                    }}
-                    placeholder="نام دلخواه جهت نمایش عمومی"
-                    className={`w-full${
-                      errors.nickname ? " border-red-important" : ""
-                    }`}
-                  />
-                </div>
-                {/* اطلاعات تماس */}
-                <div className="mb-6 sm:hidden block">
-                  <label
-                    className={`block text-gray-700 text-sm font-bold mb-2`}
-                  >
-                    اطلاعات تماس <span className="text-red-500">*</span>
-                  </label>
-                  <Select
-                    value={contactInfoType}
-                    onChange={(value) => {
-                      setContactInfoType(value);
-                    }}
-                    className="w-full"
-                    options={[
-                      { value: 0, label: "نمایش ایمیل و موبایل" },
-                      { value: 1, label: "فقط نمایش موبایل" },
-                      { value: 2, label: "فقط نمایش ایمیل" },
-                    ]}
-                  />
-                </div>
-                <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
-                  <span className="mb-2 font-bold text-gray-700">اطلاعات تماس</span>
+              {/* عنوان محصول */}
+              <div className="mb-6">
+                <label
+                  className={`block text-gray-700 text-sm font-bold mb-2${
+                    errors.productName ? " text-red-important" : ""
+                  }`}
+                >
+                  نام محصول <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  value={productName}
+                  onChange={(e) => {
+                    setProductName(e.target.value);
+                    if (errors.productName && e.target.value.trim()) {
+                      setErrors((prev) => ({ ...prev, productName: false }));
+                    }
+                  }}
+                  placeholder="نام محصول را وارد کنید"
+                  className={`w-full${
+                    errors.productName ? " border-red-important" : ""
+                  }`}
+                />
+              </div>
+              {/* نوع محصول */}
+              <div className="mb-6">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  نوع محصول
+                </label>
+                <Input
+                  value={productType}
+                  onChange={(e) => setProductType(e.target.value)}
+                  placeholder="نوع محصول را وارد کنید"
+                  className="w-full"
+                />
+              </div>
+              {/* نام کاربر */}
+              <div className="mb-6">
+                <label
+                  className={`block text-gray-700 text-sm font-bold mb-2${
+                    errors.nickname ? " text-red-important" : ""
+                  }`}
+                >
+                  نام کاربر قابل نمایش <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  value={nickname}
+                  onChange={(e) => {
+                    setNickname(e.target.value);
+                    if (errors.nickname && e.target.value.trim()) {
+                      setErrors((prev) => ({ ...prev, nickname: false }));
+                    }
+                  }}
+                  placeholder="نام دلخواه جهت نمایش عمومی"
+                  className={`w-full${
+                    errors.nickname ? " border-red-important" : ""
+                  }`}
+                />
+              </div>
+              {/* اطلاعات تماس */}
+              <div className="mb-6 sm:hidden block">
+                <label className={`block text-gray-700 text-sm font-bold mb-2`}>
+                  اطلاعات تماس <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  value={contactInfoType}
+                  onChange={(value) => {
+                    setContactInfoType(value);
+                  }}
+                  className="w-full"
+                  options={[
+                    { value: 0, label: "نمایش ایمیل و موبایل" },
+                    { value: 1, label: "فقط نمایش موبایل" },
+                    { value: 2, label: "فقط نمایش ایمیل" },
+                  ]}
+                />
+              </div>
+              <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+                <span className="mb-2 font-bold text-gray-700">
+                  اطلاعات تماس
+                </span>
                 <div className="SegmentedBuy overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
                   <Segmented
                     className="w-full overflow-auto"
@@ -392,109 +378,108 @@ function Buy({productsSec , productEdit , loading , id}) {
                     ]}
                   />
                 </div>
-                </div>
+              </div>
 
-                {/* شرح کامل */}
-                <div className="mb-6">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    شرح کامل
-                  </label>
-                  <TextArea
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    placeholder="توضیحی درباره شرح کامل محصول بنویسید"
-                    autoSize={{ minRows: 6, maxRows: 10 }}
-                    className="w-full"
-                  />
-                </div>
+              {/* شرح کامل */}
+              <div className="mb-6">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  شرح کامل
+                </label>
+                <TextArea
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder="توضیحی درباره شرح کامل محصول بنویسید"
+                  autoSize={{ minRows: 6, maxRows: 10 }}
+                  className="w-full"
+                />
+              </div>
 
-                <style jsx global>{`
-                  .border-red-important {
-                    border: 1px solid #ef4444 !important;
-                  }
-                  .ant-select-selector {
-                    border: ${errors.selectedCategory
-                      ? "1px solid red !important"
-                      : ""};
-                  }
+              <style jsx global>{`
+                .border-red-important {
+                  border: 1px solid #ef4444 !important;
+                }
+                .ant-select-selector {
+                  border: ${errors.selectedCategory
+                    ? "1px solid red !important"
+                    : ""};
+                }
 
-                  .ant-spin-dot-item {
-                    background-color: #d1182b !important;
-                  }
+                .ant-spin-dot-item {
+                  background-color: #d1182b !important;
+                }
 
-                  .text-red-important {
-                    color: #ef4444 !important;
-                  }
+                .text-red-important {
+                  color: #ef4444 !important;
+                }
+                .custom-upload-grid .ant-upload-list-picture-card {
+                  grid-template-columns: repeat(5, 1fr) !important;
+                  gap: 12px !important;
+                }
+                @media (max-width: 900px) {
                   .custom-upload-grid .ant-upload-list-picture-card {
-                    grid-template-columns: repeat(5, 1fr) !important;
-                    gap: 12px !important;
+                    grid-template-columns: repeat(3, 1fr) !important;
                   }
-                  @media (max-width: 900px) {
-                    .custom-upload-grid .ant-upload-list-picture-card {
-                      grid-template-columns: repeat(3, 1fr) !important;
-                    }
+                }
+                @media (max-width: 600px) {
+                  .custom-upload-grid .ant-upload-list-picture-card {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 5px !important;
                   }
-                  @media (max-width: 600px) {
-                    .custom-upload-grid .ant-upload-list-picture-card {
-                      grid-template-columns: repeat(2, 1fr) !important;
-                      gap: 5px !important;
-                    }
-                  }
-                  /* استایل عکس اصلی */
-                  .custom-upload-grid .ant-upload-list-item:first-child {
-                    border: 2px solid #d1182b !important;
-                    box-shadow: 0 0 0 2px #d1182b33;
-                  }
+                }
+                /* استایل عکس اصلی */
+                .custom-upload-grid .ant-upload-list-item:first-child {
+                  border: 2px solid #d1182b !important;
+                  box-shadow: 0 0 0 2px #d1182b33;
+                }
 
-                  .SegmentedBuy .ant-segmented {
-                    background-color: #ebebeb;
-                  }
-                  .SegmentedBuy .ant-segmented-item {
-                    width: 100%;
-                    font-weight: 600 !important;
-                    font-size: 14px;
-                    transition: 0.3s;
-                  }
-                  .SegmentedBuy .ant-segmented-item-selected {
-                    background-color: #fff !important;
-                    color: #d1182b !important;
-                    border-radius: 6px;
-                    font-weight: 900 !important;
-                    font-size: 16px !important;
-                    transition: 0.3s;
-                  }
-                  .SegmentedBuy .ant-segmented-item-selected:hover {
-                    color: #d1182b !important;
-                  }
-                  .SegmentedBuy .ant-segmented-thumb {
-                    background-color: #fff !important;
-                    font-weight: 900 !important;
-                  }
-                  /* حالت جمع و جورتر در sticky */
-                  .SegmentedBuy.sticky .ant-segmented-item {
-                    font-size: 12px;
-                  }
-                  .SegmentedBuy.sticky .ant-segmented-item-selected {
-                    font-size: 13px !important;
-                    border-radius: 4px;
-                  }
-                `}</style>
-                <div className="flex justify-end">
-                  <Button
-                    loading={loadingForm}
-                    disabled={loadingForm}
-                    type="primary"
-                    className="bg-[#d1182b] hover:bg-[#b91626]"
-                    onClick={handleSubmit}
-                  >
-                    {id ? "ویرایش" : "ثبت درخواست"}
-                  </Button>
-                </div>
+                .SegmentedBuy .ant-segmented {
+                  background-color: #ebebeb;
+                }
+                .SegmentedBuy .ant-segmented-item {
+                  width: 100%;
+                  font-weight: 600 !important;
+                  font-size: 14px;
+                  transition: 0.3s;
+                }
+                .SegmentedBuy .ant-segmented-item-selected {
+                  background-color: #fff !important;
+                  color: #d1182b !important;
+                  border-radius: 6px;
+                  font-weight: 900 !important;
+                  font-size: 16px !important;
+                  transition: 0.3s;
+                }
+                .SegmentedBuy .ant-segmented-item-selected:hover {
+                  color: #d1182b !important;
+                }
+                .SegmentedBuy .ant-segmented-thumb {
+                  background-color: #fff !important;
+                  font-weight: 900 !important;
+                }
+                /* حالت جمع و جورتر در sticky */
+                .SegmentedBuy.sticky .ant-segmented-item {
+                  font-size: 12px;
+                }
+                .SegmentedBuy.sticky .ant-segmented-item-selected {
+                  font-size: 13px !important;
+                  border-radius: 4px;
+                }
+              `}</style>
+              <div className="flex justify-end">
+                <Button
+                  loading={loadingForm}
+                  disabled={loadingForm}
+                  type="primary"
+                  className="bg-[#d1182b] hover:bg-[#b91626]"
+                  onClick={handleSubmit}
+                >
+                  {id ? "ویرایش" : "ثبت درخواست"}
+                </Button>
               </div>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </>
   );
 }

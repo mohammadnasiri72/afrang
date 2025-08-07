@@ -21,7 +21,6 @@ function ModalShowDetails({ id }) {
   const [productDetails, setProductDetails] = useState({});
   const user = useSelector(selectUser);
 
-  console.log(productDetails);
   
 
   const htmlToText = (htmlString) => {
