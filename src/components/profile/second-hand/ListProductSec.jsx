@@ -12,8 +12,8 @@ function ListProductSec({ productsSec }) {
 
   return (
     <>
-      <div className="flex justify-between items-center px-4 pt-4">
-        <h3 className="text-xl font-semibold text-gray-800">
+      <div className="flex justify-between items-center sm:px-4 px-1 pt-4">
+        <h3 className="sm:text-xl font-semibold text-gray-800">
           آگهی های فروش شما
         </h3>
         <button
@@ -21,7 +21,7 @@ function ListProductSec({ productsSec }) {
             // setStepPage(1);
             router.push("/profile/second-hand/add");
           }}
-          className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+          className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
           ثبت آگهی جدید
         </button>
@@ -29,30 +29,13 @@ function ListProductSec({ productsSec }) {
       <div className="py-8">
         <div className="w-full max-w-5xl mx-auto">
           {productsSec.length > 0 ? (
-            <div className="flex flex-wrap gap-2 w-full">
+            <div className="flex flex-wrap gap-2 w-full overflow-hidden">
               {[...productsSec].map((pr) => (
                 <div
                   key={pr.id}
                   data-id={pr.id}
                   className="relative flex items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
                 >
-                  <div className="absolute top-2 left-2">
-                    <Popover
-                      placement="bottom"
-                      content={
-                        <>
-                          <div className="flex flex-col gap-2 w-full">
-                            <ModalShowDetails id={pr.id} />
-                            <EditeProductSec id={pr.id} />
-                            <ModalDelete id={pr.id} />
-                          </div>
-                        </>
-                      }
-                      trigger="click"
-                    >
-                      <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
-                    </Popover>
-                  </div>
                   {pr.image ? (
                     <img
                       src={getImageUrl(pr.image)}
@@ -61,21 +44,47 @@ function ListProductSec({ productsSec }) {
                     />
                   ) : (
                     <img
-                      src={"/images/icons/camera-bag.png"}
+                      src={"/public/images/icons/photo.png"}
                       alt={pr.title}
                       className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
                     />
                   )}
                   <div className="flex flex-col items-start flex-1 min-w-0 gap-1">
-                    <span className="font-bold text-base truncate">
-                      {pr.title}
-                    </span>
+                    <div className="flex justify-between items-center w-full">
+                      <span className="font-bold text-base truncate">
+                        {pr.title}
+                      </span>
+                      <div className="">
+                        <Popover
+                          placement="bottom"
+                          content={
+                            <>
+                              <div className="flex flex-col gap-2 w-full">
+                                <ModalShowDetails id={pr.id} />
+                                <EditeProductSec id={pr.id} />
+                                <ModalDelete id={pr.id} />
+                              </div>
+                            </>
+                          }
+                          trigger="click"
+                        >
+                          <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
+                        </Popover>
+                      </div>
+                    </div>
                     <span className="text-gray-500 text-sm truncate">
-                      دسته‌بندی: {pr.categoryTitle}
+                      {pr.categoryTitle}
                     </span>
-                    <span className="text-[#d1182b] font-bold text-sm">
-                      قیمت: {pr.price.toLocaleString()} تومان
-                    </span>
+                    {pr.price !== 0 && (
+                      <span className="text-[#d1182b] font-bold text-sm">
+                        قیمت: {pr.price.toLocaleString()} تومان
+                      </span>
+                    )}
+                    {pr.price === 0 && (
+                      <span className="text-[#d1182b] font-bold text-sm">
+                        توافقی (تماس بگیرید)
+                      </span>
+                    )}
                     {pr.isActive ? (
                       <span className="text-emerald-600 flex items-center gap-1 bg-emerald-100 rounded-lg px-3">
                         <MdDone />

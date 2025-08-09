@@ -170,17 +170,17 @@ function Buy({ productsSec, productEdit, id }) {
         )}
         {(pathname === "/profile/second-hand/add" ||
           pathname.includes("/profile/second-hand/edit/")) && (
-          <div className="bg-white p-5 rounded-lg">
+          <div className="bg-white sm:p-5 p-1 rounded-lg">
             {/* عنوان */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-800">
+            <div className="flex justify-between items-center mb-4 sm:mt-0 mt-4">
+              <h2 className="sm:text-xl font-semibold text-gray-800 line-clamp-1">
                 فرم خرید کالای دسته دوم
               </h2>
               <button
                 onClick={() => {
                   router.back();
                 }}
-                className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+                className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
               >
                 بازگشت به لیست
               </button>
@@ -317,11 +317,11 @@ function Buy({ productsSec, productEdit, id }) {
                   ]}
                 />
               </div>
-              <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+              <div className="sm:flex hidden flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
                 <span className="mb-2 font-bold text-gray-700">
                   اطلاعات تماس
                 </span>
-                <div className="SegmentedBuy overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
+                <div className="SegmentedBuy overflow-hidden flex justify-center bg-white z-50 transition-all duration-300 w-full ">
                   <Segmented
                     className="w-full overflow-auto"
                     value={contactInfoType}
@@ -390,7 +390,7 @@ function Buy({ productsSec, productEdit, id }) {
                   onChange={(e) => setBody(e.target.value)}
                   placeholder="توضیحی درباره شرح کامل محصول بنویسید"
                   autoSize={{ minRows: 6, maxRows: 10 }}
-                  className="w-full"
+                  className="w-full !text-justify"
                 />
               </div>
 

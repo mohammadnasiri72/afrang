@@ -22,17 +22,17 @@ function BodyProductSec({ product }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+      <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 overflow-hidden">
         {/* Header */}
         <div className="border-b border-gray-200 pb-4 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="sm:text-2xl text-lg font-bold text-gray-900 mb-2 line-clamp-1">
             {product.title}
           </h1>
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-[#d1182b]">
+            <span className="sm:text-2xl font-bold text-[#d1182b] whitespace-nowrap">
               {formatPrice(product.price)} تومان
             </span>
-            <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+            <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
               {product.categoryTitle}
             </span>
           </div>
@@ -118,7 +118,8 @@ function BodyProductSec({ product }) {
             </Link>
           }
           type="warning"
-          showIcon
+          
+          className="text-justify"
         />
         <BoxTabDetailsProduct product={product} />
       </div>

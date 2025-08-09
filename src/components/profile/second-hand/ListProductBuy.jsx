@@ -15,30 +15,43 @@ function ListProductBuy({
 
   return (
     <>
-      <div className="flex justify-between items-center px-4 pt-4">
-        <h3 className="text-xl font-semibold text-gray-800">
+      <div className="flex justify-between items-center sm:px-4 px-1 pt-4">
+        <h3 className="sm:text-xl font-semibold text-gray-800 line-clamp-1">
           آگهی های خرید شما
         </h3>
         <button
           onClick={() => {
            router.push("/profile/second-hand/add");
           }}
-          className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+          className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
           ثبت آگهی جدید
         </button>
       </div>
-      <div className=" py-8">
-        <div className="w-full max-w-5xl mx-auto">
+      <div className="overflow-hidden py-8 w-full">
+        <div className="w-full max-w-5xl mx-auto ">
           {   productsSec.length > 0 ? (
-            <div className="flex flex-wrap gap-2 w-full">
+            <div className="flex flex-wrap gap-2 w-full sm:justify-start justify-center">
               {[...productsSec].map((pr) => (
                 <div
                   key={pr.id}
                   data-id={pr.id}
-                  className="relative flex items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
+                  className="relative flex  items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
                 >
-                  <div className="absolute top-2 left-2">
+                 
+                  <img
+                    src={"/public/images/icons/photo.png"}
+                    alt={pr.title}
+                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
+                  />
+                 
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <div className="w-full flex items-center justify-between">
+
+                    <span className="font-bold text-base truncate line-clamp-1">
+                      {pr.title}
+                    </span>
+                     <div className="">
                     <Popover
                       placement="bottom"
                       content={
@@ -57,17 +70,9 @@ function ListProductBuy({
                       <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
                     </Popover>
                   </div>
-                  <img
-                    src={"/images/icons/camera-bag.png"}
-                    alt={pr.title}
-                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
-                  />
-                  <div className="flex flex-col items-start gap-1">
-                    <span className="font-bold text-base truncate">
-                      {pr.title}
-                    </span>
+                    </div>
                     <span className="text-gray-500 text-sm truncate">
-                      دسته‌بندی: {pr.categoryTitle}
+                      {pr.categoryTitle}
                     </span>
                     <span className="text-gray-500 text-sm font-semibold">
                       {pr.isActive ? (

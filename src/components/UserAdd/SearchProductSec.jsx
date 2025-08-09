@@ -4,10 +4,9 @@ import { getUserAdBuy, getUserAdSell } from "@/services/UserAd/UserAdServices";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Input, Spin } from "antd";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ShowInfoContact from "./ShowInfoContact";
 
@@ -40,8 +39,7 @@ function SearchProductSec() {
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
 
-  const { activeTab } = useSelector((state) => state.activeTab);
-
+const pathname = usePathname();
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
     return new Intl.NumberFormat("fa-IR").format(price);
@@ -65,9 +63,9 @@ function SearchProductSec() {
     setLoading(true);
     try {
       const productsData =
-        activeTab === 1
+        pathname.includes("useds")
           ? await getUserAdSell(data)
-          : activeTab === 2
+          : pathname.includes("buyers")
           ? await getUserAdBuy(data)
           : [];
       if (productsData?.type === "error") {
@@ -241,8 +239,8 @@ function SearchProductSec() {
           }`}
         >
           {loading && (
-            <div className="bg-[#fff8] absolute top-0 left-0 bottom-0 right-0 w-full h-full ">
-              <div className="absolute top-1/2 left-1/2 translate-x-1/2 -translate-y-1/2 ">
+            <div className="bg-[#fff8] absolute top-0 left-0 bottom-0 right-0 w-full h-full z-[100]">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
                 <Spin size="large" />
               </div>
             </div>
@@ -251,9 +249,9 @@ function SearchProductSec() {
             {results.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
                 {results.map((product) =>
-                  activeTab === 1
+                  pathname.includes("useds")
                     ? ProductListItemSell(product)
-                    : activeTab === 2
+                    : pathname.includes("buyers")
                     ? ProductListItemBuy(product)
                     : ""
                 )}

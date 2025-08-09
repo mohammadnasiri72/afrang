@@ -344,17 +344,17 @@ function Sell({ productsSec, productEdit, id }) {
         )}
         {(pathname === "/profile/second-hand/add" ||
           pathname.includes("/profile/second-hand/edit")) && (
-          <div className="bg-white p-5 rounded-lg">
+          <div className="bg-white sm:p-5 p-1 rounded-lg">
             {/* عنوان */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-800">
+            <div className="flex justify-between items-center mb-4 mt-4 sm:mt-0">
+              <h2 className="sm:text-xl font-semibold text-gray-800 line-clamp-1">
                 فرم فروش کالای دسته دوم
               </h2>
               <button
                 onClick={() => {
                   router.back();
                 }}
-                className="px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+                className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626] whitespace-nowrap"
               >
                 بازگشت به لیست
               </button>
@@ -569,7 +569,7 @@ function Sell({ productsSec, productEdit, id }) {
                   onChange={(e) => setAppearance(e.target.value)}
                   placeholder="توضیحی درباره وضعیت ظاهری محصول بنویسید"
                   autoSize={{ minRows: 4, maxRows: 8 }}
-                  className="w-full"
+                  className="w-full !text-justify"
                 />
               </div>
               {/* اطلاعات تماس */}
@@ -590,11 +590,11 @@ function Sell({ productsSec, productEdit, id }) {
                   ]}
                 />
               </div>
-              <div className="flex flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+              <div className="sm:flex hidden flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
                 <span className="mb-2 font-bold text-gray-700">
                   اطلاعات تماس
                 </span>
-                <div className="SegmentedBuy  overflow-hidden sm:flex hidden justify-center bg-white z-50 transition-all duration-300 w-full ">
+                <div className="SegmentedBuy  overflow-hidden flex justify-center bg-white z-50 transition-all duration-300 w-full ">
                   <Segmented
                     className="w-full overflow-auto"
                     value={contactInfoType}
@@ -772,96 +772,99 @@ function Sell({ productsSec, productEdit, id }) {
                   showUploadList={false}
                 />
                 {/* گرید سفارشی عکس‌ها */}
-                <div className="flex flex-wrap gap-3 w-full mt-2">
+                <div className="flex flex-wrap justify-center w-full mt-2">
                   {fileList.map((file, idx) => (
-                    <div
-                      key={file.uid}
-                      onClick={() => openGallery(idx)}
-                      className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 flex-shrink-0 bg-white cursor-pointer ${
-                        mainImageIdx === idx
-                          ? "ring-2 ring-[#d1182b] border-[#d1182b]"
-                          : "border-gray-200"
-                      }`}
-                      style={{ width: 110, height: 110 }}
-                    >
-                      {file.thumbUrl ||
-                      file.url ||
-                      (file.uploadedData && file.uploadedData.imageUrl) ? (
-                        <img
-                          src={
-                            file.thumbUrl ||
-                            file.url ||
-                            (file.uploadedData &&
-                              getImageUrl(file.uploadedData.imageUrl))
-                          }
-                          alt={file.name}
-                          className="w-full h-full object-cover rounded-lg"
-                        />
-                      ) : null}
-                      {/* اسپینر فقط روی عکس در حال آپلود */}
-                      {loadingFile && idx === fileList.length - 1 && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-20">
-                          <Spin size="large" />
-                        </div>
-                      )}
-                      {/* آیکون حذف بالا چپ با سطل آشغال */}
-                      <Tooltip title="حذف عکس">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveImage(file);
-                          }}
-                          className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
-                        >
-                          <FaTrash size={16} />
-                        </button>
-                      </Tooltip>
-                      {/* آیکون ستاره برای انتخاب عکس اصلی */}
-                      <Tooltip
-                        title={
+                    <div className="sm:p-3 p-2">
+                      <div
+                        key={file.uid}
+                        onClick={() => openGallery(idx)}
+                        className={`relative group border rounded-lg overflow-hidden shadow-md transition-all duration-200 sm:w-[110px] w-[80px] sm:h-[110px] h-[80px] bg-white cursor-pointer ${
                           mainImageIdx === idx
-                            ? "عکس اصلی"
-                            : "انتخاب به عنوان عکس اصلی"
-                        }
+                            ? "ring-2 ring-[#d1182b] border-[#d1182b]"
+                            : "border-gray-200"
+                        }`}
                       >
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSetMainImage(idx);
-                          }}
-                          className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${
+                        {file.thumbUrl ||
+                        file.url ||
+                        (file.uploadedData && file.uploadedData.imageUrl) ? (
+                          <img
+                            src={
+                              file.thumbUrl ||
+                              file.url ||
+                              (file.uploadedData &&
+                                getImageUrl(file.uploadedData.imageUrl))
+                            }
+                            alt={file.name}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        ) : null}
+                        {/* اسپینر فقط روی عکس در حال آپلود */}
+                        {loadingFile && idx === fileList.length - 1 && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-20">
+                            <Spin size="large" />
+                          </div>
+                        )}
+                        {/* آیکون حذف بالا چپ با سطل آشغال */}
+                        <Tooltip title="حذف عکس">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(file);
+                            }}
+                            className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
+                          >
+                            <FaTrash size={16} />
+                          </button>
+                        </Tooltip>
+                        {/* آیکون ستاره برای انتخاب عکس اصلی */}
+                        <Tooltip
+                          title={
                             mainImageIdx === idx
-                              ? "text-yellow-400"
-                              : "text-[#333] hover:text-yellow-400"
-                          }`}
+                              ? "عکس اصلی"
+                              : "انتخاب به عنوان عکس اصلی"
+                          }
                         >
-                          <FaStar size={16} />
-                        </button>
-                      </Tooltip>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSetMainImage(idx);
+                            }}
+                            className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${
+                              mainImageIdx === idx
+                                ? "text-yellow-400"
+                                : "text-[#333] hover:text-yellow-400"
+                            }`}
+                          >
+                            <FaStar size={16} />
+                          </button>
+                        </Tooltip>
+                      </div>
                     </div>
                   ))}
                   {/* دکمه آپلود فقط اگر عکس در حال آپلود نیست */}
                   {!loadingFile && fileList.length < 10 && (
-                    <div
-                      className="flex flex-col justify-center items-center border rounded-lg h-[110px] w-[110px] cursor-pointer hover:border-[#d1182b] bg-white"
-                      onClick={() =>
-                        document
-                          .querySelector(
-                            '.custom-upload-grid input[type="file"]'
-                          )
-                          .click()
-                      }
-                    >
-                      <span className="text-[#d1182b] text-2xl">+</span>
-                      <div style={{ marginTop: 8 }}>آپلود</div>
+                    <div className="p-2">
+                      <div
+                        className="flex flex-col justify-center items-center border rounded-lg sm:h-[110px] w-[80px] sm:w-[110px] h-[80px] cursor-pointer hover:border-[#d1182b] bg-white"
+                        onClick={() =>
+                          document
+                            .querySelector(
+                              '.custom-upload-grid input[type="file"]'
+                            )
+                            .click()
+                        }
+                      >
+                        <span className="text-[#d1182b] text-2xl">+</span>
+                        <div style={{ marginTop: 8 }}>آپلود</div>
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
               {/* شرح کامل */}
-              <div className="mb-6">
+              <div className="mb-6 ">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   شرح کامل
                 </label>
@@ -870,7 +873,7 @@ function Sell({ productsSec, productEdit, id }) {
                   onChange={(e) => setBody(e.target.value)}
                   placeholder="توضیحی درباره شرح کامل محصول بنویسید"
                   autoSize={{ minRows: 6, maxRows: 10 }}
-                  className="w-full"
+                  className="w-full !text-justify"
                 />
               </div>
               <style jsx global>{`
@@ -890,21 +893,7 @@ function Sell({ productsSec, productEdit, id }) {
                 .text-red-important {
                   color: #ef4444 !important;
                 }
-                .custom-upload-grid .ant-upload-list-picture-card {
-                  grid-template-columns: repeat(5, 1fr) !important;
-                  gap: 12px !important;
-                }
-                @media (max-width: 900px) {
-                  .custom-upload-grid .ant-upload-list-picture-card {
-                    grid-template-columns: repeat(3, 1fr) !important;
-                  }
-                }
-                @media (max-width: 600px) {
-                  .custom-upload-grid .ant-upload-list-picture-card {
-                    grid-template-columns: repeat(2, 1fr) !important;
-                    gap: 5px !important;
-                  }
-                }
+                
                 /* استایل عکس اصلی */
                 .custom-upload-grid .ant-upload-list-item:first-child {
                   border: 2px solid #d1182b !important;

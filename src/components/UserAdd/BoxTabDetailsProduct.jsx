@@ -205,6 +205,7 @@ function BoxTabDetailsProduct({ product }) {
    "
                     type="info"
                     showIcon
+                    className="text-justify"
                   />
                 </div>
               )}
