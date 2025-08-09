@@ -1,5 +1,6 @@
 import Container from "@/components/container";
 import BodyProductSec from "@/components/UserAdd/BodyProductSec";
+import BreadCrumbUsedProduct from "@/components/UserAdd/BreadCrumbUsedProduct";
 import SliderProductSecImg from "@/components/UserAdd/SliderProductSecImg";
 import { getProductSecId } from "@/services/UserAd/UserAdServices";
 import { redirect } from "next/navigation";
@@ -26,6 +27,7 @@ export default async function UserAddDetails(props) {
   return (
     <>
       <Container>
+         <BreadCrumbUsedProduct title={product.title}/>
         <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative">
           <div className="lg:w-[30%] w-full p-2">
             {product.imageList.length > 0 && (

@@ -63,7 +63,7 @@ function CartActions({ product, selectedWarranty }) {
         selectedWarranty,
         userId,
         1,
-        selectedColor.id
+        selectedColor?.id
       );
       dispatch(fetchCurrentCart());
       setShowSuccessModal(true);

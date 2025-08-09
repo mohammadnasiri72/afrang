@@ -19,6 +19,7 @@ function BasketBox({ product }) {
   );
 
   
+  
 
 
   const warrantiesArray = Object.entries(product.warranties).map(
@@ -31,6 +32,7 @@ function BasketBox({ product }) {
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
   );
+
 
   return (
     <div className="px-2 h-full">

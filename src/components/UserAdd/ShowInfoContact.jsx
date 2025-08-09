@@ -13,14 +13,11 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-function ShowInfoContact({id}) {
-    const [dataContact, setDataContact] = useState({});
-      const [loadingBtn, setLoadingBtn] = useState(false);
+function ShowInfoContact({ id }) {
+  const [dataContact, setDataContact] = useState({});
+  const [loadingBtn, setLoadingBtn] = useState(false);
 
-      
-
-
-     const ShowInfo = async () => {
+  const ShowInfo = async () => {
     setLoadingBtn(true);
     try {
       const response = await getUserAdContact(id);
@@ -40,7 +37,7 @@ function ShowInfoContact({id}) {
   };
   return (
     <>
-       <div>
+      <div>
         {!dataContact.contactInfoType && (
           <Button
             loading={loadingBtn}
@@ -53,23 +50,26 @@ function ShowInfoContact({id}) {
             نمایش اطلاعات تماس
           </Button>
         )}
-        {
-          dataContact.contactInfoType && 
-           <div className="flex flex-col gap-2 pt-4 text-sm font-bold">
-                      <div className="flex items-center gap-2">
-                        <span>شماره تماس :</span>
-                        <span>
-                          {dataContact.mobile ? dataContact.mobile : "ثبت نشده"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span>ایمیل :</span>
-                        <span>
-                          {dataContact.email ? dataContact.email : "ثبت نشده"}
-                        </span>
-                      </div>
-                    </div>
-        }
+        {dataContact.contactInfoType && (
+          <div className="flex flex-col gap-2 pt-4 text-sm font-bold">
+            {dataContact?.mobile && (
+              <div className="flex items-center gap-2">
+                <span>شماره تماس :</span>
+                <span>
+                  {dataContact.mobile ? dataContact.mobile : "ثبت نشده"}
+                </span>
+              </div>
+            )}
+            {dataContact?.email && (
+              <div className="flex items-center gap-2">
+                <span>ایمیل :</span>
+                <span>
+                  {dataContact.email ? dataContact.email : "ثبت نشده"}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

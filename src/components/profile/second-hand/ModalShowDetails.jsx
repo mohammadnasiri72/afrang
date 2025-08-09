@@ -218,9 +218,22 @@ function ModalShowDetails({ id }) {
               </div>
               <div className="flex items-center justify-between bg-slate-200 px-4 py-1">
                 <span className="font-medium py-1 pr-2">تاریخ درج آگهی :</span>
-                <span className="font-medium py-1 pr-2">
-                  {productDetails.date || "–"}
-                </span>
+                {/* <span className="font-medium py-1 pr-2">
+                  {productDetails.createdFa || "–"}
+                </span> */}
+                <div>
+                  <span className="font-medium py-1 pr-2">
+                    {productDetails?.createdFa?.split(" ").length > 0
+                      ? productDetails?.createdFa?.split(" ")[0]
+                      : "-"}
+                  </span>
+                  -
+                  <span className="font-medium py-1 px-2">
+                    {productDetails?.createdFa?.split(" ").length > 1
+                      ? productDetails?.createdFa?.split(" ")[1]
+                      : "-"}
+                  </span>
+                </div>
               </div>
             </div>
 

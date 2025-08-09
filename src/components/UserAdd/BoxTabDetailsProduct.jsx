@@ -33,7 +33,6 @@ function BoxTabDetailsProduct({ product }) {
   const [loadingConfirm, setLoadingConfirm] = useState(false);
   const [dataContact, setDataContact] = useState({});
 
-
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
 
@@ -42,7 +41,6 @@ function BoxTabDetailsProduct({ product }) {
   };
 
   const handleOk = async () => {
-  
     setLoadingConfirm(true);
     try {
       const response = await getUserAdContact(product.id);
@@ -156,18 +154,24 @@ function BoxTabDetailsProduct({ product }) {
                   )}
                   {dataContact.contactInfoType && (
                     <div className="flex flex-col gap-2 pt-4 text-lg font-bold">
-                      <div className="flex items-center gap-2">
-                        <span>شماره تماس :</span>
-                        <span>
-                          {dataContact.mobile ? dataContact.mobile : "ثبت نشده"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span>ایمیل :</span>
-                        <span>
-                          {dataContact.email ? dataContact.email : "ثبت نشده"}
-                        </span>
-                      </div>
+                      {dataContact?.mobile && (
+                        <div className="flex items-center gap-2">
+                          <span>شماره تماس :</span>
+                          <span>
+                            {dataContact.mobile
+                              ? dataContact.mobile
+                              : "ثبت نشده"}
+                          </span>
+                        </div>
+                      )}
+                      {dataContact?.email && (
+                        <div className="flex items-center gap-2">
+                          <span>ایمیل :</span>
+                          <span>
+                            {dataContact.email ? dataContact.email : "ثبت نشده"}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>

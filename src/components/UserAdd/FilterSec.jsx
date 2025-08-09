@@ -38,11 +38,10 @@ function FilterSec() {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
-  const price1 = searchParams.get("price1") || undefined;
-  const price2 = searchParams.get("price2") || undefined;
+  const price1 = Number(searchParams.get("price1")) || undefined;
+  const price2 = Number(searchParams.get("price2")) || undefined;
   const categoryParams = searchParams.getAll("category");
 
-  const { activeTab } = useSelector((state) => state.activeTab);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -90,6 +89,7 @@ function FilterSec() {
       setCategoryChecked(initialCategories);
     }
   }, [filterList, searchParams]);
+
 
   return (
     <>
