@@ -14,7 +14,7 @@ function BreadCrumbUseds() {
     },
     {
       title: (
-       <span className="text-[#d1182b] font-[Yekan]">کالای کار کرده</span>
+       <span className="text-[#d1182b] font-[Yekan]">کالای دسته دوم</span>
       ),
     },
     

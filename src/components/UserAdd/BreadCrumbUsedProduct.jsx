@@ -20,7 +20,7 @@ function BreadCrumbUsedProduct({ title }) {
           href="/useds/-1"
           className="text-gray-500 hover:text-[#d1182b] font-[Yekan]"
         >
-          کالای کار کرده
+          کالای دسته دوم
         </Link>
       ),
     },

@@ -41,6 +41,7 @@ import ListProductSec from "./ListProductSec";
 import { MdEmail } from "react-icons/md";
 import { usePathname, useRouter } from "next/navigation";
 import { setFlag } from "@/redux/slices/idEditSec";
+import { SettingOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 
 function Sell({ productsSec, productEdit, id }) {
@@ -66,11 +67,18 @@ function Sell({ productsSec, productEdit, id }) {
   const [body, setBody] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
   const [contactInfoType, setContactInfoType] = useState(0);
+  const [showPrice, setShowPrice] = useState(1);
   const user = useSelector(selectUser);
 
   const pathname = usePathname();
   const router = useRouter();
   const disPatch = useDispatch();
+
+  useEffect(() => {
+    if (showPrice === 0) {
+      setSuggestedPrice("");
+    }
+  }, [showPrice]);
 
   useEffect(() => {
     if (pathname === "/profile/second-hand") {
@@ -101,7 +109,12 @@ function Sell({ productsSec, productEdit, id }) {
       setProductName(productEdit.title);
       setProductType(productEdit.type);
       setShutterCount(productEdit.usageCount);
-      setSuggestedPrice(productEdit.price.toLocaleString());
+      if (productEdit.price === 0) {
+        setSuggestedPrice("");
+        setShowPrice(0);
+      } else {
+        setSuggestedPrice(productEdit.price.toLocaleString());
+      }
       setPurchaseDate(productEdit.purchaseDate);
       setContactInfoType(productEdit.contactInfo);
       // مقداردهی اولیه عکس‌ها در حالت ویرایش
@@ -196,7 +209,7 @@ function Sell({ productsSec, productEdit, id }) {
       imageList: getImageListForBackend(),
       title: productName,
       serialNumber,
-      price: Number(suggestedPrice.replace(/,/g, "")),
+      price: showPrice === 0 ? 0 : Number(suggestedPrice.replace(/,/g, "")),
       purchaseDate,
       type: productType,
       usageCount: shutterCount,
@@ -311,6 +324,18 @@ function Sell({ productsSec, productEdit, id }) {
     );
   };
 
+  const selectBefore = (
+    <Select
+      value={showPrice}
+      onChange={(e) => {
+        setShowPrice(e);
+      }}
+    >
+      <Select.Option value={1}>قیمت پیشنهادی</Select.Option>
+      <Select.Option value={0}>توافقی (تماس بگیرید)</Select.Option>
+    </Select>
+  );
+
   return (
     <>
       <div className="w-full">
@@ -355,7 +380,7 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* دسته بندی محصول */}
-              <div className="mb-6">
+              <div className="mb-6 box-category-select">
                 <label
                   className={`block text-gray-700 text-sm font-bold mb-2${
                     errors.selectedCategory ? " text-red-important" : ""
@@ -471,6 +496,8 @@ function Sell({ productsSec, productEdit, id }) {
                   قیمت پیشنهادی
                 </label>
                 <Input
+                  disabled={showPrice === 0}
+                  addonBefore={selectBefore}
                   suffix="تومان"
                   value={suggestedPrice.toLocaleString()}
                   onChange={(e) => {
@@ -850,7 +877,7 @@ function Sell({ productsSec, productEdit, id }) {
                 .border-red-important {
                   border: 1px solid #ef4444 !important;
                 }
-                .ant-select-selector {
+                .box-category-select .ant-select-selector {
                   border: ${errors.selectedCategory
                     ? "1px solid red !important"
                     : ""};
