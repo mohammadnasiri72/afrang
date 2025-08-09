@@ -224,7 +224,7 @@ export default function Header(props) {
               <FaCartShopping
                 className={`text-4xl  ${
                   currentItems?.length !== 0
-                    ? "text-emerald-500"
+                    ? "text-teal-500"
                     : "text-[#d1182b]"
                 }`}
               />

@@ -112,7 +112,6 @@ function ShoppingDrawer() {
   return (
     <>
       <div className="relative">
-        {/* Custom SVG Cart Icon */}
         <span
           onClick={() => {
             dispatch(setOpenShopping(true));

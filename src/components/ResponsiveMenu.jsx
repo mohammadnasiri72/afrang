@@ -654,6 +654,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                   }}
                   onClick={() => {
                     if (item.url || item.pageUrl) {
+                      document.body.style.overflow = "";
                       handleNavigation(item.url || item.pageUrl);
                     }
                   }}

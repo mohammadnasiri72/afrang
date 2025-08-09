@@ -239,7 +239,7 @@ function ScrollToTopButton() {
       style={{
         position: "fixed",
         left: 32,
-        zIndex: 9999999,
+        zIndex: 1000,
         width: 36,
         height: 36,
         display: visible ? "flex" : "none",
