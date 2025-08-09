@@ -166,9 +166,9 @@ function BodyUserAdd() {
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
             <div
               onClick={() => {
-                router.push("/useds/-1");
+                // router.push("/useds/-1");
               }}
-              className={` cursor-pointer text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
+              className={` cursor-not-allowed text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
                 false ? "bg-blue-500" : "bg-blue-400"
               }`}
             >
