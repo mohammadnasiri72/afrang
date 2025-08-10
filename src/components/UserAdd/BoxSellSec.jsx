@@ -102,18 +102,25 @@ function BoxSellSec({ productList, loading }) {
               {product.categoryTitle}
             </p>
           )}
-          {product.price && (
+          {
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-[#d1182b]">
-                {formatPrice(product.price)} تومان
-              </span>
+              {product.price !== 0 && (
+                <span className="text-lg font-bold text-[#d1182b]">
+                  {formatPrice(product.price)} تومان
+                </span>
+              )}
+              {(!product.price || product.price === 0) && (
+                <span className="text-lg font-bold text-[#d1182b]">
+                  توافقی (تماس بگیرید)
+                </span>
+              )}
               {product.appearance && (
                 <span className="text-sm text-gray-500">
                   {product.appearance}
                 </span>
               )}
             </div>
-          )}
+          }
         </div>
       </div>
     </div>

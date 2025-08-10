@@ -18,6 +18,7 @@ import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from "./CountdownTimer";
 import { FaRecycle } from "react-icons/fa";
 import { Divider } from "antd";
+import AddToCartButton from "../ProductList/AddToCartButton";
 
 export default function ProductMain({ products }) {
   return (
@@ -145,7 +146,7 @@ export default function ProductMain({ products }) {
                   <div className=" ">
                     {product.canAddCart ? (
                       <div className="bg-[#d1182b] w-full flex justify-center items-center text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
-                        <AddToCartButtonCard productId={product.productId} />
+                        <AddToCartButton productId={product.productId} />
                       </div>
                     ) : (
                       <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%] cursor-not-allowed">

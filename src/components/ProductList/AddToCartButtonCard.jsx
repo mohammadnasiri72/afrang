@@ -1,16 +1,17 @@
 "use client";
 
 import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Modal, message } from "antd";
 import Cookies from "js-cookie";
+import Link from "next/link";
 import { useState } from "react";
 import { FaCartShopping, FaTrash } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { addToCart } from "../../services/cart/cartService";
 import { getProductId } from "../../services/products/productService";
-import { getUserCookie } from "@/utils/cookieUtils";
 import DeleteProductModal from "../Product/DeleteProductModal";
 
 const generateRandomUserId = () => {
@@ -20,7 +21,7 @@ const generateRandomUserId = () => {
 const AddToCartButtonCard = ({ productId }) => {
   const { currentItems } = useSelector((state) => state.cart);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
-  const cartItem = itemsArray.find(item => item.productId === productId);
+  const cartItem = itemsArray.find((item) => item.productId === productId);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +48,7 @@ const AddToCartButtonCard = ({ productId }) => {
         const firstWarrantyId = Object.keys(productDetails.warranties)[0];
         setSelectedWarranty({
           id: firstWarrantyId,
-          title: productDetails.warranties[firstWarrantyId]
+          title: productDetails.warranties[firstWarrantyId],
         });
       }
       setIsModalOpen(true);
@@ -77,7 +78,10 @@ const AddToCartButtonCard = ({ productId }) => {
             displayName: "",
             roles: [],
           };
-          Cookies.set("user", JSON.stringify(initialData), { expires: 7, path: "/" });
+          Cookies.set("user", JSON.stringify(initialData), {
+            expires: 7,
+            path: "/",
+          });
         }
       } else {
         userId = userData.userId;
@@ -100,14 +104,16 @@ const AddToCartButtonCard = ({ productId }) => {
 
   return (
     <>
-      {(!cartItem || cartItem.quantity === 0) ? (
+      {!cartItem || cartItem.quantity === 0 ? (
         <button
           onClick={handleAddToCart}
           disabled={isLoading}
           className="flex items-center px-2 bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full py-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FaCartShopping className="" />
-          <span className="line-clamp-1">{isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}</span>
+          <span className="line-clamp-1">
+            {isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}
+          </span>
         </button>
       ) : (
         <button
@@ -116,7 +122,9 @@ const AddToCartButtonCard = ({ productId }) => {
           className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FaTrash className="" />
-          <span className="">{isLoading ? "در حال بارگذاری..." : "حذف از سبد خرید"}</span>
+          <span className="">
+            {isLoading ? "در حال بارگذاری..." : "حذف از سبد خرید"}
+          </span>
         </button>
       )}
 
@@ -131,7 +139,7 @@ const AddToCartButtonCard = ({ productId }) => {
           <div className="flex flex-col gap-4">
             {/* اطلاعات محصول */}
             <div className="flex gap-4">
-              <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+              <div className="sm:w-32 w-24 sm:h-32 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                 <img
                   src={getImageUrl2(product.product.image)}
                   alt={product.product.title}
@@ -139,8 +147,12 @@ const AddToCartButtonCard = ({ productId }) => {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2">{product.product.title}</h3>
-                <p className="text-gray-600 text-xs mb-2 line-clamp-2">{product.product.description}</p>
+                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2">
+                  {product.product.title}
+                </h3>
+                <p className="text-gray-600 text-xs mb-2 line-clamp-2">
+                  {product.product.description}
+                </p>
 
                 {/* قیمت */}
                 <div>
@@ -149,7 +161,7 @@ const AddToCartButtonCard = ({ productId }) => {
                       <span className="text-gray-400 line-through text-xs">
                         {product.product.price1?.toLocaleString()} تومان
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-[#d1182b] text-lg font-bold">
                           {product.product.finalPrice?.toLocaleString()} تومان
                         </span>
@@ -165,10 +177,14 @@ const AddToCartButtonCard = ({ productId }) => {
                   )}
                 </div>
 
+              </div>
+            </div>
                 {/* گارانتی‌ها */}
                 {Object.keys(product.warranties).length > 0 && (
                   <div className="mt-3">
-                    <h4 className="font-semibold text-gray-800 text-sm mb-2">انتخاب گارانتی</h4>
+                    <h4 className="font-semibold text-gray-800 text-sm mb-2">
+                      انتخاب گارانتی
+                    </h4>
                     <div className="space-y-1.5">
                       {Object.entries(product.warranties).map(([id, title]) => (
                         <label
@@ -189,15 +205,24 @@ const AddToCartButtonCard = ({ productId }) => {
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
+                
 
             {/* دکمه تایید */}
-            <div className="mt-2 flex justify-end">
+            <div className="mt-2 flex flex-wrap  justify-end gap-2">
+              {product && product.product && product.product.url && (
+                <Link className="sm:w-auto w-full" href={product.product.url} target="_blank">
+                  <button
+                    type="button"
+                    className="bg-[#40768c] text-white px-4 py-1.5 rounded-lg hover:bg-[#28506a] transition-colors duration-300 text-sm cursor-pointer sm:w-auto w-full"
+                  >
+                    مشاهده جزئیات محصول
+                  </button>
+                </Link>
+              )}
               <button
                 onClick={handleConfirm}
                 disabled={isLoading || !product.canAddCart}
-                className="bg-[#d1182b] text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
+                className="bg-[#d1182b] sm:w-auto w-full text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
               >
                 {isLoading ? "در حال پردازش..." : "تایید و افزودن به سبد خرید"}
               </button>
@@ -215,4 +240,4 @@ const AddToCartButtonCard = ({ productId }) => {
   );
 };
 
-export default AddToCartButtonCard; 
+export default AddToCartButtonCard;

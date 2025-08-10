@@ -29,9 +29,16 @@ function BodyProductSec({ product }) {
             {product.title}
           </h1>
           <div className="flex items-center justify-between">
-            <span className="sm:text-2xl font-bold text-[#d1182b] whitespace-nowrap">
-              {formatPrice(product.price)} تومان
-            </span>
+            {(!product.price || product.price === 0) && (
+              <span className="sm:text-2xl font-bold text-[#d1182b] whitespace-nowrap">
+                توافقی (تماس بگیرید)
+              </span>
+            )}
+            {product.price !== 0 && (
+              <span className="sm:text-2xl font-bold text-[#d1182b] whitespace-nowrap">
+                {formatPrice(product.price)} تومان
+              </span>
+            )}
             <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
               {product.categoryTitle}
             </span>
@@ -118,7 +125,6 @@ function BodyProductSec({ product }) {
             </Link>
           }
           type="warning"
-          
           className="text-justify"
         />
         <BoxTabDetailsProduct product={product} />
