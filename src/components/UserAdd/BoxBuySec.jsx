@@ -153,7 +153,7 @@ function BoxBuySec({ productList, loading }) {
         </div>
 
         {/* View toggle buttons */}
-        <div className="sm:flex hidden items-center space-x-reverse bg-gray-100 rounded-lg p-1">
+        {/* <div className="sm:flex hidden items-center space-x-reverse bg-gray-100 rounded-lg p-1">
           <button
             onClick={() => setViewMode("list")}
             className={`p-2 rounded-md transition-colors cursor-pointer ${
@@ -200,7 +200,7 @@ function BoxBuySec({ productList, loading }) {
               />
             </svg>
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Products container */}

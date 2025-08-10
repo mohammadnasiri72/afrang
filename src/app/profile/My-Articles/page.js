@@ -479,6 +479,7 @@ export default function MyArticles() {
 
   return (
     <div className="space-y-6">
+       
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">
           ارسال اخبار و مقالات
@@ -754,7 +755,7 @@ export default function MyArticles() {
         <Alert
           message="راهنمای ارسال مقاله"
           description={
-            <div>
+            <div className="text-justify">
               توضیح : لطفا هر عکس را در سایز 600*800 ارسال نمایید . جهت کم کردن
               حجم عکس ها از گزینه Save For Web در برنامه photoshop استفاده
               نمایید
@@ -783,10 +784,11 @@ export default function MyArticles() {
               { required: true, message: "لطفا دسته‌بندی را انتخاب کنید" },
             ]}
           >
-            <Select placeholder="دسته‌بندی را انتخاب کنید">
+            <Select style={{zIndex:'1000000'}} placeholder="دسته‌بندی را انتخاب کنید">
               <Option value={3691}>مقالات کاربران</Option>
               <Option value={3690}>اخبار کاربران</Option>
             </Select>
+           
           </Form.Item>
 
           <Form.Item
@@ -917,6 +919,8 @@ export default function MyArticles() {
           }
         }
       `}</style>
+
+      
     </div>
   );
 }

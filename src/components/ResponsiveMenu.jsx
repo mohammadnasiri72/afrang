@@ -30,11 +30,7 @@ import { Popper, Paper, Box, Grow, Fade } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SubmenuDropdown from "./SubmenuDropdown";
 
-
-import { keyframes } from '@emotion/react';
-
-
-
+import { keyframes } from "@emotion/react";
 
 const dashboardMenuItems = [
   {
@@ -201,13 +197,11 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       activeMenu.Children &&
       activeMenu.Children.length > 0
     ) {
-     
       // محاسبه عرض اسکرول‌بار
       const scrollbarWidth =
         window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
       // document.body.style.paddingRight = `${scrollbarWidth}px`;
-      
 
       // اضافه کردن event listener برای کلید Escape
       const handleEscapeKey = (event) => {
@@ -238,8 +232,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       return () => {
         // بازگرداندن overflow و padding اصلی
         // document.body.style.overflow = originalOverflow;
-        document.body.style.paddingRight = '0px';
-        
+        document.body.style.paddingRight = "0px";
+
         // حذف event listener
         document.removeEventListener("keydown", handleEscapeKey);
         document.removeEventListener("mousedown", handleClickOutside);
@@ -492,7 +486,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       // فعال کردن مجدد اسکرول صفحه فقط اگر dropdown باز بود
       if (activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
         document.body.style.overflow = "";
-        document.body.style.paddingRight = '0px';
+        document.body.style.paddingRight = "0px";
       }
     }, 100);
   };
@@ -655,16 +649,18 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                   onClick={() => {
                     if (item.url || item.pageUrl) {
                       document.body.style.overflow = "";
-                      handleNavigation(item.url || item.pageUrl);
                     }
                   }}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <div className="py-2 cursor-pointer font-semibold">
+                    <Link onClick={onClose}
+                      href={item.url || item.pageUrl || "#"}
+                      className="py-2 cursor-pointer font-semibold"
+                    >
                       {item.title}
-                    </div>
+                    </Link>
                   ) : (
-                    <Link href={item.url || item.pageUrl || "#"}>
+                    <Link onClick={onClose} href={item.url || item.pageUrl || "#"}>
                       <div className="py-2 cursor-pointer font-semibold">
                         {item.title}
                       </div>
@@ -688,7 +684,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
             zIndex: 1200, // باید بالاتر از overlay باشد
             width: "auto",
             position: "fixed",
-            margin:0,
+            margin: 0,
             left: dropdownOffsets.left,
             right: dropdownOffsets.right,
             top: dropdownTop,
@@ -730,7 +726,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
               style={{ margin: 0, padding: 0 }}
               {...TransitionProps}
               timeout={200}
-              
             >
               <AnimatedPaper
                 sx={{
@@ -784,8 +779,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
         return {
           key: item.id,
           label: (
-            <button
-              onClick={() => handleNavigation(item.url || item.pageUrl || "#")}
+            <Link onClick={onClose}
+              href={item.url || item.pageUrl || "#"}
               className={`w-full text-right py-2 transition-colors cursor-pointer ${
                 isActivePath(item.url || item.pageUrl)
                   ? "text-[#d1182b]"
@@ -793,7 +788,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
               }`}
             >
               {item.title}
-            </button>
+            </Link>
           ),
         };
       });
@@ -828,8 +823,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
             children: dashboardMenuItems.map((item) => ({
               key: item.id,
               label: (
-                <button
-                  onClick={() => handleNavigation(item.path)}
+                <Link onClick={onClose}
+                  href={item.path}
                   className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer ${
                     isActivePath(item.path)
                       ? "text-[#d1182b]"
@@ -838,7 +833,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                 >
                   <item.icon className="text-lg" />
                   <span>{item.title}</span>
-                </button>
+                </Link>
               ),
             })),
           },

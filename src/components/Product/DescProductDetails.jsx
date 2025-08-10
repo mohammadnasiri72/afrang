@@ -6,6 +6,7 @@ import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
 import { getItemById } from "@/services/Item/item";
 import { FaRegEye } from "react-icons/fa";
+import { MdLocalPrintshop } from "react-icons/md";
 
 function DescProductDetails({ product }) {
   const [brand, setBrand] = useState({});
@@ -45,7 +46,6 @@ function DescProductDetails({ product }) {
               <span className="text-xs">{product?.product?.visit}</span>
             </div>
           )}
-          
         </div>
         {product?.product?.summary && (
           <div className="mb-4">
@@ -54,19 +54,27 @@ function DescProductDetails({ product }) {
           </div>
         )}
 
-        <div className="flex items-center gap-1 flex-wrap ">
-          {product?.product?.categoryTitle && (
-            <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
-              <span className="text-xs">دسته بندی : </span>
-              <span className="text-xs">{product?.product?.categoryTitle}</span>
-            </div>
-          )}
-          {brand?.title && (
-            <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
-              <span className="text-xs">برند : </span>
-              <span className="text-xs">{brand.title}</span>
-            </div>
-          )}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1 flex-wrap ">
+            {product?.product?.categoryTitle && (
+              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+                <span className="text-xs">دسته بندی : </span>
+                <span className="text-xs">
+                  {product?.product?.categoryTitle}
+                </span>
+              </div>
+            )}
+            {brand?.title && (
+              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+                <span className="text-xs">برند : </span>
+                <span className="text-xs">{brand.title}</span>
+              </div>
+            )}
+          </div>
+          {/* <div className="flex items-center gap-1 font-medium text-[#333a] hover:text-[#d1182b] duration-300 cursor-pointer">
+            <MdLocalPrintshop />
+            <span className="text-xs">چاپ</span>
+          </div> */}
         </div>
 
         {product?.productModes && product?.productModes.length > 0 && (

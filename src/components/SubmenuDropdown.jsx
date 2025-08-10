@@ -1,14 +1,19 @@
 "use client";
 
+import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import { getImageUrl } from "@/utils/mainDomain";
+import Link from "next/link";
 import { useMemo } from "react";
+import { useDispatch } from "react-redux";
 
 const MAX_COLUMNS = 4;
 const COLUMN_PIXEL_WIDTH = 300;
 
 const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
+  const dispatch = useDispatch();
   const dropdownContent = useMemo(() => {
     if (!activeMenu) return null;
+    
 
     const flatList = [];
     activeMenu.Children?.forEach((parent) => {
@@ -102,7 +107,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                 }}
               >
                 {col.map((item, idx) => (
-                  <div
+                  <Link href={item.url || item.pageUrl || "#"}
                     key={`${item.isParent ? "parent" : "child"}-${item.id}-${idx}`}
                     className={`line-clamp-1 pb-2 ${
                       item.isParent
@@ -116,7 +121,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                     }}
                     onClick={() => {
                       document.body.style.overflow = "";
-                      onNavigation(item.url || item.pageUrl || "#")
+                      dispatch(setOpenMenuRes(false));
                     }}
                     onMouseOver={e => {
                       if (item.isParent) {
@@ -136,7 +141,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                     }}
                   >
                     {item.title}
-                  </div>
+                  </Link>
                 ))}
                 {shouldShowImageHere && (
                   <div className="w-full h-[68vh] flex items-end justify-center flex-col">

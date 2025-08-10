@@ -16,6 +16,7 @@ body {
   font-family: "Yekan";
   src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("truetype");
   font-weight: 300;
+  
 }
 @font-face {
   font-family: "Yekan";
@@ -816,6 +817,18 @@ th {
 }
 .ant-modal-mask {
   z-index: 109999 !important;
+}
+.ant-select {
+  z-index: 119999 !important;
+}
+.ant-select-item-option {
+  z-index: 119999 !important;
+}
+.ant-select-dropdown {
+  z-index: 119999 !important;
+}
+.ant-select-item {
+  z-index: 119999 !important;
 }
 
 .used-icon-thumb.icon4 span {

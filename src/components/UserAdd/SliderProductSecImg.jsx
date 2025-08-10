@@ -89,6 +89,10 @@ export default function SliderProductSecImg({ attachments }) {
                 <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                   کالای کارکرده
                 </div>
+                 {/* پیشنهاد کاربران */}
+              <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                پیشنهاد کاربران
+              </div>
               </Swiper>
               <Swiper
                 style={{

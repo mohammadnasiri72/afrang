@@ -57,17 +57,21 @@ function BoxSellSec({ productList, loading }) {
 
   // کامپوننت محصول برای حالت لیست
   const ProductListItem = ({ product }) => (
-    <div className="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow">
-      <div className="flex items-center space-x-4 space-x-reverse">
-        <div className="flex-shrink-0 px-3">
-          <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
+    <div className="border border-gray-200 rounded-lg p-1 mb-4 hover:shadow-md transition-shadow">
+      <div className="flex items-center space-x-reverse">
+        <div className="flex-shrink-0 pl-3">
+          <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
             {product.image && product.url ? (
-              <Link href={product.url} className="w-full h-full">
+              <Link href={product.url} className="w-full h-full relative">
                 <img
                   src={getImageUrl(product.image)}
                   alt={product.title}
                   className="w-full h-full object-cover rounded-lg"
                 />
+                {/* کالای کارکرده */}
+                <div className="absolute bottom-0 right-0 left-0 bg-[#fffa] text-[#d1182b] justify-center py-1 shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  کالای کارکرده
+                </div>
               </Link>
             ) : (
               <svg
@@ -88,14 +92,19 @@ function BoxSellSec({ productList, loading }) {
         </div>
         <div className="flex-1 min-w-0">
           {product.url && (
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
-              <Link
-                href={product.url}
-                className="hover:text-[#d1182b] transition-colors"
-              >
-                {product.title}
-              </Link>
-            </h3>
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-lg font-semibold text-gray-900">
+                <Link
+                  href={product.url}
+                  className="hover:text-[#d1182b] transition-colors"
+                >
+                  {product.title}
+                </Link>
+              </h3>
+              <span className="text-xs font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
+                پیشنهاد کاربران
+              </span>
+            </div>
           )}
           {product.categoryTitle && (
             <p className="text-sm text-gray-600 mb-2">
@@ -128,16 +137,24 @@ function BoxSellSec({ productList, loading }) {
 
   // کامپوننت محصول برای حالت گرید
   const ProductGridItem = ({ product }) => (
-    <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
       <div className="mb-3">
         <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
           {product.image && product.url ? (
-            <Link href={product.url} className="w-full h-full">
+            <Link href={product.url} className="w-full h-full relative">
               <img
                 src={getImageUrl(product.image)}
                 alt={product.title}
                 className="w-full h-full object-cover rounded-lg"
               />
+              {/* کالای کارکرده */}
+              <div className="absolute top-2 right-1 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                کالای کارکرده
+              </div>
+              {/* پیشنهاد کاربران */}
+              <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                پیشنهاد کاربران
+              </div>
             </Link>
           ) : (
             <svg
@@ -156,29 +173,37 @@ function BoxSellSec({ productList, loading }) {
           )}
         </div>
       </div>
-      {product.url && (
-        <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
-          <Link
-            href={product.url}
-            className="hover:text-[#d1182b] transition-colors"
-          >
-            {product.title}
-          </Link>
-        </h3>
-      )}
-      {product.categoryTitle && (
-        <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
-      )}
-      {product.price && (
+      <div className="px-3">
+        {product.url && (
+          <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
+            <Link
+              href={product.url}
+              className="hover:text-[#d1182b] transition-colors"
+            >
+              {product.title}
+            </Link>
+          </h3>
+        )}
+        {product.categoryTitle && (
+          <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
+        )}
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-[#d1182b]">
-            {formatPrice(product.price)} تومان
-          </span>
+          {(!product.price || product.price === 0) && (
+            <span className="text-lg font-bold text-[#d1182b]">
+              توافقی (تماس بگیرید)
+            </span>
+          )}
+          {product.price !== 0 && (
+            <span className="text-lg font-bold text-[#d1182b]">
+              {formatPrice(product.price)} تومان
+            </span>
+          )}
+
           {product.appearance && (
             <span className="text-xs text-gray-500">{product.appearance}</span>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 
