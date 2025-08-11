@@ -1,15 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
+import { getItemById } from "@/services/Item/item";
 import { addToRecentViews } from "@/utils/recentViews";
-import ExpandableText from "./ExpandableText";
+import { Alert } from "antd";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FaRegEye } from "react-icons/fa";
 import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
-import { getItemById } from "@/services/Item/item";
-import { FaRegEye } from "react-icons/fa";
-import { MdLocalPrintshop } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 function DescProductDetails({ product }) {
   const [brand, setBrand] = useState({});
+
+  const { settings } = useSelector((state) => state.settings);
 
   useEffect(() => {
     // ذخیره بازدید محصول در localStorage
@@ -76,6 +79,57 @@ function DescProductDetails({ product }) {
             <span className="text-xs">چاپ</span>
           </div> */}
         </div>
+        {product?.product?.conditionId === 20 && (
+          <div className="mb-5 mt-1">
+            <div>
+              <Alert
+                message=" لطفا قبل از انجام هرگونه معامله، قوانین خرید و فروش را مطالعه نمایید "
+                description={
+                  <div className="flex flex-col items-start justify-center">
+                    <Link
+                      className="!text-cyan-700 font-semibold hover:!text-cyan-600 duration-300"
+                      href="/usedrules"
+                    >
+                      مشاهده قوانین خرید و فروش تجهیزات کارکرده و دست دوم.
+                    </Link>
+                  </div>
+                }
+                type="warning"
+                className="text-justify !py-2 !px-4"
+              />
+            </div>
+            <div className="mt-2">
+              <Alert
+                message={
+                  <span className="text-cyan-700">
+                    این محصول از طرف تیم افرنگ به شما پیشنهاد شده است.
+                  </span>
+                }
+                description={
+                  <div className="flex flex-col items-start justify-center">
+                    <div>
+                      <span>مشاوره تلفنی : </span>
+                      <a
+                        className="!text-cyan-700 font-bold hover:!text-cyan-600 duration-300"
+                        href={`tel:${
+                          settings?.find(
+                            (item) => item.propertyKey === "site_tel"
+                          )?.value || "02177615546"
+                        }`}
+                      >
+                        {settings?.find(
+                          (item) => item.propertyKey === "site_tel"
+                        )?.value || "77615546"}
+                      </a>
+                    </div>
+                  </div>
+                }
+                type="info"
+                className="text-justify !py-2 !px-4"
+              />
+            </div>
+          </div>
+        )}
 
         {product?.productModes && product?.productModes.length > 0 && (
           <div className="flex gap-5 items-center">

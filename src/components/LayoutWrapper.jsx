@@ -36,6 +36,8 @@ export default function LayoutWrapper({
   const [dataPopup, setDataPopup] = useState({});
   const pathname = usePathname();
 
+  
+
   const isShowPopups = localStorage.getItem("showPopups");
 
   useEffect(() => {
@@ -108,9 +110,9 @@ export default function LayoutWrapper({
           <SubFooter />
         </div>
       </div>
-      {(dataPopup.showInPage === "all" ||
-        (dataPopup.showInPage === "main" && pathname === "/")) &&
-        (dataPopup.showNumber === "all" || isShowPopups !== "true") && (
+      {(dataPopup?.showInPage === "all" ||
+        (dataPopup?.showInPage === "main" && pathname === "/")) &&
+        (dataPopup?.showNumber === "all" || isShowPopups !== "true") && (
           <Dialog
             fullWidth={500}
             slots={{
@@ -120,8 +122,8 @@ export default function LayoutWrapper({
             sx={{
               zIndex: 15000,
               "& .MuiPaper-root": {
-                backgroundColor: dataPopup.backgroundColor,
-                color: dataPopup.color,
+                backgroundColor: dataPopup?.backgroundColor,
+                color: dataPopup?.color,
               },
             }}
             open={openModal}
@@ -130,28 +132,28 @@ export default function LayoutWrapper({
             aria-describedby="توضیحات popup"
           >
             <DialogContent>
-              {!dataPopup.image && (
+              {!dataPopup?.image && (
                 <div
                   sx={{
-                    color: dataPopup.color,
+                    color: dataPopup?.color,
                   }}
                 >
                   <div
                     className="sm:block hidden "
-                    dangerouslySetInnerHTML={renderHTML(dataPopup.desktopBody)}
+                    dangerouslySetInnerHTML={renderHTML(dataPopup?.desktopBody)}
                   />
                   <div
                     className="sm:hidden block  "
-                    dangerouslySetInnerHTML={renderHTML(dataPopup.mobileBody)}
+                    dangerouslySetInnerHTML={renderHTML(dataPopup?.mobileBody)}
                   />
                 </div>
               )}
-              {dataPopup.image && (
+              {dataPopup?.image && (
                 <div className="flex justify-center items-center">
                   <img
                     className="w-full"
-                    src={getImageUrl(dataPopup.image)}
-                    alt={dataPopup.title}
+                    src={getImageUrl(dataPopup?.image)}
+                    alt={dataPopup?.title}
                   />
                 </div>
               )}

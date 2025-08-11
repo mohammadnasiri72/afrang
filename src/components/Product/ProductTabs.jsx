@@ -152,8 +152,12 @@ function ProductTabs({ product, parentRef }) {
     { label: "مشخصات فنی", value: 3 },
     { label: "محصولات مرتبط", value: 4 },
     ...(hasRelatedVideos ? [{ label: "ویدئوهای مرتبط", value: 7 }] : []),
-    { label: "نظرات", value: 5 },
-    { label: "پرسش و پاسخ", value: 6 },
+    ...(product.product.conditionId !== 20
+      ? [{ label: "نظرات", value: 5 }]
+      : []),
+    ...(product.product.conditionId !== 20
+      ? [{ label: "پرسش و پاسخ", value: 6 }]
+      : []),
   ];
 
   // Scroll to section on tab click (scrolls to main page)
@@ -373,24 +377,34 @@ function ProductTabs({ product, parentRef }) {
                 ویدئوهای مرتبط
               </h4>
               <div ref={relatedVideosRef} className="tab-section-scroll-anchor">
-               <BoxVideoProduct ids={ product.properties.find((e)=>e.propertyKey === "related_videos")?.value}/>
+                <BoxVideoProduct
+                  ids={
+                    product.properties.find(
+                      (e) => e.propertyKey === "related_videos"
+                    )?.value
+                  }
+                />
               </div>
             </div>
           )}
           {hasRelatedVideos && <Divider />}
-          <div ref={commentsRef} className="tab-section-scroll-anchor">
-            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
-              نظرات کاربران
-            </h4>
-            <CommentProduct id={product.product.productId} type={0} />
-          </div>
-          <Divider />
-          <div ref={qaRef} className="tab-section-scroll-anchor">
-            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
-              پرسش و پاسخ
-            </h4>
-            <CommentProduct id={product.product.productId} type={1} />
-          </div>
+          {product.product.conditionId !== 20 && (
+            <div>
+              <div ref={commentsRef} className="tab-section-scroll-anchor">
+                <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+                  نظرات کاربران
+                </h4>
+                <CommentProduct id={product.product.productId} type={0} />
+              </div>
+              <Divider />
+              <div ref={qaRef} className="tab-section-scroll-anchor">
+                <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+                  پرسش و پاسخ
+                </h4>
+                <CommentProduct id={product.product.productId} type={1} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
