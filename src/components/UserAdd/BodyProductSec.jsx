@@ -1,7 +1,8 @@
-import React from "react";
-import BoxTabDetailsProduct from "./BoxTabDetailsProduct";
 import { Alert } from "antd";
 import Link from "next/link";
+import { FaCalendarDays } from "react-icons/fa6";
+import { MdTimer } from "react-icons/md";
+import BoxTabDetailsProduct from "./BoxTabDetailsProduct";
 
 function BodyProductSec({ product }) {
   // تابع تبدیل قیمت به فرمت قابل خواندن
@@ -15,13 +16,7 @@ function BodyProductSec({ product }) {
     return dateString;
   };
 
-  console.log(product);
-  
-
-  // تابع نمایش HTML content
-  const renderHTML = (htmlContent) => {
-    return { __html: htmlContent };
-  };
+  console.log(product?.modifiedFa?.split(" ")[0]);
 
   return (
     <>
@@ -46,6 +41,24 @@ function BodyProductSec({ product }) {
               <span className="sm:text-2xl font-bold text-[#d1182b] whitespace-nowrap">
                 {formatPrice(product.price)} تومان
               </span>
+            )}
+          </div>
+          <div className="flex items-center gap-4 mt-1">
+            {product?.modifiedFa?.split(" ").length > 0 && (
+              <div className="flex items-center gap-1 ">
+                <FaCalendarDays className="text-[#555a]" />
+                <span className="font-bold text-[#555a] text-xs">
+                  {product?.modifiedFa?.split(" ")[0]}
+                </span>
+              </div>
+            )}
+            {product?.modifiedFa?.split(" ").length > 1 && (
+              <div className="flex items-center gap-1">
+                <MdTimer className="text-[#555a]" />
+                <span className="font-bold text-[#555a] text-xs">
+                  {product?.modifiedFa?.split(" ")[1]}
+                </span>
+              </div>
             )}
           </div>
         </div>
@@ -81,6 +94,17 @@ function BodyProductSec({ product }) {
               </div>
 
               <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-medium">
+                  تاریخ بروزرسانی آگهی :
+                </span>
+                <span className="text-gray-900 font-semibold">
+                  {product?.modifiedFa?.split(" ").length > 0 &&
+                   formatDate(product?.modifiedFa?.split(" ")[0])
+                  }
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">مدت استفاده :</span>
                 <span className="text-gray-900 font-semibold">
                   {product.usageTime || "نامشخص"}
@@ -89,7 +113,7 @@ function BodyProductSec({ product }) {
 
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">
-                 کارکرد شاتر (فقط دوربین SLR) :
+                  کارکرد شاتر (فقط دوربین SLR) :
                 </span>
                 <span className="text-gray-900 font-semibold">
                   {product.usageCount || "نامشخص"}
