@@ -226,7 +226,7 @@ function Products({ products }) {
                     <img
                       draggable="false"
                       className="w-36"
-                      src="/images/soldout.png"
+                      src="/public/images/soldout.png"
                       alt=""
                     />
                   </div>
@@ -353,7 +353,7 @@ function Products({ products }) {
               <img
                 draggable="false"
                 className="w-36"
-                src="/images/soldout.png"
+                src="/public/images/soldout.png"
                 alt=""
               />
             </div>

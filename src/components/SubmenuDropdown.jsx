@@ -1,20 +1,15 @@
 "use client";
 
-import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { useMemo } from "react";
-import { useDispatch } from "react-redux";
 
 const MAX_COLUMNS = 4;
 const COLUMN_PIXEL_WIDTH = 300;
 
-const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
-  const dispatch = useDispatch();
+const SubmenuDropdown = ({ activeMenu, onClose }) => {
   const dropdownContent = useMemo(() => {
     if (!activeMenu) return null;
-    
-
     const flatList = [];
     activeMenu.Children?.forEach((parent) => {
       flatList.push({ ...parent, isParent: true });
@@ -23,11 +18,13 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
       });
     });
 
-    const MENU_HEIGHT = typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.7) : 500;
+    const MENU_HEIGHT =
+      typeof window !== "undefined"
+        ? Math.round(window.innerHeight * 0.7)
+        : 500;
     const ITEM_HEIGHT = 34;
     const maxRows = Math.floor(MENU_HEIGHT / ITEM_HEIGHT);
 
-    let columnCount = Math.ceil(flatList.length / maxRows);
     // تقسیم آیتم‌ها به ستون‌ها (همیشه حداقل ۴ ستون)
     const columns = [];
     let currentColumn = [];
@@ -48,7 +45,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
     while (columns.length < 4) {
       columns.push([]);
     }
-    const filledColumns = columns.filter(col => col.length > 0).length;
+    const filledColumns = columns.filter((col) => col.length > 0).length;
     // بعد از ساخت columns:
     const needsHorizontalScroll = columns.length > MAX_COLUMNS;
     // منطق نمایش عکس
@@ -59,17 +56,19 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
       if (filledColumns === 1 || filledColumns === 2) {
         showImage = true;
         imageColIdx = 2;
-        imageColWidth = '50%';
+        imageColWidth = "50%";
       } else if (filledColumns === 3) {
         showImage = true;
         imageColIdx = 3;
-        imageColWidth = '25%';
+        imageColWidth = "25%";
       }
     }
     // اگر اسکرول افقی فعال است، عرض کل را بر اساس تعداد ستون‌ها حساب کن
-    const containerWidth = needsHorizontalScroll ? `${columns.length * COLUMN_PIXEL_WIDTH}px` : '100%';
+    const containerWidth = needsHorizontalScroll
+      ? `${columns.length * COLUMN_PIXEL_WIDTH}px`
+      : "100%";
     return (
-      <div 
+      <div
         className="rounded-b-xl relative"
         style={{
           height: MENU_HEIGHT,
@@ -78,20 +77,24 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
           padding: "0 50px",
         }}
       >
-        <div 
+        <div
           className="flex flex-row gap-0 rtl"
           style={{
             width: containerWidth,
-            minWidth: '100%',
+            minWidth: "100%",
           }}
         >
           {columns.map((col, colIdx) => {
             // منطق عرض ستون و عکس
-            let columnWidth = needsHorizontalScroll ? `${COLUMN_PIXEL_WIDTH}px` : '25%';
+            let columnWidth = needsHorizontalScroll
+              ? `${COLUMN_PIXEL_WIDTH}px`
+              : "25%";
             let shouldShowImageHere = false;
             if (showImage && colIdx === imageColIdx) {
               shouldShowImageHere = true;
-              columnWidth = needsHorizontalScroll ? `${COLUMN_PIXEL_WIDTH}px` : (imageColWidth || '25%');
+              columnWidth = needsHorizontalScroll
+                ? `${COLUMN_PIXEL_WIDTH}px`
+                : imageColWidth || "25%";
             }
             // اگر ستون خالی است و عکس هم اینجا نیست، نمایش نده
             if (!col.length && !shouldShowImageHere) {
@@ -107,12 +110,15 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                 }}
               >
                 {col.map((item, idx) => (
-                  <Link href={item.url || item.pageUrl || "#"}
-                    key={`${item.isParent ? "parent" : "child"}-${item.id}-${idx}`}
+                  <Link
+                    href={item.url || item.pageUrl || "#"}
+                    key={`${item.isParent ? "parent" : "child"}-${
+                      item.id
+                    }-${idx}`}
                     className={`line-clamp-1 pb-2 ${
                       item.isParent
-                        ? 'text-[#d1182b] font-bold text-[16px] pt-2'
-                        : 'text-[#222] font-medium text-xs'
+                        ? "text-[#d1182b] font-bold text-[16px] pt-2"
+                        : "text-[#222] font-medium text-xs"
                     } whitespace-nowrap font-inherit cursor-pointer transition-all duration-200`}
                     style={{
                       height: `${ITEM_HEIGHT}px`,
@@ -121,9 +127,9 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                     }}
                     onClick={() => {
                       document.body.style.overflow = "";
-                      dispatch(setOpenMenuRes(false));
+                      onClose();
                     }}
-                    onMouseOver={e => {
+                    onMouseOver={(e) => {
                       if (item.isParent) {
                         e.currentTarget.style.fontSize = "18px";
                       } else {
@@ -131,7 +137,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
                         e.currentTarget.style.fontSize = "13px";
                       }
                     }}
-                    onMouseOut={e => {
+                    onMouseOut={(e) => {
                       if (item.isParent) {
                         e.currentTarget.style.fontSize = "16px";
                       } else {
@@ -162,7 +168,7 @@ const SubmenuDropdown = ({ activeMenu, onNavigation }) => {
         </div>
       </div>
     );
-  }, [activeMenu, onNavigation]);
+  }, [activeMenu]);
 
   return dropdownContent;
 };

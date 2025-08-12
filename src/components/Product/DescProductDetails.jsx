@@ -1,18 +1,20 @@
 "use client";
+import { setSelectedColorMode } from "@/redux/slices/productColorSlice";
 import { getItemById } from "@/services/Item/item";
 import { addToRecentViews } from "@/utils/recentViews";
 import { Alert } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaRegEye } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
-import { useSelector } from "react-redux";
 
 function DescProductDetails({ product }) {
   const [brand, setBrand] = useState({});
 
   const { settings } = useSelector((state) => state.settings);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // ذخیره بازدید محصول در localStorage
@@ -35,6 +37,12 @@ function DescProductDetails({ product }) {
 
     fetchBrand();
   }, [product?.product?.brandId]);
+
+  useEffect(() => {
+    if (!product?.productModes || product?.productModes.length === 0) {
+      dispatch(setSelectedColorMode(null));
+    }
+  }, [product]);
 
   return (
     <>
@@ -81,7 +89,7 @@ function DescProductDetails({ product }) {
         </div>
         {product?.product?.conditionId === 20 && (
           <div className="mb-5 mt-1">
-            <div >
+            <div>
               <Alert
                 message={
                   <span className="text-cyan-700">

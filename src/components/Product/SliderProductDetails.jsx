@@ -76,7 +76,7 @@ export default function SliderProductDetails({ attachments, product }) {
               <img
                 draggable="false"
                 className="w-36"
-                src="/images/soldout.png"
+                src="/public/images/soldout.png"
                 alt=""
               />
             </div>

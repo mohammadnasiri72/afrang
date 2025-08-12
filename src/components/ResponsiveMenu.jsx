@@ -286,10 +286,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
     dispatch(setOpenMenuRes(true));
   };
 
-  const onClose = () => {
-    dispatch(setOpenMenuRes(false));
-  };
-
   const Title = () => (
     <div className="flex justify-end">
       <Link
@@ -311,14 +307,12 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
   );
 
   // تابع برای مدیریت کلیک روی لینک‌ها
-  const handleNavigation = (url) => {
+  const onClose = (url) => {
     // بستن دراور
     dispatch(setOpenMenuRes(false));
     // بستن dropdown
     setAnchorEl(null);
     setActiveMenu(null);
-    // هدایت به URL مورد نظر
-    router.push(url);
   };
 
   // تابع برای پیدا کردن کلید اکوردئون بر اساس مسیر فعلی
@@ -653,14 +647,18 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                   }}
                 >
                   {item.Children && item.Children.length > 0 ? (
-                    <Link onClick={onClose}
+                    <Link
+                      onClick={onClose}
                       href={item.url || item.pageUrl || "#"}
                       className="py-2 cursor-pointer font-semibold"
                     >
                       {item.title}
                     </Link>
                   ) : (
-                    <Link onClick={onClose} href={item.url || item.pageUrl || "#"}>
+                    <Link
+                      onClick={onClose}
+                      href={item.url || item.pageUrl || "#"}
+                    >
                       <div className="py-2 cursor-pointer font-semibold">
                         {item.title}
                       </div>
@@ -742,12 +740,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
                   borderBottomRightRadius: "20px",
                 }}
               >
-                <SubmenuDropdown
-                  activeMenu={activeMenu}
-                  expandedChildren={expandedChildren}
-                  onChildToggle={handleChildToggle}
-                  onNavigation={handleNavigation}
-                />
+                <SubmenuDropdown activeMenu={activeMenu} onClose={onClose} />
               </AnimatedPaper>
             </Fade>
           )}
@@ -779,7 +772,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
         return {
           key: item.id,
           label: (
-            <Link onClick={onClose}
+            <Link
+              onClick={onClose}
               href={item.url || item.pageUrl || "#"}
               className={`w-full text-right py-2 transition-colors cursor-pointer ${
                 isActivePath(item.url || item.pageUrl)
@@ -823,7 +817,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
             children: dashboardMenuItems.map((item) => ({
               key: item.id,
               label: (
-                <Link onClick={onClose}
+                <Link
+                  onClick={onClose}
                   href={item.path}
                   className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer ${
                     isActivePath(item.path)

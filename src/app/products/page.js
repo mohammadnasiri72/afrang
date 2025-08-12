@@ -9,13 +9,15 @@ const ProductListSkeleton = dynamic(() => import("@/components/ProductList/Produ
 const CategoryListSkeleton = dynamic(() => import("@/components/ProductList/CategoryListSkeleton"));
 
 // Main Page Component
-export default function ProductList({ searchParams }) {
+export default async function ProductList({ searchParams }) {
+  const params = await searchParams;
+
   return (
     <div className="bg-[#f6f6f6] overflow-hidden py-10">
-      {searchParams && Object.keys(searchParams).length > 0 ? (
+      {params && Object.keys(params).length > 0 ? (
         <div className="xl:px-16">
           <Suspense fallback={<ProductListSkeleton />}>
-            <ProductListWithFilters searchParams={searchParams} />
+            <ProductListWithFilters searchParams={params} />
           </Suspense>
         </div>
       ) : (

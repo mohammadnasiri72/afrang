@@ -29,6 +29,7 @@ function BasketBox({ product }) {
     (state) => state.productColor.selectedColorMode
   );
 
+
   return (
     <div className="px-2 h-full">
       <div className="bg-[#f6f6f6] h-full rounded-lg p-2">

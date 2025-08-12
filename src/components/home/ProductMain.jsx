@@ -95,7 +95,7 @@ export default function ProductMain({ products }) {
                       <img
                         draggable="false"
                         className="w-36"
-                        src="/images/soldout.png"
+                        src="/public/images/soldout.png"
                         alt=""
                       />
                     </div>

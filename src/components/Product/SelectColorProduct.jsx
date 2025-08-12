@@ -7,11 +7,12 @@ import { setSelectedColorMode } from "@/redux/slices/productColorSlice";
 
 function SelectColorProduct({ product, onChange }) {
   const modes = product?.productModes || [];
+  
   const [selectedColorId, setSelectedColorId] = useState(modes[0]?.id || null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (modes.length && selectedColorId == null) {
+    if (modes.length && selectedColorId === null) {
       setSelectedColorId(modes[0].id);
       if (onChange) onChange(modes[0].id);
       dispatch(setSelectedColorMode(modes[0]));
@@ -19,7 +20,7 @@ function SelectColorProduct({ product, onChange }) {
   }, [modes]);
 
   useEffect(() => {
-    if (selectedColorId != null) {
+    if (selectedColorId !== null) {
       const selectedMode = modes.find((m) => m.id === selectedColorId);
       if (selectedMode) dispatch(setSelectedColorMode(selectedMode));
     }

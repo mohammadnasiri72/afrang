@@ -3,7 +3,6 @@ import BodyProductSec from "@/components/UserAdd/BodyProductSec";
 import BreadCrumbUsedProduct from "@/components/UserAdd/BreadCrumbUsedProduct";
 import SliderProductSecImg from "@/components/UserAdd/SliderProductSecImg";
 import { getProductSecId } from "@/services/UserAd/UserAdServices";
-import { redirect } from "next/navigation";
 
 export default async function UserAddDetails(props) {
   const prop = await props;

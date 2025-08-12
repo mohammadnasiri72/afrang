@@ -22,22 +22,24 @@ const PaginationProduct = dynamic(() =>
 
 // کامپوننت اصلی محتوا
 async function ProductContent({ id, searchParams }) {
-  const productCategory = await getProductCategory(id);
-  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
-  const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
-  const layout = searchParams?.layout ? searchParams.layout : "list";
-  const price1 = searchParams?.price1 ? parseInt(searchParams.price1) : 0;
-  const price2 = searchParams?.price2 ? parseInt(searchParams.price2) : 100000;
-  const pageSize = searchParams?.pageSize
-    ? parseInt(searchParams.pageSize)
-    : 20;
-  const brandId = searchParams?.brandid || "";
+const params = await searchParams;
 
-  const onlyPrice = searchParams?.onlyprice === "1" ? "1" : undefined;
-  const onlyDiscount = searchParams?.onlydiscount === "1" ? "1" : undefined;
-  const statusId = searchParams?.statusid === "1" ? "1" : undefined;
-  const onlyfest = searchParams?.onlyfest === "1" ? "1" : undefined;
-  const conditionId = searchParams?.conditionId === "20" ? "20" : undefined;
+  const productCategory = await getProductCategory(id);
+  const page = params?.page ? parseInt(params.page) : 1;
+  const orderBy = params?.orderby ? parseInt(params.orderby) : "";
+  const layout = params?.layout ? params.layout : "list";
+  const price1 = params?.price1 ? parseInt(params.price1) : 0;
+  const price2 = params?.price2 ? parseInt(params.price2) : 100000;
+  const pageSize = params?.pageSize
+    ? parseInt(params.pageSize)
+    : 20;
+  const brandId = params?.brandid || "";
+
+  const onlyPrice = params?.onlyprice === "1" ? "1" : undefined;
+  const onlyDiscount = params?.onlydiscount === "1" ? "1" : undefined;
+  const statusId = params?.statusid === "1" ? "1" : undefined;
+  const onlyfest = params?.onlyfest === "1" ? "1" : undefined;
+  const conditionId = params?.conditionId === "20" ? "20" : undefined;
 
   const [products, BannerProduct] = await Promise.all([
     getProducts({
