@@ -124,7 +124,8 @@ const BodyCard = () => {
     }, 0) || 0;
 
   const compeletePay = () => {
-    if (!token) {
+    const userData = getUserCookie();
+    if (!userData?.token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
       router.push("/login");

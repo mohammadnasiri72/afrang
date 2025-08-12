@@ -18,10 +18,6 @@ function BasketBox({ product }) {
     (item) => item.productId === product?.product?.productId
   );
 
-  
-  
-
-
   const warrantiesArray = Object.entries(product.warranties).map(
     ([value, label]) => ({ value: Number(value), label })
   );
@@ -32,7 +28,6 @@ function BasketBox({ product }) {
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
   );
-
 
   return (
     <div className="px-2 h-full">
@@ -55,7 +50,6 @@ function BasketBox({ product }) {
           <div className="w-full">
             <LikeProduct productId={product?.product?.productId} />
           </div>
-          
         </div>
         {/* قابلیت خرید قسطی */}
         {product?.product?.isInstallmentSale && (
@@ -127,9 +121,9 @@ function BasketBox({ product }) {
         <div className="sm:block hidden">
           <CartActions product={product} selectedWarranty={selectedWarranty} />
         </div>
-        {product?.product?.statusId !== 1 && (
-            
-            <NotifyAvailable id={product?.product?.productId}/>
+        {product?.product?.statusId !== 1 &&
+          product?.product?.conditionId !== 20 && (
+            <NotifyAvailable id={product?.product?.productId} />
           )}
       </div>
     </div>

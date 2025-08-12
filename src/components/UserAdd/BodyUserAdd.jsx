@@ -8,6 +8,7 @@ import { FaRecycle } from "react-icons/fa";
 import Swal from "sweetalert2";
 import BoxBuySec from "./BoxBuySec";
 import BoxSellSec from "./BoxSellSec";
+import LinkGuide from "./LinkGuide";
 import SearchProductSec from "./SearchProductSec";
 
 function BodyUserAdd() {
@@ -88,7 +89,7 @@ function BodyUserAdd() {
             <SearchProductSec />
           </div>
         </div>
-
+        <LinkGuide />
         <div className="flex flex-wrap items-center ">
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
             <div

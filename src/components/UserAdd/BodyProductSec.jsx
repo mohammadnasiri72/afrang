@@ -15,6 +15,9 @@ function BodyProductSec({ product }) {
     return dateString;
   };
 
+  console.log(product);
+  
+
   // تابع نمایش HTML content
   const renderHTML = (htmlContent) => {
     return { __html: htmlContent };
@@ -57,28 +60,28 @@ function BodyProductSec({ product }) {
 
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">شماره سریال:</span>
+                <span className="text-gray-600 font-medium">شماره سریال :</span>
                 <span className="text-gray-900 font-semibold">
                   {product.serialNumber || "نامشخص"}
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">نوع محصول:</span>
+                <span className="text-gray-600 font-medium">نوع محصول :</span>
                 <span className="text-gray-900 font-semibold">
                   {product.type || "نامشخص"}
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">تاریخ خرید:</span>
+                <span className="text-gray-600 font-medium">تاریخ خرید :</span>
                 <span className="text-gray-900 font-semibold">
                   {formatDate(product.purchaseDate)}
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">مدت استفاده:</span>
+                <span className="text-gray-600 font-medium">مدت استفاده :</span>
                 <span className="text-gray-900 font-semibold">
                   {product.usageTime || "نامشخص"}
                 </span>
@@ -86,7 +89,7 @@ function BodyProductSec({ product }) {
 
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">
-                  تعداد استفاده:
+                 کارکرد شاتر (فقط دوربین SLR) :
                 </span>
                 <span className="text-gray-900 font-semibold">
                   {product.usageCount || "نامشخص"}
@@ -103,14 +106,14 @@ function BodyProductSec({ product }) {
 
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">گارانتی:</span>
+                <span className="text-gray-600 font-medium">گارانتی :</span>
                 <span className="text-gray-900 font-semibold">
                   {product.warranty ? `${product.warranty} ماه` : "ندارد"}
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">بیمه:</span>
+                <span className="text-gray-600 font-medium">بیمه :</span>
                 <span className="text-gray-900 font-semibold">
                   {product.insurance ? `${product.insurance} ماه` : "ندارد"}
                 </span>

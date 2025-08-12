@@ -18,6 +18,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
 
   return (
     <>
+    
       <Swiper
         slidesPerView={4}
         spaceBetween={10}

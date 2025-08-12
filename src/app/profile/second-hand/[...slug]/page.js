@@ -32,6 +32,8 @@ const SecondHand = () => {
   const [productEdit, setProductEdit] = useState({});
   const [productEditSell, setProductEditSell] = useState({});
 
+  
+
   const disPatch = useDispatch();
   const router = useRouter();
   const params = useParams();

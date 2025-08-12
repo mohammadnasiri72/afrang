@@ -195,7 +195,11 @@ function Products({ products }) {
               <div className="relative overflow-hidden rounded-lg group">
                 <Link href={product.url} className="relative ">
                   <Image
-                    className="object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                    className={`object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
+                      product?.statusId !== 1 && product?.conditionId === 20
+                        ? "blur-xs"
+                        : ""
+                    }`}
                     src={getImageUrl2(product.image)}
                     alt={product.title}
                     width={200}
@@ -215,6 +219,17 @@ function Products({ products }) {
                   <span className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
                     کالای کارکرده
                   </span>
+                )}
+                {/* فروخته شد*/}
+                {product?.statusId !== 1 && product?.conditionId === 20 && (
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full select-none z-10">
+                    <img
+                      draggable="false"
+                      className="w-36"
+                      src="/images/soldout.png"
+                      alt=""
+                    />
+                  </div>
                 )}
                 {/* دکمه های عملیاتی */}
                 <div className="absolute right-0 bottom-0 -translate-y-1/2 overflow-hidden translate-x-full duration-300 group-hover:-translate-x-2 flex flex-col items-center justify-center w-10 bg-white  rounded-xl shadow-lg ">
@@ -313,7 +328,11 @@ function Products({ products }) {
         <div className="relative w-full flex justify-center items-center group overflow-hidden">
           <Link href={`${product.url}`}>
             <Image
-              className="w-40 h-40 object-contain rounded-lg mb-4"
+              className={`w-40 h-40 object-contain rounded-lg mb-4 ${
+                product?.statusId !== 1 && product?.conditionId === 20
+                  ? "blur-xs"
+                  : ""
+              }`}
               src={getImageUrl2(product.image)}
               alt={product.title}
               width={160}
@@ -327,6 +346,17 @@ function Products({ products }) {
             <span className="absolute top-0 right-0 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-2 py-0.5 rounded-full shadow-md text-xs font-bold z-10 animate-fade-in">
               کارکرده
             </span>
+          )}
+          {/* فروخته شد*/}
+          {product?.statusId !== 1 && product?.conditionId === 20 && (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full select-none z-10">
+              <img
+                draggable="false"
+                className="w-36"
+                src="/images/soldout.png"
+                alt=""
+              />
+            </div>
           )}
           {/* تخفیف سمت چپ */}
           {product.discount !== 0 && (

@@ -35,15 +35,15 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-export default function SliderProductDetails({ attachments , product}) {
+export default function SliderProductDetails({ attachments, product }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   useEffect(() => {
     import("@fancyapps/ui/dist/fancybox/fancybox.css");
   }, []);
 
-   // افزایش z-index fancybox
-   useEffect(() => {
+  // افزایش z-index fancybox
+  useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `.fancybox__container { z-index: 999999 !important; }`;
     document.head.appendChild(style);
@@ -70,6 +70,17 @@ export default function SliderProductDetails({ attachments , product}) {
               کالای کارکرده
             </div>
           )}
+          {/* فروخته شد*/}
+          {product?.statusId !== 1 && product?.conditionId === 20 && (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full select-none z-10">
+              <img
+                draggable="false"
+                className="w-36"
+                src="/images/soldout.png"
+                alt=""
+              />
+            </div>
+          )}
           {attachments.length > 0 && (
             <div className="slider-productDetails">
               <Swiper
@@ -93,7 +104,11 @@ export default function SliderProductDetails({ attachments , product}) {
                       data-caption="Caption Images 4"
                     >
                       <img
-                        className="w-full border rounded-sm border-[#3331]"
+                        className={`w-full border rounded-sm border-[#3331]  ${
+                          product?.statusId !== 1 && product?.conditionId === 20
+                            ? "blur-xs"
+                            : ""
+                        }`}
                         src={getImageUrl2(attachment.fileUrl)}
                       />
                     </a>
@@ -124,7 +139,6 @@ export default function SliderProductDetails({ attachments , product}) {
           )}
         </div>
       </div>
-     
     </>
   );
 }

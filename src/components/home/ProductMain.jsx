@@ -71,10 +71,13 @@ export default function ProductMain({ products }) {
                   className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
                   <Image
-                    className="group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain"
+                    className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain ${
+                      product?.statusId !== 1 && product?.conditionId === 20
+                        ? "blur-xs"
+                        : ""
+                    }`}
                     src={getImageUrl2(product.image)}
                     alt={product.title}
-                   
                     fill
                     sizes="(max-width: 768px) 100vw, 300px"
                     unoptimized
@@ -86,8 +89,19 @@ export default function ProductMain({ products }) {
                       کالای کارکرده
                     </div>
                   )}
-                   {/* تایمر */}
-                   {product.salePlanTimer && (
+                  {/* فروخته شد*/}
+                  {product?.statusId !== 1 && product?.conditionId === 20 && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full select-none z-10">
+                      <img
+                        draggable="false"
+                        className="w-36"
+                        src="/images/soldout.png"
+                        alt=""
+                      />
+                    </div>
+                  )}
+                  {/* تایمر */}
+                  {product.salePlanTimer && (
                     <div className="absolute bottom-0 ">
                       <CountdownTimer targetDate={product.salePlanTimer} />
                     </div>
@@ -95,7 +109,6 @@ export default function ProductMain({ products }) {
                 </Link>
                 {/* محتوا */}
                 <div className="flex flex-col flex-1 justify-between mt-2">
-                 
                   {/* عنوان */}
                   <Link
                     href={product.url}

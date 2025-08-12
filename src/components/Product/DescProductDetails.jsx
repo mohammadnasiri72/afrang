@@ -81,24 +81,7 @@ function DescProductDetails({ product }) {
         </div>
         {product?.product?.conditionId === 20 && (
           <div className="mb-5 mt-1">
-            <div>
-              <Alert
-                message=" لطفا قبل از انجام هرگونه معامله، قوانین خرید و فروش را مطالعه نمایید "
-                description={
-                  <div className="flex flex-col items-start justify-center">
-                    <Link
-                      className="!text-cyan-700 font-semibold hover:!text-cyan-600 duration-300"
-                      href="/usedrules"
-                    >
-                      مشاهده قوانین خرید و فروش تجهیزات کارکرده و دست دوم.
-                    </Link>
-                  </div>
-                }
-                type="warning"
-                className="text-justify !py-2 !px-4"
-              />
-            </div>
-            <div className="mt-2">
+            <div >
               <Alert
                 message={
                   <span className="text-cyan-700">
@@ -125,6 +108,23 @@ function DescProductDetails({ product }) {
                   </div>
                 }
                 type="info"
+                className="text-justify !py-2 !px-4"
+              />
+            </div>
+            <div className="mt-2">
+              <Alert
+                message=" لطفا قبل از انجام هرگونه معامله، قوانین خرید و فروش را مطالعه نمایید "
+                description={
+                  <div className="flex flex-col items-start justify-center">
+                    <Link
+                      className="!text-cyan-700 font-semibold hover:!text-cyan-600 duration-300"
+                      href="/usedrules"
+                    >
+                      مشاهده قوانین خرید و فروش تجهیزات کارکرده و دست دوم.
+                    </Link>
+                  </div>
+                }
+                type="warning"
                 className="text-justify !py-2 !px-4"
               />
             </div>
