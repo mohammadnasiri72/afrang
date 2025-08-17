@@ -1,6 +1,5 @@
 "use client";
 
-import { SlBasket } from "react-icons/sl";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -10,17 +9,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { getImageUrl } from "@/utils/mainDomain";
-import { Button, Divider, Modal } from "antd";
+import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
-import AddToCartButton from "../ProductList/AddToCartButton";
-import { useEffect, useState } from "react";
-import { getUserAdContact } from "@/services/UserAd/UserAdServices";
-import Swal from "sweetalert2";
-import { getItemById } from "@/services/Item/item";
-import Cookies from "js-cookie";
 import ShowUserContact from "./ShowUserContact";
 
 
@@ -74,10 +67,10 @@ export default function ProductMainUser({ products }) {
             <SwiperSlide
               key={`${product.id || product.productId || index}-${index}`}
             >
-              <div className="relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md">
+              <div className="relative group w-full pb-2 overflow-hidden rounded-xl bg-white shadow-md">
                 <Link
                   href={product.url}
-                  className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
+                  className="w-full min-h-40 sm:min-h-40 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
                   <Image
                     className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain`}
@@ -95,9 +88,9 @@ export default function ProductMainUser({ products }) {
                 <div className="flex flex-col flex-1 justify-between mt-2">
                   <Link
                     href={product.url}
-                    className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[50px] flex items-start"
+                    className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start"
                   >
-                    <h3 className="text-justify line-clamp-2 w-full font-bold text-[16px]">
+                    <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px]">
                       {product.title}
                     </h3>
                   </Link>
@@ -118,7 +111,7 @@ export default function ProductMainUser({ products }) {
                     )}
                   </div>
                 </div>
-                <ShowUserContact product={product}/>
+                {/* <ShowUserContact product={product}/> */}
                 
               </div>
             </SwiperSlide>

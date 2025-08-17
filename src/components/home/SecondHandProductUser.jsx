@@ -168,7 +168,6 @@ function SecondHandProductUser() {
             <button
               onClick={() => {
                 router.push(`/useds/-1`);
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
             >
@@ -189,7 +188,7 @@ function SecondHandProductUser() {
           <div
             onClick={() => {
               router.push(`/useds/-1`);
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              
             }}
             className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
           >
