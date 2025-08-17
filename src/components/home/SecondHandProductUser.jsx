@@ -1,14 +1,13 @@
 "use client";
-import { FaCaretLeft } from "react-icons/fa6";
-import ProductMain from "./ProductMain";
-import { useEffect, useState } from 'react';
+import { getUserAdSell } from "@/services/UserAd/UserAdServices";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaCaretLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
-import { getProducts } from "@/services/products/productService";
+import ProductMain from "./ProductMain";
+import ProductMainUser from "./ProductMainUser";
 
-function SecondHandProduct() {
-  const [oldProducts, setOldProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+function SecondHandProductUser() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -23,56 +22,66 @@ function SecondHandProduct() {
     customClass: "toast-modal",
   });
 
-
-
-  useEffect(() => {
-    const fetchOldProducts = async () => {
-      try {
-        const oldProduct = await getProducts({
-          page: 1,
-          pageSize: 12,
-          orderBy: "2",
-          ConditionId: 20,
-        });
-        if (oldProduct.type === 'error') {
-          Toast.fire({
-            icon: "error",
-            text: oldProduct.message,
-          });
-          return;
-        } else {
-          setOldProducts(oldProduct);
-        }
-      } catch (error) {
+  const fetchProductsSec = async (data) => {
+    setLoading(true);
+    try {
+      const productsData = await getUserAdSell(data);
+      if (productsData?.type === "error") {
         Toast.fire({
           icon: "error",
-          text: error.response?.data ? error.response?.data : "خطای شبکه",
+          title: productsData.message,
         });
+        return;
       }
-      finally {
-        setLoading(false);
-      }
+      setFilteredProducts(productsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    fetchOldProducts()
-  }, [])
-
-  // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
-  const categories = oldProducts
-    ? [...new Set(oldProducts.map(product => product.categoryTitle))].slice(0, 5)
-    : [];
+  };
 
   useEffect(() => {
-    if (oldProducts) {
-      if (selectedCategory) {
-        const filtered = oldProducts.filter(product => product.categoryTitle === selectedCategory);
-        setFilteredProducts(filtered);
-      } else {
-        setFilteredProducts(oldProducts);
-      }
-    }
-  }, [selectedCategory, oldProducts]);
+    fetchProductsSec({
+      LangCode: "fa",
+      PageSize: 10,
+      PageIndex: 1,
+      OrderBy: 1,
+    });
+  }, []);
+
+  //   useEffect(() => {
+  //     const fetchOldProducts = async () => {
+  //       try {
+  //         const oldProduct = await getProducts({
+  //           page: 1,
+  //           pageSize: 12,
+  //           orderBy: "2",
+  //           ConditionId: 20,
+  //         });
+  //         if (oldProduct.type === "error") {
+  //           Toast.fire({
+  //             icon: "error",
+  //             text: oldProduct.message,
+  //           });
+  //           return;
+  //         } else {
+  //           setOldProducts(oldProduct);
+  //         }
+  //       } catch (error) {
+  //         Toast.fire({
+  //           icon: "error",
+  //           text: error.response?.data ? error.response?.data : "خطای شبکه",
+  //         });
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+  //     fetchOldProducts();
+  //   }, []);
 
   // اسکلتون لودینگ
+
   const SecondHandProductSkeleton = () => {
     return (
       <div className="animate-pulse sm:px-16 px-2">
@@ -149,19 +158,16 @@ function SecondHandProduct() {
   return (
     <>
       <div className="sm:px-16 px-2">
-        <div className="lg:hidden flex justify-center items-center pb-5">
-          <div className="flex-wrap gap-4 items-center">
-            <h2 className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold"> دست دوم های پیشنهاد افــــرنـــــگ</h2>
-          </div>
-        </div>
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
-          {/* هدر دسته‌بندی‌ها */}
           <div className="flex items-center justify-between mb-3 px-2">
-            <h3 className="text-lg font-semibold text-gray-700">دسته‌بندی‌ها</h3>
+            <h2 className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold">
+              {" "}
+              دست دوم های کاربران
+            </h2>
             <button
               onClick={() => {
-                router.push(`/products?conditionId=20&orderby=2`);
+                router.push(`/useds/-1`);
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
@@ -170,57 +176,19 @@ function SecondHandProduct() {
               <FaCaretLeft className="text-sm" />
             </button>
           </div>
-
-          {/* لیست دسته‌بندی‌ها */}
-          <div className="overflow-x-auto pb-2">
-            <div className="flex items-center gap-0 min-w-max px-2">
-              {categories.map((category, index) => (
-                <div key={category} className="flex items-center">
-                  <span
-                    onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
-                      ? 'text-[#d1182b] font-bold'
-                      : 'text-[#0008] hover:text-[#000]'
-                      }`}
-                  >
-                    {category}
-                  </span>
-                  {index < categories.length - 1 && <span className="mx-1">/</span>}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="flex justify-between items-center sm:px-4">
           <div className="lg:flex hidden flex-wrap gap-4 items-center">
             <button className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold">
-              دست دوم های پیشنهاد افــــرنـــــگ
+              دست دوم های کاربران
             </button>
-          </div>
-
-          {/* دسته‌بندی‌ها در حالت دسکتاپ */}
-          <div className="hidden lg:flex items-center gap-3">
-            {categories.map((category, index) => (
-              <div key={category} className="flex items-center">
-                <span
-                  onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                  className={`text-sm cursor-pointer duration-300 font-medium ${category === selectedCategory
-                    ? 'text-[#d1182b] font-bold'
-                    : 'text-[#0008] hover:text-[#000]'
-                    }`}
-                >
-                  {category}
-                </span>
-                {index < categories.length - 1 && <span className="mx-2">/</span>}
-              </div>
-            ))}
           </div>
 
           {/* دکمه نمایش همه در دسکتاپ */}
           <div
             onClick={() => {
-              router.push(`/products?conditionId=20&orderby=2`);
+              router.push(`/useds/-1`);
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
@@ -230,11 +198,11 @@ function SecondHandProduct() {
           </div>
         </div>
         <div className="mt-5">
-          <ProductMain products={filteredProducts} />
+          <ProductMainUser products={filteredProducts} />
         </div>
       </div>
     </>
   );
 }
 
-export default SecondHandProduct;
+export default SecondHandProductUser;

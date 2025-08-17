@@ -8,6 +8,7 @@ const CameraAccessories = dynamic(() => import("@/components/home/CameraAccessor
 const BoxImgHome = dynamic(() => import("@/components/home/BoxImgHome"));
 const NewProduct = dynamic(() => import("@/components/home/NewProduct"));
 const SecondHandProduct = dynamic(() => import("@/components/home/SecondHandProduct"));
+const SecondHandProductUser = dynamic(() => import("@/components/home/SecondHandProductUser"));
 const ArticleHeader = dynamic(() => import("@/components/home/ArticleHeader"));
 const ArticleSlider = dynamic(() => import("@/components/home/ArticleSlider"));
 
@@ -35,6 +36,9 @@ export default async function Home() {
 
       <div className="secondHand-sec">
         <SecondHandProduct />
+      </div>
+      <div className="secondHand-sec">
+        <SecondHandProductUser />
       </div>
 
       <ArticleHeader />
