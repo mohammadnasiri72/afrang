@@ -127,7 +127,7 @@ function DescPayment({ estimateData }) {
         >
           <div className="bg-[#ececec] p-3 rounded-lg">
             <div className="flex justify-between text-[#444] py-1 font-bold">
-              <span>قیمت کالاها ({currentItems?.length || 0})</span>
+              <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
               <span>
                 {estimateData?.productAmount
                   ? estimateData.productAmount.toLocaleString()
@@ -266,7 +266,7 @@ function DescPayment({ estimateData }) {
         <div className="w-full lg:hidden block p-4">
           <div className="bg-[#ececec] p-3 rounded-lg">
             <div className="flex justify-between text-[#444] py-1 font-bold">
-              <span>قیمت کالاها ({currentItems?.length || 0})</span>
+              <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
               <span>
                 {estimateData?.productAmount
                   ? estimateData.productAmount.toLocaleString()

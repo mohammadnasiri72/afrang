@@ -20,7 +20,7 @@ const generateRandomUserId = () => {
 
 const AddToCartButtonCard = ({ productId }) => {
   const { currentItems } = useSelector((state) => state.cart);
-  const itemsArray = Array.isArray(currentItems) ? currentItems : [];
+  const itemsArray = Array.isArray(currentItems?.filter((e)=>e.parentId === -1)) ? currentItems?.filter((e)=>e.parentId === -1) : [];
   const cartItem = itemsArray.find((item) => item.productId === productId);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);

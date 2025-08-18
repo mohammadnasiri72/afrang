@@ -4,17 +4,41 @@ import { fetchCartData } from "@/redux/slices/cartSlice";
 import { addToCartNext, moveToCurrentCart } from "@/services/cart/CartServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import { Affix, Spin } from "antd";
+import { Divider, Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsArchive } from "react-icons/bs";
 import { FaAngleLeft, FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CartCounter from "../Product/CartCounter";
+
+function buildTree(items) {
+  // 1. ایجاد یک مپ برای دسترسی سریع به آیتم‌ها با استفاده از id
+  const itemMap = {};
+  items.forEach((item) => {
+    itemMap[item.productId] = { ...item, children: [] };
+  });
+
+  // 2. ساختار درختی ایجاد می‌کنیم
+  const tree = [];
+  items.forEach((item) => {
+    if (item.parentId === -1) {
+      // آیتم اصلی را به درخت اضافه می‌کنیم
+      tree.push(itemMap[item.productId]);
+    } else {
+      // آیتم فرزند را به والدش اضافه می‌کنیم
+      if (itemMap[item.parentId]) {
+        itemMap[item.parentId].children.push(itemMap[item.productId]);
+      }
+    }
+  });
+
+  return tree;
+}
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const BodyCardSkeleton = () => {
@@ -86,7 +110,11 @@ const BodyCard = () => {
   const { currentItems, nextItems, cartType, loading } = useSelector(
     (state) => state.cart
   );
-  const items = cartType === "current" ? currentItems : nextItems;
+
+  const items =
+    cartType === "current" ? buildTree(currentItems) : buildTree(nextItems);
+
+  console.log(items);
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -232,9 +260,6 @@ const BodyCard = () => {
   const [stuckToBottom, setStuckToBottom] = useState(false);
   const [style, setStyle] = useState({});
 
- 
-  
-
   useEffect(() => {
     function handleScroll() {
       // فقط در دسکتاپ فعال باشد
@@ -247,26 +272,24 @@ const BodyCard = () => {
         setFixed(false);
         setStuckToBottom(false);
         setStyle({});
-      }
-      else if (containerRect.bottom <= innerRect.height + stickyTop) {
+      } else if (containerRect.bottom <= innerRect.height + stickyTop) {
         setFixed(false);
         setStuckToBottom(true);
         setStyle({
           position: "absolute",
           bottom: 0,
           left: 0,
-          width: containerRect.width -15,
+          width: containerRect.width - 15,
           zIndex: 100,
         });
-      }
-      else if (containerRect.top <= stickyTop) {
+      } else if (containerRect.top <= stickyTop) {
         setFixed(true);
         setStuckToBottom(false);
         setStyle({
           position: "fixed",
           top: stickyTop,
           left: containerRect.left,
-          width: containerRect.width -15,
+          width: containerRect.width - 15,
           zIndex: 100,
         });
       } else {
@@ -359,7 +382,62 @@ const BodyCard = () => {
                           <span className="font-semibold">کالای کارکرده</span>
                         </div>
                       )}
+                      <div className="sm:block hidden">
+                        {item.children?.length > 0 && (
+                          <>
+                           
+                            <div className="flex flex-wrap justify-between items-center mt-2">
+                              {item.children.map((e) => (
+                                <div
+                                  key={e.id}
+                                  className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                                >
+                                  <div className="flex gap-1">
+                                    <Link href={e.url}>
+                                      <div className="relative w-14 h-14">
+                                        <Image
+                                          style={{ filter: " brightness(0.8)" }}
+                                          className="w-full h-full object-contain rounded-lg"
+                                          src={getImageUrl2(e.image)}
+                                          alt={e?.title}
+                                          width={20}
+                                          height={20}
+                                          unoptimized
+                                        />
+                                        {e.discount !== 0 && (
+                                          <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                            {e.discount}٪
+                                          </span>
+                                        )}
+                                      </div>
+                                    </Link>
+                                    <div className="flex flex-col items-start justify-between">
+                                      <Link
+                                        className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                        href={e.url}
+                                      >
+                                        <span className="text-xs font-bold line-clamp-2 ">
+                                          {e?.title}
+                                        </span>
+                                      </Link>
+                                      {e.showPrice && (
+                                        <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                          {e?.finalPrice.toLocaleString()}
+                                          <span className="text-xs px-1">
+                                            تومان
+                                          </span>
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
+                    <Divider style={{ margin: 5, padding: 0 }} />
                     <div>
                       <div className="flex justify-between items-center flex-wrap">
                         <div className="flex flex-col py-3">
@@ -373,16 +451,71 @@ const BodyCard = () => {
                               </span>
                             </div>
                           )}
-                          <div className="flex items-center">
-                            <span className="font-semibold text-xl">
+                          <div className="flex items-center text-[#d1182b]">
+                            <span className="font-bold text-2xl">
                               {item.finalPrice.toLocaleString()}
                             </span>
-                            <span className="px-2 text-xs">تومان </span>
+                            <span className="px-2 text-xs font-bold">
+                              تومان{" "}
+                            </span>
                           </div>
                         </div>
                         {renderActionButton(item)}
                       </div>
                     </div>
+                  </div>
+                  <div className="sm:hidden block">
+                    {item.children?.length > 0 && (
+                      <>
+                        <div className="flex flex-wrap justify-between items-center mt-2">
+                          {item.children.map((e) => (
+                            <div
+                              key={e.id}
+                              className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                            >
+                              <div className="flex gap-1">
+                                <Link href={e.url}>
+                                  <div className="relative w-14 h-14">
+                                    <Image
+                                      style={{ filter: " brightness(0.8)" }}
+                                      className="w-full h-full object-contain rounded-lg"
+                                      src={getImageUrl2(e.image)}
+                                      alt={e?.title}
+                                      width={20}
+                                      height={20}
+                                      unoptimized
+                                    />
+                                    {e.discount !== 0 && (
+                                      <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                        {e.discount}٪
+                                      </span>
+                                    )}
+                                  </div>
+                                </Link>
+                                <div className="flex flex-col items-start justify-between">
+                                  <Link
+                                    className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                    href={e.url}
+                                  >
+                                    <span className="text-xs font-bold line-clamp-2 ">
+                                      {e?.title}
+                                    </span>
+                                  </Link>
+                                  {e.showPrice && (
+                                    <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                      {e?.finalPrice.toLocaleString()}
+                                      <span className="text-xs px-1">
+                                        تومان
+                                      </span>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
@@ -435,7 +568,11 @@ const BodyCard = () => {
             >
               <div
                 ref={innerRef}
-                style={fixed || stuckToBottom ? style : { position: "sticky", top: 150 }}
+                style={
+                  fixed || stuckToBottom
+                    ? style
+                    : { position: "sticky", top: 150 }
+                }
               >
                 <div className="bg-[#ececec] p-3 rounded-lg">
                   <div className="flex justify-between text-[#444] py-1 font-bold">
@@ -469,7 +606,8 @@ const BodyCard = () => {
                   </button>
                 </div>
                 <p className="text-[#444]">
-                  این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها نمی‌باشد.
+                  این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
+                  آنها نمی‌باشد.
                 </p>
               </div>
             </div>

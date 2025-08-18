@@ -1,17 +1,15 @@
 "use client";
 
+import { fetchCurrentCart } from "@/redux/slices/cartSlice";
+import { getUserCookie } from "@/utils/cookieUtils";
+import { Spin } from "antd";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
 import { addToCart } from "../../services/cart/cartService";
-import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import CartCounter from "./CartCounter";
 import SuccessModal from "./SuccessModal";
-import Cookies from "js-cookie";
-import Link from "next/link";
-import { FaShoppingBasket } from "react-icons/fa";
-import { getUserCookie, getUserId } from "@/utils/cookieUtils";
-import { Spin } from "antd";
 
 function CartActions({ product, selectedWarranty }) {
   const dispatch = useDispatch();
@@ -26,11 +24,10 @@ function CartActions({ product, selectedWarranty }) {
   // Ensure currentItems is always an array
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray.find(
-    (item) => item.productId === product?.product?.productId && item.colorId === selectedColor?.id
+    (item) =>
+      item.productId === product?.product?.productId &&
+      item.colorId === selectedColor?.id
   );
-
-  
-
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -58,15 +55,17 @@ function CartActions({ product, selectedWarranty }) {
 
     try {
       setIsLoading(true);
-      await addToCart(
+      const response = await addToCart(
         product?.product?.productId,
         selectedWarranty,
         userId,
         1,
         selectedColor?.id
       );
-      dispatch(fetchCurrentCart());
-      setShowSuccessModal(true);
+      if (response) {
+        dispatch(fetchCurrentCart());
+        setShowSuccessModal(true);
+      }
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {

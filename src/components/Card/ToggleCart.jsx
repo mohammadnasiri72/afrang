@@ -29,9 +29,9 @@ function ToggleCart() {
       label: (
         <div className="flex items-center justify-center gap-2">
           <span>سبد خرید</span>
-          {currentItems.length > 0 && (
+          {currentItems?.filter((e)=>e.parentId === -1).length > 0 && (
             <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
-              {currentItems.length}
+              {currentItems?.filter((e)=>e.parentId === -1).length}
             </span>
           )}
         </div>
@@ -42,9 +42,9 @@ function ToggleCart() {
       label: (
         <div className="flex items-center justify-center gap-2">
           <span>خرید بعدی</span>
-          {nextItems.length > 0 && (
+          {nextItems?.filter((e)=>e.parentId === -1).length > 0 && (
             <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
-              {nextItems.length}
+              {nextItems?.filter((e)=>e.parentId === -1).length}
             </span>
           )}
         </div>

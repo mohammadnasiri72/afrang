@@ -211,19 +211,19 @@ export default function Header(props) {
             className="cursor-pointer relative mt-3"
           >
             <Badge
-              count={currentItems?.length || 0}
+              count={currentItems?.filter((e)=>e.parentId === -1).length || 0}
               style={{
                 fontSize: "10px",
                 fontWeight: "bold",
                 backgroundColor:
-                  currentItems?.length !== 0 ? "#d1182b" : "#000",
+                  currentItems?.filter((e)=>e.parentId === -1).length !== 0 ? "#d1182b" : "#000",
                 color: "#fff",
                 transform: "translate(-8px, -8px)",
               }}
             >
               <FaCartShopping
                 className={`text-4xl  ${
-                  currentItems?.length !== 0
+                  currentItems?.filter((e)=>e.parentId === -1).length !== 0
                     ? "text-teal-500"
                     : "text-[#d1182b]"
                 }`}

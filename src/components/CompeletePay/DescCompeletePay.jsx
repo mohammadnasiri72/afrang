@@ -79,14 +79,14 @@ export default function DescCompeletePay() {
   const dispatch = useDispatch();
 
   const totalPrice =
-    currentItems?.reduce((sum, item) => {
+    currentItems?.filter((e)=>e.parentId === -1)?.reduce((sum, item) => {
       const price = item.price1 || 0;
       const quantity = item.quantity || 0;
       return sum + price * quantity;
     }, 0) || 0;
 
   const totalDiscount =
-    currentItems?.reduce((sum, item) => {
+    currentItems?.filter((e)=>e.parentId === -1)?.reduce((sum, item) => {
       const oldPrice = item.price1 || 0;
       const price = item.finalPrice || 0;
       const quantity = item.quantity || 0;
@@ -222,7 +222,7 @@ export default function DescCompeletePay() {
             <div className="w-full lg:mt-0 mt-3">
               <div className="bg-[#ececec] p-3 rounded-lg ">
                 <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>قیمت کالاها ({currentItems?.length || 0})</span>
+                  <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
                   <span>
                     {estimateData?.productAmount
                       ? estimateData.productAmount.toLocaleString()
@@ -402,7 +402,7 @@ export default function DescCompeletePay() {
             <div className="w-full lg:mt-0 mt-3">
               <div className="bg-[#ececec] p-3 rounded-lg ">
                 <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>قیمت کالاها ({currentItems?.length || 0})</span>
+                  <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
                   <span>
                     {estimateData?.productAmount
                       ? estimateData.productAmount.toLocaleString()

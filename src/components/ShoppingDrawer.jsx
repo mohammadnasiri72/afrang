@@ -49,27 +49,9 @@ function ShoppingDrawer() {
     setDeleteModalOpen(true);
   };
 
-  const handleIncrement = async (item) => {
-    if (!userId) return;
-    try {
-      await updateCart(item.id, 1, userId);
-      dispatch(fetchCurrentCart());
-    } catch (error) {
-      console.error("Failed to increment:", error);
-    }
-  };
+  
 
-  const handleDecrement = async (item) => {
-    if (!userId) return;
-    if (item.quantity > 1) {
-      try {
-        await updateCart(item.id, -1, userId);
-        dispatch(fetchCurrentCart());
-      } catch (error) {
-        console.error("Failed to decrement:", error);
-      }
-    }
-  };
+ 
 
   // تابع برای مدیریت کلیک روی لینک‌ها
   const handleNavigation = (url) => {
@@ -80,10 +62,12 @@ function ShoppingDrawer() {
     router.push(url);
   };
 
+  
+
   // محاسبه جمع کل
   const totalPrice =
-    currentItems.length > 0
-      ? currentItems?.reduce((sum, item) => {
+    currentItems.filter((e)=>e.parentId === -1).length > 0
+      ? currentItems?.filter((e)=>e.parentId === -1).reduce((sum, item) => {
           const price = item.finalPrice || 0;
           const quantity = item.quantity || 0;
           return sum + price * quantity;
@@ -145,9 +129,9 @@ function ShoppingDrawer() {
             <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
           </svg>
         </span>
-        {currentItems?.length > 0 && (
+        {currentItems?.filter((e)=>e.parentId === -1).length > 0 && (
           <span className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {currentItems.length}
+            {currentItems.filter((e)=>e.parentId === -1).length}
           </span>
         )}
       </div>
@@ -168,9 +152,9 @@ function ShoppingDrawer() {
           />
           <div className="flex justify-between items-center pb-3">
             <span className="text-[#666]">
-              سبد خرید ({currentItems?.length || 0})
+              سبد خرید ({currentItems?.filter((e)=>e.parentId === -1).length || 0})
             </span>
-            {currentItems.length > 0 && (
+            {currentItems.filter((e)=>e.parentId === -1).length > 0 && (
               <button
                 onClick={() => {
                   setDeleteModalsOpen(true);
@@ -182,7 +166,7 @@ function ShoppingDrawer() {
             )}
           </div>
 
-          {currentItems?.length === 0 ? (
+          {currentItems?.filter((e)=>e.parentId === -1).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">
               <div className="text-4xl text-[#d1182b] mb-4">
                 {/* Custom SVG Cart Icon for empty state */}
@@ -217,8 +201,8 @@ function ShoppingDrawer() {
           ) : (
             <>
               <div className="flex-1 overflow-auto">
-                {currentItems.length > 0 &&
-                  currentItems?.map((item) => (
+                {currentItems.filter((e)=>e.parentId === -1).length > 0 &&
+                  currentItems?.filter((e)=>e.parentId === -1).map((item) => (
                     <div key={item.id} className="group">
                       <div className="flex flex-col p-3 relative">
                         {/* تصویر و عنوان */}

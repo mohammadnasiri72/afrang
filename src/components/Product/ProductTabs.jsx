@@ -146,7 +146,7 @@ function ProductTabs({ product, parentRef }) {
 
   const options = [
     ...(product.product.typeId === 3
-      ? [{ label: "محصولات دسته ای", value: 1 }]
+      ? [{ label: "لیست محصولات", value: 1 }]
       : []),
     { label: "توضیحات محصول", value: 2 },
     { label: "مشخصات فنی", value: 3 },
@@ -340,7 +340,7 @@ function ProductTabs({ product, parentRef }) {
           {product.product.typeId === 3 && (
             <div ref={bundleRef} className="tab-section-scroll-anchor">
               <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
-                محصولات دسته ای
+                لیست محصولات
               </h4>
               <BundleProducts product={product} />
             </div>
