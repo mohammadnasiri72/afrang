@@ -24,9 +24,9 @@ function CartActions({ product, selectedWarranty }) {
   // Ensure currentItems is always an array
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray.find(
-    (item) =>
-      item.productId === product?.product?.productId &&
-      item.colorId === selectedColor?.id
+    (item) => item.productId === product?.product?.productId
+    // &&
+    //   (item.colorId === selectedColor?.id || !selectedColor)
   );
 
   useEffect(() => {
@@ -73,11 +73,14 @@ function CartActions({ product, selectedWarranty }) {
     }
   };
 
+  console.log(cartItem);
+
   return (
     <>
       <div className="mt-5 flex flex-col gap-2">
         {product.canAddCart ? (
-          cartItem && cartItem?.colorId === selectedColor?.id ? (
+          cartItem &&
+          (cartItem?.colorId === selectedColor?.id || !selectedColor) ? (
             <div className="flex flex-col justify-center items-center">
               <CartCounter
                 quantity={cartItem.quantity}
