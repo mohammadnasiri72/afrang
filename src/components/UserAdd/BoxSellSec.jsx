@@ -69,8 +69,8 @@ function BoxSellSec({ productList, loading }) {
                   className="w-full h-full object-cover rounded-lg"
                 />
                 {/* کالای کارکرده */}
-                <div className="absolute bottom-0 right-0 left-0 bg-[#fffa] text-[#d1182b] justify-center py-1 shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                  کالای کارکرده
+                <div className="absolute bottom-0 right-0 left-0 bg-[#fffa] text-[#40768c] justify-center py-1 shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  دست دوم کاربران
                 </div>
               </Link>
             ) : (

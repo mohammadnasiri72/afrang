@@ -81,8 +81,8 @@ export default function ProductMainUser({ products }) {
                     unoptimized
                   />
 
-                  <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                    کالای کارکرده
+                  <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    دست دوم کاربران
                   </div>
                 </Link>
                 <div className="flex flex-col flex-1 justify-between mt-2">

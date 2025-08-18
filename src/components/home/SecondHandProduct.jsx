@@ -151,7 +151,7 @@ function SecondHandProduct() {
       <div className="sm:px-16 px-2">
         <div className="lg:hidden flex justify-center items-center pb-5">
           <div className="flex-wrap gap-4 items-center">
-            <h2 className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold"> دست دوم های پیشنهاد افــــرنـــــگ</h2>
+            <h2 className="title-newProduct relative text-[#222] duration-300 text-lg font-semibold"> دست دوم های پیشنهاد افــــرنـــــگ</h2>
           </div>
         </div>
         {/* بخش موبایل */}
@@ -193,7 +193,7 @@ function SecondHandProduct() {
 
         <div className="flex justify-between items-center sm:px-4">
           <div className="lg:flex hidden flex-wrap gap-4 items-center">
-            <button className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold">
+            <button className="title-newProduct relative text-[#222] duration-300 text-lg font-semibold">
               دست دوم های پیشنهاد افــــرنـــــگ
             </button>
           </div>
