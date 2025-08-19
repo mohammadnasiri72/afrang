@@ -73,7 +73,6 @@ function CartActions({ product, selectedWarranty }) {
     }
   };
 
-  console.log(cartItem);
 
   return (
     <>

@@ -109,9 +109,6 @@ export default function Header(props) {
     return <HeaderSkeleton />;
   }
 
-  
-  
-
   return (
     <div className="bg-white w-full">
       <div
@@ -133,7 +130,7 @@ export default function Header(props) {
                   src={getImageUrl(
                     settings.find(
                       (item) => item.propertyKey === "site_footer_logo"
-                    )?.value 
+                    )?.value
                   )}
                   alt=""
                 />
@@ -142,8 +139,8 @@ export default function Header(props) {
               <img className="lg:w-14 w-24" src="/images/logo.png" alt="" />
             )}
 
-            <Link 
-            aria-label="صفحه اصلی"
+            <Link
+              aria-label="صفحه اصلی"
               href={
                 settings?.find((item) => item.propertyKey === "site_home_url")
                   ?.value || "/"
@@ -211,19 +208,27 @@ export default function Header(props) {
             className="cursor-pointer relative mt-3"
           >
             <Badge
-              count={currentItems?.filter((e)=>e.parentId === -1).length || 0}
+              count={
+                currentItems.length > 0
+                  ? currentItems?.filter((e) => e.parentId === -1)?.length
+                  : 0
+              }
               style={{
                 fontSize: "10px",
                 fontWeight: "bold",
                 backgroundColor:
-                  currentItems?.filter((e)=>e.parentId === -1).length !== 0 ? "#d1182b" : "#000",
+                  currentItems.length > 0 &&
+                  currentItems?.filter((e) => e.parentId === -1).length !== 0
+                    ? "#d1182b"
+                    : "#000",
                 color: "#fff",
                 transform: "translate(-8px, -8px)",
               }}
             >
               <FaCartShopping
                 className={`text-4xl  ${
-                  currentItems?.filter((e)=>e.parentId === -1).length !== 0
+                  currentItems.length > 0 &&
+                  currentItems?.filter((e) => e.parentId === -1).length !== 0
                     ? "text-teal-500"
                     : "text-[#d1182b]"
                 }`}
