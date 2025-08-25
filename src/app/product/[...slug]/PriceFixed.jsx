@@ -10,14 +10,15 @@ import { FaCartShopping } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function PriceFixed({product}) {
-    const { items, currentItems } = useSelector((state) => state.cart);
+  
+    const { currentItems } = useSelector((state) => state.cart);
     const itemsArray = Array.isArray(currentItems) ? currentItems : [];
     const cartItem = itemsArray.find(item => item.productId === product?.product?.productId);
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
-    const warrantiesArray = Object.entries(product.warranties).map(
+    const warrantiesArray = product.warranties ? Object.entries(product.warranties).map(
         ([value, label]) => ({ value: Number(value), label })
-      );
+      ) : []
       const [selectedWarranty, setSelectedWarranty] = useState(
         warrantiesArray[0]?.value || null
       );

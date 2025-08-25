@@ -9,8 +9,8 @@ import CompareButton from "../common/CompareButton";
 import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
 import LikeProduct from "./LikeProduct";
-import Warranties from "./Warranties";
 import NotifyAvailable from "./NotifyAvailable";
+import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
   const { items } = useSelector((state) => state.cart);
@@ -18,9 +18,12 @@ function BasketBox({ product }) {
     (item) => item.productId === product?.product?.productId
   );
 
-  const warrantiesArray = Object.entries(product.warranties).map(
-    ([value, label]) => ({ value: Number(value), label })
-  );
+  const warrantiesArray = product.warranties
+    ? Object.entries(product.warranties).map(([value, label]) => ({
+        value: Number(value),
+        label,
+      }))
+    : [];
   const [selectedWarranty, setSelectedWarranty] = useState(
     warrantiesArray[0]?.value || null
   );
@@ -28,7 +31,6 @@ function BasketBox({ product }) {
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
   );
-
 
   return (
     <div className="px-2 h-full">
