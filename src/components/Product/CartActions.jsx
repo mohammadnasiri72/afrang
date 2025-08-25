@@ -17,17 +17,24 @@ function CartActions({ product, selectedWarranty }) {
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
   );
+
+  
+
+  
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Ensure currentItems is always an array
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
-  const cartItem = itemsArray.find(
+  const cartItem = itemsArray.filter(
     (item) => item.productId === product?.product?.productId
     // &&
     //   (item.colorId === selectedColor?.id || !selectedColor)
   );
+
+  console.log(cartItem);
+  
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -57,7 +64,7 @@ function CartActions({ product, selectedWarranty }) {
       setIsLoading(true);
       const response = await addToCart(
         product?.product?.productId,
-        selectedWarranty,
+        selectedWarranty?.id ?  selectedWarranty?.id : -1,
         userId,
         1,
         selectedColor?.id
@@ -78,12 +85,16 @@ function CartActions({ product, selectedWarranty }) {
     <>
       <div className="mt-5 flex flex-col gap-2">
         {product.canAddCart ? (
-          cartItem &&
-          (cartItem?.colorId === selectedColor?.id || !selectedColor) ? (
+          cartItem && cartItem.length >0 &&
+
+cartItem.filter((e)=>e.colorId === selectedColor?.id).length >0 
+
+
+          ? (
             <div className="flex flex-col justify-center items-center">
               <CartCounter
-                quantity={cartItem.quantity}
-                cartId={cartItem.id}
+                quantity={cartItem.filter((e)=>e.colorId === selectedColor?.id)[0].quantity}
+                cartId={cartItem.filter((e)=>e.colorId === selectedColor?.id)[0].id}
                 ctrl={
                   product?.inventory?.inventorySetting?.showQtyControl
                     ? false

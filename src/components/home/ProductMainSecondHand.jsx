@@ -1,7 +1,5 @@
 "use client";
 
-import { SlBasket } from "react-icons/sl";
-
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -10,15 +8,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl2 } from "@/utils/mainDomain";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import AddToCartButton from "../ProductList/AddToCartButton";
+import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 
 export default function ProductMainSecondHand({ oldProducts }) {
-
   return (
     <>
-    
       <Swiper
         slidesPerView={4}
         spaceBetween={10}
@@ -53,12 +50,11 @@ export default function ProductMainSecondHand({ oldProducts }) {
           },
         }}
       >
-        {
-          oldProducts && oldProducts.map((oldProduct) => (
+        {oldProducts &&
+          oldProducts.map((oldProduct) => (
             <SwiperSlide key={oldProduct.id}>
               <div className="w-full p-2">
                 <div className="relative rounded-lg group overflow-hidden bg-white">
-
                   <div className="p-4">
                     <img
                       className="duration-1000 w-full"
@@ -83,25 +79,22 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     <SlBasket className="text-xl" />
                     <span className="px-1">افزودن به سبد خرید</span>
                   </div> */}
-                   {
-                      oldProduct.canAddCart &&
-                      <div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
-                          {/* <SlBasket className="text-xl" />
+                  {oldProduct.canAddCart && (
+                    <div>
+                      <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
+                        {/* <SlBasket className="text-xl" />
                           <span className="px-1">افزودن به سبد خرید</span> */}
-                          <AddToCartButton productId={oldProduct.productId} />
-                        </div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
-                          <AddToCartButton productId={oldProduct.productId} />
-                        </div>
+                        <AddToCartButtonCard productId={oldProduct.productId} />
                       </div>
-
-                    }
+                      <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
+                        <AddToCartButton productId={oldProduct.productId} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </SwiperSlide>
-          ))
-        }
+          ))}
         {/* <SwiperSlide>
             <div className="w-full p-2">
               <div className="relative rounded-lg group overflow-hidden bg-white">
@@ -335,7 +328,6 @@ export default function ProductMainSecondHand({ oldProducts }) {
             <FaCaretLeft className="text-2xl cursor-pointer" />
           </div>
         </div>
-
       </Swiper>
     </>
   );

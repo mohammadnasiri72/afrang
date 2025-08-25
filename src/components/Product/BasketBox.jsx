@@ -18,15 +18,10 @@ function BasketBox({ product }) {
     (item) => item.productId === product?.product?.productId
   );
 
-  const warrantiesArray = product.warranties
-    ? Object.entries(product.warranties).map(([value, label]) => ({
-        value: Number(value),
-        label,
-      }))
-    : [];
   const [selectedWarranty, setSelectedWarranty] = useState(
-    warrantiesArray[0]?.value || null
+    product?.warranty?.warrantyWays[0] || null
   );
+
 
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
@@ -36,14 +31,15 @@ function BasketBox({ product }) {
     <div className="px-2 h-full">
       <div className="bg-[#f6f6f6] h-full rounded-lg p-2">
         <h4 className="font-bold text-[#333]">اطلاعات محصول</h4>
-        {warrantiesArray && warrantiesArray.length > 0 && (
-          <Warranties
-            selectedWarranty={selectedWarranty}
-            setSelectedWarranty={setSelectedWarranty}
-            warrantiesArray={warrantiesArray}
-            disabled={isInCart}
-          />
-        )}
+        {product.warranty.warrantyWays &&
+          product.warranty.warrantyWays.length > 0 && (
+            <Warranties
+              selectedWarranty={selectedWarranty}
+              setSelectedWarranty={setSelectedWarranty}
+              warrantiesArray={product.warranty.warrantyWays}
+              disabled={isInCart}
+            />
+          )}
 
         <Divider style={{ padding: 0, margin: "10px" }} />
         <div className="flex items-center gap-1 flex-wrap w-full">

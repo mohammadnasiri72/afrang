@@ -830,6 +830,9 @@ th {
 .ant-select-item {
   z-index: 119999 !important;
 }
+.custom-tooltip {
+  z-index: 1199999 !important;
+}
 
 .used-icon-thumb.icon4 span {
   background-position: -158px 0;

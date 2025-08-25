@@ -9,6 +9,7 @@ import { FaRegEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
+import SelectedInsurance from "./SelectedInsurance";
 
 function DescProductDetails({ product }) {
   const [brand, setBrand] = useState({});
@@ -147,6 +148,12 @@ function DescProductDetails({ product }) {
             <SelectColorProduct product={product} />
           </div>
         )}
+        {
+          product?.insurance && product?.insurance?.insuranceWays?.length > 0 &&
+          <div>
+            <SelectedInsurance product={product}/>
+          </div>
+        }
         {product?.product?.optionalId && (
           <SelectProductMokamel product={product} />
         )}

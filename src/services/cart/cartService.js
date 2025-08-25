@@ -17,7 +17,9 @@ export const addToCart = async (
   warrantyId = -1,
   userId,
   quantity = 1,
-  colorId = -1
+  colorId = -1,
+  parentId = -1,
+  amount
 ) => {
   try {
     const response = await axios.post(`${mainDomain}/api/Cart`, {
@@ -26,8 +28,9 @@ export const addToCart = async (
       productId: productId,
       colorId,
       warrantyId: warrantyId,
-      parentId: -1,
+      parentId,
       quantity: quantity,
+      ...(amount ? { amount: amount } : {}),
     });
     return response.data;
   } catch (err) {
@@ -133,13 +136,13 @@ export const deleteCartItem = async (cartItemId, userId) => {
     const response = await axios.delete(
       `${mainDomain}/api/Cart/${userId}/${cartItemId}`
     );
-    Toast.fire({
-      icon: "success",
-      text: "محصول از سبد خرید حذف شد",
-      customClass: {
-        container: "toast-modal",
-      },
-    });
+    // Toast.fire({
+    //   icon: "success",
+    //   text: "محصول از سبد خرید حذف شد",
+    //   customClass: {
+    //     container: "toast-modal",
+    //   },
+    // });
     return response.data;
   } catch (err) {
     Toast.fire({
@@ -151,11 +154,9 @@ export const deleteCartItem = async (cartItemId, userId) => {
     });
   }
 };
-export const deleteCartItemAll = async ( userId) => {
+export const deleteCartItemAll = async (userId) => {
   try {
-    const response = await axios.post(
-      `${mainDomain}/api/Cart/Clear/${userId}`
-    );
+    const response = await axios.post(`${mainDomain}/api/Cart/Clear/${userId}`);
     Toast.fire({
       icon: "success",
       text: "محصولات از سبد خرید حذف شدند",

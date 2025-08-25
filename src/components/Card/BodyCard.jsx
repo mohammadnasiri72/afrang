@@ -16,23 +16,54 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CartCounter from "../Product/CartCounter";
 
+// function buildTree(items) {
+//   // 1. ایجاد یک مپ برای دسترسی سریع به آیتم‌ها با استفاده از id
+//   const itemMap = {};
+//   items.forEach((item) => {
+//     itemMap[item.productId] = { ...item, children: [] };
+//   });
+
+//   // 2. ساختار درختی ایجاد می‌کنیم
+//   const tree = [];
+//   items.forEach((item) => {
+//     if (item.parentId === -1) {
+//       // آیتم اصلی را به درخت اضافه می‌کنیم
+//       tree.push(itemMap[item.productId]);
+//     } else {
+//       // آیتم فرزند را به والدش اضافه می‌کنیم
+//       if (itemMap[item.parentId]) {
+//         itemMap[item.parentId].children.push(itemMap[item.productId]);
+//       }
+//     }
+//   });
+
+//   return tree;
+// }
+
 function buildTree(items) {
-  // 1. ایجاد یک مپ برای دسترسی سریع به آیتم‌ها با استفاده از id
   const itemMap = {};
+
+  // ایجاد یک مپ برای دسترسی سریع با کلید منحصر به فرد
   items.forEach((item) => {
-    itemMap[item.productId] = { ...item, children: [] };
+    const uniqueKey = `${item.productId}_${item.colorId}`;
+    itemMap[uniqueKey] = { ...item, children: [] };
   });
 
-  // 2. ساختار درختی ایجاد می‌کنیم
   const tree = [];
   items.forEach((item) => {
+    const uniqueKey = `${item.productId}_${item.colorId}`;
+
     if (item.parentId === -1) {
-      // آیتم اصلی را به درخت اضافه می‌کنیم
-      tree.push(itemMap[item.productId]);
+      tree.push(itemMap[uniqueKey]);
     } else {
-      // آیتم فرزند را به والدش اضافه می‌کنیم
-      if (itemMap[item.parentId]) {
-        itemMap[item.parentId].children.push(itemMap[item.productId]);
+      // پیدا کردن والد بر اساس productId بدون در نظر گرفتن colorId
+      const parentEntries = Object.entries(itemMap).find(
+        ([key, value]) => value.productId === item.parentId
+      );
+
+      if (parentEntries) {
+        const parentKey = parentEntries[0];
+        itemMap[parentKey].children.push(itemMap[uniqueKey]);
       }
     }
   });
@@ -114,7 +145,6 @@ const BodyCard = () => {
   const items =
     cartType === "current" ? buildTree(currentItems) : buildTree(nextItems);
 
-  console.log(items);
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -385,7 +415,6 @@ const BodyCard = () => {
                       <div className="sm:block hidden">
                         {item.children?.length > 0 && (
                           <>
-                           
                             <div className="flex flex-wrap justify-between items-center mt-2">
                               {item.children.map((e) => (
                                 <div
