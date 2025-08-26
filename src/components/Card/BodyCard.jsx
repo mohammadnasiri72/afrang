@@ -16,29 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CartCounter from "../Product/CartCounter";
 
-// function buildTree(items) {
-//   // 1. ایجاد یک مپ برای دسترسی سریع به آیتم‌ها با استفاده از id
-//   const itemMap = {};
-//   items.forEach((item) => {
-//     itemMap[item.productId] = { ...item, children: [] };
-//   });
+function sumAmount(array) {
+  return array.reduce((total, current) => total + current.amount, 0);
+}
 
-//   // 2. ساختار درختی ایجاد می‌کنیم
-//   const tree = [];
-//   items.forEach((item) => {
-//     if (item.parentId === -1) {
-//       // آیتم اصلی را به درخت اضافه می‌کنیم
-//       tree.push(itemMap[item.productId]);
-//     } else {
-//       // آیتم فرزند را به والدش اضافه می‌کنیم
-//       if (itemMap[item.parentId]) {
-//         itemMap[item.parentId].children.push(itemMap[item.productId]);
-//       }
-//     }
-//   });
 
-//   return tree;
-// }
 
 function buildTree(items) {
   const itemMap = {};
@@ -137,6 +119,7 @@ const BodyCardSkeleton = () => {
 };
 
 const BodyCard = () => {
+  const [amount, setAmount] = useState(0);
   const dispatch = useDispatch();
   const { currentItems, nextItems, cartType, loading } = useSelector(
     (state) => state.cart
@@ -145,6 +128,9 @@ const BodyCard = () => {
   const items =
     cartType === "current" ? buildTree(currentItems) : buildTree(nextItems);
 
+  useEffect(() => {
+    setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
+  }, [currentItems]);
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -415,7 +401,7 @@ const BodyCard = () => {
                       <div className="sm:block hidden">
                         {item.children?.length > 0 && (
                           <>
-                            <div className="flex flex-wrap justify-between items-center mt-2">
+                            <div className="flex flex-wrap justify-start items-center mt-2">
                               {item.children.map((e) => (
                                 <div
                                   key={e.id}
@@ -556,7 +542,7 @@ const BodyCard = () => {
               <div className="bg-[#ececec] p-3 rounded-lg">
                 <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
                   <span>قیمت کالاها ({items?.length || 0})</span>
-                  <span>{totalPrice.toLocaleString()}</span>
+                  <span>{(totalPrice + amount).toLocaleString()}</span>
                 </div>
                 {totalDiscount > 0 && (
                   <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
@@ -571,7 +557,11 @@ const BodyCard = () => {
                       <span className="font-bold text-lg">جمع سبد خرید:</span>
                       <div className="flex items-center">
                         <span className="font-bold text-2xl text-[#d1182b]">
-                          {(totalPrice - totalDiscount).toLocaleString()}
+                          {(
+                            totalPrice -
+                            totalDiscount +
+                            amount
+                          ).toLocaleString()}
                         </span>
                         <span className="mr-1">تومان</span>
                       </div>
@@ -606,7 +596,7 @@ const BodyCard = () => {
                 <div className="bg-[#ececec] p-3 rounded-lg">
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>قیمت کالاها ({items?.length || 0})</span>
-                    <span>{totalPrice.toLocaleString()}</span>
+                    <span>{(totalPrice + amount).toLocaleString()}</span>
                   </div>
                   {totalDiscount > 0 && (
                     <div className="flex justify-between text-[#444] py-1 font-bold">
@@ -620,7 +610,11 @@ const BodyCard = () => {
                       <span className="font-bold text-lg">جمع سبد خرید:</span>
                       <div className="flex items-center">
                         <span className="font-bold text-2xl text-[#d1182b]">
-                          {(totalPrice - totalDiscount).toLocaleString()}
+                          {(
+                            totalPrice -
+                            totalDiscount +
+                            amount
+                          ).toLocaleString()}
                         </span>
                         <span className="mr-1">تومان</span>
                       </div>

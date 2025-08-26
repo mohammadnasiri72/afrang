@@ -11,13 +11,13 @@ import { addToCart } from "../../services/cart/cartService";
 import CartCounter from "./CartCounter";
 import SuccessModal from "./SuccessModal";
 
-function CartActions({ product, selectedWarranty }) {
+function CartActions({ product }) {
   const dispatch = useDispatch();
   const { currentItems } = useSelector((state) => state.cart);
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
   );
-
+const {warrantySelected} = useSelector((state) => state.warranty);
   
 
   
@@ -33,7 +33,6 @@ function CartActions({ product, selectedWarranty }) {
     //   (item.colorId === selectedColor?.id || !selectedColor)
   );
 
-  console.log(cartItem);
   
 
   useEffect(() => {
@@ -64,7 +63,7 @@ function CartActions({ product, selectedWarranty }) {
       setIsLoading(true);
       const response = await addToCart(
         product?.product?.productId,
-        selectedWarranty?.id ?  selectedWarranty?.id : -1,
+        warrantySelected?.id ?  warrantySelected?.id : -1,
         userId,
         1,
         selectedColor?.id

@@ -98,7 +98,7 @@ function ShowProductBasket() {
                     )}
                   </div>
 
-                  <div className="flex flex-col items-end mt-2 space-y-1">
+                  <div className="flex flex-col mt-2 space-y-1">
                     {item.discount !== 0 && (
                       <div className="text-sm text-gray-500 line-through">
                         {item.price1.toLocaleString()} تومان
@@ -125,7 +125,7 @@ function ShowProductBasket() {
                     {item.children?.length > 0 && (
                       <>
                        
-                        <div className="flex flex-wrap justify-between items-center mt-2">
+                        <div className="flex flex-wrap justify-start items-center mt-2">
                           {item.children.map((e) => (
                             <div
                               key={e.id}

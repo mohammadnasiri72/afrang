@@ -1,10 +1,11 @@
 "use client";
 
 import { Divider } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCreditCard } from "react-icons/fa";
 import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import { IoIosUmbrella } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import CompareButton from "../common/CompareButton";
 import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
@@ -13,15 +14,26 @@ import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
-  const { items } = useSelector((state) => state.cart);
-  const isInCart = items?.some(
+  const { currentItems } = useSelector((state) => state.cart);
+  const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
   );
+  const [insuranceSelected, setInsuranceSelected] = useState({});
 
-  const [selectedWarranty, setSelectedWarranty] = useState(
-    product?.warranty?.warrantyWays[0] || null
+  useEffect(() => {
+    if (currentItems.find((e) => e.parentId === product?.product?.productId)) {
+      setInsuranceSelected(
+        currentItems.find((e) => e.parentId === product?.product?.productId)
+      );
+    }
+  }, [product, currentItems]);
+
+  const insur = currentItems.find(
+    (e) => e.parentId === product?.product?.productId
   );
 
+
+ 
 
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
@@ -34,8 +46,6 @@ function BasketBox({ product }) {
         {product.warranty.warrantyWays &&
           product.warranty.warrantyWays.length > 0 && (
             <Warranties
-              selectedWarranty={selectedWarranty}
-              setSelectedWarranty={setSelectedWarranty}
               warrantiesArray={product.warranty.warrantyWays}
               disabled={isInCart}
             />
@@ -50,6 +60,21 @@ function BasketBox({ product }) {
             <LikeProduct productId={product?.product?.productId} />
           </div>
         </div>
+        {/* افزودن بیمه */}
+        {insuranceSelected?.id > 0 && (
+          <div className="flex justify-between px-1 mt-1 items-center bg-blue-50 rounded-md py-2 text-blue-700 border border-blue-200">
+            <div className="flex items-center gap-1  ">
+              <IoIosUmbrella className="text-blue-500 text-base" />
+              <span className="text-xs font-semibold">
+                {insuranceSelected.title}
+              </span>
+            </div>
+            <div className="font-semibold text-xs flex items-center gap-1">
+              <span>{insuranceSelected.finalPrice.toLocaleString()}</span>
+              <span>تومان</span>
+            </div>
+          </div>
+        )}
         {/* قابلیت خرید قسطی */}
         {product?.product?.isInstallmentSale && (
           <div className="flex items-center gap-2 px-1 mt-1 bg-blue-50 rounded-md py-1 pr-2 text-blue-700 border border-blue-200">
@@ -118,7 +143,7 @@ function BasketBox({ product }) {
           </div>
         )}
         <div className="sm:block hidden">
-          <CartActions product={product} selectedWarranty={selectedWarranty} />
+          <CartActions product={product} />
         </div>
         {product?.product?.statusId !== 1 &&
           product?.product?.conditionId !== 20 && (

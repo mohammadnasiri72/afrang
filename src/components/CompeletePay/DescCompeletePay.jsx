@@ -1,13 +1,17 @@
 "use client";
-import { FaShoppingCart } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, useRef } from "react";
-import { Switch } from "@headlessui/react";
+import { setEstimateData } from "@/redux/slices/paymentSlice";
 import { estimateOrder } from "@/services/order/orderService";
+import { Switch } from "@headlessui/react";
+import { message } from "antd";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { setEstimateData } from "@/redux/slices/paymentSlice";
-import { message } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+
+function sumAmount(array) {
+  return array.reduce((total, current) => total + current.amount, 0);
+}
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const DescCompeletePaySkeleton = () => {
@@ -64,7 +68,7 @@ export default function DescCompeletePay() {
     (state) => state.shipping.selectedShipping
   );
   const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
-
+  const [amount, setAmount] = useState(0);
   const [needInvoice, setNeedInvoice] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(true);
   const [estimateData, setEstimateDataLocal] = useState(null);
@@ -78,20 +82,28 @@ export default function DescCompeletePay() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
+  }, [currentItems]);
+
   const totalPrice =
-    currentItems?.filter((e)=>e.parentId === -1)?.reduce((sum, item) => {
-      const price = item.price1 || 0;
-      const quantity = item.quantity || 0;
-      return sum + price * quantity;
-    }, 0) || 0;
+    currentItems
+      ?.filter((e) => e.parentId === -1)
+      ?.reduce((sum, item) => {
+        const price = item.price1 || 0;
+        const quantity = item.quantity || 0;
+        return sum + price * quantity;
+      }, 0) || 0;
 
   const totalDiscount =
-    currentItems?.filter((e)=>e.parentId === -1)?.reduce((sum, item) => {
-      const oldPrice = item.price1 || 0;
-      const price = item.finalPrice || 0;
-      const quantity = item.quantity || 0;
-      return sum + (oldPrice - price) * quantity;
-    }, 0) || 0;
+    currentItems
+      ?.filter((e) => e.parentId === -1)
+      ?.reduce((sum, item) => {
+        const oldPrice = item.price1 || 0;
+        const price = item.finalPrice || 0;
+        const quantity = item.quantity || 0;
+        return sum + (oldPrice - price) * quantity;
+      }, 0) || 0;
 
   const shippingCost = selectedShipping?.price
     ? parseInt(selectedShipping.price)
@@ -214,19 +226,22 @@ export default function DescCompeletePay() {
         <div ref={containerRef} className="relative lg:w-1/4 w-full z-50">
           <div
             ref={innerRef}
-            style={
-              fixed || stuckToBottom ? style : { position: "sticky" }
-            }
+            style={fixed || stuckToBottom ? style : { position: "sticky" }}
             className="w-full lg:block hidden"
           >
             <div className="w-full lg:mt-0 mt-3">
               <div className="bg-[#ececec] p-3 rounded-lg ">
                 <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
+                  <span>
+                    قیمت کالاها (
+                    {currentItems?.filter((e) => e.parentId === -1)?.length ||
+                      0}
+                    )
+                  </span>
                   <span>
                     {estimateData?.productAmount
                       ? estimateData.productAmount.toLocaleString()
-                      : totalPrice.toLocaleString()}{" "}
+                      : (totalPrice + amount).toLocaleString()}{" "}
                     تومان
                   </span>
                 </div>
@@ -312,7 +327,7 @@ export default function DescCompeletePay() {
                       <span className="font-bold text-2xl text-[#d1182b]">
                         {estimateData?.finalAmount
                           ? estimateData.finalAmount.toLocaleString()
-                          : finalPrice.toLocaleString()}
+                          : (finalPrice + amount).toLocaleString()}
                       </span>
                       <span className="mr-1">تومان</span>
                     </div>
@@ -396,17 +411,20 @@ export default function DescCompeletePay() {
               </p>
             </div>
           </div>
-          <div
-            className="w-full lg:hidden block "
-          >
+          <div className="w-full lg:hidden block ">
             <div className="w-full lg:mt-0 mt-3">
               <div className="bg-[#ececec] p-3 rounded-lg ">
                 <div className="flex justify-between text-[#444] py-1 font-bold">
-                  <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
+                  <span>
+                    قیمت کالاها (
+                    {currentItems?.filter((e) => e.parentId === -1)?.length ||
+                      0}
+                    )
+                  </span>
                   <span>
                     {estimateData?.productAmount
                       ? estimateData.productAmount.toLocaleString()
-                      : totalPrice.toLocaleString()}{" "}
+                      : (totalPrice + amount).toLocaleString()}{" "}
                     تومان
                   </span>
                 </div>
@@ -492,7 +510,7 @@ export default function DescCompeletePay() {
                       <span className="font-bold text-2xl text-[#d1182b]">
                         {estimateData?.finalAmount
                           ? estimateData.finalAmount.toLocaleString()
-                          : finalPrice.toLocaleString()}
+                          : (finalPrice + amount).toLocaleString()}
                       </span>
                       <span className="mr-1">تومان</span>
                     </div>

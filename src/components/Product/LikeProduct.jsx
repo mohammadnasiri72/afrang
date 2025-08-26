@@ -20,7 +20,7 @@ const LikeProduct = ({ productId }) => {
   useEffect(() => {
     const checkLikeStatus = async () => {
       try {
-        const user = Cookies.get("user");
+        const user = Cookies.get("user");        
         const token = JSON.parse(user).token;
         if (!token) {
           setIsInitialLoading(false);

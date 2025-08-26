@@ -16,7 +16,6 @@ function BodyProductSec({ product }) {
     return dateString;
   };
 
-  console.log(product?.modifiedFa?.split(" ")[0]);
 
   return (
     <>

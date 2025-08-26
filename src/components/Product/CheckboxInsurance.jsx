@@ -2,9 +2,9 @@ import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { addToCart, deleteCartItem } from "@/services/cart/cartService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { Checkbox, Tooltip } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -13,8 +13,15 @@ const generateRandomUserId = () => {
 function CheckboxInsurance({ insurance, product }) {
   const [valCheckbox, setValCheckbox] = useState(false);
   const userData = getUserCookie();
+  const { currentItems } = useSelector((state) => state.cart);
 
-  
+  useEffect(() => {
+    if (currentItems.find((e) => e.parentId === product?.product?.productId)) {
+      setValCheckbox(true);
+    } else {
+      setValCheckbox(false);
+    }
+  }, [currentItems, product]);
 
   const dispatch = useDispatch();
 
@@ -42,20 +49,24 @@ function CheckboxInsurance({ insurance, product }) {
       userId = userData.userId;
     }
     if (e.target.checked) {
-      await addToCart(
+      const response = await addToCart(
         insurance.id,
         -1,
         userId,
         1,
         -1,
         product?.product?.productId,
-insurance.finalPrice
+        insurance.finalPrice
       );
-      dispatch(fetchCurrentCart());
+      if (response) {
+        dispatch(fetchCurrentCart());
+      }
     }
     if (!e.target.checked) {
-      await deleteCartItem(insurance.id, userId);
-      dispatch(fetchCurrentCart());
+      const response = await deleteCartItem(insurance.id, userId);
+      if (response) {
+        dispatch(fetchCurrentCart());
+      }
     }
     setValCheckbox(e.target.checked);
   };

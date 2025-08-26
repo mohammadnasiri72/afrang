@@ -296,7 +296,6 @@ export default function OrderDetails({ trackCode }) {
     return null;
   }
 
-  console.log(buildTree(orderDetails?.products));
 
   return (
     <div className="space-y-4">
@@ -461,7 +460,7 @@ export default function OrderDetails({ trackCode }) {
                 <div className="">
                   {item.children?.length > 0 && (
                     <>
-                      <div className="flex flex-wrap justify-between items-center mt-2">
+                      <div className="flex flex-wrap justify-start items-center mt-2">
                         {item.children.map((e) => (
                           <div
                             key={e.id}
