@@ -118,9 +118,11 @@ const AddToCartButtonCard = ({ productId }) => {
     setSelectedWarranty(e.target.value);
   };
 
+  console.log(cartItem);
+
   return (
     <>
-      {!cartItem || cartItem.quantity === 0 ? (
+      {!cartItem || cartItem.quantity === 0 || cartItem.parentId !== -1 ? (
         <button
           onClick={handleAddToCart}
           disabled={isLoading}
@@ -145,7 +147,7 @@ const AddToCartButtonCard = ({ productId }) => {
       )}
 
       <ModalAddtoBasket
-         isModalOpen={isModalOpen}
+        isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         product={product}
         selectedWarranty={selectedWarranty}

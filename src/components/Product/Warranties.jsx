@@ -1,5 +1,4 @@
 "use client";
-import { setWarrantySelected } from "@/redux/slices/warrantySelected";
 import {
   FormControl,
   FormControlLabel,
@@ -8,35 +7,32 @@ import {
   Tooltip,
 } from "@mui/material";
 import { FaInfoCircle } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
 
-function Warranties({ warrantiesArray, disabled }) {
-  const { warrantySelected } = useSelector((state) => state.warranty);
-  const dispatch = useDispatch();
-
+function Warranties({
+  warrantiesArray,
+  disabled,
+  warrantySelected,
+  setWarrantySelected,
+}) {
   const handleWarrantyChange = (e) => {
     if (!disabled) {
-      dispatch(
-        setWarrantySelected(
-          warrantiesArray.find((ev) => ev.id === Number(e.target.value))
-        )
+      setWarrantySelected(
+        warrantiesArray.find((ev) => ev.id === Number(e.target.value))
       );
     }
   };
 
   return (
     <>
-     
       <FormControl sx={{ width: "90%" }}>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           onChange={handleWarrantyChange}
           name="radio-buttons-group"
-          
         >
           {warrantiesArray.map((warranty) => (
             <FormControlLabel
-            key={warranty.id}
+              key={warranty.id}
               value={warranty.id}
               className={`border border-[#0003]  rounded-2xl !mt-1 !w-full relative ${
                 warranty.id === warrantySelected?.id ? "!bg-[#4A90E255]" : ""

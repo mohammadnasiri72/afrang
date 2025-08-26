@@ -1,18 +1,17 @@
 "use client";
 
 import DeleteProductModal from "@/components/Product/DeleteProductModal";
-import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { fetchCurrentCart } from "@/redux/slices/cartSlice";
-import { updateCart } from "@/services/cart/cartService";
+import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Drawer, Tooltip } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaCartShopping, FaTrash } from "react-icons/fa6";
+import { FaRecycle } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { FaRecycle } from "react-icons/fa";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
 function ShoppingDrawer() {
@@ -23,6 +22,7 @@ function ShoppingDrawer() {
   const pathname = usePathname();
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
+  
 
   useEffect(() => {
     const userData = getUserCookie();

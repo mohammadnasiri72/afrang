@@ -11,16 +11,13 @@ import { addToCart } from "../../services/cart/cartService";
 import CartCounter from "./CartCounter";
 import SuccessModal from "./SuccessModal";
 
-function CartActions({ product }) {
+function CartActions({ product, warrantySelected }) {
   const dispatch = useDispatch();
   const { currentItems } = useSelector((state) => state.cart);
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
   );
-const {warrantySelected} = useSelector((state) => state.warranty);
-  
 
-  
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,8 +29,6 @@ const {warrantySelected} = useSelector((state) => state.warranty);
     // &&
     //   (item.colorId === selectedColor?.id || !selectedColor)
   );
-
-  
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -63,7 +58,7 @@ const {warrantySelected} = useSelector((state) => state.warranty);
       setIsLoading(true);
       const response = await addToCart(
         product?.product?.productId,
-        warrantySelected?.id ?  warrantySelected?.id : -1,
+        warrantySelected?.id ? warrantySelected?.id : -1,
         userId,
         1,
         selectedColor?.id
@@ -79,21 +74,28 @@ const {warrantySelected} = useSelector((state) => state.warranty);
     }
   };
 
-
   return (
     <>
       <div className="mt-5 flex flex-col gap-2">
         {product.canAddCart ? (
-          cartItem && cartItem.length >0 &&
-
-cartItem.filter((e)=>e.colorId === selectedColor?.id).length >0 
-
-
-          ? (
+          cartItem &&
+          cartItem.length > 0 &&
+          cartItem.filter((e) =>
+            selectedColor ? e.colorId === selectedColor?.id : e
+          ).length > 0 ? (
             <div className="flex flex-col justify-center items-center">
               <CartCounter
-                quantity={cartItem.filter((e)=>e.colorId === selectedColor?.id)[0].quantity}
-                cartId={cartItem.filter((e)=>e.colorId === selectedColor?.id)[0].id}
+                quantity={
+                 cartItem.filter((e) =>
+            selectedColor ? e.colorId === selectedColor?.id : e
+          )[0]
+                    .quantity
+                }
+                cartId={
+                 cartItem.filter((e) =>
+            selectedColor ? e.colorId === selectedColor?.id : e
+          )[0].id
+                }
                 ctrl={
                   product?.inventory?.inventorySetting?.showQtyControl
                     ? false

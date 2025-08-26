@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { FaCreditCard } from "react-icons/fa";
 import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
 import { IoIosUmbrella } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CompareButton from "../common/CompareButton";
 import PriceProduct from "../ProductList/PriceProduct";
 import CartActions from "./CartActions";
@@ -19,6 +19,7 @@ function BasketBox({ product }) {
     (item) => item.productId === product?.product?.productId
   );
   const [insuranceSelected, setInsuranceSelected] = useState({});
+  const [warrantySelected, setWarrantySelected] = useState({});
 
   useEffect(() => {
     if (currentItems.find((e) => e.parentId === product?.product?.productId)) {
@@ -31,9 +32,6 @@ function BasketBox({ product }) {
   const insur = currentItems.find(
     (e) => e.parentId === product?.product?.productId
   );
-
-
- 
 
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
@@ -48,6 +46,8 @@ function BasketBox({ product }) {
             <Warranties
               warrantiesArray={product.warranty.warrantyWays}
               disabled={isInCart}
+              warrantySelected={warrantySelected}
+              setWarrantySelected={setWarrantySelected}
             />
           )}
 
@@ -143,7 +143,7 @@ function BasketBox({ product }) {
           </div>
         )}
         <div className="sm:block hidden">
-          <CartActions product={product} />
+          <CartActions product={product} warrantySelected={warrantySelected} />
         </div>
         {product?.product?.statusId !== 1 &&
           product?.product?.conditionId !== 20 && (

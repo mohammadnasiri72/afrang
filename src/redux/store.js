@@ -15,7 +15,6 @@ import cartReducer from "./slices/cartSlice";
 import discountReducer from "./slices/discountSlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import idEditReducer from "./slices/idEditSec";
-import insuranceReducer from "./slices/insuranceSelected";
 import layoutProductsReducer from "./slices/layoutProducts";
 import legalIdReducer from "./slices/legalIdSlice";
 import menuResReducer from "./slices/menuResSlice";
@@ -30,7 +29,6 @@ import shoppingReducer from "./slices/shoppingSlice";
 import socialNetworksReducer from "./slices/socialNetworksSlice";
 import supportBoxReducer from "./slices/supportBoxSlice";
 import userReducer from "./slices/userSlice";
-import warrantyReducer from "./slices/warrantySelected";
 
 const persistedState = {
   user: {
@@ -55,8 +53,7 @@ const rootReducer = combineReducers({
   paymentWay: paymentWayReducer,
   discount: discountReducer,
   order: orderReducer,
-  insurance: insuranceReducer,
-  warranty: warrantyReducer,
+ 
   favorites: favoritesReducer,
   filterLoading: filterLoadingReducer,
   compare: compareReducer,
