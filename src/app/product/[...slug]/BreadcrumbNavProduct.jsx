@@ -2,15 +2,28 @@
 
 import { Breadcrumb } from "antd";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 function BreadcrumbNavProduct({ breadcrumb }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   if (!breadcrumb?.length) return null;
 
   const breadcrumbItems = [
     {
       // آیتم خانه همیشه اول مسیر است
       title: (
-        <Link href="/" className="text-gray-500 hover:text-[#d1182b] font-[Yekan]">
+        <Link
+          href="/"
+          className="text-gray-500 hover:text-[#d1182b] font-[Yekan]"
+        >
           خانه
         </Link>
       ),
@@ -18,11 +31,11 @@ function BreadcrumbNavProduct({ breadcrumb }) {
     // تبدیل داده‌های دریافتی به فرمت مورد نیاز کامپوننت Breadcrumb
     ...breadcrumb.map((item) => ({
       title: item.href ? (
-        <Link 
-          href={item.href} 
+        <Link
+          href={item.href}
           className={`font-[Yekan] !text-xs ${
-            item.format === "selftext" 
-              ? "text-[#d1182b]" 
+            item.format === "selftext"
+              ? "text-[#d1182b]"
               : "text-gray-500 hover:text-[#d1182b]"
           }`}
         >
@@ -38,7 +51,9 @@ function BreadcrumbNavProduct({ breadcrumb }) {
     <div className="bg-white py-4 px-5 rounded-lg xl:px-16">
       <Breadcrumb
         items={breadcrumbItems}
-        separator={<span className="text-gray-400 mx-2 text-xs font-[Yekan]">&gt;</span>}
+        separator={
+          <span className="text-gray-400 mx-2 text-xs font-[Yekan]">&gt;</span>
+        }
         className="font-[Yekan]"
       />
     </div>

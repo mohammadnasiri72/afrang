@@ -1,20 +1,34 @@
+import BodyProduct from "@/components/Product/BodyProduct";
+import DescProduct from "@/components/Product/DescProduct";
+import TitleProduct from "@/components/Product/TitleProduct";
 import { itemVisit } from "@/services/Item/item";
 import { getProductId } from "@/services/products/productService";
-import dynamic from "next/dynamic";
 import { headers } from "next/headers";
 import BasketFixed from "./BasketFixed";
 import BreadcrumbNavProduct from "./BreadcrumbNavProduct";
 import PriceFixed from "./PriceFixed";
-const BodyProduct = dynamic(() => import("@/components/Product/BodyProduct"));
-const TitleProduct = dynamic(() => import("@/components/Product/TitleProduct"));
-const DescProduct = dynamic(() => import("@/components/Product/DescProduct"));
 
+// تابع برای تولید متادیتاهای استاتیک
+export async function generateMetadata({ params }) {
+  const slug = await params;
+  const id = Number(slug.slug[0]);
+  const product = await getProductId(id);
 
+  return {
+    title: product?.product?.title || "محصول",
+    description: product?.product?.shortDescription || "توضیحات محصول",
+  };
+}
 
+// تابع برای تولید پارامترهای استاتیک
+export async function generateStaticParams() {
+  // اینجا می‌توانید لیستی از IDهای محصولات را برگردانید
+  // یا خالی بگذارید اگر نمی‌خواهید از SSG استفاده کنید
+  return [];
+}
 
 export default async function ProductDetails(props) {
-  const prop = await props;
-  const params = await prop.params;
+  const params = await props.params;
   const headersList = headers();
 
   // Get IP and User Agent from headers
@@ -39,7 +53,6 @@ export default async function ProductDetails(props) {
   } catch (error) {
     console.error("Error recording visit:", error);
   }
-  
 
   return (
     <>

@@ -20,8 +20,6 @@ function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
 }
 
-
-
 function buildTree(items) {
   const itemMap = {};
 
@@ -145,6 +143,8 @@ const BodyCard = () => {
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [token, setToken] = useState(null);
+
+ 
 
   useEffect(() => {
     const userData = getUserCookie();

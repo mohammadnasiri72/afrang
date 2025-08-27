@@ -4,6 +4,7 @@ import { getPopUpsData } from "@/services/popups/popups";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Dialog, DialogActions, DialogContent, Slide } from "@mui/material";
 import { Button } from "antd";
+import { usePathname } from "next/navigation";
 import { forwardRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -14,7 +15,6 @@ import SubFooter from "./SubFooter";
 import SubHeader from "./SubHeader";
 import BoxImgBranding from "./home/BoxImgBranding";
 import SupportBox from "./home/SupportBox";
-import { usePathname } from "next/navigation";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,6 +25,7 @@ export default function LayoutWrapper({
   showHeaderFooter = true,
   showPro = true,
   showCart = true,
+  isShowPopups = true,
 }) {
   if (!showHeaderFooter) {
     return <>{children}</>;
@@ -36,14 +37,9 @@ export default function LayoutWrapper({
   const [dataPopup, setDataPopup] = useState({});
   const pathname = usePathname();
 
-  
-
-  const isShowPopups = localStorage.getItem("showPopups");
-
   useEffect(() => {
     setTimeout(() => {
       setOpenModal(true);
-      
     }, 3000);
   }, [pathname]);
 
@@ -94,7 +90,6 @@ export default function LayoutWrapper({
     localStorage.setItem("showPopups", true);
   };
 
-
   return (
     <>
       <div className={showPro ? "" : "pb-16 sm:pb-0"}>
@@ -106,7 +101,7 @@ export default function LayoutWrapper({
           <BoxImgBranding />
           <div className="h-10"></div>
           <SupportBox />
-          <Footer />
+          <Footer/>
           <SubFooter />
         </div>
       </div>

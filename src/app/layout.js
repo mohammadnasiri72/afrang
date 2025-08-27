@@ -12,7 +12,19 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+// axios.get(`${mainDomain}/api/Property/value/setting`)
+// .then((res)=>{
+//   console.log(res);
+
+// })
+// .catch((err)=>{
+//   console.log(err);
+
+// })
+
+export default async function RootLayout({ children }) {
+  
+
   return (
     <html lang="fa" dir="rtl">
       <head>

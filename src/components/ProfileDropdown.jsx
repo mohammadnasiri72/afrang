@@ -40,6 +40,7 @@ const ProfileDropdown = () => {
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
   const [menuAnimate, setMenuAnimate] = useState(false); // <-- new state
 
+   
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -248,7 +249,7 @@ const ProfileDropdown = () => {
         style={{ cursor: 'pointer' }}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <div className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg ${isOpen ? "" : ""}`}> 
+        <div className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg`}> 
           <FaUser
             className={isOpen ? "text-2xl text-[#d1182b]" : "text-2xl text-gray-500"}
           />

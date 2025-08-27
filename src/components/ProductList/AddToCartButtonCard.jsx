@@ -118,7 +118,6 @@ const AddToCartButtonCard = ({ productId }) => {
     setSelectedWarranty(e.target.value);
   };
 
-  console.log(cartItem);
 
   return (
     <>

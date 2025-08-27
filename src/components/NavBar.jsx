@@ -4,6 +4,7 @@ import ResponsiveMenu from "./ResponsiveMenu";
 import SearchNavbar from "./SearchNavbar";
 
 const NavBar = ({ activeMenu, setActiveMenu }) => {
+ 
   return (
     <div className="bg-[#d1182b] w-full">
       <div

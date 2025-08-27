@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import "./../../public/fa/css/all.css";
 import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { fetchSocialNetworksData } from "@/redux/slices/socialNetworksSlice";
 import { getMenuFooter } from "@/services/menu/menuService";
 import { mainDomainImg } from "@/utils/mainDomain";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import "./../../public/fa/css/all.css";
 import Newsletter from "./Newsletter";
 
 const FooterSkeleton = () => {
@@ -128,6 +128,10 @@ const Footer = () => {
   const hasFetchedSocialNetworks = useRef(false);
   const [footerMenu, setFooterMenu] = useState([]);
   const [menuLoading, setMenuLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!settings || settings.length === 0) {
@@ -170,11 +174,10 @@ const Footer = () => {
         <div className="flex flex-wrap">
           <div className="lg:w-1/3 sm:w-1/2 w-full px-3 flex flex-col items-center justify-start">
             <div className="w-full flex sm:justify-start justify-center ">
-              {settings?.find(
-                (item) => item.propertyKey === "site_home_url"
-              ) ? (
+              {settings?.find((item) => item.propertyKey === "site_home_url") &&
+              mounted ? (
                 <Link
-                aria-label="صفحه اصلی"
+                  aria-label="صفحه اصلی"
                   href={
                     settings?.find(
                       (item) => item.propertyKey === "site_home_url"
@@ -197,14 +200,16 @@ const Footer = () => {
               )}
               <div className="">
                 <div className="w-full px-3 mt-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
-                  <span>
-                    <span className="text-[#d1182b] whitespace-nowrap pl-1">
-                      آدرس :{" "}
+                  {mounted && (
+                    <span>
+                      <span className="text-[#d1182b] whitespace-nowrap pl-1">
+                        آدرس :{" "}
+                      </span>
+                      {settings?.find(
+                        (item) => item.propertyKey === "site_address1"
+                      )?.value || "آدرس در دسترس نیست"}
                     </span>
-                    {settings?.find(
-                      (item) => item.propertyKey === "site_address1"
-                    )?.value || "آدرس در دسترس نیست"}
-                  </span>
+                  )}
                 </div>
                 <div className="w-full px-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
                   <span>
@@ -274,18 +279,21 @@ const Footer = () => {
                   <span className="text-[#666] text-xs sm:mt-0 mt-2">
                     آیا سوالی دارید
                   </span>
-                  <span className="text-[#d1182b] text-sm font-semibold">
-                    <a
-                      href={`tel:${
-                        settings?.find(
+                  {mounted && (
+                    <span className="text-[#d1182b] text-sm font-semibold">
+                      <a
+                        href={`tel:${
+                          settings?.find(
+                            (item) => item.propertyKey === "site_tel"
+                          )?.value || "02177615546"
+                        }`}
+                      >
+                        {settings?.find(
                           (item) => item.propertyKey === "site_tel"
-                        )?.value || "02177615546"
-                      }`}
-                    >
-                      {settings?.find((item) => item.propertyKey === "site_tel")
-                        ?.value || "77615546"}
-                    </a>
-                  </span>
+                        )?.value || "77615546"}
+                      </a>
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center sm:flex-row flex-col">
@@ -319,19 +327,21 @@ const Footer = () => {
                   <span className="text-[#666] text-xs sm:mt-0 mt-2">
                     ارتباط باما
                   </span>
-                  <span className="text-[#d1182b] text-sm font-semibold">
-                    <a
-                      href={`mailto:${
-                        settings?.find(
+                  {mounted && (
+                    <span className="text-[#d1182b] text-sm font-semibold">
+                      <a
+                        href={`mailto:${
+                          settings?.find(
+                            (item) => item.propertyKey === "site_email"
+                          )?.value || "unreal@outlook.com"
+                        }`}
+                      >
+                        {settings?.find(
                           (item) => item.propertyKey === "site_email"
-                        )?.value || "unreal@outlook.com"
-                      }`}
-                    >
-                      {settings?.find(
-                        (item) => item.propertyKey === "site_email"
-                      )?.value || "unreal@outlook.com"}
-                    </a>
-                  </span>
+                        )?.value || "unreal@outlook.com"}
+                      </a>
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -340,18 +350,20 @@ const Footer = () => {
             <h4 className="font-semibold text-[16px] sm:text-start text-center">
               عضویت در خبرنامه <span className="text-[#d1182b]">افرنگ</span>
             </h4>
-            <p className="text-[#666] mt-4 sm:text-start text-center">
-              {settings?.find(
-                (item) => item.propertyKey === "site_footer_description"
-              )?.value ||
-                "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
-            </p>
+            {mounted && (
+              <p className="text-[#666] mt-4 sm:text-start text-center">
+                {settings?.find(
+                  (item) => item.propertyKey === "site_footer_description"
+                )?.value ||
+                  "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
+              </p>
+            )}
 
             <Newsletter />
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
               {socialNetworks?.map((item) => (
-                <Link 
-                aria-label="شبکه های اجتماعی"
+                <Link
+                  aria-label="شبکه های اجتماعی"
                   key={item.id}
                   href={item.sourceLink || "#"}
                   target="_blank"
@@ -406,28 +418,34 @@ const Footer = () => {
         </div>
       </div>
       <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
-        <p className="xl:w-1/2 w-full text-justify py-2">
-          {settings?.find((item) => item.propertyKey === "site_copyright")
-            ?.value ? (
-            <span>
+        {mounted && (
+          <p className="xl:w-1/2 w-full text-justify py-2">
+            {settings?.find((item) => item.propertyKey === "site_copyright")
+              ?.value ? (
               <span>
-                {
-                  settings?.find(
-                    (item) => item.propertyKey === "site_copyright"
-                  )?.value
-                }
+                <span>
+                  {
+                    settings?.find(
+                      (item) => item.propertyKey === "site_copyright"
+                    )?.value
+                  }
+                </span>
+                <Link
+                  target="_blank"
+                  href="https://activeidea.net/"
+                  className=" px-1 font-semibold"
+                >
+                  طراحی سایت و بهینه سازی سایت : ایده پویا
+                </Link>
               </span>
-              <Link target="_blank" href='https://activeidea.net/' className=" px-1 font-semibold">
-                طراحی سایت و بهینه سازی سایت : ایده پویا
-              </Link>
-            </span>
-          ) : (
-            <span>
-              © کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می
-              باشد. طراحی سایت و بهینه سازی سایت : ایده پویا
-            </span>
-          )}
-        </p>
+            ) : (
+              <span>
+                © کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می
+                باشد. طراحی سایت و بهینه سازی سایت : ایده پویا
+              </span>
+            )}
+          </p>
+        )}
       </div>
     </div>
   );

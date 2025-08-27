@@ -7,7 +7,7 @@ import { Badge } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -86,6 +86,11 @@ export default function Header(props) {
   const { currentItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const userCookie = Cookies.get("user");
@@ -117,7 +122,8 @@ export default function Header(props) {
       >
         <div className="flex items-center lg:w-1/2 w-auto">
           <div className="flex items-center lg:w-2/5 w-auto">
-            {settings?.find((item) => item.propertyKey === "site_home_url") ? (
+            {mounted &&
+            settings?.find((item) => item.propertyKey === "site_home_url") ? (
               <Link
                 href={
                   settings.find((item) => item.propertyKey === "site_home_url")
@@ -148,9 +154,7 @@ export default function Header(props) {
             >
               <div className="flex-col px-1 lg:flex hidden">
                 <span className="w-28 font-semibold text-lg">
-                  {"خانــه عکاســــان افــــــــــرنـگ" ||
-                    settings?.find((item) => item.propertyKey === "site_title")
-                      ?.value}
+                  خانــه عکاســــان افــــــــــرنـگ
                 </span>
               </div>
             </Link>
@@ -164,21 +168,23 @@ export default function Header(props) {
             </div>
             <div className="flex flex-col pr-2 text-xs">
               <span className="text-[#0008]"> آیا سوالی دارید </span>
-              <span className="text-red-700 font-semibold text-sm">
-                <a
-                  href={`tel:${
-                    settings?.find((item) => item.propertyKey === "site_tel")
-                      ?.value || "02177615546"
-                  }`}
-                >
-                  {settings?.find((item) => item.propertyKey === "site_tel")
-                    ?.value || "77615546"}
-                </a>
-              </span>
+              {mounted && (
+                <span className="text-red-700 font-semibold text-sm">
+                  <a
+                    href={`tel:${
+                      settings?.find((item) => item.propertyKey === "site_tel")
+                        ?.value || "02177615546"
+                    }`}
+                  >
+                    {settings?.find((item) => item.propertyKey === "site_tel")
+                      ?.value || "77615546"}
+                  </a>
+                </span>
+              )}
             </div>
           </div>
 
-          {user?.token ? (
+          {user?.token && mounted ? (
             <ProfileDropdown />
           ) : (
             <div className="flex items-center gap-3 font-semibold">
@@ -207,33 +213,35 @@ export default function Header(props) {
             onClick={() => disPatch(setOpenShopping(true))}
             className="cursor-pointer relative mt-3"
           >
-            <Badge
-              count={
-                currentItems.length > 0
-                  ? currentItems?.filter((e) => e.parentId === -1)?.length
-                  : 0
-              }
-              style={{
-                fontSize: "10px",
-                fontWeight: "bold",
-                backgroundColor:
-                  currentItems.length > 0 &&
-                  currentItems?.filter((e) => e.parentId === -1).length !== 0
-                    ? "#d1182b"
-                    : "#000",
-                color: "#fff",
-                transform: "translate(-8px, -8px)",
-              }}
-            >
-              <FaCartShopping
-                className={`text-4xl  ${
-                  currentItems.length > 0 &&
-                  currentItems?.filter((e) => e.parentId === -1).length !== 0
-                    ? "text-teal-500"
-                    : "text-[#d1182b]"
-                }`}
-              />
-            </Badge>
+            {mounted && (
+              <Badge
+                count={
+                  currentItems.length > 0
+                    ? currentItems?.filter((e) => e.parentId === -1)?.length
+                    : 0
+                }
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  backgroundColor:
+                    currentItems.length > 0 &&
+                    currentItems?.filter((e) => e.parentId === -1).length !== 0
+                      ? "#d1182b"
+                      : "#000",
+                  color: "#fff",
+                  transform: "translate(-8px, -8px)",
+                }}
+              >
+                <FaCartShopping
+                  className={`text-4xl  ${
+                    currentItems.length > 0 &&
+                    currentItems?.filter((e) => e.parentId === -1).length !== 0
+                      ? "text-teal-500"
+                      : "text-[#d1182b]"
+                  }`}
+                />
+              </Badge>
+            )}
           </div>
         </div>
       </div>

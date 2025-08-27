@@ -18,14 +18,39 @@ function BasketBox({ product }) {
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
   );
-  const [insuranceSelected, setInsuranceSelected] = useState({});
-  const [warrantySelected, setWarrantySelected] = useState({});
+  const [insuranceSelected, setInsuranceSelected] = useState([]);
+  const [warrantySelected, setWarrantySelected] = useState(
+    product?.warranty?.warrantyWays?.length > 0
+      ? product.warranty.warrantyWays[0]
+      : {}
+  );
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // console.log(currentItems);
+  // console.log(product);
+
+  let filteredArray = [];
 
   useEffect(() => {
-    if (currentItems.find((e) => e.parentId === product?.product?.productId)) {
-      setInsuranceSelected(
-        currentItems.find((e) => e.parentId === product?.product?.productId)
-      );
+    filteredArray = currentItems.filter((item1) =>
+      product.insurance.insuranceWays.some(
+        (item2) => item2.id === item1.productId
+      )
+    );
+  }, [currentItems, product]);
+
+  useEffect(() => {
+    const childCurrentItems = currentItems.filter(
+      (e) => e.parentId === product?.product?.productId
+    );
+    if (childCurrentItems.length > 0) {
+      setInsuranceSelected(filteredArray);
+    } else {
+      setInsuranceSelected([]);
     }
   }, [product, currentItems]);
 
@@ -61,20 +86,22 @@ function BasketBox({ product }) {
           </div>
         </div>
         {/* افزودن بیمه */}
-        {insuranceSelected?.id > 0 && (
-          <div className="flex justify-between px-1 mt-1 items-center bg-blue-50 rounded-md py-2 text-blue-700 border border-blue-200">
-            <div className="flex items-center gap-1  ">
-              <IoIosUmbrella className="text-blue-500 text-base" />
-              <span className="text-xs font-semibold">
-                {insuranceSelected.title}
-              </span>
+        {insuranceSelected?.length > 0 &&
+          insuranceSelected.map((insurance) => (
+            <div
+              key={insurance.id}
+              className="flex justify-between px-1 mt-1 items-center bg-blue-50 rounded-md py-2 text-blue-700 border border-blue-200"
+            >
+              <div className="flex items-center gap-1  ">
+                <IoIosUmbrella className="text-blue-500 text-base" />
+                <span className="text-xs font-semibold">{insurance.title}</span>
+              </div>
+              <div className="font-semibold text-xs flex items-center gap-1">
+                <span>{insurance.finalPrice.toLocaleString()}</span>
+                <span>تومان</span>
+              </div>
             </div>
-            <div className="font-semibold text-xs flex items-center gap-1">
-              <span>{insuranceSelected.finalPrice.toLocaleString()}</span>
-              <span>تومان</span>
-            </div>
-          </div>
-        )}
+          ))}
         {/* قابلیت خرید قسطی */}
         {product?.product?.isInstallmentSale && (
           <div className="flex items-center gap-2 px-1 mt-1 bg-blue-50 rounded-md py-1 pr-2 text-blue-700 border border-blue-200">
@@ -143,7 +170,12 @@ function BasketBox({ product }) {
           </div>
         )}
         <div className="sm:block hidden">
-          <CartActions product={product} warrantySelected={warrantySelected} />
+          {mounted && (
+            <CartActions
+              product={product}
+              warrantySelected={warrantySelected}
+            />
+          )}
         </div>
         {product?.product?.statusId !== 1 &&
           product?.product?.conditionId !== 20 && (

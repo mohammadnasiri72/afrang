@@ -186,6 +186,11 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
 
   const { settings } = useSelector((state) => state.settings);
 
+   const [mounted, setMounted] = useState(false);
+useEffect(() => {
+   setMounted(true);
+ }, []);
+
   // باید قبل از هر استفاده‌ای از open تعریف شود
   const open = Boolean(anchorEl);
 
@@ -197,11 +202,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
       activeMenu.Children &&
       activeMenu.Children.length > 0
     ) {
-      // محاسبه عرض اسکرول‌بار
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = "hidden";
-      // document.body.style.paddingRight = `${scrollbarWidth}px`;
+     
 
       // اضافه کردن event listener برای کلید Escape
       const handleEscapeKey = (event) => {
@@ -496,22 +497,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
     handleMenuClose();
   };
 
-  // تابع برای toggle کردن دروپ‌داون فرزندان
-  const handleChildToggle = (childId, event) => {
-    // جلوگیری از bubble شدن event
-    event.preventDefault();
-    event.stopPropagation();
-
-    setExpandedChildren((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(childId)) {
-        newSet.delete(childId);
-      } else {
-        newSet.add(childId);
-      }
-      return newSet;
-    });
-  };
+ 
 
   // --- همیشه موقعیت anchorEl را با اسکرول به‌روز کن ---
   useEffect(() => {
@@ -576,7 +562,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
     };
   }, [open, anchorEl, activeMenu, headerHeight, navbarHeight]);
 
-  if (loading) {
+  if (loading || !mounted) {
     return (
       <div className="w-full">
         <Loading navbar={true} />

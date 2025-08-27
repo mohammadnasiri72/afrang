@@ -1,6 +1,5 @@
 "use client";
 
-import { AuthProvider } from "@/context/AuthContext";
 import { fetchCartData, setCartType } from "@/redux/slices/cartSlice";
 import {
   setError,
@@ -14,8 +13,6 @@ import { fetchMenuItems } from "@/services/menuService";
 import { getUserId } from "@/utils/cookieUtils";
 import { mainDomain } from "@/utils/mainDomain";
 import { syncUserCookieWithRedux } from "@/utils/manageCookie";
-import { ConfigProvider } from "antd";
-import fa_IR from "antd/locale/fa_IR"; // برای فارسی
 import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
@@ -41,12 +38,6 @@ function InitialDataManager() {
   const initialized = useRef(false);
   const lastUserId = useRef(null);
   const lastCartType = useRef(null);
-
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual"; // غیرفعال کردن بازیابی اسکرول
-    }
-  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -150,67 +141,6 @@ function InitialDataManager() {
   return null;
 }
 
-// کامپوننت داخلی که از Redux استفاده می‌کند
-function LayoutContent({ children }) {
-  const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  const showHeaderFooter =
-    !pathname.includes("/login") &&
-    !pathname.includes("/register") &&
-    !pathname.includes("/forgot-password");
-
-  const showPro = !pathname.includes("/product/");
-
-  const showCart = !pathname.includes("/cart");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const userData = syncUserCookieWithRedux();
-      if (!userData) {
-        const initialData = {
-          token: "",
-          refreshToken: "",
-          expiration: "",
-          userId: generateRandomUserId(),
-          displayName: "",
-          roles: [],
-        };
-        Cookies.set("user", JSON.stringify(initialData));
-        store.dispatch(setUser(initialData));
-      }
-    }, 2000);
-  }, []);
-
-  return (
-    <ConfigProvider direction="rtl" locale={fa_IR}>
-      <AuthProvider>
-        <DynamicTitle />
-        {mounted ? (
-          <>
-            <InitialDataManager />
-            <LayoutWrapper
-              showHeaderFooter={showHeaderFooter}
-              showPro={showPro}
-              showCart={showCart}
-            >
-              {children}
-            </LayoutWrapper>
-          </>
-        ) : (
-          <div className="fixed inset-0 bg-white flex items-center justify-center">
-            <div className="w-16 h-16 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-          </div>
-        )}
-      </AuthProvider>
-    </ConfigProvider>
-  );
-}
-
-// ScrollToTopButton component
 function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -288,6 +218,47 @@ function ScrollToTopButton() {
 
 // کامپوننت اصلی که Provider را فراهم می‌کند
 function Layout({ children }) {
+  
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setMounted(true);
+    }, 300);
+  }, []);
+
+  const pathname = usePathname();
+  const showHeaderFooter =
+    !pathname.includes("/login") &&
+    !pathname.includes("/register") &&
+    !pathname.includes("/forgot-password");
+
+  const showPro = !pathname.includes("/product/");
+
+  const showCart = !pathname.includes("/cart");
+
+  // const isShowPopups = localStorage.getItem("showPopups");
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const userData = syncUserCookieWithRedux();
+  //     if (!userData) {
+  //       const initialData = {
+  //         token: "",
+  //         refreshToken: "",
+  //         expiration: "",
+  //         userId: generateRandomUserId(),
+  //         displayName: "",
+  //         roles: [],
+  //       };
+  //       Cookies.set("user", JSON.stringify(initialData));
+  //       store.dispatch(setUser(initialData));
+  //     }
+  //   }, 2000);
+  // }, []);
+
+ console.log('2');
+ 
+
   return (
     <Provider store={store}>
       <div
@@ -297,7 +268,25 @@ function Layout({ children }) {
           overflow: "hidden",
         }}
       >
-        <LayoutContent>{children}</LayoutContent>
+        <>
+          <DynamicTitle />
+          <InitialDataManager />
+          <LayoutWrapper
+            showHeaderFooter={showHeaderFooter}
+            showPro={showPro}
+            showCart={showCart}
+            isShowPopups={true}
+           
+          >
+            {children}
+            {!mounted && (
+              <div className="fixed inset-0 bg-white flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+                <div className="w-14 h-14 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+          </LayoutWrapper>
+        </>
+
         <ScrollToTopButton />
       </div>
     </Provider>
