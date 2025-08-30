@@ -3,8 +3,7 @@
 import ResponsiveMenu from "./ResponsiveMenu";
 import SearchNavbar from "./SearchNavbar";
 
-const NavBar = ({ activeMenu, setActiveMenu }) => {
- 
+const NavBar = ({ activeMenu, setActiveMenu, menuItems }) => {
   return (
     <div className="bg-[#d1182b] w-full">
       <div
@@ -15,6 +14,7 @@ const NavBar = ({ activeMenu, setActiveMenu }) => {
           <ResponsiveMenu
             activeMenu={activeMenu}
             setActiveMenu={setActiveMenu}
+            initialItems={menuItems}
           />
         </div>
         <SearchNavbar />

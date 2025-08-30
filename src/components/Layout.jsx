@@ -6,7 +6,7 @@ import {
   setLoading,
   setMenuItems,
 } from "@/redux/slices/menuResSlice";
-import { fetchSettingsData } from "@/redux/slices/settingsSlice";
+import { fetchSettingsData, setSettings } from "@/redux/slices/settingsSlice";
 import { setUser } from "@/redux/slices/userSlice";
 import { addToCart, getCart } from "@/services/cart/cartService";
 import { fetchMenuItems } from "@/services/menuService";
@@ -21,13 +21,13 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { FaChevronUp } from "react-icons/fa";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { store } from "./../redux/store";
+import { makeStore } from "../redux/makeStore";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
 
-const generateRandomUserId = () => {
-  return crypto.randomUUID();
-};
+// const generateRandomUserId = () => {
+//   return crypto.randomUUID();
+// };
 
 // کامپوننت برای مدیریت داده‌های اولیه
 function InitialDataManager() {
@@ -48,12 +48,11 @@ function InitialDataManager() {
           dispatch(setLoading());
 
           // دریافت منو و تنظیمات به صورت موازی
-          const [menuItems, settingsData] = await Promise.all([
-            fetchMenuItems(),
-            dispatch(fetchSettingsData()).unwrap(),
-          ]);
+          // const [menuItems] = await Promise.all([
+          //   fetchMenuItems(),
+          // ]);
 
-          dispatch(setMenuItems(menuItems));
+          // dispatch(setMenuItems(menuItems));
         }
 
         const currentUserId = user?.userId || getUserId();
@@ -217,14 +216,20 @@ function ScrollToTopButton() {
 }
 
 // کامپوننت اصلی که Provider را فراهم می‌کند
-function Layout({ children }) {
+function Layout({ children , settings , menuItems}) {
   
   const [mounted, setMounted] = useState(false);
+  const { store } = makeStore({
+    settings: { settings },
+    menuRes: { items: menuItems, openMenuRes: false, loading: false, error: null },
+  });
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
     }, 300);
   }, []);
+  
+  // no client-time dispatch here to avoid hydration mismatch
 
   const pathname = usePathname();
   const showHeaderFooter =
@@ -256,9 +261,6 @@ function Layout({ children }) {
   //   }, 2000);
   // }, []);
 
- console.log('2');
- 
-
   return (
     <Provider store={store}>
       <div
@@ -276,14 +278,14 @@ function Layout({ children }) {
             showPro={showPro}
             showCart={showCart}
             isShowPopups={true}
-           
+            menuItems={menuItems}
           >
             {children}
-            {!mounted && (
+            {/* {!mounted && (
               <div className="fixed inset-0 bg-white flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
                 <div className="w-14 h-14 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
               </div>
-            )}
+            )} */}
           </LayoutWrapper>
         </>
 

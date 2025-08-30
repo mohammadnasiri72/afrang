@@ -26,6 +26,7 @@ export default function LayoutWrapper({
   showPro = true,
   showCart = true,
   isShowPopups = true,
+  menuItems,
 }) {
   if (!showHeaderFooter) {
     return <>{children}</>;
@@ -36,6 +37,8 @@ export default function LayoutWrapper({
   const [openModal, setOpenModal] = useState(false);
   const [dataPopup, setDataPopup] = useState({});
   const pathname = usePathname();
+
+  
 
   useEffect(() => {
     setTimeout(() => {
@@ -95,7 +98,7 @@ export default function LayoutWrapper({
       <div className={showPro ? "" : "pb-16 sm:pb-0"}>
         <div className={showCart ? "" : "pb-28 sm:pb-0"}>
           <SubHeader />
-          <HeaderNavbarWrapper />
+          <HeaderNavbarWrapper menuItems={menuItems} />
           <SocialNetworks />
           {children}
           <BoxImgBranding />

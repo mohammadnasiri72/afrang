@@ -86,11 +86,6 @@ export default function Header(props) {
   const { currentItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const userCookie = Cookies.get("user");
@@ -122,7 +117,7 @@ export default function Header(props) {
       >
         <div className="flex items-center lg:w-1/2 w-auto">
           <div className="flex items-center lg:w-2/5 w-auto">
-            {mounted &&
+            {
             settings?.find((item) => item.propertyKey === "site_home_url") ? (
               <Link
                 href={
@@ -168,7 +163,7 @@ export default function Header(props) {
             </div>
             <div className="flex flex-col pr-2 text-xs">
               <span className="text-[#0008]"> آیا سوالی دارید </span>
-              {mounted && (
+              { (
                 <span className="text-red-700 font-semibold text-sm">
                   <a
                     href={`tel:${
@@ -184,7 +179,7 @@ export default function Header(props) {
             </div>
           </div>
 
-          {user?.token && mounted ? (
+          {user?.token  ? (
             <ProfileDropdown />
           ) : (
             <div className="flex items-center gap-3 font-semibold">
@@ -213,7 +208,7 @@ export default function Header(props) {
             onClick={() => disPatch(setOpenShopping(true))}
             className="cursor-pointer relative mt-3"
           >
-            {mounted && (
+            { (
               <Badge
                 count={
                   currentItems.length > 0

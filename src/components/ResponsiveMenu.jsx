@@ -1,33 +1,33 @@
 "use client";
 
 import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
-import { Drawer, Menu } from "antd";
 import { getUserCookie } from "@/utils/cookieUtils";
+import { getImageUrl } from "@/utils/mainDomain";
+import { Fade, Paper, Popper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { Drawer, Menu } from "antd";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   FaAddressBook,
   FaBuilding,
+  FaCamera,
+  FaComment,
+  FaExclamationTriangle,
+  FaHeart,
   FaHome,
+  FaInfoCircle,
+  FaKey,
+  FaNewspaper,
+  FaRecycle,
   FaShoppingBag,
   FaSignOutAlt,
   FaUser,
-  FaKey,
-  FaHeart,
-  FaCamera,
-  FaExclamationTriangle,
-  FaInfoCircle,
-  FaComment,
-  FaNewspaper,
-  FaRecycle,
 } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
-import { getImageUrl } from "@/utils/mainDomain";
-import { Popper, Paper, Box, Grow, Fade } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import SubmenuDropdown from "./SubmenuDropdown";
 
 import { keyframes } from "@emotion/react";
@@ -156,14 +156,18 @@ const AnimatedPaper = styled(StyledPaper)`
   animation: ${slideDown} 0.3s ease-in;
 `;
 
-function ResponsiveMenu({ activeMenu, setActiveMenu }) {
+function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-  const { items, loading, openMenuRes } = useSelector((state) => state.menuRes);
+  const { items: itemsFromRedux, openMenuRes } = useSelector((state) => state.menuRes);
+  const items = initialItems && initialItems.length ? initialItems : itemsFromRedux;
+  console.log(items);
+
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
+  
 
   const [expandedChildren, setExpandedChildren] = useState(new Set());
   const menuRef = useRef(null);
@@ -186,11 +190,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu }) {
 
   const { settings } = useSelector((state) => state.settings);
 
-   const [mounted, setMounted] = useState(false);
-useEffect(() => {
-   setMounted(true);
- }, []);
-
   // باید قبل از هر استفاده‌ای از open تعریف شود
   const open = Boolean(anchorEl);
 
@@ -202,8 +201,6 @@ useEffect(() => {
       activeMenu.Children &&
       activeMenu.Children.length > 0
     ) {
-     
-
       // اضافه کردن event listener برای کلید Escape
       const handleEscapeKey = (event) => {
         if (event.key === "Escape") {
@@ -497,8 +494,6 @@ useEffect(() => {
     handleMenuClose();
   };
 
- 
-
   // --- همیشه موقعیت anchorEl را با اسکرول به‌روز کن ---
   useEffect(() => {
     let timeoutId;
@@ -562,13 +557,7 @@ useEffect(() => {
     };
   }, [open, anchorEl, activeMenu, headerHeight, navbarHeight]);
 
-  if (loading || !mounted) {
-    return (
-      <div className="w-full">
-        <Loading navbar={true} />
-      </div>
-    );
-  }
+
 
   // Desktop Menu Component
   const DesktopMenu = () => {

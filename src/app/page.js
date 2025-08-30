@@ -20,7 +20,7 @@ export default async function Home() {
 
       <SliderHome />
 
-      <div className="sm:px-20 px-2">
+      {/* <div className="sm:px-20 px-2">
         <EidDiscount />
       </div>
 
@@ -42,7 +42,7 @@ export default async function Home() {
       </div>
 
       <ArticleHeader />
-      <ArticleSlider />
+      <ArticleSlider /> */}
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import Layout from "@/components/Layout";
+import { fetchMenuItems } from "@/services/menuService";
+import { getSettings } from "@/services/settings/settingsService";
 import "@/styles/leaflet.css";
 import { mainDomainImg } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
@@ -12,18 +14,10 @@ export const metadata = {
   },
 };
 
-// axios.get(`${mainDomain}/api/Property/value/setting`)
-// .then((res)=>{
-//   console.log(res);
-
-// })
-// .catch((err)=>{
-//   console.log(err);
-
-// })
 
 export default async function RootLayout({ children }) {
-  
+  const settings = await getSettings();
+  const menuItems = await fetchMenuItems();
 
   return (
     <html lang="fa" dir="rtl">
@@ -32,7 +26,9 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
-        <Layout>{children}</Layout>
+        <Layout settings={settings} menuItems={menuItems}>
+          {children}
+        </Layout>
         <Toaster position="top-center" />
       </body>
     </html>

@@ -5,7 +5,7 @@ import Header from "./Header";
 import NavBar from "./NavBar";
 import { useSelector } from "react-redux";
 
-const HeaderNavbarWrapper = () => {
+const HeaderNavbarWrapper = ({ menuItems }) => {
   const [headerFixed, setHeaderFixed] = useState(false);
   const [navbarFixed, setNavbarFixed] = useState(false);
   const headerRef = useRef(null);
@@ -140,7 +140,7 @@ const HeaderNavbarWrapper = () => {
             justifyContent: "center",
           }}
         >
-          <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+          <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} menuItems={menuItems} />
         </div>
       </div>
       {/* header اصلی که همیشه در جای خودش هست */}
@@ -159,7 +159,7 @@ const HeaderNavbarWrapper = () => {
           width: "100%",
         }}
       >
-        <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+        <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} menuItems={menuItems} />
       </div>
       {activeMenu?.id && (
         <div
