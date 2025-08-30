@@ -78,6 +78,8 @@ function SelectProductMokamel({ product }) {
 
         const result = await getProductListId(data);
         if (result && Array.isArray(result)) {
+          console.log(data);
+          
           setOptionalProducts(result);
         }
       }

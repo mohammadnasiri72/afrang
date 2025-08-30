@@ -1,7 +1,11 @@
 "use client";
 
 import { fetchCartData } from "@/redux/slices/cartSlice";
-import { addToCartNext, moveToCurrentCart } from "@/services/cart/CartServices";
+import {
+  addToCartNext,
+  getCart,
+  moveToCurrentCart,
+} from "@/services/cart/CartServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Spin } from "antd";
@@ -15,6 +19,7 @@ import { GoShieldCheck } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CartCounter from "../Product/CartCounter";
+import Cookies from "js-cookie";
 
 function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
@@ -118,17 +123,31 @@ const BodyCardSkeleton = () => {
 
 const BodyCard = () => {
   const [amount, setAmount] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  
   const dispatch = useDispatch();
-  const { currentItems, nextItems, cartType, loading } = useSelector(
+  const { currentItems, nextItems, cartType, loading, initialized } = useSelector(
     (state) => state.cart
   );
+
+  
+
+  // فقط یک بار در mount شدن کامپوننت
+  useEffect(() => {
+    setMounted(true);
+    // حذف dispatch از اینجا چون در Layout انجام می‌شود
+  }, []);
 
   const items =
     cartType === "current" ? buildTree(currentItems) : buildTree(nextItems);
 
   useEffect(() => {
-    setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
-  }, [currentItems]);
+    if (mounted && currentItems.length > 0) {
+      setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
+      setIsInitialLoad(false);
+    }
+  }, [currentItems, mounted]);
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -143,8 +162,6 @@ const BodyCard = () => {
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [token, setToken] = useState(null);
-
- 
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -169,6 +186,7 @@ const BodyCard = () => {
 
   const compeletePay = () => {
     const userData = getUserCookie();
+
     if (!userData?.token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
@@ -323,7 +341,8 @@ const BodyCard = () => {
     };
   }, []);
 
-  if (loading) {
+  // نمایش skeleton فقط در زمان loading اولیه یا عدم mount شدن
+  if (!mounted || (loading && isInitialLoad)) {
     return <BodyCardSkeleton />;
   }
 

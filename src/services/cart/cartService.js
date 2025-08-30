@@ -157,13 +157,7 @@ export const deleteCartItem = async (cartItemId, userId) => {
 export const deleteCartItemAll = async (userId) => {
   try {
     const response = await axios.post(`${mainDomain}/api/Cart/Clear/${userId}`);
-    Toast.fire({
-      icon: "success",
-      text: "محصولات از سبد خرید حذف شدند",
-      customClass: {
-        container: "toast-modal",
-      },
-    });
+   
     return response.data;
   } catch (err) {
     Toast.fire({
@@ -173,5 +167,70 @@ export const deleteCartItemAll = async (userId) => {
         container: "toast-modal",
       },
     });
+  }
+};
+
+// تابع برای ادغام سبد خرید مهمان با سبد خرید کاربر
+export const mergeGuestCart = async (guestUserId, currentUserId) => {
+  try {
+    console.log('Debug - Starting cart merge for guest:', guestUserId, 'to user:', currentUserId);
+    
+    // ابتدا cart مهمان را دریافت کن
+    const guestCartResponse = await axios.get(`${mainDomain}/api/Cart/${guestUserId}`);
+    const guestCart = guestCartResponse.data;
+    
+    if (!guestCart || !guestCart.length) {
+      console.log('Debug - Guest cart is empty, no merge needed');
+      return { success: true, message: 'سبد خرید مهمان خالی است' };
+    }
+    
+    console.log('Debug - Found guest cart items:', guestCart.length);
+    
+    // محصولات مهمان را به cart کاربر اضافه کن - فقط همین!
+    for (const item of guestCart) {
+      try {
+        await addToCart(
+          item.productId,
+          item.warrantyId || -1,
+          currentUserId, // استفاده از userId کاربر لاگین شده
+          item.quantity || 1,
+          item.colorId || -1,
+          item.parentId || -1,
+          item.amount
+        );
+        console.log('Debug - Added item to user cart:', item.productId);
+      } catch (error) {
+        console.error('Error adding item to user cart:', error);
+      }
+    }
+    
+    console.log('Debug - All items added to user cart');
+    
+    // پاک کردن cart مهمان
+    try {
+      await deleteCartItemAll(guestUserId);
+      console.log('Debug - Guest cart cleared successfully');
+    } catch (clearError) {
+      console.error('Error clearing guest cart:', clearError);
+    }
+    
+   
+    
+    return { 
+      success: true, 
+      mergedItems: guestCart.length,
+      message: `${guestCart.length} محصول با موفقیت ادغام شد`
+    };
+    
+  } catch (err) {
+    console.error("Error merging cart:", err);
+    Toast.fire({
+      icon: "error",
+      text: "خطا در ادغام سبد خرید",
+      customClass: {
+        container: "toast-modal",
+      },
+    });
+    return { success: false, error: err.message };
   }
 };

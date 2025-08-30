@@ -1,54 +1,46 @@
 "use client";
-import { getUserAdSell } from "@/services/UserAd/UserAdServices";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
-import Swal from "sweetalert2";
-import ProductMain from "./ProductMain";
 import ProductMainUser from "./ProductMainUser";
 
-function SecondHandProductUser() {
-  const [filteredProducts, setFilteredProducts] = useState([]);
+function SecondHandProductUser({ filteredProducts }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // import sweet alert 2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
-
-  const fetchProductsSec = async (data) => {
-    setLoading(true);
-    try {
-      const productsData = await getUserAdSell(data);
-      if (productsData?.type === "error") {
-        Toast.fire({
-          icon: "error",
-          title: productsData.message,
-        });
-        return;
-      }
-      setFilteredProducts(productsData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
+  useEffect(() => {
+    if (filteredProducts.length > 0) {
       setLoading(false);
     }
-  };
+  }, [filteredProducts]);
 
-  useEffect(() => {
-    fetchProductsSec({
-      LangCode: "fa",
-      PageSize: 10,
-      PageIndex: 1,
-      OrderBy: 1,
-    });
-  }, []);
+  // const fetchProductsSec = async (data) => {
+  //   setLoading(true);
+  //   try {
+  //     const productsData = await getUserAdSell(data);
+  //     if (productsData?.type === "error") {
+  //       Toast.fire({
+  //         icon: "error",
+  //         title: productsData.message,
+  //       });
+  //       return;
+  //     }
+  //     setFilteredProducts(productsData);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchProductsSec({
+  //     LangCode: "fa",
+  //     PageSize: 10,
+  //     PageIndex: 1,
+  //     OrderBy: 1,
+  //   });
+  // }, []);
 
   //   useEffect(() => {
   //     const fetchOldProducts = async () => {
@@ -187,7 +179,6 @@ function SecondHandProductUser() {
           <div
             onClick={() => {
               router.push(`/useds/-1`);
-              
             }}
             className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
           >

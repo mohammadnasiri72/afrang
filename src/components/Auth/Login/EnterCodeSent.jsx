@@ -6,8 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+
 
 // تابع تبدیل اعداد انگلیسی به فارسی
 const toPersianNumber = (number) => {
@@ -27,8 +28,10 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [error, setError] = useState("");
   const [resendLoading, setResendLoading] = useState(false);
   const [countdown, setCountdown] = useState(120); // 2 minutes in seconds
+
   const inputRefs = useRef([]);
   const { settings } = useSelector((state) => state.settings);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -180,6 +183,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
             container: "toast-modal",
           },
         });
+
       } else {
         Toast.fire({
           icon: "error",

@@ -149,6 +149,17 @@ export default function DescCompeletePay() {
   }, [selectedAddress, selectedShipping, selectedLegal, token]);
 
   const handlePayment = () => {
+    // چک کردن آدرس و روش ارسال قبل از رفتن به صفحه پرداخت
+    if (!selectedAddress) {
+      message.error("لطفاً ابتدا آدرس را انتخاب کنید");
+      return;
+    }
+
+    if (!selectedShipping) {
+      message.error("لطفاً ابتدا روش ارسال را انتخاب کنید");
+      return;
+    }
+
     if (estimateData) {
       try {
         const action = setEstimateData(estimateData);

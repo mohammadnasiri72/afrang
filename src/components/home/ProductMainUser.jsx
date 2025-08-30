@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -14,16 +13,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
-import ShowUserContact from "./ShowUserContact";
-
-
 
 export default function ProductMainUser({ products }) {
- 
-
-  
-
-
   return (
     <>
       <Swiper
@@ -69,7 +60,7 @@ export default function ProductMainUser({ products }) {
             >
               <div className="relative group w-full pb-2 overflow-hidden rounded-xl bg-white shadow-md">
                 <Link
-                  href={product.url}
+                  href={product.url ? product.url : "#"}
                   className="w-full min-h-40 sm:min-h-40 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
                   <Image
@@ -87,7 +78,7 @@ export default function ProductMainUser({ products }) {
                 </Link>
                 <div className="flex flex-col flex-1 justify-between mt-2">
                   <Link
-                    href={product.url}
+                    href={product.url ? product.url : "#"}
                     className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start"
                   >
                     <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px]">
@@ -112,7 +103,6 @@ export default function ProductMainUser({ products }) {
                   </div>
                 </div>
                 {/* <ShowUserContact product={product}/> */}
-                
               </div>
             </SwiperSlide>
           ))}

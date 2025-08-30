@@ -22,6 +22,7 @@ function Warranties({
     }
   };
 
+
   return (
     <>
       <FormControl sx={{ width: "90%" }}>

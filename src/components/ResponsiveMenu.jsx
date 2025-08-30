@@ -162,8 +162,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
   const pathname = usePathname();
   const { items: itemsFromRedux, openMenuRes } = useSelector((state) => state.menuRes);
   const items = initialItems && initialItems.length ? initialItems : itemsFromRedux;
-  console.log(items);
-
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);

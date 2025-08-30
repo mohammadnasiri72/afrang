@@ -17,7 +17,6 @@ function CheckboxInsurance({ insurance, product }) {
   const userData = getUserCookie();
   const { currentItems } = useSelector((state) => state.cart);
 
-
   useEffect(() => {
     if (currentItems.length > 0 && insurance.id > 0) {
       setCartId(currentItems.find((e) => e.productId === insurance.id)?.id);
@@ -105,15 +104,21 @@ function CheckboxInsurance({ insurance, product }) {
       >
         <div className="flex flex-col select-none">
           <span className="font-semibold">{insurance.title}</span>
-          <div className="flex items-center gap-1.5 font-semibold">
-            {/* {insurance.price !== insurance.finalPrice && (
+          {insurance.finalPrice > 0 ? (
+            <div className="flex items-center gap-1.5 font-semibold">
+              {/* {insurance.price !== insurance.finalPrice && (
               <span className="line-through text-[#0005]">
                 {insurance.price.toLocaleString()}
               </span>
             )} */}
-            <span className="">{insurance.finalPrice.toLocaleString()}</span>
-            <span>تومان</span>
-          </div>
+              <span className="">{insurance.finalPrice.toLocaleString()}</span>
+              <span>تومان</span>
+            </div>
+          ) : (
+            <div>
+              <span>رایگان</span>
+            </div>
+          )}
         </div>
         {insurance.desc && (
           <div className="absolute left-2 top-2">

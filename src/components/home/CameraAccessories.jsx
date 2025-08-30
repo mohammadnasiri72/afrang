@@ -42,50 +42,18 @@ const CameraAccessoriesSkeleton = () => {
   );
 };
 
-export default function CameraAccessories() {
+export default function CameraAccessories({category}) {
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState([]);
-
-  // import sweet alert 2
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-start",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  customClass: "toast-modal",
-});
+ 
+useEffect(()=>{
+  if (category.length > 0) {
+    setLoading(false)
+  }
+},[category])
+  
 
 
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const category = await getCategory({
-          TypeId: 4,
-          LangCode: "fa",
-          IsHome: 1,
-        });
-        if (category.type === 'error') {
-          Toast.fire({
-            icon: "error",
-            text: category.message,
-          });
-          return;
-        } else {
-          setCategory(category);
-        }
-      } catch (error) {
-        Toast.fire({
-          icon: "error",
-          text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
-      }
-      finally {
-        setLoading(false);
-      }
-    };
-    fetchCategory();
-  }, []);
+ 
 
   if (loading) {
     return <CameraAccessoriesSkeleton />;

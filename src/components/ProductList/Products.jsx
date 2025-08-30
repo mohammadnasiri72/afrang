@@ -452,9 +452,9 @@ function Products({ products }) {
           : "space-y-5 mt-5"
       }
     >
-      {products.map((product) => (
+      {products.map((product , i) => (
         <div
-          key={product.id}
+          key={i}
           className={layoutProducts === "grid" ? "h-full" : ""}
         >
           {layoutProducts === "grid" ? (

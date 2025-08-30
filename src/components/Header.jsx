@@ -82,13 +82,17 @@ const HeaderSkeleton = () => {
 
 export default function Header(props) {
   const user = useSelector((state) => state.user.user);
+  const userCookie = Cookies.get("user");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const { settings, loading } = useSelector((state) => state.settings);
   const { currentItems } = useSelector((state) => state.cart);
   const disPatch = useDispatch();
   const route = useRouter();
 
   useEffect(() => {
-    const userCookie = Cookies.get("user");
     if (userCookie) {
       try {
         const userData = JSON.parse(userCookie);
@@ -117,8 +121,7 @@ export default function Header(props) {
       >
         <div className="flex items-center lg:w-1/2 w-auto">
           <div className="flex items-center lg:w-2/5 w-auto">
-            {
-            settings?.find((item) => item.propertyKey === "site_home_url") ? (
+            {settings?.find((item) => item.propertyKey === "site_home_url") ? (
               <Link
                 href={
                   settings.find((item) => item.propertyKey === "site_home_url")
@@ -163,7 +166,7 @@ export default function Header(props) {
             </div>
             <div className="flex flex-col pr-2 text-xs">
               <span className="text-[#0008]"> آیا سوالی دارید </span>
-              { (
+              {
                 <span className="text-red-700 font-semibold text-sm">
                   <a
                     href={`tel:${
@@ -175,40 +178,62 @@ export default function Header(props) {
                       ?.value || "77615546"}
                   </a>
                 </span>
-              )}
+              }
             </div>
           </div>
-
-          {user?.token  ? (
-            <ProfileDropdown />
-          ) : (
-            <div className="flex items-center gap-3 font-semibold">
-              <div
-                onClick={() => {
-                  route.push("/login");
-                }}
-                className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
-              >
-                <img src="/images/icons/arrow-login.png" alt="" />
-                <span>ورود</span>
-              </div>
-              <div
-                onClick={() => {
-                  route.push("/register");
-                }}
-                className="border-r border-[#0005] pr-3"
-              >
-                <span className="cursor-pointer hover:text-[#d1182b] duration-300">
-                  عضویت
-                </span>
-              </div>
+          {mounted && (
+            <div>
+              {userCookie && JSON.parse(userCookie)?.token ? (
+                <ProfileDropdown />
+              ) : (
+                <div className="flex items-center gap-3 font-semibold">
+                  <div
+                    onClick={() => {
+                      route.push("/login");
+                    }}
+                    className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
+                  >
+                    <img src="/images/icons/arrow-login.png" alt="" />
+                    <span>ورود</span>
+                  </div>
+                  <div
+                    onClick={() => {
+                      route.push("/register");
+                    }}
+                    className="border-r border-[#0005] pr-3"
+                  >
+                    <span className="cursor-pointer hover:text-[#d1182b] duration-300">
+                      عضویت
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
+          )}
+          {!mounted && (
+            <div className="flex items-center gap-3 font-semibold">
+                  <div
+                   
+                    className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
+                  >
+                    <img src="/images/icons/arrow-login.png" alt="" />
+                    <span>ورود</span>
+                  </div>
+                  <div
+                   
+                    className="border-r border-[#0005] pr-3"
+                  >
+                    <span className="cursor-pointer hover:text-[#d1182b] duration-300">
+                      عضویت
+                    </span>
+                  </div>
+                </div>
           )}
           <div
             onClick={() => disPatch(setOpenShopping(true))}
             className="cursor-pointer relative mt-3"
           >
-            { (
+            {mounted && (
               <Badge
                 count={
                   currentItems.length > 0
@@ -235,6 +260,20 @@ export default function Header(props) {
                       : "text-[#d1182b]"
                   }`}
                 />
+              </Badge>
+            )}
+            {!mounted && (
+              <Badge
+                count={0}
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  transform: "translate(-8px, -8px)",
+                }}
+              >
+                <FaCartShopping className={`text-4xl  ${"text-[#d1182b]"}`} />
               </Badge>
             )}
           </div>

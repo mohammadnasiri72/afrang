@@ -14,6 +14,7 @@ import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
+  
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
@@ -29,9 +30,6 @@ function BasketBox({ product }) {
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  // console.log(currentItems);
-  // console.log(product);
 
   let filteredArray = [];
 
@@ -67,6 +65,7 @@ function BasketBox({ product }) {
       <div className="bg-[#f6f6f6] h-full rounded-lg p-2">
         <h4 className="font-bold text-[#333]">اطلاعات محصول</h4>
         {product.warranty.warrantyWays &&
+          mounted &&
           product.warranty.warrantyWays.length > 0 && (
             <Warranties
               warrantiesArray={product.warranty.warrantyWays}

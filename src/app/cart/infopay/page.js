@@ -28,6 +28,13 @@ export default function CompletePay() {
         customClass: "toast-modal",
     });
 
+    const [mounted, setMounted] = useState(false);
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     useEffect(() => {
         const checkAuthAndCart = async () => {
             try {
@@ -55,8 +62,8 @@ export default function CompletePay() {
                     }
                 }
 
-                // Check address and shipping
-                if (!selectedAddress || !selectedShipping) {
+                // Check address and shipping - فقط بعد از mount شدن
+                if (mounted && (!selectedAddress || !selectedShipping)) {
                     Toast.fire({
                         icon: "warning",
                         text: "لطفاً ابتدا آدرس و روش ارسال را انتخاب کنید",
@@ -66,17 +73,29 @@ export default function CompletePay() {
                     return;
                 }
 
-
+                setIsChecking(false);
             } catch (error) {
                 console.error('Error checking auth:', error);
                 router.push('/cart');
             }
         };
 
-        checkAuthAndCart();
-    }, [dispatch, currentItems, router, selectedAddress, selectedShipping]);
+        if (mounted) {
+            checkAuthAndCart();
+        }
+    }, [dispatch, currentItems, router, selectedAddress, selectedShipping, mounted]);
 
 
+    // نمایش loading تا زمانی که چک‌ها تمام نشده
+    if (!mounted || isChecking) {
+        return (
+            <div className="w-full min-h-[400px] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+            </div>
+        );
+    }
+
+    // اگر هنوز آدرس یا shipping انتخاب نشده، loading نمایش بده
     if (!selectedAddress || !selectedShipping) {
         return (
             <div className="w-full min-h-[400px] flex items-center justify-center">

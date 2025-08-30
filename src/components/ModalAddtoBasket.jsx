@@ -1,9 +1,8 @@
-import { addToCart } from "@/services/cart/cartService";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import { message, Modal, Radio, Tooltip } from "antd";
+import { Modal, Radio, Tooltip } from "antd";
 import Link from "next/link";
 import { FaCheck, FaInfoCircle } from "react-icons/fa";
-import Swal from "sweetalert2";
+import SelectedInsurance from "./Product/SelectedInsurance";
 
 function ModalAddtoBasket({
   isModalOpen,
@@ -71,6 +70,9 @@ function ModalAddtoBasket({
                 </div>
               </div>
             </div>
+            {product?.insurance?.insuranceWays?.length > 0 && (
+              <SelectedInsurance product={product} />
+            )}
             {/* گارانتی‌ها */}
             {product?.warranty?.warrantyWays.length > 0 && (
               <div className="mt-3">

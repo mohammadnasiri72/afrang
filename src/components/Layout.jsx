@@ -1,19 +1,12 @@
 "use client";
 
-import { fetchCartData, setCartType } from "@/redux/slices/cartSlice";
 import {
-  setError,
-  setLoading,
-  setMenuItems,
-} from "@/redux/slices/menuResSlice";
-import { fetchSettingsData, setSettings } from "@/redux/slices/settingsSlice";
+  fetchCartData,
+  mergeGuestCartWithUser,
+} from "@/redux/slices/cartSlice";
+import { setError } from "@/redux/slices/menuResSlice";
 import { setUser } from "@/redux/slices/userSlice";
-import { addToCart, getCart } from "@/services/cart/cartService";
-import { fetchMenuItems } from "@/services/menuService";
-import { getUserId } from "@/utils/cookieUtils";
-import { mainDomain } from "@/utils/mainDomain";
 import { syncUserCookieWithRedux } from "@/utils/manageCookie";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -25,107 +18,97 @@ import { makeStore } from "../redux/makeStore";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
 
-// const generateRandomUserId = () => {
-//   return crypto.randomUUID();
-// };
+const generateRandomUserId = () => {
+  return crypto.randomUUID();
+};
 
 // کامپوننت برای مدیریت داده‌های اولیه
 function InitialDataManager() {
   const dispatch = useDispatch();
-  const { cartType } = useSelector((state) => state.cart);
+  const { cartType, initialized } = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
-  const initialized = useRef(false);
+  const [mounted, setMounted] = useState(false);
+  const initializedRef = useRef(false);
   const lastUserId = useRef(null);
   const lastCartType = useRef(null);
+  const userCookie = Cookies.get("user");
+  const [isMergingCart, setIsMergingCart] = useState(false);
+
+  // اضافه کردن mounted state برای جلوگیری از hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ذخیره guest userId در localStorage اگر کاربر مهمان باشد
+  useEffect(() => {
+    if (mounted && userCookie) {
+      const userData = JSON.parse(userCookie);
+      // اگر کاربر مهمان باشد (token ندارد) و userId دارد
+      if (!userData.token && userData.userId) {
+        localStorage.setItem("guestUserId", userData.userId);
+        console.log("Debug - Guest userId stored:", userData.userId);
+      }
+    }
+  }, [mounted, userCookie]);
 
   useEffect(() => {
     const loadData = async () => {
+      // فقط بعد از mount شدن کامپوننت و در client side
+      if (!mounted) return;
+
       try {
         // فقط در اولین بار اجرا می‌شود
-        if (!initialized.current) {
-          initialized.current = true;
-          dispatch(setLoading());
-
-          // دریافت منو و تنظیمات به صورت موازی
-          // const [menuItems] = await Promise.all([
-          //   fetchMenuItems(),
-          // ]);
-
-          // dispatch(setMenuItems(menuItems));
+        if (!initializedRef.current) {
+          initializedRef.current = true;
         }
 
-        const currentUserId = user?.userId || getUserId();
-        const isLoggedIn = user?.token; // چک کردن وضعیت لاگین
+        // فقط اگر کاربر لاگین باشد و token داشته باشد
+        if (userCookie && JSON.parse(userCookie)?.token) {
+          const currentUserId = JSON.parse(userCookie)?.userId;
 
-        // اگر کاربر لاگین شده و قبلاً لاگین نبوده (تغییر از حالت مهمان به کاربر)
-        if (
-          isLoggedIn &&
-          lastUserId.current &&
-          lastUserId.current !== currentUserId
-        ) {
-          try {
-            // دریافت سبد خرید قبلی (قبل از لاگین)
-            const previousCartItems = await getCart(lastUserId.current);
+          // جلوگیری از fetch مکرر و فقط اگر قبلاً initialize نشده باشد
+          if (lastUserId.current !== currentUserId || !initialized) {
+            lastUserId.current = currentUserId;
 
-            // دریافت سبد خرید جدید (بعد از لاگین)
-            const newCartItems = await getCart(currentUserId);
+            // بررسی اینکه آیا کاربر قبلاً مهمان بوده و cart داشته یا نه
+            const storedGuestUserId = localStorage.getItem("guestUserId");
+            if (storedGuestUserId && storedGuestUserId !== currentUserId) {
+              console.log("Debug - Found guest cart, merging...", {
+                storedGuestUserId,
+                currentUserId,
+              });
+              setIsMergingCart(true);
 
-            // اگر سبد خرید قبلی خالی نبود، محصولات رو به سبد خرید جدید اضافه کن
-            if (previousCartItems && previousCartItems.length > 0) {
-              for (const item of previousCartItems) {
-                try {
-                  await addToCart(
-                    item.productId,
-                    item.warrantyId || -1,
-                    currentUserId,
-                    item.quantity
-                  );
-                } catch (error) {
-                  console.error("Error adding item to new cart:", error);
-                }
+              try {
+                const userData = JSON.parse(userCookie);
+
+                // ذخیره userId کاربر لاگین شده در localStorage برای استفاده در mergeGuestCart
+                localStorage.setItem("user", JSON.stringify(userData));
+
+                await dispatch(
+                  mergeGuestCartWithUser({
+                    guestUserId: storedGuestUserId,
+                    currentUserId: userData.userId,
+                  })
+                ).unwrap();
+
+                console.log("Debug - Guest cart merged successfully");
+                // پاک کردن guestUserId از localStorage
+                localStorage.removeItem("guestUserId");
+              } catch (error) {
+                console.error("Error merging guest cart:", error);
+              } finally {
+                setIsMergingCart(false);
               }
             }
 
-            // دریافت سبد خرید نهایی بعد از ادغام
-            dispatch(fetchCartData());
-
-            // حذف سبد خرید قبلی
-            if (previousCartItems && previousCartItems.length > 0) {
-              for (const item of previousCartItems) {
-                try {
-                  await axios.delete(
-                    `${mainDomain}/api/Cart/${lastUserId.current}/${item.id}`
-                  );
-                } catch (error) {
-                  console.error(
-                    "Error deleting item from previous cart:",
-                    error
-                  );
-                }
-              }
-            }
-          } catch (error) {
-            console.error("Error in cart merge process:", error);
-          }
-        }
-
-        // به‌روزرسانی lastUserId و lastCartType
-        if (
-          currentUserId !== lastUserId.current ||
-          cartType !== lastCartType.current
-        ) {
-          lastUserId.current = currentUserId;
-          lastCartType.current = cartType;
-
-          if (currentUserId) {
-            dispatch(setCartType(cartType));
             dispatch(fetchCartData());
           }
         }
       } catch (error) {
         console.error("Error loading data:", error);
-        if (!initialized.current) {
+        if (!initializedRef.current) {
           dispatch(setError(error.message));
         }
       } finally {
@@ -134,9 +117,29 @@ function InitialDataManager() {
     };
 
     loadData();
-  }, [user, cartType, dispatch]);
+  }, [mounted, cartType, dispatch, userCookie, initialized]);
 
-  if (isLoading) return null;
+  if (isLoading || !mounted)
+    return (
+      <>
+        <div className="fixed inset-0 bg-white flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-14 h-14 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+
+  // نمایش loading برای cart merge
+  if (isMergingCart) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
+          <p className="text-gray-700">در حال ادغام سبد خرید...</p>
+        </div>
+      </div>
+    );
+  }
+
   return null;
 }
 
@@ -216,19 +219,25 @@ function ScrollToTopButton() {
 }
 
 // کامپوننت اصلی که Provider را فراهم می‌کند
-function Layout({ children , settings , menuItems}) {
-  
+function Layout({ children, settings, menuItems }) {
   const [mounted, setMounted] = useState(false);
+
   const { store } = makeStore({
     settings: { settings },
-    menuRes: { items: menuItems, openMenuRes: false, loading: false, error: null },
+    menuRes: {
+      items: menuItems,
+      openMenuRes: false,
+      loading: false,
+      error: null,
+    },
   });
+
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
     }, 300);
   }, []);
-  
+
   // no client-time dispatch here to avoid hydration mismatch
 
   const pathname = usePathname();
@@ -243,23 +252,23 @@ function Layout({ children , settings , menuItems}) {
 
   // const isShowPopups = localStorage.getItem("showPopups");
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     const userData = syncUserCookieWithRedux();
-  //     if (!userData) {
-  //       const initialData = {
-  //         token: "",
-  //         refreshToken: "",
-  //         expiration: "",
-  //         userId: generateRandomUserId(),
-  //         displayName: "",
-  //         roles: [],
-  //       };
-  //       Cookies.set("user", JSON.stringify(initialData));
-  //       store.dispatch(setUser(initialData));
-  //     }
-  //   }, 2000);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      const userData = syncUserCookieWithRedux();
+      if (!userData) {
+        const initialData = {
+          token: "",
+          refreshToken: "",
+          expiration: "",
+          userId: generateRandomUserId(),
+          displayName: "",
+          roles: [],
+        };
+        Cookies.set("user", JSON.stringify(initialData));
+        store.dispatch(setUser(initialData));
+      }
+    }, 2000);
+  }, []);
 
   return (
     <Provider store={store}>

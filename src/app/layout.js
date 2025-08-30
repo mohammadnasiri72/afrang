@@ -1,10 +1,10 @@
-import Layout from "@/components/Layout";
 import { fetchMenuItems } from "@/services/menuService";
 import { getSettings } from "@/services/settings/settingsService";
 import "@/styles/leaflet.css";
 import { mainDomainImg } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Toaster } from "react-hot-toast";
+import AntdRegistry from "./AntdRegistry";
 import "./globals.css";
 
 export const metadata = {
@@ -13,7 +13,6 @@ export const metadata = {
     icon: `${mainDomainImg}/uploads/logo/favicon.ico`,
   },
 };
-
 
 export default async function RootLayout({ children }) {
   const settings = await getSettings();
@@ -26,9 +25,10 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
-        <Layout settings={settings} menuItems={menuItems}>
+        <AntdRegistry settings={settings} menuItems={menuItems}>
           {children}
-        </Layout>
+        </AntdRegistry>
+
         <Toaster position="top-center" />
       </body>
     </html>

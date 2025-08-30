@@ -11,6 +11,7 @@ import activeTabReducer from "./slices/activeTab";
 import addressReducer from "./slices/addressSlice";
 import blogReducer from "./slices/blogSlice";
 import cartReducer from "./slices/cartSlice";
+import cartReducer1 from "./slices/cartSlice1";
 import discountReducer from "./slices/discountSlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import idEditReducer from "./slices/idEditSec";
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   address: addressReducer,
   blog: blogReducer,
   cart: cartReducer,
+  cart1: cartReducer1,
   shipping: shippingReducer,
   legalId: legalIdReducer,
   paymentWay: paymentWayReducer,
@@ -58,11 +60,21 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart", "favorites"],
+  whitelist: ["cart", "favorites", "address", "shipping"],
 };
+
+// ایجاد store به صورت singleton
+let storeInstance = null;
+let persistorInstance = null;
 
 export function makeStore(preloadedState) {
   const isClient = typeof window !== "undefined";
+  
+  // اگر store قبلاً ایجاد شده، همان را برگردان
+  if (storeInstance) {
+    return { store: storeInstance, persistor: persistorInstance };
+  }
+  
   const reducer = isClient ? persistReducer(persistConfig, rootReducer) : rootReducer;
   const store = configureStore({
     reducer,
@@ -74,7 +86,13 @@ export function makeStore(preloadedState) {
       }),
     preloadedState,
   });
+  
   const persistor = isClient ? persistStore(store) : null;
+  
+  // ذخیره store برای استفاده بعدی
+  storeInstance = store;
+  persistorInstance = persistor;
+  
   return { store, persistor };
 }
 

@@ -3,58 +3,55 @@ import { FaCaretLeft } from "react-icons/fa6";
 import ProductMain from "./ProductMain";
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
-import { getProducts } from "@/services/products/productService";
 
-function SecondHandProduct() {
-  const [oldProducts, setOldProducts] = useState([]);
+
+function SecondHandProduct({oldProducts}) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // import sweet alert 2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
+
+
+ useEffect(()=>{
+  if (oldProducts.length>0) {
+    setLoading(false)
+  }
+ },[oldProducts])
 
 
 
-  useEffect(() => {
-    const fetchOldProducts = async () => {
-      try {
-        const oldProduct = await getProducts({
-          page: 1,
-          pageSize: 12,
-          orderBy: "2",
-          ConditionId: 20,
-        });
-        if (oldProduct.type === 'error') {
-          Toast.fire({
-            icon: "error",
-            text: oldProduct.message,
-          });
-          return;
-        } else {
-          setOldProducts(oldProduct);
-        }
-      } catch (error) {
-        Toast.fire({
-          icon: "error",
-          text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
-      }
-      finally {
-        setLoading(false);
-      }
-    }
-    fetchOldProducts()
-  }, [])
+  // useEffect(() => {
+  //   const fetchOldProducts = async () => {
+  //     try {
+  //       const oldProduct = await getProducts({
+  //         page: 1,
+  //         pageSize: 12,
+  //         orderBy: "2",
+  //         ConditionId: 20,
+  //       });
+        
+  //       if (oldProduct.type === 'error') {
+  //         Toast.fire({
+  //           icon: "error",
+  //           text: oldProduct.message,
+  //         });
+  //         return;
+  //       } else {
+  //         setOldProducts(oldProduct);
+  //       }
+  //     } catch (error) {
+  //       Toast.fire({
+  //         icon: "error",
+  //         text: error.response?.data ? error.response?.data : "خطای شبکه",
+  //       });
+  //     }
+  //     finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   fetchOldProducts()
+  // }, [])
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories = oldProducts

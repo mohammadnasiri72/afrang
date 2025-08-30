@@ -3,8 +3,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { FaCaretLeft } from "react-icons/fa6";
 import ProductMain from "./ProductMain";
-import { getProducts } from "@/services/products/productService";
-import Swal from "sweetalert2";
 
 // اسکلتون لودینگ
 const NewProductSkeleton = () => {
@@ -83,68 +81,30 @@ const NewProductSkeleton = () => {
   );
 };
 
-function NewProduct() {
-  const [products, setProducts] = useState([]);
+function NewProduct({ products }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
-  // import sweet alert 2
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-start",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  customClass: "toast-modal",
-});
-
-
-
   useEffect(() => {
-    const fetchNewProducts = async () => {
-      try {
-        const newProducts = await getProducts({
-          page: 1,
-          pageSize: 12,
-          orderBy: "2",
-        });
-
-        if (newProducts.type === 'error') {
-          Toast.fire({
-            icon: "error",
-            text: newProducts.message,
-          });
-          return;
-        } else {
-          setProducts(newProducts);
-        }
-      } catch (error) {
-        Toast.fire({
-          icon: "error",
-          text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
-      }
-      finally {
-        setLoading(false);
-      }
+    if (products.length > 0) {
+      setLoading(false);
     }
-    fetchNewProducts()
-  }, [])
-
-
+  }, [products]);
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories = products
-    ? [...new Set(products.map(product => product.categoryTitle))].slice(0, 5)
+    ? [...new Set(products.map((product) => product.categoryTitle))].slice(0, 5)
     : [];
 
   useEffect(() => {
     if (products) {
       if (selectedCategory) {
-        const filtered = products.filter(product => product.categoryTitle === selectedCategory);
+        const filtered = products.filter(
+          (product) => product.categoryTitle === selectedCategory
+        );
         setFilteredProducts(filtered);
       } else {
         setFilteredProducts(products);
@@ -172,7 +132,9 @@ const Toast = Swal.mixin({
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
           <div className="flex items-center justify-between mb-3 px-2">
-            <h3 className="text-lg font-semibold text-gray-700">دسته‌بندی‌ها</h3>
+            <h3 className="text-lg font-semibold text-gray-700">
+              دسته‌بندی‌ها
+            </h3>
             <button
               onClick={() => {
                 router.push(`/products?orderby=2`);
@@ -190,15 +152,22 @@ const Toast = Swal.mixin({
               {categories.map((category, index) => (
                 <div key={`${category}-${index}`} className="flex items-center">
                   <span
-                    onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
-                      ? 'text-[#d1182b] font-bold'
-                      : 'text-[#0008] hover:text-[#000]'
-                      }`}
+                    onClick={() =>
+                      setSelectedCategory(
+                        category === selectedCategory ? null : category
+                      )
+                    }
+                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
+                      category === selectedCategory
+                        ? "text-[#d1182b] font-bold"
+                        : "text-[#0008] hover:text-[#000]"
+                    }`}
                   >
                     {category}
                   </span>
-                  {index < categories.length - 1 && <span className="mx-1">/</span>}
+                  {index < categories.length - 1 && (
+                    <span className="mx-1">/</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -210,11 +179,16 @@ const Toast = Swal.mixin({
           {categories.map((category, index) => (
             <div key={`${category}-${index}`} className="flex items-center">
               <span
-                onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                className={`text-sm cursor-pointer duration-300 font-medium ${category === selectedCategory
-                  ? 'text-[#d1182b] font-bold'
-                  : 'text-[#0008] hover:text-[#000]'
-                  }`}
+                onClick={() =>
+                  setSelectedCategory(
+                    category === selectedCategory ? null : category
+                  )
+                }
+                className={`text-sm cursor-pointer duration-300 font-medium ${
+                  category === selectedCategory
+                    ? "text-[#d1182b] font-bold"
+                    : "text-[#0008] hover:text-[#000]"
+                }`}
               >
                 {category}
               </span>
