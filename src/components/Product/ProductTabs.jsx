@@ -1,16 +1,13 @@
 "use client";
 
 import { Divider, Segmented } from "antd";
-import { useState, useEffect } from "react";
-import ProductMain from "../home/ProductMain";
+import { useEffect, useRef, useState } from "react";
 import AccessoriesProduct from "./AccessoriesProduct";
+import BoxVideoProduct from "./BoxVideoProduct";
+import BundleProducts from "./BundleProducts";
 import CommentProduct from "./CommentProduct";
 import DetailsProduct from "./DetailsProduct";
 import SpecificationsProduct from "./SpecificationsProduct";
-import BundleProducts from "./BundleProducts";
-import { useRef } from "react";
-import RelatedProductsMobile from "./RelatedProductsMobile";
-import BoxVideoProduct from "./BoxVideoProduct";
 
 function ProductTabs({ product, parentRef }) {
   const [tabProDetails, setTabProDetails] = useState(

@@ -1,22 +1,21 @@
 "use client";
 import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { Select } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FaCaretDown } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
-function SelectOrder({ value }) {
+function SelectOrderClient({ value, currentSearchParams }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const handleChange = (value) => {
+  const handleChange = (newValue) => {
     dispatch(setLoadingBlog(true));
-    const params = new URLSearchParams(searchParams);
-    if (value === 1) {
+    const params = new URLSearchParams(currentSearchParams);
+    if (newValue === 1) {
       params.delete("orderBy");
     } else {
-      params.set("orderBy", value);
+      params.set("orderBy", newValue);
     }
     router.push(`?${params.toString()}`);
   };
@@ -41,6 +40,12 @@ function SelectOrder({ value }) {
         />
       </div>
     </>
+  );
+}
+
+function SelectOrder({ value, currentSearchParams }) {
+  return (
+    <SelectOrderClient value={value} currentSearchParams={currentSearchParams} />
   );
 }
 

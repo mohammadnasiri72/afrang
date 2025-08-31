@@ -2,15 +2,14 @@
 
 import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { getImageUrl } from "@/utils/mainDomain";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import Container from "../container";
 
-function CategoryBlog({ category }) {
+function CategoryBlog({ category, searchParams }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const activeCategory = searchParams.get("category");
+  const activeCategory = searchParams?.category;
 
   const handleChangCategory = (cat) => {
     dispatch(setLoadingBlog(true));

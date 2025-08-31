@@ -1,21 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserId } from "@/utils/cookieUtils";
 import { getCart, getNextCart } from '@/services/cart/CartServices';
-import { mergeGuestCart } from '@/services/cart/cartService';
 import Cookies from 'js-cookie';
-
-// اکشن برای ادغام سبد خرید مهمان با سبد خرید کاربر
-export const mergeGuestCartWithUser = createAsyncThunk(
-  'cart/mergeGuestCart',
-  async ({ guestUserId, currentUserId }, { rejectWithValue }) => {
-    try {
-      const response = await mergeGuestCart(guestUserId, currentUserId);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 
 // اکشن برای دریافت سبد خرید فعلی
 export const fetchCurrentCart = createAsyncThunk(
@@ -54,25 +40,11 @@ export const fetchNextCart = createAsyncThunk(
 // اکشن برای دریافت هر دو سبد خرید
 export const fetchCartData = createAsyncThunk(
   'cart/fetchCartData',
-  async (_, { dispatch, rejectWithValue }) => {
-    try {
-      const userCookie = Cookies.get('user');
-      const userId = JSON.parse(userCookie)?.userId;
-      
-      if (!userId) return rejectWithValue("No user ID found");
-      
-      const [currentCart, nextCart] = await Promise.all([
-        getCart(userId),
-        getNextCart(userId)
-      ]);
-      
-      return {
-        currentItems: currentCart || [],
-        nextItems: nextCart || []
-      };
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+  async (_, { dispatch }) => {
+    await Promise.all([
+      dispatch(fetchCurrentCart()),
+      dispatch(fetchNextCart())
+    ]);
   }
 );
 
@@ -82,9 +54,8 @@ const cartSlice = createSlice({
     currentItems: [],
     nextItems: [],
     cartType: 'current',
-    loading: false,
-    error: null,
-    initialized: false // اضافه کردن flag برای تشخیص اینکه آیا قبلاً initialize شده یا نه
+    loading: true,
+    error: null
   },
   reducers: {
     setCartType: (state, action) => {
@@ -94,87 +65,49 @@ const cartSlice = createSlice({
       state.currentItems = [];
       state.nextItems = [];
     },
-    setInitialized: (state, action) => {
-      state.initialized = action.payload;
+    mergeGuestCartWithUser: (state, action) => {
+      // Merge guest cart items with user cart
+      const { guestCart } = action.payload;
+      if (guestCart && guestCart.length > 0) {
+        // Add guest cart items to current items
+        state.currentItems = [...state.currentItems, ...guestCart];
+      }
     }
   },
   extraReducers: (builder) => {
     builder
-      // Merge Guest Cart
-      .addCase(mergeGuestCartWithUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(mergeGuestCartWithUser.fulfilled, (state, action) => {
-        state.loading = false;
-        // بعد از merge، cart data را دوباره fetch می‌کنیم
-      })
-      .addCase(mergeGuestCartWithUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      // Fetch Cart Data (unified)
-      .addCase(fetchCartData.pending, (state) => {
-        // فقط اگر قبلاً initialize نشده باشد، loading را true کنیم
-        if (!state.initialized) {
-          state.loading = true;
-        }
-        state.error = null;
-      })
-      .addCase(fetchCartData.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentItems = action.payload.currentItems;
-        state.nextItems = action.payload.nextItems;
-        state.error = null;
-        state.initialized = true;
-      })
-      .addCase(fetchCartData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-        state.currentItems = [];
-        state.nextItems = [];
-        state.initialized = true;
-      })
-      // Current Cart (legacy support)
+      // Current Cart
       .addCase(fetchCurrentCart.pending, (state) => {
-        if (!state.initialized) {
-          state.loading = true;
-        }
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchCurrentCart.fulfilled, (state, action) => {
         state.loading = false;
         state.currentItems = action.payload;
-        state.error = null;
-        state.initialized = true;
+        
+        
       })
       .addCase(fetchCurrentCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         state.currentItems = [];
-        state.initialized = true;
       })
-      // Next Cart (legacy support)
+      // Next Cart
       .addCase(fetchNextCart.pending, (state) => {
-        if (!state.initialized) {
-          state.loading = true;
-        }
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchNextCart.fulfilled, (state, action) => {
         state.loading = false;
         state.nextItems = action.payload;
-        state.error = null;
-        state.initialized = true;
       })
       .addCase(fetchNextCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         state.nextItems = [];
-        state.initialized = true;
       });
   }
 });
 
-export const { setCartType, clearCart, setInitialized } = cartSlice.actions;
+export const { setCartType, clearCart, mergeGuestCartWithUser } = cartSlice.actions;
 export default cartSlice.reducer; 

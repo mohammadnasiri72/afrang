@@ -10,6 +10,11 @@ function BasketFixed({ product }) {
   const [stuckToBottom, setStuckToBottom] = useState(false);
   const [style, setStyle] = useState({});
 
+  // Check if product exists and has required data
+  if (!product || !product.product) {
+    return null;
+  }
+
   useEffect(() => {
     function handleScroll() {
       if (!containerRef.current || !innerRef.current) return;

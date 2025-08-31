@@ -2,20 +2,17 @@
 
 import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { Pagination, Select } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const BlogPagination = ({ blogs }) => {
+const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-
   const dispatch = useDispatch();
 
   const handlePageChange = (page) => {
     dispatch(setLoadingBlog(true));
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(initialSearchParams);
 
     if (page !== 1) {
       params.set("page", page);
@@ -28,7 +25,7 @@ const BlogPagination = ({ blogs }) => {
 
   const handlePageSizeChange = (size) => {
     dispatch(setLoadingBlog(true));
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(initialSearchParams);
     if (size !== 12) {
       params.set("pageSize", size);
       params.delete("page");
@@ -40,8 +37,8 @@ const BlogPagination = ({ blogs }) => {
     }
   };
 
-  const page = Number(searchParams.get("page")) || 1;
-  const pageSize = Number(searchParams.get("pageSize")) || 12;
+  const page = Number(initialSearchParams?.page) || 1;
+  const pageSize = Number(initialSearchParams?.pageSize) || 12;
 
   return (
     <>

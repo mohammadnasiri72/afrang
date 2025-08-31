@@ -7,42 +7,23 @@ import Container from "../container";
 import BlogPagination from "./BlogPagination";
 import EmptyBlogs from "./EmptyBlogs";
 import ExpandableText from "./ExpandableText";
-import { getItem } from "@/services/Item/item";
 
-
-async function BoxImgBlog({
-  searchParams,
-}) {
-
-  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
-  const pageSize = searchParams?.pageSize
-    ? parseInt(searchParams.pageSize)
-    : 12;
-
-    // دریافت مقالات
-    let blogs;
-    try {
-      blogs = await getItem({
-        TypeId: 5,
-        LangCode: "fa",
-        PageSize: pageSize,
-        PageIndex: page,
-        CategoryIdArray: searchParams?.category,
-        OrderBy: searchParams?.orderBy
-      });
-    } catch (error) {
-      console.error('Error fetching blogs:', error);
-      throw new Error('خطا در دریافت مقالات. لطفا دوباره تلاش کنید.');
-    }
-
-   
-
-
+async function BoxImgBlog({ blogs = [] }) {
   const formatPersianDate = (dateString) => {
     try {
       const persianMonths = [
-        'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
-        'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        "فروردین",
+        "اردیبهشت",
+        "خرداد",
+        "تیر",
+        "مرداد",
+        "شهریور",
+        "مهر",
+        "آبان",
+        "آذر",
+        "دی",
+        "بهمن",
+        "اسفند",
       ];
 
       const date = moment(dateString);
@@ -52,33 +33,38 @@ async function BoxImgBlog({
 
       return `${day} ${month} ${year}`;
     } catch (error) {
-      console.error('Error formatting date:', error);
+      console.error("Error formatting date:", error);
       return dateString;
     }
   };
 
-
   return (
     <Container>
-    
       <div className="flex flex-wrap pt-10">
         {blogs.map((blog) => (
           <div key={blog.id} className="lg:w-1/4 md:w-1/3 sm:w-1/2 w-full p-2">
             <div className="rounded-lg group overflow-hidden bg-white relative z-50">
               <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
-                <Link href={blog.url} className="flex items-center justify-center">
+                <Link
+                  href={blog.url}
+                  className="flex items-center justify-center"
+                >
                   <div className="relative h-[200px] w-full">
                     <Image
                       className="group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-cover w-full h-full"
-                      src={blog.image && blog.image !== "NULL" ? getImageUrl(blog.image) : '/images/gallery/blog-img1.jpg'}
+                      src={
+                        blog.image && blog.image !== "NULL"
+                          ? getImageUrl(blog.image)
+                          : "/images/gallery/blog-img1.jpg"
+                      }
                       alt={blog.title || "تصویر مقاله"}
                       width={200}
                       height={200}
                       unoptimized
                     />
                   </div>
-                  <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2 border-[1.5px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2" />
-                  <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0 border-[1.5px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />
+                  <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2 border-[1px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2" />
+                  <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0 border-[1px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />
                 </Link>
               </div>
 
@@ -93,6 +79,10 @@ async function BoxImgBlog({
                 </h2>
                 <div className="min-h-[100px] text-justify">
                   <ExpandableText text={blog.summary} />
+                </div>
+
+                <div className="hidden">
+                  <div dangerouslySetInnerHTML={{ __html: blog.summary }} />
                 </div>
 
                 <div className="flex justify-between items-center mt-2">

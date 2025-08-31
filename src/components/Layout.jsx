@@ -26,14 +26,14 @@ const generateRandomUserId = () => {
 function InitialDataManager() {
   const dispatch = useDispatch();
   const { cartType, initialized } = useSelector((state) => state.cart);
-  const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const initializedRef = useRef(false);
   const lastUserId = useRef(null);
-  const lastCartType = useRef(null);
   const userCookie = Cookies.get("user");
   const [isMergingCart, setIsMergingCart] = useState(false);
+
+  
 
   // اضافه کردن mounted state برای جلوگیری از hydration mismatch
   useEffect(() => {
@@ -47,7 +47,6 @@ function InitialDataManager() {
       // اگر کاربر مهمان باشد (token ندارد) و userId دارد
       if (!userData.token && userData.userId) {
         localStorage.setItem("guestUserId", userData.userId);
-        console.log("Debug - Guest userId stored:", userData.userId);
       }
     }
   }, [mounted, userCookie]);
@@ -74,10 +73,7 @@ function InitialDataManager() {
             // بررسی اینکه آیا کاربر قبلاً مهمان بوده و cart داشته یا نه
             const storedGuestUserId = localStorage.getItem("guestUserId");
             if (storedGuestUserId && storedGuestUserId !== currentUserId) {
-              console.log("Debug - Found guest cart, merging...", {
-                storedGuestUserId,
-                currentUserId,
-              });
+             
               setIsMergingCart(true);
 
               try {
@@ -93,7 +89,6 @@ function InitialDataManager() {
                   })
                 ).unwrap();
 
-                console.log("Debug - Guest cart merged successfully");
                 // پاک کردن guestUserId از localStorage
                 localStorage.removeItem("guestUserId");
               } catch (error) {
@@ -254,8 +249,8 @@ function Layout({ children, settings, menuItems }) {
 
   useEffect(() => {
     setTimeout(() => {
-      const userData = syncUserCookieWithRedux();
-      if (!userData) {
+       const userCookie = Cookies.get("user");
+      if (!userCookie) {
         const initialData = {
           token: "",
           refreshToken: "",

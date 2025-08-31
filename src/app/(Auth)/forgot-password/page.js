@@ -1,11 +1,16 @@
-import dynamic from 'next/dynamic';
+"use client";
 
-const ForgotPassword = dynamic(() => import("@/components/Auth/ForgotPassword/ForgotPassword"));
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+const ForgotPassword = dynamic(() =>
+  import("@/components/Auth/ForgotPassword/ForgotPassword")
+);
 
 export default function LoginPage() {
-  return (
-    <div>
-      <ForgotPassword />
-    </div>
-  );
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  return <div>{mounted && <ForgotPassword />}</div>;
 }

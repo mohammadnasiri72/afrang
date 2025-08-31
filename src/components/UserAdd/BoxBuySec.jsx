@@ -1,12 +1,12 @@
 "use client";
-import { getUserAdContact } from "@/services/UserAd/UserAdServices";
-import { Button, Pagination, Select } from "antd";
+import { Pagination, Select } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import ShowInfoContact from "./ShowInfoContact";
 
 function useIsMobile(breakpoint = 768) {
+  if (typeof window === 'undefined') return;
+  
   const [isMobile, setIsMobile] = useState(
     () => window.innerWidth < breakpoint
   );

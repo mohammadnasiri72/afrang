@@ -4,25 +4,28 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaCalendar } from "react-icons/fa6";
 
 async function FeaturedBlog() {
+  // دریافت مقالات
+  let blogs;
+  try {
+    blogs = await getItem({
+      TypeId: 5,
+      LangCode: "fa",
+      PageSize: 1,
+      PageIndex: 1,
+    });
+  } catch (error) {
+    console.error('Error fetching blogs:', error);
+    blogs = [];
+  }
 
-
-
-   
-
-
-
-     // تابع برای حذف تگ‌های HTML
+  // تابع برای حذف تگ‌های HTML
   const stripHtmlTags = (html) => {
     if (!html || typeof html !== 'string') return "";
     try {
-        if (typeof document !== "undefined") {
-            const doc = new DOMParser().parseFromString(html, "text/html");
-            return doc.body.textContent || "";
-        }
-        return html.replace(/<[^>]*>/g, "");
+      return html.replace(/<[^>]*>/g, "");
     } catch (error) {
-        console.error("Error stripping HTML:", error);
-        return "";
+      console.error("Error stripping HTML:", error);
+      return html.replace(/<[^>]*>/g, "");
     }
   };
 
@@ -45,25 +48,9 @@ async function FeaturedBlog() {
     }
   };
 
-
-   // دریافت مقالات
-   let blogs;
-   try {
-     blogs = await getItem({
-       TypeId: 5,
-       LangCode: "fa",
-       PageSize: 1,
-       PageIndex: 1,
-       
-     });
-   } catch (error) {
-     console.error('Error fetching blogs:', error);
-     throw new Error('خطا در دریافت مقالات. لطفا دوباره تلاش کنید.');
-   }
-
-  
-
-
+  if (!blogs || blogs.length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -94,8 +81,8 @@ async function FeaturedBlog() {
                   alt={blogs[0].title}
                   className="group-hover:scale-105 scale-100 duration-300 group-hover:grayscale-[0.7] filter  brightness-[0.95] object-cover w-full h-full object-contain overflow-hidden"
                 />
-                <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2  border-[1.5px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2 group-hover:opacity-100 opacity-0" />
-                <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0  border-[1.5px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />
+                <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2  border-[1px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2 group-hover:opacity-100 opacity-0" />
+                <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0  border-[1px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />
               
               </div>
             </div>

@@ -1,7 +1,15 @@
-import dynamic from 'next/dynamic';
+"use client";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
-const AddressList = dynamic(() => import("@/components/profile/address/AddressList"));
+const AddressList = dynamic(() =>
+  import("@/components/profile/address/AddressList")
+);
 
 export default function AddressesPage() {
-  return <AddressList />;
-} 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  return <>{mounted && <AddressList />}</>;
+}

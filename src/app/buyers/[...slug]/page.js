@@ -3,7 +3,7 @@ import BodyUserAdd from "@/components/UserAdd/BodyUserAdd";
 import BreadCrumbUseds from "@/components/UserAdd/BreadCrumbUseds";
 import FilterSec from "@/components/UserAdd/FilterSec";
 
-export default async function UserAddDetails() {
+export default function UserAddDetails() {
   return (
     <>
       <Container>

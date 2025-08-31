@@ -37,7 +37,7 @@ function BodyProduct({ product }) {
 
   return (
     <>
-      <div className="!hidden">
+      <div className="">
         <div className="py-9 px-7">
           <div
             className="prose max-w-none"
@@ -74,6 +74,8 @@ function BodyProduct({ product }) {
             </div>
           ))}
         </div>
+
+
       </div>
 
       <ProductTabs product={product} />

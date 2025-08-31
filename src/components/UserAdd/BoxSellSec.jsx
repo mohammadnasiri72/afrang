@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 function useIsMobile(breakpoint = 768) {
+   if (typeof window === 'undefined') return;
+   
   const [isMobile, setIsMobile] = useState(
     () => window.innerWidth < breakpoint
   );

@@ -14,7 +14,20 @@ function BreadcrumbNavProduct({ breadcrumb }) {
     return null;
   }
 
-  if (!breadcrumb?.length) return null;
+  // Check if breadcrumb exists and has data
+  if (!breadcrumb || !Array.isArray(breadcrumb) || breadcrumb.length === 0) {
+    return (
+      <div className="bg-white py-4 px-5 rounded-lg xl:px-16">
+        <div className="flex items-center space-x-2 text-gray-500">
+          <Link href="/" className="text-gray-500 hover:text-[#d1182b] font-[Yekan]">
+            خانه
+          </Link>
+          <span className="text-gray-400 mx-2 text-xs font-[Yekan]">&gt;</span>
+          <span className="text-[#d1182b] font-[Yekan]">محصول</span>
+        </div>
+      </div>
+    );
+  }
 
   const breadcrumbItems = [
     {

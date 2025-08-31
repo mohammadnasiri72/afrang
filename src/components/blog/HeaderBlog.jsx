@@ -4,11 +4,6 @@ import SelectOrder from "./SelectOrder";
 
 async function HeaderBlog({ searchParams, category }) {
 
-  
-
-
- 
-
   return (
     <>
       <Container>
@@ -21,19 +16,8 @@ async function HeaderBlog({ searchParams, category }) {
               </h2>
             </div>
             <div className="flex items-center w-full gap-4 flex-wrap md:flex-nowrap">
-              {/* <div className="sm:hidden flex w-full">
-                <div className="w-1/2 px-3">
-                  <ModalSelectCategoryBlog />
-                </div>
-                <div className="w-1/2 px-3">
-                  <ModalSelectSortBlog />
-                </div>
-              </div> */}
-              {/* <SubCategory /> */}
-
-              <SelectOrder value={searchParams?.orderBy || 1} />
-
-              <SelectCategory category={category} />
+              <SelectOrder value={searchParams?.orderBy || 1} currentSearchParams={searchParams} />
+              <SelectCategory category={category} activeCategory={searchParams?.category} currentSearchParams={searchParams} />
             </div>
           </div>
         </div>

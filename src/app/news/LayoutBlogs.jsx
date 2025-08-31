@@ -2,7 +2,7 @@
 
 import Container from "@/components/container";
 import { setLoadingBlog } from "@/redux/slices/blogSlice";
-import { useSearchParams } from "next/navigation";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,11 +10,9 @@ function LayoutBlogs({ children }) {
   const loadingBlog = useSelector((state) => state.blog.loadingBlog);
   const dispatch = useDispatch();
 
-  const searchParams = useSearchParams();
-
   useEffect(() => {
     dispatch(setLoadingBlog(false));
-  }, [searchParams]);
+  }, []);
 
   if (loadingBlog) {
     return (

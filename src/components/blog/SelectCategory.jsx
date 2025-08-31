@@ -2,19 +2,17 @@
 
 import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { Select } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FaCaretDown } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
-function SelectCategory({ category }) {
+function SelectCategoryClient({ category, activeCategory, currentSearchParams }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const activeCategory = searchParams?.get("category");
 
   const handleChange = (value) => {
     dispatch(setLoadingBlog(true));
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(currentSearchParams);
     if (value === "all") {
       params.delete("category");
     } else {
@@ -49,6 +47,12 @@ function SelectCategory({ category }) {
         />
       </div>
     </>
+  );
+}
+
+function SelectCategory({ category, activeCategory, currentSearchParams }) {
+  return (
+    <SelectCategoryClient category={category} activeCategory={activeCategory} currentSearchParams={currentSearchParams} />
   );
 }
 

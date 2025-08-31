@@ -173,18 +173,15 @@ export const deleteCartItemAll = async (userId) => {
 // تابع برای ادغام سبد خرید مهمان با سبد خرید کاربر
 export const mergeGuestCart = async (guestUserId, currentUserId) => {
   try {
-    console.log('Debug - Starting cart merge for guest:', guestUserId, 'to user:', currentUserId);
     
     // ابتدا cart مهمان را دریافت کن
     const guestCartResponse = await axios.get(`${mainDomain}/api/Cart/${guestUserId}`);
     const guestCart = guestCartResponse.data;
     
     if (!guestCart || !guestCart.length) {
-      console.log('Debug - Guest cart is empty, no merge needed');
       return { success: true, message: 'سبد خرید مهمان خالی است' };
     }
     
-    console.log('Debug - Found guest cart items:', guestCart.length);
     
     // محصولات مهمان را به cart کاربر اضافه کن - فقط همین!
     for (const item of guestCart) {
@@ -198,18 +195,15 @@ export const mergeGuestCart = async (guestUserId, currentUserId) => {
           item.parentId || -1,
           item.amount
         );
-        console.log('Debug - Added item to user cart:', item.productId);
       } catch (error) {
         console.error('Error adding item to user cart:', error);
       }
     }
     
-    console.log('Debug - All items added to user cart');
     
     // پاک کردن cart مهمان
     try {
       await deleteCartItemAll(guestUserId);
-      console.log('Debug - Guest cart cleared successfully');
     } catch (clearError) {
       console.error('Error clearing guest cart:', clearError);
     }

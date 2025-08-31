@@ -9,7 +9,6 @@ import { Skeleton } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import CheckBoxCaterory from "./CheckBoxCaterory";
 
@@ -28,6 +27,10 @@ const theme = createTheme({
 });
 
 function FilterSec() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [valuePrice, setValuePrice] = useState([0, 1000000000]);
   const [filterList, setFilterList] = useState({});
   const [loading, setLoading] = useState(false);
@@ -90,149 +93,150 @@ function FilterSec() {
     }
   }, [filterList, searchParams]);
 
-
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
-        <img
-          className="h-64 w-full object-cover"
-          src="/images/gallery/news-thumb-large.jpg"
-          alt=""
-        />
-        {pathname.includes("useds") && (
+      {mounted && (
+        <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
+          <img
+            className="h-64 w-full object-cover"
+            src="/images/gallery/news-thumb-large.jpg"
+            alt=""
+          />
+          {pathname.includes("useds") && (
+            <div>
+              <div
+                onClick={() => {
+                  setOpenCollapsePrice((e) => !e);
+                }}
+                className="border-b-2 border-b-[#3335] my-5 cursor-pointer"
+              >
+                <span className="flex justify-between items-center">
+                  <span className="text-lg font-bold border-b-4 border-[#d1182b] select-none">
+                    بر اساس قیمت
+                  </span>
+                  <FaChevronDown
+                    className={`duration-300 ${
+                      openCollapsePrice ? "rotate-180" : ""
+                    }`}
+                  />
+                </span>
+              </div>
+              <Collapse in={openCollapsePrice} timeout="auto" unmountOnExit>
+                <ThemeProvider theme={theme}>
+                  <div className="px-4">
+                    <Slider
+                      getAriaLabel={() => "Temperature range"}
+                      value={valuePrice}
+                      onChange={(event, newValue) => {
+                        setValuePrice(newValue);
+                      }}
+                      valueLabelDisplay="auto"
+                      valueLabelFormat={(value) => value.toLocaleString()}
+                      sx={{
+                        "& .MuiSlider-rail": {
+                          backgroundColor: "#d8d8d8",
+                        },
+                        "& .MuiSlider-track": {
+                          backgroundColor: "#40768c",
+                          border: "none",
+                        },
+                        "& .MuiSlider-thumb": {
+                          backgroundColor: "#40768c",
+                          transform: "translate(50%, -50%)",
+                        },
+                        "& .MuiSlider-valueLabel": {
+                          backgroundColor: "#40768c",
+                          padding: "4px 8px",
+                          borderRadius: "4px",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                        },
+                        direction: "rtl",
+                      }}
+                      min={0}
+                      max={filterList?.maxPrice}
+                      step={1000}
+                    />
+                  </div>
+                </ThemeProvider>
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
+                    <span className="text-gray-500">از</span>
+                    <div className="font-semibold">
+                      {valuePrice[0].toLocaleString()} تومان
+                    </div>
+                  </div>
+                  <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
+                    <span className="text-gray-500">تا</span>
+                    <div className="font-semibold">
+                      {valuePrice[1].toLocaleString()} تومان
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <button
+                    onClick={() => {
+                      params.set("price1", valuePrice[0]);
+                      params.set("price2", valuePrice[1]);
+                      params.delete("page");
+                      router.push(
+                        `${window.location.pathname}?${params.toString()}`
+                      );
+                    }}
+                    className="bg-[#18d1be] w-full rounded-lg duration-300 text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
+                  >
+                    اعمال فیلتر قیمت
+                  </button>
+                </div>
+              </Collapse>
+            </div>
+          )}
           <div>
             <div
               onClick={() => {
-                setOpenCollapsePrice((e) => !e);
+                setOpenCollapseCategory((e) => !e);
               }}
               className="border-b-2 border-b-[#3335] my-5 cursor-pointer"
             >
               <span className="flex justify-between items-center">
                 <span className="text-lg font-bold border-b-4 border-[#d1182b] select-none">
-                  بر اساس قیمت
+                  دسته بندی
                 </span>
                 <FaChevronDown
                   className={`duration-300 ${
-                    openCollapsePrice ? "rotate-180" : ""
+                    openCollapseCategory ? "rotate-180" : ""
                   }`}
                 />
               </span>
             </div>
-            <Collapse in={openCollapsePrice} timeout="auto" unmountOnExit>
-              <ThemeProvider theme={theme}>
-                <div className="px-4">
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    value={valuePrice}
-                    onChange={(event, newValue) => {
-                      setValuePrice(newValue);
-                    }}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => value.toLocaleString()}
-                    sx={{
-                      "& .MuiSlider-rail": {
-                        backgroundColor: "#d8d8d8",
-                      },
-                      "& .MuiSlider-track": {
-                        backgroundColor: "#40768c",
-                        border: "none",
-                      },
-                      "& .MuiSlider-thumb": {
-                        backgroundColor: "#40768c",
-                        transform: "translate(50%, -50%)",
-                      },
-                      "& .MuiSlider-valueLabel": {
-                        backgroundColor: "#40768c",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                      },
-                      direction: "rtl",
-                    }}
-                    min={0}
-                    max={filterList?.maxPrice}
-                    step={1000}
-                  />
+            <Collapse in={openCollapseCategory} timeout="auto" unmountOnExit>
+              {!loading && (
+                <div className="flex flex-col items-start h-64 overflow-auto">
+                  {filterList?.categories?.length > 0 &&
+                    filterList.categories.map((item) => (
+                      <CheckBoxCaterory
+                        key={item.id}
+                        category={item}
+                        categoryChecked={categoryChecked}
+                        setCategoryChecked={setCategoryChecked}
+                      />
+                    ))}
                 </div>
-              </ThemeProvider>
-              <div className="flex flex-col gap-2 mt-4">
-                <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
-                  <span className="text-gray-500">از</span>
-                  <div className="font-semibold">
-                    {valuePrice[0].toLocaleString()} تومان
-                  </div>
+              )}
+              {loading && (
+                <div className="flex flex-col gap-2">
+                  <Skeleton.Input className="!w-full" />
+                  <Skeleton.Input className="!w-full" />
+                  <Skeleton.Input className="!w-full" />
+                  <Skeleton.Input className="!w-full" />
+                  <Skeleton.Input className="!w-full" />
+                  <Skeleton.Input className="!w-full" />
                 </div>
-                <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
-                  <span className="text-gray-500">تا</span>
-                  <div className="font-semibold">
-                    {valuePrice[1].toLocaleString()} تومان
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4">
-                <button
-                  onClick={() => {
-                    params.set("price1", valuePrice[0]);
-                    params.set("price2", valuePrice[1]);
-                    params.delete("page");
-                    router.push(
-                      `${window.location.pathname}?${params.toString()}`
-                    );
-                  }}
-                  className="bg-[#18d1be] w-full rounded-lg duration-300 text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
-                >
-                  اعمال فیلتر قیمت
-                </button>
-              </div>
+              )}
             </Collapse>
           </div>
-        )}
-        <div>
-          <div
-            onClick={() => {
-              setOpenCollapseCategory((e) => !e);
-            }}
-            className="border-b-2 border-b-[#3335] my-5 cursor-pointer"
-          >
-            <span className="flex justify-between items-center">
-              <span className="text-lg font-bold border-b-4 border-[#d1182b] select-none">
-                دسته بندی
-              </span>
-              <FaChevronDown
-                className={`duration-300 ${
-                  openCollapseCategory ? "rotate-180" : ""
-                }`}
-              />
-            </span>
-          </div>
-          <Collapse in={openCollapseCategory} timeout="auto" unmountOnExit>
-            {!loading && (
-              <div className="flex flex-col items-start h-64 overflow-auto">
-                {filterList?.categories?.length > 0 &&
-                  filterList.categories.map((item) => (
-                    <CheckBoxCaterory
-                      key={item.id}
-                      category={item}
-                      categoryChecked={categoryChecked}
-                      setCategoryChecked={setCategoryChecked}
-                    />
-                  ))}
-              </div>
-            )}
-            {loading && (
-              <div className="flex flex-col gap-2">
-                <Skeleton.Input className="!w-full" />
-                <Skeleton.Input className="!w-full" />
-                <Skeleton.Input className="!w-full" />
-                <Skeleton.Input className="!w-full" />
-                <Skeleton.Input className="!w-full" />
-                <Skeleton.Input className="!w-full" />
-              </div>
-            )}
-          </Collapse>
         </div>
-      </div>
+      )}
     </>
   );
 }
