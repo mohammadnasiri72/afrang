@@ -1,102 +1,19 @@
 "use client";
-import { getImageUrl } from "@/utils/mainDomain";
+import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
+import { Divider } from "antd";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
-import Swal from "sweetalert2";
 import ProductMain from "./ProductMain";
 
-// import sweet alert 2
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-start",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  customClass: "toast-modal",
-});
 
-// اسکلتون لودینگ
-const EidDiscountSkeleton = () => {
-  return (
-    <div className="animate-pulse">
-      {/* اسکلتون عنوان */}
-      <div className="lg:hidden flex justify-center items-center pb-10">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-48 bg-gray-200 rounded-lg"></div>
-          <div className="h-12 w-12 bg-gray-200 rounded-lg"></div>
-        </div>
-      </div>
-
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
-        {/* اسکلتون عنوان در دسکتاپ */}
-        <div className="lg:flex hidden items-center gap-3">
-          <div className="h-8 w-48 bg-gray-200 rounded-lg"></div>
-          <div className="h-12 w-12 bg-gray-200 rounded-lg"></div>
-        </div>
-
-        {/* اسکلتون بخش موبایل */}
-        <div className="lg:hidden w-full">
-          <div className="flex items-center justify-between mb-3 px-2">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-            <div className="h-6 w-20 bg-gray-200 rounded"></div>
-          </div>
-          <div className="overflow-x-auto pb-2">
-            <div className="flex items-center gap-2 min-w-max px-2">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="flex items-center">
-                  <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                  {item < 5 && <span className="mx-2">/</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* اسکلتون دسته‌بندی‌ها در دسکتاپ */}
-        <div className="hidden lg:flex items-center gap-3">
-          {[1, 2, 3, 4, 5].map((item) => (
-            <div key={item} className="flex items-center">
-              <div className="h-5 w-20 bg-gray-200 rounded"></div>
-              {item < 5 && <span className="mx-2">/</span>}
-            </div>
-          ))}
-        </div>
-
-        {/* اسکلتون دکمه نمایش همه در دسکتاپ */}
-        <div className="hidden lg:flex">
-          <div className="h-6 w-24 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-
-      {/* اسکلتون محصولات */}
-      <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {[1, 2, 3, 4, 5].map((item) => (
-          <div key={item} className="bg-white rounded-lg p-4">
-            <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
 export default function EidDiscount({ actionProducts, products }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    if (products.length > 0) {
-      setLoading(false);
-    }
-  }, [products]);
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories =
@@ -120,13 +37,9 @@ export default function EidDiscount({ actionProducts, products }) {
     }
   }, [selectedCategory, products]);
 
-  if (loading) {
-    return <EidDiscountSkeleton />;
-  }
-
   return (
     <>
-      {filteredProducts.length > 0 && (
+      {
         <div className="mt-5">
           <div className="lg:hidden flex justify-center items-center">
             <div className="flex items-center title-newProduct relative">
@@ -242,8 +155,101 @@ export default function EidDiscount({ actionProducts, products }) {
           <div className="mt-5">
             <ProductMain products={filteredProducts} />
           </div>
+
+          <div className="hidden">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className=" relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md"
+              >
+                {/* تصویر */}
+                <Link
+                  href={product.url}
+                  className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
+                >
+                  <Image
+                    className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain ${
+                      product?.statusId !== 1 && product?.conditionId === 20
+                        ? "blur-xs"
+                        : ""
+                    }`}
+                    src={getImageUrl2(product.image)}
+                    alt={product.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    unoptimized
+                  />
+                  {/* لیبل کالای کارکرده */}
+                  {product.conditionId === 20 && (
+                    <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                      {/* <FaRecycle className="ml-1 text-base" /> */}
+                      کالای کارکرده
+                    </div>
+                  )}
+                  {/* فروخته شد*/}
+                  {product?.statusId !== 1 && product?.conditionId === 20 && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full select-none z-10">
+                      <img
+                        draggable="false"
+                        className="w-36"
+                        src="/public/images/soldout.png"
+                        alt=""
+                      />
+                    </div>
+                  )}
+                </Link>
+                {/* محتوا */}
+                <div className="flex flex-col flex-1 justify-between mt-2">
+                  {/* عنوان */}
+                  <Link
+                    href={product.url}
+                    className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
+                  >
+                    <h3 className="text-justify line-clamp-3 w-full">
+                      {product.title}
+                    </h3>
+                  </Link>
+                  <Divider style={{ margin: 5, padding: 0 }} />
+
+                  {/* قیمت */}
+                  <div className="h-[4.5rem] px-2 duration-300">
+                    {!product.callPriceButton && product.finalPrice !== 0 && (
+                      <div className="flex flex-col">
+                        <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300 group-hover:text-lg ">
+                          {product.finalPrice.toLocaleString()} تومان
+                        </span>
+                        {product.discount !== 0 && (
+                          <span className="text-[#333a] font-semibold text-sm line-through">
+                            {product.price1.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {!product.callPriceButton && product.finalPrice === 0 && (
+                      <span className="font-bold text-base text-[#333]">
+                        بدون قیمت
+                      </span>
+                    )}
+                    {product.callPriceButton && (
+                      <span className="font-bold text-base text-[#333]">
+                        تماس بگیرید
+                      </span>
+                    )}
+                  </div>
+                </div>
+                {/* تخفیف */}
+                {product.discount !== 0 && (
+                  <div className="absolute top-3 left-3 z-50 duration-300">
+                    <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                      {product.discount}%
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      )}
+      }
     </>
   );
 }

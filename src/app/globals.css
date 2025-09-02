@@ -12,6 +12,8 @@ body {
   scroll-behavior: smooth !important;
 }
 
+
+
 @font-face {
   font-family: "Yekan";
   src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("truetype");

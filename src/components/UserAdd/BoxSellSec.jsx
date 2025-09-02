@@ -32,6 +32,7 @@ function useIsMobile(breakpoint = 768) {
 }
 
 function BoxSellSec({ productList, loading }) {
+  
   const [viewMode, setViewMode] = useState("list");
 
   const router = useRouter();

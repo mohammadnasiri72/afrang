@@ -6,7 +6,6 @@ import {
 } from "@/redux/slices/cartSlice";
 import { setError } from "@/redux/slices/menuResSlice";
 import { setUser } from "@/redux/slices/userSlice";
-import { syncUserCookieWithRedux } from "@/utils/manageCookie";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -32,8 +31,6 @@ function InitialDataManager() {
   const lastUserId = useRef(null);
   const userCookie = Cookies.get("user");
   const [isMergingCart, setIsMergingCart] = useState(false);
-
-  
 
   // اضافه کردن mounted state برای جلوگیری از hydration mismatch
   useEffect(() => {
@@ -73,7 +70,6 @@ function InitialDataManager() {
             // بررسی اینکه آیا کاربر قبلاً مهمان بوده و cart داشته یا نه
             const storedGuestUserId = localStorage.getItem("guestUserId");
             if (storedGuestUserId && storedGuestUserId !== currentUserId) {
-             
               setIsMergingCart(true);
 
               try {
@@ -117,8 +113,8 @@ function InitialDataManager() {
   if (isLoading || !mounted)
     return (
       <>
-        <div className="fixed inset-0 bg-white flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-14 h-14 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
         </div>
       </>
     );
@@ -214,8 +210,16 @@ function ScrollToTopButton() {
 }
 
 // کامپوننت اصلی که Provider را فراهم می‌کند
-function Layout({ children, settings, menuItems }) {
-  const [mounted, setMounted] = useState(false);
+function Layout({
+  children,
+  settings,
+  menuItems,
+  brandItems,
+  itemsSupport,
+  socialNetworks,
+  footerMenu,
+  popupsData,
+}) {
 
   const { store } = makeStore({
     settings: { settings },
@@ -227,11 +231,7 @@ function Layout({ children, settings, menuItems }) {
     },
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMounted(true);
-    }, 300);
-  }, []);
+ 
 
   // no client-time dispatch here to avoid hydration mismatch
 
@@ -249,7 +249,7 @@ function Layout({ children, settings, menuItems }) {
 
   useEffect(() => {
     setTimeout(() => {
-       const userCookie = Cookies.get("user");
+      const userCookie = Cookies.get("user");
       if (!userCookie) {
         const initialData = {
           token: "",
@@ -283,13 +283,14 @@ function Layout({ children, settings, menuItems }) {
             showCart={showCart}
             isShowPopups={true}
             menuItems={menuItems}
+            brandItems={brandItems}
+            itemsSupport={itemsSupport}
+            socialNetworks={socialNetworks}
+            footerMenu={footerMenu}
+            popupsData={popupsData}
           >
             {children}
-            {/* {!mounted && (
-              <div className="fixed inset-0 bg-white flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-                <div className="w-14 h-14 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-              </div>
-            )} */}
+           
           </LayoutWrapper>
         </>
 

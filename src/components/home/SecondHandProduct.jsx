@@ -1,67 +1,32 @@
 "use client";
+import { getImageUrl2 } from "@/utils/mainDomain";
+import { Divider } from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
 import ProductMain from "./ProductMain";
-import { useEffect, useState } from 'react';
-import { useRouter } from "next/navigation";
 
-
-function SecondHandProduct({oldProducts}) {
+function SecondHandProduct({ oldProducts }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
-
-
-
- useEffect(()=>{
-  if (oldProducts.length>0) {
-    setLoading(false)
-  }
- },[oldProducts])
-
-
-
-  // useEffect(() => {
-  //   const fetchOldProducts = async () => {
-  //     try {
-  //       const oldProduct = await getProducts({
-  //         page: 1,
-  //         pageSize: 12,
-  //         orderBy: "2",
-  //         ConditionId: 20,
-  //       });
-        
-  //       if (oldProduct.type === 'error') {
-  //         Toast.fire({
-  //           icon: "error",
-  //           text: oldProduct.message,
-  //         });
-  //         return;
-  //       } else {
-  //         setOldProducts(oldProduct);
-  //       }
-  //     } catch (error) {
-  //       Toast.fire({
-  //         icon: "error",
-  //         text: error.response?.data ? error.response?.data : "خطای شبکه",
-  //       });
-  //     }
-  //     finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   fetchOldProducts()
-  // }, [])
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories = oldProducts
-    ? [...new Set(oldProducts.map(product => product.categoryTitle))].slice(0, 5)
+    ? [...new Set(oldProducts.map((product) => product.categoryTitle))].slice(
+        0,
+        5
+      )
     : [];
 
   useEffect(() => {
     if (oldProducts) {
       if (selectedCategory) {
-        const filtered = oldProducts.filter(product => product.categoryTitle === selectedCategory);
+        const filtered = oldProducts.filter(
+          (product) => product.categoryTitle === selectedCategory
+        );
         setFilteredProducts(filtered);
       } else {
         setFilteredProducts(oldProducts);
@@ -69,93 +34,24 @@ function SecondHandProduct({oldProducts}) {
     }
   }, [selectedCategory, oldProducts]);
 
-  // اسکلتون لودینگ
-  const SecondHandProductSkeleton = () => {
-    return (
-      <div className="animate-pulse sm:px-16 px-2">
-        {/* اسکلتون بخش موبایل */}
-        <div className="lg:hidden w-full">
-          <div className="flex items-center justify-between mb-3 px-2">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-            <div className="h-6 w-20 bg-gray-200 rounded"></div>
-          </div>
-          <div className="overflow-x-auto pb-2">
-            <div className="flex items-center gap-2 min-w-max px-2">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="flex items-center">
-                  <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                  {item < 5 && <span className="mx-2">/</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center sm:px-4">
-          {/* اسکلتون عنوان */}
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="h-8 w-64 bg-gray-200 rounded-lg"></div>
-          </div>
-
-          {/* اسکلتون دسته‌بندی‌ها در دسکتاپ */}
-          <div className="hidden lg:flex items-center gap-3">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="flex items-center">
-                <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                {item < 5 && <span className="mx-2">/</span>}
-              </div>
-            ))}
-          </div>
-
-          {/* اسکلتون دکمه نمایش همه در دسکتاپ */}
-          <div className="hidden lg:flex">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-
-        {/* اسکلتون محصولات */}
-        <div className="mt-10">
-          <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="bg-white rounded-lg p-4">
-                  <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* اسکلتون دکمه‌های ناوبری */}
-            <div className="sm:hidden flex items-center justify-between absolute left-0 right-0 bottom-1">
-              <div className="h-8 w-8 bg-gray-200 rounded"></div>
-              <div className="h-8 w-8 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  if (loading) {
-    return <SecondHandProductSkeleton />;
-  }
-
   return (
     <>
       <div className="sm:px-16 px-2">
         <div className="lg:hidden flex justify-center items-center pb-5">
           <div className="flex-wrap gap-4 items-center">
-            <h2 className="title-newProduct relative text-[#222] duration-300 text-lg font-semibold"> دست دوم های پیشنهاد افــــرنـــــگ</h2>
+            <h2 className="title-newProduct relative text-[#222] duration-300 text-lg font-semibold">
+              {" "}
+              دست دوم های پیشنهاد افــــرنـــــگ
+            </h2>
           </div>
         </div>
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
           <div className="flex items-center justify-between mb-3 px-2">
-            <h3 className="text-lg font-semibold text-gray-700">دسته‌بندی‌ها</h3>
+            <h3 className="text-lg font-semibold text-gray-700">
+              دسته‌بندی‌ها
+            </h3>
             <button
               onClick={() => {
                 router.push(`/products?conditionId=20&orderby=2`);
@@ -173,15 +69,22 @@ function SecondHandProduct({oldProducts}) {
               {categories.map((category, index) => (
                 <div key={category} className="flex items-center">
                   <span
-                    onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${category === selectedCategory
-                      ? 'text-[#d1182b] font-bold'
-                      : 'text-[#0008] hover:text-[#000]'
-                      }`}
+                    onClick={() =>
+                      setSelectedCategory(
+                        category === selectedCategory ? null : category
+                      )
+                    }
+                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
+                      category === selectedCategory
+                        ? "text-[#d1182b] font-bold"
+                        : "text-[#0008] hover:text-[#000]"
+                    }`}
                   >
                     {category}
                   </span>
-                  {index < categories.length - 1 && <span className="mx-1">/</span>}
+                  {index < categories.length - 1 && (
+                    <span className="mx-1">/</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -200,15 +103,22 @@ function SecondHandProduct({oldProducts}) {
             {categories.map((category, index) => (
               <div key={category} className="flex items-center">
                 <span
-                  onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
-                  className={`text-sm cursor-pointer duration-300 font-medium ${category === selectedCategory
-                    ? 'text-[#d1182b] font-bold'
-                    : 'text-[#0008] hover:text-[#000]'
-                    }`}
+                  onClick={() =>
+                    setSelectedCategory(
+                      category === selectedCategory ? null : category
+                    )
+                  }
+                  className={`text-sm cursor-pointer duration-300 font-medium ${
+                    category === selectedCategory
+                      ? "text-[#d1182b] font-bold"
+                      : "text-[#0008] hover:text-[#000]"
+                  }`}
                 >
                   {category}
                 </span>
-                {index < categories.length - 1 && <span className="mx-2">/</span>}
+                {index < categories.length - 1 && (
+                  <span className="mx-2">/</span>
+                )}
               </div>
             ))}
           </div>
@@ -226,6 +136,98 @@ function SecondHandProduct({oldProducts}) {
         </div>
         <div className="mt-5">
           <ProductMain products={filteredProducts} />
+        </div>
+        <div className="hidden">
+          {oldProducts.map((product) => (
+            <div
+              key={product.id}
+              className=" relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md"
+            >
+              {/* تصویر */}
+              <Link
+                href={product.url}
+                className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
+              >
+                <Image
+                  className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain ${
+                    product?.statusId !== 1 && product?.conditionId === 20
+                      ? "blur-xs"
+                      : ""
+                  }`}
+                  src={getImageUrl2(product.image)}
+                  alt={product.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 300px"
+                  unoptimized
+                />
+                {/* لیبل کالای کارکرده */}
+                {product.conditionId === 20 && (
+                  <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    {/* <FaRecycle className="ml-1 text-base" /> */}
+                    کالای کارکرده
+                  </div>
+                )}
+                {/* فروخته شد*/}
+                {product?.statusId !== 1 && product?.conditionId === 20 && (
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full select-none z-10">
+                    <img
+                      draggable="false"
+                      className="w-36"
+                      src="/public/images/soldout.png"
+                      alt=""
+                    />
+                  </div>
+                )}
+              </Link>
+              {/* محتوا */}
+              <div className="flex flex-col flex-1 justify-between mt-2">
+                {/* عنوان */}
+                <Link
+                  href={product.url}
+                  className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
+                >
+                  <h3 className="text-justify line-clamp-3 w-full">
+                    {product.title}
+                  </h3>
+                </Link>
+                <Divider style={{ margin: 5, padding: 0 }} />
+
+                {/* قیمت */}
+                <div className="h-[4.5rem] px-2 duration-300">
+                  {!product.callPriceButton && product.finalPrice !== 0 && (
+                    <div className="flex flex-col">
+                      <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300 group-hover:text-lg ">
+                        {product.finalPrice.toLocaleString()} تومان
+                      </span>
+                      {product.discount !== 0 && (
+                        <span className="text-[#333a] font-semibold text-sm line-through">
+                          {product.price1.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {!product.callPriceButton && product.finalPrice === 0 && (
+                    <span className="font-bold text-base text-[#333]">
+                      بدون قیمت
+                    </span>
+                  )}
+                  {product.callPriceButton && (
+                    <span className="font-bold text-base text-[#333]">
+                      تماس بگیرید
+                    </span>
+                  )}
+                </div>
+              </div>
+              {/* تخفیف */}
+              {product.discount !== 0 && (
+                <div className="absolute top-3 left-3 z-50 duration-300">
+                  <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                    {product.discount}%
+                  </span>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </>
