@@ -25,21 +25,7 @@ export default function GlobalError({
               متأسفانه مشکلی غیرمنتظره در سیستم پیش آمده است.
             </p>
             
-            {process.env.NODE_ENV === 'development' && error && (
-              <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-700 mb-6">
-                <p className="mb-2 font-semibold">جزئیات خطا (فقط در حالت توسعه):</p>
-                <details className="text-right">
-                  <summary className="cursor-pointer text-[#d1182b]">
-                    نمایش جزئیات
-                  </summary>
-                  <pre className="mt-2 text-xs text-left overflow-auto bg-gray-200 p-2 rounded">
-                    {error.message}
-                    <br />
-                    {error.stack}
-                  </pre>
-                </details>
-              </div>
-            )}
+           
             
             <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-700 mb-6">
               <p className="mb-2">لطفاً:</p>
