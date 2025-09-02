@@ -1,8 +1,9 @@
+"use client";
 import { setActiveTab } from "@/redux/slices/idEditSec";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { Alert } from "antd";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BsPatchQuestionFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 
@@ -10,7 +11,6 @@ function LinkGuide() {
   const [href, setHref] = useState("/login");
   const [href2, setHref2] = useState("/login");
   const disPatch = useDispatch();
-
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -81,7 +81,11 @@ function LinkGuide() {
               جهت ثبت سریال محصول مفقود شده خود برروی این لینک کلیک نمایید.
             </span>
           </Link>
-          <Link className=" flex items-center gap-1 group" target="_blank" href={"https://www.afrangdigital.com/help/help.htm"}>
+          <Link
+            className=" flex items-center gap-1 group"
+            target="_blank"
+            href={"https://www.afrangdigital.com/help/help.htm"}
+          >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               درصورت تمایل جهت آگاهی از روند کار ، از راهنمای سایت استفاده

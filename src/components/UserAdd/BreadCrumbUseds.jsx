@@ -4,11 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 function BreadCrumbUseds() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const breadcrumbItems = [
     {
       title: (
@@ -28,7 +23,7 @@ function BreadCrumbUseds() {
   ];
   return (
     <>
-      {mounted && (
+      { (
         <div className="bg-white py-4 px-5 rounded-lg xl:px-16">
           <Breadcrumb
             items={breadcrumbItems}

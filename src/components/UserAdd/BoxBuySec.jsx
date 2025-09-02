@@ -5,31 +5,32 @@ import { useEffect, useState } from "react";
 import ShowInfoContact from "./ShowInfoContact";
 
 function useIsMobile(breakpoint = 768) {
-  if (typeof window === 'undefined') return;
-  
   const [isMobile, setIsMobile] = useState(
-    () => window.innerWidth < breakpoint
+    () => typeof window !== "undefined" && window.innerWidth < breakpoint
   );
 
   useEffect(() => {
-    const updateSize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-
-    // اجرا در ابتدا
-    updateSize();
-
-    // اجرا در هر بار resize شدن
-    window.addEventListener("resize", updateSize);
-
-    // پاک‌سازی event موقع unmount شدن
-    return () => window.removeEventListener("resize", updateSize);
+    if (typeof window !== "undefined") {
+      
+      const updateSize = () => {
+        setIsMobile(window.innerWidth < breakpoint);
+      };
+  
+      // اجرا در ابتدا
+      updateSize();
+  
+      // اجرا در هر بار resize شدن
+      window.addEventListener("resize", updateSize);
+  
+      // پاک‌سازی event موقع unmount شدن
+      return () => window.removeEventListener("resize", updateSize);
+    }
   }, [breakpoint]);
 
   return isMobile;
 }
 
-function BoxBuySec({ productList, loading }) {
+function BoxBuySec({ productList }) {
   const [viewMode, setViewMode] = useState("list");
 
   const router = useRouter();
@@ -98,14 +99,6 @@ function BoxBuySec({ productList, loading }) {
       <ShowInfoContact id={product.id} />
     </div>
   );
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-6">

@@ -4,13 +4,10 @@ import { Pagination, Select } from "antd";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 
 function useIsMobile(breakpoint = 768) {
-   if (typeof window === 'undefined') return;
-   
   const [isMobile, setIsMobile] = useState(
-    () => window.innerWidth < breakpoint
+    () => typeof window !== "undefined" && window.innerWidth < breakpoint
   );
 
   useEffect(() => {
@@ -31,8 +28,8 @@ function useIsMobile(breakpoint = 768) {
   return isMobile;
 }
 
-function BoxSellSec({ productList, loading }) {
-  
+function BoxSellSec({ productList }) {
+
   const [viewMode, setViewMode] = useState("list");
 
   const router = useRouter();
@@ -69,7 +66,7 @@ function BoxSellSec({ productList, loading }) {
                 <img
                   src={getImageUrl(product.image)}
                   alt={product.title}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg overflow-hidden"
                 />
                 {/* کالای کارکرده */}
                 <div className="absolute bottom-0 right-0 left-0 bg-[#fffa] text-[#40768c] justify-center py-1 shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
@@ -104,9 +101,18 @@ function BoxSellSec({ productList, loading }) {
                   {product.title}
                 </Link>
               </h3>
+              <div className="flex flex-col items-center justify-center gap-1">
+
               <span className="text-xs font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
                 پیشنهاد کاربران
               </span>
+              {
+                product.isArchive &&
+                <span className="text-xs font-bold select-none bg-yellow-500 rounded-full text-white px-2 py-1">
+                آرشیو شده 
+              </span>
+              }
+              </div>
             </div>
           )}
           {product.categoryTitle && (
@@ -209,14 +215,6 @@ function BoxSellSec({ productList, loading }) {
       </div>
     </div>
   );
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-      </div>
-    );
-  }
 
   return (
     <>
