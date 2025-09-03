@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getProductCategory, getProductId } from './services/products/productService'
+import { getProductSecId } from './services/UserAd/UserAdServices';
 
 // مسیرهای محافظت شده که نیاز به احراز هویت دارند
 const protectedRoutes = [
@@ -106,7 +107,42 @@ export async function middleware(request) {
     } catch (error) {
       console.error('Error in product redirect:', error);
     }
-  } else if (!staticPaths.some(path => pathname.startsWith(path))) {
+  } else if (pathname.startsWith('/Usedproduct/') || pathname.startsWith('/usedproduct/')) {
+    try {
+      const pathParts = pathname.split('/');
+      // پیدا کردن آخرین عدد در URL
+      let productId = null;
+      for (let i = pathParts.length - 1; i >= 0; i--) {
+        const num = Number(pathParts[i]);
+        if (!isNaN(num)) {
+          productId = num;
+          break;
+        }
+      }
+
+      if (productId !== null) {
+        const productCategory = await getProductSecId(productId);
+        const decodedPathname = decodeURIComponent(pathname);
+
+        if (productCategory?.url && productCategory.url !== decodedPathname) {
+          return NextResponse.redirect(new URL(productCategory.url, request.url), { status: 301 });
+        } else if (!staticPaths.some(path => pathname.startsWith(path))) {
+          // اگر نیاز به ریدایرکت محصول نبود، چک می‌کنیم که آیا نیاز به تبدیل حروف کوچک داریم
+          const lowerCasePath = decodedPathname.toLowerCase();
+
+          if (decodedPathname !== lowerCasePath) {
+            const newUrl = new URL(request.url);
+            newUrl.pathname = lowerCasePath;
+            return NextResponse.redirect(newUrl, { status: 301 });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error in product redirect:', error);
+    }
+  }
+  
+  else if (!staticPaths.some(path => pathname.startsWith(path))) {
     try {
       const decodedPath = decodeURIComponent(pathname);
       const lowerCasePath = decodedPath.toLowerCase();

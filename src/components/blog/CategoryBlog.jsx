@@ -1,6 +1,5 @@
 "use client";
 
-import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { getImageUrl } from "@/utils/mainDomain";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -12,12 +11,13 @@ function CategoryBlog({ category, searchParams }) {
   const activeCategory = searchParams?.category;
 
   const handleChangCategory = (cat) => {
-    dispatch(setLoadingBlog(true));
+    // dispatch(setLoadingBlog(true));
     const params = new URLSearchParams(searchParams);
     if (activeCategory && activeCategory === cat.id.toString()) {
       params.delete("category");
     } else {
       params.set("category", cat.id);
+      params.delete("page");
     }
     router.push(`?${params.toString()}`);
   };

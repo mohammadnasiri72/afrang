@@ -1,8 +1,9 @@
 "use client";
 import { getImageUrl } from "@/utils/mainDomain";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function useIsMobile(breakpoint = 768) {
@@ -29,9 +30,8 @@ function useIsMobile(breakpoint = 768) {
 }
 
 function BoxSellSec({ productList }) {
-
   const [viewMode, setViewMode] = useState("list");
-
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
@@ -39,6 +39,16 @@ function BoxSellSec({ productList }) {
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
   const pageSize = searchParams.get("pageSize") || "20";
+
+  const createPageURL = (page) => {
+    const params = new URLSearchParams(searchParams);
+    if (page === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", page.toString());
+    }
+    return `${pathname}?${params.toString()}`;
+  };
 
   const isMobile = useIsMobile();
 
@@ -102,16 +112,21 @@ function BoxSellSec({ productList }) {
                 </Link>
               </h3>
               <div className="flex flex-col items-center justify-center gap-1">
+                {product.isAfrangOffer ? (
+                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
+                    پیشنهاد افرنگ
+                  </span>
+                ) : (
+                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
+                    پیشنهاد کاربران
+                  </span>
+                )}
 
-              <span className="text-xs font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
-                پیشنهاد کاربران
-              </span>
-              {
-                product.isArchive &&
-                <span className="text-xs font-bold select-none bg-yellow-500 rounded-full text-white px-2 py-1">
-                آرشیو شده 
-              </span>
-              }
+                {product.isArchive && (
+                  <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full text-white px-2 py-1">
+                    آرشیو شده
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -161,9 +176,15 @@ function BoxSellSec({ productList }) {
                 کالای کارکرده
               </div>
               {/* پیشنهاد کاربران */}
-              <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                پیشنهاد کاربران
-              </div>
+              {product.isAfrangOffer ? (
+                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  پیشنهاد افرنگ
+                </div>
+              ) : (
+                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  پیشنهاد کاربران
+                </div>
+              )}
             </Link>
           ) : (
             <svg
@@ -194,7 +215,16 @@ function BoxSellSec({ productList }) {
           </h3>
         )}
         {product.categoryTitle && (
-          <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-gray-600 mb-2">
+              {product.categoryTitle}
+            </p>
+            {product.isArchive && (
+              <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full text-white px-2 py-1">
+                آرشیو شده
+              </span>
+            )}
+          </div>
         )}
         <div className="flex items-center justify-between">
           {(!product.price || product.price === 0) && (
@@ -215,6 +245,34 @@ function BoxSellSec({ productList }) {
       </div>
     </div>
   );
+
+  const handlePageChange = (value) => {
+    params.set("page", value);
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  // تابع برای رندر کردن لینک‌های واقعی
+  const itemRender = (current, type, originalElement) => {
+    if (type === "page") {
+      return (
+        <Link href={createPageURL(current)} passHref legacyBehavior>
+          <a
+            rel="follow"
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(current);
+            }}
+          >
+            {current}
+          </a>
+        </Link>
+      );
+    }
+
+   
+
+    return originalElement;
+  };
 
   return (
     <>
@@ -363,10 +421,10 @@ function BoxSellSec({ productList }) {
             <Pagination
               current={Number(pageIndex)}
               onChange={(value) => {
-                params.set("page", value);
-                router.push(`${window.location.pathname}?${params.toString()}`);
+                handlePageChange(value);
               }}
               total={productList[0].total}
+              itemRender={itemRender}
               pageSize={Number(pageSize)}
               showSizeChanger={false}
               className="rtl"

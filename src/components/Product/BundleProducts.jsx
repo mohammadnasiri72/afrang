@@ -128,18 +128,7 @@ function BundleProducts({ product }) {
                         </div>
                       </div>
                     )}
-                    {/* {product.bundle.itemCart && (
-                      <div>
-                        <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#d1182b] font-bold">
-                          <SlBasket className="text-xl" />
-                          <span className="px-1">افزودن به سبد خرید</span>
-                        </div>
-                        <div className="bg-teal-500 bottom-0 left-0 right-0 overflow-hidden sm:hidden flex justify-center items-center py-2 text-white rounded-b-lg duration-300 cursor-pointer hover:bg-[#d1182b] font-bold">
-                          <SlBasket className="text-xl" />
-                          <span className="px-1">افزودن به سبد خرید</span>
-                        </div>
-                      </div>
-                    )} */}
+                   
 
                     <div className="bg-[#d1182b] left-0 right-0 w-full flex justify-center items-center text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
                       <AddToCartButtonCard productId={item.productId} />

@@ -13,22 +13,21 @@ function ProductTabs({ product, parentRef }) {
   const [tabProDetails, setTabProDetails] = useState(
     product.product.typeId === 3 ? 1 : 2
   );
-  const [topPosition, setTopPosition] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
   const elementRef = useRef(null);
 
-  const [parentLeft, setParentLeft] = useState(0);
-  const [parentRight, setParentRight] = useState(0);
   const [boxLeft, setBoxLeft] = useState(0);
   const [boxWidth, setBoxWidth] = useState(0);
   const [scrollSpyDisabled, setScrollSpyDisabled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
 
   // refs for each section
   const bundleRef = useRef(null);
   const detailsRef = useRef(null);
   const specsRef = useRef(null);
   const accessoriesRef = useRef(null);
-  const relatedVideosRef = useRef(null); // جدید
+  const relatedVideosRef = useRef(null);
   const commentsRef = useRef(null);
   const qaRef = useRef(null);
   const segmentedBoxRef = useRef(null);
@@ -68,7 +67,6 @@ function ProductTabs({ product, parentRef }) {
         window.requestAnimationFrame(() => {
           let found = false;
           const scrollY = window.scrollY;
-          const windowHeight = window.innerHeight;
 
           // ابتدا چک کنیم که آیا در محدوده باکس تب‌ها هستیم یا نه
           if (elementRef.current) {
@@ -171,9 +169,6 @@ function ProductTabs({ product, parentRef }) {
     if (val === 6) ref = qaRef;
     if (val === 7 && hasRelatedVideos) ref = relatedVideosRef;
     if (ref && ref.current && elementRef.current) {
-      const rect = elementRef.current.getBoundingClientRect();
-      const scrollY = window.scrollY;
-      const elementTop = rect.top + scrollY;
       const stickyTop = 100;
       const extraOffset = 150;
       const offset =
@@ -187,7 +182,7 @@ function ProductTabs({ product, parentRef }) {
     // بعد از اسکرول، scroll spy را دوباره فعال کن
     setTimeout(() => {
       setScrollSpyDisabled(false);
-    }, 1000);
+    }, 0);
   };
 
   useEffect(() => {
@@ -200,13 +195,19 @@ function ProductTabs({ product, parentRef }) {
         const elementHeight = element.offsetHeight;
         const elementBottom = absoluteTop + elementHeight;
 
-        setTopPosition(absoluteTop);
 
         // اگر اسکرول به باکس تب‌ها رسید و هنوز از آن عبور نکرده، آن را فیکس کن
         if (scrollY >= absoluteTop - 100 && scrollY < elementBottom - 500) {
           setIsSticky(true);
+          setIsHidden(false);
+        } else if (
+          scrollY >= absoluteTop - 100 &&
+          scrollY >= elementBottom - 500
+        ) {
+          setIsHidden(true);
         } else {
           setIsSticky(false);
+          setIsHidden(false);
         }
       }
     };
@@ -225,8 +226,6 @@ function ProductTabs({ product, parentRef }) {
   useEffect(() => {
     if (parentRef && parentRef.current) {
       const rect = parentRef.current.getBoundingClientRect();
-      setParentLeft(rect.left + window.scrollX);
-      setParentRight(window.innerWidth - (rect.right + window.scrollX));
     }
   }, [parentRef]);
 
@@ -293,7 +292,7 @@ function ProductTabs({ product, parentRef }) {
       `}</style>
       <div
         ref={elementRef}
-        className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative"
+        className={`flex flex-wrap bg-white rounded-lg mt-3 z-50 relative`}
       >
         <div
           ref={segmentedBoxRef}
@@ -321,7 +320,9 @@ function ProductTabs({ product, parentRef }) {
         >
           <Segmented
             ref={segmentedRef}
-            className="font-semibold text-3xl w-full overflow-auto"
+            className={`font-semibold text-3xl w-full overflow-auto ${
+              isHidden ? "!hidden" : ""
+            }`}
             dir="rtl"
             style={{
               padding: "8px",
@@ -342,9 +343,9 @@ function ProductTabs({ product, parentRef }) {
               <BundleProducts product={product} />
             </div>
           )}
-          <Divider />
+          <Divider style={{ margin: 0, padding: 0 }} />
 
-          <div ref={detailsRef} className="tab-section-scroll-anchor">
+          <div ref={detailsRef} className="tab-section-scroll-anchor pt-2">
             <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
               توضیحات محصول
             </h4>

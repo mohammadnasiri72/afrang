@@ -14,8 +14,9 @@ export default async function UserAddDetails(props) {
   const product = await getProductSecId(id);
 
   if (product.type === "error") {
-   notFound()
+    notFound();
   }
+
 
   return (
     <>
@@ -24,7 +25,10 @@ export default async function UserAddDetails(props) {
         <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative">
           <div className="lg:w-[30%] w-full p-2">
             {product?.imageList?.length > 0 && (
-              <SliderProductSecImg attachments={product.imageList} />
+              <SliderProductSecImg
+                attachments={product.imageList}
+                isAfrangOffer={product.isAfrangOffer}
+              />
             )}
           </div>
           <div className="lg:w-[70%] w-full p-2">

@@ -50,6 +50,7 @@ export default async function Home() {
     page: 1,
     pageSize: 12,
     orderBy: "2",
+    ConditionId: 10,
   });
 
   const oldProducts = await getProducts({

@@ -1,20 +1,21 @@
-import { getCategory } from '@/services/Category/categoryService';
-import { getItem } from '@/services/Item/item';
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { getCategory } from "@/services/Category/categoryService";
+import { getItem } from "@/services/Item/item";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
-const HeaderBlog = dynamic(() => import('@/components/blog/HeaderBlog'));
-const FeaturedBlog = dynamic(() => import('@/components/blog/FeaturedBlog'));
-const CategoryBlog = dynamic(() => import('@/components/blog/CategoryBlog'));
-const BoxImgBlog = dynamic(() => import('@/components/blog/BoxImgBlog'));
+const HeaderBlog = dynamic(() => import("@/components/blog/HeaderBlog"));
+const FeaturedBlog = dynamic(() => import("@/components/blog/FeaturedBlog"));
+const CategoryBlog = dynamic(() => import("@/components/blog/CategoryBlog"));
+const BoxImgBlog = dynamic(() => import("@/components/blog/BoxImgBlog"));
 
 // Import skeleton components
-import HeaderBlogSkeleton from '@/components/skeletons/HeaderBlogSkeleton';
-import FeaturedBlogSkeleton from '@/components/skeletons/FeaturedBlogSkeleton';
-import CategoryBlogSkeleton from '@/components/skeletons/CategoryBlogSkeleton';
-import BoxImgBlogSkeleton from '@/components/skeletons/BoxImgBlogSkeleton';
+import BoxImgBlogSkeleton from "@/components/skeletons/BoxImgBlogSkeleton";
+import CategoryBlogSkeleton from "@/components/skeletons/CategoryBlogSkeleton";
+import FeaturedBlogSkeleton from "@/components/skeletons/FeaturedBlogSkeleton";
+import HeaderBlogSkeleton from "@/components/skeletons/HeaderBlogSkeleton";
 
-export default async function Blog({ searchParams }) {
+export default async function Blog(prop) {
+  const searchParams = await prop.searchParams;
   // دریافت دسته‌بندی‌ها
   const category = await getCategory({
     TypeId: 5,
@@ -23,8 +24,10 @@ export default async function Blog({ searchParams }) {
 
   // دریافت مقالات برای SSR
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
-  const pageSize = searchParams?.pageSize ? parseInt(searchParams.pageSize) : 12;
-  
+  const pageSize = searchParams?.pageSize
+    ? parseInt(searchParams.pageSize)
+    : 12;
+
   let blogs;
   try {
     blogs = await getItem({
@@ -40,6 +43,7 @@ export default async function Blog({ searchParams }) {
     blogs = [];
   }
 
+
   return (
     <div className="bg-[#f6f6f6] overflow-hidden">
       <Suspense fallback={<HeaderBlogSkeleton />}>
@@ -52,7 +56,7 @@ export default async function Blog({ searchParams }) {
         <CategoryBlog category={category} searchParams={searchParams} />
       </Suspense>
       <Suspense fallback={<BoxImgBlogSkeleton />}>
-        <BoxImgBlog blogs={blogs} />
+        <BoxImgBlog blogs={blogs} searchParams={searchParams}/>
       </Suspense>
     </div>
   );

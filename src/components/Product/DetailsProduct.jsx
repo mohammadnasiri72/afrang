@@ -17,7 +17,7 @@ function DetailsProduct({ product }) {
 
   if (loading) {
     return (
-      <div className="py-9 px-7">
+      <div className="py-5 px-7">
         <Skeleton active paragraph={{ rows: 2 }} />
         <div className="mt-4">
           <Skeleton.Image active className="!w-full !h-48" />
@@ -31,7 +31,7 @@ function DetailsProduct({ product }) {
 
   if (!product?.product?.body) {
     return (
-      <div className="py-9 px-7">
+      <div className="py-5 px-7">
         <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8">
           <div className="flex justify-center mb-6">
             <FaFileAlt className="text-6xl text-[#d1182b] opacity-80" />
@@ -49,7 +49,7 @@ function DetailsProduct({ product }) {
 
   return (
     <>
-      <div className="py-9 px-7">
+      <div className="py-5 px-7">
         <div
           className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: product.product.body }}

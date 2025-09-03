@@ -8,7 +8,9 @@ import BlogPagination from "./BlogPagination";
 import EmptyBlogs from "./EmptyBlogs";
 import ExpandableText from "./ExpandableText";
 
-async function BoxImgBlog({ blogs = [] }) {
+async function BoxImgBlog({ blogs = [] , searchParams }) {
+  console.log(searchParams);
+  
   const formatPersianDate = (dateString) => {
     try {
       const persianMonths = [
@@ -101,7 +103,7 @@ async function BoxImgBlog({ blogs = [] }) {
           </div>
         ))}
       </div>
-      <BlogPagination blogs={blogs} />
+      <BlogPagination blogs={blogs} searchParams={searchParams}/>
       {blogs.length === 0 && <EmptyBlogs />}
     </Container>
   );

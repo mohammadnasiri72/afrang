@@ -1,22 +1,20 @@
 "use client";
 
-import { setLoadingBlog } from "@/redux/slices/blogSlice";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 import { FaCaretDown } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 
 function SelectCategoryClient({ category, activeCategory, currentSearchParams }) {
-  const dispatch = useDispatch();
   const router = useRouter();
 
   const handleChange = (value) => {
-    dispatch(setLoadingBlog(true));
+    // dispatch(setLoadingBlog(true));
     const params = new URLSearchParams(currentSearchParams);
     if (value === "all") {
       params.delete("category");
     } else {
       params.set("category", value);
+      params.delete("page");
     }
     router.push(`?${params.toString()}`);
   };

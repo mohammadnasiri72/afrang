@@ -35,8 +35,9 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-export default function SliderProductSecImg({ attachments }) {
+export default function SliderProductSecImg({ attachments, isAfrangOffer }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
 
   useEffect(() => {
     import("@fancyapps/ui/dist/fancybox/fancybox.css");
@@ -87,12 +88,19 @@ export default function SliderProductSecImg({ attachments }) {
                 ))}
                 {/* کالای کارکرده */}
                 <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                 دست دوم کاربران
+                  دست دوم 
                 </div>
-                 {/* پیشنهاد کاربران */}
-              <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                پیشنهاد کاربران
-              </div>
+                {/* پیشنهاد کاربران */}
+                {isAfrangOffer ? (
+                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    پیشنهاد افرنگ
+                  </div>
+                ) : (
+                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    پیشنهاد کاربران
+                  </div>
+                )}
+               
               </Swiper>
               <Swiper
                 style={{

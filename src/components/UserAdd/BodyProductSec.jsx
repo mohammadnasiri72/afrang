@@ -27,7 +27,9 @@ function BodyProductSec({ product }) {
       <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 overflow-hidden">
         {/* Header */}
         <div className="border-b border-gray-200 pb-4 mb-6">
-          <div className="flex items-center flex-wrap justify-between mb-2">
+          <div className="flex items-start flex-wrap justify-between mb-2">
+            <div className="flex flex-col items-start">
+
             <h1
               data-id={product.id}
               className="sm:text-2xl text-lg font-bold text-gray-900"
@@ -37,6 +39,7 @@ function BodyProductSec({ product }) {
             <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
               {product.categoryTitle}
             </span>
+            </div>
             {product.isArchive && (
               <span className="sm:text-sm text-xs text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
                 آرشیو شده

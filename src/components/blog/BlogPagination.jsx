@@ -1,40 +1,78 @@
+
+
+
 "use client";
 
-import { setLoadingBlog } from "@/redux/slices/blogSlice";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
 const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
+  // const params = new URLSearchParams(searchParams.toString());
 
-  const handlePageChange = (page) => {
-    dispatch(setLoadingBlog(true));
+  const createPageURL = (page) => {
     const params = new URLSearchParams(initialSearchParams);
-
+    
     if (page !== 1) {
-      params.set("page", page);
-      router.push(`?${params.toString()}`);
+      params.set("page", page.toString());
     } else {
       params.delete("page");
-      router.push(`?${params.toString()}`);
     }
+    
+    return `${pathname}?${params.toString()}`;
+  };
+
+  const handlePageChange = (page) => {
+    const url = createPageURL(page);
+    router.push(url);
   };
 
   const handlePageSizeChange = (size) => {
-    dispatch(setLoadingBlog(true));
     const params = new URLSearchParams(initialSearchParams);
+    
     if (size !== 12) {
-      params.set("pageSize", size);
-      params.delete("page");
-      router.push(`?${params.toString()}`);
+      params.set("pageSize", size.toString());
     } else {
       params.delete("pageSize");
-      params.delete("page");
-      router.push(`?${params.toString()}`);
     }
+    
+    params.delete("page");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  // تابع برای رندر کردن لینک‌های واقعی
+  const itemRender = (current, type, originalElement) => {
+    if (type === 'page') {
+      return (
+        <Link 
+          href={createPageURL(current)} 
+          passHref
+          legacyBehavior
+        >
+          <a 
+            rel="follow" 
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(current);
+            }}
+            className="ant-pagination-item-link"
+          >
+            {current}
+          </a>
+        </Link>
+      );
+    }
+    
+   
+    
+   
+    
+    return originalElement;
   };
 
   const page = Number(initialSearchParams?.page) || 1;
@@ -48,22 +86,21 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
           className="relative z-50 w-full flex justify-center py-3 sm:flex-row flex-col-reverse items-center"
         >
           <div className="flex items-center">
-         
-          <span className="sm:mt-0 mt-3 select-none">{`مجموع ${blogs[0]?.total} آیتم`}</span>
-          <div className="flex items-center mt-3 sm:hidden ">
-           <Select
-             value={pageSize}
-             style={{ width: 55 }}
-             onChange={handlePageSizeChange}
-             options={[
-               { value: 12, label: "12" },
-               { value: 24, label: "24" },
-               { value: 50, label: "50" },
-               { value: 100, label: "100" },
-             ]}
-           />
-            <span className="px-1">: تعداد در هر صفحه </span>
-         </div>
+            <span className="sm:mt-0 mt-3 select-none">{`مجموع ${blogs[0]?.total} آیتم`}</span>
+            <div className="flex items-center mt-3 sm:hidden ">
+              <Select
+                value={pageSize}
+                style={{ width: 55 }}
+                onChange={handlePageSizeChange}
+                options={[
+                  { value: 12, label: "12" },
+                  { value: 24, label: "24" },
+                  { value: 50, label: "50" },
+                  { value: 100, label: "100" },
+                ]}
+              />
+              <span className="px-1">: تعداد در هر صفحه </span>
+            </div>
           </div>
 
           <Pagination
@@ -71,12 +108,13 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
             total={blogs[0]?.total}
             pageSize={pageSize}
             onChange={handlePageChange}
+            itemRender={itemRender} 
             showSizeChanger={false}
             pageSizeOptions={[12, 24, 50, 100]}
             defaultPageSize={12}
           />
+          
           <div className="sm:flex hidden items-center">
-           
             <Select
               value={pageSize}
               style={{ width: 55 }}
@@ -88,7 +126,7 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
                 { value: 100, label: "100" },
               ]}
             />
-             <span className="px-1">: تعداد در هر صفحه </span>
+            <span className="px-1">: تعداد در هر صفحه </span>
           </div>
         </div>
       )}

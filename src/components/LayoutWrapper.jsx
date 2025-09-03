@@ -1,12 +1,10 @@
 // این فایل نیازی به "use client" ندارد چون یک Server Component است
-import { setPopupsList } from "@/redux/slices/popupsSlice";
-import { getPopUpsData } from "@/services/popups/popups";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Dialog, DialogActions, DialogContent, Slide } from "@mui/material";
 import { Button } from "antd";
 import { usePathname } from "next/navigation";
 import { forwardRef, Suspense, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Footer from "./Footer";
 import HeaderNavbarWrapper from "./HeaderNavbarWrapper";
@@ -31,7 +29,7 @@ export default function LayoutWrapper({
   itemsSupport,
   socialNetworks,
   footerMenu,
-  popupsData
+  popupsData,
 }) {
   if (!showHeaderFooter) {
     return <>{children}</>;
@@ -41,6 +39,7 @@ export default function LayoutWrapper({
   const [openModal, setOpenModal] = useState(false);
   const [dataPopup, setDataPopup] = useState({});
   const pathname = usePathname();
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -58,16 +57,6 @@ export default function LayoutWrapper({
       setDataPopup(popupsList.find((e) => e.category === "popup_site"));
     }
   }, [popupsList]);
-
-  // تنظیمات Toast
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
 
  
 
@@ -232,7 +221,7 @@ export default function LayoutWrapper({
     <>
       <div className={showPro ? "" : "pb-16 sm:pb-0"}>
         <div className={showCart ? "" : "pb-28 sm:pb-0"}>
-          <SubHeader popupsList={popupsData}/>
+          {popupsData.length > 0 && <SubHeader popupsList={popupsData} />}
           <HeaderNavbarWrapper menuItems={menuItems} />
           <SocialNetworks />
           {children}

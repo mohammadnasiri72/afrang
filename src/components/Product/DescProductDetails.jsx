@@ -1,6 +1,5 @@
 "use client";
 import { setSelectedColorMode } from "@/redux/slices/productColorSlice";
-import { getItemById } from "@/services/Item/item";
 import { addToRecentViews } from "@/utils/recentViews";
 import { Alert } from "antd";
 import Link from "next/link";
@@ -12,7 +11,6 @@ import SelectProductMokamel from "./SelectProductMokamel";
 import SelectedInsurance from "./SelectedInsurance";
 
 function DescProductDetails({ product }) {
-  const [brand, setBrand] = useState({});
 
   const { settings } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
@@ -24,20 +22,7 @@ function DescProductDetails({ product }) {
     }
   }, [product]);
 
-  useEffect(() => {
-    const fetchBrand = async () => {
-      try {
-        if (product?.product?.brandId) {
-          const brandId = await getItemById(product?.product?.brandId);
-          setBrand(brandId || {});
-        }
-      } catch (error) {
-        console.error("Error fetching brand:", error);
-      }
-    };
-
-    fetchBrand();
-  }, [product?.product?.brandId]);
+ 
 
   useEffect(() => {
     if (!product?.productModes || product?.productModes.length === 0) {
@@ -80,12 +65,19 @@ function DescProductDetails({ product }) {
                 </span>
               </div>
             )}
-            {brand?.title && (
+            {/* {brand?.title && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
                 <span className="text-xs">برند : </span>
                 <span className="text-xs">{brand.title}</span>
               </div>
-            )}
+            )} */}
+            {
+              product?.product?.brandTitle &&
+              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+                <span className="text-xs">برند : </span>
+                <span className="text-xs">{product?.product?.brandTitle}</span>
+              </div>
+            }
           </div>
           {/* <div className="flex items-center gap-1 font-medium text-[#333a] hover:text-[#d1182b] duration-300 cursor-pointer">
             <MdLocalPrintshop />

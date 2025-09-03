@@ -1,6 +1,8 @@
 "use client";
 
+import { Spin } from "antd";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -8,10 +10,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function BoxImgBranding({ brands }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
+  if (isPending) {
+    return (
+      <div className="fixed top-0 bottom-0 left-0 right-0 bg-white flex justify-center items-center z-[46546546]">
+          <Spin />
+      </div>
+    );
+  }
 
   return (
-    <div className="md:px-16 px-2  relative">
+    <div className="relative">
       <div className="absolute left-0 -top-52">
         <img src="/images/gallery/bg-shadow-1.png" alt="" />
       </div>
@@ -48,7 +58,9 @@ export default function BoxImgBranding({ brands }) {
           <SwiperSlide key={brand.id}>
             <img
               onClick={() => {
-                router.push(`/products?brandid=${brand.id}`);
+                startTransition(() => {
+                  router.push(`/products?brandid=${brand.id}`);
+                });
               }}
               src={`https://afrangadmin.aitest2.ir${brand.image}`}
               alt={brand.title}
