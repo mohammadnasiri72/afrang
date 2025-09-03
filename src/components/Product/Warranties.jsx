@@ -4,9 +4,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  Tooltip,
 } from "@mui/material";
-import { FaInfoCircle } from "react-icons/fa";
 
 function Warranties({
   warrantiesArray,
@@ -48,7 +46,7 @@ function Warranties({
                         disabled ? "text-gray-500" : ""
                       }`}
                     >
-                      {warranty.title}
+                      {warranty.title} {warranty.desc}
                     </span>
                   </div>
                   {warranty.finalPrice > 0 && (
@@ -59,7 +57,7 @@ function Warranties({
                       <span>تومان</span>
                     </div>
                   )}
-                  {warranty.desc && (
+                  {/* {warranty.desc && (
                     <div className="absolute left-2 top-2">
                       <Tooltip
                         sx={{ fontFamily: "yekan" }}
@@ -68,7 +66,7 @@ function Warranties({
                         <FaInfoCircle className="text-[#4A90E2]" />
                       </Tooltip>
                     </div>
-                  )}
+                  )} */}
                 </div>
               }
             />

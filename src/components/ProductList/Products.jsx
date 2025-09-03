@@ -14,8 +14,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import AddToCartButton from "./AddToCartButton";
 import CompareButtonBtn from "./CompareButtonBtn";
-import ShowImgProduct from "./ShowImgProduct";
 import PriceProduct from "./PriceProduct";
+import ShowImgProduct from "./ShowImgProduct";
 
 function Products({ products }) {
   const layoutProducts = useSelector(
@@ -150,7 +150,10 @@ function Products({ products }) {
                   href={product.url}
                   className="hover:text-[#d1182b] duration-300"
                 >
-                  <h2 className="font-semibold text-sm line-clamp-3 mb-1 text-justify">
+                  <h2
+                    data-id={product.productId}
+                    className="font-semibold text-sm line-clamp-3 mb-1 text-justify"
+                  >
                     {product.title}
                   </h2>
                 </Link>
@@ -248,7 +251,10 @@ function Products({ products }) {
                   href={product.url}
                   className="hover:text-[#d1182b] duration-300"
                 >
-                  <h2 className="font-semibold sm:text-lg text-sm text-justify">
+                  <h2
+                    data-id={product.productId}
+                    className="font-semibold sm:text-lg text-sm text-justify"
+                  >
                     {product.title}
                   </h2>
                 </Link>
@@ -378,7 +384,9 @@ function Products({ products }) {
           href={`${product.url}`}
           className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
         >
-          <h2 className="text-justify">{product.title}</h2>
+          <h2 data-id={product.productId} className="text-justify">
+            {product.title}
+          </h2>
         </Link>
         <div className="flex items-center justify-center gap-3 mb-2">
           {product.fastShipping && (
@@ -452,11 +460,8 @@ function Products({ products }) {
           : "space-y-5 mt-5"
       }
     >
-      {products.map((product , i) => (
-        <div
-          key={i}
-          className={layoutProducts === "grid" ? "h-full" : ""}
-        >
+      {products.map((product, i) => (
+        <div key={i} className={layoutProducts === "grid" ? "h-full" : ""}>
           {layoutProducts === "grid" ? (
             <GridProductCard product={product} />
           ) : (

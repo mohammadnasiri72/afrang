@@ -82,6 +82,8 @@ export default function DescCompeletePay() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const descShipping = useSelector((state) => state.shipping.descShipping);
+
   useEffect(() => {
     setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
   }, [currentItems]);
@@ -321,10 +323,10 @@ export default function DescCompeletePay() {
                   </div>
                 )}
 
-                {estimateData?.shipmentDesc && (
+                {descShipping?.freeShippingDesc && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
-                    <span>توضیحات ارسال</span>
-                    <span>{estimateData?.shipmentDesc}</span>
+                    <span className="whitespace-nowrap">توضیحات ارسال</span>
+                    <span className="text-end">{descShipping?.freeShippingDesc}</span>
                   </div>
                 )}
 

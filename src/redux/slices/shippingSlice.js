@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     selectedShipping: null,
-    shippingMethods: []
+    shippingMethods: [],
+    descShipping : ''
 };
 
 const shippingSlice = createSlice({
@@ -15,6 +16,9 @@ const shippingSlice = createSlice({
         setShippingMethods: (state, action) => {
             state.shippingMethods = action.payload;
         },
+        setDescShipping: (state, action) => {
+            state.descShipping = action.payload;
+        },
         clearShippingState: (state) => {
             state.selectedShipping = null;
             state.shippingMethods = [];
@@ -22,5 +26,5 @@ const shippingSlice = createSlice({
     }
 });
 
-export const { setSelectedShipping, setShippingMethods, clearShippingState } = shippingSlice.actions;
+export const { setSelectedShipping, setShippingMethods, clearShippingState , setDescShipping} = shippingSlice.actions;
 export default shippingSlice.reducer; 

@@ -33,7 +33,7 @@ function BoxTabDetailsProduct({ product }) {
   const [loadingConfirm, setLoadingConfirm] = useState(false);
   const [dataContact, setDataContact] = useState({});
 
-  const user = Cookies.get("user");
+  const user = Cookies.get("user") || '{}';
   const token = JSON.parse(user).token;
 
   const showModal = () => {

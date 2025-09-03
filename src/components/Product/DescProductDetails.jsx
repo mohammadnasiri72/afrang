@@ -45,11 +45,15 @@ function DescProductDetails({ product }) {
     }
   }, [product]);
 
+
   return (
     <>
       <div className="px-3">
         <div className="flex items-center justify-between flex-wrap ">
-          <h1 className="py-[15px] font-semibold text-lg">
+          <h1
+            data-id={product.product.productId}
+            className="py-[15px] font-semibold text-lg"
+          >
             {product.product.title}
           </h1>
           {product?.product?.visit && (
@@ -148,12 +152,12 @@ function DescProductDetails({ product }) {
             <SelectColorProduct product={product} />
           </div>
         )}
-        {
-          product?.insurance && product?.insurance?.insuranceWays?.length > 0 &&
-          <div>
-            <SelectedInsurance product={product}/>
-          </div>
-        }
+        {product?.insurance &&
+          product?.insurance?.insuranceWays?.length > 0 && (
+            <div>
+              <SelectedInsurance product={product} />
+            </div>
+          )}
         {product?.product?.optionalId && (
           <SelectProductMokamel product={product} />
         )}

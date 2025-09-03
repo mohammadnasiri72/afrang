@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 
 function DescPayment({ estimateData }) {
   const { currentItems, cartType } = useSelector((store) => store.cart);
+   const descShipping = useSelector((state) => state.shipping.descShipping);
   const [loading, setLoading] = useState(false);
   const selectedPayment = useSelector(
     (state) => state.paymentWay.selectedPayment
@@ -210,12 +211,18 @@ function DescPayment({ estimateData }) {
               </div>
             )}
 
-            {estimateData?.shipmentDesc && (
+            {/* {estimateData?.shipmentDesc && (
               <div className="flex justify-between text-[#444] py-1 font-bold">
                 <span>توضیحات ارسال</span>
                 <span>{estimateData?.shipmentDesc}</span>
               </div>
-            )}
+            )} */}
+             {descShipping?.freeShippingDesc && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span className="whitespace-nowrap">توضیحات ارسال</span>
+                    <span className="text-end">{descShipping?.freeShippingDesc}</span>
+                  </div>
+                )}
 
             <hr className="border-[#6666] my-3" />
 

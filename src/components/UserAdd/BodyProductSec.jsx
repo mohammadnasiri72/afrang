@@ -16,6 +16,11 @@ function BodyProductSec({ product }) {
     return dateString;
   };
 
+  // تابع نمایش HTML content
+  const renderHTML = (htmlContent) => {
+    return { __html: htmlContent };
+  };
+
 
   return (
     <>
@@ -23,12 +28,20 @@ function BodyProductSec({ product }) {
         {/* Header */}
         <div className="border-b border-gray-200 pb-4 mb-6">
           <div className="flex items-center flex-wrap justify-between mb-2">
-            <h1 className="sm:text-2xl text-lg font-bold text-gray-900 line-clamp-1">
+            <h1
+              data-id={product.id}
+              className="sm:text-2xl text-lg font-bold text-gray-900"
+            >
               {product.title}
             </h1>
             <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
               {product.categoryTitle}
             </span>
+            {product.isArchive && (
+              <span className="sm:text-sm text-xs text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
+                آرشیو شده
+              </span>
+            )}
           </div>
           <div className="flex flex-wrap items-center justify-between">
             {(!product.price || product.price === 0) && (
@@ -98,8 +111,7 @@ function BodyProductSec({ product }) {
                 </span>
                 <span className="text-gray-900 font-semibold">
                   {product?.modifiedFa?.split(" ").length > 0 &&
-                   formatDate(product?.modifiedFa?.split(" ")[0])
-                  }
+                    formatDate(product?.modifiedFa?.split(" ")[0])}
                 </span>
               </div>
 
@@ -156,6 +168,34 @@ function BodyProductSec({ product }) {
           className="text-justify"
         />
         <BoxTabDetailsProduct product={product} />
+
+        <div className="hidden">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="text-gray-700 leading-relaxed !text-justify">
+              {product.appearance ? product.appearance : "موردی ثبت نشده است"}
+            </p>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            {product.body ? (
+              <div
+                className="text-gray-700 leading-relaxed prose prose-sm max-w-none !text-justify"
+                dangerouslySetInnerHTML={renderHTML(product.body)}
+              />
+            ) : (
+              "موردی ثبت نشده است"
+            )}
+          </div>
+          <div className="mt-3">
+            <Alert
+              message="
+   صحت و سقم اطلاعات وارد شده به عهده کاربر می باشد و افرنگ در این مورد هیچ گونه مسئولیتی را نمی پذیرد.
+   "
+              type="info"
+              showIcon
+              className="text-justify"
+            />
+          </div>
+        </div>
       </div>
     </>
   );

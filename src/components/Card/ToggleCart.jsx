@@ -1,8 +1,8 @@
 "use client";
 
-import { fetchCartData, setCartType } from '@/redux/slices/cartSlice';
+import { setCartType } from '@/redux/slices/cartSlice';
 import { Segmented } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 function ToggleCart() {
@@ -10,11 +10,6 @@ function ToggleCart() {
   const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-
-  // دریافت هر دو سبد خرید در ابتدای لود کامپوننت
-  // useEffect(() => {
-  //   dispatch(fetchCartData());
-  // }, [dispatch]);
 
   const handleToggle = (value) => {
     setTypeArticle(value);

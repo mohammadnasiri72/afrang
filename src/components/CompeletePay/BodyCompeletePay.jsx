@@ -1,15 +1,16 @@
 "use client";
-import { setSelectedAddress } from '@/redux/slices/addressSlice';
-import { setSelectedShipping } from '@/redux/slices/shippingSlice';
+import {
+  setDescShipping,
+  setSelectedShipping,
+} from "@/redux/slices/shippingSlice";
 import { getWaySend } from "@/services/order/orderService";
 import Cookies from "js-cookie";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BoxAddress from "./BoxAddress";
 import BoxLegal from "./BoxLegal";
 import ShowProductBasket from "./ShowProductBasket";
 import WaySend from "./WaySend";
-import { getAddress } from '@/services/User/UserServices';
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const WaySendSkeleton = () => {
@@ -48,10 +49,11 @@ export default function BodyCompeletePay() {
   const [isShippingLoading, setIsShippingLoading] = useState(false);
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
+
+  const selectedShipping = useSelector(
+    (state) => state.shipping.selectedShipping
+  );
   
-  
-  const selectedShipping = useSelector((state) => state.shipping.selectedShipping);
- 
 
   const [highlightShipping, setHighlightShipping] = useState(false);
   const waySendRef = useRef(null);
@@ -71,8 +73,6 @@ export default function BodyCompeletePay() {
     }
   }, [selectedAddress]);
 
-  
-
   // get WaySend
   const WaySendFu = async () => {
     try {
@@ -81,27 +81,28 @@ export default function BodyCompeletePay() {
         const items = await getWaySend(selectedAddress.provinceId, token);
         if (items) {
           setWaySendList(items);
+          dispatch(setDescShipping(items));
           if (items.shippingWays?.length === 1) {
             // اگر فقط یک روش ارسال وجود دارد، آن را انتخاب کن
             dispatch(setSelectedShipping(items.shippingWays[0]));
           } else {
             // اگر چند روش ارسال وجود دارد، هیچ کدام را انتخاب نکن
             dispatch(setSelectedShipping(null));
+            dispatch(setDescShipping(""));
           }
         }
       } else {
         // اگر آدرسی انتخاب نشده، لیست روش‌های ارسال را پاک کن
         setWaySendList({ shippingWays: [] });
+        dispatch(setDescShipping(""));
         dispatch(setSelectedShipping(null));
       }
     } catch (error) {
-      console.error('Error fetching shipping methods:', error);
+      console.error("Error fetching shipping methods:", error);
     } finally {
       setIsShippingLoading(false);
     }
   };
-
-  
 
   // Load shipping methods when address changes
   useEffect(() => {
@@ -112,11 +113,8 @@ export default function BodyCompeletePay() {
 
   const handleShippingChange = (shipping) => {
     dispatch(setSelectedShipping(shipping));
+    
   };
-
- 
-
- 
 
   return (
     <div className="lg:w-3/4 w-full lg:pl-5">
@@ -125,14 +123,23 @@ export default function BodyCompeletePay() {
       </div>
       <div className="mt-5">
         <BoxAddress
-          onAddressDelete={() => setWaySendList({ shippingWays: [] })}
+          onAddressDelete={() => {
+            setWaySendList({ shippingWays: [] });
+            dispatch(setDescShipping(""));
+          }}
         />
       </div>
       <div className="mt-4" ref={waySendRef}>
         {isShippingLoading ? (
           <WaySendSkeleton />
         ) : (
-          <div className={highlightShipping ? "ring-4 ring-[#d1182b] rounded-xl transition-all duration-500" : "transition-all duration-500"}>
+          <div
+            className={
+              highlightShipping
+                ? "ring-4 ring-[#d1182b] rounded-xl transition-all duration-500"
+                : "transition-all duration-500"
+            }
+          >
             <WaySend
               waySendList={waySendList}
               selectedShipping={selectedShipping}

@@ -46,7 +46,6 @@ async function BodyProduct({ product }) {
       product?.product?.relatedId
     );
   }
-  console.log(relatedProducts);
 
   return (
     <>
