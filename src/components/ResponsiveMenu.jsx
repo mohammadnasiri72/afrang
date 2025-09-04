@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import { Drawer, Menu } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
   FaAddressBook,
   FaBuilding,
@@ -27,7 +27,6 @@ import {
 } from "react-icons/fa";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "./Loading";
 import SubmenuDropdown from "./SubmenuDropdown";
 
 import { keyframes } from "@emotion/react";
@@ -156,16 +155,18 @@ const AnimatedPaper = styled(StyledPaper)`
   animation: ${slideDown} 0.3s ease-in;
 `;
 
-function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
+function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransition}) {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-  const { items: itemsFromRedux, openMenuRes } = useSelector((state) => state.menuRes);
-  const items = initialItems && initialItems.length ? initialItems : itemsFromRedux;
+  const { items: itemsFromRedux, openMenuRes } = useSelector(
+    (state) => state.menuRes
+  );
+  const items =
+    initialItems && initialItems.length ? initialItems : itemsFromRedux;
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
-  
 
   const [expandedChildren, setExpandedChildren] = useState(new Set());
   const menuRef = useRef(null);
@@ -187,6 +188,9 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
   });
 
   const { settings } = useSelector((state) => state.settings);
+
+  
+
 
   // باید قبل از هر استفاده‌ای از open تعریف شود
   const open = Boolean(anchorEl);
@@ -303,7 +307,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
   );
 
   // تابع برای مدیریت کلیک روی لینک‌ها
-  const onClose = (url) => {
+  const onClose = () => {
     // بستن دراور
     dispatch(setOpenMenuRes(false));
     // بستن dropdown
@@ -555,8 +559,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
     };
   }, [open, anchorEl, activeMenu, headerHeight, navbarHeight]);
 
-
-
   // Desktop Menu Component
   const DesktopMenu = () => {
     return (
@@ -621,7 +623,19 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <Link
-                      onClick={onClose}
+                      onClick={(e) => {
+                        // بستن دراور
+                        dispatch(setOpenMenuRes(false));
+                        // بستن dropdown
+                        setAnchorEl(null);
+                        setActiveMenu(null);
+
+                        e.preventDefault();
+                        startTransition(() => {
+                          router.push(item.url || item.pageUrl || "#");
+                        });
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
                       href={item.url || item.pageUrl || "#"}
                       className="py-2 cursor-pointer font-semibold"
                     >
@@ -629,7 +643,19 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
                     </Link>
                   ) : (
                     <Link
-                      onClick={onClose}
+                      onClick={(e) => {
+                        // بستن دراور
+                        dispatch(setOpenMenuRes(false));
+                        // بستن dropdown
+                        setAnchorEl(null);
+                        setActiveMenu(null);
+
+                        e.preventDefault();
+                        startTransition(() => {
+                          router.push(item.url || item.pageUrl || "#");
+                        });
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
                       href={item.url || item.pageUrl || "#"}
                     >
                       <div className="py-2 cursor-pointer font-semibold">
@@ -746,7 +772,19 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
           key: item.id,
           label: (
             <Link
-              onClick={onClose}
+              onClick={(e) => {
+                // بستن دراور
+                dispatch(setOpenMenuRes(false));
+                // بستن dropdown
+                setAnchorEl(null);
+                setActiveMenu(null);
+
+                e.preventDefault();
+                startTransition(() => {
+                  router.push(item.url || item.pageUrl || "#");
+                });
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               href={item.url || item.pageUrl || "#"}
               className={`w-full text-right py-2 transition-colors cursor-pointer ${
                 isActivePath(item.url || item.pageUrl)
@@ -791,7 +829,19 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
               key: item.id,
               label: (
                 <Link
-                  onClick={onClose}
+                  onClick={(e) => {
+                    // بستن دراور
+                    dispatch(setOpenMenuRes(false));
+                    // بستن dropdown
+                    setAnchorEl(null);
+                    setActiveMenu(null);
+
+                    e.preventDefault();
+                    startTransition(() => {
+                      router.push(item.path);
+                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   href={item.path}
                   className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer ${
                     isActivePath(item.path)
@@ -916,6 +966,8 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
       </>
     );
   };
+
+
 
   return (
     <>

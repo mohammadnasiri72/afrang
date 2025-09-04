@@ -1,6 +1,7 @@
+import NotFound from "@/app/not-found";
 import Container from "@/components/container";
 import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
-import { getItem, getListItemBanner } from "@/services/Item/item";
+import { getListItemBanner } from "@/services/Item/item";
 import {
   getProductCategory,
   getProducts,
@@ -22,18 +23,16 @@ const PaginationProduct = dynamic(() =>
 
 // کامپوننت اصلی محتوا
 async function ProductContent({ id, searchParams }) {
-const params = await searchParams;
+  const params = await searchParams;
 
   const productCategory = await getProductCategory(id);
-  
+
   const page = params?.page ? parseInt(params.page) : 1;
   const orderBy = params?.orderby ? parseInt(params.orderby) : "";
   const layout = params?.layout ? params.layout : "list";
   const price1 = params?.price1 ? parseInt(params.price1) : 0;
   const price2 = params?.price2 ? parseInt(params.price2) : 100000;
-  const pageSize = params?.pageSize
-    ? parseInt(params.pageSize)
-    : 20;
+  const pageSize = params?.pageSize ? parseInt(params.pageSize) : 20;
   const brandId = params?.brandid || "";
 
   const onlyPrice = params?.onlyprice === "1" ? "1" : undefined;
@@ -56,9 +55,13 @@ const params = await searchParams;
       StatusId: statusId,
       OnlyFest: onlyfest,
       ConditionId: conditionId,
-    }),  
+    }),
     getListItemBanner(4693),
   ]);
+
+  if (products.type === "error") {
+    return NotFound();
+  }
 
   return (
     <>
@@ -76,7 +79,7 @@ const params = await searchParams;
             </h1>
           )}
           <div className="flex flex-col lg:flex-row w-full">
-            <FilterProduct BannerProduct={BannerProduct} id={id}/>
+            <FilterProduct BannerProduct={BannerProduct} id={id} />
             <div className="w-full">
               {!products || products.length === 0 ? (
                 <div className="flex justify-center">
@@ -115,7 +118,6 @@ export default async function ProductList(props) {
 
   let id = 0;
   const pathParts = param.slug;
- 
 
   // پیدا کردن آخرین عدد در URL
   for (let i = pathParts.length - 1; i >= 0; i--) {

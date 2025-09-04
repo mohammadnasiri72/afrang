@@ -1,8 +1,7 @@
-import { getProducts } from "@/services/products/productService";
 import { getItem } from "@/services/Item/item";
-import { FaBoxOpen } from "react-icons/fa6";
+import { getProducts } from "@/services/products/productService";
 import dynamic from "next/dynamic";
-import ErrorProductList from "@/app/products/error";
+import { FaBoxOpen } from "react-icons/fa6";
 
 const FilterProduct = dynamic(() => import("./FilterProduct"));
 const BodyProductList = dynamic(() => import("./BodyProductList"));
@@ -44,7 +43,8 @@ export default async function ProductListWithFilters({ searchParams }) {
       LangCode: "fa",
       CategoryIdArray: "4693",
     }),
-  ]);  
+  ]);
+
 
   return (
     <div className="flex flex-col lg:flex-row w-full">
@@ -71,7 +71,7 @@ export default async function ProductListWithFilters({ searchParams }) {
         <div className="w-full">
           <BodyProductList products={products} layout={layout} />
           <div className="flex justify-center mt-8">
-            <PaginationProduct total={products[0].total} />
+            {/* <PaginationProduct total={products[0].total} /> */}
           </div>
         </div>
       )}

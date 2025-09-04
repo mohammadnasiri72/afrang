@@ -1,5 +1,8 @@
 import { getProductId } from "@/services/products/productService";
+import { getImageUrl, mainDomain } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
+import Head from 'next/head'
+
 
 export const metadata = {
   title: "محصولات",
@@ -15,8 +18,8 @@ export default async function layoutProductDetails({ children, params }) {
   }
 
   return (
-    <html lang="fa" dir="rtl">
-      <head>
+    <>
+      <Head>
         <link
           rel="canonical"
           href="https://www.afrangdigital.com/product/5427/canon-eos-5d-mark-iv-dslr-camera"
@@ -59,9 +62,9 @@ export default async function layoutProductDetails({ children, params }) {
           name="description"
           content={product?.seoInfo?.seoDescription || ""}
         />
-      </head>
+      </Head>
 
-      <body>{children}</body>
-    </html>
+      <main>{children}</main>
+    </>
   );
 }

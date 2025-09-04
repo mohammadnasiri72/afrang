@@ -110,6 +110,8 @@ function InitialDataManager() {
     loadData();
   }, [mounted, cartType, dispatch, userCookie, initialized]);
 
+  
+
   if (isLoading || !mounted)
     return (
       <>
@@ -220,7 +222,6 @@ function Layout({
   footerMenu,
   popupsData,
 }) {
-
   const { store } = makeStore({
     settings: { settings },
     menuRes: {
@@ -230,8 +231,6 @@ function Layout({
       error: null,
     },
   });
-
- 
 
   // no client-time dispatch here to avoid hydration mismatch
 
@@ -290,7 +289,6 @@ function Layout({
             popupsData={popupsData}
           >
             {children}
-           
           </LayoutWrapper>
         </>
 

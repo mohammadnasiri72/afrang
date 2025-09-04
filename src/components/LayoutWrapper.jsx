@@ -5,7 +5,6 @@ import { Button } from "antd";
 import { usePathname } from "next/navigation";
 import { forwardRef, Suspense, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import Footer from "./Footer";
 import HeaderNavbarWrapper from "./HeaderNavbarWrapper";
 import SocialNetworks from "./SocialNetworks";
@@ -40,7 +39,6 @@ export default function LayoutWrapper({
   const [dataPopup, setDataPopup] = useState({});
   const pathname = usePathname();
 
-
   useEffect(() => {
     setTimeout(() => {
       setOpenModal(true);
@@ -57,8 +55,6 @@ export default function LayoutWrapper({
       setDataPopup(popupsList.find((e) => e.category === "popup_site"));
     }
   }, [popupsList]);
-
- 
 
   const handleClose = () => {
     setOpenModal(false);

@@ -1,6 +1,5 @@
 "use client";
 
-import { Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import "swiper/css";
@@ -14,9 +13,11 @@ export default function BoxImgBranding({ brands }) {
 
   if (isPending) {
     return (
-      <div className="fixed top-0 bottom-0 left-0 right-0 bg-white flex justify-center items-center z-[46546546]">
-          <Spin />
-      </div>
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
     );
   }
 
@@ -61,6 +62,7 @@ export default function BoxImgBranding({ brands }) {
                 startTransition(() => {
                   router.push(`/products?brandid=${brand.id}`);
                 });
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               src={`https://afrangadmin.aitest2.ir${brand.image}`}
               alt={brand.title}
