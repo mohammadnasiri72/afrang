@@ -1,22 +1,18 @@
 "use client";
 
+import { setFlag } from "@/redux/slices/idEditSec";
 import { selectUser } from "@/redux/slices/userSlice";
 import { getUserAdFilter2 } from "@/services/UserAd/UserAdServices";
-import {
-  getUserBuyAd,
-  getUserBuyAdId,
-  PostUserBuyAd,
-} from "@/services/UserSellAd/UserSellAdServices";
+import { PostUserBuyAd } from "@/services/UserSellAd/UserSellAdServices";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Alert, Avatar, Button, Input, Segmented, Select, Spin } from "antd";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { FaMobile, FaVoicemail } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductBuy from "./ListProductBuy";
-import { usePathname, useRouter } from "next/navigation";
-import { setFlag } from "@/redux/slices/idEditSec";
 const { TextArea } = Input;
 
 function Buy({ productsSec, productEdit, id }) {
@@ -39,6 +35,8 @@ function Buy({ productsSec, productEdit, id }) {
   const { flag } = useSelector((state) => state.idEdit);
   const pathname = usePathname();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   const disPatch = useDispatch();
 
   useEffect(() => {
@@ -142,7 +140,10 @@ function Buy({ productsSec, productEdit, id }) {
         icon: "success",
         title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
-      router.push("/profile/second-hand");
+      startTransition(() => {
+        router.push("/profile/second-hand");
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       disPatch(setFlag(!flag));
       resetState();
     } catch (error) {
@@ -162,6 +163,16 @@ function Buy({ productsSec, productEdit, id }) {
     customClass: "toast-modal",
   });
 
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="w-full">
@@ -177,8 +188,12 @@ function Buy({ productsSec, productEdit, id }) {
                 فرم خرید کالای دسته دوم
               </h2>
               <button
-                onClick={() => {
-                  router.back();
+                onClick={(e) => {
+                  e.preventDefault();
+                  startTransition(() => {
+                    router.back();
+                  });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
               >

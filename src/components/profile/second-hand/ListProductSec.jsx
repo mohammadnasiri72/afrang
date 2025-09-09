@@ -1,14 +1,26 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import { Empty, Popover } from "antd";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
 import ModalDelete from "./ModalDelete";
 import ModalShowDetails from "./ModalShowDetails";
-import { useRouter } from "next/navigation";
 
 function ListProductSec({ productsSec }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -17,9 +29,12 @@ function ListProductSec({ productsSec }) {
           آگهی های فروش شما
         </h3>
         <button
-          onClick={() => {
-            // setStepPage(1);
-            router.push("/profile/second-hand/add");
+          onClick={(e) => {
+            e.preventDefault();
+            startTransition(() => {
+              router.push("/profile/second-hand/add");
+            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >

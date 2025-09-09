@@ -1,5 +1,6 @@
 "use client";
 
+import { PostContactForm } from "@/services/form/formService";
 import { Segmented, Select } from "antd";
 import { useState } from "react";
 import {
@@ -11,7 +12,6 @@ import {
 import { GoMail } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { useSelector } from "react-redux";
-import { PostContactForm } from "@/services/form/formService";
 import Swal from "sweetalert2";
 
 function BodyContact() {
@@ -26,6 +26,7 @@ function BodyContact() {
     email: "",
     message: "",
   });
+
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -85,11 +86,17 @@ function BodyContact() {
     return error;
   };
 
+  // تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+  const toEnglishNumber = (number) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: toEnglishNumber(value),
     }));
 
     // Validate field on change
@@ -361,28 +368,27 @@ function BodyContact() {
         />
       </div>
 
-        <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
-          <Segmented
-            className="font-semibold text-3xl w-full overflow-auto"
-            dir="rtl"
-            style={{
-              paddingTop: "8px",
-              paddingBottom: "8px",
-              fontFamily: "yekan",
-            }}
-            value={typeArticle}
-            onChange={(e) => {
-              setTypeArticle(e);
-            }}
-            options={[
-              "شماره های تماس",
-              "فکس و سایر تلفن ها",
-              "ایمیل و کد پستی",
-              "ساعات کار",
-            ]}
-          />
-        </div>
-     
+      <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
+        <Segmented
+          className="font-semibold text-3xl w-full overflow-auto"
+          dir="rtl"
+          style={{
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            fontFamily: "yekan",
+          }}
+          value={typeArticle}
+          onChange={(e) => {
+            setTypeArticle(e);
+          }}
+          options={[
+            "شماره های تماس",
+            "فکس و سایر تلفن ها",
+            "ایمیل و کد پستی",
+            "ساعات کار",
+          ]}
+        />
+      </div>
 
       <div className="mt-8">
         <div className="rounded-lg bg-white p-5">

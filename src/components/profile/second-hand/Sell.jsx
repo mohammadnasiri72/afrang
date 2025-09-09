@@ -1,13 +1,10 @@
 "use client";
 
+import { setFlag } from "@/redux/slices/idEditSec";
 import { selectUser } from "@/redux/slices/userSlice";
 import { UploadFile } from "@/services/File/FileServices";
 import { getUserAdFilter } from "@/services/UserAd/UserAdServices";
-import {
-  getUserSellAd,
-  getUserSellAdId,
-  PostUserSellAd,
-} from "@/services/UserSellAd/UserSellAdServices";
+import { PostUserSellAd } from "@/services/UserSellAd/UserSellAdServices";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
@@ -24,7 +21,8 @@ import {
   Tooltip,
   Upload,
 } from "antd";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import {
@@ -34,14 +32,11 @@ import {
   FaTrash,
   FaVoicemail,
 } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductSec from "./ListProductSec";
-import { MdEmail } from "react-icons/md";
-import { usePathname, useRouter } from "next/navigation";
-import { setFlag } from "@/redux/slices/idEditSec";
-import { SettingOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 
 function Sell({ productsSec, productEdit, id }) {
@@ -69,6 +64,7 @@ function Sell({ productsSec, productEdit, id }) {
   const [contactInfoType, setContactInfoType] = useState(0);
   const [showPrice, setShowPrice] = useState(1);
   const user = useSelector(selectUser);
+  const [isPending, startTransition] = useTransition();
 
   const pathname = usePathname();
   const router = useRouter();
@@ -239,7 +235,11 @@ function Sell({ productsSec, productEdit, id }) {
         title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
       disPatch(setFlag((e) => !e));
-      router.push("/profile/second-hand");
+      startTransition(() => {
+        router.push("/profile/second-hand");
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
       resetState();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -336,6 +336,22 @@ function Sell({ productsSec, productEdit, id }) {
     </Select>
   );
 
+  // تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+  const toEnglishNumber = (number) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+  };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="w-full">
@@ -351,8 +367,12 @@ function Sell({ productsSec, productEdit, id }) {
                 فرم فروش کالای دسته دوم
               </h2>
               <button
-                onClick={() => {
-                  router.back();
+                onClick={(e) => {
+                  e.preventDefault();
+                  startTransition(() => {
+                    router.back();
+                  });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626] whitespace-nowrap"
               >
@@ -501,7 +521,10 @@ function Sell({ productsSec, productEdit, id }) {
                   suffix="تومان"
                   value={suggestedPrice.toLocaleString()}
                   onChange={(e) => {
-                    const raw = e.target.value.replace(/,/g, "");
+                    const raw = toEnglishNumber(e.target.value).replace(
+                      /,/g,
+                      ""
+                    );
                     if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
                       const formatted =
                         raw === "" ? "" : Number(raw).toLocaleString();
@@ -893,7 +916,7 @@ function Sell({ productsSec, productEdit, id }) {
                 .text-red-important {
                   color: #ef4444 !important;
                 }
-                
+
                 /* استایل عکس اصلی */
                 .custom-upload-grid .ant-upload-list-item:first-child {
                   border: 2px solid #d1182b !important;

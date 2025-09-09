@@ -820,7 +820,7 @@ th {
 .ant-modal-mask {
   z-index: 109999 !important;
 }
-.ant-select {
+/* .ant-select {
   z-index: 995 !important;
 }
 .ant-select-item-option {
@@ -831,7 +831,7 @@ th {
 }
 .ant-select-item {
   z-index: 995 !important;
-}
+} */
 .custom-tooltip {
   z-index: 1199999 !important;
 }

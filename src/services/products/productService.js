@@ -121,7 +121,7 @@ export const getProductPricing = async (categoryId) => {
 };
 
 // تابع کمکی برای ایجاد تاخیر
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getProductCategory = async (categoryId) => {
   try {

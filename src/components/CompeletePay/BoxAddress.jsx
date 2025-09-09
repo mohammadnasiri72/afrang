@@ -232,7 +232,6 @@ function BoxAddress({ onAddressDelete }) {
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
-                        onClick={e => e.stopPropagation()}
                       >
                         <path
                           strokeLinecap="round"

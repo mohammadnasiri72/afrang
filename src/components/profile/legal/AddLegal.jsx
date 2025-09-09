@@ -1,13 +1,13 @@
 "use client";
 
-import { Divider, Modal, Select, Spin } from "antd";
-import { useState, useEffect, useRef } from "react";
+import { getCity, getProvince } from "@/services/order/orderService";
+import { addLegal, getLegalId } from "@/services/User/UserServices";
+import { Modal, Select, Spin } from "antd";
+import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
 import { FaBuilding, FaCaretDown, FaTimes } from "react-icons/fa";
 import { MdOutlinePhone } from "react-icons/md";
 import Swal from "sweetalert2";
-import { getProvince, getCity } from "@/services/order/orderService";
-import Cookies from "js-cookie";
-import { addLegal, getLegalId } from "@/services/User/UserServices";
 
 function AddLegal({
   id = null,
@@ -43,6 +43,8 @@ function AddLegal({
     cityId: editData?.[0]?.cityId || "",
     cityTitle: editData?.[0]?.cityTitle || "",
   });
+
+  console.log(formData);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -191,6 +193,12 @@ function AddLegal({
     }
   }, [editData]);
 
+  // تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+  const toEnglishNumber = (number) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+  };
+
   return (
     <Modal
       title={
@@ -269,10 +277,10 @@ function AddLegal({
               <input
                 value={formData.economicCode}
                 onChange={(e) => {
-                  if (e.target.value * 1 >= 0) {
+                  if (toEnglishNumber(e.target.value) * 1 >= 0) {
                     setFormData((prev) => ({
                       ...prev,
-                      economicCode: e.target.value,
+                      economicCode: toEnglishNumber(e.target.value),
                     }));
                     setErrors((prev) => ({ ...prev, economicCode: "" }));
                     setErrors((prev) => ({ ...prev, economicCodeLength: "" }));
@@ -304,10 +312,10 @@ function AddLegal({
               <input
                 value={formData.nationalId}
                 onChange={(e) => {
-                  if (e.target.value * 1 >= 0) {
+                  if (toEnglishNumber(e.target.value) * 1 >= 0) {
                     setFormData((prev) => ({
                       ...prev,
-                      nationalId: e.target.value,
+                      nationalId: toEnglishNumber(e.target.value),
                     }));
                     setErrors((prev) => ({ ...prev, nationalId: "" }));
                     setErrors((prev) => ({ ...prev, nationalIdLength: "" }));
@@ -321,7 +329,9 @@ function AddLegal({
               <p className="text-red-500 text-xs mt-1">{errors.nationalId}</p>
             )}
             {!errors.nationalId && errors.nationalIdLength && (
-              <p className="text-red-500 text-xs mt-1">{errors.nationalIdLength}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.nationalIdLength}
+              </p>
             )}
           </div>
         </div>
@@ -408,7 +418,7 @@ function AddLegal({
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
-                    registrationId: e.target.value,
+                    registrationId: toEnglishNumber(e.target.value),
                   }));
                   setErrors((prev) => ({ ...prev, registrationId: "" }));
                 }}
@@ -439,7 +449,7 @@ function AddLegal({
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
-                    landlineNumber: e.target.value,
+                    landlineNumber: toEnglishNumber(e.target.value),
                   }));
                   setErrors((prev) => ({ ...prev, landlineNumber: "" }));
                 }}

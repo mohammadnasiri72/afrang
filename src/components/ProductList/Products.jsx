@@ -110,15 +110,17 @@ function Products({ products }) {
               <div className="relative flex-shrink-0">
                 <div className="relative overflow-hidden rounded-lg group">
                   <Link href={product.url} className="relative">
-                    <Image
-                      className="object-contain rounded-lg w-24 h-24 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
-                      src={getImageUrl2(product.image)}
-                      alt={product.title}
-                      width={96}
-                      height={96}
-                      priority={false}
-                      unoptimized
-                    />
+                    {product.image && (
+                      <Image
+                        className="object-contain rounded-lg w-24 h-24 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                        src={getImageUrl2(product.image)}
+                        alt={product.title}
+                        width={96}
+                        height={96}
+                        priority={false}
+                        unoptimized
+                      />
+                    )}
                   </Link>
                   {/* تخفیف سمت چپ */}
                   {product.discount !== 0 && (
@@ -197,19 +199,21 @@ function Products({ products }) {
             <div className=" min-w-52 max-w-52 relative flex items-start justify-center pt-5">
               <div className="relative overflow-hidden rounded-lg group">
                 <Link href={product.url} className="relative ">
-                  <Image
-                    className={`object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
-                      product?.statusId !== 1 && product?.conditionId === 20
-                        ? "blur-xs"
-                        : ""
-                    }`}
-                    src={getImageUrl2(product.image)}
-                    alt={product.title}
-                    width={200}
-                    height={200}
-                    priority={false}
-                    unoptimized
-                  />
+                  {product.image && (
+                    <Image
+                      className={`object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
+                        product?.statusId !== 1 && product?.conditionId === 20
+                          ? "blur-xs"
+                          : ""
+                      }`}
+                      src={getImageUrl2(product.image)}
+                      alt={product.title}
+                      width={200}
+                      height={200}
+                      priority={false}
+                      unoptimized
+                    />
+                  )}
                 </Link>
                 {/* تخفیف سمت چپ */}
                 {product.discount !== 0 && (
@@ -333,19 +337,21 @@ function Products({ products }) {
       <div className="flex flex-col items-center flex-grow">
         <div className="relative w-full flex justify-center items-center group overflow-hidden">
           <Link href={`${product.url}`}>
-            <Image
-              className={`w-40 h-40 object-contain rounded-lg mb-4 ${
-                product?.statusId !== 1 && product?.conditionId === 20
-                  ? "blur-xs"
-                  : ""
-              }`}
-              src={getImageUrl2(product.image)}
-              alt={product.title}
-              width={160}
-              height={160}
-              priority={false}
-              unoptimized
-            />
+            {product.image && (
+              <Image
+                className={`w-40 h-40 object-contain rounded-lg mb-4 ${
+                  product?.statusId !== 1 && product?.conditionId === 20
+                    ? "blur-xs"
+                    : ""
+                }`}
+                src={getImageUrl2(product.image)}
+                alt={product.title}
+                width={160}
+                height={160}
+                priority={false}
+                unoptimized
+              />
+            )}
           </Link>
           {/* کالای کارکرده سمت راست */}
           {product.conditionId === 20 && (

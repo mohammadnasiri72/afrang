@@ -479,6 +479,21 @@ export default function MyArticles() {
 
   return (
     <div className="space-y-6">
+      <style jsx global>{`
+        .ant-select {
+          z-index: 110000 !important;
+        }
+        .ant-select-item-option {
+          z-index: 110000 !important;
+        }
+        .ant-select-dropdown {
+          z-index: 110000 !important;
+        }
+        .ant-select-item {
+          z-index: 110000 !important;
+        }
+        
+      `}</style>
        
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">

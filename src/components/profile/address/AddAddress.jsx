@@ -5,30 +5,29 @@ import {
   getCity,
   getProvince,
 } from "@/services/order/orderService";
-import { Button, Modal, Select, Spin, Switch, Tooltip } from "antd";
+import { Modal, Select, Spin, Switch, Tooltip } from "antd";
 import Cookies from "js-cookie";
+import L from "leaflet";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "leaflet-geosearch/dist/geosearch.css";
+import "leaflet/dist/leaflet.css";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { FaCaretDown, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
-import { MdOutlinePhoneAndroid, MdLocationOn } from "react-icons/md";
+import { FaCaretDown, FaMapMarkerAlt, FaTimes } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import Swal from "sweetalert2";
-import dynamic from 'next/dynamic';
-import L from 'leaflet';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import 'leaflet-geosearch/dist/geosearch.css';
-import { useMap } from 'react-leaflet';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 
 // Create custom icon function
 const createCustomIcon = () => {
   return new L.Icon({
-    iconUrl: '/images/marker-icon.png',
-    iconRetinaUrl: '/images/marker-icon-2x.png',
-    shadowUrl: '/images/marker-shadow.png',
+    iconUrl: "/images/marker-icon.png",
+    iconRetinaUrl: "/images/marker-icon-2x.png",
+    shadowUrl: "/images/marker-shadow.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    shadowSize: [41, 41],
   });
 };
 
@@ -45,10 +44,10 @@ const MapClickHandler = ({ onPositionChange }) => {
       }
     };
 
-    map.on('click', handleClick);
+    map.on("click", handleClick);
 
     return () => {
-      map.off('click', handleClick);
+      map.off("click", handleClick);
     };
   }, [map, onPositionChange]);
 
@@ -66,14 +65,14 @@ const SearchControl = ({ onLocationSelect }) => {
     const provider = new OpenStreetMapProvider();
     const searchControl = new GeoSearchControl({
       provider,
-      style: 'bar',
+      style: "bar",
       showMarker: false,
       showPopup: false,
       autoClose: true,
       retainZoomLevel: false,
       animateZoom: true,
       keepResult: true,
-      searchControlPosition: 'topcenter',
+      searchControlPosition: "topcenter",
     });
 
     map.addControl(searchControl);
@@ -84,18 +83,18 @@ const SearchControl = ({ onLocationSelect }) => {
       if (onLocationSelect) {
         onLocationSelect({
           lat: e.location.lat,
-          lng: e.location.lng
+          lng: e.location.lng,
         });
       }
     };
 
-    map.on('geosearch/showlocation', handleSearchResult);
+    map.on("geosearch/showlocation", handleSearchResult);
 
     return () => {
       if (searchControlRef.current) {
         map.removeControl(searchControlRef.current);
       }
-      map.off('geosearch/showlocation', handleSearchResult);
+      map.off("geosearch/showlocation", handleSearchResult);
     };
   }, [map, onLocationSelect]);
 
@@ -117,7 +116,7 @@ const MapController = ({ position }) => {
 
 // Custom Search Component
 const CustomSearch = ({ onLocationSelect }) => {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const provider = new OpenStreetMapProvider();
@@ -134,7 +133,7 @@ const CustomSearch = ({ onLocationSelect }) => {
       const searchResults = await provider.search({ query: value });
       setResults(searchResults);
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -144,10 +143,10 @@ const CustomSearch = ({ onLocationSelect }) => {
     if (onLocationSelect) {
       onLocationSelect({
         lat: result.y,
-        lng: result.x
+        lng: result.x,
       });
     }
-    setSearchValue('');
+    setSearchValue("");
     setResults([]);
   };
 
@@ -191,7 +190,7 @@ const MapComponent = ({ position, onPositionChange }) => {
     <MapContainer
       center={[position.lat, position.lng]}
       zoom={13}
-      style={{ height: '100%', width: '100%' }}
+      style={{ height: "100%", width: "100%" }}
     >
       <MapClickHandler onPositionChange={onPositionChange} />
       <MapController position={position} />
@@ -247,8 +246,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [useMapToggle, setUseMapToggle] = useState(false);
-  const [position, setPosition] = useState({ lat: 35.6892, lng: 51.3890 }); // Default to Tehran
+  const [position, setPosition] = useState({ lat: 35.6892, lng: 51.389 }); // Default to Tehran
   const [map, setMap] = useState(null);
+
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -266,10 +266,10 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
 
   // Initialize map icons
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const iconUrl = '/images/marker-icon.png';
-      const iconRetinaUrl = '/images/marker-icon-2x.png';
-      const shadowUrl = '/images/marker-shadow.png';
+    if (typeof window !== "undefined") {
+      const iconUrl = "/images/marker-icon.png";
+      const iconRetinaUrl = "/images/marker-icon-2x.png";
+      const shadowUrl = "/images/marker-shadow.png";
 
       delete L.Icon.Default.prototype._getIconUrl;
       L.Icon.Default.mergeOptions({
@@ -306,13 +306,14 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
       return "کد ملی درست نیست";
     }
     // الگوریتم اعتبارسنجی کد ملی ایران
-    const digits = code.split('').map(Number);
+    const digits = code.split("").map(Number);
     const lastDigit = digits[9];
     const sum = digits.slice(0, 9).reduce((acc, digit, index) => {
-      return acc + (digit * (10 - index));
+      return acc + digit * (10 - index);
     }, 0);
     const remainder = sum % 11;
-    const isValid = remainder < 2 ? lastDigit === remainder : lastDigit === (11 - remainder);
+    const isValid =
+      remainder < 2 ? lastDigit === remainder : lastDigit === 11 - remainder;
     if (!isValid) {
       return "کد ملی وارد شده معتبر نیست";
     }
@@ -335,7 +336,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
     }
 
     // بررسی اینکه رقم اول صفر نباشد
-    if (code[0] === '0') {
+    if (code[0] === "0") {
       return "کد پستی نمی‌تواند با صفر شروع شود";
     }
 
@@ -390,7 +391,11 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   };
 
   const updatePosition = (newPosition) => {
-    if (newPosition && typeof newPosition.lat === 'number' && typeof newPosition.lng === 'number') {
+    if (
+      newPosition &&
+      typeof newPosition.lat === "number" &&
+      typeof newPosition.lng === "number"
+    ) {
       setPosition(newPosition);
     }
   };
@@ -403,28 +408,28 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
       updatePosition(e.latlng);
     };
 
-    map.on('click', handleMapClick);
+    map.on("click", handleMapClick);
 
     return () => {
-      map.off('click', handleMapClick);
+      map.off("click", handleMapClick);
     };
   }, [map]);
 
   // Map marker component
   const LocationMarker = () => {
     const markerIcon = new L.Icon({
-      iconUrl: '/images/marker-icon.png',
-      iconRetinaUrl: '/images/marker-icon-2x.png',
-      shadowUrl: '/images/marker-shadow.png',
+      iconUrl: "/images/marker-icon.png",
+      iconRetinaUrl: "/images/marker-icon-2x.png",
+      shadowUrl: "/images/marker-shadow.png",
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
-      shadowSize: [41, 41]
+      shadowSize: [41, 41],
     });
 
     return (
-      <Marker 
-        position={position} 
+      <Marker
+        position={position}
         icon={markerIcon}
         draggable={true}
         eventHandlers={{
@@ -563,6 +568,12 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
     setErrors((prev) => ({ ...prev, selectedProvince: "" }));
   };
 
+  // تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+  const toEnglishNumber = (number) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+  };
+
   return (
     <Modal
       title={
@@ -623,7 +634,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         {/* Row 1: نام و نام خانوادگی، استان، شهر */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-gray-700 mb-2">نام و نام خانوادگی*</label>
+            <label className="block text-gray-700 mb-2">
+              نام و نام خانوادگی*
+            </label>
             <input
               type="text"
               value={fullName}
@@ -645,25 +658,32 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             <label className="block text-gray-700 mb-2">استان*</label>
             <Select
               placeholder="انتخاب استان"
-              className={`w-full ${errors.selectedProvince ? "select-error" : ""}`}
+              className={`w-full ${
+                errors.selectedProvince ? "select-error" : ""
+              }`}
               onChange={handleProvinceChange}
               value={selectedProvince}
               size="large"
               suffixIcon={<FaCaretDown className="text-[#d1182b]" />}
               classNames={{
                 popup: {
-                  root: "custom-select-dropdown"
-                }
+                  root: "custom-select-dropdown",
+                },
               }}
             >
               {provinceList.map((province) => (
-                <Select.Option key={province.provinceId} value={province.provinceId}>
+                <Select.Option
+                  key={province.provinceId}
+                  value={province.provinceId}
+                >
                   {province.title}
                 </Select.Option>
               ))}
             </Select>
             {errors.selectedProvince && (
-              <p className="text-red-500 text-sm mt-1">{errors.selectedProvince}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.selectedProvince}
+              </p>
             )}
           </div>
 
@@ -682,8 +702,8 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
               suffixIcon={<FaCaretDown className="text-[#d1182b]" />}
               classNames={{
                 popup: {
-                  root: "custom-select-dropdown"
-                }
+                  root: "custom-select-dropdown",
+                },
               }}
             >
               {cityList.map((city) => (
@@ -706,7 +726,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
               type="tel"
               value={mobile}
               onChange={(e) => {
-                const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 11);
+                const value = toEnglishNumber(e.target.value)
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 11);
                 setMobile(value);
                 setErrors((prev) => ({ ...prev, mobile: "" }));
               }}
@@ -727,7 +749,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
               type="text"
               value={nationalCode}
               onChange={(e) => {
-                const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                const value = toEnglishNumber(e.target.value)
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 10);
                 setNationalCode(value);
                 setErrors((prev) => ({ ...prev, nationalCode: "" }));
               }}
@@ -750,17 +774,19 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
               pattern="[0-9]*"
               value={postalCode}
               onChange={(e) => {
-                const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                const value = toEnglishNumber(e.target.value)
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 10);
                 setPostalCode(value);
                 if (value.length === 10) {
                   const error = validatePostalCode(value);
                   if (error) {
-                    setErrors(prev => ({ ...prev, postalCode: error }));
+                    setErrors((prev) => ({ ...prev, postalCode: error }));
                   } else {
-                    setErrors(prev => ({ ...prev, postalCode: "" }));
+                    setErrors((prev) => ({ ...prev, postalCode: "" }));
                   }
                 } else {
-                  setErrors(prev => ({ ...prev, postalCode: "" }));
+                  setErrors((prev) => ({ ...prev, postalCode: "" }));
                 }
               }}
               className={`w-full px-4 py-2 rounded-lg border ${
@@ -800,8 +826,8 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             onClick={onClose}
             disabled={loading}
             className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${
-              loading 
-                ? "opacity-50 cursor-not-allowed" 
+              loading
+                ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-gray-200 cursor-pointer"
             }`}
           >
@@ -811,7 +837,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             onClick={handleOk}
             disabled={loading}
             className={`px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] ${
-              loading ? "cursor-not-allowed" : "cursor-pointer hover:bg-[#b91626]"
+              loading
+                ? "cursor-not-allowed"
+                : "cursor-pointer hover:bg-[#b91626]"
             }`}
           >
             {loading ? (
@@ -819,8 +847,10 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
                 <Spin className="white-spin" size="small" />
                 <span>{id ? "در حال ویرایش" : "در حال ثبت"}</span>
               </div>
+            ) : id ? (
+              "ویرایش"
             ) : (
-              id ? "ویرایش" : "ثبت"
+              "ثبت"
             )}
           </button>
         </div>
@@ -915,7 +945,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           height: 30px !important;
           line-height: 30px !important;
           border-radius: 8px !important;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
 
         .leaflet-control-zoom a:hover {
@@ -947,7 +977,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           border-radius: 4px !important;
           font-size: 11px !important;
           margin: 5px !important;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
         }
 
         .leaflet-control-attribution a {
@@ -982,7 +1012,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           border: 2px solid #e5e7eb !important;
           border-radius: 12px !important;
           font-size: 14px !important;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
           transition: all 0.2s !important;
           font-family: Yekan !important;
           direction: rtl !important;
@@ -1003,7 +1033,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           background: white !important;
           border-radius: 12px !important;
           margin-top: 8px !important;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
           max-height: 200px !important;
           overflow-y: auto !important;
           direction: rtl !important;
@@ -1060,4 +1090,4 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   );
 }
 
-export default AddAddress; 
+export default AddAddress;

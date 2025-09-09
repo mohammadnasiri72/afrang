@@ -274,7 +274,6 @@ function BoxLegal() {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
-                          onClick={e => e.stopPropagation()}
                         >
                           <path
                             strokeLinecap="round"
@@ -284,7 +283,7 @@ function BoxLegal() {
                           />
                         </svg>
                       </button>
-                      <span onClick={e => e.stopPropagation()}>
+                      <span onClick={(e) => e.stopPropagation()}>
                         <DeleteLegal
                           id={legal.id}
                           onDelete={handleDeleteLegal}

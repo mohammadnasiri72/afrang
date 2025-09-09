@@ -1,17 +1,25 @@
 import { Empty, Popover } from "antd";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { HiDotsVertical } from "react-icons/hi";
+import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
 import ModalDeleteBuy from "./ModalDeleteBuy";
 import ModalShowDetailsBuy from "./ModalShowDetailsBuy";
-import { MdDone, MdOutlineTimer } from "react-icons/md";
-import { useRouter } from "next/navigation";
 
-function ListProductBuy({
-  productsSec,
-}) {
-  
+function ListProductBuy({ productsSec }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-    const router = useRouter();
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -20,8 +28,12 @@ function ListProductBuy({
           آگهی های خرید شما
         </h3>
         <button
-          onClick={() => {
-           router.push("/profile/second-hand/add");
+          onClick={(e) => {
+            e.preventDefault();
+            startTransition(() => {
+              router.push("/profile/second-hand/add");
+            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
@@ -30,7 +42,7 @@ function ListProductBuy({
       </div>
       <div className="overflow-hidden py-8 w-full">
         <div className="w-full max-w-5xl mx-auto ">
-          {   productsSec.length > 0 ? (
+          {productsSec.length > 0 ? (
             <div className="flex flex-wrap gap-2 w-full sm:justify-start justify-center">
               {[...productsSec].map((pr) => (
                 <div
@@ -38,38 +50,34 @@ function ListProductBuy({
                   data-id={pr.id}
                   className="relative flex  items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
                 >
-                 
                   <img
                     src={"/public/images/icons/photo.png"}
                     alt={pr.title}
                     className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
                   />
-                 
+
                   <div className="flex flex-col items-start gap-1 w-full">
                     <div className="w-full flex items-center justify-between">
-
-                    <span className="font-bold text-base truncate line-clamp-1">
-                      {pr.title}
-                    </span>
-                     <div className="">
-                    <Popover
-                      placement="bottom"
-                      content={
-                        <>
-                          <div className="flex flex-col gap-2 w-full">
-                            <ModalShowDetailsBuy id={pr.id} />
-                            <EditeProductSec
-                              id={pr.id}
-                            />
-                            <ModalDeleteBuy id={pr.id} />
-                          </div>
-                        </>
-                      }
-                      trigger="click"
-                    >
-                      <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
-                    </Popover>
-                  </div>
+                      <span className="font-bold text-base truncate line-clamp-1">
+                        {pr.title}
+                      </span>
+                      <div className="">
+                        <Popover
+                          placement="bottom"
+                          content={
+                            <>
+                              <div className="flex flex-col gap-2 w-full">
+                                <ModalShowDetailsBuy id={pr.id} />
+                                <EditeProductSec id={pr.id} />
+                                <ModalDeleteBuy id={pr.id} />
+                              </div>
+                            </>
+                          }
+                          trigger="click"
+                        >
+                          <HiDotsVertical className="cursor-pointer text-gray-500 text-xl " />
+                        </Popover>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-sm truncate">
                       {pr.categoryTitle}
