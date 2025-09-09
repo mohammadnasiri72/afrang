@@ -655,7 +655,7 @@ const BodyCard = () => {
             </div>
           )}
 
-          <div className="fixed sm:hidden block bottom-14 left-0 right-0 z-[50] bg-[#ececec]">
+          <div className="fixed sm:hidden block bottom-10 left-0 right-0 z-[50] bg-[#ececec]">
             <div className="bg-white p-3 rounded-lg mb-3">
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg">جمع سبد خرید:</span>

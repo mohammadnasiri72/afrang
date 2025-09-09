@@ -281,7 +281,7 @@ export default function BodyOrder() {
     if (selectedTrackCode) {
         return (
             <div className="mt-4">
-                <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
+                <div className="bg-white rounded-xl shadow-lg z-50 relative">
                     <OrderDetails trackCode={selectedTrackCode} />
                 </div>
             </div>

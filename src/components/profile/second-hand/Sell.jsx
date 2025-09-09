@@ -385,8 +385,8 @@ function Sell({ productsSec, productEdit, id }) {
                 <Alert
                   message={
                     <span className="font-bold">
-                      کاربر گرامی توجه داشته باشید که شماره همراه شما در سایت
-                      نمایش داده خواهد شد.
+                      کاربر گرامی در صورتیکه تمایل به نمایش تلفن خود در سایت
+                      دارید گزینه مربوط در قسمت پایین فرم را انتخاب نمایید.
                     </span>
                   }
                   description={

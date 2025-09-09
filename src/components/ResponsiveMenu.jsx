@@ -895,7 +895,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
 
         <Drawer
           zIndex={10010}
-          width={350}
+          width={250}
           title={<Title />}
           onClose={onClose}
           styles={{

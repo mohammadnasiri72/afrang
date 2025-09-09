@@ -103,11 +103,11 @@ function ShoppingDrawer() {
                 dispatch(setOpenShopping(true));
               }}
               className="text-3xl cursor-pointer inline-block align-middle"
-              style={{ width: "1.5em", height: "1.5em" }}
+              style={{ width: "1.2em", height: "1.2em" }}
             >
               <svg
-                width="1.5em"
-                height="1.5em"
+                width="1.2em"
+                height="1.2em"
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +133,7 @@ function ShoppingDrawer() {
             </span>
             {currentItems.length > 0 &&
               currentItems?.filter((e) => e.parentId === -1).length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                   {currentItems?.filter((e) => e.parentId === -1).length}
                 </span>
               )}

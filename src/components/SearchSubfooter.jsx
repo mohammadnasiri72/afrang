@@ -18,8 +18,8 @@ function SearchSubfooter() {
         style={{ width: '1.5em', height: '1.5em' }}
       >
         <svg
-          width="1.5em"
-          height="1.5em"
+          width="1.2em"
+          height="1.2em"
           viewBox="0 0 32 32"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

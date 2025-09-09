@@ -35,6 +35,8 @@ export default async function ProductDetails(props) {
     console.error("Error recording visit:", error);
   }
 
+  console.log(product);
+
   return (
     <>
       {product?.breadcrumb && (
@@ -54,7 +56,7 @@ export default async function ProductDetails(props) {
           </div>
         </div>
       )}
-      {product && <PriceFixed product={product} />}
+      {product && product.canAddCart && <PriceFixed product={product} />}
     </>
   );
 }

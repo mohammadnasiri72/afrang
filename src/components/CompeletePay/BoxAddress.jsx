@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
 import AddAddress from "@/components/profile/address/AddAddress";
-import DeleteAddress from "./DeleteAddress";
-import { FaPlus, FaHome, FaCheck, FaMapMarkerAlt } from "react-icons/fa";
-import { getAddress } from "@/services/User/UserServices";
-import { useDispatch, useSelector } from "react-redux";
 import { setSelectedAddress } from "@/redux/slices/addressSlice";
+import { getAddress } from "@/services/User/UserServices";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { FaCheck, FaHome, FaMapMarkerAlt, FaPlus } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import DeleteAddress from "./DeleteAddress";
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const BoxAddressSkeleton = () => {
@@ -148,32 +148,61 @@ function BoxAddress({ onAddressDelete }) {
                   }
                 `}
               >
-                <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm">
+                <div className="sm:hidden flex justify-between items-center w-full">
+                  <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0  flex  items-center justify-center shadow-sm">
+                    <FaHome className="text-xl text-[#d1182b]" />
+                  </div>
+                  <div className="flex items-center gap-2 justify-end w-full sm:justify-start sm:w-auto">
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditClick(address.id);
+                        }}
+                        className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
+                        title="ویرایش"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
+                        </svg>
+                      </button>
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <DeleteAddress
+                          id={address.id}
+                          onDelete={onAddressDelete}
+                          getAddressFu={getAddressFu}
+                        />
+                      </span>
+                    </div>
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
+                    ${
+                      address.id === selectedAddress?.id
+                        ? "border-[#d1182b] bg-[#d1182b]"
+                        : "border-gray-300"
+                    }`}
+                    >
+                      {address.id === selectedAddress?.id && (
+                        <FaCheck className="text-white text-[10px]" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 sm:flex hidden items-center justify-center shadow-sm">
                   <FaHome className="text-xl text-[#d1182b]" />
                 </div>
                 <div className="flex-grow">
-                  {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div className="text-sm">
-                      <span className="font-medium text-gray-800">گیرنده:</span>
-                      <span className="text-gray-600 mr-2">{address.fullName}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="font-medium text-gray-800">کد ملی:</span>
-                      <span className="text-gray-600 mr-2">{address.nationalCode}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="font-medium text-gray-800">شماره تماس:</span>
-                      <span className="text-gray-600 mr-2">{address.mobile}</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="font-medium text-gray-800">کد پستی:</span>
-                      <span className="text-gray-600 mr-2">{address.postalCode}</span>
-                    </div>
-                    <div className="text-sm col-span-2">
-                      <span className="font-medium text-gray-800">آدرس:</span>
-                      <span className="text-gray-600 mr-2">{address.provinceTitle} - {address.cityTitle} - {address.address}</span>
-                    </div>
-                  </div> */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div className="text-sm">
                       <span className="font-medium text-gray-800">
@@ -216,7 +245,7 @@ function BoxAddress({ onAddressDelete }) {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 justify-center w-full sm:justify-start sm:w-auto">
+                <div className="sm:flex hidden items-center gap-2 justify-center w-full sm:justify-start sm:w-auto">
                   <div className="flex items-center gap-1">
                     <button
                       onClick={(e) => {
@@ -241,8 +270,12 @@ function BoxAddress({ onAddressDelete }) {
                         />
                       </svg>
                     </button>
-                    <span onClick={e => e.stopPropagation()}>
-                      <DeleteAddress id={address.id} onDelete={onAddressDelete} getAddressFu={getAddressFu} />
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <DeleteAddress
+                        id={address.id}
+                        onDelete={onAddressDelete}
+                        getAddressFu={getAddressFu}
+                      />
                     </span>
                   </div>
                   <div

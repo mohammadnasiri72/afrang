@@ -205,7 +205,58 @@ function BoxLegal() {
                                             : "border-gray-200 hover:border-[#d1182b] hover:bg-red-50/50 cursor-pointer"
                                         }`}
                 >
-                  <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm">
+                  <div className="sm:hidden flex justify-between items-center w-full">
+                    <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 flex items-center justify-center shadow-sm">
+                      <FaBuilding className="text-xl text-[#d1182b]" />
+                    </div>
+                    <div className="flex items-center gap-2 sm:w-auto w-full justify-end">
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditClick(legal.id);
+                          }}
+                          className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
+                          title="ویرایش"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </button>
+                        <span onClick={(e) => e.stopPropagation()}>
+                          <DeleteLegal
+                            id={legal.id}
+                            onDelete={handleDeleteLegal}
+                            getLegalFu={fetchLegalList}
+                          />
+                        </span>
+                      </div>
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
+                                            ${
+                                              selectedLegal?.id === legal.id
+                                                ? "border-[#d1182b] bg-[#d1182b]"
+                                                : "border-gray-300"
+                                            }`}
+                      >
+                        {selectedLegal?.id === legal.id && (
+                          <FaCheck className="text-white text-[10px]" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-10 h-10 bg-white rounded-lg flex-shrink-0 sm:flex hidden items-center justify-center shadow-sm">
                     <FaBuilding className="text-xl text-[#d1182b]" />
                   </div>
                   <div className="flex-grow">
@@ -258,7 +309,7 @@ function BoxLegal() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 sm:w-auto w-full sm:justify-start justify-center">
+                  <div className="sm:flex hidden items-center gap-2 sm:w-auto w-full sm:justify-start justify-center">
                     <div className="flex items-center gap-1">
                       <button
                         onClick={(e) => {

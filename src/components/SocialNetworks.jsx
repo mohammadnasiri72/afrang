@@ -9,7 +9,7 @@ const SocialNetworks = () => {
   return (
     <div
       style={{ zIndex: "60" }}
-      className="fixed sm:bottom-[32px] bottom-40 right-5 flex flex-col gap-3"
+      className="fixed sm:bottom-[32px] bottom-44 right-1 flex flex-col gap-3"
     >
       <Link
         aria-label="تماس با ما"

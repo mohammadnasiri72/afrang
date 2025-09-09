@@ -1,6 +1,5 @@
 "use client";
 import SuccessModal from "@/components/Product/SuccessModal";
-import PriceProduct from "@/components/ProductList/PriceProduct";
 import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { addToCart } from "@/services/cart/cartService";
 import { Spin } from "antd";
@@ -8,6 +7,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
+import PriceProduct from "./PriceProduct";
 
 export default function PriceFixed({ product }) {
   // Check if product exists and has required data

@@ -23,6 +23,7 @@ import {
   FaBuilding,
   FaChevronDown,
   FaAngleDown,
+  FaClipboardList,
 } from "react-icons/fa";
 import { IoIosCard } from "react-icons/io";
 import {
@@ -296,11 +297,10 @@ export default function OrderDetails({ trackCode }) {
     return null;
   }
 
-
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 px-6 pt-6">
         <h2 className="text-xl font-bold text-gray-800">جزئیات سفارش</h2>
         <button
           onClick={handleBack}
@@ -349,7 +349,7 @@ export default function OrderDetails({ trackCode }) {
           </div>
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <FaTruck className="text-gray-500 text-xl" />
+              <FaClipboardList className="text-gray-500 text-xl" />
               <p className="text-sm text-gray-500">وضعیت سفارش</p>
             </div>
             <p className="font-bold text-lg text-[#40768c]">
@@ -417,7 +417,7 @@ export default function OrderDetails({ trackCode }) {
                         <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                           {item.warranty && (
                             <span className="text-green-600 line-clamp-1">
-                              گارانتی: {item.warranty}
+                              {item.warranty}
                             </span>
                           )}
                         </div>

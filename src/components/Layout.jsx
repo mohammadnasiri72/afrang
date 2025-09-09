@@ -143,7 +143,7 @@ function ScrollToTopButton() {
       const percent =
         docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
       setProgress(percent);
-      setVisible(scrollTop > 20);
+      setVisible(scrollTop > 300);
     };
     window.addEventListener("scroll", handleScroll);
     handleScroll();
@@ -158,7 +158,7 @@ function ScrollToTopButton() {
     <div
       style={{
         position: "fixed",
-        left: 32,
+        left: 4,
         zIndex: 1000,
         width: 36,
         height: 36,
@@ -173,7 +173,7 @@ function ScrollToTopButton() {
       }}
       onClick={handleClick}
       aria-label="scroll to top"
-      className="group bottom-40 sm:bottom-[32px]"
+      className="group bottom-44 sm:bottom-[32px]"
     >
       <div style={{ position: "absolute", width: 36, height: 36 }}>
         <CircularProgressbar
