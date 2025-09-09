@@ -7,6 +7,7 @@ import RegisterStepTwo from "./RegisterStepTwo";
 export default function Register() {
   const [stateRegister, setStateRegister] = useState(1);
   const [mobile, setMobile] = useState("");
+
   return (
     <>
       <div className="bg-[#f4f4f4] min-h-screen relative">

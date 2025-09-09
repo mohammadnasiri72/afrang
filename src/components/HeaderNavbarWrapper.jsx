@@ -101,7 +101,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
     <>
       {/* header ثابت که با اسکرول ظاهر می‌شود */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[11000156] transition-all duration-300 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-[1001] transition-all duration-300 ease-out ${
           headerFixed ? "translate-y-0" : "-translate-y-full"
         }`}
         data-header-fixed={headerFixed ? "true" : "false"}
@@ -125,7 +125,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
       </div>
       {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
       <div
-        className={`fixed left-0 right-0 z-[11000155] transition-all duration-300 ease-out ${
+        className={`fixed left-0 right-0 z-[1000] transition-all duration-300 ease-out ${
           navbarFixed ? "translate-y-0" : "-translate-y-full"
         }`}
         style={{
@@ -154,12 +154,12 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
         </div>
       </div>
       {/* header اصلی که همیشه در جای خودش هست */}
-      <div ref={headerRef} className="z-[11000155] relative">
+      <div ref={headerRef} className="z-[1001] relative">
         <Header onLoaded={() => setHeaderLoaded(true)} />
       </div>
       {/* navbar اصلی که همیشه در جای خودش هست */}
       <div
-        className="z-[11000155] relative"
+        className="z-[1000] relative"
         ref={navbarRef}
         style={{
           visibility: navbarFixed ? "hidden" : "visible",
@@ -174,7 +174,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
       {activeMenu?.id && (
         <div
           className={`fixed top-0 right-0 left-0 bottom-0 transition-all duration-300 bg-[#0007]`}
-          style={{ zIndex: 1000 }}
+          style={{ zIndex: 999 }}
         />
       )}
     </>

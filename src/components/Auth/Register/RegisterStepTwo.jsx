@@ -7,12 +7,18 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import EnterCodeSent from "./EnterCodeSent";
+
+// تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+const toEnglishNumber = (number) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+};
 
 function RegisterStepTwo({ mobile, setStateRegister }) {
   const [name, setName] = useState("");
@@ -32,6 +38,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
   const dispatch = useDispatch();
 
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -110,7 +117,11 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
       if (userData.token) {
         Cookies.set("user", JSON.stringify(userData));
         dispatch(setUser(userData));
-        router.push("/");
+        startTransition(() => {
+          router.push("/");
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
         Toast.fire({
           icon: "success",
           text: "ثبت نام شما با موفقیت انجام شد",
@@ -139,6 +150,17 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
       setLoading(false);
     }
   };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
@@ -187,7 +209,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   <FaUser className="text-[#656565]" />
                   <input
                     onChange={(e) => {
-                      setName(e.target.value);
+                      setName(toEnglishNumber(e.target.value));
                       setErrors((prev) => ({ ...prev, name: "" }));
                     }}
                     value={name}
@@ -214,7 +236,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   <FaUser className="text-[#656565]" />
                   <input
                     onChange={(e) => {
-                      setFamily(e.target.value);
+                      setFamily(toEnglishNumber(e.target.value));
                       setErrors((prev) => ({ ...prev, family: "" }));
                     }}
                     value={family}
@@ -244,7 +266,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   <FaLock className="text-[#656565]" />
                   <input
                     onChange={(e) => {
-                      setPassword(e.target.value);
+                      setPassword(toEnglishNumber(e.target.value));
                       setErrors((prev) => ({ ...prev, password: "" }));
                     }}
                     value={password}
@@ -271,7 +293,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   <FaLock className="text-[#656565]" />
                   <input
                     onChange={(e) => {
-                      setPassword2(e.target.value);
+                      setPassword2(toEnglishNumber(e.target.value));
                       setErrors((prev) => ({ ...prev, password2: "" }));
                     }}
                     value={password2}
@@ -301,7 +323,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                 <MdEmail className="text-[#656565]" />
                 <input
                   onChange={(e) => {
-                    setEmail(e.target.value);
+                    setEmail(toEnglishNumber(e.target.value));
                     setErrors((prev) => ({ ...prev, email: "" }));
                   }}
                   value={email}

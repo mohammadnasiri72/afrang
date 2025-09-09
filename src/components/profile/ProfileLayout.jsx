@@ -157,7 +157,7 @@ export default function ProfileLayout({ children }) {
 
     useEffect(() => {
         if (!user || !user.token) {
-            resetUserCookie();
+            // resetUserCookie();
             router.push("/");
             return;
         }

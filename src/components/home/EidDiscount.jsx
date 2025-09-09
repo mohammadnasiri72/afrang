@@ -4,16 +4,15 @@ import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
 import ProductMain from "./ProductMain";
-
-
 
 export default function EidDiscount({ actionProducts, products }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories =
@@ -36,6 +35,16 @@ export default function EidDiscount({ actionProducts, products }) {
       }
     }
   }, [selectedCategory, products]);
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -76,7 +85,10 @@ export default function EidDiscount({ actionProducts, products }) {
                 </h3>
                 <button
                   onClick={() => {
-                    router.push(`/products?onlyfest=1&orderby=2`);
+                    startTransition(() => {
+                      router.push(`/products?onlyfest=1&orderby=2`);
+                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
                 >
@@ -144,7 +156,10 @@ export default function EidDiscount({ actionProducts, products }) {
             {/* دکمه نمایش همه در دسکتاپ */}
             <div
               onClick={() => {
-                router.push(`/products?onlyfest=1&orderby=2`);
+                startTransition(() => {
+                  router.push(`/products?onlyfest=1&orderby=2`);
+                });
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
             >

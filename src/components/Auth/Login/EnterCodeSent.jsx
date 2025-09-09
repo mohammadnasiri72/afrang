@@ -5,10 +5,9 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-
 
 // تابع تبدیل اعداد انگلیسی به فارسی
 const toPersianNumber = (number) => {
@@ -31,7 +30,17 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
 
   const inputRefs = useRef([]);
   const { settings } = useSelector((state) => state.settings);
-  const dispatch = useDispatch();
+
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: "toast-modal",
+  });
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -167,12 +176,21 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         const redirectPath = localStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
           localStorage.removeItem("redirectAfterLogin"); // پاک کردن مسیر از localStorage
-          router.push(redirectPath);
+          startTransition(() => {
+            router.push(redirectPath);
+          });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else if (!from) {
-          router.push("/");
+          startTransition(() => {
+            router.push("/");
+          });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           if (from === "card") {
-            router.push("/cart/infosend");
+            startTransition(() => {
+              router.push("/cart/infosend");
+            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }
         }
 
@@ -183,7 +201,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
             container: "toast-modal",
           },
         });
-
       } else {
         Toast.fire({
           icon: "error",
@@ -208,15 +225,15 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     }
   };
 
-  const router = useRouter();
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
-  });
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

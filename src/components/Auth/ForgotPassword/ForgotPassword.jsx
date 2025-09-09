@@ -1,16 +1,22 @@
 "use client";
 
+import { ResetPassword } from "@/services/Account/AccountService";
+import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaUser } from "react-icons/fa6";
-import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
-import { getImageUrl } from "@/utils/mainDomain";
-import { ResetPassword } from "@/services/Account/AccountService";
+import Swal from "sweetalert2";
+
+// تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+const toEnglishNumber = (number) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+};
 
 const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
 const patternEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -21,6 +27,7 @@ const ForgotPassword = () => {
   const [errors, setErrors] = useState({});
   const { settings } = useSelector((state) => state.settings);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const Toast = Swal.mixin({
     toast: true,
@@ -81,7 +88,10 @@ const ForgotPassword = () => {
         },
       });
 
-      router.push("/login");
+      startTransition(() => {
+        router.push("/login");
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -94,6 +104,16 @@ const ForgotPassword = () => {
       setLoading(false);
     }
   };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -150,7 +170,7 @@ const ForgotPassword = () => {
                       <FaUser className="text-[#656565]" />
                       <input
                         onChange={(e) => {
-                          setUsername(e.target.value);
+                          setUsername(toEnglishNumber(e.target.value));
                           setErrors((prev) => ({ ...prev, username: "" }));
                         }}
                         value={username}
@@ -172,7 +192,10 @@ const ForgotPassword = () => {
                     <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
                       <div
                         onClick={() => {
-                          router.back();
+                          startTransition(() => {
+                            router.back();
+                          });
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                       >

@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  fetchCartData,
-  mergeGuestCartWithUser,
-} from "@/redux/slices/cartSlice";
+import { fetchCartData } from "@/redux/slices/cartSlice";
 import { setError } from "@/redux/slices/menuResSlice";
 import { setUser } from "@/redux/slices/userSlice";
 import Cookies from "js-cookie";
@@ -78,12 +75,12 @@ function InitialDataManager() {
                 // ذخیره userId کاربر لاگین شده در localStorage برای استفاده در mergeGuestCart
                 localStorage.setItem("user", JSON.stringify(userData));
 
-                await dispatch(
-                  mergeGuestCartWithUser({
-                    guestUserId: storedGuestUserId,
-                    currentUserId: userData.userId,
-                  })
-                ).unwrap();
+                // await dispatch(
+                //   mergeGuestCartWithUser({
+                //     guestUserId: storedGuestUserId,
+                //     currentUserId: userData.userId,
+                //   })
+                // ).unwrap();
 
                 // پاک کردن guestUserId از localStorage
                 localStorage.removeItem("guestUserId");
@@ -109,8 +106,6 @@ function InitialDataManager() {
 
     loadData();
   }, [mounted, cartType, dispatch, userCookie, initialized]);
-
-  
 
   if (isLoading || !mounted)
     return (
@@ -249,6 +244,7 @@ function Layout({
   useEffect(() => {
     setTimeout(() => {
       const userCookie = Cookies.get("user");
+
       if (!userCookie) {
         const initialData = {
           token: "",

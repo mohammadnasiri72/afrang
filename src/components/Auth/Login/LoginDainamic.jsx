@@ -1,15 +1,20 @@
 import { loginSendOtp } from "@/services/Account/AccountService";
-import { authServiceSendOtp } from "@/services/Auth/authService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { MdOutlinePhoneAndroid } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+
+// تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+const toEnglishNumber = (number) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+};
 
 const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
 
@@ -19,6 +24,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
   const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -82,6 +88,17 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
       }
     }
   };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
@@ -129,7 +146,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                   <MdOutlinePhoneAndroid className="text-[#656565] text-2xl" />
                   <input
                     onChange={(e) => {
-                      setMobile(e.target.value);
+                      setMobile(toEnglishNumber(e.target.value));
                       setErrorMobile("");
                     }}
                     value={mobile}
@@ -158,7 +175,10 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                 <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
                   <div
                     onClick={() => {
-                      router.back();
+                      startTransition(() => {
+                        router.back();
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                   >

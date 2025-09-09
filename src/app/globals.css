@@ -821,20 +821,21 @@ th {
   z-index: 109999 !important;
 }
 .ant-select {
-  z-index: 119999 !important;
+  z-index: 995 !important;
 }
 .ant-select-item-option {
-  z-index: 119999 !important;
+  z-index: 995 !important;
 }
 .ant-select-dropdown {
-  z-index: 119999 !important;
+  z-index: 995 !important;
 }
 .ant-select-item {
-  z-index: 119999 !important;
+  z-index: 995 !important;
 }
 .custom-tooltip {
   z-index: 1199999 !important;
 }
+
 
 .used-icon-thumb.icon4 span {
   background-position: -158px 0;

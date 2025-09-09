@@ -11,6 +11,7 @@ const CategoryListSkeleton = dynamic(() => import("@/components/ProductList/Cate
 // Main Page Component
 export default async function ProductList({ searchParams }) {
   const params = await searchParams;
+  
 
   return (
     <div className="bg-[#f6f6f6] overflow-hidden py-10">

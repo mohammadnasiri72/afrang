@@ -71,7 +71,7 @@ export default async function ProductListWithFilters({ searchParams }) {
         <div className="w-full">
           <BodyProductList products={products} layout={layout} />
           <div className="flex justify-center mt-8">
-            {/* <PaginationProduct total={products[0].total} /> */}
+            <PaginationProduct total={products[0].total} />
           </div>
         </div>
       )}

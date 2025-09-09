@@ -1,6 +1,5 @@
 import { RegisterSendOtp } from "@/services/Account/AccountService";
 import { Spin } from "antd";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -18,13 +17,11 @@ const toEnglishNumber = (number) => {
 // const englishCode = digits.map((d) => toEnglishNumber(d)).join("");
 
 function EnterCodeSent({ setCode, mobile }) {
-  const [loading, setLoading] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [resendLoading, setResendLoading] = useState(false);
   const [countdown, setCountdown] = useState(120); // 2 minutes in seconds
   const inputRefs = useRef([]);
-  const router = useRouter();
 
   const Toast = Swal.mixin({
     toast: true,
@@ -50,7 +47,9 @@ function EnterCodeSent({ setCode, mobile }) {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   useEffect(() => {
@@ -160,10 +159,11 @@ function EnterCodeSent({ setCode, mobile }) {
             <button
               onClick={handleResendCode}
               disabled={countdown > 0 || resendLoading}
-              className={`text-[#d1182b] text-sm font-semibold ${countdown > 0 || resendLoading
+              className={`text-[#d1182b] text-sm font-semibold ${
+                countdown > 0 || resendLoading
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:text-[#b91626] cursor-pointer"
-                }`}
+              }`}
             >
               {resendLoading ? (
                 <div className="flex items-center gap-2">

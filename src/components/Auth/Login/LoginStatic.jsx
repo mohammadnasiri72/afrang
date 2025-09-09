@@ -1,15 +1,20 @@
-import { authServiceStatic } from "@/services/Auth/authService";
+import { login } from "@/services/Account/AccountService";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
-import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
-import { getImageUrl } from "@/utils/mainDomain";
-import { login } from "@/services/Account/AccountService";
+import Swal from "sweetalert2";
+
+// تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+const toEnglishNumber = (number) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+};
 
 function LoginStatic({ setStateLogin, from }) {
   const [username, setUsername] = useState("");
@@ -19,6 +24,7 @@ function LoginStatic({ setStateLogin, from }) {
   const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -76,12 +82,22 @@ function LoginStatic({ setStateLogin, from }) {
         const redirectPath = localStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
           localStorage.removeItem("redirectAfterLogin"); // پاک کردن مسیر از localStorage
-          router.push(redirectPath);
+
+          startTransition(() => {
+            router.push(redirectPath);
+          });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else if (!from) {
-          router.push("/");
+          startTransition(() => {
+            router.push("/");
+          });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           if (from === "card") {
-            router.push("/card/compeletePay");
+            startTransition(() => {
+              router.push("/card/compeletePay");
+            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }
         }
 
@@ -113,6 +129,16 @@ function LoginStatic({ setStateLogin, from }) {
       setLoading(false);
     }
   };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -161,7 +187,7 @@ function LoginStatic({ setStateLogin, from }) {
                   <FaUser className="text-[#656565]" />
                   <input
                     onChange={(e) => {
-                      setUsername(e.target.value);
+                      setUsername(toEnglishNumber(e.target.value));
                       setErrors((prev) => ({ ...prev, username: "" }));
                     }}
                     value={username}
@@ -188,7 +214,7 @@ function LoginStatic({ setStateLogin, from }) {
                   <FaLock className="text-[#656565]" />
                   <input
                     onChange={(e) => {
-                      setPassword(e.target.value);
+                      setPassword(toEnglishNumber(e.target.value));
                       setErrors((prev) => ({ ...prev, password: "" }));
                     }}
                     value={password}
