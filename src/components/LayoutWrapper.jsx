@@ -217,7 +217,7 @@ export default function LayoutWrapper({
     <>
       <div className={showPro ? "" : "pb-16 sm:pb-0"}>
         <div className={showCart ? "" : "pb-28 sm:pb-0"}>
-          {popupsData.length > 0 && <SubHeader popupsList={popupsData} />}
+           <SubHeader popupsList={popupsData} />
           <HeaderNavbarWrapper menuItems={menuItems} />
           <SocialNetworks />
           {children}

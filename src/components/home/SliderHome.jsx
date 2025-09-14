@@ -1,6 +1,6 @@
 "use client";
 
-import { mainDomain } from "@/utils/mainDomain";
+import { mainDomainImg } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -37,7 +37,7 @@ const SliderHome = ({ sliderItems }) => {
       }`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      tabIndex={-1}
+      tabIndex={0}
     >
       <Slider {...settings}>
         {sliderItems.map((item) => (
@@ -45,13 +45,13 @@ const SliderHome = ({ sliderItems }) => {
             {/* <div className="w-full">
               <img
                 className="h-64 w-full object-cover"
-                src={`${mainDomain}${item.image}`}
+                src={`${mainDomainImg}${item.image}`}
                 alt={item.title}
               />
             </div> */}
             <div className="w-full">
               <Image
-                src={`https://afrangadmin.aitest2.ir${item.image}`}
+                src={`${mainDomainImg}${item.image}`}
                 alt={item.title}
                 width={800} // عرض واقعی تصویر
                 height={256} // ارتفاع واقعی تصویر (متناسب با h-64)
@@ -67,7 +67,10 @@ const SliderHome = ({ sliderItems }) => {
             {item.sourceLink && item.sourceLink !== "/" ? (
               <div className="flex justify-center absolute top-4/5 left-1/2 transform -translate-x-1/2">
                 <Link href={item.sourceLink}>
-                  <button className="bg-[#18d1be] rounded-2xl py-1.5 duration-300 hover:bg-white hover:text-[#d1182b] cursor-pointer text-[#444] font-bold px-3">
+                  <button
+                    tabIndex={-1}
+                    className="bg-[#18d1be] rounded-2xl py-1.5 duration-300 hover:bg-white hover:text-[#d1182b] cursor-pointer text-[#444] font-bold px-3"
+                  >
                     نمایش بیشتر
                   </button>
                 </Link>

@@ -111,7 +111,7 @@ function InitialDataManager() {
   if (isLoading || !mounted || isMergingCart)
     return (
       <>
-        <Loading />
+        {/* <Loading /> */}
       </>
     );
 

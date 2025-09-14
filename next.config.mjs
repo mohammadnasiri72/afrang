@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    domains: ['afrangadmin.aitest2.ir'],
     remotePatterns: [
       {
         protocol: 'https',
