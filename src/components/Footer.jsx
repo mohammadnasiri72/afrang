@@ -1,13 +1,22 @@
 import { mainDomainImg } from "@/utils/mainDomain";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { useSelector } from "react-redux";
+import Loading from "./Loading";
 import Newsletter from "./Newsletter";
 
 const Footer = ({ socialNetworks, footerMenu }) => {
   const { settings } = useSelector((state) => state.settings);
-
- 
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  if (isPending) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
 
   return (
     <div className="footer sm:pb-0 pb-16">
@@ -15,9 +24,22 @@ const Footer = ({ socialNetworks, footerMenu }) => {
         <div className="flex flex-wrap">
           <div className="lg:w-1/3 sm:w-1/2 w-full px-3 flex flex-col items-center justify-start">
             <div className="w-full flex sm:justify-start justify-center ">
-              {settings?.find((item) => item.propertyKey === "site_home_url") &&
-              <Link
+              {settings?.find(
+                (item) => item.propertyKey === "site_home_url"
+              ) && (
+                <Link
                   aria-label="صفحه اصلی"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    startTransition(() => {
+                      router.push(
+                        settings?.find(
+                          (item) => item.propertyKey === "site_home_url"
+                        )?.value || "/"
+                      );
+                    });
+                  }}
                   href={
                     settings?.find(
                       (item) => item.propertyKey === "site_home_url"
@@ -34,19 +56,18 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                     }
                     alt=""
                   />
-                </Link>}
+                </Link>
+              )}
               <div className="">
                 <div className="w-full px-3 mt-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
-                 
-                    <span>
-                      <span className="text-[#d1182b] whitespace-nowrap pl-1">
-                        آدرس :{" "}
-                      </span>
-                      {settings?.find(
-                        (item) => item.propertyKey === "site_address1"
-                      )?.value || "آدرس در دسترس نیست"}
+                  <span>
+                    <span className="text-[#d1182b] whitespace-nowrap pl-1">
+                      آدرس :{" "}
                     </span>
-                 
+                    {settings?.find(
+                      (item) => item.propertyKey === "site_address1"
+                    )?.value || "آدرس در دسترس نیست"}
+                  </span>
                 </div>
                 <div className="w-full px-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
                   <span>
@@ -68,6 +89,13 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                 {footerMenu[0]?.menuItems?.map((menuItem) => (
                   <li key={menuItem.id} className="w-full list-none p-1">
                     <Link
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        startTransition(() => {
+                          router.push(menuItem.url || "#");
+                        });
+                      }}
                       href={menuItem.url || "#"}
                       className="block w-full bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
                     >
@@ -116,21 +144,19 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                   <span className="text-[#666] text-xs sm:mt-0 mt-2">
                     آیا سوالی دارید
                   </span>
-              
-                    <span className="text-[#d1182b] text-sm font-semibold">
-                      <a
-                        href={`tel:${
-                          settings?.find(
-                            (item) => item.propertyKey === "site_tel"
-                          )?.value || "02177615546"
-                        }`}
-                      >
-                        {settings?.find(
+
+                  <span className="text-[#d1182b] text-sm font-semibold">
+                    <a
+                      href={`tel:${
+                        settings?.find(
                           (item) => item.propertyKey === "site_tel"
-                        )?.value || "77615546"}
-                      </a>
-                    </span>
-               
+                        )?.value || "02177615546"
+                      }`}
+                    >
+                      {settings?.find((item) => item.propertyKey === "site_tel")
+                        ?.value || "77615546"}
+                    </a>
+                  </span>
                 </div>
               </div>
               <div className="flex items-center sm:flex-row flex-col">
@@ -164,21 +190,20 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                   <span className="text-[#666] text-xs sm:mt-0 mt-2">
                     ارتباط باما
                   </span>
-               
-                    <span className="text-[#d1182b] text-sm font-semibold">
-                      <a
-                        href={`mailto:${
-                          settings?.find(
-                            (item) => item.propertyKey === "site_email"
-                          )?.value || "unreal@outlook.com"
-                        }`}
-                      >
-                        {settings?.find(
+
+                  <span className="text-[#d1182b] text-sm font-semibold">
+                    <a
+                      href={`mailto:${
+                        settings?.find(
                           (item) => item.propertyKey === "site_email"
-                        )?.value || "unreal@outlook.com"}
-                      </a>
-                    </span>
-             
+                        )?.value || "unreal@outlook.com"
+                      }`}
+                    >
+                      {settings?.find(
+                        (item) => item.propertyKey === "site_email"
+                      )?.value || "unreal@outlook.com"}
+                    </a>
+                  </span>
                 </div>
               </div>
             </div>
@@ -187,14 +212,13 @@ const Footer = ({ socialNetworks, footerMenu }) => {
             <h4 className="font-semibold text-[16px] sm:text-start text-center">
               عضویت در خبرنامه <span className="text-[#d1182b]">افرنگ</span>
             </h4>
-           
-              <p className="text-[#666] mt-4 sm:text-start text-center">
-                {settings?.find(
-                  (item) => item.propertyKey === "site_footer_description"
-                )?.value ||
-                  "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
-              </p>
-        
+
+            <p className="text-[#666] mt-4 sm:text-start text-center">
+              {settings?.find(
+                (item) => item.propertyKey === "site_footer_description"
+              )?.value ||
+                "و از تخفیف در خرید، مشاهده سوابق سفارشات، شرکت در نقد و بررسی و بسیاری از خدمات دیگر بهره مند شوید."}
+            </p>
 
             <Newsletter />
             <div className="flex gap-3 mt-4 justify-center sm:justify-start">
@@ -230,6 +254,13 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                   {footerMenu[0]?.menuItems?.map((menuItem) => (
                     <li key={menuItem.id} className="list-none p-1">
                       <Link
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                          startTransition(() => {
+                            router.push(menuItem.url || "#");
+                          });
+                        }}
                         href={menuItem.url || "#"}
                         className="block bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
                       >
@@ -255,34 +286,32 @@ const Footer = ({ socialNetworks, footerMenu }) => {
         </div>
       </div>
       <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
-       
-          <p className="xl:w-1/2 w-full text-justify py-2">
-            {settings?.find((item) => item.propertyKey === "site_copyright")
-              ?.value ? (
+        <p className="xl:w-1/2 w-full text-justify py-2">
+          {settings?.find((item) => item.propertyKey === "site_copyright")
+            ?.value ? (
+            <span>
               <span>
-                <span>
-                  {
-                    settings?.find(
-                      (item) => item.propertyKey === "site_copyright"
-                    )?.value
-                  }
-                </span>
-                <Link
-                  target="_blank"
-                  href="https://activeidea.net/"
-                  className=" px-1 font-semibold"
-                >
-                  طراحی سایت و بهینه سازی سایت : ایده پویا
-                </Link>
+                {
+                  settings?.find(
+                    (item) => item.propertyKey === "site_copyright"
+                  )?.value
+                }
               </span>
-            ) : (
-              <span>
-                © کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می
-                باشد. طراحی سایت و بهینه سازی سایت : ایده پویا
-              </span>
-            )}
-          </p>
-       
+              <Link
+                target="_blank"
+                href="https://activeidea.net/"
+                className=" px-1 font-semibold"
+              >
+                طراحی سایت و بهینه سازی سایت : ایده پویا
+              </Link>
+            </span>
+          ) : (
+            <span>
+              © کلیه حقوق این وب سایت محفوظ و متعلق به خانه عکاسان افرنگ می
+              باشد. طراحی سایت و بهینه سازی سایت : ایده پویا
+            </span>
+          )}
+        </p>
       </div>
     </div>
   );

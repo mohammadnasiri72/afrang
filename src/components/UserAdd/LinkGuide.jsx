@@ -3,7 +3,8 @@ import { setActiveTab } from "@/redux/slices/idEditSec";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { Alert } from "antd";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { BsPatchQuestionFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 
@@ -11,6 +12,17 @@ function LinkGuide() {
   const [href, setHref] = useState("/login");
   const [href2, setHref2] = useState("/login");
   const disPatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -44,7 +56,18 @@ function LinkGuide() {
           />
         </div>
         <div className="lg:w-3/4 w-full p-3 flex flex-col items-start justify-between gap-4 my-2">
-          <Link className=" flex items-center gap-1 group" href={"/UsedRules"}>
+          <Link
+            className=" flex items-center gap-1 group"
+            href={"/UsedRules"}
+            onClick={(e) => {
+              e.preventDefault();
+
+              startTransition(() => {
+                router.push("/UsedRules");
+              });
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               مشاهده قوانین خرید و فروش تجهیزات عکاسی و دوربین دیجیتال کارکرده و
@@ -52,11 +75,17 @@ function LinkGuide() {
             </span>
           </Link>
           <Link
-            onClick={() => {
-              disPatch(setActiveTab(2));
-            }}
             className=" flex items-center gap-1 group"
             href={href}
+            onClick={(e) => {
+              disPatch(setActiveTab(2));
+              e.preventDefault();
+
+              startTransition(() => {
+                router.push(href);
+              });
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
@@ -64,18 +93,35 @@ function LinkGuide() {
             </span>
           </Link>
           <Link
-            onClick={() => {
-              disPatch(setActiveTab(1));
-            }}
             className=" flex items-center gap-1 group"
             href={href}
+            onClick={(e) => {
+              disPatch(setActiveTab(1));
+              e.preventDefault();
+
+              startTransition(() => {
+                router.push(href);
+              });
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               ثبت آگهی فروش دست دوم
             </span>
           </Link>
-          <Link className=" flex items-center gap-1 group" href={href2}>
+          <Link
+            className=" flex items-center gap-1 group"
+            href={href2}
+            onClick={(e) => {
+              e.preventDefault();
+
+              startTransition(() => {
+                router.push(href2);
+              });
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               جهت ثبت سریال محصول مفقود شده خود برروی این لینک کلیک نمایید.

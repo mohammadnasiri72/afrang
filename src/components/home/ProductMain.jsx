@@ -13,12 +13,26 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from "./CountdownTimer";
 
 export default function ProductMain({ products }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Swiper
@@ -65,6 +79,14 @@ export default function ProductMain({ products }) {
               <div className="relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md">
                 {/* تصویر */}
                 <Link
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    startTransition(() => {
+                      router.push(product.url);
+                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   href={product.url}
                   className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
@@ -109,6 +131,14 @@ export default function ProductMain({ products }) {
                 <div className="flex flex-col flex-1 justify-between mt-2">
                   {/* عنوان */}
                   <Link
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      startTransition(() => {
+                        router.push(product.url);
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
                     href={product.url}
                     className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                   >

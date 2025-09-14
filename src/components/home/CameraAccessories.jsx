@@ -8,19 +8,23 @@ import "swiper/css/pagination";
 
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Pagination } from "swiper/modules";
 
+export default function CameraAccessories({ category }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-
-export default function CameraAccessories({category}) {
- 
-
-  
-
-
- 
-
- 
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <div className="box-slider-CameraAccessories pt-5 pb-48">
@@ -57,26 +61,35 @@ export default function CameraAccessories({category}) {
               },
             }}
           >
-            {
-              category.map((item) => (
-                <SwiperSlide key={item.id}>
-                  <Link href={item.url} className="flex flex-col items-center justify-center">
-                    <div className="flex flex-col items-center justify-center select-none cursor-pointer">
-                      <div className="w-[50px] h-[50px] flex items-center justify-center">
-                        <img
-                          src={getImageUrl(item.image)}
-                          alt={item.title}
-                          className="sm:w-[50px] sm:h-[50px] w-[40px] h-[40px]"
-                        />
-                      </div>
-                      <span className="text-white sm:text-xl mt-3 font-medium text-center">
-                        {item.title}
-                      </span>
+            {category.map((item) => (
+              <SwiperSlide key={item.id}>
+                <Link
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    startTransition(() => {
+                      router.push(item.url);
+                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  href={item.url}
+                  className="flex flex-col items-center justify-center"
+                >
+                  <div className="flex flex-col items-center justify-center select-none cursor-pointer">
+                    <div className="w-[50px] h-[50px] flex items-center justify-center">
+                      <img
+                        src={getImageUrl(item.image)}
+                        alt={item.title}
+                        className="sm:w-[50px] sm:h-[50px] w-[40px] h-[40px]"
+                      />
                     </div>
-                  </Link>
-                </SwiperSlide>
-              ))
-            }
+                    <span className="text-white sm:text-xl mt-3 font-medium text-center">
+                      {item.title}
+                    </span>
+                  </div>
+                </Link>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

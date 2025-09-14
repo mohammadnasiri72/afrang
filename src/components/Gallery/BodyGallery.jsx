@@ -15,7 +15,7 @@ import {
 } from "antd";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaEye, FaRegUser, FaTelegram } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { LuCalendarRange } from "react-icons/lu";
@@ -67,6 +67,7 @@ function BodyGallery() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
+  const [isPending, startTransition] = useTransition();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -286,6 +287,16 @@ function BodyGallery() {
     setImgSelected(ImagesData[prevIndex]);
   };
 
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       {mounted && (
@@ -462,7 +473,17 @@ function BodyGallery() {
                           </>
                         )}
                       </div>
-                      <Link href={"/profile/Send-Photo"}>
+                      <Link
+                        href={"/profile/Send-Photo"}
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          startTransition(() => {
+                            router.push("/profile/Send-Photo");
+                          });
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                      >
                         <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                           <FaTelegram className="text-lg" />
                           <span className="whitespace-nowrap pr-2 font-semibold text-sm">
@@ -645,6 +666,18 @@ function BodyGallery() {
                           href={`${
                             window.location.pathname
                           }?${searchParams.toString()}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+
+                            startTransition(() => {
+                              router.push(
+                                `${
+                                  window.location.pathname
+                                }?${searchParams.toString()}`
+                              );
+                            });
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          }}
                         >
                           {page}
                         </Link>

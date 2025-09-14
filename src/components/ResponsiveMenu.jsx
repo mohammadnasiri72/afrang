@@ -739,7 +739,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                   borderBottomRightRadius: "20px",
                 }}
               >
-                <SubmenuDropdown activeMenu={activeMenu} onClose={onClose} />
+                <SubmenuDropdown activeMenu={activeMenu} onClose={onClose} startTransition={startTransition}/>
               </AnimatedPaper>
             </Fade>
           )}

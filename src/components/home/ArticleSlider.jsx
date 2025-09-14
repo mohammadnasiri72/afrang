@@ -10,11 +10,16 @@ import "swiper/css/pagination";
 import { getImageUrl } from "@/utils/mainDomain";
 import moment from "moment-jalaali";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight, FaCircleUser } from "react-icons/fa6";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ExpandableText from "../blog/ExpandableText";
 
 export default function ArticleSlider({ blogs }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const formatPersianDate = (dateString) => {
     try {
       const persianMonths = [
@@ -43,6 +48,16 @@ export default function ArticleSlider({ blogs }) {
       return dateString;
     }
   };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -92,6 +107,14 @@ export default function ArticleSlider({ blogs }) {
                     </div> */}
                   <Link
                     href={blog.url}
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      startTransition(() => {
+                        router.push(blog.url);
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
                     className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none"
                   >
                     <img
@@ -113,6 +136,14 @@ export default function ArticleSlider({ blogs }) {
                       <Link
                         className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1 text-justify"
                         href={blog.url}
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          startTransition(() => {
+                            router.push(blog.url);
+                          });
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
                       >
                         {blog.title}
                       </Link>

@@ -2,12 +2,14 @@
 
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 const MAX_COLUMNS = 4;
 const COLUMN_PIXEL_WIDTH = 300;
 
-const SubmenuDropdown = ({ activeMenu, onClose }) => {
+const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
+  const router = useRouter();
   const dropdownContent = useMemo(() => {
     if (!activeMenu) return null;
     const flatList = [];
@@ -125,9 +127,14 @@ const SubmenuDropdown = ({ activeMenu, onClose }) => {
                       lineHeight: `${ITEM_HEIGHT}px`,
                       textAlign: item.isParent ? undefined : "right",
                     }}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       document.body.style.overflow = "";
                       onClose();
+                      startTransition(() => {
+                        router.push(item.url || item.pageUrl || "#");
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     onMouseOver={(e) => {
                       if (item.isParent) {

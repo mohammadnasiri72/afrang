@@ -9,11 +9,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { getImageUrl2 } from "@/utils/mainDomain";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import AddToCartButton from "../ProductList/AddToCartButton";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 
 export default function ProductMainSecondHand({ oldProducts }) {
+ 
   return (
     <>
       <Swiper

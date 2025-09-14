@@ -1,10 +1,9 @@
 "use client";
 import { getImageUrl } from "@/utils/mainDomain";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
@@ -30,6 +29,8 @@ function useIsMobile(breakpoint = 768) {
 }
 
 function BoxSellSec({ productList }) {
+  const [isPending, startTransition] = useTransition();
+
   const [viewMode, setViewMode] = useState("list");
   const pathname = usePathname();
   const router = useRouter();
@@ -72,7 +73,18 @@ function BoxSellSec({ productList }) {
         <div className="flex-shrink-0 pl-3">
           <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
             {product.image && product.url ? (
-              <Link href={product.url} className="w-full h-full relative">
+              <Link
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  startTransition(() => {
+                    router.push(product.url);
+                  });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                href={product.url}
+                className="w-full h-full relative"
+              >
                 <img
                   src={getImageUrl(product.image)}
                   alt={product.title}
@@ -106,6 +118,14 @@ function BoxSellSec({ productList }) {
               <h3 className="text-lg font-semibold text-gray-900">
                 <Link
                   href={product.url}
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    startTransition(() => {
+                      router.push(product.url);
+                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   className="hover:text-[#d1182b] transition-colors"
                 >
                   {product.title}
@@ -165,7 +185,18 @@ function BoxSellSec({ productList }) {
       <div className="mb-3">
         <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
           {product.image && product.url ? (
-            <Link href={product.url} className="w-full h-full relative">
+            <Link
+              onClick={(e) => {
+                e.preventDefault();
+
+                startTransition(() => {
+                  router.push(product.url);
+                });
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              href={product.url}
+              className="w-full h-full relative"
+            >
               <img
                 src={getImageUrl(product.image)}
                 alt={product.title}
@@ -208,6 +239,14 @@ function BoxSellSec({ productList }) {
           <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
             <Link
               href={product.url}
+              onClick={(e) => {
+                e.preventDefault();
+
+                startTransition(() => {
+                  router.push(product.url);
+                });
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               className="hover:text-[#d1182b] transition-colors"
             >
               {product.title}
@@ -261,6 +300,10 @@ function BoxSellSec({ productList }) {
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(current);
+              startTransition(() => {
+                router.push(createPageURL(current));
+              });
+              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             {current}
@@ -269,10 +312,18 @@ function BoxSellSec({ productList }) {
       );
     }
 
-   
-
     return originalElement;
   };
+
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

@@ -4,7 +4,6 @@ import { getImageUrl } from "@/utils/mainDomain";
 export default async function BoxImgHome() {
   const mainBanner = await getListItemBanner(3293);
 
-
   return (
     <>
       <div className="max-w-[1250px] py-0 px-[10px] my-0 mx-auto text-right">

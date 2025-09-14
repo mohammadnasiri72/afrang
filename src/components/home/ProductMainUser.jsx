@@ -11,10 +11,23 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
 
 export default function ProductMainUser({ products }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  if (isPending) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <Swiper
@@ -61,6 +74,14 @@ export default function ProductMainUser({ products }) {
               <div className="relative group w-full pb-2 overflow-hidden rounded-xl bg-white shadow-md">
                 <Link
                   href={product.url ? product.url : "#"}
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    startTransition(() => {
+                      router.push(product.url);
+                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   className="w-full min-h-40 sm:min-h-40 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
                   <Image
@@ -79,6 +100,14 @@ export default function ProductMainUser({ products }) {
                 <div className="flex flex-col flex-1 justify-between mt-2">
                   <Link
                     href={product.url ? product.url : "#"}
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      startTransition(() => {
+                        router.push(product.url);
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
                     className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start"
                   >
                     <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px]">
