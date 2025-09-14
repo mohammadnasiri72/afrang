@@ -1,10 +1,11 @@
+"use client";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Skeleton, Tooltip } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useTransition } from "react";
 import {
   FaCartShopping,
   FaRecycle,
@@ -12,6 +13,7 @@ import {
   FaTruckFast,
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../Loading";
 import AddToCartButton from "./AddToCartButton";
 import CompareButtonBtn from "./CompareButtonBtn";
 import PriceProduct from "./PriceProduct";
@@ -21,6 +23,10 @@ function Products({ products }) {
   const layoutProducts = useSelector(
     (state) => state.layoutProducts.layoutProducts
   );
+
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  
 
   const dispatch = useDispatch();
   const isFilterLoading = useSelector(
@@ -109,7 +115,17 @@ function Products({ products }) {
               {/* تصویر محصول */}
               <div className="relative flex-shrink-0">
                 <div className="relative overflow-hidden rounded-lg group">
-                  <Link href={product.url} className="relative">
+                  <Link
+                    href={product.url}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      startTransition(() => {
+                        router.push(product.url);
+                      });
+                    }}
+                    className="relative"
+                  >
                     {product.image && (
                       <Image
                         className="object-contain rounded-lg w-24 h-24 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
@@ -150,6 +166,13 @@ function Products({ products }) {
               <div className="flex-grow">
                 <Link
                   href={product.url}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    startTransition(() => {
+                      router.push(product.url);
+                    });
+                  }}
                   className="hover:text-[#d1182b] duration-300"
                 >
                   <h2
@@ -198,7 +221,17 @@ function Products({ products }) {
           <div className="hidden lg:flex w-full h-52 overflow-hidden">
             <div className=" min-w-52 max-w-52 relative flex items-start justify-center pt-5">
               <div className="relative overflow-hidden rounded-lg group">
-                <Link href={product.url} className="relative ">
+                <Link
+                  href={product.url}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    startTransition(() => {
+                      router.push(product.url);
+                    });
+                  }}
+                  className="relative "
+                >
                   {product.image && (
                     <Image
                       className={`object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
@@ -253,6 +286,13 @@ function Products({ products }) {
               <div className="sm:px-5 sm:py-5 px-5 w-7/12 relative flex flex-col h-full">
                 <Link
                   href={product.url}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    startTransition(() => {
+                      router.push(product.url);
+                    });
+                  }}
                   className="hover:text-[#d1182b] duration-300"
                 >
                   <h2
@@ -336,7 +376,16 @@ function Products({ products }) {
     <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col relative z-50">
       <div className="flex flex-col items-center flex-grow">
         <div className="relative w-full flex justify-center items-center group overflow-hidden">
-          <Link href={`${product.url}`}>
+          <Link
+            href={product.url}
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              startTransition(() => {
+                router.push(product.url);
+              });
+            }}
+          >
             {product.image && (
               <Image
                 className={`w-40 h-40 object-contain rounded-lg mb-4 ${
@@ -387,7 +436,14 @@ function Products({ products }) {
           </div>
         </div>
         <Link
-          href={`${product.url}`}
+          href={product.url}
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            startTransition(() => {
+              router.push(product.url);
+            });
+          }}
           className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
         >
           <h2 data-id={product.productId} className="text-justify">
@@ -457,6 +513,14 @@ function Products({ products }) {
       </div>
     </div>
   );
+
+  if (isPending) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
 
   return (
     <div

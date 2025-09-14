@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Loading from "../Loading";
 
 export default function BoxImgBranding({ brands }) {
   const router = useRouter();
@@ -14,9 +15,7 @@ export default function BoxImgBranding({ brands }) {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+        <Loading />
       </>
     );
   }

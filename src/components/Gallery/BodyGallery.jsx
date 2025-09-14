@@ -28,6 +28,7 @@ import { getGallery } from "@/services/gallery/galleryServices";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import Link from "next/link";
+import Loading from "../Loading";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -290,9 +291,7 @@ function BodyGallery() {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+       <Loading />
       </>
     );
   }

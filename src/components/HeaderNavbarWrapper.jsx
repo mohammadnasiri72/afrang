@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import Header from "./Header";
-import NavBar from "./NavBar";
 import { useSelector } from "react-redux";
+import Header from "./Header";
+import Loading from "./Loading";
+import NavBar from "./NavBar";
 
 const HeaderNavbarWrapper = ({ menuItems }) => {
   const [headerFixed, setHeaderFixed] = useState(false);
@@ -91,9 +92,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+        <Loading />
       </>
     );
   }
@@ -150,7 +149,12 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
             justifyContent: "center",
           }}
         >
-          <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} menuItems={menuItems} startTransition={startTransition}/>
+          <NavBar
+            activeMenu={activeMenu}
+            setActiveMenu={setActiveMenu}
+            menuItems={menuItems}
+            startTransition={startTransition}
+          />
         </div>
       </div>
       {/* header اصلی که همیشه در جای خودش هست */}
@@ -169,7 +173,12 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
           width: "100%",
         }}
       >
-        <NavBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} menuItems={menuItems} startTransition={startTransition}/>
+        <NavBar
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+          menuItems={menuItems}
+          startTransition={startTransition}
+        />
       </div>
       {activeMenu?.id && (
         <div

@@ -13,6 +13,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { makeStore } from "../redux/makeStore";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
+import Loading from "./Loading";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -107,26 +108,14 @@ function InitialDataManager() {
     loadData();
   }, [mounted, cartType, dispatch, userCookie, initialized]);
 
-  if (isLoading || !mounted)
+  if (isLoading || !mounted || isMergingCart)
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+        <Loading />
       </>
     );
 
-  // نمایش loading برای cart merge
-  if (isMergingCart) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-          <p className="text-gray-700">در حال ادغام سبد خرید...</p>
-        </div>
-      </div>
-    );
-  }
+ 
 
   return null;
 }
@@ -230,6 +219,11 @@ function Layout({
   // no client-time dispatch here to avoid hydration mismatch
 
   const pathname = usePathname();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    
+  }, [pathname]);
+
   const showHeaderFooter =
     !pathname.includes("/login") &&
     !pathname.includes("/register") &&

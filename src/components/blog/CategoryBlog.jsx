@@ -2,11 +2,9 @@
 
 import { getImageUrl } from "@/utils/mainDomain";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import Container from "../container";
 
 function CategoryBlog({ category, searchParams }) {
-  const dispatch = useDispatch();
   const router = useRouter();
   const activeCategory = searchParams?.category;
 

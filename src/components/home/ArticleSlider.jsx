@@ -15,6 +15,7 @@ import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight, FaCircleUser } from "react-icons/fa6";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ExpandableText from "../blog/ExpandableText";
+import Loading from "../Loading";
 
 export default function ArticleSlider({ blogs }) {
   const [isPending, startTransition] = useTransition();
@@ -52,9 +53,7 @@ export default function ArticleSlider({ blogs }) {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+       <Loading />
       </>
     );
   }

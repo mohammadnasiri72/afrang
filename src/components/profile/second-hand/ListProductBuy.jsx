@@ -6,6 +6,7 @@ import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
 import ModalDeleteBuy from "./ModalDeleteBuy";
 import ModalShowDetailsBuy from "./ModalShowDetailsBuy";
+import Loading from "@/components/Loading";
 
 function ListProductBuy({ productsSec }) {
   const router = useRouter();
@@ -14,9 +15,7 @@ function ListProductBuy({ productsSec }) {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+        <Loading />
       </>
     );
   }

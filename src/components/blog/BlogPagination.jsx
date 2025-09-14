@@ -1,64 +1,67 @@
-
-
-
 "use client";
 
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useTransition } from "react";
+import Loading from "../Loading";
 
 const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
-  const router = useRouter();
   const pathname = usePathname();
-  const dispatch = useDispatch();
-  // const params = new URLSearchParams(searchParams.toString());
-
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  if (isPending) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
   const createPageURL = (page) => {
     const params = new URLSearchParams(initialSearchParams);
-    
+
     if (page !== 1) {
       params.set("page", page.toString());
     } else {
       params.delete("page");
     }
-    
+
     return `${pathname}?${params.toString()}`;
   };
 
   const handlePageChange = (page) => {
     const url = createPageURL(page);
-    router.push(url);
+    startTransition(() => {
+      router.push(url);
+    });
   };
 
   const handlePageSizeChange = (size) => {
     const params = new URLSearchParams(initialSearchParams);
-    
+
     if (size !== 12) {
       params.set("pageSize", size.toString());
     } else {
       params.delete("pageSize");
     }
-    
+
     params.delete("page");
-    router.push(`${pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
   };
 
   // تابع برای رندر کردن لینک‌های واقعی
   const itemRender = (current, type, originalElement) => {
-    if (type === 'page') {
+    if (type === "page") {
       return (
-        <Link 
-          href={createPageURL(current)} 
-          passHref
-          legacyBehavior
-        >
-          <a 
-            rel="follow" 
+        <Link href={createPageURL(current)} passHref legacyBehavior>
+          <a
+            rel="follow"
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(current);
+              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="ant-pagination-item-link"
           >
@@ -67,11 +70,7 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
         </Link>
       );
     }
-    
-   
-    
-   
-    
+
     return originalElement;
   };
 
@@ -108,12 +107,12 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
             total={blogs[0]?.total}
             pageSize={pageSize}
             onChange={handlePageChange}
-            itemRender={itemRender} 
+            itemRender={itemRender}
             showSizeChanger={false}
             pageSizeOptions={[12, 24, 50, 100]}
             defaultPageSize={12}
           />
-          
+
           <div className="sm:flex hidden items-center">
             <Select
               value={pageSize}

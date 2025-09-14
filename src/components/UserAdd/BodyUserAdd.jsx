@@ -8,6 +8,7 @@ import BoxBuySec from "./BoxBuySec";
 import BoxSellSec from "./BoxSellSec";
 import LinkGuide from "./LinkGuide";
 import SearchProductSec from "./SearchProductSec";
+import Loading from "../Loading";
 
 function BodyUserAdd({ productList, pathname, archived }) {
   const [isPending, startTransition] = useTransition();
@@ -15,9 +16,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+        <Loading />
       </>
     );
   }

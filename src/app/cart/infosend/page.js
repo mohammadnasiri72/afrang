@@ -1,6 +1,7 @@
 "use client";
 
 import Container from "@/components/container";
+import Loading from "@/components/Loading";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -56,9 +57,9 @@ export default function CompletePay() {
 
   if (!mounted) {
     return (
-      <div className="w-full min-h-[400px] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
-      </div>
+      <>
+        <Loading />
+      </>
     );
   }
 

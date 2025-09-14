@@ -1,4 +1,3 @@
-import React from "react";
 import { PuffLoader } from "react-spinners";
 
 function Loading({ fullScreen = false, navbar = false, slider = false }) {
@@ -26,16 +25,10 @@ function Loading({ fullScreen = false, navbar = false, slider = false }) {
     </div>
   );
 
- 
-
   return (
-    // <div className="w-full h-full min-h-[200px] flex flex-col gap-2 justify-center items-center">
-    //   {loaderElement}
-    //   <div className="text-sm text-gray-400">لطفا صبر کنید...</div>
-    // </div>
-     <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          {loaderElement}
-        </div>
+    <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+      {loaderElement}
+    </div>
   );
 }
 

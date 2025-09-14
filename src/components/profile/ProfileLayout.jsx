@@ -29,6 +29,7 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import Loading from "../Loading";
 
 const menuItems = [
   {
@@ -286,9 +287,7 @@ export default function ProfileLayout({ children }) {
   if (isPending) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
+       <Loading />
       </>
     );
   }
