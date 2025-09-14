@@ -24,6 +24,9 @@ export default function CameraAccessories({ category }) {
       </>
     );
   }
+
+  console.log(category);
+
   return (
     <>
       <div className="box-slider-CameraAccessories pt-5 pb-48">

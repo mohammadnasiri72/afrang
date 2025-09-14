@@ -107,7 +107,7 @@ html {
 }
 
 .slider-container .slick-dots li.slick-active button:before {
-  margin-top: -5px !important;
+  margin-top: 5px !important;
 }
 .slider-container .slick-dots li button:before {
   width: 10px !important;
@@ -115,6 +115,7 @@ html {
   border-radius: 50%;
   background-color: #fff;
   transition: 0.4s;
+  margin-top: 10px;
 }
 
 .slider-container .slick-dots li.slick-active button:before {
@@ -862,4 +863,23 @@ th {
 .used-icon-thumb {
   text-align: center;
   font-size: 13px;
+}
+
+.inner-curve {
+  --r: 30px; 
+  --s: 80px; 
+  --a: 30deg;
+  --p: 50%;  
+cursor: pointer;
+  height: 256px;
+  aspect-ratio: 3/2;
+  background: #ED303C !important;
+  --_m:calc(100% - var(--r)),#000 calc(100% - 1px),#0000;
+  --_d:(var(--s) + var(--r))*cos(var(--a));
+  mask:
+    radial-gradient(var(--r) at calc(var(--p) + var(--_d)) var(--_m)),
+    radial-gradient(var(--r) at calc(var(--p) - var(--_d)) var(--_m)),
+    radial-gradient(var(--s) at var(--p) calc(100% + sin(var(--a))*var(--s)),
+      #0000 100%,#000 calc(100% + 1px)) 0 calc(var(--r)*(sin(var(--a)) - 1)) no-repeat,
+    linear-gradient(90deg,#000 calc(var(--p) - var(--_d)),#0000 0 calc(var(--p) + var(--_d)),#000 0);
 }

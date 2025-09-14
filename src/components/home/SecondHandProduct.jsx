@@ -77,7 +77,7 @@ function SecondHandProduct({ oldProducts }) {
                     className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
                       category === selectedCategory
                         ? "text-[#d1182b] font-bold"
-                        : "text-[#0008] hover:text-[#000]"
+                        : "text-[#333] hover:text-[#000]"
                     }`}
                   >
                     {category}
@@ -111,7 +111,7 @@ function SecondHandProduct({ oldProducts }) {
                   className={`text-sm cursor-pointer duration-300 font-medium ${
                     category === selectedCategory
                       ? "text-[#d1182b] font-bold"
-                      : "text-[#0008] hover:text-[#000]"
+                      : "text-[#333] hover:text-[#000]"
                   }`}
                 >
                   {category}
@@ -200,7 +200,7 @@ function SecondHandProduct({ oldProducts }) {
                         {product.finalPrice.toLocaleString()} تومان
                       </span>
                       {product.discount !== 0 && (
-                        <span className="text-[#333a] font-semibold text-sm line-through">
+                        <span className="text-[#555] font-semibold text-sm line-through">
                           {product.price1.toLocaleString()}
                         </span>
                       )}

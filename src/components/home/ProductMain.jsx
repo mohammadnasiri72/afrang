@@ -165,7 +165,7 @@ export default function ProductMain({ products }) {
                           {product.finalPrice.toLocaleString()} تومان
                         </span>
                         {product.discount !== 0 && (
-                          <span className="text-[#333a] font-semibold text-sm line-through">
+                          <span className="text-[#333] font-semibold text-sm line-through">
                             {product.price1.toLocaleString()}
                           </span>
                         )}
@@ -211,10 +211,10 @@ export default function ProductMain({ products }) {
           ))}
 
         <div className="sm:hidden flex  items-center justify-between absolute left-0 right-0 bottom-1">
-          <div className="custom-prev bg-[#3331] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
+          <div className="custom-prev bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
             <FaCaretRight className="text-2xl cursor-pointer " />
           </div>
-          <div className=" custom-next bg-[#3331] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
+          <div className=" custom-next bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
             <FaCaretLeft className="text-2xl cursor-pointer" />
           </div>
         </div>

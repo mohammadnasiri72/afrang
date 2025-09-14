@@ -1,61 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { mainDomain } from "@/utils/mainDomain";
+import Image from "next/image";
 import Link from "next/link";
-import { Skeleton } from "antd";
-import { getItem } from "@/services/Item/item";
-import Swal from "sweetalert2";
+import { useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
-const SliderHome = ({sliderItems}) => {
+const SliderHome = ({ sliderItems }) => {
   const [isDragging, setIsDragging] = useState(false);
-
-
-  // import sweet alert 2
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-start",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  customClass: "toast-modal",
-});
-
-
-  // useEffect(() => {
-  //   const getSliderItems = async () => {
-  //     if (isRequested.current) return;
-  //     isRequested.current = true;
-
-  //     try {
-  //       const items = await getItem({
-  //         TypeId: 6,
-  //         LangCode: "fa",
-  //       });
-  //       if (items.type === 'error') {
-  //         Toast.fire({
-  //           icon: "error",
-  //           text: items.message,
-  //         });
-  //         return;
-  //       }
-  //      else {
-  //         setSliderItems(items);
-  //       }
-  //     } catch (error) {
-  //       Toast.fire({
-  //         icon: "error",
-  //         text: error.response?.data ? error.response?.data : "خطای شبکه",
-  //       });
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   getSliderItems();
-  // }, []);
 
   const handleMouseDown = () => {
     setIsDragging(true);
@@ -76,36 +30,44 @@ const Toast = Swal.mixin({
     arrows: true,
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="w-full h-64 relative bg-gray-200 flex items-center justify-center">
-  //       <div className="left-1/2 transform -translate-x-1/2 flex gap-2">
-  //         <Skeleton.Button active size="small" shape="circle" />
-  //         <Skeleton.Button active size="small" shape="circle" />
-  //         <Skeleton.Button active size="small" shape="circle" />
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div
-      className={`slider-container h-64 overflow-hidden ${isDragging ? "dragging" : ""}`}
+      className={`slider-container h-64 overflow-hidden ${
+        isDragging ? "dragging" : ""
+      }`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      tabIndex={-1}
     >
       <Slider {...settings}>
         {sliderItems.map((item) => (
-          <div key={item.id}>
-            <img
-              className="h-64 w-full object-cover"
-              src={`https://afrangadmin.aitest2.ir${item.image}`}
-              alt={item.title}
-            />
+          <div className="relative " key={item.id}>
+            {/* <div className="w-full">
+              <img
+                className="h-64 w-full object-cover"
+                src={`${mainDomain}${item.image}`}
+                alt={item.title}
+              />
+            </div> */}
+            <div className="w-full">
+              <Image
+                src={`https://afrangadmin.aitest2.ir${item.image}`}
+                alt={item.title}
+                width={800} // عرض واقعی تصویر
+                height={256} // ارتفاع واقعی تصویر (متناسب با h-64)
+                className="w-full object-cover"
+                style={{ height: "256px" }} // یا می‌توانید از min-h برای ارتفاع استفاده کنید
+                priority={true} // اگر این تصویر جزو اولین تصاویر صفحه است
+                loading="eager" // بارگذاری فوری بدون lazy loading
+                quality={75} // کیفیت تصویر (75% تعادل خوبی دارد)
+                placeholder="blur" // برای effect loading بهتر
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaUMk9kfa+ODhJpWlvYWA==" // یک placeholder ساده
+              />
+            </div>
             {item.sourceLink && item.sourceLink !== "/" ? (
-              <div className="flex justify-center">
+              <div className="flex justify-center absolute top-4/5 left-1/2 transform -translate-x-1/2">
                 <Link href={item.sourceLink}>
-                  <button className="bg-[#18d1be] rounded-2xl py-1.5 duration-300 hover:bg-white hover:text-[#d1182b] cursor-pointer text-[#444] font-bold translate-y-[-150%] px-3">
+                  <button className="bg-[#18d1be] rounded-2xl py-1.5 duration-300 hover:bg-white hover:text-[#d1182b] cursor-pointer text-[#444] font-bold px-3">
                     نمایش بیشتر
                   </button>
                 </Link>

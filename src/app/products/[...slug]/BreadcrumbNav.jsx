@@ -1,8 +1,10 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { Breadcrumb } from "antd";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 
 function BreadcrumbNav({ breadcrumb }) {
   if (!breadcrumb?.length) return null;
@@ -11,11 +13,21 @@ function BreadcrumbNav({ breadcrumb }) {
     setMounted(true);
   }, []);
 
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const items = [
     {
       title: (
         <Link
           href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            startTransition(() => {
+              router.push("/");
+            });
+          }}
           className="text-gray-500 hover:text-[#d1182b] font-[Yekan]"
         >
           خانه
@@ -26,6 +38,13 @@ function BreadcrumbNav({ breadcrumb }) {
       title: item.href ? (
         <Link
           href={item.href}
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            startTransition(() => {
+              router.push(item.href);
+            });
+          }}
           className="text-gray-500 hover:text-[#d1182b] font-[Yekan]"
         >
           {item.title}
@@ -35,6 +54,14 @@ function BreadcrumbNav({ breadcrumb }) {
       ),
     })),
   ];
+
+  if (isPending) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
 
   return (
     <>

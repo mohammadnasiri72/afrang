@@ -118,12 +118,19 @@ const ForgotPassword = () => {
   return (
     <>
       <div className="bg-[#f4f4f4] min-h-screen relative">
-        <div
-          style={{
-            backgroundImage: "url(/images/gallery/background-image.jpg)",
-          }}
-          className="w-[70%] min-h-screen absolute top-0 left-0 bottom-0 bg-cover bg-no-repeat"
-        ></div>
+        <div className="w-[70%] min-h-screen absolute top-0 left-0 bottom-0 overflow-hidden">
+          <Image
+            src="/images/gallery/background-image.jpg"
+            alt="پس‌زمینه گالری"
+            fill
+            priority
+            quality={75}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,..." // جایگزین با base64 واقعی
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 70vw"
+          />
+        </div>
         <div className="flex justify-start min-h-screen items-center">
           <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
             <div className="flex flex-wrap">

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiPhoneCall } from "react-icons/bi";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaArrowRightLong, FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchHeader from "./SearchHeader";
@@ -191,9 +191,9 @@ export default function Header(props) {
                     onClick={() => {
                       route.push("/login");
                     }}
-                    className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
+                    className="flex items-center gap-1 cursor-pointer hover:text-[#d1182b] duration-300"
                   >
-                    <img src="/images/icons/arrow-login.png" alt="" />
+                    <FaArrowRightLong />
                     <span>ورود</span>
                   </div>
                   <div
@@ -212,22 +212,16 @@ export default function Header(props) {
           )}
           {!mounted && (
             <div className="flex items-center gap-3 font-semibold">
-                  <div
-                   
-                    className="flex items-center cursor-pointer hover:text-[#d1182b] duration-300"
-                  >
-                    <img src="/images/icons/arrow-login.png" alt="" />
-                    <span>ورود</span>
-                  </div>
-                  <div
-                   
-                    className="border-r border-[#0005] pr-3"
-                  >
-                    <span className="cursor-pointer hover:text-[#d1182b] duration-300">
-                      عضویت
-                    </span>
-                  </div>
-                </div>
+              <div className="flex items-center gap-1 cursor-pointer hover:text-[#d1182b] duration-300">
+                <FaArrowRightLong />
+                <span>ورود</span>
+              </div>
+              <div className="border-r border-[#0005] pr-3">
+                <span className="cursor-pointer hover:text-[#d1182b] duration-300">
+                  عضویت
+                </span>
+              </div>
+            </div>
           )}
           <div
             onClick={() => disPatch(setOpenShopping(true))}

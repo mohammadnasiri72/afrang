@@ -76,7 +76,7 @@ function NewProduct({ products }) {
                     className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
                       category === selectedCategory
                         ? "text-[#d1182b] font-bold"
-                        : "text-[#0008] hover:text-[#000]"
+                        : "text-[#333] hover:text-[#000]"
                     }`}
                   >
                     {category}
@@ -103,7 +103,7 @@ function NewProduct({ products }) {
                 className={`text-sm cursor-pointer duration-300 font-medium ${
                   category === selectedCategory
                     ? "text-[#d1182b] font-bold"
-                    : "text-[#0008] hover:text-[#000]"
+                    : "text-[#333] hover:text-[#000]"
                 }`}
               >
                 {category}
