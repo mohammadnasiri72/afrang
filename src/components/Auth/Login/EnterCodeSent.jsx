@@ -1,3 +1,4 @@
+import Loading from "@/components/Loading";
 import { loginOtp, loginSendOtp } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Alert, Spin } from "antd";
@@ -179,18 +180,15 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
           startTransition(() => {
             router.push(redirectPath);
           });
-          window.scrollTo({ top: 0, behavior: "smooth" });
         } else if (!from) {
           startTransition(() => {
             router.push("/");
           });
-          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           if (from === "card") {
             startTransition(() => {
               router.push("/cart/infosend");
             });
-            window.scrollTo({ top: 0, behavior: "smooth" });
           }
         }
 
@@ -224,16 +222,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       setLoading(false);
     }
   };
-
-  if (isPending) {
-    return (
-      <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -367,6 +355,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
           </div>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

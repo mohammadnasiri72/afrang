@@ -280,80 +280,70 @@ export default function ProfileLayout({ children }) {
     }
   };
 
-  // if (!user || !user.token || userStatus === 'loading') {
-  //     return <ProfileLayoutSkeleton />;
-  // }
-
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
-
   return (
-    <div className="lg:min-h-screen  min-h-auto bg-[#f6f6f6] flex">
-      {/* Sidebar */}
-      <aside
-        className={`
+    <>
+      <div className="lg:min-h-screen  min-h-auto bg-[#f6f6f6] flex">
+        {/* Sidebar */}
+        <aside
+          className={`
                 sticky top-10 h-screen w-64 bg-white shadow-lg z-40 flex-shrink-0
                 transform transition-transform duration-300 ease-in-out lg:block hidden
             `}
-      >
-        <div className="h-full flex flex-col">
-          {/* بخش اطلاعات کاربر */}
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
-                {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={`${user?.displayName.slice(0, 1)}`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600 text-sm">
-                    {user?.displayName?.charAt(0) || "?"}
-                  </div>
-                )}
+        >
+          <div className="h-full flex flex-col">
+            {/* بخش اطلاعات کاربر */}
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={`${user?.displayName.slice(0, 1)}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600 text-sm">
+                      {user?.displayName?.charAt(0) || "?"}
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-sm font-bold text-gray-800 truncate">
+                    {user?.displayName}
+                  </h2>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user?.userId}
+                  </p>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-sm font-bold text-gray-800 truncate">
-                  {user?.displayName}
-                </h2>
-                <p className="text-xs text-gray-500 truncate">{user?.userId}</p>
+              <div className="mt-3 p-2 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-gray-600">کیف پول:</span>
+                  <span className="font-bold text-[#d1182b]">
+                    {walletBalance !== null
+                      ? `${walletBalance.toLocaleString()} تومان`
+                      : "در حال بارگذاری..."}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="mt-3 p-2 bg-gray-50 rounded-lg">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">کیف پول:</span>
-                <span className="font-bold text-[#d1182b]">
-                  {walletBalance !== null
-                    ? `${walletBalance.toLocaleString()} تومان`
-                    : "در حال بارگذاری..."}
-                </span>
-              </div>
-            </div>
-          </div>
 
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.path;
+            <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.path;
 
-              return (
-                <Link
-                  onClick={(e) => {
-                    e.preventDefault();
-                    startTransition(() => {
-                      router.push(item.path || "#");
-                    });
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  key={item.id}
-                  href={item.path}
-                  className={`
+                return (
+                  <Link
+                    onClick={(e) => {
+                      e.preventDefault();
+                      startTransition(() => {
+                        router.push(item.path || "#");
+                      });
+                    }}
+                    key={item.id}
+                    href={item.path}
+                    className={`
                                         flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
                                         ${
                                           isActive
@@ -361,17 +351,17 @@ export default function ProfileLayout({ children }) {
                                             : "text-gray-600 hover:bg-gray-100"
                                         }
                                     `}
-                >
-                  <Icon className="text-lg" />
-                  <span>{item.title}</span>
-                </Link>
-              );
-            })}
-            <div className="">
-              <button
-                onClick={LogoutHandler}
-                disabled={isLoggingOut}
-                className={`
+                  >
+                    <Icon className="text-lg" />
+                    <span>{item.title}</span>
+                  </Link>
+                );
+              })}
+              <div className="">
+                <button
+                  onClick={LogoutHandler}
+                  disabled={isLoggingOut}
+                  className={`
                                     w-full flex items-center justify-start gap-3 px-4 py-3 rounded-lg 
                                     transition-colors cursor-pointer
                                     ${
@@ -380,30 +370,32 @@ export default function ProfileLayout({ children }) {
                                         : "text-red-600 hover:bg-red-50"
                                     }
                                 `}
-              >
-                {isLoggingOut ? (
-                  <>
-                    <FaSpinner className="text-lg animate-spin" />
-                    <span>در حال خروج...</span>
-                  </>
-                ) : (
-                  <>
-                    <FaSignOutAlt className="text-lg" />
-                    <span>خروج از حساب</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </nav>
-        </div>
-      </aside>
+                >
+                  {isLoggingOut ? (
+                    <>
+                      <FaSpinner className="text-lg animate-spin" />
+                      <span>در حال خروج...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaSignOutAlt className="text-lg" />
+                      <span>خروج از حساب</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </nav>
+          </div>
+        </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 lg:min-h-screen min-h-auto">
-        <div className="p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
-        </div>
-      </main>
-    </div>
+        {/* Main Content */}
+        <main className="flex-1 lg:min-h-screen min-h-auto">
+          <div className="p-6 lg:p-8">
+            <div className="max-w-7xl mx-auto">{children}</div>
+          </div>
+        </main>
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 }

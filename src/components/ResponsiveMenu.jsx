@@ -634,7 +634,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                         startTransition(() => {
                           router.push(item.url || item.pageUrl || "#");
                         });
-                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       href={item.url || item.pageUrl || "#"}
                       className="py-2 cursor-pointer font-semibold"
@@ -654,7 +653,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                         startTransition(() => {
                           router.push(item.url || item.pageUrl || "#");
                         });
-                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       href={item.url || item.pageUrl || "#"}
                     >
@@ -783,7 +781,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                 startTransition(() => {
                   router.push(item.url || item.pageUrl || "#");
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               href={item.url || item.pageUrl || "#"}
               className={`w-full text-right py-2 transition-colors cursor-pointer ${
@@ -840,7 +837,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                     startTransition(() => {
                       router.push(item.path);
                     });
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   href={item.path}
                   className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer ${

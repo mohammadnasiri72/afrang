@@ -26,7 +26,7 @@ function Loading({ fullScreen = false, navbar = false, slider = false }) {
   );
 
   return (
-    <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
+    <div className="fixed inset-0 bg-white/50 flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
       {loaderElement}
     </div>
   );

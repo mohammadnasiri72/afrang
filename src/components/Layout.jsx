@@ -111,11 +111,9 @@ function InitialDataManager() {
   if (isLoading || !mounted || isMergingCart)
     return (
       <>
-        {/* <Loading /> */}
+        <Loading />
       </>
     );
-
- 
 
   return null;
 }
@@ -221,7 +219,6 @@ function Layout({
   const pathname = usePathname();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    
   }, [pathname]);
 
   const showHeaderFooter =

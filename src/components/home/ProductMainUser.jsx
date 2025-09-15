@@ -20,13 +20,7 @@ import Loading from "../Loading";
 export default function ProductMainUser({ products }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
+
   return (
     <>
       <Swiper
@@ -79,7 +73,6 @@ export default function ProductMainUser({ products }) {
                     startTransition(() => {
                       router.push(product.url);
                     });
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="w-full min-h-40 sm:min-h-40 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                 >
@@ -144,6 +137,7 @@ export default function ProductMainUser({ products }) {
           </div>
         </div>
       </Swiper>
+      {isPending && <Loading />}
     </>
   );
 }

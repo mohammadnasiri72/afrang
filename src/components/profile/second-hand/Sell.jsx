@@ -239,7 +239,6 @@ function Sell({ productsSec, productEdit, id }) {
       startTransition(() => {
         router.push("/profile/second-hand");
       });
-      window.scrollTo({ top: 0, behavior: "smooth" });
 
       resetState();
     } catch (error) {
@@ -343,13 +342,7 @@ function Sell({ productsSec, productEdit, id }) {
     return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
   };
 
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
+  
 
   return (
     <>
@@ -371,7 +364,6 @@ function Sell({ productsSec, productEdit, id }) {
                   startTransition(() => {
                     router.back();
                   });
-                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626] whitespace-nowrap"
               >
@@ -969,6 +961,10 @@ function Sell({ productsSec, productEdit, id }) {
           </div>
         )}
       </div>
+      {
+        isPending &&
+        <Loading />
+      }
     </>
   );
 }

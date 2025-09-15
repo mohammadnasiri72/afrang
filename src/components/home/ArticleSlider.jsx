@@ -50,14 +50,6 @@ export default function ArticleSlider({ blogs }) {
     }
   };
 
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
-
   return (
     <>
       <div className="sm:px-16 px-2">
@@ -112,7 +104,6 @@ export default function ArticleSlider({ blogs }) {
                       startTransition(() => {
                         router.push(blog.url);
                       });
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none"
                   >
@@ -141,7 +132,6 @@ export default function ArticleSlider({ blogs }) {
                           startTransition(() => {
                             router.push(blog.url);
                           });
-                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                       >
                         {blog.title}
@@ -180,6 +170,7 @@ export default function ArticleSlider({ blogs }) {
           </div>
         </Swiper>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

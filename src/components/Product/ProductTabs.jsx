@@ -1,6 +1,6 @@
 "use client";
 
-import { Divider, Segmented } from "antd";
+import { Divider } from "antd";
 import { useEffect, useRef, useState } from "react";
 import AccessoriesProduct from "./AccessoriesProduct";
 import BoxVideoProduct from "./BoxVideoProduct";
@@ -20,7 +20,6 @@ function ProductTabs({ product, parentRef }) {
   const [boxWidth, setBoxWidth] = useState(0);
   const [scrollSpyDisabled, setScrollSpyDisabled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-
 
   // refs for each section
   const bundleRef = useRef(null);
@@ -141,17 +140,34 @@ function ProductTabs({ product, parentRef }) {
 
   const options = [
     ...(product.product.typeId === 3
-      ? [{ label: "لیست محصولات", value: 1 }]
+      ? [
+          {
+            label: "لیست محصولات",
+            value: 1,
+          },
+        ]
       : []),
     { label: "توضیحات محصول", value: 2 },
     { label: "مشخصات فنی", value: 3 },
     { label: "محصولات مرتبط", value: 4 },
-    ...(hasRelatedVideos ? [{ label: "ویدئوهای مرتبط", value: 7 }] : []),
+    ...(hasRelatedVideos
+      ? [
+          {
+            label: "ویدئوهای مرتبط",
+            value: 7,
+          },
+        ]
+      : []),
     ...(product.product.conditionId !== 20
       ? [{ label: "نظرات", value: 5 }]
       : []),
     ...(product.product.conditionId !== 20
-      ? [{ label: "پرسش و پاسخ", value: 6 }]
+      ? [
+          {
+            label: "پرسش و پاسخ",
+            value: 6,
+          },
+        ]
       : []),
   ];
 
@@ -194,7 +210,6 @@ function ProductTabs({ product, parentRef }) {
         const scrollY = window.scrollY;
         const elementHeight = element.offsetHeight;
         const elementBottom = absoluteTop + elementHeight;
-
 
         // اگر اسکرول به باکس تب‌ها رسید و هنوز از آن عبور نکرده، آن را فیکس کن
         if (scrollY >= absoluteTop - 100 && scrollY < elementBottom - 500) {
@@ -243,6 +258,107 @@ function ProductTabs({ product, parentRef }) {
       window.removeEventListener("resize", updateBoxPosition);
     };
   }, []);
+
+  // تابع برای اصلاح ARIA attributes بعد از render
+  useEffect(() => {
+    const fixAriaAttributes = () => {
+      const segmentedItems = document.querySelectorAll(".ant-segmented-item");
+      segmentedItems.forEach((item) => {
+        // تغییر role از radio به button
+        if (item.getAttribute("role") === "radio") {
+          item.setAttribute("role", "button");
+        }
+
+        // حذف aria-checked و جایگزینی با aria-selected
+        if (item.hasAttribute("aria-checked")) {
+          item.removeAttribute("aria-checked");
+        }
+
+        // اضافه کردن aria-selected بر اساس کلاس selected
+        const isSelected = item.classList.contains(
+          "ant-segmented-item-selected"
+        );
+        item.setAttribute("aria-selected", isSelected.toString());
+
+        // اضافه کردن tabindex برای accessibility
+        item.setAttribute("tabindex", isSelected ? "0" : "-1");
+      });
+
+      // اصلاح container اصلی
+      const segmentedGroup = document.querySelector(".ant-segmented");
+      if (
+        segmentedGroup &&
+        segmentedGroup.getAttribute("role") === "radiogroup"
+      ) {
+        segmentedGroup.setAttribute("role", "tablist");
+        segmentedGroup.setAttribute("aria-label", "تب های محصول");
+      }
+    };
+
+    // اجرای فیکس بعد از render و بعد از هر تغییر
+    fixAriaAttributes();
+
+    // همچنین بعد از هر تغییر تب
+    const timer = setTimeout(fixAriaAttributes, 100);
+
+    return () => clearTimeout(timer);
+  }, [tabProDetails]);
+
+  // اضافه کردن keyboard navigation
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      const currentIndex = options.findIndex(
+        (opt) => opt.value === tabProDetails
+      );
+      const targetIndex = e.currentTarget.getAttribute("data-index");
+      if (targetIndex !== null) {
+        handleTabChange(options[targetIndex].value);
+      }
+    }
+  };
+
+  // ساخت Segmented سفارشی با ARIA درست
+  const renderCustomSegmented = () => {
+    return (
+      <div
+        role="tablist"
+        aria-label="تب های محصول"
+        className={`ant-segmented flex overflow-auto bg-[#ebebeb] p-2 rounded-lg !w-full ${
+          isHidden ? "!hidden" : ""
+        }`}
+        style={{ fontFamily: "yekan" }}
+      >
+        {options.map((option, index) => (
+          <button
+            key={option.value}
+            role="tab"
+            aria-selected={tabProDetails === option.value}
+            tabIndex={tabProDetails === option.value ? 0 : -1}
+            data-index={index}
+            onClick={() => handleTabChange(option.value)}
+            onKeyDown={handleKeyDown}
+            className={`
+              px-4 py-2 mx-2 font-semibold text-sm transition-all duration-300 cursor-pointer
+              ${
+                tabProDetails === option.value
+                  ? "bg-white text-[#d1182b] rounded-md font-bold text-base"
+                  : "text-gray-700"
+              }
+              ${isSticky ? "text-xs py-1 mx-1" : "text-sm py-2 mx-2"}
+               
+            `}
+            style={{
+              minWidth: "max-content",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -318,7 +434,7 @@ function ProductTabs({ product, parentRef }) {
             marginBottom: isSticky ? 0 : undefined,
           }}
         >
-          <Segmented
+          {/* <Segmented
             ref={segmentedRef}
             className={`font-semibold text-3xl w-full overflow-auto ${
               isHidden ? "!hidden" : ""
@@ -332,38 +448,39 @@ function ProductTabs({ product, parentRef }) {
             value={tabProDetails}
             onChange={handleTabChange}
             options={options}
-          />
+          /> */}
+          {renderCustomSegmented()}
         </div>
         <div className="w-full">
           {product.product.typeId === 3 && (
             <div ref={bundleRef} className="tab-section-scroll-anchor">
-              <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+              <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
                 لیست محصولات
-              </h4>
+              </h3>
               <BundleProducts product={product} />
             </div>
           )}
           <Divider style={{ margin: 0, padding: 0 }} />
 
           <div ref={detailsRef} className="tab-section-scroll-anchor pt-2">
-            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+            <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
               توضیحات محصول
-            </h4>
+            </h3>
             <DetailsProduct product={product} />
           </div>
           <Divider />
 
           <div ref={specsRef} className="tab-section-scroll-anchor">
-            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+            <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
               مشخصات فنی
-            </h4>
+            </h3>
             <SpecificationsProduct product={product} />
           </div>
           <Divider />
           <div>
-            <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+            <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
               محصولات مرتبط
-            </h4>
+            </h3>
             <div ref={accessoriesRef} className="tab-section-scroll-anchor">
               <AccessoriesProduct product={product} />
             </div>
@@ -371,9 +488,9 @@ function ProductTabs({ product, parentRef }) {
           <Divider />
           {hasRelatedVideos && (
             <div>
-              <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+              <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
                 ویدئوهای مرتبط
-              </h4>
+              </h3>
               <div ref={relatedVideosRef} className="tab-section-scroll-anchor">
                 <BoxVideoProduct
                   ids={
@@ -389,16 +506,16 @@ function ProductTabs({ product, parentRef }) {
           {product.product.conditionId !== 20 && (
             <div>
               <div ref={commentsRef} className="tab-section-scroll-anchor">
-                <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+                <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
                   نظرات کاربران
-                </h4>
+                </h3>
                 <CommentProduct id={product.product.productId} type={0} />
               </div>
               <Divider />
               <div ref={qaRef} className="tab-section-scroll-anchor">
-                <h4 className="px-7 text-2xl font-bold text-[#d1182b]">
+                <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
                   پرسش و پاسخ
-                </h4>
+                </h3>
                 <CommentProduct id={product.product.productId} type={1} />
               </div>
             </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { setFlag } from "@/redux/slices/idEditSec";
 import { selectUser } from "@/redux/slices/userSlice";
 import { getUserAdFilter2 } from "@/services/UserAd/UserAdServices";
@@ -13,7 +14,6 @@ import { MdEmail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductBuy from "./ListProductBuy";
-import Loading from "@/components/Loading";
 const { TextArea } = Input;
 
 function Buy({ productsSec, productEdit, id }) {
@@ -144,7 +144,6 @@ function Buy({ productsSec, productEdit, id }) {
       startTransition(() => {
         router.push("/profile/second-hand");
       });
-      window.scrollTo({ top: 0, behavior: "smooth" });
       disPatch(setFlag(!flag));
       resetState();
     } catch (error) {
@@ -163,14 +162,6 @@ function Buy({ productsSec, productEdit, id }) {
     timerProgressBar: true,
     customClass: "toast-modal",
   });
-
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
 
   return (
     <>
@@ -192,7 +183,6 @@ function Buy({ productsSec, productEdit, id }) {
                   startTransition(() => {
                     router.back();
                   });
-                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
               >
@@ -494,6 +484,7 @@ function Buy({ productsSec, productEdit, id }) {
           </div>
         )}
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

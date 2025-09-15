@@ -23,7 +23,6 @@ function BreadcrumbNav({ breadcrumb }) {
           href="/"
           onClick={(e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
             startTransition(() => {
               router.push("/");
             });
@@ -40,7 +39,6 @@ function BreadcrumbNav({ breadcrumb }) {
           href={item.href}
           onClick={(e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
             startTransition(() => {
               router.push(item.href);
             });
@@ -54,14 +52,6 @@ function BreadcrumbNav({ breadcrumb }) {
       ),
     })),
   ];
-
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
 
   return (
     <>
@@ -78,6 +68,7 @@ function BreadcrumbNav({ breadcrumb }) {
           />
         </div>
       )}
+      {isPending && <Loading />}
     </>
   );
 }

@@ -1,3 +1,4 @@
+import Loading from "@/components/Loading";
 import { loginSendOtp } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
@@ -89,16 +90,6 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
     }
   };
 
-  if (isPending) {
-    return (
-      <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
@@ -178,7 +169,6 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                       startTransition(() => {
                         router.back();
                       });
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                   >
@@ -216,6 +206,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
           </div>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

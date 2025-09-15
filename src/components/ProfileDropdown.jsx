@@ -289,7 +289,6 @@ const ProfileDropdown = () => {
                       startTransition(() => {
                         router.push(item.href || "#");
                       });
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     key={item.id}
                     href={item.href}
@@ -322,35 +321,30 @@ const ProfileDropdown = () => {
         )
       : null;
 
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
-
   return (
-    <div className="relative inline-block z-[1000000]">
-      {/* آیکون پروفایل */}
-      <div
-        ref={profileBtnRef}
-        className="inline-block"
-        style={{ cursor: "pointer" }}
-        onClick={() => setIsOpen((prev) => !prev)}
-      >
+    <>
+      <div className="relative inline-block z-[1000000]">
+        {/* آیکون پروفایل */}
         <div
-          className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg`}
+          ref={profileBtnRef}
+          className="inline-block"
+          style={{ cursor: "pointer" }}
+          onClick={() => setIsOpen((prev) => !prev)}
         >
-          <FaUser
-            className={
-              isOpen ? "text-2xl text-[#d1182b]" : "text-2xl text-gray-500"
-            }
-          />
+          <div
+            className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg`}
+          >
+            <FaUser
+              className={
+                isOpen ? "text-2xl text-[#d1182b]" : "text-2xl text-gray-500"
+              }
+            />
+          </div>
         </div>
+        {menuPortal}
       </div>
-      {menuPortal}
-    </div>
+      {isPending && <Loading />}
+    </>
   );
 };
 

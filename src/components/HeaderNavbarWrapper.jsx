@@ -89,13 +89,6 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
     return "0px";
   };
 
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
   return (
     <>
       {/* header ثابت که با اسکرول ظاهر می‌شود */}
@@ -186,6 +179,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
           style={{ zIndex: 999 }}
         />
       )}
+      {isPending && <Loading />}
     </>
   );
 };

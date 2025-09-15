@@ -18,6 +18,7 @@ export default function SubFooter() {
           <span
             className="text-3xl cursor-pointer inline-block align-middle"
             style={{ width: "1em", height: "1em" }}
+            aria-label="پروفایل کاربر"
           >
             <svg
               width="1.2em"

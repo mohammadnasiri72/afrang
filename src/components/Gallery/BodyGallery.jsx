@@ -288,14 +288,6 @@ function BodyGallery() {
     setImgSelected(ImagesData[prevIndex]);
   };
 
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
-
   return (
     <>
       {mounted && (
@@ -480,7 +472,6 @@ function BodyGallery() {
                           startTransition(() => {
                             router.push("/profile/Send-Photo");
                           });
-                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                       >
                         <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
@@ -675,7 +666,6 @@ function BodyGallery() {
                                 }?${searchParams.toString()}`
                               );
                             });
-                            window.scrollTo({ top: 0, behavior: "smooth" });
                           }}
                         >
                           {page}
@@ -690,6 +680,7 @@ function BodyGallery() {
           )}
         </Container>
       )}
+      {isPending && <Loading />}
     </>
   );
 }

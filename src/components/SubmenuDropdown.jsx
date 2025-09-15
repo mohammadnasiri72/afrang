@@ -134,7 +134,6 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                       startTransition(() => {
                         router.push(item.url || item.pageUrl || "#");
                       });
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     onMouseOver={(e) => {
                       if (item.isParent) {

@@ -13,13 +13,7 @@ import Loading from "../Loading";
 function BodyUserAdd({ productList, pathname, archived }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
+ 
   return (
     <>
       <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
@@ -45,7 +39,6 @@ function BodyUserAdd({ productList, pathname, archived }) {
                 startTransition(() => {
                   router.push("/useds/-1");
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
               <div
@@ -80,7 +73,6 @@ function BodyUserAdd({ productList, pathname, archived }) {
                 startTransition(() => {
                   router.push("/buyers/-1");
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
               <div
@@ -115,7 +107,6 @@ function BodyUserAdd({ productList, pathname, archived }) {
                 startTransition(() => {
                   router.push("/products?conditionId=20&orderby=2");
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
               <div
@@ -141,7 +132,6 @@ function BodyUserAdd({ productList, pathname, archived }) {
                 startTransition(() => {
                   router.push("/useds/-1?archived=true");
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
               <div
@@ -172,6 +162,9 @@ function BodyUserAdd({ productList, pathname, archived }) {
         {pathname === "useds" && <BoxSellSec productList={productList} />}
         {pathname === "buyers" && <BoxBuySec productList={productList} />}
       </div>
+      {
+        isPending && <Loading />
+      }
     </>
   );
 }

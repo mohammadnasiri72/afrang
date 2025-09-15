@@ -42,7 +42,7 @@ function DescProductDetails({ product }) {
             {product.product.title}
           </h1>
           {product?.product?.visit && (
-            <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+            <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
               <FaRegEye className="text-sm" />
               <span className="text-xs">{product?.product?.visit}</span>
             </div>
@@ -58,7 +58,7 @@ function DescProductDetails({ product }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1 flex-wrap ">
             {product?.product?.categoryTitle && (
-              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">دسته بندی : </span>
                 <span className="text-xs">
                   {product?.product?.categoryTitle}
@@ -66,20 +66,20 @@ function DescProductDetails({ product }) {
               </div>
             )}
             {/* {brand?.title && (
-              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">برند : </span>
                 <span className="text-xs">{brand.title}</span>
               </div>
             )} */}
             {
               product?.product?.brandTitle &&
-              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333a]">
+              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">برند : </span>
                 <span className="text-xs">{product?.product?.brandTitle}</span>
               </div>
             }
           </div>
-          {/* <div className="flex items-center gap-1 font-medium text-[#333a] hover:text-[#d1182b] duration-300 cursor-pointer">
+          {/* <div className="flex items-center gap-1 font-medium text-[#333] hover:text-[#d1182b] duration-300 cursor-pointer">
             <MdLocalPrintshop />
             <span className="text-xs">چاپ</span>
           </div> */}

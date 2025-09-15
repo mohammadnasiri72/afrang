@@ -81,7 +81,6 @@ function BoxSellSec({ productList }) {
                   startTransition(() => {
                     router.push(product.url);
                   });
-                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 href={product.url}
                 className="w-full h-full relative"
@@ -125,7 +124,6 @@ function BoxSellSec({ productList }) {
                     startTransition(() => {
                       router.push(product.url);
                     });
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="hover:text-[#d1182b] transition-colors"
                 >
@@ -193,7 +191,6 @@ function BoxSellSec({ productList }) {
                 startTransition(() => {
                   router.push(product.url);
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               href={product.url}
               className="w-full h-full relative"
@@ -246,7 +243,6 @@ function BoxSellSec({ productList }) {
                 startTransition(() => {
                   router.push(product.url);
                 });
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="hover:text-[#d1182b] transition-colors"
             >
@@ -304,7 +300,6 @@ function BoxSellSec({ productList }) {
               startTransition(() => {
                 router.push(createPageURL(current));
               });
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             {current}
@@ -316,13 +311,7 @@ function BoxSellSec({ productList }) {
     return originalElement;
   };
 
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
+  
 
   return (
     <>
@@ -483,6 +472,10 @@ function BoxSellSec({ productList }) {
           </div>
         )}
       </div>
+      {
+        isPending &&
+        <Loading />
+      }
     </>
   );
 }

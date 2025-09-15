@@ -13,13 +13,7 @@ function ListProductSec({ productsSec }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  if (isPending) {
-    return (
-      <>
-       <Loading />
-      </>
-    );
-  }
+ 
 
   return (
     <>
@@ -33,7 +27,6 @@ function ListProductSec({ productsSec }) {
             startTransition(() => {
               router.push("/profile/second-hand/add");
             });
-            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
@@ -126,6 +119,9 @@ function ListProductSec({ productsSec }) {
           )}
         </div>
       </div>
+      {
+        isPending && <Loading />
+      }
     </>
   );
 }

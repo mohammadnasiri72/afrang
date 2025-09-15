@@ -17,16 +17,6 @@ export default function CameraAccessories({ category }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
-
-  console.log(category);
-
   return (
     <>
       <div className="box-slider-CameraAccessories pt-5 pb-48">
@@ -72,7 +62,6 @@ export default function CameraAccessories({ category }) {
                     startTransition(() => {
                       router.push(item.url);
                     });
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   href={item.url}
                   className="flex flex-col items-center justify-center"
@@ -81,7 +70,7 @@ export default function CameraAccessories({ category }) {
                     <div className="w-[50px] h-[50px] flex items-center justify-center">
                       <img
                         src={getImageUrl(item.image)}
-                        alt={'دسته بندی محصولات'}
+                        alt={"دسته بندی محصولات"}
                         className="sm:w-[50px] sm:h-[50px] w-[40px] h-[40px]"
                       />
                     </div>
@@ -95,6 +84,7 @@ export default function CameraAccessories({ category }) {
           </Swiper>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

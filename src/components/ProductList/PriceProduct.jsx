@@ -15,12 +15,12 @@ function PriceProduct({ product }) {
   return (
     <>
       {product.callPriceButton && (
-        <div className="text-lg text-blue-500 mt-5 font-semibold select-none">
+        <div className="text-lg text-blue-800 mt-5 font-semibold select-none">
           تماس بگیرید
         </div>
       )}
       {!product.callPriceButton && price === 0 && (
-        <div className="text-lg text-blue-500 mt-5">بدون قیمت</div>
+        <div className="text-lg text-blue-800 mt-5">بدون قیمت</div>
       )}
       {!product.callPriceButton && price !== 0 && (
         <div className="bg-white p-2 rounded-lg shadow my-2 flex flex-col items-center justify-center">

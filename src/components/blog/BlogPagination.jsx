@@ -10,13 +10,7 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
+
   const createPageURL = (page) => {
     const params = new URLSearchParams(initialSearchParams);
 
@@ -61,7 +55,6 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(current);
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="ant-pagination-item-link"
           >
@@ -129,6 +122,7 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
           </div>
         </div>
       )}
+      {isPending && <Loading />}
     </>
   );
 };

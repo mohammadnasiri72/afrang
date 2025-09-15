@@ -18,12 +18,12 @@ function BreadcrumbNavProduct({ breadcrumb }) {
   if (!breadcrumb || !Array.isArray(breadcrumb) || breadcrumb.length === 0) {
     return (
       <div className="bg-white py-4 px-5 rounded-lg xl:px-16">
-        <div className="flex items-center space-x-2 text-gray-500">
-          <Link href="/" className="text-gray-500 hover:text-[#d1182b] font-[Yekan]">
+        <div className="flex items-center space-x-2 !text-gray-800">
+          <Link href="/" className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan]">
             خانه
           </Link>
-          <span className="text-gray-400 mx-2 text-xs font-[Yekan]">&gt;</span>
-          <span className="text-[#d1182b] font-[Yekan]">محصول</span>
+          <span className="!text-gray-700 mx-2 text-xs font-[Yekan]">&gt;</span>
+          <span className="!text-[#d1182b] font-[Yekan]">محصول</span>
         </div>
       </div>
     );
@@ -35,7 +35,7 @@ function BreadcrumbNavProduct({ breadcrumb }) {
       title: (
         <Link
           href="/"
-          className="text-gray-500 hover:text-[#d1182b] font-[Yekan]"
+          className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan]"
         >
           خانه
         </Link>
@@ -48,14 +48,14 @@ function BreadcrumbNavProduct({ breadcrumb }) {
           href={item.href}
           className={`font-[Yekan] !text-xs ${
             item.format === "selftext"
-              ? "text-[#d1182b]"
-              : "text-gray-500 hover:text-[#d1182b]"
+              ? "!text-[#d1182b]"
+              : "!text-gray-800 hover:text-[#d1182b]"
           }`}
         >
           {item.title}
         </Link>
       ) : (
-        <span className="text-[#d1182b] font-[Yekan]">{item.title}</span>
+        <span className="!text-[#d1182b] font-[Yekan]">{item.title}</span>
       ),
     })),
   ];
@@ -65,7 +65,7 @@ function BreadcrumbNavProduct({ breadcrumb }) {
       <Breadcrumb
         items={breadcrumbItems}
         separator={
-          <span className="text-gray-400 mx-2 text-xs font-[Yekan]">&gt;</span>
+          <span className="!text-gray-700 mx-2 text-xs font-[Yekan]">&gt;</span>
         }
         className="font-[Yekan]"
       />

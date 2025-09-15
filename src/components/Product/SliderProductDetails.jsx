@@ -38,6 +38,7 @@ Fancybox.bind("[data-fancybox='gallery']", {
 export default function SliderProductDetails({ attachments, product }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
+
   useEffect(() => {
     import("@fancyapps/ui/dist/fancybox/fancybox.css");
   }, []);
@@ -77,7 +78,7 @@ export default function SliderProductDetails({ attachments, product }) {
                 draggable="false"
                 className="w-36"
                 src="/public/images/soldout.png"
-                alt=""
+                alt="فروخته شد"
               />
             </div>
           )}
@@ -97,11 +98,12 @@ export default function SliderProductDetails({ attachments, product }) {
               >
                 {attachments.map((attachment) => (
                   <SwiperSlide key={attachment.id}>
-                    <a
+                    <a 
                       className="w-full"
                       href={getImageUrl2(attachment.fileUrl)}
                       data-fancybox="gallery"
                       data-caption="Caption Images 4"
+                      aria-label="لینک کروسل"
                     >
                       <img
                         className={`w-full border rounded-sm border-[#3331]  ${
@@ -110,6 +112,7 @@ export default function SliderProductDetails({ attachments, product }) {
                             : ""
                         }`}
                         src={getImageUrl2(attachment.fileUrl)}
+                        alt={product.title}
                       />
                     </a>
                   </SwiperSlide>
@@ -131,6 +134,7 @@ export default function SliderProductDetails({ attachments, product }) {
                     <img
                       className="w-full border rounded-sm border-[#3331]"
                       src={getImageUrl2(attachment.fileUrl)}
+                      alt={product.title}
                     />
                   </SwiperSlide>
                 ))}

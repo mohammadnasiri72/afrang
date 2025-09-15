@@ -24,17 +24,10 @@ import CountdownTimer from "./CountdownTimer";
 export default function ProductMain({ products }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
 
   return (
     <>
-      <div className="sm:min-h-[28rem]">
+      <div className="sm:min-h-[22rem] min-h-[23rem]">
         <Swiper
           // loop={true}
           grabCursor={true}
@@ -76,7 +69,7 @@ export default function ProductMain({ products }) {
               <SwiperSlide
                 key={`${product.id || product.productId || index}-${index}`}
               >
-                <div className="relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md">
+                <div className="relative group w-full sm:min-h-[22rem] min-h-[23rem] overflow-hidden rounded-xl bg-white shadow-md">
                   {/* تصویر */}
                   <Link
                     onClick={(e) => {
@@ -85,7 +78,6 @@ export default function ProductMain({ products }) {
                       startTransition(() => {
                         router.push(product.url);
                       });
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     href={product.url}
                     className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
@@ -137,7 +129,6 @@ export default function ProductMain({ products }) {
                         startTransition(() => {
                           router.push(product.url);
                         });
-                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       href={product.url}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
@@ -192,7 +183,7 @@ export default function ProductMain({ products }) {
                       ) : (
                         <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%] cursor-not-allowed">
                           <SlBasket className="text-xl text-[#333]" />
-                          <span className="px-1 text-[#666]">
+                          <span className="px-1 text-[#333]">
                             {product.statusDesc}
                           </span>
                         </div>
@@ -221,6 +212,7 @@ export default function ProductMain({ products }) {
           </div>
         </Swiper>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

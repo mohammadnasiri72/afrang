@@ -12,13 +12,10 @@ body {
   scroll-behavior: smooth !important;
 }
 
-
-
 @font-face {
   font-family: "Yekan";
   src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("truetype");
   font-weight: 300;
-  
 }
 @font-face {
   font-family: "Yekan";
@@ -784,7 +781,6 @@ th {
   font-family: var(--font-family-primary) !important;
 }
 
-
 .custom-success-message .anticon {
   color: #d1182b !important;
 }
@@ -837,7 +833,6 @@ th {
   z-index: 1199999 !important;
 }
 
-
 .used-icon-thumb.icon4 span {
   background-position: -158px 0;
 }
@@ -851,7 +846,7 @@ th {
   background-position: 0 0;
 }
 .used-icon-thumb span {
-  background-image: url('./../../public/images/used_icons.png');
+  background-image: url("./../../public/images/used_icons.png");
   background-repeat: no-repeat;
   background-position: center center;
   display: block;
@@ -866,20 +861,67 @@ th {
 }
 
 .inner-curve {
-  --r: 30px; 
-  --s: 80px; 
+  --r: 30px;
+  --s: 80px;
   --a: 30deg;
-  --p: 50%;  
-cursor: pointer;
+  --p: 50%;
+  cursor: pointer;
   height: 256px;
   aspect-ratio: 3/2;
-  background: #ED303C !important;
-  --_m:calc(100% - var(--r)),#000 calc(100% - 1px),#0000;
-  --_d:(var(--s) + var(--r))*cos(var(--a));
-  mask:
-    radial-gradient(var(--r) at calc(var(--p) + var(--_d)) var(--_m)),
+  background: #ed303c !important;
+  --_m: calc(100% - var(--r)), #000 calc(100% - 1px), #0000;
+  --_d: (var(--s) + var(--r)) * cos(var(--a));
+  mask: radial-gradient(var(--r) at calc(var(--p) + var(--_d)) var(--_m)),
     radial-gradient(var(--r) at calc(var(--p) - var(--_d)) var(--_m)),
-    radial-gradient(var(--s) at var(--p) calc(100% + sin(var(--a))*var(--s)),
-      #0000 100%,#000 calc(100% + 1px)) 0 calc(var(--r)*(sin(var(--a)) - 1)) no-repeat,
-    linear-gradient(90deg,#000 calc(var(--p) - var(--_d)),#0000 0 calc(var(--p) + var(--_d)),#000 0);
+    radial-gradient(
+        var(--s) at var(--p) calc(100% + sin(var(--a)) * var(--s)),
+        #0000 100%,
+        #000 calc(100% + 1px)
+      )
+      0 calc(var(--r) * (sin(var(--a)) - 1)) no-repeat,
+    linear-gradient(
+      90deg,
+      #000 calc(var(--p) - var(--_d)),
+      #0000 0 calc(var(--p) + var(--_d)),
+      #000 0
+    );
 }
+
+.slider-homePage .swiper-pagination {
+  bottom: 50% !important;
+  transform: translateY(50%) !important;
+  right: 20px;
+  width: 20px !important; /* محدود کردن عرض */
+  height: auto !important;
+  pointer-events: none !important; /* غیرفعال کردن تعامل با ماوس */
+}
+.custom-bullet {
+  background: rgba(255, 255, 255, 0.5) !important;
+  transition: all 0.3s ease !important;
+  width: 10px !important;
+  height: 10px !important;
+  opacity: 0.7 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin-bottom: 10px !important;
+  pointer-events: auto !important;
+}
+
+.custom-bullet:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+  opacity: 1 !important;
+}
+
+.custom-bullet-active {
+  background: #d1182b !important;
+  opacity: 1 !important;
+  width: 10px !important;
+  height: 20px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 10px #d1182b55 !important;
+}
+.custom-bullet-active:hover {
+  background: #d1182b !important;
+  opacity: 1 !important;
+}
+

@@ -35,7 +35,6 @@ export default async function ProductDetails(props) {
     console.error("Error recording visit:", error);
   }
 
-  console.log(product);
 
   return (
     <>

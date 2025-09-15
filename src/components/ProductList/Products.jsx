@@ -119,7 +119,6 @@ function Products({ products }) {
                     href={product.url}
                     onClick={(e) => {
                       e.preventDefault();
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                       startTransition(() => {
                         router.push(product.url);
                       });
@@ -168,7 +167,6 @@ function Products({ products }) {
                   href={product.url}
                   onClick={(e) => {
                     e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                     startTransition(() => {
                       router.push(product.url);
                     });
@@ -225,7 +223,6 @@ function Products({ products }) {
                   href={product.url}
                   onClick={(e) => {
                     e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                     startTransition(() => {
                       router.push(product.url);
                     });
@@ -288,7 +285,6 @@ function Products({ products }) {
                   href={product.url}
                   onClick={(e) => {
                     e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                     startTransition(() => {
                       router.push(product.url);
                     });
@@ -380,7 +376,6 @@ function Products({ products }) {
             href={product.url}
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
               startTransition(() => {
                 router.push(product.url);
               });
@@ -439,7 +434,6 @@ function Products({ products }) {
           href={product.url}
           onClick={(e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
             startTransition(() => {
               router.push(product.url);
             });

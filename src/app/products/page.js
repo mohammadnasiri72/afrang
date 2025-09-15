@@ -1,4 +1,5 @@
 import Container from '@/components/container';
+import { getCategory } from '@/services/Category/categoryService';
 import dynamic from 'next/dynamic';
 import { Suspense } from "react";
 
@@ -12,6 +13,11 @@ const CategoryListSkeleton = dynamic(() => import("@/components/ProductList/Cate
 export default async function ProductList({ searchParams }) {
   const params = await searchParams;
   
+   const categories = await getCategory({
+      TypeId: 4,
+      LangCode: "fa",
+      IsHome: 1,
+    });
 
   return (
     <div className="bg-[#f6f6f6] overflow-hidden py-10">
@@ -24,7 +30,7 @@ export default async function ProductList({ searchParams }) {
       ) : (
         <Container>
           <Suspense fallback={<CategoryListSkeleton />}>
-            <CategoryList />
+            <CategoryList categories={categories}/>
           </Suspense>
         </Container>
       )}

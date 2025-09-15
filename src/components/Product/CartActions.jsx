@@ -125,7 +125,7 @@ function CartActions({ product, warrantySelected }) {
         ) : (
           <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
             <FaCartShopping className="text-[#333]" />
-            <span className="text-[#666]">{product?.product?.statusDesc}</span>
+            <span className="text-[#333]">{product?.product?.statusDesc}</span>
           </button>
         )}
       </div>

@@ -76,7 +76,7 @@ function AccessoriesProduct({ product }) {
     return (
       <div className="p-5 flex flex-wrap items-start">
         <div className="md:w-1/4 w-full border rounded-lg border-[#0003] p-3">
-          <h5 className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</h5>
+          <span className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</span>
           {[1, 2, 3, 4, 5].map((index) => (
             <div key={index}>
               <Skeleton.Button
@@ -135,7 +135,7 @@ function AccessoriesProduct({ product }) {
     <>
       <div className="p-5 flex flex-wrap items-start">
         <div className="md:w-1/4 w-full border rounded-lg border-[#0003] p-3">
-          <h5 className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</h5>
+          <span className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</span>
           {categories.map((category, index) => (
             <div key={index}>
               <div
@@ -358,7 +358,7 @@ function AccessoriesProduct({ product }) {
                         </div>
                       )}
                       {!item.canAddCart && (
-                        <div className="mt-auto flex items-center gap-1 text-xs text-[#666] bg-[#e1e1e1] px-2 py-1 rounded">
+                        <div className="mt-auto flex items-center gap-1 text-xs text-[#333] bg-[#e1e1e1] px-2 py-1 rounded">
                           <SlBasket className="text-base text-[#333]" />
                           <span>{item.statusDesc}</span>
                         </div>

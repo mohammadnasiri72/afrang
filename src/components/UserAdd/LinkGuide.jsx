@@ -15,13 +15,6 @@ function LinkGuide() {
   const disPatch = useDispatch();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -64,7 +57,6 @@ function LinkGuide() {
               startTransition(() => {
                 router.push("/UsedRules");
               });
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
@@ -83,7 +75,6 @@ function LinkGuide() {
               startTransition(() => {
                 router.push(href);
               });
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
@@ -101,7 +92,6 @@ function LinkGuide() {
               startTransition(() => {
                 router.push(href);
               });
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
@@ -118,7 +108,6 @@ function LinkGuide() {
               startTransition(() => {
                 router.push(href2);
               });
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
@@ -139,6 +128,7 @@ function LinkGuide() {
           </Link>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

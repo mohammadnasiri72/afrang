@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { ResetPassword } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
@@ -91,7 +92,6 @@ const ForgotPassword = () => {
       startTransition(() => {
         router.push("/login");
       });
-      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -104,16 +104,6 @@ const ForgotPassword = () => {
       setLoading(false);
     }
   };
-
-  if (isPending) {
-    return (
-      <>
-        <div className="fixed inset-0 bg-[#fff] flex items-center justify-center !z-[10000000000000] transition-opacity duration-300">
-          <div className="w-8 h-8 border-4 border-[#d1182b] border-t-transparent rounded-full animate-spin" />
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -202,7 +192,6 @@ const ForgotPassword = () => {
                           startTransition(() => {
                             router.back();
                           });
-                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                       >
@@ -241,6 +230,7 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 };
