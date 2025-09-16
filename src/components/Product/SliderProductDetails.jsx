@@ -38,7 +38,6 @@ Fancybox.bind("[data-fancybox='gallery']", {
 export default function SliderProductDetails({ attachments, product }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-
   useEffect(() => {
     import("@fancyapps/ui/dist/fancybox/fancybox.css");
   }, []);
@@ -55,8 +54,8 @@ export default function SliderProductDetails({ attachments, product }) {
 
   return (
     <>
-      <div className="flex justify-between relative">
-        <div className="w-full mx-auto">
+      <div className="flex justify-between relative h-full ">
+        <div className="w-full mx-auto h-full">
           {/* تخفیف */}
           {product?.discount !== 0 && (
             <div className="absolute top-3 left-3 z-50 duration-300">
@@ -83,7 +82,7 @@ export default function SliderProductDetails({ attachments, product }) {
             </div>
           )}
           {attachments.length > 0 && (
-            <div className="slider-productDetails">
+            <div className="slider-productDetails h-full">
               <Swiper
                 style={{
                   cursor: "pointer",
@@ -98,15 +97,15 @@ export default function SliderProductDetails({ attachments, product }) {
               >
                 {attachments.map((attachment) => (
                   <SwiperSlide key={attachment.id}>
-                    <a 
-                      className="w-full"
+                    <a
+                      className=" h-full"
                       href={getImageUrl2(attachment.fileUrl)}
                       data-fancybox="gallery"
                       data-caption="Caption Images 4"
                       aria-label="لینک کروسل"
                     >
                       <img
-                        className={`w-full border rounded-sm border-[#3331]  ${
+                        className={`w-full h-full border rounded-sm border-[#3331]  ${
                           product?.statusId !== 1 && product?.conditionId === 20
                             ? "blur-xs"
                             : ""

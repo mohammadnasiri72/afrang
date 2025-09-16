@@ -1,26 +1,27 @@
-'use client';
-
-import { useState, useEffect } from "react";
-import ProductMain from "../home/ProductMain";
 import { getRelatedProductsByIdString } from "@/services/products/productService";
+import ProductMain from "../home/ProductMain";
 
-function DescProduct({ product }) {
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [similarProducts, setSimilarProducts] = useState([]);
+async function DescProduct({ product }) {
+  let similarProducts = [];
+  if (product.product?.similarId) {
+    similarProducts = await getRelatedProductsByIdString(
+      product.product.similarId
+    );
+  }
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      if (product.product?.optionalId) {
-        const relatedResult = await getRelatedProductsByIdString(product.product.optionalId);
-        setRelatedProducts(relatedResult || []);
-      }
-      if (product.product?.similarId) {
-        const similarResult = await getRelatedProductsByIdString(product.product.similarId);
-        setSimilarProducts(similarResult || []);
-      }
-    };
-    fetchProducts();
-  }, [product.product?.relatedId, product.product?.similarId]);
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     if (product.product?.optionalId) {
+  //       const relatedResult = await getRelatedProductsByIdString(product.product.optionalId);
+  //       setRelatedProducts(relatedResult || []);
+  //     }
+  //     if (product.product?.similarId) {
+  //       const similarResult = await getRelatedProductsByIdString(product.product.similarId);
+  //       setSimilarProducts(similarResult || []);
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, [product.product?.relatedId, product.product?.similarId]);
 
   return (
     <>
@@ -45,8 +46,7 @@ function DescProduct({ product }) {
           <ProductMain products={relatedProducts} />
         </div>
       } */}
-      {
-        similarProducts.length > 0 &&
+      {similarProducts.length > 0 && (
         <div className="sm:px-4 mt-20">
           <div className="sm:hidden flex justify-center items-center pb-10">
             <div className="sm:hidden flex items-center title-newProduct relative">
@@ -59,15 +59,14 @@ function DescProduct({ product }) {
             </div>
           </div>
         </div>
-      }
-      {
-        similarProducts.length > 0 &&
+      )}
+      {similarProducts.length > 0 && (
         <div className="mt-5">
           <ProductMain products={similarProducts} />
         </div>
-      }
+      )}
     </>
   );
 }
 
-export default DescProduct; 
+export default DescProduct;

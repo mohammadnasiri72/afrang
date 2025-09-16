@@ -1,6 +1,5 @@
 "use client";
 
-import { getComment } from "@/services/comments/serviceComment";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import moment from "moment-jalaali";
@@ -142,35 +141,14 @@ function CommentItem({ comment, onReply, replyTo, onReplySent, depth = 0 }) {
   );
 }
 
-function CommentProduct({ id, type }) {
-  const [comments, setComments] = useState([]);
-  const [isloading, setIsLoading] = useState(false);
+function CommentProduct({ comments, type, id }) {
   const [replyTo, setReplyTo] = useState(null);
-  const [refresh, setRefresh] = useState(0);
   const commentBoxRef = useRef(null);
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        setIsLoading(true);
-        const initialComments = await getComment(id, 1, type);
-        if (initialComments && Array.isArray(initialComments)) {
-          setComments(initialComments);
-        } else if (initialComments && Array.isArray(initialComments.items)) {
-          setComments(initialComments.items);
-        } else {
-          setComments([]);
-        }
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchComments();
-  }, [id, type, refresh]);
-
-  const commentTree = useMemo(() => buildCommentTree(comments), [comments]);
+  const commentTree =
+    comments && comments.length > 0
+      ? useMemo(() => buildCommentTree(comments), [comments])
+      : [];
 
   const handleReply = (commentId) => {
     setReplyTo(commentId);
@@ -178,11 +156,6 @@ function CommentProduct({ id, type }) {
 
   const handleReplySent = () => {
     setReplyTo(null);
-    setRefresh((r) => r + 1);
-  };
-
-  const handleNewCommentSent = () => {
-    setRefresh((r) => r + 1);
   };
 
   const EmptyComments = () => {
@@ -193,9 +166,9 @@ function CommentProduct({ id, type }) {
         ) : (
           <FaQuestionCircle className="text-6xl text-gray-300 mb-4" />
         )}
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+        <span className="text-xl font-semibold text-gray-700 mb-2">
           {type === 0 ? "هنوز نظری ثبت نشده است" : "هنوز پرسشی ثبت نشده است"}
-        </h3>
+        </span>
         <p className="text-gray-500 text-center max-w-md">
           {type === 0
             ? "اولین نفری باشید که نظر خود را درباره این مطلب بیان می‌کنید"
@@ -213,9 +186,7 @@ function CommentProduct({ id, type }) {
 
   return (
     <div className="mx-auto py-4 sm:px-10 px-5 bg-white rounded-lg shadow">
-      {isloading ? (
-        <div>در حال بارگذاری...</div>
-      ) : commentTree.length === 0 ? (
+      {commentTree.length === 0 ? (
         <EmptyComments />
       ) : (
         commentTree.map((comment) => (
@@ -232,13 +203,12 @@ function CommentProduct({ id, type }) {
         ))
       )}
       {/* فرم ثبت کامنت جدید پایین لیست */}
-      <div className="mt-8">
+      <div className="mt-8 h-[25rem] overflow-auto">
         <SendCommentBox
           ref={commentBoxRef}
           itemId={id}
           parentId={-1}
           type={type}
-          onCommentSent={handleNewCommentSent}
           boxTitle={boxTitle}
           placeholder={placeholder}
         />

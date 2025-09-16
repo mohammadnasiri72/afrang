@@ -332,6 +332,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
           </div>
         </div>
       </Swiper>
+      
     </>
   );
 }

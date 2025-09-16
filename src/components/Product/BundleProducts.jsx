@@ -8,50 +8,15 @@ import { useEffect, useState } from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 
-function BundleProducts({ product }) {
-  const [bundleProducts, setBundleProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+async function BundleProducts({ product }) {
 
-  useEffect(() => {
-    const fetchBundleProducts = async () => {
-      setLoading(true);
-      if (product?.bundle?.products?.length) {
-        // تبدیل آرایه productId ها به یک رشته با جداکننده کاما
-        const productIds = product.bundle.products
-          .map((item) => item.productId)
-          .join(",");
-        const products = await getRelatedProductsByIdString(productIds);
-        setBundleProducts(products);
-      }
-      setLoading(false);
-    };
+  const bundleProducts = await getRelatedProductsByIdString(product.bundle.products)
 
-    fetchBundleProducts();
-  }, [product]);
 
-  if (loading) {
-    return (
-      <div className="p-5">
-        <div className="flex flex-wrap md:-mt-3 w-full">
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="md:w-1/3 lg:w-1/4 w-full">
-              <div className="w-full p-3 relative h-full">
-                <div className="relative rounded-lg overflow-hidden shadow-lg border border-[#0001] h-full flex flex-col">
-                  <Skeleton.Image active className="!w-full !h-48" />
-                  <div className="p-3">
-                    <Skeleton active paragraph={{ rows: 2 }} />
-                    <div className="mt-3">
-                      <Skeleton.Button active block />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+
+ 
+
+ 
 
   if (!bundleProducts.length) {
     return (
@@ -60,9 +25,9 @@ function BundleProducts({ product }) {
           <div className="flex justify-center mb-6">
             <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          <span className="text-2xl font-bold mb-4 text-gray-800">
             محصولات مرتبطی یافت نشد!
-          </h2>
+          </span>
           <p className="text-gray-600">
             در حال حاضر محصول مرتبطی برای این کالا وجود ندارد.
           </p>
@@ -85,7 +50,7 @@ function BundleProducts({ product }) {
                   </span>
                 </div>
               )}
-              <div className="relative rounded-lg group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
+              <div className="relative group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
                 <Link href={item.url} className="flex-grow-0">
                   <img
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"

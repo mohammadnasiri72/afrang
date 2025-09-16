@@ -19,7 +19,7 @@ export default function CameraAccessories({ category }) {
 
   return (
     <>
-      <div className="box-slider-CameraAccessories pt-5 pb-48">
+      <div className="box-slider-CameraAccessories bg-no-repeat bg-cover h-80 pt-3">
         <div className="sm:px-16 px-2">
           <Swiper
             // loop={true}

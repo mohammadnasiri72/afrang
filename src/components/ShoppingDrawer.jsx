@@ -95,7 +95,7 @@ function ShoppingDrawer() {
 
   return (
     <>
-      {mounted && (
+      {mounted ? (
         <>
           <div className="relative">
             <span
@@ -406,6 +406,42 @@ function ShoppingDrawer() {
               z-index: 99999;
             }
           `}</style>
+        </>
+      ) : (
+        <>
+          <span
+            className="text-3xl cursor-pointer inline-block align-middle"
+            style={{ width: "1.2em", height: "1.2em" }}
+          >
+            <svg
+              width="1.2em"
+              height="1.2em"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ display: "block" }}
+            >
+              <rect
+                width="32"
+                height="32"
+                rx="16"
+                fill="#d1182b"
+                fillOpacity="0.08"
+              />
+              <path
+                d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1"
+                stroke="#d1182b"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle cx="13.5" cy="25" r="1.5" fill="#d1182b" />
+              <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
+            </svg>
+          </span>
+          <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            0
+          </span>
         </>
       )}
     </>

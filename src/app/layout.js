@@ -1,14 +1,15 @@
+/* eslint-disable @next/next/no-css-tags */
 import { fetchBrandingItems } from "@/services/brandingService";
 import { getItem } from "@/services/Item/item";
 import { getMenuFooter } from "@/services/menu/menuService";
 import { fetchMenuItems } from "@/services/menuService";
 import { getPopUpsData } from "@/services/popups/popups";
 import { getSettings } from "@/services/settings/settingsService";
-import "@/styles/leaflet.css";
+// import "@/styles/leaflet.css";
 import { mainDomainImg } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Toaster } from "react-hot-toast";
-import "./../../public/fa/css/all.min.css";
+// import "./../../public/fa/css/all.min.css";
 import AntdRegistry from "./AntdRegistry";
 import "./globals.css";
 

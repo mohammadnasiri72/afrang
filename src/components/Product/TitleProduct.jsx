@@ -1,7 +1,6 @@
-import React from "react";
-import SliderProductDetails from "./SliderProductDetails";
-import DescProductDetails from "./DescProductDetails";
 import BasketBox from "./BasketBox";
+import DescProductDetails from "./DescProductDetails";
+import SliderProductDetails from "./SliderProductDetails";
 
 function TitleProduct({ product }) {
   // ساخت آبجکت جدید برای تصویر اصلی با همان ساختار attachments
@@ -25,7 +24,7 @@ function TitleProduct({ product }) {
     <>
       <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative">
         {allAttachments && allAttachments.length > 0 && (
-          <div className="lg:w-[40%] w-full p-2">
+          <div className="lg:w-[40%] w-full p-2 h-[30rem] overflow-hidden">
             <SliderProductDetails
               attachments={allAttachments}
               product={product?.product}

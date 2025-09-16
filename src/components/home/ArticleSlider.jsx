@@ -52,7 +52,7 @@ export default function ArticleSlider({ blogs }) {
 
   return (
     <>
-      <div className="sm:px-16 px-2">
+      <div className="sm:px-16 px-2 min-h-96">
         <Swiper
           slidesPerView={4}
           spaceBetween={10}

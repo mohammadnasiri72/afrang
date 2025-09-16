@@ -25,10 +25,7 @@ function BasketBox({ product }) {
       : {}
   );
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+ 
 
   let filteredArray = [];
 
@@ -64,7 +61,7 @@ function BasketBox({ product }) {
       <div className="bg-[#f6f6f6] h-full rounded-lg p-2">
         <h2 className="font-bold text-[#333]">اطلاعات محصول</h2>
         {product.warranty.warrantyWays &&
-          mounted &&
+         
           product.warranty.warrantyWays.length > 0 && (
             <Warranties
               warrantiesArray={product.warranty.warrantyWays}
@@ -79,7 +76,7 @@ function BasketBox({ product }) {
           <div className="w-full">
             <CompareButton id={product?.product?.productId} />
           </div>
-          <div className="w-full">
+          <div className="w-full h-10">
             <LikeProduct productId={product?.product?.productId} />
           </div>
         </div>
@@ -168,12 +165,12 @@ function BasketBox({ product }) {
           </div>
         )}
         <div className="sm:block hidden">
-          {mounted && (
+         
             <CartActions
               product={product}
               warrantySelected={warrantySelected}
             />
-          )}
+        
         </div>
         {product?.product?.statusId !== 1 &&
           product?.product?.conditionId !== 20 && (

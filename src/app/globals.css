@@ -14,47 +14,55 @@ body {
 
 @font-face {
   font-family: "Yekan";
-  src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Thin.woff") format("woff");
   font-weight: 300;
+  font-display: swap;
 }
 @font-face {
   font-family: "Yekan";
-  src: url("./../../public/font/YekanBakhFaNum-Light.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Light.woff") format("woff");
   font-weight: 400;
+  font-display: swap;
 }
 @font-face {
   font-family: "Yekan";
-  src: url("./../../public/font/YekanBakhFaNum-Regular.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Regular.woff") format("woff");
   font-weight: 500;
+  font-display: swap;
 }
 @font-face {
   font-family: "Yekan";
-  src: url("./../../public/font/YekanBakhFaNum-Medium.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Medium.woff") format("woff");
   font-weight: 600;
+  font-display: swap;
 }
 @font-face {
   font-family: "Yekan";
-  src: url("./../../public/font/YekanBakhFaNum-Heavy.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Heavy.woff") format("woff");
   font-weight: 700;
+  font-display: swap;
 }
 @font-face {
   font-family: "YekanPersianNum";
-  src: url("./../../public/font/YekanBakhFaNum-Fat.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Fat.woff") format("woff");
   font-weight: 800;
+  font-display: swap;
 }
 @font-face {
   font-family: "YekanPersianNum";
-  src: url("./../../public/font/YekanBakhFaNum-Bold.woff") format("truetype");
+  src: url("./../../public/font/YekanBakhFaNum-Bold.woff") format("woff");
   font-weight: 900;
+  font-display: swap;
 }
-@font-face {
+/* @font-face {
   font-family: "Morabba";
   src: url("./../../public/font/Morabba.ttf") format("truetype");
   font-weight: normal;
-}
+  font-display: swap;
+} */
 body {
   direction: rtl !important;
-  font-family: Yekan !important;
+  font-family: Yekan, sans-serif !important;
   font-size: 14px;
   font-weight: normal;
   line-height: 23px;
@@ -64,12 +72,12 @@ body {
 
 html {
   scroll-behavior: smooth;
-  font-family: Yekan !important;
+  font-family: Yekan, sans-serif !important;
 }
 
-.logo-text {
+/* .logo-text {
   font-family: Morabba !important;
-}
+} */
 
 .slider-container {
   cursor: grab;
@@ -168,8 +176,6 @@ html {
 
 .box-slider-CameraAccessories {
   background-image: url("./../../public/images/gallery/bg-pattern.png");
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .title-newProduct:after,
@@ -211,15 +217,7 @@ html {
   width: 4%;
 }
 
-.secondHand-sec {
-  padding-top: 20px;
-  background: rgb(246, 246, 246);
-  background: linear-gradient(
-    0deg,
-    rgba(246, 246, 246, 1) 25%,
-    rgba(217, 217, 217, 1) 100%
-  );
-}
+
 .footer {
   background: linear-gradient(
     0deg,

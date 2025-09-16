@@ -70,7 +70,7 @@ export default function PriceFixed({ product }) {
   return (
     <>
       {mounted && (
-        <div className="sm:hidden block fixed bottom-14 right-0 left-0 w-full !z-[50]">
+        <div className="sm:hidden block fixed bottom-[3.75rem] right-0 left-0 w-full !z-[50]">
           <div className="flex items-center justify-between bg-white shadow-lg rounded-xl px-3 border border-[#eee]">
             <div className="flex flex-col items-start">
               <span className=" font-bold text-[#d1182b]">

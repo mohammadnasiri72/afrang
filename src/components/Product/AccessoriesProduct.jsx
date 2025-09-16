@@ -24,38 +24,13 @@ function chunkArray(array, size) {
   return result;
 }
 
-function AccessoriesProduct({ product }) {
+function AccessoriesProduct({ product , relatedProducts}) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(1200);
   const productsSectionRef = useRef(null);
 
-  useEffect(() => {
-    const fetchRelatedProducts = async () => {
-      setLoading(true);
-      try {
-        if (product?.product?.relatedId) {
-          const result = await getRelatedProductsByIdString(
-            product?.product?.relatedId
-          );
-          setRelatedProducts(result || []);
-        }
-      } catch (error) {
-        console.error("Error fetching related products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRelatedProducts();
-  }, [product?.product?.relatedId]);
+  
 
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+ 
 
   // Get unique categories from relatedProducts
   const categories = [
@@ -72,46 +47,7 @@ function AccessoriesProduct({ product }) {
   const groupedProducts = chunkArray(filteredProducts, groupSize);
   const shouldUseSlider = filteredProducts.length > groupSize;
 
-  if (loading) {
-    return (
-      <div className="p-5 flex flex-wrap items-start">
-        <div className="md:w-1/4 w-full border rounded-lg border-[#0003] p-3">
-          <span className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</span>
-          {[1, 2, 3, 4, 5].map((index) => (
-            <div key={index}>
-              <Skeleton.Button
-                active
-                size="large"
-                block
-                className="mt-3"
-                style={{ height: "48px", borderRadius: "4px" }}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="md:w-3/4 w-full md:px-5">
-          <div className="flex flex-wrap md:-mt-3 w-full">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="md:w-1/2 lg:w-1/3 w-full">
-                <div className="w-full p-3 relative h-full">
-                  <div className="relative rounded-lg overflow-hidden shadow-lg border border-[#0001] h-full flex flex-col">
-                    <Skeleton.Image active className="!w-full !h-48" />
-                    <div className="p-3">
-                      <Skeleton active paragraph={{ rows: 2 }} />
-                      <div className="mt-3">
-                        <Skeleton.Button active block />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+ 
 
   if (!categories || categories.length === 0) {
     return (
@@ -120,9 +56,9 @@ function AccessoriesProduct({ product }) {
           <div className="flex justify-center mb-6">
             <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          <span className="text-2xl font-bold mb-4 text-gray-800">
             محصول مرتبطی یافت نشد!
-          </h2>
+          </span>
           <p className="text-gray-600">
             در حال حاضر محصول مرتبطی برای این کالا ثبت نشده است.
           </p>

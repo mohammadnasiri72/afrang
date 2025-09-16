@@ -267,10 +267,10 @@ const Footer = ({ socialNetworks, footerMenu }) => {
             <div className="lg:w-1/12 sm:w-1/2 w-full p-3 sm:text-start text-center">
               <h4 className="font-semibold text-[16px]">مجوزها</h4>
               <div className="flex flex-wrap sm:justify-start justify-center items-center gap-2 mt-3">
-                <div className="py-2 px-5 rounded-lg bg-red-300 cursor-pointer duration-300 hover:bg-[#d1182b]">
+                <div className="py-2 px-5 rounded-lg bg-red-300 w-28 h-28 cursor-pointer duration-300 hover:bg-[#d1182b]">
                   <img src="/images/icons/namad.png" alt="#" />
                 </div>
-                <div className="py-2 px-5 rounded-lg bg-red-300 cursor-pointer duration-300 hover:bg-[#d1182b]">
+                <div className="py-2 px-5 rounded-lg bg-red-300 w-28 h-28 cursor-pointer duration-300 hover:bg-[#d1182b]">
                   <img src="/images/icons/namad.png" alt="#" />
                 </div>
               </div>

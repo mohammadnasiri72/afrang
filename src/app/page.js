@@ -448,7 +448,7 @@ export default async function Home() {
   return (
     <div className="bg-[#f6f6f6] overflow-hidden">
       <SliderHome sliderItems={sliderItems} />
-      <div className="sm:px-20 px-2">
+      <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
         <Suspense fallback={<EidDiscountSkeleton />}>
           <EidDiscount actionProducts={actionProducts} products={productList} />
         </Suspense>
@@ -466,28 +466,28 @@ export default async function Home() {
         <BoxImgHome />
       </Suspense>
       {newProducts.length > 0 && (
-        <div className="sm:px-20 px-2">
+        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<NewProductSkeleton />}>
             <NewProduct products={newProducts} />
           </Suspense>
         </div>
       )}
       {oldProducts.length > 0 && (
-        <div className="">
+        <div className=" lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<SecondHandProductSkeleton />}>
             <SecondHandProduct oldProducts={oldProducts} />
           </Suspense>
         </div>
       )}
       {productsData.length > 0 && (
-        <div className="secondHand-sec">
+        <div className=" min-h-[23rem] bg-gradient-to-t from-[#d9d9d9] to-[#f6f6f6] to-25%">
           <Suspense fallback={<SecondHandProductSkeletonUser />}>
             <SecondHandProductUser filteredProducts={productsData} />
           </Suspense>
         </div>
       )}
       {blogs.length > 0 && (
-        <div>
+        <div className="sm:h-[29rem] h-[31rem] overflow-hidden">
           <ArticleHeader />
           <Suspense fallback={<ArticleSliderSkeleton />}>
             <ArticleSlider blogs={blogs} />

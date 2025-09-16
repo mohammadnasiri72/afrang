@@ -9,7 +9,14 @@ import CommentProduct from "./CommentProduct";
 import DetailsProduct from "./DetailsProduct";
 import SpecificationsProduct from "./SpecificationsProduct";
 
-function ProductTabs({ product, parentRef }) {
+function ProductTabs({
+  product,
+  parentRef,
+  relatedProducts,
+  listVideo,
+  comments,
+  commentsQuestion,
+}) {
   const [tabProDetails, setTabProDetails] = useState(
     product.product.typeId === 3 ? 1 : 2
   );
@@ -454,51 +461,48 @@ function ProductTabs({ product, parentRef }) {
         <div className="w-full">
           {product.product.typeId === 3 && (
             <div ref={bundleRef} className="tab-section-scroll-anchor">
-              <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+              <span className="px-7 text-2xl font-bold text-[#d1182b]">
                 لیست محصولات
-              </h3>
+              </span>
               <BundleProducts product={product} />
             </div>
           )}
           <Divider style={{ margin: 0, padding: 0 }} />
 
           <div ref={detailsRef} className="tab-section-scroll-anchor pt-2">
-            <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+            <span className="px-7 text-2xl font-bold text-[#d1182b]">
               توضیحات محصول
-            </h3>
+            </span>
             <DetailsProduct product={product} />
           </div>
           <Divider />
 
           <div ref={specsRef} className="tab-section-scroll-anchor">
-            <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+            <span className="px-7 text-2xl font-bold text-[#d1182b]">
               مشخصات فنی
-            </h3>
+            </span>
             <SpecificationsProduct product={product} />
           </div>
           <Divider />
           <div>
-            <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+            <span className="px-7 text-2xl font-bold text-[#d1182b]">
               محصولات مرتبط
-            </h3>
+            </span>
             <div ref={accessoriesRef} className="tab-section-scroll-anchor">
-              <AccessoriesProduct product={product} />
+              <AccessoriesProduct
+                product={product}
+                relatedProducts={relatedProducts}
+              />
             </div>
           </div>
           <Divider />
           {hasRelatedVideos && (
             <div>
-              <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+              <span className="px-7 text-2xl font-bold text-[#d1182b]">
                 ویدئوهای مرتبط
-              </h3>
+              </span>
               <div ref={relatedVideosRef} className="tab-section-scroll-anchor">
-                <BoxVideoProduct
-                  ids={
-                    product.properties.find(
-                      (e) => e.propertyKey === "related_videos"
-                    )?.value
-                  }
-                />
+                <BoxVideoProduct listVideo={listVideo} />
               </div>
             </div>
           )}
@@ -506,17 +510,17 @@ function ProductTabs({ product, parentRef }) {
           {product.product.conditionId !== 20 && (
             <div>
               <div ref={commentsRef} className="tab-section-scroll-anchor">
-                <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+                <span className="px-7 text-2xl font-bold text-[#d1182b]">
                   نظرات کاربران
-                </h3>
-                <CommentProduct id={product.product.productId} type={0} />
+                </span>
+                <CommentProduct comments={comments} type={0}  id={product.product.productId}/>
               </div>
               <Divider />
               <div ref={qaRef} className="tab-section-scroll-anchor">
-                <h3 className="px-7 text-2xl font-bold text-[#d1182b]">
+                <span className="px-7 text-2xl font-bold text-[#d1182b]">
                   پرسش و پاسخ
-                </h3>
-                <CommentProduct id={product.product.productId} type={1} />
+                </span>
+                <CommentProduct comments={commentsQuestion} type={1}  id={product.product.productId}/>
               </div>
             </div>
           )}

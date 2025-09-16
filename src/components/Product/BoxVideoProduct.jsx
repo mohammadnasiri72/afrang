@@ -1,14 +1,13 @@
 "use client";
 
-import { getListItemByIds } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
-import { useEffect, useState, useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Fancybox } from "@fancyapps/ui";
+import { useEffect } from "react";
+import { FaPlay } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Fancybox } from "@fancyapps/ui";
-import { FaPlay } from "react-icons/fa";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // تنظیمات Fancybox برای گالری ویدئو
 Fancybox.bind("[data-fancybox='video-gallery']", {
@@ -21,24 +20,7 @@ Fancybox.bind("[data-fancybox='video-gallery']", {
   dragToClose: true,
 });
 
-
-
-function BoxVideoProduct({ ids }) {
-  const [listVideo, setListVideo] = useState([]);
-
-  useEffect(() => {
-    if (!ids) return;
-    const fetchData = async () => {
-      try {
-        const response = await getListItemByIds(ids);
-        setListVideo(response);
-      } catch (error) {
-        console.error("Error fetching video items:", error);
-      }
-    };
-    fetchData();
-  }, [ids]);
-
+function BoxVideoProduct({ listVideo }) {
   // افزایش z-index fancybox
   useEffect(() => {
     const style = document.createElement("style");
@@ -57,8 +39,8 @@ function BoxVideoProduct({ ids }) {
       return `
         <div style="position:relative;height:100%;max-width:100%;aspect-ratio:16/9;overflow:hidden;">
           ${match[0].replace(
-            '<iframe',
-            '<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"'
+            "<iframe",
+            '<iframe  title="ویدئو محصول با iframe" style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"'
           )}
         </div>
       `;
@@ -111,6 +93,7 @@ function BoxVideoProduct({ ids }) {
     } else if (videoScript) {
       // اگر اسکریپت HTML با iframe بود فقط iframe را استخراج کن
       const iframeTag = extractIframeTag(videoScript);
+
       if (iframeTag) {
         videoContent = iframeTag;
       } else {
@@ -129,12 +112,12 @@ function BoxVideoProduct({ ids }) {
           {/* کاور ویدئو */}
           <div
             style={{
-              position: 'relative',
-              aspectRatio: '16/9',
-              width: '100%',
-              overflow: 'hidden',
-              borderRadius: '0.75rem',
-              background: '#e5e7eb',
+              position: "relative",
+              aspectRatio: "16/9",
+              width: "100%",
+              overflow: "hidden",
+              borderRadius: "0.75rem",
+              background: "#e5e7eb",
             }}
             className="group"
           >
@@ -143,23 +126,23 @@ function BoxVideoProduct({ ids }) {
                 src={getImageUrl(coverImage)}
                 alt={video.title}
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   top: 0,
                   left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
                 }}
               />
             ) : (
               <div
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   top: 0,
                   left: 0,
-                  width: '100%',
-                  height: '100%',
+                  width: "100%",
+                  height: "100%",
                 }}
                 className="bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center"
               >
@@ -171,11 +154,11 @@ function BoxVideoProduct({ ids }) {
             {videoContent && (
               <div
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   inset: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <div className="bg-black bg-opacity-50 rounded-full p-4 cursor-pointer group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
@@ -185,15 +168,16 @@ function BoxVideoProduct({ ids }) {
             )}
 
             {/* لینک Fancybox */}
-            {videoContent && (
+            {videoContent && videoFile && !videoScript && (
               <a
-                href={videoFile && !videoScript ? videoContent : undefined}
+                aria-label="لینک ویدئو محصول"
+                href={videoContent}
                 data-fancybox="video-gallery"
                 data-caption={video.title}
                 className="absolute top-0 bottom-0 right-0 left-0 block cursor-pointer"
                 style={{ zIndex: 10 }}
                 {...(videoScript
-                  ? { 'data-type': 'html', 'data-src': videoContent }
+                  ? { "data-type": "html", "data-src": videoContent }
                   : {})}
               />
             )}
@@ -290,10 +274,8 @@ function BoxVideoProduct({ ids }) {
           padding: 0 !important;
           background: #000 !important;
         }
-        .fancybox__content img, .fancybox__content video {
-         
-        
-         
+        .fancybox__content img,
+        .fancybox__content video {
           object-fit: contain !important;
           background: #000 !important;
           margin: 0 auto;

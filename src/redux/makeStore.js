@@ -41,7 +41,6 @@ const rootReducer = combineReducers({
   address: addressReducer,
   blog: blogReducer,
   cart: cartReducer,
-  cart1: cartReducer1,
   shipping: shippingReducer,
   legalId: legalIdReducer,
   paymentWay: paymentWayReducer,

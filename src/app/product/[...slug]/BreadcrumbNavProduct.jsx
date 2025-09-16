@@ -5,14 +5,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 function BreadcrumbNavProduct({ breadcrumb }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  
 
-  if (!mounted) {
-    return null;
-  }
+ 
 
   // Check if breadcrumb exists and has data
   if (!breadcrumb || !Array.isArray(breadcrumb) || breadcrumb.length === 0) {

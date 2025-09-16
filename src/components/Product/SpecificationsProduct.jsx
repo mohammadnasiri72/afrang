@@ -1,35 +1,6 @@
-"use client";
-
-import React, { useRef, useState, useEffect } from "react";
-import { Skeleton } from "antd";
 import { FaClipboardList } from "react-icons/fa";
 
 function SpecificationsProduct({ product }) {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // شبیه‌سازی زمان لودینگ برای نمایش اسکلتون
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="mt-5 px-5">
-        {[1, 2, 3, 4].map((item) => (
-          <div key={item} className="mt-3">
-            <Skeleton.Input active block className="!h-14" />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  
-
   if (!product.properties || product.properties.length === 0) {
     return (
       <div className="flex justify-center p-8">
@@ -37,7 +8,9 @@ function SpecificationsProduct({ product }) {
           <div className="flex justify-center mb-6">
             <FaClipboardList className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">مشخصاتی ثبت نشده!</h2>
+          <span className="text-2xl font-bold mb-4 text-gray-800">
+            مشخصاتی ثبت نشده!
+          </span>
           <p className="text-gray-600">
             در حال حاضر مشخصات فنی برای این محصول ثبت نشده است.
           </p>
@@ -52,10 +25,15 @@ function SpecificationsProduct({ product }) {
   return (
     <div className="mt-5 w-full px-5">
       {grouped.map((group, idx) => (
-        <div key={idx} className="mb-7 bg-white rounded-lg shadow border border-gray-100">
+        <div
+          key={idx}
+          className="mb-7 bg-white rounded-lg shadow border border-gray-100"
+        >
           <div className="bg-[#f3f3f3] rounded-t-lg px-6 py-3 border-b border-gray-100 flex items-center">
             <FaClipboardList className="text-[#d1182b] mr-2 text-lg" />
-            <span className="font-bold text-gray-800 text-base">{group.title}</span>
+            <span className="font-bold text-gray-800 text-base">
+              {group.title}
+            </span>
           </div>
           <div className="divide-y divide-gray-100">
             {group.items.map((property) => (
@@ -63,8 +41,12 @@ function SpecificationsProduct({ product }) {
                 key={property.id}
                 className="flex items-center py-3 px-6 hover:bg-gray-50 transition"
               >
-                <div className="w-1/2 text-gray-700 text-sm">{property.title}</div>
-                <div className="w-1/2 font-semibold text-gray-900 text-sm text-left">{property.propertyValue}</div>
+                <div className="w-1/2 text-gray-700 text-sm">
+                  {property.title}
+                </div>
+                <div className="w-1/2 font-semibold text-gray-900 text-sm text-left">
+                  {property.propertyValue}
+                </div>
               </div>
             ))}
           </div>
@@ -95,8 +77,12 @@ function groupByCategory(properties) {
   });
   // مرتب‌سازی گروه‌ها بر اساس propertyCategoryPriority (نزولی)، سپس propertyCategoryId (نزولی)
   return Object.values(groups).sort((a, b) => {
-    if ((b.propertyCategoryPriority ?? 0) !== (a.propertyCategoryPriority ?? 0)) {
-      return (b.propertyCategoryPriority ?? 0) - (a.propertyCategoryPriority ?? 0);
+    if (
+      (b.propertyCategoryPriority ?? 0) !== (a.propertyCategoryPriority ?? 0)
+    ) {
+      return (
+        (b.propertyCategoryPriority ?? 0) - (a.propertyCategoryPriority ?? 0)
+      );
     }
     return (b.propertyCategoryId ?? 0) - (a.propertyCategoryId ?? 0);
   });

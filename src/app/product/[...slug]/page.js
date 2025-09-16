@@ -35,7 +35,6 @@ export default async function ProductDetails(props) {
     console.error("Error recording visit:", error);
   }
 
-
   return (
     <>
       {product?.breadcrumb && (
@@ -51,7 +50,9 @@ export default async function ProductDetails(props) {
               </div>
               <BasketFixed product={product} />
             </div>
-            <DescProduct product={product} />
+            <div className="sm:h-[35rem] h-[40rem] overflow-hidden">
+              <DescProduct product={product} />
+            </div>
           </div>
         </div>
       )}

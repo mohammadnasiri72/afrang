@@ -1,3 +1,5 @@
+import { getComment } from "@/services/comments/serviceComment";
+import { getListItemByIds } from "@/services/Item/item";
 import { getRelatedProductsByIdString } from "@/services/products/productService";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";
@@ -46,6 +48,24 @@ async function BodyProduct({ product }) {
       product?.product?.relatedId
     );
   }
+
+  let listVideo = [];
+  if (product?.product?.relatedId) {
+    listVideo = await getListItemByIds(
+      product.properties.find((e) => e.propertyKey === "related_videos")?.value
+    );
+  }
+
+  let comments = [];
+  if (product?.product?.relatedId) {
+    comments = await getComment(product.product.productId, 1, 0);
+  }
+
+  let commentsQuestion = [];
+  if (product?.product?.relatedId) {
+    commentsQuestion = await getComment(product.product.productId, 1, 1);
+  }
+
 
   return (
     <>
@@ -154,7 +174,13 @@ async function BodyProduct({ product }) {
         <CommentProduct id={product.product.productId} type={1} />
       </div>
 
-      <ProductTabs product={product} />
+      <ProductTabs
+        product={product}
+        relatedProducts={relatedProducts}
+        listVideo={listVideo}
+        comments={comments}
+        commentsQuestion={commentsQuestion}
+      />
     </>
   );
 }
