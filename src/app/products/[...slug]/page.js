@@ -6,6 +6,7 @@ import {
   getProductCategory,
   getProducts,
 } from "@/services/products/productService";
+import { getCategoryChild } from "@/services/Property/propertyService";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { FaBoxOpen } from "react-icons/fa6";
@@ -26,6 +27,8 @@ async function ProductContent({ id, searchParams }) {
   const params = await searchParams;
 
   const productCategory = await getProductCategory(id);
+  const resultFilter = await getCategoryChild(id);
+  console.log(resultFilter);
 
   const page = params?.page ? parseInt(params.page) : 1;
   const orderBy = params?.orderby ? parseInt(params.orderby) : "";
@@ -79,7 +82,11 @@ async function ProductContent({ id, searchParams }) {
             </h1>
           )}
           <div className="flex flex-col lg:flex-row w-full">
-            <FilterProduct BannerProduct={BannerProduct} id={id} />
+            <FilterProduct
+              BannerProduct={BannerProduct}
+              id={id}
+              resultFilter={resultFilter}
+            />
             <div className="w-full">
               {!products || products.length === 0 ? (
                 <div className="flex justify-center">

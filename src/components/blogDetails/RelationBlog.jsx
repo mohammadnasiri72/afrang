@@ -39,19 +39,19 @@ async function RelationBlog() {
           <h2 className="font-semibold text-[16px]">آخرین اخبار</h2>
           {blogs.length > 0 &&
             blogs.map((blog) => (
-              <div key={blog.id} className="w-full mt-2">
+              <div key={blog.id} className="w-full mt-2 ">
                 <Link
                   href={blog.url}
-                  className="relative group overflow-hidden"
+                  className="relative group overflow-hidden "
                 >
-                  <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
+                  <div className="overflow-hidden w-full aspect-[16/9]  relative cursor-pointer flex items-center justify-center">
                     <Image
-                      className="group-hover:scale-105 scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-cover"
+                      className="group-hover:scale-105  scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain"
                       src={getImageUrl(blog.image) || "/images/gallery/blog-img1.jpg"}
                       alt={blog.title}
                       width={224}
                       height={224}
-                      unoptimized
+                      
                     />
                     <hr className="w-14 absolute top-1/2 left-full ease-out duration-500 translate-x-0 -translate-y-1/2  border-t-[1px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2" />
                     <hr className="w-14 absolute -top-full left-1/2 ease-out duration-500 -translate-x-1/2 translate-y-0  border-t-[1px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />

@@ -52,6 +52,9 @@ export default function SliderProductDetails({ attachments, product }) {
     };
   }, []);
 
+  // شناسایی تصویر LCP (اولین تصویر محصول)
+  const lcpImage = attachments.length > 0 ? attachments[0] : null;
+
   return (
     <>
       <div className="flex justify-between relative h-full ">
@@ -81,6 +84,18 @@ export default function SliderProductDetails({ attachments, product }) {
               />
             </div>
           )}
+          
+          {/* تصویر LCP - بدون lazy loading و با اولویت بالا */}
+          {lcpImage && (
+            <img
+              src={getImageUrl2(lcpImage.fileUrl)}
+              alt={product.title}
+              className="absolute opacity-0 w-0 h-0"
+              fetchPriority="high"
+              loading="eager"
+            />
+          )}
+          
           {attachments.length > 0 && (
             <div className="slider-productDetails h-full">
               <Swiper
@@ -95,7 +110,7 @@ export default function SliderProductDetails({ attachments, product }) {
                 modules={[FreeMode, Thumbs]}
                 className="mySwiper2"
               >
-                {attachments.map((attachment) => (
+                {attachments.map((attachment, index) => (
                   <SwiperSlide key={attachment.id}>
                     <a
                       className=" h-full"
@@ -112,6 +127,10 @@ export default function SliderProductDetails({ attachments, product }) {
                         }`}
                         src={getImageUrl2(attachment.fileUrl)}
                         alt={product.title}
+                        // برای اولین تصویر از eager loading استفاده می‌کنیم
+                        loading={index === 0 ? "eager" : "lazy"}
+                        // برای اولین تصویر اولویت بالاتری قرار می‌دهیم
+                        fetchPriority={index === 0 ? "high" : "auto"}
                       />
                     </a>
                   </SwiperSlide>
@@ -134,6 +153,7 @@ export default function SliderProductDetails({ attachments, product }) {
                       className="w-full border rounded-sm border-[#3331]"
                       src={getImageUrl2(attachment.fileUrl)}
                       alt={product.title}
+                      loading="lazy"
                     />
                   </SwiperSlide>
                 ))}

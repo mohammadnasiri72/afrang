@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { getImageUrl } from "@/utils/mainDomain";
-import { useRouter, useSearchParams } from "next/navigation";
 
 function BannerImg({ item, id }) {
   const [isShowImg, setIsShowImg] = useState(false);

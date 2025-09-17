@@ -1,4 +1,5 @@
-import { getItemByUrl, itemVisit } from "@/services/Item/item";
+import { getComment } from "@/services/comments/serviceComment";
+import { itemVisit } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
 import moment from "moment-jalaali";
 import { headers } from "next/headers";
@@ -65,22 +66,27 @@ async function BlogDesc({ blog }) {
     console.error("Error recording visit:", error);
   }
 
+  const comments = await getComment(blog?.id, 1, 0);
+
+
   return (
     <>
       <div className="lg:w-3/4 w-full p-2">
         <div className="bg-white p-4 rounded-lg">
-          <h1 className="font-semibold text-[25px] text-justify">{blog?.title || ""}</h1>
+          <h1 className="font-semibold text-[25px] text-justify">
+            {blog?.title || ""}
+          </h1>
           <div className="flex flex-wrap gap-3 mt-2">
             <div className="flex items-center">
               <FaCalendarAlt className="text-[#40768c]" />
-              <span className="px-1 text-[#40768caa]">
+              <span className="px-1 text-[#40768c]">
                 {blog?.created ? formatPersianDate(blog.created) : ""}
               </span>
             </div>
             <div className="flex items-center">
               <FaUser className="text-[#40768c]" />
               {blog?.sourceName && (
-                <span className="px-1 text-[#40768caa]">
+                <span className="px-1 text-[#40768c]">
                   انتشار توسط :{" "}
                   <span>
                     {blog?.sourceName && blog?.sourceName !== "NULL"
@@ -92,13 +98,13 @@ async function BlogDesc({ blog }) {
             </div>
             <div className="flex items-center">
               <FaComments className="text-[#40768c]" />
-              <span className="px-1 text-[#40768caa]">
+              <span className="px-1 text-[#40768c]">
                 <span>{blog?.comment || 0}</span> نظر داده شده
               </span>
             </div>
             <div className="flex items-center">
               <IoMdTime className="text-[#40768c]" />
-              <span className="px-1 text-[#40768caa]">
+              <span className="px-1 text-[#40768c]">
                 زمان خواندن این مطلب:{" "}
                 {blog?.body ? calculateReadingTime(blog.body) : 0} دقیقه
               </span>
@@ -126,7 +132,7 @@ async function BlogDesc({ blog }) {
           </div>
         </div>
 
-        <CommentSection id={blog?.id} type={0} />
+        <CommentSection id={blog?.id} type={0} comments={comments}/>
       </div>
     </>
   );

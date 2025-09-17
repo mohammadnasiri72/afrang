@@ -20,6 +20,9 @@ const NewProduct = dynamic(() => import("@/components/home/NewProduct"));
 const SecondHandProduct = dynamic(() =>
   import("@/components/home/SecondHandProduct")
 );
+const SliderProductSec = dynamic(() =>
+  import("@/components/home/SliderProductSec")
+);
 const SecondHandProductUser = dynamic(() =>
   import("@/components/home/SecondHandProductUser")
 );
@@ -447,12 +450,17 @@ export default async function Home() {
 
   return (
     <div className="bg-[#f6f6f6] overflow-hidden">
-      <SliderHome sliderItems={sliderItems} />
-      <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
-        <Suspense fallback={<EidDiscountSkeleton />}>
-          <EidDiscount actionProducts={actionProducts} products={productList} />
-        </Suspense>
-      </div>
+      {sliderItems.length > 0 && <SliderHome sliderItems={sliderItems} />}
+      {productList.length > 0 && (
+        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
+          <Suspense fallback={<EidDiscountSkeleton />}>
+            <EidDiscount
+              actionProducts={actionProducts}
+              products={productList}
+            />
+          </Suspense>
+        </div>
+      )}
 
       {category.length > 0 && (
         <div>
@@ -472,7 +480,15 @@ export default async function Home() {
           </Suspense>
         </div>
       )}
-      {oldProducts.length > 0 && (
+      {oldProducts.length > 0 && productsData.length > 0 && (
+        <div className="sm:h-[32rem] h-[56rem]">
+          <SliderProductSec
+            oldProducts={oldProducts}
+            productsData={productsData}
+          />
+        </div>
+      )}
+      {/* {oldProducts.length > 0 && (
         <div className=" lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<SecondHandProductSkeleton />}>
             <SecondHandProduct oldProducts={oldProducts} />
@@ -485,7 +501,7 @@ export default async function Home() {
             <SecondHandProductUser filteredProducts={productsData} />
           </Suspense>
         </div>
-      )}
+      )} */}
       {blogs.length > 0 && (
         <div className="sm:h-[29rem] h-[31rem] overflow-hidden">
           <ArticleHeader />

@@ -1,15 +1,60 @@
 import { getProductId } from "@/services/products/productService";
 import { getImageUrl, mainDomain } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
-import Head from 'next/head'
 
+export async function generateMetadata({ params }) {
+  const id = await params.slug[0];
+  const product = await getProductId(id);
 
-export const metadata = {
-  title: "محصولات",
-  description: "محصولات",
-};
+  if (product.type === "error") {
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد"
+    };
+  }
 
-export default async function layoutProductDetails({ children, params }) {
+  const title = product?.seoInfo?.seoTitle || "محصول";
+  const description = product?.seoInfo?.seoDescription || "توضیحات محصول";
+  const imageUrl = getImageUrl(product?.product?.image || "");
+  const url = `${mainDomain}${product?.product?.url || ""}`;
+  const price = String(product?.product?.finalPrice * 10);
+  const availability = product?.product?.statusId === 1 ? "instock" : "out of stock";
+  const brand = product?.product?.brandTitle || "";
+
+  return {
+    title: title,
+    description: description,
+    metadataBase: new URL(mainDomain),
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      url: url,
+      siteName: "افرنگ دیجیتال",
+      images: [
+        {
+          url: imageUrl,
+          width: 296,
+          height: 290,
+          alt: title,
+        },
+      ],
+      locale: "fa_IR",
+      type: "website", // استفاده از نوع استاندارد OpenGraph
+    },
+    other: {
+      "og:type": "product", // اما همچنان می‌توانید نوع محصول را به صورت دستی تنظیم کنید
+      "og:brand": brand,
+      "product:price:amount": price,
+      "product:price:currency": "IRR",
+      "product:availability": availability,
+    },
+  };
+}
+
+export default async function LayoutProductDetails({ children, params }) {
   const id = await params.slug[0];
   const product = await getProductId(id);
 
@@ -18,53 +63,6 @@ export default async function layoutProductDetails({ children, params }) {
   }
 
   return (
-    <>
-      <Head>
-        <link
-          rel="canonical"
-          href="https://www.afrangdigital.com/product/5427/canon-eos-5d-mark-iv-dslr-camera"
-        />
-        <meta name="og:locale" content="fa_IR" />
-        <meta name="og:type" content="product" />
-        <meta name="og:title" content={product?.seoInfo?.seoTitle || ""} />
-        <meta
-          name="og:description"
-          content={product?.seoInfo?.seoDescription || ""}
-        />
-        <meta
-          name="og:url"
-          content={`${mainDomain}${product?.product?.url || ""}`}
-        />
-        <meta name="og:site_name" content="افرنگ دیجیتال" />
-        <meta
-          name="og:image"
-          content={getImageUrl(product?.product?.image || "")}
-        />
-        <meta
-          name="og:image:secure_url"
-          content={getImageUrl(product?.product?.image || "")}
-        />
-        <meta name="og:image:width" content="296" />
-        <meta name="og:image:height" content="290" />
-        <meta name="og:brand" content={product?.product?.brandTitle || ""} />
-        <meta
-          name="product:price:amount"
-          content={String(product?.product?.finalPrice * 10)}
-        />
-        <meta name="product:price:currency" content="IRR" />
-        <meta
-          name="product:availability"
-          content={
-            product?.product?.statusId === 1 ? "instock" : "out of stock"
-          }
-        />
-        <meta
-          name="description"
-          content={product?.seoInfo?.seoDescription || ""}
-        />
-      </Head>
-
-      <main>{children}</main>
-    </>
+    <main>{children}</main>
   );
 }

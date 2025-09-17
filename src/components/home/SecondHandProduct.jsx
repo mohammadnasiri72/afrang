@@ -40,7 +40,6 @@ function SecondHandProduct({ oldProducts }) {
         <div className="lg:hidden flex justify-center items-center pb-5">
           <div className="flex-wrap gap-4 items-center">
             <h2 className="title-newProduct relative text-[#222] duration-300 text-lg font-semibold">
-              {" "}
               دست دوم های پیشنهاد افــــرنـــــگ
             </h2>
           </div>

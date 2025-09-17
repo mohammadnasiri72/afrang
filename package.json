@@ -16,6 +16,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fancyapps/ui": "^5.0.36",
+    "@fortawesome/fontawesome-free": "^7.0.1",
     "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
     "@headlessui/react": "^2.2.4",
     "@mui/material": "^6.5.0",

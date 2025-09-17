@@ -217,7 +217,6 @@ html {
   width: 4%;
 }
 
-
 .footer {
   background: linear-gradient(
     0deg,
@@ -858,43 +857,47 @@ th {
   font-size: 13px;
 }
 
+
 .inner-curve {
-  --r: 30px;
-  --s: 80px;
-  --a: 30deg;
-  --p: 50%;
-  cursor: pointer;
-  height: 256px;
-  aspect-ratio: 3/2;
-  background: #ed303c !important;
-  --_m: calc(100% - var(--r)), #000 calc(100% - 1px), #0000;
+  --r: 40px; /* control the rounded part */
+  --s: 60px; /* control the size of the cut */
+  --a: 30deg; /* control the depth of the curvature */
+  --p: 50%; /* control the position */
+
+  aspect-ratio: 2/3;
+  --_m: , #000 calc(100% - 1px), #0000;
+  --_r: var(--r) at calc(100% - var(--r));
   --_d: (var(--s) + var(--r)) * cos(var(--a));
-  mask: radial-gradient(var(--r) at calc(var(--p) + var(--_d)) var(--_m)),
-    radial-gradient(var(--r) at calc(var(--p) - var(--_d)) var(--_m)),
+  mask: radial-gradient(var(--_r) calc(var(--p) + var(--_d)) var(--_m)),
+    radial-gradient(var(--_r) calc(var(--p) - var(--_d)) var(--_m)),
     radial-gradient(
-        var(--s) at var(--p) calc(100% + sin(var(--a)) * var(--s)),
+        var(--s) at calc(100% + sin(var(--a)) * var(--s)) var(--p),
         #0000 100%,
         #000 calc(100% + 1px)
       )
-      0 calc(var(--r) * (sin(var(--a)) - 1)) no-repeat,
+      calc(var(--r) * (sin(var(--a)) - 1)) 0 no-repeat,
     linear-gradient(
-      90deg,
       #000 calc(var(--p) - var(--_d)),
       #0000 0 calc(var(--p) + var(--_d)),
       #000 0
     );
 }
 
-.slider-homePage .swiper-pagination {
+
+
+
+.slider-homePage .custom-swiper-pagination {
   bottom: 50% !important;
-  transform: translateY(50%) !important;
-  right: 20px;
+  /* transform: translateY(50%) !important; */
+  right: 10px;
   width: 20px !important; /* محدود کردن عرض */
   height: auto !important;
   pointer-events: none !important; /* غیرفعال کردن تعامل با ماوس */
+  position: relative;
+  z-index: 100 !important;
 }
 .custom-bullet {
-  background: rgba(255, 255, 255, 0.5) !important;
+  background: #0005 !important;
   transition: all 0.3s ease !important;
   width: 10px !important;
   height: 10px !important;
@@ -906,7 +909,7 @@ th {
 }
 
 .custom-bullet:hover {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: #d1182b !important;
   opacity: 1 !important;
 }
 
@@ -923,3 +926,22 @@ th {
   opacity: 1 !important;
 }
 
+/* HTML: <div class="loader"></div> */
+.loader {
+  color: #d1182b;
+  width: 4px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
+  transform: translateX(-38px);
+  animation: l21 0.5s infinite alternate linear;
+}
+
+@keyframes l21 {
+  50% {
+    box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px;
+  }
+  100% {
+    box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
+  }
+}

@@ -240,7 +240,7 @@ const Footer = ({ socialNetworks, footerMenu }) => {
               </div>
             </div>
 
-            <div className="lg:w-1/4 sm:w-1/2 w-full p-3 sm:text-start text-center">
+            <div className="lg:w-1/3 sm:w-1/2 w-full p-3 sm:text-start text-center">
               <div className="sm:flex hidden flex-wrap  items-center w-full justify-end">
                 <div className="">
                   <ul className="flex flex-wrap items-start w-full px-2">
@@ -264,7 +264,7 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                 </div>
               </div>
             </div>
-            <div className="lg:w-1/12 sm:w-1/2 w-full p-3 sm:text-start text-center">
+            {/* <div className="lg:w-1/12 sm:w-1/2 w-full p-3 sm:text-start text-center">
               <h4 className="font-semibold text-[16px]">مجوزها</h4>
               <div className="flex flex-wrap sm:justify-start justify-center items-center gap-2 mt-3">
                 <div className="py-2 px-5 rounded-lg bg-red-300 w-28 h-28 cursor-pointer duration-300 hover:bg-[#d1182b]">
@@ -274,7 +274,7 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                   <img src="/images/icons/namad.png" alt="#" />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">

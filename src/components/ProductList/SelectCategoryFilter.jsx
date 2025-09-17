@@ -1,105 +1,55 @@
 "use client";
 
+import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
+import { getCategoryChild } from "@/services/Property/propertyService";
 import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Collapse, Divider, Switch, Skeleton } from "antd";
-import { useRouter, useSearchParams, useParams } from "next/navigation";
+import { Collapse, Divider, Skeleton, Switch } from "antd";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { FaAngleUp } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
-import { FaSearch } from "react-icons/fa";
-import { getCategoryChild } from "@/services/Property/propertyService";
 import { useDispatch } from "react-redux";
-import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
 });
 
-function SelectCategoryFilter() {
+function SelectCategoryFilter({ resultFilter }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
 
-  const [filters, setFilters] = useState({
-    category: [],
-    minPrice: "",
-    maxPrice: "",
-  });
-
-  const [apiData, setApiData] = useState({
-    brands: [],
-    categories: {},
-    maxPrice: 100000
-  });
-
-  
-
-  const [loading, setLoading] = useState(true);
-  const [valuePrice, setValuePrice] = useState([0, 100000]);
-  const [defaultMaxPrice, setDefaultMaxPrice] = useState(100000);
+  const [loading, setLoading] = useState(false);
+  const [valuePrice, setValuePrice] = useState([0, resultFilter?.maxPrice]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [valueCategory, setValueCategory] = useState([]);
   const [activeKeys, setActiveKeys] = useState(["1"]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [switchStates, setSwitchStates] = useState({
-    available: false,    // محصولات موجود
-    discount: false,     // محصولات تخفیف‌دار
-    vip: false,         // محصولات فروش ویژه
-    price: false,       // محصولات قیمت‌دار
-    secondHand: false   // کالای دست دوم
+    available: false, // محصولات موجود
+    discount: false, // محصولات تخفیف‌دار
+    vip: false, // محصولات فروش ویژه
+    price: false, // محصولات قیمت‌دار
+    secondHand: false, // کالای دست دوم
   });
 
   const [categorySearch, setCategorySearch] = useState("");
   const [brandSearch, setBrandSearch] = useState("");
 
-  useEffect(() => {
-    const mainCategoryId = params?.slug?.[0] || -1;
-    // if (!mainCategoryId) {
-    //   setLoading(false);
-    //   return;
-    // }
-
-    const fetchData = async () => {
-      try {
-        const result = await getCategoryChild(mainCategoryId);
-        
-        
-        if (result) {
-          setApiData({
-            brands: result.brands || [],
-            categories: result.categories || {},
-            maxPrice: result.maxPrice || 100000
-          });
-          setDefaultMaxPrice(result.maxPrice || 100000);
-          setValuePrice([0, result.maxPrice || 100000]);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  
 
   useEffect(() => {
     const urlCategories = searchParams.get("category") || "";
     const price1 = searchParams.get("price1");
     const price2 = searchParams.get("price2");
 
-    setFilters({
-      category: urlCategories ? urlCategories.split(",") : [],
-      minPrice: price1 || "",
-      maxPrice: price2 || "",
-    });
-
     // تنظیم مقادیر اسلایدر بر اساس URL یا مقادیر پیش‌فرض
     setValuePrice([
       price1 ? parseInt(price1) : 0,
-      price2 ? parseInt(price2) : defaultMaxPrice
+      price2 ? parseInt(price2) : resultFilter.maxPrice,
     ]);
 
     if (searchParams.get("category")) {
@@ -115,15 +65,19 @@ function SelectCategoryFilter() {
     } else {
       setSelectedBrands([]);
     }
-  }, [searchParams, defaultMaxPrice]);
+  }, [searchParams, resultFilter.maxPrice]);
 
   useEffect(() => {
     setSwitchStates({
-      available: searchParams.get('statusid') === '1' || searchParams.get('StatusId') === '1',
-      discount: searchParams.get('onlydiscount') === '1',
-      vip: searchParams.get('onlyfest') === '1',
-      price: searchParams.get('onlyprice') === '1',
-      secondHand: searchParams.get('ConditionId') === '20' || searchParams.get('conditionId') === '20'
+      available:
+        searchParams.get("statusid") === "1" ||
+        searchParams.get("StatusId") === "1",
+      discount: searchParams.get("onlydiscount") === "1",
+      vip: searchParams.get("onlyfest") === "1",
+      price: searchParams.get("onlyprice") === "1",
+      secondHand:
+        searchParams.get("ConditionId") === "20" ||
+        searchParams.get("conditionId") === "20",
     });
   }, [searchParams]);
 
@@ -131,15 +85,15 @@ function SelectCategoryFilter() {
     dispatch(setFilterLoading(true));
     let newSelectedBrands;
     if (selectedBrands.includes(brandid)) {
-      newSelectedBrands = selectedBrands.filter(id => id !== brandid);
+      newSelectedBrands = selectedBrands.filter((id) => id !== brandid);
     } else {
       newSelectedBrands = [...selectedBrands, brandid];
     }
     setSelectedBrands(newSelectedBrands);
 
     const params = new URLSearchParams(searchParams.toString());
-    params.delete('page');
-    
+    params.delete("page");
+
     if (newSelectedBrands.length > 0) {
       params.set("brandid", newSelectedBrands.join(","));
     } else {
@@ -151,7 +105,7 @@ function SelectCategoryFilter() {
   const handleFilterChange = () => {
     dispatch(setFilterLoading(true));
     const params = new URLSearchParams(searchParams.toString());
-    params.delete('page');
+    params.delete("page");
 
     if (valuePrice[0] > 0) {
       params.set("price1", valuePrice[0]);
@@ -159,7 +113,7 @@ function SelectCategoryFilter() {
       params.delete("price1");
     }
 
-    if (valuePrice[1] < defaultMaxPrice) {
+    if (valuePrice[1] < resultFilter.maxPrice) {
       params.set("price2", valuePrice[1]);
     } else {
       params.delete("price2");
@@ -170,16 +124,13 @@ function SelectCategoryFilter() {
 
   const handleResetFilters = () => {
     dispatch(setFilterLoading(true));
-    setFilters({
-      minPrice: "",
-      maxPrice: "",
-    });
+
     setSelectedBrands([]);
-    setValuePrice([0, defaultMaxPrice]);
-    
+    setValuePrice([0, resultFilter.maxPrice]);
+
     // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=2
     const params = new URLSearchParams();
-    params.set('OrderBy', '2');
+    params.set("OrderBy", "2");
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
@@ -192,14 +143,12 @@ function SelectCategoryFilter() {
   };
 
   const handleCategoryClick = (id, title, url) => {
-    // dispatch(setFilterLoading(true));
-    // setLoading(true);
     setSelectedCategory(id);
-    
+
     const params = new URLSearchParams(searchParams.toString());
-    params.delete('page');
-    
-    router.push(`${url}${params.toString() ? `?${params.toString()}` : ''}`);
+    params.delete("page");
+
+    router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
   const handleSwitchChange = (type) => {
@@ -208,68 +157,55 @@ function SelectCategoryFilter() {
     setSwitchStates(newStates);
 
     const params = new URLSearchParams(searchParams.toString());
-    params.delete('page');
-    
+    params.delete("page");
+
     if (newStates.available) {
-      params.set('statusid', '1');
+      params.set("statusid", "1");
     } else {
-      params.delete('statusid');
+      params.delete("statusid");
     }
 
     if (newStates.discount) {
-      params.set('onlydiscount', '1');
+      params.set("onlydiscount", "1");
     } else {
-      params.delete('onlydiscount');
+      params.delete("onlydiscount");
     }
 
     if (newStates.vip) {
-      params.set('onlyfest', '1');
+      params.set("onlyfest", "1");
     } else {
-      params.delete('onlyfest');
+      params.delete("onlyfest");
     }
 
     if (newStates.price) {
-      params.set('onlyprice', '1');
+      params.set("onlyprice", "1");
     } else {
-      params.delete('onlyprice');
+      params.delete("onlyprice");
     }
 
     if (newStates.secondHand) {
-      params.set('conditionId', '20');
+      params.set("conditionId", "20");
     } else {
-      params.delete('conditionId');
+      params.delete("conditionId");
     }
 
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  const filteredCategories = Array.isArray(apiData.categories) 
-    ? apiData.categories.filter((category) =>
+  const filteredCategories = Array.isArray(resultFilter.categories)
+    ? resultFilter.categories.filter((category) =>
         category.title.toLowerCase().includes(categorySearch.toLowerCase())
       )
     : [];
 
-  const filteredBrands = apiData.brands.filter((brand) =>
-    brand.title.toLowerCase().includes(brandSearch.toLowerCase()) ||
-    brand.titleEn.toLowerCase().includes(brandSearch.toLowerCase())
+  const filteredBrands = resultFilter.brands.filter(
+    (brand) =>
+      brand.title.toLowerCase().includes(brandSearch.toLowerCase()) ||
+      brand.titleEn.toLowerCase().includes(brandSearch.toLowerCase())
   );
 
   const renderCategories = () => {
-    if (loading) {
-      return Array(5).fill(null).map((_, index) => (
-        <div key={index} className="p-2.5 my-1">
-          <Skeleton.Button
-            active
-            size="large"
-            block
-            style={{ 
-              height: '40px',
-              borderRadius: '6px'
-            }}
-          />
-        </div>
-      ));
-    }
+   
 
     if (filteredCategories.length === 0) {
       return (
@@ -284,14 +220,17 @@ function SelectCategoryFilter() {
       return (
         <div
           key={category.id}
-          onClick={() => handleCategoryClick(category.id, category.title, category.url)}
+          onClick={() =>
+            handleCategoryClick(category.id, category.title, category.url)
+          }
           className={`p-2.5 my-1 rounded-md transition-all duration-300 cursor-pointer text-right
-            ${isSelected
-              ? 'bg-[#d1182b] text-white hover:bg-[#b31525]'
-              : 'hover:bg-gray-100'
+            ${
+              isSelected
+                ? "bg-[#d1182b] text-white hover:bg-[#b31525]"
+                : "hover:bg-gray-100"
             }`}
         >
-          <span className={isSelected ? 'text-white' : 'text-gray-800'}>
+          <span className={isSelected ? "text-white" : "text-gray-800"}>
             {category.title}
           </span>
         </div>
@@ -300,21 +239,7 @@ function SelectCategoryFilter() {
   };
 
   const renderBrands = () => {
-    if (loading) {
-      return Array(5).fill(null).map((_, index) => (
-        <div key={index} className="p-2">
-          <Skeleton.Button
-            active
-            size="large"
-            block
-            style={{ 
-              height: '30px',
-              borderRadius: '6px'
-            }}
-          />
-        </div>
-      ));
-    }
+   
 
     if (filteredBrands.length === 0) {
       return (
@@ -372,10 +297,8 @@ function SelectCategoryFilter() {
             />
             <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
-          <div className="overflow-y-auto px-2" style={{ maxHeight: '250px' }}>
-            <FormGroup dir="rtl">
-              {renderCategories()}
-            </FormGroup>
+          <div className="overflow-y-auto px-2" style={{ maxHeight: "250px" }}>
+            <FormGroup dir="rtl">{renderCategories()}</FormGroup>
           </div>
         </div>
       ),
@@ -395,10 +318,8 @@ function SelectCategoryFilter() {
             />
             <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
-          <div className="overflow-y-auto px-2" style={{ maxHeight: '250px' }}>
-            <FormGroup>
-              {renderBrands()}
-            </FormGroup>
+          <div className="overflow-y-auto px-2" style={{ maxHeight: "250px" }}>
+            <FormGroup>{renderBrands()}</FormGroup>
           </div>
         </div>
       ),
@@ -440,7 +361,7 @@ function SelectCategoryFilter() {
                   direction: "rtl",
                 }}
                 min={0}
-                max={apiData.maxPrice}
+                max={resultFilter.maxPrice}
                 step={1000}
               />
             </div>
@@ -448,11 +369,15 @@ function SelectCategoryFilter() {
           <div className="flex flex-col gap-2 mt-4">
             <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
               <span className="text-gray-500">از</span>
-              <div className="font-semibold">{valuePrice[0].toLocaleString()} تومان</div>
+              <div className="font-semibold">
+                {valuePrice[0].toLocaleString()} تومان
+              </div>
             </div>
             <div className="w-full bg-[#f0f0f0] p-3 rounded-sm flex items-center justify-between">
               <span className="text-gray-500">تا</span>
-              <div className="font-semibold">{valuePrice[1].toLocaleString()} تومان</div>
+              <div className="font-semibold">
+                {valuePrice[1].toLocaleString()} تومان
+              </div>
             </div>
           </div>
           <div className="mt-4">
@@ -469,43 +394,46 @@ function SelectCategoryFilter() {
   ];
 
   // فیلتر کردن آیتم‌ها بعد از اتمام لودینگ
-  const filteredItems = loading 
-    ? outerItems 
+  const filteredItems = loading
+    ? outerItems
     : outerItems.filter((item, index) => {
-        if (index === 0) return Object.keys(apiData.categories).length > 0 || categorySearch.length > 0;
-        if (index === 1) return apiData.brands.length > 0 || brandSearch.length > 0;
+        if (index === 0)
+          return (
+            Object.keys(resultFilter.categories).length > 0 ||
+            categorySearch.length > 0
+          );
+        if (index === 1)
+          return resultFilter.brands.length > 0 || brandSearch.length > 0;
         return true; // همیشه محدوده قیمت رو نشون بده
       });
 
   // اگر هیچ داده‌ای وجود نداشت و در حالت جستجو نیستیم، اکوردئون‌ها را مخفی کن
-  const shouldShowCollapse = !loading && (
-    Object.keys(apiData.categories).length > 0 || 
-    apiData.brands.length > 0 || 
-    categorySearch.length > 0 || 
-    brandSearch.length > 0
-  );
+  const shouldShowCollapse =
+    !loading &&
+    (Object.keys(resultFilter.categories).length > 0 ||
+      resultFilter.brands.length > 0 ||
+      categorySearch.length > 0 ||
+      brandSearch.length > 0);
 
   // تابع برای بررسی وجود فیلترهای فعال
   const hasActiveFilters = () => {
     const orderBy = searchParams.get("OrderBy");
     const hasOnlyOrderBy2 = orderBy === "2" && searchParams.size === 1;
-    
+
     return (
-      !hasOnlyOrderBy2 && (
-        selectedBrands.length > 0 ||
+      !hasOnlyOrderBy2 &&
+      (selectedBrands.length > 0 ||
         valuePrice[0] > 0 ||
-        valuePrice[1] < defaultMaxPrice ||
+        valuePrice[1] < resultFilter.maxPrice ||
         switchStates.available ||
         switchStates.discount ||
         switchStates.vip ||
         switchStates.price ||
         switchStates.secondHand ||
         searchParams.get("category") ||
-        (orderBy && orderBy !== "2")
-      )
+        (orderBy && orderBy !== "2"))
     );
   };
-
 
   return (
     <>
@@ -523,7 +451,7 @@ function SelectCategoryFilter() {
           </button>
         )}
       </div>
-      <Divider style={{marginBottom: "0px"}}/>
+      <Divider style={{ marginBottom: "0px" }} />
       {loading ? (
         <div className="space-y-6 mt-4">
           {/* Category Section Skeleton */}
@@ -579,43 +507,53 @@ function SelectCategoryFilter() {
       )}
       <div className="flex flex-col gap-2 mt-6 border-t pt-6">
         <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
-          <span className="font-semibold text-base text-gray-700">محصولات موجود</span>
-          <Switch 
+          <span className="font-semibold text-base text-gray-700">
+            محصولات موجود
+          </span>
+          <Switch
             checked={switchStates.available}
-            onChange={() => handleSwitchChange('available')}
-            style={{ color: "#d1182b" }} 
+            onChange={() => handleSwitchChange("available")}
+            style={{ color: "#d1182b" }}
           />
         </div>
         <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
-          <span className="font-semibold text-base text-gray-700">محصولات تخفیف‌دار</span>
-          <Switch 
+          <span className="font-semibold text-base text-gray-700">
+            محصولات تخفیف‌دار
+          </span>
+          <Switch
             checked={switchStates.discount}
-            onChange={() => handleSwitchChange('discount')}
-            style={{ color: "#d1182b" }} 
+            onChange={() => handleSwitchChange("discount")}
+            style={{ color: "#d1182b" }}
           />
         </div>
         <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
-          <span className="font-semibold text-base text-gray-700">محصولات فروش ویژه</span>
-          <Switch 
+          <span className="font-semibold text-base text-gray-700">
+            محصولات فروش ویژه
+          </span>
+          <Switch
             checked={switchStates.vip}
-            onChange={() => handleSwitchChange('vip')}
-            style={{ color: "#d1182b" }} 
+            onChange={() => handleSwitchChange("vip")}
+            style={{ color: "#d1182b" }}
           />
         </div>
         <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
-          <span className="font-semibold text-base text-gray-700">محصولات قیمت‌دار</span>
-          <Switch 
+          <span className="font-semibold text-base text-gray-700">
+            محصولات قیمت‌دار
+          </span>
+          <Switch
             checked={switchStates.price}
-            onChange={() => handleSwitchChange('price')}
-            style={{ color: "#d1182b" }} 
+            onChange={() => handleSwitchChange("price")}
+            style={{ color: "#d1182b" }}
           />
         </div>
         <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
-          <span className="font-semibold text-base text-gray-700">کالای دست دوم</span>
-          <Switch 
+          <span className="font-semibold text-base text-gray-700">
+            کالای دست دوم
+          </span>
+          <Switch
             checked={switchStates.secondHand}
-            onChange={() => handleSwitchChange('secondHand')}
-            style={{ color: "#d1182b" }} 
+            onChange={() => handleSwitchChange("secondHand")}
+            style={{ color: "#d1182b" }}
           />
         </div>
       </div>

@@ -9,7 +9,6 @@ import { getSettings } from "@/services/settings/settingsService";
 import { mainDomainImg } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
 import { Toaster } from "react-hot-toast";
-// import "./../../public/fa/css/all.min.css";
 import AntdRegistry from "./AntdRegistry";
 import "./globals.css";
 
@@ -40,6 +39,10 @@ export default async function RootLayout({ children }) {
     <html lang="fa" dir="rtl">
       <head>
         <link rel="stylesheet" href="/style/style.css" />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        />
       </head>
 
       <body>
