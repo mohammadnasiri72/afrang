@@ -1,7 +1,14 @@
 "use client";
 import { Steps } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import { FaCheckCircle, FaCreditCard, FaMapMarkerAlt, FaShoppingCart } from "react-icons/fa";
+import { useTransition } from "react";
+import {
+  FaCheckCircle,
+  FaCreditCard,
+  FaMapMarkerAlt,
+  FaShoppingCart,
+} from "react-icons/fa";
+import Loading from "../Loading";
 
 function HeaderCard() {
   const router = useRouter();
@@ -9,8 +16,7 @@ function HeaderCard() {
   const isCompleteinfosend = pathname.includes("infosend");
   const isCompleteinfopay = pathname.includes("infopay");
   const isCompletepayment = pathname.includes("order");
-
- 
+  const [isPending, startTransition] = useTransition();
 
   const handleStepClick = (step) => {
     // اگر در مرحله پرداخت هستیم، فقط اجازه برگشت به سبد خرید رو میدیم
@@ -20,21 +26,29 @@ function HeaderCard() {
 
     switch (step) {
       case 0:
-        router.push('/cart');
+        startTransition(() => {
+          router.push("/cart");
+        });
         break;
       case 1:
         if (isCompleteinfopay || isCompleteinfosend || isCompletepayment) {
-          router.push('/cart/infosend');
+          startTransition(() => {
+            router.push("/cart/infosend");
+          });
         }
         break;
       case 2:
         if (isCompleteinfopay || isCompletepayment) {
-          router.push('/cart/infopay');
+          startTransition(() => {
+            router.push("/cart/infopay");
+          });
         }
         break;
       case 3:
         if (isCompletepayment) {
-          router.push('/cart/order');
+          startTransition(() => {
+            router.push("/cart/order");
+          });
         }
         break;
     }
@@ -42,7 +56,6 @@ function HeaderCard() {
 
   return (
     <>
-     
       <div className="flex flex-wrap items-center justify-center py-2">
         <div className="md:w-1/2 w-full md:mt-0 mt-4">
           <Steps
@@ -55,31 +68,70 @@ function HeaderCard() {
                 status: "finish",
                 icon: <FaShoppingCart className="text-red-600 text-2xl" />,
                 onClick: () => handleStepClick(0),
-                className: "cursor-pointer hover:opacity-80 transition-opacity"
+                className: "cursor-pointer hover:opacity-80 transition-opacity",
               },
               {
                 title: "اطلاعات ارسال",
                 // description: "ثبت آدرس و روش ارسال",
-                status: (isCompleteinfopay || isCompleteinfosend || isCompletepayment) ? "finish" : "wait",
-                icon: <FaMapMarkerAlt className={`text-2xl ${(isCompleteinfosend || isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
+                status:
+                  isCompleteinfopay || isCompleteinfosend || isCompletepayment
+                    ? "finish"
+                    : "wait",
+                icon: (
+                  <FaMapMarkerAlt
+                    className={`text-2xl ${
+                      isCompleteinfosend ||
+                      isCompleteinfopay ||
+                      isCompletepayment
+                        ? "text-red-600"
+                        : ""
+                    }`}
+                  />
+                ),
                 onClick: () => handleStepClick(1),
-                className: (isCompleteinfopay || isCompleteinfosend || isCompletepayment) && !isCompletepayment ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-not-allowed"
+                className:
+                  (isCompleteinfopay ||
+                    isCompleteinfosend ||
+                    isCompletepayment) &&
+                  !isCompletepayment
+                    ? "cursor-pointer hover:opacity-80 transition-opacity"
+                    : "cursor-not-allowed",
               },
               {
                 title: "اطلاعات پرداخت",
                 // description: "انتخاب روش پرداخت",
-                status: (isCompleteinfopay || isCompletepayment) ? "finish" : "wait",
-                icon: <FaCreditCard className={`text-2xl ${(isCompleteinfopay || isCompletepayment) ? "text-red-600" : ""}`} />,
+                status:
+                  isCompleteinfopay || isCompletepayment ? "finish" : "wait",
+                icon: (
+                  <FaCreditCard
+                    className={`text-2xl ${
+                      isCompleteinfopay || isCompletepayment
+                        ? "text-red-600"
+                        : ""
+                    }`}
+                  />
+                ),
                 onClick: () => handleStepClick(2),
-                className: (isCompleteinfopay || isCompletepayment) && !isCompletepayment ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-not-allowed"
+                className:
+                  (isCompleteinfopay || isCompletepayment) && !isCompletepayment
+                    ? "cursor-pointer hover:opacity-80 transition-opacity"
+                    : "cursor-not-allowed",
               },
               {
                 title: "پرداخت و اتمام",
                 // description: "تکمیل و ثبت سفارش",
                 status: isCompletepayment ? "finish" : "wait",
-                icon: <FaCheckCircle className={`text-2xl ${isCompletepayment ? "text-red-600" : ""}`} />,
+                icon: (
+                  <FaCheckCircle
+                    className={`text-2xl ${
+                      isCompletepayment ? "text-red-600" : ""
+                    }`}
+                  />
+                ),
                 onClick: () => handleStepClick(3),
-                className: isCompletepayment ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-not-allowed"
+                className: isCompletepayment
+                  ? "cursor-pointer hover:opacity-80 transition-opacity"
+                  : "cursor-not-allowed",
               },
             ]}
           />
@@ -125,6 +177,7 @@ function HeaderCard() {
           opacity: 0.8;
         }
       `}</style>
+      {isPending && <Loading />}
     </>
   );
 }
