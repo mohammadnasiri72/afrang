@@ -4,14 +4,15 @@ import { estimateOrderSave } from "@/services/order/orderService";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import Loading from "../Loading";
 
 function DescPayment({ estimateData }) {
   const { currentItems, cartType } = useSelector((store) => store.cart);
-   const descShipping = useSelector((state) => state.shipping.descShipping);
+  const descShipping = useSelector((state) => state.shipping.descShipping);
   const [loading, setLoading] = useState(false);
   const selectedPayment = useSelector(
     (state) => state.paymentWay.selectedPayment
@@ -25,6 +26,7 @@ function DescPayment({ estimateData }) {
   const token = JSON.parse(user).token;
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -52,7 +54,9 @@ function DescPayment({ estimateData }) {
 
       if (response) {
         dispatch(setOrderData(response));
-        router.push(`/profile/orders?trackCode=${response}`);
+        startTransition(() => {
+          router.push(`/profile/orders?trackCode=${response}`);
+        });
       }
     } catch (error) {
       Toast.fire({
@@ -128,7 +132,10 @@ function DescPayment({ estimateData }) {
         >
           <div className="bg-[#ececec] p-3 rounded-lg">
             <div className="flex justify-between text-[#444] py-1 font-bold">
-              <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
+              <span>
+                قیمت کالاها (
+                {currentItems?.filter((e) => e.parentId === -1)?.length || 0})
+              </span>
               <span>
                 {estimateData?.productAmount
                   ? estimateData.productAmount.toLocaleString()
@@ -217,12 +224,14 @@ function DescPayment({ estimateData }) {
                 <span>{estimateData?.shipmentDesc}</span>
               </div>
             )} */}
-             {descShipping?.freeShippingDesc && (
-                  <div className="flex justify-between text-[#444] py-1 font-bold">
-                    <span className="whitespace-nowrap">توضیحات ارسال</span>
-                    <span className="text-end">{descShipping?.freeShippingDesc}</span>
-                  </div>
-                )}
+            {descShipping?.freeShippingDesc && (
+              <div className="flex justify-between text-[#444] py-1 font-bold">
+                <span className="whitespace-nowrap">توضیحات ارسال</span>
+                <span className="text-end">
+                  {descShipping?.freeShippingDesc}
+                </span>
+              </div>
+            )}
 
             <hr className="border-[#6666] my-3" />
 
@@ -273,7 +282,10 @@ function DescPayment({ estimateData }) {
         <div className="w-full lg:hidden block p-4">
           <div className="bg-[#ececec] p-3 rounded-lg">
             <div className="flex justify-between text-[#444] py-1 font-bold">
-              <span>قیمت کالاها ({currentItems?.filter((e)=>e.parentId === -1)?.length || 0})</span>
+              <span>
+                قیمت کالاها (
+                {currentItems?.filter((e) => e.parentId === -1)?.length || 0})
+              </span>
               <span>
                 {estimateData?.productAmount
                   ? estimateData.productAmount.toLocaleString()
@@ -450,6 +462,7 @@ function DescPayment({ estimateData }) {
           </div>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

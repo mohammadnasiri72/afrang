@@ -7,11 +7,12 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Drawer, Tooltip } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaRecycle } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "./Loading";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
 function ShoppingDrawer() {
@@ -23,6 +24,8 @@ function ShoppingDrawer() {
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -58,7 +61,9 @@ function ShoppingDrawer() {
     dispatch(setOpenShopping(false));
 
     // هدایت به URL مورد نظر
-    router.push(url);
+    startTransition(() => {
+      router.push(url);
+    });
   };
 
   // محاسبه جمع کل
@@ -78,7 +83,10 @@ function ShoppingDrawer() {
     if (!token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      router.push("/login");
+      startTransition(() => {
+        router.push("/login");
+      });
+
       return;
     }
     handleNavigation("/cart/infosend");
@@ -444,6 +452,7 @@ function ShoppingDrawer() {
           </span>
         </>
       )}
+      {isPending && <Loading />}
     </>
   );
 }

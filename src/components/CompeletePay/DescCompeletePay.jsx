@@ -5,9 +5,10 @@ import { Switch } from "@headlessui/react";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../Loading";
 
 function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
@@ -81,6 +82,7 @@ export default function DescCompeletePay() {
   const token = JSON.parse(user).token;
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
 
   const descShipping = useSelector((state) => state.shipping.descShipping);
 
@@ -167,7 +169,9 @@ export default function DescCompeletePay() {
         const action = setEstimateData(estimateData);
         if (action) {
           dispatch(action);
-          router.push("/cart/infopay");
+          startTransition(() => {
+            router.push("/cart/infopay");
+          });
         } else {
           console.error("Action is undefined");
         }
@@ -175,7 +179,9 @@ export default function DescCompeletePay() {
         console.error("Error dispatching estimate data:", error);
       }
     } else {
-      router.push("/cart/infopay");
+      startTransition(() => {
+        router.push("/cart/infopay");
+      });
     }
   };
 
@@ -326,7 +332,9 @@ export default function DescCompeletePay() {
                 {descShipping?.freeShippingDesc && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span className="whitespace-nowrap">توضیحات ارسال</span>
-                    <span className="text-end">{descShipping?.freeShippingDesc}</span>
+                    <span className="text-end">
+                      {descShipping?.freeShippingDesc}
+                    </span>
                   </div>
                 )}
 
@@ -653,6 +661,7 @@ export default function DescCompeletePay() {
           </button>
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

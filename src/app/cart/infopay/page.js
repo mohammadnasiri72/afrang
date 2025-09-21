@@ -5,7 +5,7 @@ import Loading from "@/components/Loading";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -22,7 +22,6 @@ export default function CompletePay() {
     (state) => state.shipping.selectedShipping
   );
 
-
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -35,7 +34,7 @@ export default function CompletePay() {
 
   const [mounted, setMounted] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
-
+  const [isPending, startTransition] = useTransition();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -46,13 +45,19 @@ export default function CompletePay() {
         // Check for user token
         const userCookie = Cookies.get("user");
         if (!userCookie) {
-          router.push("/cart");
+          startTransition(() => {
+            router.push("/cart");
+          });
+
           return;
         }
 
         const userData = JSON.parse(userCookie);
         if (!userData?.token) {
-          router.push("/cart");
+          startTransition(() => {
+            router.push("/cart");
+          });
+
           return;
         }
 
@@ -65,7 +70,9 @@ export default function CompletePay() {
             !currentPath.includes("/profile/orders") ||
             !searchParams.includes("trackCode")
           ) {
-            router.push("/cart");
+            startTransition(() => {
+              router.push("/cart");
+            });
             return;
           }
         }
@@ -77,18 +84,26 @@ export default function CompletePay() {
             text: "لطفاً ابتدا آدرس و روش ارسال را انتخاب کنید",
             customClass: { container: "toast-modal" },
           });
-          router.push("/cart/infosend");
+          startTransition(() => {
+            router.push("/cart/infosend");
+          });
+
           return;
         }
         if (!estimateData) {
-          router.push("/cart");
+          startTransition(() => {
+            router.push("/cart");
+          });
+
           return;
         }
 
         setIsChecking(false);
       } catch (error) {
         console.error("Error checking auth:", error);
-        router.push("/cart");
+        startTransition(() => {
+          router.push("/cart");
+        });
       }
     };
 
@@ -123,11 +138,14 @@ export default function CompletePay() {
   }
 
   return (
-    <div className="bg-[#f6f6f6] overflow-hidden">
-      <Container>
-        <HeaderCard />
-        <BodyPayment />
-      </Container>
-    </div>
+    <>
+      <div className="bg-[#f6f6f6] overflow-hidden">
+        <Container>
+          <HeaderCard />
+          <BodyPayment />
+        </Container>
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 }

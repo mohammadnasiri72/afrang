@@ -1,25 +1,21 @@
 "use client";
 
 import { fetchCartData } from "@/redux/slices/cartSlice";
-import {
-  addToCartNext,
-  getCart,
-  moveToCurrentCart,
-} from "@/services/cart/CartServices";
+import { addToCartNext, moveToCurrentCart } from "@/services/cart/CartServices";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Divider, Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { BsArchive } from "react-icons/bs";
 import { FaAngleLeft, FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import Loading from "../Loading";
 import CartCounter from "../Product/CartCounter";
-import Cookies from "js-cookie";
 
 function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
@@ -125,13 +121,10 @@ const BodyCard = () => {
   const [amount, setAmount] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  
-  const dispatch = useDispatch();
-  const { currentItems, nextItems, cartType, loading, initialized } = useSelector(
-    (state) => state.cart
-  );
 
-  
+  const dispatch = useDispatch();
+  const { currentItems, nextItems, cartType, loading, initialized } =
+    useSelector((state) => state.cart);
 
   // فقط یک بار در mount شدن کامپوننت
   useEffect(() => {
@@ -162,6 +155,7 @@ const BodyCard = () => {
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [token, setToken] = useState(null);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -190,9 +184,13 @@ const BodyCard = () => {
     if (!userData?.token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      router.push("/login");
+      startTransition(() => {
+        router.push("/login");
+      });
     } else {
-      router.push("/cart/infosend");
+      startTransition(() => {
+        router.push("/cart/infosend");
+      });
     }
   };
 
@@ -347,342 +345,391 @@ const BodyCard = () => {
   }
 
   return (
-    <div className="flex flex-wrap z-[50] relative">
-      {items?.length === 0 ? (
-        <div className="w-full flex flex-col items-center justify-center py-10">
-          <div className="text-4xl text-[#d1182b] mb-4">
-            <FaShoppingCart />
+    <>
+      <div className="flex flex-wrap z-[50] relative">
+        {items?.length === 0 ? (
+          <div className="w-full flex flex-col items-center justify-center py-10">
+            <div className="text-4xl text-[#d1182b] mb-4">
+              <FaShoppingCart />
+            </div>
+            <h2 className="text-2xl font-semibold text-[#333] mb-2">
+              {cartType === "next" ? "لیست خرید بعدی" : "سبد خرید"} شما خالی است
+            </h2>
+            <p className="text-[#666]">
+              برای مشاهده محصولات به صفحه اصلی مراجعه کنید
+            </p>
           </div>
-          <h2 className="text-2xl font-semibold text-[#333] mb-2">
-            {cartType === "next" ? "لیست خرید بعدی" : "سبد خرید"} شما خالی است
-          </h2>
-          <p className="text-[#666]">
-            برای مشاهده محصولات به صفحه اصلی مراجعه کنید
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="lg:w-3/4 w-full">
-            <div className="flex flex-col gap-5">
-              {items?.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
-                >
-                  <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
-                    <div className="relative rounded-lg overflow-hidden">
-                      <Link href={item.url}>
-                        <Image
-                          style={{ filter: " brightness(0.8)" }}
-                          className="w-full h-full object-contain"
-                          src={getImageUrl2(item.image)}
-                          alt={item?.title}
-                          width={150}
-                          height={150}
-                          unoptimized
-                        />
-                      </Link>
-                      {item.discount !== 0 && (
-                        <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
-                          {item.discount}٪
-                        </span>
-                      )}
+        ) : (
+          <>
+            <div className="lg:w-3/4 w-full">
+              <div className="flex flex-col gap-5">
+                {items?.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
+                  >
+                    <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
+                      <div className="relative rounded-lg overflow-hidden">
+                        <Link
+                          onClick={(ev) => {
+                            ev.preventDefault();
+                            startTransition(() => {
+                              router.push(item.url);
+                            });
+                          }}
+                          href={item.url}
+                        >
+                          <Image
+                            style={{ filter: " brightness(0.8)" }}
+                            className="w-full h-full object-contain"
+                            src={getImageUrl2(item.image)}
+                            alt={item?.title}
+                            width={150}
+                            height={150}
+                            unoptimized
+                          />
+                        </Link>
+                        {item.discount !== 0 && (
+                          <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                            {item.discount}٪
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-5">{renderCartCounter(item)}</div>
                     </div>
-                    <div className="mt-5">{renderCartCounter(item)}</div>
-                  </div>
-                  <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
-                    <div>
-                      <Link href={item.url}>
-                        <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] mb-3 hover:text-[#d1182b] transition-colors duration-300">
-                          {item.title}
-                        </h3>
-                      </Link>
-                      {item.warranty && (
+                    <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
+                      <div>
+                        <Link
+                          onClick={(ev) => {
+                            ev.preventDefault();
+                            startTransition(() => {
+                              router.push(item.url);
+                            });
+                          }}
+                          href={item.url}
+                        >
+                          <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] mb-3 hover:text-[#d1182b] transition-colors duration-300">
+                            {item.title}
+                          </h3>
+                        </Link>
+                        {item.warranty && (
+                          <div className="flex items-center mt-2">
+                            <BsArchive className="text-[#666]" />
+                            <span className="px-2 sm:text-[13px] text-xs">
+                              {item.warranty}
+                            </span>
+                          </div>
+                        )}
                         <div className="flex items-center mt-2">
-                          <BsArchive className="text-[#666]" />
+                          <GoShieldCheck className="text-[#666]" />
                           <span className="px-2 sm:text-[13px] text-xs">
-                            {item.warranty}
+                            ضمانت اصل بودن کالا
                           </span>
                         </div>
-                      )}
-                      <div className="flex items-center mt-2">
-                        <GoShieldCheck className="text-[#666]" />
-                        <span className="px-2 sm:text-[13px] text-xs">
-                          ضمانت اصل بودن کالا
-                        </span>
-                      </div>
-                      {item.conditionId === 20 && (
-                        <div className="flex items-center text-sm text-[#d1182b] mt-2">
-                          <FaRecycle className="ml-1.5" />
-                          <span className="font-semibold">کالای کارکرده</span>
-                        </div>
-                      )}
-                      <div className="sm:block hidden">
-                        {item.children?.length > 0 && (
-                          <>
-                            <div className="flex flex-wrap justify-start items-center mt-2">
-                              {item.children.map((e) => (
-                                <div
-                                  key={e.id}
-                                  className="lg:w-1/3 w-full lg:mt-0 mt-3"
-                                >
-                                  <div className="flex gap-1">
-                                    <Link href={e.url}>
-                                      <div className="relative w-14 h-14">
-                                        <Image
-                                          style={{ filter: " brightness(0.8)" }}
-                                          className="w-full h-full object-contain rounded-lg"
-                                          src={getImageUrl2(e.image)}
-                                          alt={e?.title}
-                                          width={20}
-                                          height={20}
-                                          unoptimized
-                                        />
-                                        {e.discount !== 0 && (
-                                          <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
-                                            {e.discount}٪
+                        {item.conditionId === 20 && (
+                          <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                            <FaRecycle className="ml-1.5" />
+                            <span className="font-semibold">کالای کارکرده</span>
+                          </div>
+                        )}
+                        <div className="sm:block hidden">
+                          {item.children?.length > 0 && (
+                            <>
+                              <div className="flex flex-wrap justify-start items-center mt-2">
+                                {item.children.map((e) => (
+                                  <div
+                                    key={e.id}
+                                    className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                                  >
+                                    <div className="flex gap-1">
+                                      <Link
+                                        onClick={(ev) => {
+                                          ev.preventDefault();
+                                          startTransition(() => {
+                                            router.push(e.url);
+                                          });
+                                        }}
+                                        href={e.url}
+                                      >
+                                        <div className="relative w-14 h-14">
+                                          <Image
+                                            style={{
+                                              filter: " brightness(0.8)",
+                                            }}
+                                            className="w-full h-full object-contain rounded-lg"
+                                            src={getImageUrl2(e.image)}
+                                            alt={e?.title}
+                                            width={20}
+                                            height={20}
+                                            unoptimized
+                                          />
+                                          {e.discount !== 0 && (
+                                            <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                              {e.discount}٪
+                                            </span>
+                                          )}
+                                        </div>
+                                      </Link>
+                                      <div className="flex flex-col items-start justify-between">
+                                        <Link
+                                          onClick={(ev) => {
+                                            ev.preventDefault();
+                                            startTransition(() => {
+                                              router.push(e.url);
+                                            });
+                                          }}
+                                          className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                          href={e.url}
+                                        >
+                                          <span className="text-xs font-bold line-clamp-2 ">
+                                            {e?.title}
+                                          </span>
+                                        </Link>
+                                        {e.showPrice && (
+                                          <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                            {e?.finalPrice.toLocaleString()}
+                                            <span className="text-xs px-1">
+                                              تومان
+                                            </span>
                                           </span>
                                         )}
                                       </div>
-                                    </Link>
-                                    <div className="flex flex-col items-start justify-between">
-                                      <Link
-                                        className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
-                                        href={e.url}
-                                      >
-                                        <span className="text-xs font-bold line-clamp-2 ">
-                                          {e?.title}
-                                        </span>
-                                      </Link>
-                                      {e.showPrice && (
-                                        <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
-                                          {e?.finalPrice.toLocaleString()}
-                                          <span className="text-xs px-1">
-                                            تومان
-                                          </span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <Divider style={{ margin: 5, padding: 0 }} />
+                      <div>
+                        <div className="flex justify-between items-center flex-wrap">
+                          <div className="flex flex-col py-3">
+                            {item.discount !== 0 && (
+                              <div className="flex items-center">
+                                <span className="font-semibold text-[#666] text-lg line-through">
+                                  {item.price1.toLocaleString()}
+                                </span>
+                                <span className="px-2 text-xs text-[#666]">
+                                  قیمت قبل ازتخفیف
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex items-center text-[#d1182b]">
+                              <span className="font-bold text-2xl">
+                                {item.finalPrice.toLocaleString()}
+                              </span>
+                              <span className="px-2 text-xs font-bold">
+                                تومان{" "}
+                              </span>
+                            </div>
+                          </div>
+                          {renderActionButton(item)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="sm:hidden block">
+                      {item.children?.length > 0 && (
+                        <>
+                          <div className="flex flex-wrap justify-between items-center mt-2">
+                            {item.children.map((e) => (
+                              <div
+                                key={e.id}
+                                className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                              >
+                                <div className="flex gap-1">
+                                  <Link
+                                    onClick={(ev) => {
+                                      ev.preventDefault();
+                                      startTransition(() => {
+                                        router.push(e.url);
+                                      });
+                                    }}
+                                    href={e.url}
+                                  >
+                                    <div className="relative w-14 h-14">
+                                      <Image
+                                        style={{ filter: " brightness(0.8)" }}
+                                        className="w-full h-full object-contain rounded-lg"
+                                        src={getImageUrl2(e.image)}
+                                        alt={e?.title}
+                                        width={20}
+                                        height={20}
+                                        unoptimized
+                                      />
+                                      {e.discount !== 0 && (
+                                        <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                          {e.discount}٪
                                         </span>
                                       )}
                                     </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <Divider style={{ margin: 5, padding: 0 }} />
-                    <div>
-                      <div className="flex justify-between items-center flex-wrap">
-                        <div className="flex flex-col py-3">
-                          {item.discount !== 0 && (
-                            <div className="flex items-center">
-                              <span className="font-semibold text-[#666] text-lg line-through">
-                                {item.price1.toLocaleString()}
-                              </span>
-                              <span className="px-2 text-xs text-[#666]">
-                                قیمت قبل ازتخفیف
-                              </span>
-                            </div>
-                          )}
-                          <div className="flex items-center text-[#d1182b]">
-                            <span className="font-bold text-2xl">
-                              {item.finalPrice.toLocaleString()}
-                            </span>
-                            <span className="px-2 text-xs font-bold">
-                              تومان{" "}
-                            </span>
-                          </div>
-                        </div>
-                        {renderActionButton(item)}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="sm:hidden block">
-                    {item.children?.length > 0 && (
-                      <>
-                        <div className="flex flex-wrap justify-between items-center mt-2">
-                          {item.children.map((e) => (
-                            <div
-                              key={e.id}
-                              className="lg:w-1/3 w-full lg:mt-0 mt-3"
-                            >
-                              <div className="flex gap-1">
-                                <Link href={e.url}>
-                                  <div className="relative w-14 h-14">
-                                    <Image
-                                      style={{ filter: " brightness(0.8)" }}
-                                      className="w-full h-full object-contain rounded-lg"
-                                      src={getImageUrl2(e.image)}
-                                      alt={e?.title}
-                                      width={20}
-                                      height={20}
-                                      unoptimized
-                                    />
-                                    {e.discount !== 0 && (
-                                      <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
-                                        {e.discount}٪
+                                  </Link>
+                                  <div className="flex flex-col items-start justify-between">
+                                    <Link
+                                      onClick={(ev) => {
+                                        ev.preventDefault();
+                                        startTransition(() => {
+                                          router.push(e.url);
+                                        });
+                                      }}
+                                      className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                      href={e.url}
+                                    >
+                                      <span className="text-xs font-bold line-clamp-2 ">
+                                        {e?.title}
+                                      </span>
+                                    </Link>
+                                    {e.showPrice && (
+                                      <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                        {e?.finalPrice.toLocaleString()}
+                                        <span className="text-xs px-1">
+                                          تومان
+                                        </span>
                                       </span>
                                     )}
                                   </div>
-                                </Link>
-                                <div className="flex flex-col items-start justify-between">
-                                  <Link
-                                    className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
-                                    href={e.url}
-                                  >
-                                    <span className="text-xs font-bold line-clamp-2 ">
-                                      {e?.title}
-                                    </span>
-                                  </Link>
-                                  {e.showPrice && (
-                                    <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
-                                      {e?.finalPrice.toLocaleString()}
-                                      <span className="text-xs px-1">
-                                        تومان
-                                      </span>
-                                    </span>
-                                  )}
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-          {/* نمایش جمع و سود خرید برای موبایل و تبلت (بین sm و lg) */}
-          {cartType === "current" && (
-            <div className="w-full mt-3 lg:hidden">
-              <div className="bg-[#ececec] p-3 rounded-lg">
-                <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
-                  <span>قیمت کالاها ({items?.length || 0})</span>
-                  <span>{(totalPrice + amount).toLocaleString()}</span>
-                </div>
-                {totalDiscount > 0 && (
+            {/* نمایش جمع و سود خرید برای موبایل و تبلت (بین sm و lg) */}
+            {cartType === "current" && (
+              <div className="w-full mt-3 lg:hidden">
+                <div className="bg-[#ececec] p-3 rounded-lg">
                   <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
-                    <span>سود شما از این خرید</span>
-                    <span>{totalDiscount.toLocaleString()}</span>
+                    <span>قیمت کالاها ({items?.length || 0})</span>
+                    <span>{(totalPrice + amount).toLocaleString()}</span>
                   </div>
-                )}
-                {/* جمع سبد خرید و دکمه فقط در md و پایین‌تر از lg اما بالاتر از sm نمایش داده شود */}
-                <div className="hidden md:block sm:block mt-3">
-                  <div className="bg-white p-3 rounded-lg mb-3">
-                    <div className="flex justify-center items-center flex-col gap-2">
-                      <span className="font-bold text-lg">جمع سبد خرید:</span>
-                      <div className="flex items-center">
-                        <span className="font-bold text-2xl text-[#d1182b]">
-                          {(
-                            totalPrice -
-                            totalDiscount +
-                            amount
-                          ).toLocaleString()}
-                        </span>
-                        <span className="mr-1">تومان</span>
+                  {totalDiscount > 0 && (
+                    <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
+                      <span>سود شما از این خرید</span>
+                      <span>{totalDiscount.toLocaleString()}</span>
+                    </div>
+                  )}
+                  {/* جمع سبد خرید و دکمه فقط در md و پایین‌تر از lg اما بالاتر از sm نمایش داده شود */}
+                  <div className="hidden md:block sm:block mt-3">
+                    <div className="bg-white p-3 rounded-lg mb-3">
+                      <div className="flex justify-center items-center flex-col gap-2">
+                        <span className="font-bold text-lg">جمع سبد خرید:</span>
+                        <div className="flex items-center">
+                          <span className="font-bold text-2xl text-[#d1182b]">
+                            {(
+                              totalPrice -
+                              totalDiscount +
+                              amount
+                            ).toLocaleString()}
+                          </span>
+                          <span className="mr-1">تومان</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={compeletePay}
+                        className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                      >
+                        <FaShoppingCart />
+                        <span>تسویه حساب</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* جمع سبد خرید و دکمه فقط در دسکتاپ (lg و بالاتر) داخل باکس فیکس شده */}
+            {cartType === "current" && (
+              <div
+                ref={containerRef}
+                className="w-1/4 pr-5 lg:mt-0 mt-3 relative z-50 hidden lg:block"
+                style={{ position: "relative" }}
+              >
+                <div
+                  ref={innerRef}
+                  style={
+                    fixed || stuckToBottom
+                      ? style
+                      : { position: "sticky", top: 150 }
+                  }
+                >
+                  <div className="bg-[#ececec] p-3 rounded-lg">
+                    <div className="flex justify-between text-[#444] py-1 font-bold">
+                      <span>قیمت کالاها ({items?.length || 0})</span>
+                      <span>{(totalPrice + amount).toLocaleString()}</span>
+                    </div>
+                    {totalDiscount > 0 && (
+                      <div className="flex justify-between text-[#444] py-1 font-bold">
+                        <span>سود شما از این خرید</span>
+                        <span>{totalDiscount.toLocaleString()}</span>
+                      </div>
+                    )}
+                    <hr className="border-[#6666] my-3" />
+                    <div className="bg-white p-3 rounded-lg mb-3">
+                      <div className="flex justify-center items-center flex-col">
+                        <span className="font-bold text-lg">جمع سبد خرید:</span>
+                        <div className="flex items-center">
+                          <span className="font-bold text-2xl text-[#d1182b]">
+                            {(
+                              totalPrice -
+                              totalDiscount +
+                              amount
+                            ).toLocaleString()}
+                          </span>
+                          <span className="mr-1">تومان</span>
+                        </div>
                       </div>
                     </div>
                     <button
                       onClick={compeletePay}
-                      className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                      className="w-full sm:flex hidden justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
                     >
                       <FaShoppingCart />
                       <span>تسویه حساب</span>
                     </button>
                   </div>
+                  <p className="text-[#444]">
+                    این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله
+                    رزرو آنها نمی‌باشد.
+                  </p>
                 </div>
               </div>
-            </div>
-          )}
-          {/* جمع سبد خرید و دکمه فقط در دسکتاپ (lg و بالاتر) داخل باکس فیکس شده */}
-          {cartType === "current" && (
-            <div
-              ref={containerRef}
-              className="w-1/4 pr-5 lg:mt-0 mt-3 relative z-50 hidden lg:block"
-              style={{ position: "relative" }}
-            >
-              <div
-                ref={innerRef}
-                style={
-                  fixed || stuckToBottom
-                    ? style
-                    : { position: "sticky", top: 150 }
-                }
-              >
-                <div className="bg-[#ececec] p-3 rounded-lg">
-                  <div className="flex justify-between text-[#444] py-1 font-bold">
-                    <span>قیمت کالاها ({items?.length || 0})</span>
-                    <span>{(totalPrice + amount).toLocaleString()}</span>
-                  </div>
-                  {totalDiscount > 0 && (
-                    <div className="flex justify-between text-[#444] py-1 font-bold">
-                      <span>سود شما از این خرید</span>
-                      <span>{totalDiscount.toLocaleString()}</span>
-                    </div>
-                  )}
-                  <hr className="border-[#6666] my-3" />
-                  <div className="bg-white p-3 rounded-lg mb-3">
-                    <div className="flex justify-center items-center flex-col">
-                      <span className="font-bold text-lg">جمع سبد خرید:</span>
-                      <div className="flex items-center">
-                        <span className="font-bold text-2xl text-[#d1182b]">
-                          {(
-                            totalPrice -
-                            totalDiscount +
-                            amount
-                          ).toLocaleString()}
-                        </span>
-                        <span className="mr-1">تومان</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={compeletePay}
-                    className="w-full sm:flex hidden justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
-                  >
-                    <FaShoppingCart />
-                    <span>تسویه حساب</span>
-                  </button>
-                </div>
-                <p className="text-[#444]">
-                  این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
-                  آنها نمی‌باشد.
-                </p>
-              </div>
-            </div>
-          )}
+            )}
 
-          <div className="fixed sm:hidden block bottom-10 left-0 right-0 z-[50] bg-[#ececec]">
-            <div className="bg-white p-3 rounded-lg mb-3">
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-lg">جمع سبد خرید:</span>
-                <div className="flex items-center">
-                  <span className="font-bold text-2xl text-[#d1182b]">
-                    {(totalPrice - totalDiscount).toLocaleString()}
-                  </span>
-                  <span className="mr-1">تومان</span>
+            <div className="fixed sm:hidden block bottom-10 left-0 right-0 z-[50] bg-[#ececec]">
+              <div className="bg-white p-3 rounded-lg mb-3">
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-lg">جمع سبد خرید:</span>
+                  <div className="flex items-center">
+                    <span className="font-bold text-2xl text-[#d1182b]">
+                      {(totalPrice - totalDiscount).toLocaleString()}
+                    </span>
+                    <span className="mr-1">تومان</span>
+                  </div>
                 </div>
+                <button
+                  onClick={compeletePay}
+                  className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                >
+                  <FaShoppingCart />
+                  <span>تسویه حساب</span>
+                </button>
               </div>
-              <button
-                onClick={compeletePay}
-                className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
-              >
-                <FaShoppingCart />
-                <span>تسویه حساب</span>
-              </button>
             </div>
-          </div>
-        </>
-      )}
-      <style jsx global>{`
-        .custom-spin .ant-spin-dot-item {
-          background-color: #d1182b !important;
-        }
-      `}</style>
-    </div>
+          </>
+        )}
+        <style jsx global>{`
+          .custom-spin .ant-spin-dot-item {
+            background-color: #d1182b !important;
+          }
+        `}</style>
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 };
 
