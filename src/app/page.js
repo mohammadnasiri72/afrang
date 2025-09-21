@@ -68,6 +68,8 @@ export default async function Home() {
     PageSize: 10,
     PageIndex: 1,
     OrderBy: 1,
+    IsArchive:0,
+    IsActive:1
   });
 
   const blogs = await getItem({
