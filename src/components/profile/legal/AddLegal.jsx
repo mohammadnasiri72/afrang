@@ -44,7 +44,6 @@ function AddLegal({
     cityTitle: editData?.[0]?.cityTitle || "",
   });
 
-  console.log(formData);
 
   const Toast = Swal.mixin({
     toast: true,

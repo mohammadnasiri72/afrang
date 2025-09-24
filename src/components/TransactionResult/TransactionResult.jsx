@@ -1,11 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ProgressButton from "./ProgressButton";
 
-const TransactionResult = ({ status }) => {
-  // حالت‌های ممکن: 'success', 'failed'
-  const [transactionStatus] = useState(status);
+const TransactionResult = () => {
+  const searchParams = useSearchParams();
+  const status = searchParams.get("success");
+  const msg = searchParams.get("msg");
 
   return (
     <motion.div
@@ -21,13 +22,11 @@ const TransactionResult = ({ status }) => {
           {/* هدر با رنگ متغیر بر اساس وضعیت */}
           <div
             className={`py-5 ${
-              transactionStatus === "success" ? "bg-green-500" : "bg-red-500"
+              status === "true" ? "bg-green-500" : "bg-red-500"
             }`}
           >
             <h1 className="text-white text-center text-2xl font-bold">
-              {transactionStatus === "success"
-                ? "تراکنش موفق"
-                : "تراکنش ناموفق"}
+              {status === "true" ? "تراکنش موفق" : "تراکنش ناموفق"}
             </h1>
           </div>
 
@@ -36,12 +35,12 @@ const TransactionResult = ({ status }) => {
             <div className="flex justify-center my-6">
               <div
                 className={`rounded-full p-4 ${
-                  transactionStatus === "success"
+                  status === "true"
                     ? "bg-green-100 text-green-500"
                     : "bg-red-100 text-red-500"
                 }`}
               >
-                {transactionStatus === "success" ? (
+                {status === "true" ? (
                   <svg
                     className="w-16 h-16"
                     fill="none"
@@ -78,23 +77,13 @@ const TransactionResult = ({ status }) => {
             {/* پیام وضعیت */}
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold text-gray-800">
-                {transactionStatus === "success"
+                {status === "true"
                   ? "پرداخت شما با موفقیت انجام شد"
                   : "متاسفانه پرداخت انجام نشد"}
               </h2>
-              <p className="text-gray-600 mt-2">
-                {transactionStatus === "success"
-                  ? "رسید پرداخت به ایمیل شما ارسال گردید"
-                  : "لطفاً مجدداً تلاش کنید یا با پشتیبانی تماس بگیرید"}
-              </p>
+              <p className="text-gray-600 mt-2">{msg}</p>
             </div>
 
-            {/* دکمه‌های اقدام */}
-            {/* <div className="flex flex-col gap-3">
-              <button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white py-3 px-4 rounded-lg font-medium transition-colors">
-                بازگشت به صفحه اصلی
-              </button>
-            </div> */}
             <ProgressButton />
           </div>
 

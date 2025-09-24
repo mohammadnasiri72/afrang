@@ -18,7 +18,6 @@ export default async function BodyPaymentFinal({ trackCode, token }) {
   if (token) {
     orderDataTrackCode = await getOrderTrackCode(trackCode, token);
     if (orderDataTrackCode.type === "error") {
-      console.log(token);
       Toast.fire({
         icon: "error",
         text: orderDataTrackCode.message,
