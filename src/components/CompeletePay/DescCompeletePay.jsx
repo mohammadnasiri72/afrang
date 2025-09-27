@@ -2,11 +2,13 @@
 import { setEstimateData } from "@/redux/slices/paymentSlice";
 import { estimateOrder } from "@/services/order/orderService";
 import { Switch } from "@headlessui/react";
-import { message } from "antd";
+import { Alert, message } from "antd";
 import Cookies from "js-cookie";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Loading";
 
@@ -264,6 +266,7 @@ export default function DescCompeletePay() {
                     تومان
                   </span>
                 </div>
+
                 {totalDiscount > 0 && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>سود شما از این خرید</span>
@@ -275,6 +278,7 @@ export default function DescCompeletePay() {
                     </span>
                   </div>
                 )}
+
                 {estimateData?.taxAmount > 0 && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>مالیات({estimateData?.taxPercent}%)</span>
@@ -286,6 +290,7 @@ export default function DescCompeletePay() {
                     </span>
                   </div>
                 )}
+
                 {estimateData?.shipmentAmount > 0 && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>هزینه ارسال</span>
@@ -297,6 +302,7 @@ export default function DescCompeletePay() {
                     </span>
                   </div>
                 )}
+
                 {!estimateData?.shipmentAmount && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>هزینه ارسال</span>
@@ -330,12 +336,11 @@ export default function DescCompeletePay() {
                 )}
 
                 {descShipping?.freeShippingDesc && (
-                  <div className="flex justify-between text-[#444] py-1 font-bold">
-                    <span className="whitespace-nowrap">توضیحات ارسال</span>
-                    <span className="text-end">
-                      {descShipping?.freeShippingDesc}
-                    </span>
-                  </div>
+                  <Alert
+                    style={{ fontWeight: "bold" }}
+                    message={descShipping?.freeShippingDesc}
+                    type="info"
+                  />
                 )}
 
                 <hr className="border-[#6666] my-3" />
@@ -426,7 +431,14 @@ export default function DescCompeletePay() {
                   )}
                 </button>
               </div>
-              <p className="text-[#444] mt-2">
+              <Link
+                className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+                href={"/cart"}
+              >
+                <FaCartShopping className="inline" />
+                <span className="pl-0.5">بازگشت به سبد خرید</span>
+              </Link>
+              <p className="text-[#444]">
                 این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
                 آنها نمی‌باشد.
               </p>
@@ -514,11 +526,12 @@ export default function DescCompeletePay() {
                   </div>
                 )}
 
-                {estimateData?.shipmentDesc && (
-                  <div className="flex justify-between text-[#444] py-1 font-bold">
-                    <span>توضیحات ارسال</span>
-                    <span>{estimateData?.shipmentDesc}</span>
-                  </div>
+                {descShipping?.freeShippingDesc && (
+                  <Alert
+                    style={{ fontWeight: "bold" }}
+                    message={descShipping?.freeShippingDesc}
+                    type="info"
+                  />
                 )}
 
                 <hr className="border-[#6666] my-3" />
@@ -609,7 +622,14 @@ export default function DescCompeletePay() {
                   )}
                 </button>
               </div>
-              <p className="text-[#444] mt-2">
+              <Link
+                className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+                href={"/cart"}
+              >
+                <FaCartShopping className="inline" />
+                <span className="pl-0.5">بازگشت به سبد خرید</span>
+              </Link>
+              <p className="text-[#444]">
                 این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
                 آنها نمی‌باشد.
               </p>

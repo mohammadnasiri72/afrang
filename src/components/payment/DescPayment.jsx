@@ -1,11 +1,13 @@
 "use client";
 import { setOrderData } from "@/redux/slices/orderSlice";
 import { estimateOrderSave } from "@/services/order/orderService";
-import { message } from "antd";
+import { Alert, message } from "antd";
 import Cookies from "js-cookie";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Loading from "../Loading";
@@ -218,19 +220,21 @@ function DescPayment({ estimateData }) {
               </div>
             )}
 
-            {/* {estimateData?.shipmentDesc && (
-              <div className="flex justify-between text-[#444] py-1 font-bold">
-                <span>توضیحات ارسال</span>
-                <span>{estimateData?.shipmentDesc}</span>
-              </div>
-            )} */}
-            {descShipping?.freeShippingDesc && (
+            {/* {descShipping?.freeShippingDesc && (
               <div className="flex justify-between text-[#444] py-1 font-bold">
                 <span className="whitespace-nowrap">توضیحات ارسال</span>
                 <span className="text-end">
                   {descShipping?.freeShippingDesc}
                 </span>
               </div>
+            )} */}
+
+            {descShipping?.freeShippingDesc && (
+              <Alert
+                style={{ fontWeight: "bold" }}
+                message={descShipping?.freeShippingDesc}
+                type="info"
+              />
             )}
 
             <hr className="border-[#6666] my-3" />
@@ -274,7 +278,14 @@ function DescPayment({ estimateData }) {
               )}
             </button>
           </div>
-          <p className="text-[#444] mt-2">
+          <Link
+            className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+            href={"/cart"}
+          >
+            <FaCartShopping className="inline" />
+            <span className="pl-0.5">بازگشت به سبد خرید</span>
+          </Link>
+          <p className="text-[#444]">
             این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها
             نمی‌باشد.
           </p>
@@ -368,11 +379,19 @@ function DescPayment({ estimateData }) {
               </div>
             )}
 
-            {estimateData?.shipmentDesc && (
+            {/* {estimateData?.shipmentDesc && (
               <div className="flex justify-between text-[#444] py-1 font-bold">
                 <span>توضیحات ارسال</span>
                 <span>{estimateData?.shipmentDesc}</span>
               </div>
+            )} */}
+
+            {descShipping?.freeShippingDesc && (
+              <Alert
+                style={{ fontWeight: "bold" }}
+                message={descShipping?.freeShippingDesc}
+                type="info"
+              />
             )}
 
             <hr className="border-[#6666] my-3" />
@@ -416,7 +435,14 @@ function DescPayment({ estimateData }) {
               )}
             </button>
           </div>
-          <p className="text-[#444] mt-2">
+          <Link
+            className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+            href={"/cart"}
+          >
+            <FaCartShopping className="inline" />
+            <span className="pl-0.5">بازگشت به سبد خرید</span>
+          </Link>
+          <p className="text-[#444]">
             این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها
             نمی‌باشد.
           </p>

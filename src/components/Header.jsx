@@ -13,6 +13,7 @@ import { FaArrowRightLong, FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchHeader from "./SearchHeader";
+import ShoppingDrawer from "./ShoppingDrawer";
 
 const HeaderSkeleton = () => {
   return (
@@ -224,37 +225,38 @@ export default function Header(props) {
             </div>
           )}
           <div
-            onClick={() => disPatch(setOpenShopping(true))}
-            className="cursor-pointer relative mt-3"
+           
+            className="relative mt-3"
           >
             {mounted && (
-              <Badge
-                count={
-                  currentItems.length > 0
-                    ? currentItems?.filter((e) => e.parentId === -1)?.length
-                    : 0
-                }
-                style={{
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  backgroundColor:
-                    currentItems.length > 0 &&
-                    currentItems?.filter((e) => e.parentId === -1).length !== 0
-                      ? "#d1182b"
-                      : "#000",
-                  color: "#fff",
-                  transform: "translate(-8px, -8px)",
-                }}
-              >
-                <FaCartShopping
-                  className={`text-4xl  ${
-                    currentItems.length > 0 &&
-                    currentItems?.filter((e) => e.parentId === -1).length !== 0
-                      ? "text-teal-500"
-                      : "text-[#d1182b]"
-                  }`}
-                />
-              </Badge>
+              // <Badge
+              //   count={
+              //     currentItems.length > 0
+              //       ? currentItems?.filter((e) => e.parentId === -1)?.length
+              //       : 0
+              //   }
+              //   style={{
+              //     fontSize: "10px",
+              //     fontWeight: "bold",
+              //     backgroundColor:
+              //       currentItems.length > 0 &&
+              //       currentItems?.filter((e) => e.parentId === -1).length !== 0
+              //         ? "#d1182b"
+              //         : "#000",
+              //     color: "#fff",
+              //     transform: "translate(-8px, -8px)",
+              //   }}
+              // >
+              //   <FaCartShopping
+              //     className={`text-4xl  ${
+              //       currentItems.length > 0 &&
+              //       currentItems?.filter((e) => e.parentId === -1).length !== 0
+              //         ? "text-teal-500"
+              //         : "text-[#d1182b]"
+              //     }`}
+              //   />
+              // </Badge>
+              <ShoppingDrawer header/>
             )}
             {!mounted && (
               <Badge

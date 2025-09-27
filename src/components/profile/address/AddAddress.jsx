@@ -249,7 +249,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   const [position, setPosition] = useState({ lat: 35.6892, lng: 51.389 }); // Default to Tehran
   const [map, setMap] = useState(null);
 
-
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -474,7 +473,6 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
       latitude: useMapToggle ? position.lat.toString() : "",
       longitude: useMapToggle ? position.lng.toString() : "",
     };
-
     setLoading(true);
     try {
       await addAddress(data, token);
@@ -503,6 +501,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
   const resetHandler = () => {
     setErrors({});
     setFullName("");
+    setPosition({ lat: 35.6892, lng: 51.389 });
     setMobile("");
     setSelectedCity("");
     setNationalCode("");
@@ -549,6 +548,10 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           const items = await getAddressId(id, token);
           if (items) {
             setFullName(items[0].fullName);
+            setPosition({
+              lat: parseFloat(items[0].latitude),
+              lng: parseFloat(items[0].longitude),
+            });
             setMobile(items[0].mobile);
             setSelectedProvince(items[0].provinceId);
             setSelectedCity(items[0].cityId);

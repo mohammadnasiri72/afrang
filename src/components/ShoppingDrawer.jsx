@@ -5,34 +5,27 @@ import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import { Drawer, Tooltip } from "antd";
+import { Badge, Drawer, Tooltip } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { FaRecycle } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa6";
+import { FaCartShopping, FaTrash } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
-function ShoppingDrawer() {
+function ShoppingDrawer({ header }) {
   const open = useSelector((store) => store.shopping.openShopping);
   const { currentItems } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-  const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
-  const [mounted, setMounted] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
     const userData = getUserCookie();
-    setUserId(userData?.userId || null);
     setToken(userData?.token || null);
   }, []);
 
@@ -57,13 +50,12 @@ function ShoppingDrawer() {
 
   // تابع برای مدیریت کلیک روی لینک‌ها
   const handleNavigation = (url) => {
-    // بستن دراور
-    dispatch(setOpenShopping(false));
-
     // هدایت به URL مورد نظر
     startTransition(() => {
       router.push(url);
     });
+    // بستن دراور
+    dispatch(setOpenShopping(false));
   };
 
   // محاسبه جمع کل
@@ -103,321 +95,41 @@ function ShoppingDrawer() {
 
   return (
     <>
-      {mounted ? (
-        <>
-          <div className="relative">
-            <span
-              onClick={() => {
-                dispatch(setOpenShopping(true));
-              }}
-              className="text-3xl cursor-pointer inline-block align-middle"
-              style={{ width: "1.2em", height: "1.2em" }}
-            >
-              <svg
-                width="1.2em"
-                height="1.2em"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ display: "block" }}
-              >
-                <rect
-                  width="32"
-                  height="32"
-                  rx="16"
-                  fill="#d1182b"
-                  fillOpacity="0.08"
-                />
-                <path
-                  d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1"
-                  stroke="#d1182b"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle cx="13.5" cy="25" r="1.5" fill="#d1182b" />
-                <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
-              </svg>
-            </span>
-            {currentItems.length > 0 &&
-              currentItems?.filter((e) => e.parentId === -1).length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                  {currentItems?.filter((e) => e.parentId === -1).length}
-                </span>
-              )}
-          </div>
-
-          <Drawer
-            zIndex={10000}
-            placement={"left"}
-            closable={true}
-            onClose={onClose}
-            open={open}
-            width={300}
-            styles={styles}
-          >
-            <div className="flex flex-col h-full">
-              <IoCloseOutline
-                onClick={onClose}
-                className="text-3xl cursor-pointer hover:bg-[#0001] rounded-full duration-300 p-1"
-              />
-              <div className="flex justify-between items-center pb-3">
-                {currentItems.length > 0 &&
-                  currentItems.filter((e) => e.parentId === -1).length > 0 && (
-                    <span className="text-[#666]">
-                      سبد خرید (
-                      {currentItems.length > 0
-                        ? currentItems?.filter((e) => e.parentId === -1).length
-                        : 0}
-                      )
-                    </span>
-                  )}
-                {currentItems.length > 0 &&
-                  currentItems?.filter((e) => e.parentId === -1).length > 0 && (
-                    <button
-                      onClick={() => {
-                        setDeleteModalsOpen(true);
-                      }}
-                      className="cursor-pointer text-[#d1182b] font-bold"
-                    >
-                      حذف همه
-                    </button>
-                  )}
-              </div>
-
-              {(currentItems.length > 0 &&
-                currentItems?.filter((e) => e.parentId === -1).length === 0) ||
-              currentItems.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-10">
-                  <div className="text-4xl text-[#d1182b] mb-4">
-                    {/* Custom SVG Cart Icon for empty state */}
-                    <svg
-                      width="2.5em"
-                      height="2.5em"
-                      viewBox="0 0 32 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ display: "block" }}
-                    >
-                      <rect
-                        width="32"
-                        height="32"
-                        rx="16"
-                        fill="#d1182b"
-                        fillOpacity="0.08"
-                      />
-                      <path
-                        d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1"
-                        stroke="#d1182b"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <circle cx="13.5" cy="25" r="1.5" fill="#d1182b" />
-                      <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
-                    </svg>
-                  </div>
-                  <p className="text-[#666] text-center">
-                    سبد خرید شما خالی است
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="flex-1 overflow-auto">
-                    {currentItems.length > 0 &&
-                      currentItems?.filter((e) => e.parentId === -1).length >
-                        0 &&
-                      currentItems
-                        ?.filter((e) => e.parentId === -1)
-                        .map((item) => (
-                          <div key={item.id} className="group">
-                            <div className="flex flex-col p-3 relative">
-                              {/* تصویر و عنوان */}
-                              <div className="flex items-start gap-3">
-                                <div className="w-20 h-20 flex-shrink-0 border border-[#0001] p-2 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
-                                  {item.image ? (
-                                    <img
-                                      className="w-full h-full object-contain"
-                                      src={getImageUrl2(item.image)}
-                                      alt={item.title}
-                                    />
-                                  ) : (
-                                    <span className="text-xs text-gray-500 text-center p-1 line-clamp-1">
-                                      {item.title}
-                                    </span>
-                                  )}
-                                  {/* لیبل تخفیف */}
-                                  {item.discount > 0 && (
-                                    <div className="absolute top-0 right-0 bg-[#d1182b] text-white text-xs px-2 py-1 rounded-bl-lg">
-                                      {item.discount}%
-                                    </div>
-                                  )}
-                                  {/* تعداد محصول */}
-                                  <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/90 text-white text-xs px-2 py-1 text-center">
-                                    {item.quantity} عدد
-                                  </div>
-                                </div>
-                                <div className="flex-1 min-w-0 flex flex-col">
-                                  <div
-                                    onClick={() => handleNavigation(item.url)}
-                                    className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer"
-                                    style={{
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 3,
-                                      WebkitBoxOrient: "vertical",
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                      lineHeight: "1.25em",
-                                    }}
-                                  >
-                                    {item.title && item.title.includes("|")
-                                      ? (() => {
-                                          const [main, color] =
-                                            item.title.split("|");
-                                          return (
-                                            <>
-                                              <span>{main.trim()}</span>
-                                              {color && color.trim() && (
-                                                <>
-                                                  <span className="mx-1 text-[#aaa]">
-                                                    |
-                                                  </span>
-                                                  <span className="font-bold">
-                                                    {color.trim()}
-                                                  </span>
-                                                </>
-                                              )}
-                                            </>
-                                          );
-                                        })()
-                                      : item.title}
-                                  </div>
-
-                                  {item.conditionId === 20 && (
-                                    <div className="flex items-center text-sm text-[#d1182b] mt-2">
-                                      <FaRecycle className="ml-1.5" />
-                                      <span className="font-semibold">
-                                        کالای کارکرده
-                                      </span>
-                                    </div>
-                                  )}
-
-                                  <div className="flex justify-end mt-2">
-                                    <Tooltip
-                                      title="حذف از سبد خرید"
-                                      placement="left"
-                                      zIndex={10001}
-                                    >
-                                      <button
-                                        onClick={() => handleDeleteClick(item)}
-                                        className="text-[#d1182b] hover:bg-red-50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer"
-                                      >
-                                        <FaTrash className="text-sm" />
-                                      </button>
-                                    </Tooltip>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* اطلاعات محصول */}
-                              <div className="mt-3 space-y-3">
-                                {/* گارانتی */}
-                                {item.warranty && (
-                                  <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
-                                    <span className="text-sm font-bold text-[#d1182b]">
-                                      {item.warranty}
-                                    </span>
-                                  </div>
-                                )}
-
-                                {/* قیمت */}
-                                <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-sm font-medium text-gray-700">
-                                      قیمت :
-                                    </span>
-                                    <div className="flex items-center">
-                                      <span className="text-lg font-bold text-[#d1182b]">
-                                        {item.finalPrice.toLocaleString()}
-                                      </span>
-                                      <span className="mr-1 text-sm text-[#d1182b]">
-                                        تومان
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="h-[1px] bg-[#d1182b]/10 my-2"></div>
-                          </div>
-                        ))}
-                  </div>
-
-                  <div className="mt-auto pt-4 border-t">
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="font-semibold text-[#666] text-[17px]">
-                        جمع خرید:
-                      </span>
-                      <div className="flex items-center font-bold text-[#d1182b] text-[20px]">
-                        <span>{totalPrice.toLocaleString()}</span>
-                        <span className="px-1 text-[16px]">تومان</span>
-                      </div>
-                    </div>
-                    <div>
-                      <button
-                        onClick={() => handleNavigation("/cart")}
-                        className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${
-                          pathname === "/cart"
-                            ? "bg-[#b91626]"
-                            : "bg-[#d1182b] hover:bg-[#b91626]"
-                        }`}
-                      >
-                        سبد خرید
-                      </button>
-                      <button
-                        onClick={handleCheckout}
-                        className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${
-                          pathname === "/cart/infosend"
-                            ? "bg-[#b91626]"
-                            : "bg-[#d1182b] hover:bg-[#b91626]"
-                        }`}
-                      >
-                        تسویه حساب
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </Drawer>
-
-          <DeleteProductModal
-            isOpen={deleteModalOpen}
-            onClose={() => {
-              setDeleteModalOpen(false);
-              setItemToDelete(null);
-            }}
-            cartId={itemToDelete?.id}
-            cartType="current"
+      {header ? (
+        <Badge
+          count={
+            currentItems.length > 0
+              ? currentItems?.filter((e) => e.parentId === -1)?.length
+              : 0
+          }
+          style={{
+            fontSize: "10px",
+            fontWeight: "bold",
+            backgroundColor:
+              currentItems.length > 0 &&
+              currentItems?.filter((e) => e.parentId === -1).length !== 0
+                ? "#d1182b"
+                : "#000",
+            color: "#fff",
+            transform: "translate(-8px, -8px)",
+          }}
+        >
+          <FaCartShopping
+            onClick={() => dispatch(setOpenShopping(true))}
+            className={`text-4xl cursor-pointer ${
+              currentItems.length > 0 &&
+              currentItems?.filter((e) => e.parentId === -1).length !== 0
+                ? "text-teal-500"
+                : "text-[#d1182b]"
+            }`}
           />
-          <DeleteProductsModal
-            isOpen={deleteModalsOpen}
-            onClose={() => {
-              setDeleteModalsOpen(false);
-            }}
-          />
-
-          <style jsx global>{`
-            .confirm-modal-wrapper {
-              position: fixed;
-              inset: 0;
-              z-index: 99999;
-            }
-          `}</style>
-        </>
+        </Badge>
       ) : (
-        <>
+        <div className="relative">
           <span
+            onClick={() => {
+              dispatch(setOpenShopping(true));
+            }}
             className="text-3xl cursor-pointer inline-block align-middle"
             style={{ width: "1.2em", height: "1.2em" }}
           >
@@ -447,11 +159,280 @@ function ShoppingDrawer() {
               <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
             </svg>
           </span>
-          <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-            0
-          </span>
-        </>
+
+          {currentItems.length > 0 &&
+            currentItems?.filter((e) => e.parentId === -1).length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                {currentItems?.filter((e) => e.parentId === -1).length}
+              </span>
+            )}
+        </div>
       )}
+
+      <Drawer
+        zIndex={10000}
+        placement={"left"}
+        closable={true}
+        onClose={onClose}
+        open={open}
+        width={300}
+        styles={styles}
+      >
+        <div className="flex flex-col h-full">
+          <IoCloseOutline
+            onClick={onClose}
+            className="text-3xl cursor-pointer hover:bg-[#0001] rounded-full duration-300 p-1"
+          />
+          <div className="flex justify-between items-center pb-3">
+            {currentItems.length > 0 &&
+              currentItems.filter((e) => e.parentId === -1).length > 0 && (
+                <span className="text-[#666]">
+                  سبد خرید (
+                  {currentItems.length > 0
+                    ? currentItems?.filter((e) => e.parentId === -1).length
+                    : 0}
+                  )
+                </span>
+              )}
+            {currentItems.length > 0 &&
+              currentItems?.filter((e) => e.parentId === -1).length > 0 && (
+                <button
+                  onClick={() => {
+                    setDeleteModalsOpen(true);
+                  }}
+                  className="cursor-pointer text-[#d1182b] font-bold"
+                >
+                  حذف همه
+                </button>
+              )}
+          </div>
+
+          {(currentItems.length > 0 &&
+            currentItems?.filter((e) => e.parentId === -1).length === 0) ||
+          currentItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10">
+              <div className="text-4xl text-[#d1182b] mb-4">
+                {/* Custom SVG Cart Icon for empty state */}
+                <svg
+                  width="2.5em"
+                  height="2.5em"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ display: "block" }}
+                >
+                  <rect
+                    width="32"
+                    height="32"
+                    rx="16"
+                    fill="#d1182b"
+                    fillOpacity="0.08"
+                  />
+                  <path
+                    d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1"
+                    stroke="#d1182b"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="13.5" cy="25" r="1.5" fill="#d1182b" />
+                  <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
+                </svg>
+              </div>
+              <p className="text-[#666] text-center">سبد خرید شما خالی است</p>
+            </div>
+          ) : (
+            <>
+              <div className="flex-1 overflow-auto">
+                {currentItems.length > 0 &&
+                  currentItems?.filter((e) => e.parentId === -1).length > 0 &&
+                  currentItems
+                    ?.filter((e) => e.parentId === -1)
+                    .map((item) => (
+                      <div key={item.id} className="group">
+                        <div className="flex flex-col p-3 relative">
+                          {/* تصویر و عنوان */}
+                          <div className="flex items-start gap-3">
+                            <div className="w-20 h-20 flex-shrink-0 border border-[#0001] p-2 shadow-lg rounded-lg overflow-hidden flex items-center justify-center relative">
+                              {item.image ? (
+                                <img
+                                  className="w-full h-full object-contain"
+                                  src={getImageUrl2(item.image)}
+                                  alt={item.title}
+                                />
+                              ) : (
+                                <span className="text-xs text-gray-500 text-center p-1 line-clamp-1">
+                                  {item.title}
+                                </span>
+                              )}
+                              {/* لیبل تخفیف */}
+                              {item.discount > 0 && (
+                                <div className="absolute top-0 right-0 bg-[#d1182b] text-white text-xs px-2 py-1 rounded-bl-lg">
+                                  {item.discount}%
+                                </div>
+                              )}
+                              {/* تعداد محصول */}
+                              <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/90 text-white text-xs px-2 py-1 text-center">
+                                {item.quantity} عدد
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0 flex flex-col">
+                              <div
+                                onClick={() => handleNavigation(item.url)}
+                                className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer"
+                                style={{
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 3,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  lineHeight: "1.25em",
+                                }}
+                              >
+                                {item.title && item.title.includes("|")
+                                  ? (() => {
+                                      const [main, color] =
+                                        item.title.split("|");
+                                      return (
+                                        <>
+                                          <span>{main.trim()}</span>
+                                          {color && color.trim() && (
+                                            <>
+                                              <span className="mx-1 text-[#aaa]">
+                                                |
+                                              </span>
+                                              <span className="font-bold">
+                                                {color.trim()}
+                                              </span>
+                                            </>
+                                          )}
+                                        </>
+                                      );
+                                    })()
+                                  : item.title}
+                              </div>
+
+                              {item.conditionId === 20 && (
+                                <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                                  <FaRecycle className="ml-1.5" />
+                                  <span className="font-semibold">
+                                    کالای کارکرده
+                                  </span>
+                                </div>
+                              )}
+
+                              <div className="flex justify-end mt-2">
+                                <Tooltip
+                                  title="حذف از سبد خرید"
+                                  placement="left"
+                                  zIndex={10001}
+                                >
+                                  <button
+                                    onClick={() => handleDeleteClick(item)}
+                                    className="text-[#d1182b] hover:bg-red-50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer"
+                                  >
+                                    <FaTrash className="text-sm" />
+                                  </button>
+                                </Tooltip>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* اطلاعات محصول */}
+                          <div className="mt-3 space-y-3">
+                            {/* گارانتی */}
+                            {item.warranty && (
+                              <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
+                                <span className="text-sm font-bold text-[#d1182b]">
+                                  {item.warranty}
+                                </span>
+                              </div>
+                            )}
+
+                            {/* قیمت */}
+                            <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-gray-700">
+                                  قیمت :
+                                </span>
+                                <div className="flex items-center">
+                                  <span className="text-lg font-bold text-[#d1182b]">
+                                    {item.finalPrice.toLocaleString()}
+                                  </span>
+                                  <span className="mr-1 text-sm text-[#d1182b]">
+                                    تومان
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="h-[1px] bg-[#d1182b]/10 my-2"></div>
+                      </div>
+                    ))}
+              </div>
+
+              <div className="mt-auto pt-4 border-t">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="font-semibold text-[#666] text-[17px]">
+                    جمع خرید:
+                  </span>
+                  <div className="flex items-center font-bold text-[#d1182b] text-[20px]">
+                    <span>{totalPrice.toLocaleString()}</span>
+                    <span className="px-1 text-[16px]">تومان</span>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    onClick={() => handleNavigation("/cart")}
+                    className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${
+                      pathname === "/cart"
+                        ? "bg-[#b91626]"
+                        : "bg-[#d1182b] hover:bg-[#b91626]"
+                    }`}
+                  >
+                    سبد خرید
+                  </button>
+                  <button
+                    onClick={handleCheckout}
+                    className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${
+                      pathname === "/cart/infosend"
+                        ? "bg-[#b91626]"
+                        : "bg-[#d1182b] hover:bg-[#b91626]"
+                    }`}
+                  >
+                    تسویه حساب
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </Drawer>
+
+      <DeleteProductModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setItemToDelete(null);
+        }}
+        cartId={itemToDelete?.id}
+        cartType="current"
+      />
+      <DeleteProductsModal
+        isOpen={deleteModalsOpen}
+        onClose={() => {
+          setDeleteModalsOpen(false);
+        }}
+      />
+
+      <style jsx global>{`
+        .confirm-modal-wrapper {
+          position: fixed;
+          inset: 0;
+          z-index: 99999;
+        }
+      `}</style>
       {isPending && <Loading />}
     </>
   );

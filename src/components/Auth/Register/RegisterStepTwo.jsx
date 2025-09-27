@@ -1,3 +1,4 @@
+import Loading from "@/components/Loading";
 import { setUser } from "@/redux/slices/userSlice";
 import { Register } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
