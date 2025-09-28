@@ -1,18 +1,28 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import { getOrderTrackCode } from "@/services/order/orderService";
 import { getImageUrl2 } from "@/utils/mainDomain";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
 import Cookies from "js-cookie";
 import moment from "moment-jalaali";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
+  FaAngleDown,
   FaArrowLeft,
   FaBarcode,
   FaBox,
+  FaBuilding,
   FaCalendarAlt,
   FaCheckCircle,
+  FaClipboardList,
   FaClock,
   FaMapMarkerAlt,
   FaMoneyBillWave,
@@ -20,20 +30,8 @@ import {
   FaRecycle,
   FaTruck,
   FaUser,
-  FaBuilding,
-  FaChevronDown,
-  FaAngleDown,
-  FaClipboardList,
 } from "react-icons/fa";
 import { IoIosCard } from "react-icons/io";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-} from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
 
 function buildTree(items) {
   // 1. ایجاد یک مپ برای دسترسی سریع به آیتم‌ها با استفاده از id
@@ -221,6 +219,8 @@ export default function OrderDetails({ trackCode }) {
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  console.log(orderDetails);
 
   const formatPersianDate = (dateString) => {
     try {
@@ -751,6 +751,13 @@ export default function OrderDetails({ trackCode }) {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between py-2 border-b border-gray-50">
+                <span className="text-gray-600">مجموع اقلام :</span>
+                <span className="font-medium">
+                  {orderDetails.productAmount.toLocaleString()} تومان
+                </span>
+              </div>
+
+              <div className="flex justify-between py-2 border-b border-gray-50">
                 <span className="text-gray-600">روش پرداخت :</span>
                 <span className="font-medium">
                   {orderDetails.order.paymentTitle}
@@ -764,7 +771,7 @@ export default function OrderDetails({ trackCode }) {
                 <div className="flex justify-between py-2 border-b border-gray-50 ">
                   <span className="text-gray-600">کیف پول :</span>
                   <span className="font-semibold">
-                    {orderDetails.order.discountWalletPrice.toLocaleString()}{" "}
+                    {orderDetails.order.discountWalletPrice.toLocaleString()}
                     تومان
                   </span>
                 </div>

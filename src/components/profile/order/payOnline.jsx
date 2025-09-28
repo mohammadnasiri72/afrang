@@ -32,7 +32,6 @@ export default function PayOnline({ orderData }) {
   const [loading, setLoading] = useState(true);
   const [offlineLoading, setOfflineLoading] = useState(false);
 
-
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -108,6 +107,8 @@ export default function PayOnline({ orderData }) {
     }
   };
 
+  console.log(token);
+
   const payHandler = () => {
     const data = {
       orderId: Number(param.get("trackCode")),
@@ -120,11 +121,17 @@ export default function PayOnline({ orderData }) {
         },
       })
       .then((res) => {
-        console.log(res);
-
-        // redirectWithToken(res.data.form[0].value, res.data.url);
+        redirectWithToken(res.data.form[0].value, res.data.url);
       })
-      .catch((err) => {});
+      .catch((error) => {
+        Toast.fire({
+          icon: "error",
+          text: error.response?.data ? error.response?.data : "خطای شبکه",
+          customClass: {
+            container: "toast-modal",
+          },
+        });
+      });
   };
 
   return (

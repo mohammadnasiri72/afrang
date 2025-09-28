@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['afrangadmin.aitest2.ir', 'afrangdigital.com'],
+    domains: ['admin.afrangdigital.com', 'afrangdigital.com'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'afrangadmin.aitest2.ir',
+        hostname: 'admin.afrangdigital.com',
         port: '',
         pathname: '/**',
       },
