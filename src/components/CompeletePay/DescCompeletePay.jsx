@@ -82,6 +82,8 @@ export default function DescCompeletePay() {
 
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
+  console.log(token);
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [isPending, startTransition] = useTransition();
@@ -118,7 +120,7 @@ export default function DescCompeletePay() {
 
   useEffect(() => {
     const fetchEstimate = async () => {
-      if (!selectedAddress || !selectedShipping) {
+      if (!selectedAddress && !selectedShipping && !selectedLegal) {
         setEstimateDataLocal(null);
         return;
       }
@@ -127,9 +129,9 @@ export default function DescCompeletePay() {
       try {
         const data = {
           langCode: "fa",
-          addressId: selectedAddress.id,
+          addressId: selectedAddress?.id || 0,
           legalInfoId: selectedLegal?.id || 0,
-          shipmentId: selectedShipping.id,
+          shipmentId: selectedShipping?.id || 0,
           discountCode: "",
           paymentId: 0,
         };
@@ -239,6 +241,8 @@ export default function DescCompeletePay() {
     };
   }, []);
 
+  console.log(estimateData);
+
   return (
     <>
       {loading ? (
@@ -303,7 +307,15 @@ export default function DescCompeletePay() {
                   </div>
                 )}
 
-                {!estimateData?.shipmentAmount && (
+                {((!estimateData?.shipmentAmount &&
+                  estimateData?.shipmentAmount !== 0) ||
+                  !selectedShipping) && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>هزینه ارسال</span>
+                    <span>نامشخص</span>
+                  </div>
+                )}
+                {estimateData?.shipmentAmount === 0 && selectedShipping && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>هزینه ارسال</span>
                     <span>رایگان</span>
@@ -494,7 +506,15 @@ export default function DescCompeletePay() {
                     </span>
                   </div>
                 )}
-                {!estimateData?.shipmentAmount && (
+                {((!estimateData?.shipmentAmount &&
+                  estimateData?.shipmentAmount !== 0) ||
+                  !selectedShipping) && (
+                  <div className="flex justify-between text-[#444] py-1 font-bold">
+                    <span>هزینه ارسال</span>
+                    <span>نامشخص</span>
+                  </div>
+                )}
+                {estimateData?.shipmentAmount === 0 && selectedShipping && (
                   <div className="flex justify-between text-[#444] py-1 font-bold">
                     <span>هزینه ارسال</span>
                     <span>رایگان</span>

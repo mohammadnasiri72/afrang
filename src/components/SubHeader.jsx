@@ -57,7 +57,12 @@ export default function SubHeader({ popupsList }) {
                     ).backgroundColor,
                   }}
                 >
-                  <Marquee speed={50} gradient={false} direction="right" className="!overflow-hidden">
+                  <Marquee
+                    speed={50}
+                    gradient={false}
+                    direction="right"
+                    className="!overflow-hidden"
+                  >
                     <div
                       style={{
                         color: popupsList.find(
@@ -89,7 +94,7 @@ export default function SubHeader({ popupsList }) {
           )}
         </div>
       ) : (
-        <div className="h-10"></div>
+        <div className="h-10 bg-slate-400"></div>
       )}
     </>
   );

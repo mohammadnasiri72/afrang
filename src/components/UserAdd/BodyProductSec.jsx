@@ -2,9 +2,12 @@ import { Alert } from "antd";
 import Link from "next/link";
 import { FaCalendarDays } from "react-icons/fa6";
 import { MdTimer } from "react-icons/md";
+import LikeProduct from "../Product/LikeProduct";
 import BoxTabDetailsProduct from "./BoxTabDetailsProduct";
 
 function BodyProductSec({ product }) {
+  console.log(product);
+
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
     return new Intl.NumberFormat("fa-IR").format(price);
@@ -21,24 +24,27 @@ function BodyProductSec({ product }) {
     return { __html: htmlContent };
   };
 
-
   return (
     <>
       <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 overflow-hidden">
         {/* Header */}
         <div className="border-b border-gray-200 pb-4 mb-6">
           <div className="flex items-start flex-wrap justify-between mb-2">
-            <div className="flex flex-col items-start">
-
-            <h1
-              data-id={product.id}
-              className="sm:text-2xl text-lg font-bold text-gray-900"
-            >
-              {product.title}
-            </h1>
-            <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
-              {product.categoryTitle}
-            </span>
+            <div className="flex flex-col items-start w-full">
+              <div className="flex flex-wrap w-full justify-between items-center">
+                <h1
+                  data-id={product.id}
+                  className="sm:text-2xl text-lg font-bold text-gray-900"
+                >
+                  {product.title}
+                </h1>
+                <div>
+                  <LikeProduct productId={product?.id} />
+                </div>
+              </div>
+              <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
+                {product.categoryTitle}
+              </span>
             </div>
             {product.isArchive && (
               <span className="sm:text-sm text-xs text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">

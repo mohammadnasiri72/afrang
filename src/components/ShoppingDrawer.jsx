@@ -160,12 +160,12 @@ function ShoppingDrawer({ header }) {
             </svg>
           </span>
 
-          {currentItems.length > 0 &&
+          {/* {currentItems.length > 0 &&
             currentItems?.filter((e) => e.parentId === -1).length > 0 && (
               <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {currentItems?.filter((e) => e.parentId === -1).length}
               </span>
-            )}
+            )} */}
         </div>
       )}
 

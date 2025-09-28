@@ -38,7 +38,12 @@ export async function middleware(request) {
   }
 
   // بررسی ریدایرکت محصولات
-  if (pathname.startsWith("/Products/") || pathname.startsWith("/products/")) {
+  if (pathname === "/index" || pathname === "/home") {
+    return NextResponse.redirect(new URL("/", request.url), { status: 301 });
+  } else if (
+    pathname.startsWith("/Products/") ||
+    pathname.startsWith("/products/")
+  ) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL

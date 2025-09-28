@@ -13,8 +13,7 @@ export const getMenuFooter = async () => {
     });
     return response.data;
   } catch (err) {
-    console.error('API Error:', err.response?.data || err.message);
-    throw err;
+   
   }
 };
 

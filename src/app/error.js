@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { FaHome, FaArrowRight, FaExclamationTriangle } from "react-icons/fa";
 
 export default function Error({ error, reset }) {

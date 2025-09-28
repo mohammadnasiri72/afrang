@@ -102,6 +102,99 @@ export default function LayoutWrapper({
     );
   };
 
+  const HeaderNavbarSkeleton = () => {
+    return (
+      <div className="bg-white w-full">
+        {/* Header Skeleton */}
+        <div
+          style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
+          className="flex items-center justify-between lg:px-16 px-4 py-1"
+        >
+          <div className="flex items-center lg:w-1/2 w-auto">
+            <div className="flex items-center lg:w-2/5 w-auto">
+              {/* Logo */}
+              <div className="w-10 h-10 bg-gray-200 animate-pulse rounded-lg" />
+              {/* Logo Text */}
+              <div className="flex-col px-1 lg:flex hidden">
+                <div className="h-4 bg-gray-200 animate-pulse rounded w-20" />
+              </div>
+            </div>
+            {/* Search Bar */}
+            <div className="px-2 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 lg:w-3/5 w-4/5">
+              <div className="w-5 h-5 bg-gray-300 animate-pulse rounded-full mx-1" />
+              <div className="h-6 bg-gray-300 animate-pulse rounded w-full" />
+            </div>
+          </div>
+          {/* Right Section - Contact, User, Cart */}
+          <div className="flex items-center justify-end lg:w-1/2 w-auto gap-4">
+            {/* Contact Info */}
+            <div className="lg:flex hidden items-center">
+              <div className="bg-slate-200 rounded-lg p-1">
+                <div className="w-4 h-4 bg-gray-300 animate-pulse rounded-full" />
+              </div>
+              <div className="flex flex-col pr-1 gap-1">
+                <div className="h-2 bg-gray-200 animate-pulse rounded w-16" />
+                <div className="h-3 bg-gray-200 animate-pulse rounded w-20" />
+              </div>
+            </div>
+            {/* User Section */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
+                <div className="h-3 bg-gray-200 animate-pulse rounded w-8" />
+              </div>
+              <div className="border-r border-[#0005] pr-2">
+                <div className="h-3 bg-gray-200 animate-pulse rounded w-10" />
+              </div>
+            </div>
+            {/* Cart Icon */}
+            <div className="relative mt-1">
+              <div className="w-8 h-8 bg-gray-200 animate-pulse rounded-full" />
+            </div>
+          </div>
+        </div>
+        
+        {/* NavBar Skeleton */}
+        <div className="bg-[#d1182b] w-full">
+          <div
+            style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
+            className="px-2 flex justify-between items-center text-white py-2"
+          >
+            {/* Menu Items */}
+            <div className="flex-1">
+              <div className="flex justify-center w-full overflow-x-auto lg:overflow-visible">
+                <div className="flex items-center">
+                  {[...Array(6)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`hover:bg-[#0002] duration-300 px-2 relative group hidden lg:flex items-center ${
+                        i === 5 ? "" : "border-l border-[#fff8]"
+                      }`}
+                    >
+                      <div className="h-4 bg-gray-300 animate-pulse rounded w-16" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Mobile Menu Button */}
+            <div className="p-3 lg:hidden flex justify-between items-center w-full">
+              <div className="flex items-center">
+                <div className="w-6 h-6 bg-gray-300 animate-pulse rounded" />
+              </div>
+            </div>
+            {/* Search Navbar */}
+            <div className="lg:flex hidden items-center">
+              <div className="bg-white/20 rounded-lg p-1">
+                <div className="w-4 h-4 bg-gray-300 animate-pulse rounded-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const FooterSkeleton = () => {
     return (
       <div className="footer sm:pb-0 pb-16">
@@ -217,19 +310,31 @@ export default function LayoutWrapper({
     <>
       <div className={showPro ? "" : "pb-16 sm:pb-0"}>
         <div className={showCart ? "" : "pb-28 sm:pb-0"}>
-           <SubHeader popupsList={popupsData} />
-          <HeaderNavbarWrapper menuItems={menuItems} />
+          <SubHeader popupsList={popupsData} />
+          <Suspense fallback={<HeaderNavbarSkeleton />}>
+            {menuItems && <HeaderNavbarWrapper menuItems={menuItems} />}
+            {!menuItems && <HeaderNavbarSkeleton />}
+          </Suspense>
           <SocialNetworks />
           {children}
           <Suspense fallback={<LoadingSkeletonBrand />}>
-            <BoxImgBranding brands={brandItems} />
+            {brandItems && <BoxImgBranding brands={brandItems} />}
+            {!brandItems && <LoadingSkeletonBrand />}
           </Suspense>
           <div className="h-10"></div>
           <Suspense fallback={<LoadingSkeletonSupport />}>
-            <SupportBox items={itemsSupport} />
+            {itemsSupport && itemsSupport.length > 0 && (
+              <SupportBox items={itemsSupport} />
+            )}
+            {(!itemsSupport || itemsSupport.length === 0) && (
+              <LoadingSkeletonSupport />
+            )}
           </Suspense>
           <Suspense fallback={<FooterSkeleton />}>
-            <Footer socialNetworks={socialNetworks} footerMenu={footerMenu} />
+            {socialNetworks && footerMenu && (
+              <Footer socialNetworks={socialNetworks} footerMenu={footerMenu} />
+            )}
+            {(!socialNetworks || !footerMenu) && <FooterSkeleton />}
           </Suspense>
           <SubFooter />
         </div>

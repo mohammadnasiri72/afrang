@@ -16,7 +16,6 @@ export const fetchBrandingItems = async () => {
     }
     return [];
   } catch (error) {
-    console.error("Error fetching branding items:", error);
-    throw error;
+   
   }
 }; 

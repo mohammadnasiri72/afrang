@@ -59,7 +59,6 @@ export const fetchMenuItems = async () => {
     }
     return [];
   } catch (error) {
-    console.error("Error fetching menu items:", error);
-    throw error;
+    
   }
 }; 

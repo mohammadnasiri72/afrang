@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 export default async function DynamicPage({ params }) {
   try {
     const data = await getItemByUrl(params.slug);
-
     if (data?.type === "error") {
       notFound();
     }

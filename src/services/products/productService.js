@@ -34,7 +34,8 @@ export const getProducts = async (data) => {
 
     return response.data;
   } catch (error) {
-    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+    // return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+     throw new Error("API request failed");
   }
 };
 

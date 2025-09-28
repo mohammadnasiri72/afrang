@@ -50,7 +50,11 @@ export default async function RootLayout({ children }) {
           settings={settings}
           menuItems={menuItems}
           brandItems={brandItems}
-          itemsSupport={itemsSupport.sort((a, b) => b.priority - a.priority)}
+          itemsSupport={
+            itemsSupport.length > 0
+              ? itemsSupport.sort((a, b) => b.priority - a.priority)
+              : []
+          }
           socialNetworks={socialNetworks}
           footerMenu={footerMenu}
           popupsData={popupsData}

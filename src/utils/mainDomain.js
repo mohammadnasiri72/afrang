@@ -5,7 +5,7 @@ export const mainDomainImg2 = "https://afrangdigital.com";
 export const getImageUrl = (image) => {
   if (!image) return null;
   try {
-    if (image.startsWith("https")) {
+    if (image.startsWith("http")) {
       return image;
     }
     return `${mainDomainImg}/${image.replace(/^(~\/|\.\.\/)/g, "")}`;
@@ -18,7 +18,7 @@ export const getImageUrl = (image) => {
 export const getImageUrl2 = (image) => {
   if (!image) return null;
   try {
-    if (image.startsWith("https")) {
+    if (image.startsWith("http")) {
       return image;
     }
     return `${mainDomainImg2}/${image.replace(/^(~\/|\.\.\/)/g, "")}`;

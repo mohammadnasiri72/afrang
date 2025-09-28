@@ -48,6 +48,9 @@ function DescPayment({ estimateData }) {
         addressId: selectedAddress.id,
         legalInfoId: selectedLegal?.id || 0,
         shipmentId: selectedShipping.id,
+        shipmentDesc: descShipping?.freeShippingDesc
+          ? descShipping?.freeShippingDesc
+          : "",
         discountCode: estimateData?.discountCode || "",
         paymentId: selectedPayment.id,
       };

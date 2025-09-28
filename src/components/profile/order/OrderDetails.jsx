@@ -8,6 +8,7 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
+import { Alert } from "antd";
 import Cookies from "js-cookie";
 import moment from "moment-jalaali";
 import Image from "next/image";
@@ -740,6 +741,13 @@ export default function OrderDetails({ trackCode }) {
                   </span>
                 </div>
               </div>
+              {orderDetails?.order?.shipmentDesc && (
+                <Alert
+                  style={{ fontWeight: "bold" }}
+                  message={orderDetails?.order?.shipmentDesc}
+                  type="info"
+                />
+              )}
             </div>
           </div>
 
@@ -750,6 +758,8 @@ export default function OrderDetails({ trackCode }) {
               <h4 className="text-gray-800 font-bold">اطلاعات پرداخت</h4>
             </div>
             <div className="space-y-2">
+              <div className="flex justify-between py-2 border-b border-gray-50"></div>
+
               <div className="flex justify-between py-2 border-b border-gray-50">
                 <span className="text-gray-600">مجموع اقلام :</span>
                 <span className="font-medium">
