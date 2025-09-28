@@ -221,7 +221,6 @@ export default function OrderDetails({ trackCode }) {
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  console.log(orderDetails);
 
   const formatPersianDate = (dateString) => {
     try {

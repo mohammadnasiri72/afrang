@@ -82,7 +82,6 @@ export default function DescCompeletePay() {
 
   const user = Cookies.get("user");
   const token = JSON.parse(user).token;
-  console.log(token);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -241,7 +240,6 @@ export default function DescCompeletePay() {
     };
   }, []);
 
-  console.log(estimateData);
 
   return (
     <>

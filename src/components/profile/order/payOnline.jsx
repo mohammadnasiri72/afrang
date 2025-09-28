@@ -107,7 +107,6 @@ export default function PayOnline({ orderData }) {
     }
   };
 
-  console.log(token);
 
   const payHandler = () => {
     const data = {

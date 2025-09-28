@@ -6,7 +6,6 @@ import LikeProduct from "../Product/LikeProduct";
 import BoxTabDetailsProduct from "./BoxTabDetailsProduct";
 
 function BodyProductSec({ product }) {
-  console.log(product);
 
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
