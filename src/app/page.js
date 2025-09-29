@@ -1,6 +1,6 @@
 import BoxImgHomeSkeleton from "@/components/home/BoxImgHomeSkeleton";
 import { getCategory } from "@/services/Category/categoryService";
-import { getItem } from "@/services/Item/item";
+import { getItem, getListItemBanner } from "@/services/Item/item";
 import {
   getProductAction,
   getProductListId,
@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
 const SliderHome = dynamic(() => import("@/components/home/SliderHome"));
+const SliderHomeSkeleton = dynamic(() => import("@/components/home/SliderHomeSkeleton"));
 const EidDiscount = dynamic(() => import("@/components/home/EidDiscount"));
 const CameraAccessories = dynamic(() =>
   import("@/components/home/CameraAccessories")
@@ -20,9 +21,8 @@ const NewProduct = dynamic(() => import("@/components/home/NewProduct"));
 const SecondHandProduct = dynamic(() =>
   import("@/components/home/SecondHandProduct")
 );
-const SliderProductSec = dynamic(() =>
-  import("@/components/home/SliderProductSec")
-);
+const SliderProductSec = dynamic(() => import("@/components/home/SliderProductSec"));
+const SliderProductSecSkeleton = dynamic(() => import("@/components/home/SliderProductSecSkeleton"));
 const SecondHandProductUser = dynamic(() =>
   import("@/components/home/SecondHandProductUser")
 );
@@ -30,55 +30,98 @@ const ArticleHeader = dynamic(() => import("@/components/home/ArticleHeader"));
 const ArticleSlider = dynamic(() => import("@/components/home/ArticleSlider"));
 
 export default async function Home() {
-  const sliderItems = await getItem({
-    TypeId: 6,
-    LangCode: "fa",
-  });
-
-  const actionProducts = await getProductAction();
+  // Initialize with empty arrays as fallback
+  let sliderItems = [];
+  let actionProducts = [];
+  let mainBanner = [];
   let productList = [];
-  if (actionProducts && actionProducts.length > 0) {
-    productList = await getProductListId({
-      ids: actionProducts[0]?.productIds || [],
+  let category = [];
+  let newProducts = [];
+  let oldProducts = [];
+  let productsData = [];
+  let blogs = [];
+
+  try {
+    sliderItems = await getItem({
+      TypeId: 6,
+      LangCode: "fa",
     });
+  } catch (error) {
+    console.error("Error fetching slider items:", error);
+  }
+  try {
+    mainBanner = await getListItemBanner(3293);
+  } catch (error) {
+    console.error("Error fetching slider items:", error);
   }
 
-  const category = await getCategory({
-    TypeId: 4,
-    LangCode: "fa",
-    IsHome: 1,
-  });
+  try {
+    actionProducts = await getProductAction();
+    if (actionProducts && actionProducts.length > 0 && !actionProducts.type) {
+      productList = await getProductListId({
+        ids: actionProducts[0]?.productIds || [],
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching action products:", error);
+  }
 
-  const newProducts = await getProducts({
-    page: 1,
-    pageSize: 12,
-    orderBy: "2",
-    ConditionId: 10,
-  });
+  try {
+    category = await getCategory({
+      TypeId: 4,
+      LangCode: "fa",
+      IsHome: 1,
+    });
+  } catch (error) {
+    console.error("Error fetching category:", error);
+  }
 
-  const oldProducts = await getProducts({
-    page: 1,
-    pageSize: 12,
-    orderBy: "2",
-    ConditionId: 20,
-  });
+  try {
+    newProducts = await getProducts({
+      page: 1,
+      pageSize: 12,
+      orderBy: "2",
+      ConditionId: 10,
+    });
+  } catch (error) {
+    console.error("Error fetching new products:", error);
+  }
 
-  const productsData = await getUserAdSell({
-    LangCode: "fa",
-    PageSize: 10,
-    PageIndex: 1,
-    OrderBy: 1,
-    IsArchive:0,
-    IsActive:1
-  });
+  try {
+    oldProducts = await getProducts({
+      page: 1,
+      pageSize: 12,
+      orderBy: "2",
+      ConditionId: 20,
+    });
+  } catch (error) {
+    console.error("Error fetching old products:", error);
+  }
 
-  const blogs = await getItem({
-    TypeId: 5,
-    LangCode: "fa",
-    PageSize: 12,
-    PageIndex: 1,
-    OrderBy: 1,
-  });
+  try {
+    productsData = await getUserAdSell({
+      LangCode: "fa",
+      PageSize: 10,
+      PageIndex: 1,
+      OrderBy: 1,
+      IsArchive: 0,
+      IsActive: 1,
+    });
+  } catch (error) {
+    console.error("Error fetching products data:", error);
+  }
+
+  try {
+    blogs = await getItem({
+      TypeId: 5,
+      LangCode: "fa",
+      PageSize: 12,
+      PageIndex: 1,
+      OrderBy: 1,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+  }
 
   const EidDiscountSkeleton = () => {
     return (
@@ -259,144 +302,6 @@ export default async function Home() {
     );
   };
 
-  const SecondHandProductSkeleton = () => {
-    return (
-      <div className="animate-pulse sm:px-16 px-2">
-        {/* اسکلتون بخش موبایل */}
-        <div className="lg:hidden w-full">
-          <div className="flex items-center justify-between mb-3 px-2">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-            <div className="h-6 w-20 bg-gray-200 rounded"></div>
-          </div>
-          <div className="overflow-x-auto pb-2">
-            <div className="flex items-center gap-2 min-w-max px-2">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="flex items-center">
-                  <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                  {item < 5 && <span className="mx-2">/</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center sm:px-4">
-          {/* اسکلتون عنوان */}
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="h-8 w-64 bg-gray-200 rounded-lg"></div>
-          </div>
-
-          {/* اسکلتون دسته‌بندی‌ها در دسکتاپ */}
-          <div className="hidden lg:flex items-center gap-3">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="flex items-center">
-                <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                {item < 5 && <span className="mx-2">/</span>}
-              </div>
-            ))}
-          </div>
-
-          {/* اسکلتون دکمه نمایش همه در دسکتاپ */}
-          <div className="hidden lg:flex">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-
-        {/* اسکلتون محصولات */}
-        <div className="mt-10">
-          <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="bg-white rounded-lg p-4">
-                  <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* اسکلتون دکمه‌های ناوبری */}
-            <div className="sm:hidden flex items-center justify-between absolute left-0 right-0 bottom-1">
-              <div className="h-8 w-8 bg-gray-200 rounded"></div>
-              <div className="h-8 w-8 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const SecondHandProductSkeletonUser = () => {
-    return (
-      <div className="animate-pulse sm:px-16 px-2">
-        {/* اسکلتون بخش موبایل */}
-        <div className="lg:hidden w-full">
-          <div className="flex items-center justify-between mb-3 px-2">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-            <div className="h-6 w-20 bg-gray-200 rounded"></div>
-          </div>
-          <div className="overflow-x-auto pb-2">
-            <div className="flex items-center gap-2 min-w-max px-2">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="flex items-center">
-                  <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                  {item < 5 && <span className="mx-2">/</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center sm:px-4">
-          {/* اسکلتون عنوان */}
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="h-8 w-64 bg-gray-200 rounded-lg"></div>
-          </div>
-
-          {/* اسکلتون دسته‌بندی‌ها در دسکتاپ */}
-          <div className="hidden lg:flex items-center gap-3">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="flex items-center">
-                <div className="h-5 w-20 bg-gray-200 rounded"></div>
-                {item < 5 && <span className="mx-2">/</span>}
-              </div>
-            ))}
-          </div>
-
-          {/* اسکلتون دکمه نمایش همه در دسکتاپ */}
-          <div className="hidden lg:flex">
-            <div className="h-6 w-24 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-
-        {/* اسکلتون محصولات */}
-        <div className="mt-10">
-          <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="bg-white rounded-lg p-4">
-                  <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* اسکلتون دکمه‌های ناوبری */}
-            <div className="sm:hidden flex items-center justify-between absolute left-0 right-0 bottom-1">
-              <div className="h-8 w-8 bg-gray-200 rounded"></div>
-              <div className="h-8 w-8 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const ArticleSliderSkeleton = () => {
     return (
       <div className="animate-pulse sm:px-16 px-2">
@@ -452,7 +357,11 @@ export default async function Home() {
 
   return (
     <div className="bg-[#f6f6f6] overflow-hidden">
-      {sliderItems.length > 0 && <SliderHome sliderItems={sliderItems} />}
+      {sliderItems.length > 0 ? (
+        <SliderHome sliderItems={sliderItems} />
+      ) : (
+        <SliderHomeSkeleton />
+      )}
       {productList.length > 0 && (
         <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<EidDiscountSkeleton />}>
@@ -463,6 +372,7 @@ export default async function Home() {
           </Suspense>
         </div>
       )}
+      {productList.length === 0 && <EidDiscountSkeleton />}
 
       {category.length > 0 && (
         <div>
@@ -471,10 +381,14 @@ export default async function Home() {
           </Suspense>
         </div>
       )}
+      {category.type === "error" && <CameraAccessoriesSkeleton />}
+      {mainBanner.length > 0 && (
+        <Suspense fallback={<BoxImgHomeSkeleton />}>
+          <BoxImgHome mainBanner={mainBanner} />
+        </Suspense>
+      )}
+      {mainBanner.type === "error" && <BoxImgHomeSkeleton />}
 
-      <Suspense fallback={<BoxImgHomeSkeleton />}>
-        <BoxImgHome />
-      </Suspense>
       {newProducts.length > 0 && (
         <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<NewProductSkeleton />}>
@@ -482,28 +396,22 @@ export default async function Home() {
           </Suspense>
         </div>
       )}
-      {oldProducts.length > 0 && productsData.length > 0 && (
+      {newProducts.type === "error" && <NewProductSkeleton />}
+      {oldProducts.length > 0 && productsData.length > 0 ? (
         <div className="sm:h-[32rem] h-[56rem]">
           <SliderProductSec
             oldProducts={oldProducts}
             productsData={productsData}
           />
         </div>
+      ) : (
+        <SliderProductSecSkeleton />
       )}
-      {/* {oldProducts.length > 0 && (
-        <div className=" lg:h-[29rem] h-[35rem] overflow-hidden">
-          <Suspense fallback={<SecondHandProductSkeleton />}>
-            <SecondHandProduct oldProducts={oldProducts} />
-          </Suspense>
-        </div>
-      )}
-      {productsData.length > 0 && (
-        <div className=" min-h-[23rem] bg-gradient-to-t from-[#d9d9d9] to-[#f6f6f6] to-25%">
-          <Suspense fallback={<SecondHandProductSkeletonUser />}>
-            <SecondHandProductUser filteredProducts={productsData} />
-          </Suspense>
-        </div>
-      )} */}
+      {/* {
+        (oldProducts.type === 'error' || productsData.type === 'error') &&
+
+      } */}
+
       {blogs.length > 0 && (
         <div className="sm:h-[29rem] h-[31rem] overflow-hidden">
           <ArticleHeader />
@@ -512,6 +420,7 @@ export default async function Home() {
           </Suspense>
         </div>
       )}
+      {blogs.type === "error" && <ArticleSliderSkeleton />}
     </div>
   );
 }

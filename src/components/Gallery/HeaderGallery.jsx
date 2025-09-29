@@ -6,12 +6,23 @@ import SelectSort from "./SelectSort";
 import { getCategory } from "@/services/Category/categoryService";
 
 async function HeaderGallery() {
-  const category = await getCategory({
-    TypeId: 9,
-    LangCode: "fa",
-    Page: 1,
-    PageSize: 100,
-  });
+  let category = [];
+  
+  try {
+    const result = await getCategory({
+      TypeId: 9,
+      LangCode: "fa",
+      Page: 1,
+      PageSize: 100,
+    });
+    
+    // Check if result is an error object or valid array
+    if (result && !result.type && Array.isArray(result)) {
+      category = result;
+    }
+  } catch (error) {
+    console.error("Error fetching category:", error);
+  }
 
   return (
     <>

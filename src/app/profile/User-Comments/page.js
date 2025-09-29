@@ -321,11 +321,13 @@ const UserCommentsPage = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
     } finally {
       if (pageNumber === 1) {
         setLoading(false);
       } else {
         setIsFetchingMore(false);
+        setLoading(false);
       }
     }
   };

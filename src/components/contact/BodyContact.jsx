@@ -185,31 +185,31 @@ function BodyContact() {
     return <div>اطلاعاتی یافت نشد</div>;
   }
 
-  const sitePostalCode = settings.find(
+  const sitePostalCode = settings?.find(
     (item) => item.propertyKey === "site_postalcode"
   )?.value;
-  const sitePhone = settings.find(
+  const sitePhone = settings?.find(
     (item) => item.propertyKey === "site_tel"
   )?.value;
-  const siteMobile = settings.find(
+  const siteMobile = settings?.find(
     (item) => item.propertyKey === "site_social_tel"
   )?.value;
-  const siteManagerName = settings.find(
+  const siteManagerName = settings?.find(
     (item) => item.propertyKey === "site_admin_tel"
   )?.title;
-  const siteManagerMobile = settings.find(
+  const siteManagerMobile = settings?.find(
     (item) => item.propertyKey === "site_admin_tel"
   )?.value;
-  const siteSalesManagerName = settings.find(
+  const siteSalesManagerName = settings?.find(
     (item) => item.propertyKey === "site_adminsale_tel"
   )?.title;
-  const siteSalesManagerMobile = settings.find(
+  const siteSalesManagerMobile = settings?.find(
     (item) => item.propertyKey === "site_adminsale_tel"
   )?.value;
-  const siteEmail = settings.find(
+  const siteEmail = settings?.find(
     (item) => item.propertyKey === "site_email"
   )?.value;
-  const siteWorkingHours = settings.find(
+  const siteWorkingHours = settings?.find(
     (item) => item.propertyKey === "site_worktime"
   )?.value;
 

@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 
 function GoogleMap() {
   const { settings, loading } = useSelector((state) => state.settings);
-  const siteAddress = settings.find(item => item.propertyKey === "site_address1")?.value;
-  const map = settings.find(item => item.propertyKey === "site_map_script")?.value;
+  const siteAddress = settings?.find(item => item.propertyKey === "site_address1")?.value;
+  const map = settings?.find(item => item.propertyKey === "site_map_script")?.value;
 
 
 

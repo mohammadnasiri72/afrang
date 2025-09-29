@@ -11,12 +11,23 @@ const BodyDic = dynamic(() => import('@/components/dic/bodyDic'), {
 export const revalidate = 3600; // کش برای یک ساعت
 
 export default async function Dic() {
-    const dics = await getItem({ 
-        TypeId: 1039, 
-        LangCode: 'fa', 
-        PageIndex: 1, 
-        PageSize: 200 
-    });
+    let dics = [];
+    
+    try {
+        const result = await getItem({ 
+            TypeId: 1039, 
+            LangCode: 'fa', 
+            PageIndex: 1, 
+            PageSize: 200 
+        });
+        
+        // Check if result is an error object or valid array
+        if (result && !result.type && Array.isArray(result)) {
+            dics = result;
+        }
+    } catch (error) {
+        console.error("Error fetching dics:", error);
+    }
 
     return (
         <>

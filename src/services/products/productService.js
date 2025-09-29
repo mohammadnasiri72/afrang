@@ -28,14 +28,18 @@ export const getProducts = async (data) => {
     
    
     
-    if (!response.data || !Array.isArray(response.data)) {
-      return [];
-    }
+    // if (!response.data || !Array.isArray(response.data)) {
+    //   return [];
+    // }
 
     return response.data;
-  } catch (error) {
-    // return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
-     throw new Error("API request failed");
+  } catch (err) {
+    // console.error("Error fetching products:", error);
+    // return [];
+    return {
+  type: "error",
+  message: err.response?.data ? err.response?.data : "خطای شبکه",
+};
   }
 };
 

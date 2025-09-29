@@ -1,8 +1,6 @@
-import { getListItemBanner } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
 
-export default async function BoxImgHome() {
-  const mainBanner = await getListItemBanner(3293);
+export default async function BoxImgHome({mainBanner}) {
 
   return (
     <>
