@@ -10,7 +10,7 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import { FaCopy, FaCreditCard, FaExchangeAlt, FaPhone, FaTimes, FaUser } from "react-icons/fa";
 import DatePicker from "react-multi-date-picker";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
-import "react-multi-date-picker/styles/layouts/mobile.css";
+
 import Swal from "sweetalert2";
 
 export default function PayOffline({ orderData }) {

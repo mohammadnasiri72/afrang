@@ -68,11 +68,13 @@ body {
   line-height: 23px;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  font-display: swap;
 }
 
 html {
   scroll-behavior: smooth;
   font-family: Yekan, sans-serif !important;
+  font-display: swap;
 }
 
 /* .logo-text {
@@ -740,6 +742,7 @@ button:hover .w-10 {
 .ant-alert,
 .ant-timeline {
   font-family: var(--font-family-primary) !important;
+  font-display: swap;
 }
 
 /* اعمال فونت به همه المان‌های HTML */
@@ -761,11 +764,13 @@ li,
 td,
 th {
   font-family: var(--font-family-primary);
+  font-display: swap;
 }
 
 /* اعمال فونت به المان‌های با کلاس rtl */
 [dir="rtl"] * {
   font-family: var(--font-family-primary);
+  font-display: swap;
 }
 
 /* تنظیمات اضافی برای اطمینان از اعمال فونت در موارد خاص */
@@ -776,6 +781,7 @@ th {
 .ant-menu-title-content,
 .ant-dropdown-menu-title-content {
   font-family: var(--font-family-primary) !important;
+  font-display: swap;
 }
 
 .custom-success-message .anticon {
@@ -857,7 +863,6 @@ th {
   font-size: 13px;
 }
 
-
 .inner-curve {
   --r: 40px; /* control the rounded part */
   --s: 60px; /* control the size of the cut */
@@ -882,9 +887,6 @@ th {
       #000 0
     );
 }
-
-
-
 
 .slider-homePage .custom-swiper-pagination {
   bottom: 50% !important;

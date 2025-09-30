@@ -1,9 +1,6 @@
 "use client";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+
 
 import { getItemById } from "@/services/Item/item";
 import { getUserAdContact } from "@/services/UserAd/UserAdServices";

@@ -1,7 +1,6 @@
 "use client";
 
 import { setIdEdit } from "@/redux/slices/idEditSec";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Tooltip } from "antd";
 import { useRouter } from "next/navigation";
 import { BiEdit } from "react-icons/bi";

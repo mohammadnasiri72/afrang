@@ -7,7 +7,6 @@ import { getUserAdFilter } from "@/services/UserAd/UserAdServices";
 import { PostUserSellAd } from "@/services/UserSellAd/UserSellAdServices";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import {
   Alert,
   Avatar,

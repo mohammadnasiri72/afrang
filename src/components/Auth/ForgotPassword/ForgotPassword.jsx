@@ -3,7 +3,6 @@
 import Loading from "@/components/Loading";
 import { ResetPassword } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
-import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";

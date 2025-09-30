@@ -1,7 +1,7 @@
 "use client";
 
 import { FaExclamationCircle } from "react-icons/fa";
-import "react-multi-date-picker/styles/layouts/mobile.css";
+
 import PayOffline from "./payOffline";
 import PayOnline from "./payOnline";
 

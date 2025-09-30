@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 import { FaChevronUp } from "react-icons/fa";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { makeStore } from "../redux/makeStore";

@@ -2,7 +2,6 @@ import Loading from "@/components/Loading";
 import { setUser } from "@/redux/slices/userSlice";
 import { Register } from "@/services/Account/AccountService";
 import { getImageUrl } from "@/utils/mainDomain";
-import "@ant-design/v5-patch-for-react-19";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
 import Image from "next/image";

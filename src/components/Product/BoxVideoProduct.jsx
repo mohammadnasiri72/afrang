@@ -4,8 +4,6 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import { useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
-import "swiper/css";
-import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 

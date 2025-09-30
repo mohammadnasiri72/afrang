@@ -1,6 +1,5 @@
 "use client";
 
-import "@ant-design/v5-patch-for-react-19";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";

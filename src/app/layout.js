@@ -8,7 +8,18 @@ import { getSettings } from "@/services/settings/settingsService";
 // import "@/styles/leaflet.css";
 import { mainDomainImg } from "@/utils/mainDomain";
 import "@ant-design/v5-patch-for-react-19";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import "leaflet-geosearch/dist/geosearch.css";
+import "leaflet/dist/leaflet.css";
+import "react-circular-progressbar/dist/styles.css";
 import { Toaster } from "react-hot-toast";
+import "react-multi-date-picker/styles/layouts/mobile.css";
+import "swiper/css";
+import "swiper/css/effect-cards";
+import "swiper/css/effect-coverflow";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import AntdRegistry from "./AntdRegistry";
 import "./globals.css";
 

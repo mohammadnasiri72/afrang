@@ -3,10 +3,6 @@
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { useRouter } from "next/navigation";

@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import "swiper/css";
-import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Loading from "../Loading";

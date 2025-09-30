@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck, FaCreditCard, FaExchangeAlt, FaTimes } from "react-icons/fa";
-import "react-multi-date-picker/styles/layouts/mobile.css";
+
 import Swal from "sweetalert2";
 
 const redirectWithToken = (token, targetUrl) => {

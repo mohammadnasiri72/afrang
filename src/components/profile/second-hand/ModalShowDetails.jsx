@@ -4,14 +4,13 @@ import { selectUser } from "@/redux/slices/userSlice";
 import { getUserSellAdId } from "@/services/UserSellAd/UserSellAdServices";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Modal, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import "swiper/css";
-import "swiper/css/effect-cards";
+
+
 import { EffectCards } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 

@@ -5,7 +5,6 @@ import { setFlag } from "@/redux/slices/idEditSec";
 import { selectUser } from "@/redux/slices/userSlice";
 import { getUserAdFilter2 } from "@/services/UserAd/UserAdServices";
 import { PostUserBuyAd } from "@/services/UserSellAd/UserSellAdServices";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Alert, Avatar, Button, Input, Segmented, Select, Spin } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";

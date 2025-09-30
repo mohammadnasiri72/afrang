@@ -4,9 +4,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import { mainDomainImg } from "@/utils/mainDomain";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/pagination";
+
+
+
 import Link from "next/link";
 
 const SliderHome = ({ sliderItems }) => {

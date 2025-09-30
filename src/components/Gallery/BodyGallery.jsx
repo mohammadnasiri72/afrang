@@ -26,7 +26,6 @@ import BoxImageGallery from "./BoxImageGallery";
 import { getPropertyItem } from "@/services/Property/propertyService";
 import { getGallery } from "@/services/gallery/galleryServices";
 import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import Link from "next/link";
 import Loading from "../Loading";
 

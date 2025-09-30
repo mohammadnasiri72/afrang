@@ -4,11 +4,6 @@ import { useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-
 // import required modules
 import { getImageUrl2 } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
@@ -84,7 +79,7 @@ export default function SliderProductDetails({ attachments, product }) {
               />
             </div>
           )}
-          
+
           {/* تصویر LCP - بدون lazy loading و با اولویت بالا */}
           {lcpImage && (
             <img
@@ -95,7 +90,7 @@ export default function SliderProductDetails({ attachments, product }) {
               loading="eager"
             />
           )}
-          
+
           {attachments.length > 0 && (
             <div className="slider-productDetails h-full">
               <Swiper
