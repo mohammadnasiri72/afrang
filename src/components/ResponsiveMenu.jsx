@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import { Drawer, Menu } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   FaAddressBook,
   FaBuilding,
@@ -124,13 +124,13 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   marginTop: "0px",
   paddingTop: "0px",
   fontFamily: "inherit",
-  position: "fixed", // فیکس شده
-  left: "100px", // فاصله از لبه چپ
-  right: "100px", // فاصله از لبه راست
+  position: "fixed",
+  left: "100px",
+  right: "100px",
   maxHeight: "70vh",
-  overflow: "hidden",
-  direction: "rtl", // راست‌چین برای فارسی
-  zIndex: 1200, // باید بالاتر از overlay باشد
+  // overflowY: "auto",
+  direction: "rtl",
+  zIndex: 1200,
   "&::-webkit-scrollbar": {
     width: "6px",
   },
@@ -147,15 +147,38 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const slideDown = keyframes`
-  0% { height: 0; }
-  100% {  height: 70vh; }
+   0% { 
+    height: 0;
+    opacity: 0;
+  }
+  100% { 
+    height: 70vh;
+    opacity: 1;
+  }
 `;
 
 const AnimatedPaper = styled(StyledPaper)`
-  animation: ${slideDown} 0.3s ease-in;
+  animation: ${slideDown} 0.3s ease-in-out;
 `;
 
-function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransition}) {
+// تابع کمکی برای مدیریت اسکرول بدن
+const disableBodyScroll = () => {
+  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = 'hidden';
+  document.body.style.paddingRight = `${scrollBarWidth}px`;
+};
+
+const enableBodyScroll = () => {
+  document.body.style.overflow = '';
+  document.body.style.paddingRight = '';
+};
+
+function ResponsiveMenu({
+  activeMenu,
+  setActiveMenu,
+  initialItems,
+  startTransition,
+}) {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -174,45 +197,34 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
   const dropdownTimeoutRef = useRef(null);
   const childDropdownTimeoutRef = useRef(null);
   const isHoveringRef = useRef(false);
-  // --- اضافه کردن state برای ارتفاع header و navbar ---
+  
   const [headerHeight, setHeaderHeight] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
-  // --- مقدار top زیرمنو را در state نگه می‌دارم ---
   const [dropdownTop, setDropdownTop] = useState(0);
-  // --- اضافه کردن refs برای اولین و آخرین آیتم navbar ---
+  
   const firstNavItemRef = useRef(null);
   const lastNavItemRef = useRef(null);
   const [dropdownOffsets, setDropdownOffsets] = useState({
-    right: 100,
-    left: 100,
+    right: 50,
+    left: 50,
   });
 
   const { settings } = useSelector((state) => state.settings);
 
-  
-
-
-  // باید قبل از هر استفاده‌ای از open تعریف شود
   const open = Boolean(anchorEl);
 
-  // غیرفعال کردن اسکرول صفحه وقتی زیرمنو باز است
+  // مدیریت اسکرول صفحه وقتی زیرمنو باز است
   useEffect(() => {
-    if (
-      open &&
-      activeMenu &&
-      activeMenu.Children &&
-      activeMenu.Children.length > 0
-    ) {
-      // اضافه کردن event listener برای کلید Escape
+    if (open && activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
+      disableBodyScroll();
+      
       const handleEscapeKey = (event) => {
         if (event.key === "Escape") {
           handleMenuClose();
         }
       };
 
-      // اضافه کردن event listener برای کلیک خارج از زیرمنو
       const handleClickOutside = (event) => {
-        // چک کردن اینکه آیا کلیک خارج از navbar و dropdown است
         const navbar = navbarRef.current;
         const dropdown = document.querySelector("[data-popper-placement]");
 
@@ -230,18 +242,15 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
       document.addEventListener("mousedown", handleClickOutside);
 
       return () => {
-        // بازگرداندن overflow و padding اصلی
-        // document.body.style.overflow = originalOverflow;
-        document.body.style.paddingRight = "0px";
-
-        // حذف event listener
+        enableBodyScroll();
         document.removeEventListener("keydown", handleEscapeKey);
         document.removeEventListener("mousedown", handleClickOutside);
       };
+    } else {
+      enableBodyScroll();
     }
   }, [open, activeMenu]);
 
-  // --- تابع برای گرفتن ارتفاع header و navbar بعد از لود کامل ---
   const updateHeaderNavbarHeights = useCallback(() => {
     setTimeout(() => {
       const headerFixed = document.querySelector("[data-header-fixed]");
@@ -250,6 +259,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
         document.querySelector("div[ref-header]") ||
         document.querySelector("header");
       const navbar = navbarRef.current;
+      
       if (
         headerFixed &&
         headerFixed.getAttribute("data-header-fixed") === "true"
@@ -258,6 +268,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
       } else if (header) {
         setHeaderHeight(header.offsetHeight || 0);
       }
+      
       if (
         navbarFixed &&
         navbarFixed.getAttribute("data-navbar-fixed") === "true"
@@ -266,7 +277,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
       } else if (navbar) {
         setNavbarHeight(navbar.offsetHeight || 0);
       }
-    }, 60); // تاخیر کوتاه برای اطمینان از رندر کامل
+    }, 60);
   }, []);
 
   useEffect(() => {
@@ -306,44 +317,35 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
     </div>
   );
 
-  // تابع برای مدیریت کلیک روی لینک‌ها
   const onClose = () => {
-    // بستن دراور
     dispatch(setOpenMenuRes(false));
-    // بستن dropdown
     setAnchorEl(null);
     setActiveMenu(null);
+    enableBodyScroll();
   };
 
-  // تابع برای پیدا کردن کلید اکوردئون بر اساس مسیر فعلی
   const getAccordionKeyFromPath = (path) => {
     if (!path) return null;
 
     const normalizedPath = decodeURIComponent(path);
 
-    // چک کردن مسیرهای داشبورد
     if (path.startsWith("/profile/")) {
       return "dashboard-group";
     }
 
-    // چک کردن همه آیتم‌های منو
     for (const item of items) {
-      // اگر آیتم زیرمنو داره
       if (item.Children && item.Children.length > 0) {
-        // چک کردن مستقیم URL آیتم
         const itemUrl = item.url || item.pageUrl;
         if (itemUrl && decodeURIComponent(itemUrl) === normalizedPath) {
           return item.id;
         }
 
-        // چک کردن زیرمنوها
         for (const child of item.Children) {
           const childUrl = child.url || child.pageUrl;
           if (childUrl && decodeURIComponent(childUrl) === normalizedPath) {
             return item.id;
           }
 
-          // چک کردن زیرمنوهای سطح دوم
           if (child.Children && child.Children.length > 0) {
             for (const subChild of child.Children) {
               const subChildUrl = subChild.url || subChild.pageUrl;
@@ -362,12 +364,10 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
     return null;
   };
 
-  // تنظیم کلید اکوردئون وقتی مسیر تغییر می‌کنه
   useEffect(() => {
     const currentKey = getAccordionKeyFromPath(pathname);
     if (currentKey) {
       setOpenKeys((prev) => {
-        // اگر کلید قبلاً وجود نداشته، اضافه کن
         if (!prev.includes(currentKey)) {
           return [...prev, currentKey];
         }
@@ -376,17 +376,13 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
     }
   }, [pathname, items]);
 
-  // تابع برای چک کردن اینکه آیا مسیر فعلی با مسیر داده شده مطابقت دارد
   const isActivePath = (path) => {
     if (!path) return false;
-
-    // تبدیل URL به حالت نرمال
     const normalizedPathname = decodeURIComponent(pathname);
     const normalizedPath = decodeURIComponent(path);
     return normalizedPathname === normalizedPath;
   };
 
-  // تابع برای چک کردن اینکه آیا آیتم پدر فعال است
   const isParentActive = (items) => {
     if (!items) return false;
     return items.some((item) => {
@@ -403,17 +399,15 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
     });
   };
 
-  // تابع‌های مدیریت dropdown
   const handleMenuOpen = (event, menuItem) => {
-    // اگر آیتم فرزند ندارد، هیچ کاری نکن
     if (!menuItem.Children || menuItem.Children.length === 0) {
       return;
     }
+    
     if (activeMenu && activeMenu.id === menuItem.id && open) {
       return;
     }
 
-    // پیدا کردن نزدیک‌ترین المنت با کلاس main-navbar که قابل مشاهده است
     let navbar = navbarRef.current;
     if (navbar && window.getComputedStyle(navbar).visibility === "hidden") {
       const navbars = document.querySelectorAll(".main-navbar");
@@ -424,18 +418,19 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
 
     const headerFixed = document.querySelector('[data-header-fixed="true"]');
     const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-    // --- محاسبه دقیق top برای anchorEl ---
+    
     let topPosition = 0;
     if (navbarFixed) {
       const headerH = headerFixed ? headerFixed.offsetHeight : headerHeight;
       const navbarH = navbarFixed.offsetHeight || navbarHeight;
       topPosition = headerH + navbarH;
     } else if (navbar) {
-      // مقدار bottom المنت navbar منهای window.scrollY برای موقعیت دقیق
       const navbarRect = navbar.getBoundingClientRect();
       topPosition = navbarRect.bottom - window.scrollY;
     }
+    
     setDropdownTop(topPosition);
+    
     const createAnchorElement = () => ({
       getBoundingClientRect: () => ({
         top: topPosition,
@@ -448,45 +443,33 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
         y: topPosition,
       }),
     });
+    
     setAnchorEl(createAnchorElement());
     setActiveMenu(menuItem);
-    // --- در handleMenuOpen محاسبه داینامیک فاصله‌ها ---
-    if (
-      firstNavItemRef.current &&
-      lastNavItemRef.current &&
-      navbarRef.current
-    ) {
+    
+    if (firstNavItemRef.current && lastNavItemRef.current && navbarRef.current) {
       const firstRect = firstNavItemRef.current.getBoundingClientRect();
       const lastRect = lastNavItemRef.current.getBoundingClientRect();
-      const right = window.innerWidth - firstRect.right; // فاصله اولین آیتم تا راست صفحه
-      const left = lastRect.left; // فاصله آخرین آیتم تا چپ صفحه
-      setDropdownOffsets({ right, left });
-    } else {
-      setDropdownOffsets({ right: 100, left: 100 });
+      const right = window.innerWidth - firstRect.right;
+      const left = lastRect.left;
+      // setDropdownOffsets({ right, left });
     }
   };
 
   const handleMenuClose = () => {
-    // Clear any existing timeout
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
     }
 
-    // Add a small delay to prevent immediate closing when moving to dropdown
     dropdownTimeoutRef.current = setTimeout(() => {
       setAnchorEl(null);
       setActiveMenu(null);
-      setExpandedChildren(new Set()); // Reset expanded children
-      // فعال کردن مجدد اسکرول صفحه فقط اگر dropdown باز بود
-      if (activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
-        document.body.style.overflow = "";
-        document.body.style.paddingRight = "0px";
-      }
-    }, 100);
+      setExpandedChildren(new Set());
+      enableBodyScroll();
+    }, 150);
   };
 
   const handleDropdownMouseEnter = () => {
-    // Clear timeout when entering dropdown
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
     }
@@ -496,7 +479,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
     handleMenuClose();
   };
 
-  // --- همیشه موقعیت anchorEl را با اسکرول به‌روز کن ---
   useEffect(() => {
     let timeoutId;
     const handleScrollAndResize = () => {
@@ -513,12 +495,14 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
               (el) => window.getComputedStyle(el).visibility !== "hidden"
             );
           }
+          
           const headerFixed = document.querySelector(
             '[data-header-fixed="true"]'
           );
           const navbarFixed = document.querySelector(
             '[data-navbar-fixed="true"]'
           );
+          
           let topPosition = 0;
           if (navbarFixed) {
             const headerH = headerFixed
@@ -530,6 +514,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
             const navbarRect = navbar.getBoundingClientRect();
             topPosition = navbarRect.bottom - window.scrollY;
           }
+          
           setDropdownTop(topPosition);
           const updatedAnchorEl = {
             getBoundingClientRect: () => ({
@@ -547,8 +532,10 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
         }, 16);
       }
     };
+    
     window.addEventListener("scroll", handleScrollAndResize, { passive: true });
     window.addEventListener("resize", handleScrollAndResize, { passive: true });
+    
     return () => {
       window.removeEventListener("scroll", handleScrollAndResize);
       window.removeEventListener("resize", handleScrollAndResize);
@@ -564,7 +551,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
     return (
       <div
         ref={navbarRef}
-        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative z-[1200]" // اضافه کردن z-index
+        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative z-[1200]"
       >
         <div className="w-full">
           <div className="flex justify-center w-full overflow-x-auto lg:overflow-visible">
@@ -617,18 +604,17 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                   }}
                   onClick={() => {
                     if (item.url || item.pageUrl) {
-                      document.body.style.overflow = "";
+                      enableBodyScroll();
                     }
                   }}
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <Link
                       onClick={(e) => {
-                        // بستن دراور
                         dispatch(setOpenMenuRes(false));
-                        // بستن dropdown
                         setAnchorEl(null);
                         setActiveMenu(null);
+                        enableBodyScroll();
 
                         e.preventDefault();
                         startTransition(() => {
@@ -643,11 +629,10 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                   ) : (
                     <Link
                       onClick={(e) => {
-                        // بستن دراور
                         dispatch(setOpenMenuRes(false));
-                        // بستن dropdown
                         setAnchorEl(null);
                         setActiveMenu(null);
+                        enableBodyScroll();
 
                         e.preventDefault();
                         startTransition(() => {
@@ -676,7 +661,7 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
           keepMounted
           disablePortal
           style={{
-            zIndex: 1200, // باید بالاتر از overlay باشد
+            zIndex: 1200,
             width: "auto",
             position: "fixed",
             margin: 0,
@@ -737,7 +722,11 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
                   borderBottomRightRadius: "20px",
                 }}
               >
-                <SubmenuDropdown activeMenu={activeMenu} onClose={onClose} startTransition={startTransition}/>
+                <SubmenuDropdown
+                  activeMenu={activeMenu}
+                  onClose={onClose}
+                  startTransition={startTransition}
+                />
               </AnimatedPaper>
             </Fade>
           )}
@@ -771,11 +760,10 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
           label: (
             <Link
               onClick={(e) => {
-                // بستن دراور
                 dispatch(setOpenMenuRes(false));
-                // بستن dropdown
                 setAnchorEl(null);
                 setActiveMenu(null);
+                enableBodyScroll();
 
                 e.preventDefault();
                 startTransition(() => {
@@ -800,13 +788,13 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
       try {
         Cookies.remove("user");
         dispatch(setOpenMenuRes(false));
+        enableBodyScroll();
         router.push("/");
       } catch (error) {
         console.error("Logout error:", error);
       }
     };
 
-    // ایجاد آیتم‌های داشبورد برای منو
     const dashboardItems = user?.token
       ? [
           {
@@ -827,11 +815,10 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
               label: (
                 <Link
                   onClick={(e) => {
-                    // بستن دراور
                     dispatch(setOpenMenuRes(false));
-                    // بستن dropdown
                     setAnchorEl(null);
                     setActiveMenu(null);
+                    enableBodyScroll();
 
                     e.preventDefault();
                     startTransition(() => {
@@ -854,7 +841,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
         ]
       : [];
 
-    // ترکیب آیتم‌های منو
     const menuItems = [
       ...dashboardItems,
       ...renderMenuItems(items),
@@ -878,7 +864,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
         : []),
     ];
 
-    // پیدا کردن کلید اکوردئون فعلی
     const currentAccordionKey = getAccordionKeyFromPath(pathname);
 
     return (
@@ -962,8 +947,6 @@ function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems , startTransit
       </>
     );
   };
-
-
 
   return (
     <>

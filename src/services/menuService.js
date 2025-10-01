@@ -8,6 +8,10 @@ export const fetchMenuItems = async () => {
         langCode: "fa",
         menuKey: "primary",
       },
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
     });
 
     if (response.data && response.data.length > 0) {
@@ -59,6 +63,7 @@ export const fetchMenuItems = async () => {
     }
     return [];
   } catch (error) {
-    
+     console.error("Error fetching menu items:", error);
+    return [];
   }
 }; 

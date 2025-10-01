@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-css-tags */
+export const dynamic = 'force-dynamic'; 
+
 import { fetchBrandingItems } from "@/services/brandingService";
 import { getItem } from "@/services/Item/item";
 import { getMenuFooter } from "@/services/menu/menuService";
@@ -76,3 +78,4 @@ export default async function RootLayout({ children }) {
     </html>
   );
 }
+
