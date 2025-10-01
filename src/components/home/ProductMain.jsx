@@ -89,6 +89,7 @@ export default function ProductMain({ products }) {
                       fill
                       sizes="(max-width: 768px) 100vw, 300px"
                       unoptimized
+                      priority
                     />
                     {/* لیبل کالای کارکرده */}
                     {product.conditionId === 20 && (

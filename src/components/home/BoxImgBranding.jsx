@@ -1,5 +1,6 @@
 "use client";
 
+import { mainDomainImg } from "@/utils/mainDomain";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -53,7 +54,7 @@ export default function BoxImgBranding({ brands }) {
                     router.push(`/products?brandid=${brand.id}`);
                   });
                 }}
-                src={`https://afrangadmin.aitest2.ir${brand.image}`}
+                src={`${mainDomainImg}${brand.image}`}
                 alt={brand.title}
                 className="w-36 h-36 object-contain cursor-pointer"
               />

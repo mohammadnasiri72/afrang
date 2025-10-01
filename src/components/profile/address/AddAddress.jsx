@@ -9,6 +9,8 @@ import { Modal, Select, Spin, Switch, Tooltip } from "antd";
 import Cookies from "js-cookie";
 import L from "leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "leaflet-geosearch/dist/geosearch.css";
+import "leaflet/dist/leaflet.css";
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";

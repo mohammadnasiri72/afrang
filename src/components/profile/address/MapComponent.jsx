@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import dynamic from 'next/dynamic';
 import { TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import "leaflet-geosearch/dist/geosearch.css";
+import "leaflet/dist/leaflet.css";
 
 // Only MapContainer needs to be dynamic
 const MapContainer = dynamic(
