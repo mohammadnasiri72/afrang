@@ -421,6 +421,7 @@ export default async function Home() {
         </div>
       )}
       {blogs.type === "error" && <ArticleSliderSkeleton />}
+      
     </div>
   );
 }

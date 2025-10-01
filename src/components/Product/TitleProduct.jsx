@@ -69,6 +69,7 @@ function TitleProduct({ product }) {
           <BasketBox product={product} />
         </div>
       </div>
+      
     </>
   );
 }

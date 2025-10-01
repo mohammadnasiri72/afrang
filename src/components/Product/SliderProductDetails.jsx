@@ -126,6 +126,9 @@ export default function SliderProductDetails({ attachments, product }) {
                         loading={index === 0 ? "eager" : "lazy"}
                         // برای اولین تصویر اولویت بالاتری قرار می‌دهیم
                         fetchPriority={index === 0 ? "high" : "auto"}
+                        width={400} // اندازه واقعی تصویر
+                        height={300} // اندازه واقعی تصویر
+                        placeholder="blur"
                       />
                     </a>
                   </SwiperSlide>

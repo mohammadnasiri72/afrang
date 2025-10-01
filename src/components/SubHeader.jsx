@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Marquee from "react-fast-marquee";
 
 export default function SubHeader({ popupsList }) {
+
   const pathname = usePathname();
 
   // تابع نمایش HTML content

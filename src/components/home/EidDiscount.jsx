@@ -156,7 +156,7 @@ export default function EidDiscount({ actionProducts, products }) {
           </div>
         </div>
         <div className="mt-5">
-          <ProductMain products={filteredProducts} />
+          <ProductMain products={filteredProducts} noLazy />
         </div>
 
         <div className="hidden">
