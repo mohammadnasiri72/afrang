@@ -46,7 +46,9 @@ const SupportBox = ({ items }) => {
           {items.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="rounded-lg bg-white p-5 flex sm:flex-row flex-col justify-center gap-2 items-center">
-                <SupportBoxPhoto item={item} />
+                <div className="sm:block hidden">
+                  <SupportBoxPhoto item={item} />
+                </div>
                 <span>{item.title}</span>
               </div>
             </SwiperSlide>

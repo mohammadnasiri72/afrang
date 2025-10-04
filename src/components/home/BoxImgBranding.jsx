@@ -45,7 +45,7 @@ export default function BoxImgBranding({ brands }) {
         >
           {brands.map((brand) => (
             <SwiperSlide key={brand.id}>
-              <div className="relative overflow-hidden w-36 h-36">
+              <div className="relative overflow-hidden w-36 h-36 aspect-square">
                 <BoxImgBrandingPhoto
                   brand={brand}
                   startTransition={startTransition}
