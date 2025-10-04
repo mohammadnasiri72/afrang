@@ -41,7 +41,7 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                         (item) => item.propertyKey === "site_home_url"
                       )?.value || "/"
                     }
-                    className="relative overflow-hidden w-20"
+                    className="relative overflow-hidden !w-12 !h-12"
                   >
                     {/* <img
                       className="w-20 "
@@ -74,11 +74,11 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R" // اختیاری
                     />
                     <div
-                      className={`absolute left-0 right-0 top-0 bottom-0 ${
+                      className={`absolute left-0 right-0 top-0 bottom-0 flex justify-center items-center ${
                         isLoaded ? "!hidden" : ""
                       }`}
                     >
-                      <Skeleton.Image active className={`!w-12 !h-12`} />
+                      <Skeleton.Image active className={`!w-5 !h-5`} />
                     </div>
                   </Link>
                 )}

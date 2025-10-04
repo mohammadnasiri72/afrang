@@ -9,7 +9,6 @@ import CountdownTimer from "./CountdownTimer";
 import { useRouter } from "next/navigation";
 
 function ProductMainPhotoNoLazy({ product , startTransition}) {
-  const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
   return (
     <>
@@ -29,16 +28,13 @@ function ProductMainPhotoNoLazy({ product , startTransition}) {
             product?.statusId !== 1 && product?.conditionId === 20
               ? "blur-xs"
               : ""
-          } ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          }`}
           src={getImageUrl2(product.image)}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 100vw, 300px"
           unoptimized
           priority={ true}
-          onLoad={() => {
-            setIsLoaded(true);
-          }}
           loading={ 'eager' } 
         />
         {/* لیبل کالای کارکرده */}
@@ -65,13 +61,7 @@ function ProductMainPhotoNoLazy({ product , startTransition}) {
             <CountdownTimer targetDate={product.salePlanTimer} />
           </div>
         )}
-        <div
-          className={`absolute left-0 right-0 top-0 bottom-0 ${
-            isLoaded ? "!hidden" : ""
-          }`}
-        >
-          <Skeleton.Image active className={`!w-full !h-full `} />
-        </div>
+       
       </Link>
     </>
   );
