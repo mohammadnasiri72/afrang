@@ -3,22 +3,20 @@
 import { Autoplay, EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-
-import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
 import { Divider } from "antd";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import {
-    FaAngleLeft,
-    FaAngleRight,
-    FaCaretLeft,
-    FaSearch,
+  FaAngleLeft,
+  FaAngleRight,
+  FaCaretLeft,
+  FaSearch,
 } from "react-icons/fa";
 import { SlBasket } from "react-icons/sl";
 import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
+import SliderProductSecPhoto from "./SliderProductSecPhoto";
 
 export default function SliderProductSec({ oldProducts, productsData }) {
   const [isPending, startTransition] = useTransition();
@@ -89,18 +87,8 @@ export default function SliderProductSec({ oldProducts, productsData }) {
                     href={product.url}
                     className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                   >
-                    <Image
-                      className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain ${
-                        product?.statusId !== 1 && product?.conditionId === 20
-                          ? "blur-xs"
-                          : ""
-                      }`}
-                      src={getImageUrl(product.image)}
-                      alt={product.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 300px"
-                      unoptimized
-                    />
+                    <SliderProductSecPhoto product={product} />
+
                     {/* لیبل کالای کارکرده */}
                     {product.conditionId === 20 && (
                       <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
@@ -261,66 +249,6 @@ export default function SliderProductSec({ oldProducts, productsData }) {
           >
             {productsData.map((product) => (
               <SwiperSlide key={product.id} className="group cursor-pointer">
-                {/* <div className="relative sm:min-h-[22rem] min-h-[23rem] group w-full pb-2 overflow-hidden rounded-xl bg-white shadow-md">
-                  <Link
-                    href={product.url ? product.url : "#"}
-                    onClick={(e) => {
-                      e.preventDefault();
-
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
-                    }}
-                    className="w-full min-h-40 flex items-center justify-center bg-[#fff] overflow-hidden relative"
-                  >
-                    <Image
-                      className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain`}
-                      src={getImageUrl2(product.image)}
-                      alt={product.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 300px"
-                      unoptimized
-                    />
-
-                    <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                      دست دوم کاربران
-                    </div>
-                  </Link>
-                  <div className="flex flex-col flex-1 justify-between mt-2">
-                    <Link
-                      href={product.url ? product.url : "#"}
-                      onClick={(e) => {
-                        e.preventDefault();
-
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start"
-                    >
-                      <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px]">
-                        {product.title}
-                      </h3>
-                    </Link>
-                    <Divider style={{ margin: 5, padding: 0 }} />
-
-                    <div className="px-2 duration-300">
-                      {product.price !== 0 && (
-                        <div className="flex flex-col">
-                          <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300">
-                            {product.price.toLocaleString()} تومان
-                          </span>
-                        </div>
-                      )}
-                      {product.price === 0 && (
-                        <span className="font-bold text-base text-[#333]">
-                          توافقی (تماس بگیرید)
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div> */}
                 <div className="relative group w-full sm:min-h-[22rem] min-h-[23rem] overflow-hidden rounded-xl bg-white shadow-md">
                   {/* تصویر */}
                   <Link
@@ -334,7 +262,7 @@ export default function SliderProductSec({ oldProducts, productsData }) {
                     href={product.url}
                     className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                   >
-                    <Image
+                    {/* <Image
                       className={`group-hover:scale-110 scale-100 duration-1000 w-full h-full object-contain ${
                         product?.statusId !== 1 && product?.conditionId === 20
                           ? "blur-xs"
@@ -345,7 +273,8 @@ export default function SliderProductSec({ oldProducts, productsData }) {
                       fill
                       sizes="(max-width: 768px) 100vw, 300px"
                       unoptimized
-                    />
+                    /> */}
+                    <SliderProductSecPhoto product={product} />
                     {/* لیبل دست دوم کاربران */}
                     <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                       دست دوم کاربران

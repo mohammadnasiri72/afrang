@@ -13,6 +13,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import ProductMainPhotoLazy from "./ProductMainPhotoLazy";
+import ProductMainPhotoNoLazy from "./ProductMainPhotoNoLazy";
 
 export default function ProductMain({ products, noLazy }) {
   const [isPending, startTransition] = useTransition();
@@ -65,7 +66,17 @@ export default function ProductMain({ products, noLazy }) {
               >
                 <div className="relative group w-full sm:min-h-[22rem] min-h-[23rem] overflow-hidden rounded-xl bg-white shadow-md">
                   {/* تصویر */}
-                  <ProductMainPhotoLazy product={product} noLazy={noLazy}/>
+                  {noLazy ? (
+                    <ProductMainPhotoNoLazy
+                      product={product}
+                      startTransition={startTransition}
+                    />
+                  ) : (
+                    <ProductMainPhotoLazy
+                      product={product}
+                      startTransition={startTransition}
+                    />
+                  )}
 
                   {/* محتوا */}
                   <div className="flex flex-col flex-1 justify-between mt-2">

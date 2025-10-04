@@ -3,12 +3,20 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 
 const MAX_COLUMNS = 4;
 const COLUMN_PIXEL_WIDTH = 300;
 
 const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
+  const boxRef = useRef(null);
+
+  const handleWheel = (e) => {
+    if (boxRef.current) {
+      e.preventDefault(); // نذار صفحه عمودی اسکرول بخوره
+      boxRef.current.scrollLeft += e.deltaY; // حرکت عمودی ماوس → افقی
+    }
+  };
   const router = useRouter();
   const dropdownContent = useMemo(() => {
     if (!activeMenu) return null;
@@ -71,6 +79,8 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       : "100%";
     return (
       <div
+        ref={boxRef}
+        onWheel={handleWheel}
         className="rounded-b-xl relative"
         style={{
           height: MENU_HEIGHT,

@@ -4,11 +4,11 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CountdownTimer from "./CountdownTimer";
+import { useRouter } from "next/navigation";
 
-function ProductMainPhotoLazy({ product, startTransition }) {
+function ProductMainPhotoNoLazy({ product , startTransition}) {
   const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
   return (
@@ -35,13 +35,11 @@ function ProductMainPhotoLazy({ product, startTransition }) {
           fill
           sizes="(max-width: 768px) 100vw, 300px"
           unoptimized
-          priority={false}
+          priority={ true}
           onLoad={() => {
             setIsLoaded(true);
           }}
-          loading={"lazy"}
-          placeholder={"blur"}
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R" // اختیاری
+          loading={ 'eager' } 
         />
         {/* لیبل کالای کارکرده */}
         {product.conditionId === 20 && (
@@ -79,4 +77,4 @@ function ProductMainPhotoLazy({ product, startTransition }) {
   );
 }
 
-export default ProductMainPhotoLazy;
+export default ProductMainPhotoNoLazy;

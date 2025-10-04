@@ -1,12 +1,15 @@
 import { mainDomainImg } from "@/utils/mainDomain";
+import { Skeleton } from "antd";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 import Newsletter from "./Newsletter";
 
 const Footer = ({ socialNetworks, footerMenu }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
   const { settings } = useSelector((state) => state.settings);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -38,8 +41,9 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                         (item) => item.propertyKey === "site_home_url"
                       )?.value || "/"
                     }
+                    className="relative overflow-hidden w-20"
                   >
-                    <img
+                    {/* <img
                       className="w-20 "
                       src={
                         mainDomainImg +
@@ -48,7 +52,34 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                         )?.value
                       }
                       alt=""
+                    /> */}
+                    <Image
+                      className={` ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                      src={
+                        mainDomainImg +
+                        settings?.find(
+                          (item) => item.propertyKey === "site_footer_logo"
+                        )?.value
+                      }
+                      alt="لوگو"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      unoptimized
+                      priority={false}
+                      onLoad={() => {
+                        setIsLoaded(true);
+                      }}
+                      loading={"lazy"}
+                      placeholder={"blur"}
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R" // اختیاری
                     />
+                    <div
+                      className={`absolute left-0 right-0 top-0 bottom-0 ${
+                        isLoaded ? "!hidden" : ""
+                      }`}
+                    >
+                      <Skeleton.Image active className={`!w-12 !h-12`} />
+                    </div>
                   </Link>
                 )}
                 <div className="">

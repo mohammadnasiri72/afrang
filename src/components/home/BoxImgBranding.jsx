@@ -1,16 +1,13 @@
 "use client";
 
-import { mainDomainImg } from "@/utils/mainDomain";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Loading from "../Loading";
+import BoxImgBrandingPhoto from "./BoxImgBrandingPhoto";
 
 export default function BoxImgBranding({ brands }) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-
   return (
     <>
       <div className="relative">
@@ -48,16 +45,12 @@ export default function BoxImgBranding({ brands }) {
         >
           {brands.map((brand) => (
             <SwiperSlide key={brand.id}>
-              <img
-                onClick={() => {
-                  startTransition(() => {
-                    router.push(`/products?brandid=${brand.id}`);
-                  });
-                }}
-                src={`${mainDomainImg}${brand.image}`}
-                alt={brand.title}
-                className="w-36 h-36 object-contain cursor-pointer"
-              />
+              <div className="relative overflow-hidden w-36 h-36">
+                <BoxImgBrandingPhoto
+                  brand={brand}
+                  startTransition={startTransition}
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

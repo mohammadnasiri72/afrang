@@ -18,14 +18,10 @@ const CameraAccessories = dynamic(() =>
 );
 const BoxImgHome = dynamic(() => import("@/components/home/BoxImgHome"));
 const NewProduct = dynamic(() => import("@/components/home/NewProduct"));
-const SecondHandProduct = dynamic(() =>
-  import("@/components/home/SecondHandProduct")
-);
+
 const SliderProductSec = dynamic(() => import("@/components/home/SliderProductSec"));
 const SliderProductSecSkeleton = dynamic(() => import("@/components/home/SliderProductSecSkeleton"));
-const SecondHandProductUser = dynamic(() =>
-  import("@/components/home/SecondHandProductUser")
-);
+
 const ArticleHeader = dynamic(() => import("@/components/home/ArticleHeader"));
 const ArticleSlider = dynamic(() => import("@/components/home/ArticleSlider"));
 

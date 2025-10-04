@@ -1,11 +1,9 @@
 "use client";
 
-import { getImageUrl } from "@/utils/mainDomain";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-
-
 import { Pagination } from "swiper/modules";
+import SupportBoxPhoto from "./SupportBoxPhoto";
 
 const SupportBox = ({ items }) => {
   return (
@@ -48,7 +46,7 @@ const SupportBox = ({ items }) => {
           {items.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="rounded-lg bg-white p-5 flex sm:flex-row flex-col justify-center gap-2 items-center">
-                <img src={getImageUrl(item.image)} alt={item.id} />
+                <SupportBoxPhoto item={item} />
                 <span>{item.title}</span>
               </div>
             </SwiperSlide>
