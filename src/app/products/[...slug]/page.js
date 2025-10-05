@@ -29,6 +29,7 @@ async function ProductContent({ id, searchParams }) {
   const productCategory = await getProductCategory(id);
   const resultFilter = await getCategoryChild(id);
 
+
   const page = params?.page ? parseInt(params.page) : 1;
   const orderBy = params?.orderby ? parseInt(params.orderby) : "";
   const layout = params?.layout ? params.layout : "list";

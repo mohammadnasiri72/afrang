@@ -1,5 +1,6 @@
 import { getItem } from "@/services/Item/item";
 import { getProducts } from "@/services/products/productService";
+import { getCategoryChild } from "@/services/Property/propertyService";
 import dynamic from "next/dynamic";
 import { FaBoxOpen } from "react-icons/fa6";
 
@@ -8,6 +9,7 @@ const BodyProductList = dynamic(() => import("./BodyProductList"));
 const PaginationProduct = dynamic(() => import("./PaginationProduct"));
 
 export default async function ProductListWithFilters({ searchParams }) {
+  const resultFilter = await getCategoryChild(-1);
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
   const layout = searchParams?.layout ? searchParams.layout : "list";
@@ -45,10 +47,13 @@ export default async function ProductListWithFilters({ searchParams }) {
     }),
   ]);
 
-
   return (
     <div className="flex flex-col lg:flex-row w-full">
-      <FilterProduct BannerProduct={bannerProduct} />
+      <FilterProduct
+        BannerProduct={bannerProduct}
+        resultFilter={resultFilter}
+        id={-1}
+      />
       {!products ||
       products.length === 0 ||
       products.type === "error" ||
@@ -75,7 +80,6 @@ export default async function ProductListWithFilters({ searchParams }) {
           </div>
         </div>
       )}
-      {}
     </div>
   );
 }

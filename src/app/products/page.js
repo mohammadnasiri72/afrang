@@ -1,23 +1,32 @@
-import Container from '@/components/container';
-import { getCategory } from '@/services/Category/categoryService';
-import dynamic from 'next/dynamic';
+import Container from "@/components/container";
+import { getCategory } from "@/services/Category/categoryService";
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
 // Dynamic imports for components
-const ProductListWithFilters = dynamic(() => import("@/components/ProductList/ProductListWithFilters"));
-const CategoryList = dynamic(() => import("@/components/ProductList/CategoryList"));
-const ProductListSkeleton = dynamic(() => import("@/components/ProductList/ProductListSkeleton"));
-const CategoryListSkeleton = dynamic(() => import("@/components/ProductList/CategoryListSkeleton"));
+const ProductListWithFilters = dynamic(() =>
+  import("@/components/ProductList/ProductListWithFilters")
+);
+const CategoryList = dynamic(() =>
+  import("@/components/ProductList/CategoryList")
+);
+const ProductListSkeleton = dynamic(() =>
+  import("@/components/ProductList/ProductListSkeleton")
+);
+const CategoryListSkeleton = dynamic(() =>
+  import("@/components/ProductList/CategoryListSkeleton")
+);
 
 // Main Page Component
 export default async function ProductList({ searchParams }) {
   const params = await searchParams;
-  
-   const categories = await getCategory({
-      TypeId: 4,
-      LangCode: "fa",
-      IsHome: 1,
-    });
+
+
+  const categories = await getCategory({
+    TypeId: 4,
+    LangCode: "fa",
+    IsHome: 1,
+  });
 
   return (
     <div className="bg-[#f6f6f6] overflow-hidden py-10">
@@ -30,7 +39,7 @@ export default async function ProductList({ searchParams }) {
       ) : (
         <Container>
           <Suspense fallback={<CategoryListSkeleton />}>
-            <CategoryList categories={categories}/>
+            <CategoryList categories={categories} />
           </Suspense>
         </Container>
       )}

@@ -8,6 +8,8 @@ import BoxImgBrandingPhoto from "./BoxImgBrandingPhoto";
 
 export default function BoxImgBranding({ brands }) {
   const [isPending, startTransition] = useTransition();
+
+  
   return (
     <>
       <div className="relative">
