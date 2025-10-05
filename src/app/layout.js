@@ -14,7 +14,9 @@ import "@ant-design/v5-patch-for-react-19";
 import "react-circular-progressbar/dist/styles.css";
 import { Toaster } from "react-hot-toast";
 
-import Layout from "@/components/Layout";
+
+
+import AntdRegistry from "./AntdRegistry";
 import "./globals.css";
 
 export const metadata = {
@@ -48,10 +50,20 @@ export default async function RootLayout({ children }) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         />
+        <style>{`
+    @font-face {
+      font-family: "Font Awesome 6 Free";
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Font Awesome 6 Brands";
+      font-display: swap;
+    }
+  `}</style>
       </head>
 
       <body>
-        <Layout
+        <AntdRegistry
           settings={settings}
           menuItems={menuItems}
           brandItems={brandItems}
@@ -64,10 +76,8 @@ export default async function RootLayout({ children }) {
           footerMenu={footerMenu}
           popupsData={popupsData}
         >
-          هدر
-          <main>{children}</main>
-          فوتر
-        </Layout>
+          {children}
+        </AntdRegistry>
 
         <Toaster position="top-center" />
       </body>

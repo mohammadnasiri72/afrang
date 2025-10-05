@@ -6,10 +6,11 @@ export async function generateMetadata({ params }) {
   const id = await params.slug[0];
   const product = await getProductId(id);
 
+
   if (product.type === "error") {
     return {
       title: "صفحه پیدا نشد",
-      description: "صفحه مورد نظر یافت نشد"
+      description: "صفحه مورد نظر یافت نشد",
     };
   }
 
@@ -18,7 +19,8 @@ export async function generateMetadata({ params }) {
   const imageUrl = getImageUrl(product?.product?.image || "");
   const url = `${mainDomain}${product?.product?.url || ""}`;
   const price = String(product?.product?.finalPrice * 10);
-  const availability = product?.product?.statusId === 1 ? "instock" : "out of stock";
+  const availability =
+    product?.product?.statusId === 1 ? "instock" : "out of stock";
   const brand = product?.product?.brandTitle || "";
 
   return {
@@ -62,7 +64,5 @@ export default async function LayoutProductDetails({ children, params }) {
     return notFound();
   }
 
-  return (
-    <main>{children}</main>
-  );
+  return <main>{children}</main>;
 }

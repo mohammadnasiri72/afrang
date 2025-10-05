@@ -6,12 +6,11 @@ function FilterProduct({ BannerProduct, id, resultFilter }) {
   return (
     <div className="lg:w-1/4 w-full lg:min-w-[300px]">
       <div className="lg:block hidden p-3">
-        {
-          resultFilter &&
-        <div className="bg-white rounded-lg p-3">
-          <SelectCategoryFilter resultFilter={resultFilter} />
-        </div>
-        }
+        {resultFilter && (
+          <div className="bg-white rounded-lg p-3">
+            <SelectCategoryFilter resultFilter={resultFilter} />
+          </div>
+        )}
 
         {BannerProduct &&
           BannerProduct.length > 0 &&

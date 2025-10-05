@@ -17,18 +17,18 @@ export async function generateMetadata({ params }) {
     }
 
     const {
-      seoTitle = "محصولات",
-      seoDescription = "توضیحات محصولات",
+      seoTitle = "لیست محصولات",
+      seoDescription = "توضیحات لیست محصولات",
       seoKeywords = "",
       seoHeadTags = "",
     } = resultFilter.category || {};
 
     const title =
-      resultFilter?.category?.seoTitle || seoTitle || "محصولات";
+      resultFilter?.category?.seoTitle || seoTitle || "لیست محصولات";
     const description =
       resultFilter?.category?.seoDescription ||
       seoDescription ||
-      "توضیحات محصولات";
+      "توضیحات لیست محصولات";
     const keywords = resultFilter?.category?.seoKeywords || seoKeywords;
 
     return {
@@ -53,6 +53,14 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function layoutProducts({ children }) {
-  return <div>{children}</div>;
+// layout فقط برای صفحه لیست محصولات
+export default async function LayoutProductList({ children, params }) {
+  const id = await params.slug[0];
+  const resultFilter = await getCategoryChild(id);
+
+  if (!resultFilter || resultFilter.type === "error") {
+    return notFound();
+  }
+
+  return <main>{children}</main>;
 }

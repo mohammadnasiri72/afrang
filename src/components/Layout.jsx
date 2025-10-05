@@ -13,9 +13,6 @@ import { makeStore } from "../redux/makeStore";
 import DynamicTitle from "./DynamicTitle";
 import LayoutWrapper from "./LayoutWrapper";
 import Loading from "./Loading";
-import { createCache, StyleProvider } from "@ant-design/cssinjs";
-import { ConfigProvider } from "antd";
-import faIR from "antd/locale/fa_IR";
 
 const generateRandomUserId = () => {
   return crypto.randomUUID();
@@ -219,7 +216,6 @@ function Layout({
   // no client-time dispatch here to avoid hydration mismatch
 
   const pathname = usePathname();
-  const [cache] = useState(() => createCache());
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pathname]);
@@ -255,41 +251,36 @@ function Layout({
   }, []);
 
   return (
-    <StyleProvider cache={cache}>
-       <ConfigProvider direction="rtl" locale={faIR}>
+    <Provider store={store}>
+      <div
+        style={{
+          maxWidth: "2000px",
+          margin: "auto",
+          overflow: "hidden",
+        }}
+      >
+        <>
+          <DynamicTitle />
+          <InitialDataManager />
+          <LayoutWrapper
+            showHeaderFooter={showHeaderFooter}
+            showPro={showPro}
+            showCart={showCart}
+            isShowPopups={true}
+            menuItems={menuItems}
+            brandItems={brandItems}
+            itemsSupport={itemsSupport}
+            socialNetworks={socialNetworks}
+            footerMenu={footerMenu}
+            popupsData={popupsData}
+          >
+            {children}
+          </LayoutWrapper>
+        </>
 
-      <Provider store={store}>
-        <div
-          style={{
-            maxWidth: "2000px",
-            margin: "auto",
-            overflow: "hidden",
-          }}
-        >
-          <>
-            <DynamicTitle />
-            <InitialDataManager />
-            <LayoutWrapper
-              showHeaderFooter={showHeaderFooter}
-              showPro={showPro}
-              showCart={showCart}
-              isShowPopups={true}
-              menuItems={menuItems}
-              brandItems={brandItems}
-              itemsSupport={itemsSupport}
-              socialNetworks={socialNetworks}
-              footerMenu={footerMenu}
-              popupsData={popupsData}
-            >
-              {children}
-            </LayoutWrapper>
-          </>
-
-          <ScrollToTopButton />
-        </div>
-      </Provider>
-       </ConfigProvider>
-    </StyleProvider>
+        <ScrollToTopButton />
+      </div>
+    </Provider>
   );
 }
 
