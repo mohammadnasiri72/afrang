@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { setFlag } from "@/redux/slices/idEditSec";
 import { selectUser } from "@/redux/slices/userSlice";
 import { UploadFile } from "@/services/File/FileServices";
@@ -33,10 +34,10 @@ import {
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
+import "react-multi-date-picker/styles/layouts/mobile.css";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ListProductSec from "./ListProductSec";
-import Loading from "@/components/Loading";
 const { TextArea } = Input;
 
 function Sell({ productsSec, productEdit, id }) {
@@ -340,8 +341,6 @@ function Sell({ productsSec, productEdit, id }) {
     const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
     return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
   };
-
-  
 
   return (
     <>
@@ -960,10 +959,7 @@ function Sell({ productsSec, productEdit, id }) {
           </div>
         )}
       </div>
-      {
-        isPending &&
-        <Loading />
-      }
+      {isPending && <Loading />}
     </>
   );
 }

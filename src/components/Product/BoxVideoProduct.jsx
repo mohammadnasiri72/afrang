@@ -6,6 +6,9 @@ import { useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // تنظیمات Fancybox برای گالری ویدئو
 Fancybox.bind("[data-fancybox='video-gallery']", {

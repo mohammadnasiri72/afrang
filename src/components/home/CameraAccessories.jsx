@@ -1,5 +1,8 @@
 "use client";
 
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { getImageUrl } from "@/utils/mainDomain";
@@ -15,7 +18,7 @@ export default function CameraAccessories({ category }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  
+
   return (
     <>
       <div className="box-slider-CameraAccessories bg-no-repeat bg-cover h-80 pt-3">
@@ -67,7 +70,6 @@ export default function CameraAccessories({ category }) {
                 >
                   <div className="flex flex-col items-center justify-center select-none cursor-pointer">
                     <div className="w-[50px] h-[50px] flex items-center justify-center relative">
-                     
                       {item.image && (
                         <Image
                           className={`sm:w-[50px] sm:h-[50px] w-[40px] h-[40px] ${

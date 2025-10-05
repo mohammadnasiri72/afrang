@@ -1,7 +1,7 @@
 "use client";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { Skeleton } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Loading";
@@ -14,7 +14,6 @@ function Products({ products }) {
   );
 
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   const dispatch = useDispatch();
   const isFilterLoading = useSelector(
@@ -93,34 +92,33 @@ function Products({ products }) {
     );
   }
 
- 
-
-  if (isPending) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
-
   return (
-    <div
-      className={
-        layoutProducts === "grid"
-          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"
-          : "space-y-5 mt-5"
-      }
-    >
-      {products.map((product, i) => (
-        <div key={i} className={layoutProducts === "grid" ? "h-full" : ""}>
-          {layoutProducts === "grid" ? (
-            <GridProductCard product={product} />
-          ) : (
-            <ProductCard product={product} />
-          )}
-        </div>
-      ))}
-    </div>
+    <>
+      <div
+        className={
+          layoutProducts === "grid"
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"
+            : "space-y-5 mt-5"
+        }
+      >
+        {products.map((product, i) => (
+          <div key={i} className={layoutProducts === "grid" ? "h-full" : ""}>
+            {layoutProducts === "grid" ? (
+              <GridProductCard
+                product={product}
+                startTransition={startTransition}
+              />
+            ) : (
+              <ProductCard
+                product={product}
+                startTransition={startTransition}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 }
 

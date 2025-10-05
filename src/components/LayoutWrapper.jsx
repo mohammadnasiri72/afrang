@@ -153,7 +153,7 @@ export default function LayoutWrapper({
             </div>
           </div>
         </div>
-        
+
         {/* NavBar Skeleton */}
         <div className="bg-[#d1182b] w-full">
           <div
@@ -397,3 +397,5 @@ export default function LayoutWrapper({
     </>
   );
 }
+
+

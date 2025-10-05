@@ -20,10 +20,10 @@ export default function BoxImgHome({ mainBanner }) {
         <div className="max-w-[1250px] py-0 px-[10px] my-0 mx-auto text-right">
           <div className="mt-[-160px] mb-[10px]">
             <div className="flex flex-wrap">
-              <div className="md:w-1/4 w-1/2 p-2">
-                <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
+              <div className="md:w-1/4 w-1/2 p-2 ">
+                <div className="w-full border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[400px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`object-cover ${
                       isLoaded1 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[0]?.image)}
@@ -50,9 +50,9 @@ export default function BoxImgHome({ mainBanner }) {
               </div>
 
               <div className="w-full sm:w-1/2 md:w-1/2 hidden md:block p-2">
-                <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
+                <div className="w-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[400px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded2 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[1]?.image)}
@@ -79,9 +79,9 @@ export default function BoxImgHome({ mainBanner }) {
               </div>
 
               <div className="md:w-1/4 w-1/2 p-2">
-                <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
+                <div className="w-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[400px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded3 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[2]?.image)}
@@ -108,9 +108,9 @@ export default function BoxImgHome({ mainBanner }) {
               </div>
 
               <div className="w-full md:hidden block">
-                <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
+                <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[400px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded2 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[1]?.image)}
@@ -141,7 +141,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
                 <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded4 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[3]?.image)}
@@ -170,7 +170,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
                 <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded5 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[4]?.image)}
@@ -199,7 +199,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
                 <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded6 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[5]?.image)}
@@ -228,7 +228,7 @@ export default function BoxImgHome({ mainBanner }) {
               <div className="sm:w-1/4 md:w-1/4 w-1/2 p-2">
                 <div className="h-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden min-h-[200px]">
                   <Image
-                    className={`w-full object-contain ${
+                    className={`w-full object-cover ${
                       isLoaded7 ? "opacity-100" : "opacity-0"
                     }`}
                     src={getImageUrl(mainBanner[6]?.image)}

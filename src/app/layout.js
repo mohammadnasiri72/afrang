@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-css-tags */
-export const dynamic = 'force-dynamic'; 
+export const dynamic = "force-dynamic";
 
 import { fetchBrandingItems } from "@/services/brandingService";
 import { getItem } from "@/services/Item/item";
@@ -13,14 +13,8 @@ import "@ant-design/v5-patch-for-react-19";
 // import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import "react-circular-progressbar/dist/styles.css";
 import { Toaster } from "react-hot-toast";
-import "react-multi-date-picker/styles/layouts/mobile.css";
-import "swiper/css";
-import "swiper/css/effect-cards";
-import "swiper/css/effect-coverflow";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import AntdRegistry from "./AntdRegistry";
+
+import Layout from "@/components/Layout";
 import "./globals.css";
 
 export const metadata = {
@@ -57,7 +51,7 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
-        <AntdRegistry
+        <Layout
           settings={settings}
           menuItems={menuItems}
           brandItems={brandItems}
@@ -70,12 +64,13 @@ export default async function RootLayout({ children }) {
           footerMenu={footerMenu}
           popupsData={popupsData}
         >
-          {children}
-        </AntdRegistry>
+          هدر
+          <main>{children}</main>
+          فوتر
+        </Layout>
 
         <Toaster position="top-center" />
       </body>
     </html>
   );
 }
-

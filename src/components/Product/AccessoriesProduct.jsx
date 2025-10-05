@@ -1,13 +1,15 @@
 "use client";
 
-import { getRelatedProductsByIdString } from "@/services/products/productService";
 import { getImageUrl2 } from "@/utils/mainDomain";
-import { Divider, Skeleton } from "antd";
+import { Divider } from "antd";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa6";
 import { SlBasket } from "react-icons/sl";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
@@ -21,13 +23,9 @@ function chunkArray(array, size) {
   return result;
 }
 
-function AccessoriesProduct({ product , relatedProducts}) {
+function AccessoriesProduct({ product, relatedProducts }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
   const productsSectionRef = useRef(null);
-
-  
-
- 
 
   // Get unique categories from relatedProducts
   const categories = [
@@ -43,8 +41,6 @@ function AccessoriesProduct({ product , relatedProducts}) {
   const groupSize = 5;
   const groupedProducts = chunkArray(filteredProducts, groupSize);
   const shouldUseSlider = filteredProducts.length > groupSize;
-
- 
 
   if (!categories || categories.length === 0) {
     return (
@@ -68,7 +64,9 @@ function AccessoriesProduct({ product , relatedProducts}) {
     <>
       <div className="p-5 flex flex-wrap items-start">
         <div className="md:w-1/4 w-full border rounded-lg border-[#0003] p-3">
-          <span className="font-semibold text-[18px]">دسته بندی محصولات مرتبط</span>
+          <span className="font-semibold text-[18px]">
+            دسته بندی محصولات مرتبط
+          </span>
           {categories.map((category, index) => (
             <div key={index}>
               <div

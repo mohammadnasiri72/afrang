@@ -54,7 +54,9 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                       alt=""
                     /> */}
                     <Image
-                      className={` ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                      className={`object-contain ${
+                        isLoaded ? "opacity-100" : "opacity-0"
+                      }`}
                       src={
                         mainDomainImg +
                         settings?.find(
@@ -86,11 +88,13 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                   <div className="w-full px-3 mt-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
                     <span>
                       <span className="text-[#d1182b] whitespace-nowrap pl-1">
-                        آدرس :{" "}
+                        آدرس:
                       </span>
                       {settings?.find(
                         (item) => item.propertyKey === "site_address1"
-                      )?.value || "آدرس در دسترس نیست"}
+                      )?.value ?? (
+                        <span className="inline-block w-[200px] h-[1em] bg-gray-200 animate-pulse align-middle rounded" />
+                      )}
                     </span>
                   </div>
                   <div className="w-full px-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
@@ -100,8 +104,13 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                       </span>
                       {settings?.find(
                         (item) => item.propertyKey === "site_worktime"
-                      )?.value ||
-                        "شنبه تا چهارشنبه از ساعت 10 الی 18 و پنج شنبه از ساعت 10 الی 16"}
+                      )?.value ? (
+                        settings.find(
+                          (item) => item.propertyKey === "site_worktime"
+                        )?.value
+                      ) : (
+                        <span className="inline-block w-[250px] h-[1em] bg-gray-200 animate-pulse rounded" />
+                      )}
                     </span>
                   </div>
                 </div>

@@ -1,14 +1,14 @@
 "use client";
 
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { getImageUrl } from "@/utils/mainDomain";
-import { Skeleton } from "antd";
 import moment from "moment-jalaali";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight, FaCircleUser } from "react-icons/fa6";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ExpandableText from "../blog/ExpandableText";
@@ -16,7 +16,6 @@ import Loading from "../Loading";
 import ArticleSliderPhoto from "./ArticleSliderPhoto";
 
 export default function ArticleSlider({ blogs }) {
- 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -106,9 +105,8 @@ export default function ArticleSlider({ blogs }) {
                     }}
                     className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none h-48"
                   >
-                    
-                    <ArticleSliderPhoto blog={blog}/>
-                  
+                    <ArticleSliderPhoto blog={blog} />
+
                     <hr className="w-14 absolute top-1/2 left-full ease-out duration-300 translate-x-0 -translate-y-1/2  border-[1.5px] border-[#fff] group-hover:left-1/2 group-hover:-translate-x-1/2" />
                     <hr className="w-14 absolute -top-full left-1/2 ease-out duration-300 -translate-x-1/2 translate-y-0  border-[1.5px] border-[#fff] group-hover:top-1/2 group-hover:-translate-y-1/2 rotate-90" />
                   </Link>

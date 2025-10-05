@@ -5,6 +5,9 @@ import dynamic from "next/dynamic";
 import { SlBasket } from "react-icons/sl";
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 import { getImageUrl2 } from "@/utils/mainDomain";
 import Link from "next/link";

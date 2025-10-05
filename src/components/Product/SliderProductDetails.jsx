@@ -3,6 +3,9 @@
 import { useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // import required modules
 import { getImageUrl2 } from "@/utils/mainDomain";

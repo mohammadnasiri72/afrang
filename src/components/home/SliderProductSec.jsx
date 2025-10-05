@@ -1,7 +1,12 @@
 "use client";
 
+import "swiper/css/effect-coverflow";
 import { Autoplay, EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 import { Divider } from "antd";
 import Link from "next/link";
@@ -17,6 +22,7 @@ import { SlBasket } from "react-icons/sl";
 import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import SliderProductSecPhoto from "./SliderProductSecPhoto";
+import SliderProductSecPhoto2 from "./SliderProductSecPhoto2";
 
 export default function SliderProductSec({ oldProducts, productsData }) {
   const [isPending, startTransition] = useTransition();
@@ -52,10 +58,10 @@ export default function SliderProductSec({ oldProducts, productsData }) {
             effect="coverflow"
             coverflowEffect={{
               rotate: 20,
-              stretch: 0,
-              depth: 450,
-              modifier: 1,
-              slideShadows: true,
+              stretch: 20,
+              depth: 50,
+              modifier: 0,
+              slideShadows: false,
             }}
             navigation={{
               nextEl: ".creative-next",
@@ -227,10 +233,10 @@ export default function SliderProductSec({ oldProducts, productsData }) {
             effect="coverflow"
             coverflowEffect={{
               rotate: 20,
-              stretch: 0,
-              depth: 450,
-              modifier: 1,
-              slideShadows: true,
+              stretch: 20,
+              depth: 50,
+              modifier: 0,
+              slideShadows: false,
             }}
             navigation={{
               nextEl: ".creative-next",
@@ -274,7 +280,7 @@ export default function SliderProductSec({ oldProducts, productsData }) {
                       sizes="(max-width: 768px) 100vw, 300px"
                       unoptimized
                     /> */}
-                    <SliderProductSecPhoto product={product} />
+                    <SliderProductSecPhoto2 product={product} />
                     {/* لیبل دست دوم کاربران */}
                     <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                       دست دوم کاربران

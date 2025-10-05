@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 // Import Swiper React components
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
@@ -32,7 +35,6 @@ Fancybox.bind("[data-fancybox='gallery']", {
 
 export default function SliderProductSecImg({ attachments, isAfrangOffer }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
 
   useEffect(() => {
     import("@fancyapps/ui/dist/fancybox/fancybox.css");
@@ -83,7 +85,7 @@ export default function SliderProductSecImg({ attachments, isAfrangOffer }) {
                 ))}
                 {/* کالای کارکرده */}
                 <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                  دست دوم 
+                  دست دوم
                 </div>
                 {/* پیشنهاد کاربران */}
                 {isAfrangOffer ? (
@@ -95,7 +97,6 @@ export default function SliderProductSecImg({ attachments, isAfrangOffer }) {
                     پیشنهاد کاربران
                   </div>
                 )}
-               
               </Swiper>
               <Swiper
                 style={{

@@ -11,6 +11,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { FaTimes, FaUser } from "react-icons/fa";
 import DatePicker from "react-multi-date-picker";
+import "react-multi-date-picker/styles/layouts/mobile.css";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 

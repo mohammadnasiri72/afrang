@@ -5,5 +5,11 @@ export const metadata = {
   description: "ورود",
 };
 export default async function layoutLogin({ children }) {
-  return <div>{children}</div>;
+  return <div>
+    <h1>ورود</h1>
+    {children}
+    <footer>
+      <p>تمامی حقوق محفوظ است.</p>
+    </footer>
+  </div>;
 }

@@ -3,14 +3,16 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import { Skeleton, Tooltip } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaCartShopping, FaTruck, FaTruckFast } from "react-icons/fa6";
 import AddToCartButton from "./AddToCartButton";
 import CompareButtonBtn from "./CompareButtonBtn";
 import ShowImgProduct from "./ShowImgProduct";
 
-function GridProductCard({ product }) {
+function GridProductCard({ product, startTransition }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
   return (
     <>
       <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col relative z-50">

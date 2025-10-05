@@ -5,14 +5,13 @@ import { useState } from "react";
 
 function SliderProductSecPhoto({ product }) {
   const [isLoaded, setIsLoaded] = useState(false);
-
   return (
     <>
       <Image
         className={`w-full object-contain ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
-        src={getImageUrl2(product.image)}
+        src={getImageUrl2(product.imageSrc)}
         alt={product.title}
         fill
         sizes="(max-width: 768px) 100vw, 300px"

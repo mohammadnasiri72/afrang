@@ -3,6 +3,7 @@ import { getImageUrl2 } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   FaCartShopping,
@@ -15,8 +16,9 @@ import CompareButtonBtn from "./CompareButtonBtn";
 import PriceProduct from "./PriceProduct";
 import ShowImgProduct from "./ShowImgProduct";
 
-function ProductCard({ product }) {
+function ProductCard({ product, startTransition }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
   return (
     <>
       <div className="bg-white rounded-lg relative z-50">

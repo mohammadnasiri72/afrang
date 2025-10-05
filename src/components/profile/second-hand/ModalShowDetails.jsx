@@ -9,8 +9,10 @@ import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-
-
+import "swiper/css";
+import "swiper/css/effect-cards";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { EffectCards } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -20,14 +22,10 @@ function ModalShowDetails({ id }) {
   const [productDetails, setProductDetails] = useState({});
   const user = useSelector(selectUser);
 
-  
-
   const htmlToText = (htmlString) => {
     const doc = new DOMParser().parseFromString(htmlString, "text/html");
     return doc.body.textContent || "";
   };
-
-  
 
   const Toast = Swal.mixin({
     toast: true,
