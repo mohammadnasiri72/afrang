@@ -61,7 +61,7 @@ function SearchSubfooter() {
           <IoSearchSharp className="text-white text-2xl cursor-pointer" />
           <input
             type="text"
-            className="w-full outline-none text-white px-2"
+            className="w-full outline-none !text-white px-2"
             placeholder="جستجو..."
           />
         </div>

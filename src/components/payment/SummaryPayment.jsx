@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { FaUser, FaTruck, FaShoppingCart, FaBuilding } from "react-icons/fa";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { useEffect, useState } from "react";
 import ShowProductBasket from "../CompeletePay/ShowProductBasket";
 

@@ -6,14 +6,9 @@ import { fetchSettingsData } from "@/redux/slices/settingsSlice";
 import { mainDomainImg } from "@/utils/mainDomain";
 
 const DynamicTitle = () => {
-  const dispatch = useDispatch();
-  const { settings, loading } = useSelector((state) => state.settings);
+  const { settings } = useSelector((state) => state.settings);
 
-  useEffect(() => {
-    if (!settings || settings.length === 0) {
-      dispatch(fetchSettingsData());
-    }
-  }, [dispatch, settings]);
+ 
 
   useEffect(() => {
     if (settings && settings.length > 0) {

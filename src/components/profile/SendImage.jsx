@@ -132,7 +132,7 @@ const DeleteImageModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className={`px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] ${
+            className={`px-4 py-2 text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] ${
               isLoading
                 ? "cursor-not-allowed"
                 : "cursor-pointer hover:bg-[#b91626]"
@@ -461,7 +461,7 @@ const SendImage = () => {
                     className={`px-3 py-1 rounded-full text-sm font-medium
                                         ${
                                           item.isActive
-                                            ? "bg-green-500 text-white"
+                                            ? "bg-green-500 !text-white"
                                             : "bg-orange-400 text-gray-800"
                                         }`}
                   >

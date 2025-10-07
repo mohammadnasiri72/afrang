@@ -132,17 +132,17 @@ function BoxSellSec({ productList }) {
               </h3>
               <div className="flex flex-col items-center justify-center gap-1">
                 {product.isAfrangOffer ? (
-                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
+                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full !text-white px-2 py-1">
                     پیشنهاد افرنگ
                   </span>
                 ) : (
-                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full text-white px-2 py-1">
+                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full !text-white px-2 py-1">
                     پیشنهاد کاربران
                   </span>
                 )}
 
                 {product.isArchive && (
-                  <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full text-white px-2 py-1">
+                  <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full !text-white px-2 py-1">
                     آرشیو شده
                   </span>
                 )}
@@ -206,11 +206,11 @@ function BoxSellSec({ productList }) {
               </div>
               {/* پیشنهاد کاربران */}
               {product.isAfrangOffer ? (
-                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                   پیشنهاد افرنگ
                 </div>
               ) : (
-                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                   پیشنهاد کاربران
                 </div>
               )}
@@ -256,7 +256,7 @@ function BoxSellSec({ productList }) {
               {product.categoryTitle}
             </p>
             {product.isArchive && (
-              <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full text-white px-2 py-1">
+              <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full !text-white px-2 py-1">
                 آرشیو شده
               </span>
             )}

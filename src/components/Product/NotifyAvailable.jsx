@@ -23,7 +23,7 @@ function NotifyAvailable({id}) {
   return (
     <>
       <button
-        className="w-full cursor-pointer mt-2 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+        className="w-full cursor-pointer mt-2 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 !text-white font-semibold rounded-lg shadow-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
         type="button"
         aria-label="Add to favorites"
         data-bs-toggle="tooltip"

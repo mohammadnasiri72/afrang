@@ -1,6 +1,6 @@
 "use client";
 
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +30,7 @@ function ProductMainPhotoLazy({ product, startTransition }) {
               ? "blur-xs"
               : ""
           } ${isLoaded ? "opacity-100" : "opacity-0"}`}
-          src={getImageUrl2(product.image)}
+          src={getImageUrl(product.image)}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 100vw, 300px"

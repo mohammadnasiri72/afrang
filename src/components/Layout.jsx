@@ -3,15 +3,18 @@
 import { fetchCartData } from "@/redux/slices/cartSlice";
 import { setError } from "@/redux/slices/menuResSlice";
 import { setUser } from "@/redux/slices/userSlice";
+import { createCache, StyleProvider } from "@ant-design/cssinjs";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ConfigProvider } from "antd";
+import faIR from "antd/locale/fa_IR";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { FaChevronUp } from "react-icons/fa";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { makeStore } from "../redux/makeStore";
 import DynamicTitle from "./DynamicTitle";
-import LayoutWrapper from "./LayoutWrapper";
 import Loading from "./Loading";
 
 const generateRandomUserId = () => {
@@ -193,24 +196,9 @@ function ScrollToTopButton() {
 }
 
 // کامپوننت اصلی که Provider را فراهم می‌کند
-function Layout({
-  children,
-  settings,
-  menuItems,
-  brandItems,
-  itemsSupport,
-  socialNetworks,
-  footerMenu,
-  popupsData,
-}) {
+function Layout({ children , settings}) {
   const { store } = makeStore({
-    settings: { settings },
-    menuRes: {
-      items: menuItems,
-      openMenuRes: false,
-      loading: false,
-      error: null,
-    },
+    settings : {settings}
   });
 
   // no client-time dispatch here to avoid hydration mismatch
@@ -219,17 +207,6 @@ function Layout({
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pathname]);
-
-  const showHeaderFooter =
-    !pathname.includes("/login") &&
-    !pathname.includes("/register") &&
-    !pathname.includes("/forgot-password");
-
-  const showPro = !pathname.includes("/product/");
-
-  const showCart = !pathname.includes("/cart");
-
-  // const isShowPopups = localStorage.getItem("showPopups");
 
   useEffect(() => {
     setTimeout(() => {
@@ -250,37 +227,31 @@ function Layout({
     }, 2000);
   }, []);
 
-  return (
-    <Provider store={store}>
-      <div
-        style={{
-          maxWidth: "2000px",
-          margin: "auto",
-          overflow: "hidden",
-        }}
-      >
-        <>
-          <DynamicTitle />
-          <InitialDataManager />
-          <LayoutWrapper
-            showHeaderFooter={showHeaderFooter}
-            showPro={showPro}
-            showCart={showCart}
-            isShowPopups={true}
-            menuItems={menuItems}
-            brandItems={brandItems}
-            itemsSupport={itemsSupport}
-            socialNetworks={socialNetworks}
-            footerMenu={footerMenu}
-            popupsData={popupsData}
-          >
-            {children}
-          </LayoutWrapper>
-        </>
+  const [cache] = useState(() => createCache());
 
-        <ScrollToTopButton />
-      </div>
-    </Provider>
+  return (
+    <StyleProvider cache={cache}>
+      <ConfigProvider direction="rtl" locale={faIR}>
+        <AntdRegistry>
+          <Provider store={store}>
+            <div
+              style={{
+                maxWidth: "2000px",
+                margin: "auto",
+                overflow: "hidden",
+              }}
+            >
+              <>
+                {/* <DynamicTitle /> */}
+                <InitialDataManager />
+                {children}
+              </>
+              <ScrollToTopButton />
+            </div>
+          </Provider>
+        </AntdRegistry>
+      </ConfigProvider>
+    </StyleProvider>
   );
 }
 

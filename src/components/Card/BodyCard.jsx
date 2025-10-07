@@ -3,7 +3,7 @@
 import { fetchCartData } from "@/redux/slices/cartSlice";
 import { addToCartNext, moveToCurrentCart } from "@/services/cart/CartServices";
 import { getUserCookie } from "@/utils/cookieUtils";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Divider, Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -123,7 +123,7 @@ const BodyCard = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const dispatch = useDispatch();
-  const { currentItems, nextItems, cartType, loading, initialized } =
+  const { currentItems, nextItems, cartType, loading } =
     useSelector((state) => state.cart);
 
   // فقط یک بار در mount شدن کامپوننت
@@ -382,7 +382,7 @@ const BodyCard = () => {
                           <Image
                             style={{ filter: " brightness(0.8)" }}
                             className="w-full h-full object-contain"
-                            src={getImageUrl2(item.image)}
+                            src={getImageUrl(item.image)}
                             alt={item?.title}
                             width={150}
                             height={150}
@@ -390,7 +390,7 @@ const BodyCard = () => {
                           />
                         </Link>
                         {item.discount !== 0 && (
-                          <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                          <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
                             {item.discount}٪
                           </span>
                         )}
@@ -457,14 +457,14 @@ const BodyCard = () => {
                                               filter: " brightness(0.8)",
                                             }}
                                             className="w-full h-full object-contain rounded-lg"
-                                            src={getImageUrl2(e.image)}
+                                            src={getImageUrl(e.image)}
                                             alt={e?.title}
                                             width={20}
                                             height={20}
                                             unoptimized
                                           />
                                           {e.discount !== 0 && (
-                                            <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                            <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
                                               {e.discount}٪
                                             </span>
                                           )}
@@ -552,14 +552,14 @@ const BodyCard = () => {
                                       <Image
                                         style={{ filter: " brightness(0.8)" }}
                                         className="w-full h-full object-contain rounded-lg"
-                                        src={getImageUrl2(e.image)}
+                                        src={getImageUrl(e.image)}
                                         alt={e?.title}
                                         width={20}
                                         height={20}
                                         unoptimized
                                       />
                                       {e.discount !== 0 && (
-                                        <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                        <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
                                           {e.discount}٪
                                         </span>
                                       )}
@@ -632,7 +632,7 @@ const BodyCard = () => {
                       </div>
                       <button
                         onClick={compeletePay}
-                        className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                        className="w-full flex justify-center items-center gap-2 !text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
                       >
                         <FaShoppingCart />
                         <span>تسویه حساب</span>
@@ -686,7 +686,7 @@ const BodyCard = () => {
                     </div>
                     <button
                       onClick={compeletePay}
-                      className="w-full sm:flex hidden justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                      className="w-full sm:flex hidden justify-center items-center gap-2 !text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
                     >
                       <FaShoppingCart />
                       <span>تسویه حساب</span>
@@ -713,7 +713,7 @@ const BodyCard = () => {
                 </div>
                 <button
                   onClick={compeletePay}
-                  className="w-full flex justify-center items-center gap-2 text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
+                  className="w-full flex justify-center items-center gap-2 !text-white bg-[#d1182b] cursor-pointer py-2 rounded-lg duration-300 hover:bg-[#40768c] mt-3"
                 >
                   <FaShoppingCart />
                   <span>تسویه حساب</span>

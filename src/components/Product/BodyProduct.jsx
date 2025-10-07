@@ -1,7 +1,7 @@
 import { getComment } from "@/services/comments/serviceComment";
 import { getListItemByIds } from "@/services/Item/item";
 import { getRelatedProductsByIdString } from "@/services/products/productService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaClipboardList } from "react-icons/fa";
 import { SlBasket } from "react-icons/sl";
@@ -120,7 +120,7 @@ async function BodyProduct({ product }) {
                 >
                   <img
                     className="object-contain w-20 h-20"
-                    src={getImageUrl2(item.image)}
+                    src={getImageUrl(item.image)}
                     alt={item.title}
                   />
                 </Link>
@@ -154,7 +154,7 @@ async function BodyProduct({ product }) {
                 </div>
                 <div className="flex flex-col items-end justify-between h-full ml-2 ">
                   {item.discount !== 0 && !item.callPriceButton && (
-                    <span className="bg-[#d1182b] text-white rounded-md px-2 py-0.5 text-xs mb-1">
+                    <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs mb-1">
                       {item.discount}%
                     </span>
                   )}

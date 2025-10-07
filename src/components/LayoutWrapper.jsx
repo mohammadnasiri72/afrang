@@ -23,12 +23,10 @@ export default function LayoutWrapper({
   showPro = true,
   showCart = true,
   isShowPopups = true,
-  menuItems,
   brandItems,
   itemsSupport,
   socialNetworks,
   footerMenu,
-  popupsData,
 }) {
   if (!showHeaderFooter) {
     return <>{children}</>;
@@ -158,7 +156,7 @@ export default function LayoutWrapper({
         <div className="bg-[#d1182b] w-full">
           <div
             style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
-            className="px-2 flex justify-between items-center text-white py-2"
+            className="px-2 flex justify-between items-center !text-white py-2"
           >
             {/* Menu Items */}
             <div className="flex-1">
@@ -308,7 +306,7 @@ export default function LayoutWrapper({
 
   return (
     <>
-      <div className={showPro ? "" : "pb-16 sm:pb-0"}>
+      {/* <div className={showPro ? "" : "pb-16 sm:pb-0"}>
         <div className={showCart ? "" : "pb-28 sm:pb-0"}>
           <SubHeader popupsList={popupsData} />
           <Suspense fallback={<HeaderNavbarSkeleton />}>
@@ -393,7 +391,8 @@ export default function LayoutWrapper({
               </Button>
             </DialogActions>
           </Dialog>
-        )}
+        )} */}
+         {children}
     </>
   );
 }

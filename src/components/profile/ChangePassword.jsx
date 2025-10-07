@@ -227,7 +227,7 @@ export default function ChangeUserPassword() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-full px-4 py-2 text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b91626]'
+                        className={`w-full px-4 py-2 !text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b91626]'
                             }`}
                     >
                         {loading ? (

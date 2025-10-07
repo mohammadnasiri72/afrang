@@ -1,4 +1,4 @@
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { BsArchive } from "react-icons/bs";
 import { FaShoppingCart, FaRecycle } from "react-icons/fa";
 import Link from "next/link";
@@ -57,7 +57,7 @@ function ShowProductBasket() {
                 <Link href={item.url}>
                   <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1 hover:opacity-80 transition-opacity">
                     <img
-                      src={getImageUrl2(item.image)}
+                      src={getImageUrl(item.image)}
                       alt={item.title || "تصویر محصول"}
                       className="w-full h-full object-contain rounded-md"
                       onError={(e) => {
@@ -66,11 +66,11 @@ function ShowProductBasket() {
                       }}
                     />
                     {item.discount !== 0 && (
-                      <div className="absolute -top-2 -right-2 bg-[#d1182b] text-white text-xs font-medium px-2 py-0.5 rounded-full">
+                      <div className="absolute -top-2 -right-2 bg-[#d1182b] !text-white text-xs font-medium px-2 py-0.5 rounded-full">
                         {item.discount}٪
                       </div>
                     )}
-                    <div className="absolute -bottom-2 left-0 right-0 bg-[#d1182b]/80 text-white text-xs font-medium py-0.5 text-center rounded-b-md">
+                    <div className="absolute -bottom-2 left-0 right-0 bg-[#d1182b]/80 !text-white text-xs font-medium py-0.5 text-center rounded-b-md">
                       {item.quantity} عدد
                     </div>
                   </div>
@@ -137,14 +137,14 @@ function ShowProductBasket() {
                                     <Image
                                       style={{ filter: " brightness(0.8)" }}
                                       className="w-full h-full object-contain rounded-lg"
-                                      src={getImageUrl2(e.image)}
+                                      src={getImageUrl(e.image)}
                                       alt={e?.title}
                                       width={20}
                                       height={20}
                                       unoptimized
                                     />
                                     {e.discount !== 0 && (
-                                      <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                      <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
                                         {e.discount}٪
                                       </span>
                                     )}
@@ -192,14 +192,14 @@ function ShowProductBasket() {
                                   <Image
                                     style={{ filter: " brightness(0.8)" }}
                                     className="w-full h-full object-contain rounded-lg"
-                                    src={getImageUrl2(e.image)}
+                                    src={getImageUrl(e.image)}
                                     alt={e?.title}
                                     width={20}
                                     height={20}
                                     unoptimized
                                   />
                                   {e.discount !== 0 && (
-                                    <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                    <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
                                       {e.discount}٪
                                     </span>
                                   )}

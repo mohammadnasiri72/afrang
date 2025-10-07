@@ -25,13 +25,13 @@ function EmptyBlogs() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/"
-            className="px-6 py-3 bg-[#d1182b] text-white rounded-lg hover:bg-[#b31524] transition-colors duration-300 flex items-center justify-center gap-2"
+            className="px-6 py-3 bg-[#d1182b] !text-white rounded-lg hover:bg-[#b31524] transition-colors duration-300 flex items-center justify-center gap-2"
           >
             <span>بازگشت به صفحه اصلی</span>
           </Link>
           <Link
             href="/news"
-            className="px-6 py-3 bg-[#40768c] text-white rounded-lg hover:bg-[#2d5a6b] transition-colors duration-300 flex items-center justify-center gap-2"
+            className="px-6 py-3 bg-[#40768c] !text-white rounded-lg hover:bg-[#2d5a6b] transition-colors duration-300 flex items-center justify-center gap-2"
           >
             <span>مشاهده همه مطالب</span>
           </Link>

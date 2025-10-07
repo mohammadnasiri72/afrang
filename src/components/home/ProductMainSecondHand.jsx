@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import AddToCartButton from "../ProductList/AddToCartButton";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
@@ -57,7 +57,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     <img
                       className="duration-1000 w-full"
                       style={{ filter: " brightness(0.95)" }}
-                      src={getImageUrl2(oldProduct.image)}
+                      src={getImageUrl(oldProduct.image)}
                       alt=""
                     />
                   </div>
@@ -73,18 +73,18 @@ export default function ProductMainSecondHand({ oldProducts }) {
                       {oldProduct.price1.toLocaleString()}
                     </span>
                   </div>
-                  {/* <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                  {/* <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                     <SlBasket className="text-xl" />
                     <span className="px-1">افزودن به سبد خرید</span>
                   </div> */}
                   {oldProduct.canAddCart && (
                     <div>
-                      <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
+                      <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center !text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
                         {/* <SlBasket className="text-xl" />
                           <span className="px-1">افزودن به سبد خرید</span> */}
                         <AddToCartButtonCard productId={oldProduct.productId} />
                       </div>
-                      <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
+                      <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center !text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
                         <AddToCartButton productId={oldProduct.productId} />
                       </div>
                     </div>
@@ -118,7 +118,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>
@@ -150,7 +150,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>
@@ -182,7 +182,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>
@@ -214,7 +214,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>
@@ -246,7 +246,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>
@@ -278,7 +278,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>
@@ -310,7 +310,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     18,000,000
                   </span>
                 </div>
-                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
+                <div className="bg-[#40768c] bottom-0 left-0 right-0 overflow-hidden flex justify-center items-center py-3 !text-white rounded-b-lg sm:translate-y-[90%] sm:group-hover:translate-y-0 duration-300 sm:absolute cursor-pointer hover:bg-teal-500 font-bold">
                   <SlBasket className="text-xl" />
                   <span className="px-1">افزودن به سبد خرید</span>
                 </div>

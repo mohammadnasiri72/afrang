@@ -1,5 +1,5 @@
 "use client";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,7 +46,7 @@ function ProductCard({ product, startTransition }) {
                             ? "blur-xs"
                             : ""
                         } ${isLoaded ? "opacity-100" : "opacity-0"}`}
-                        src={getImageUrl2(product.image)}
+                        src={getImageUrl(product.image)}
                         alt={product.title}
                         width={96}
                         height={96}
@@ -63,7 +63,7 @@ function ProductCard({ product, startTransition }) {
                   </Link>
                   {/* تخفیف سمت چپ */}
                   {product.discount !== 0 && (
-                    <span className="absolute top-1 left-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+                    <span className="absolute top-1 left-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm !text-white text-xs font-bold z-10">
                       {product.discount}%
                     </span>
                   )}
@@ -167,7 +167,7 @@ function ProductCard({ product, startTransition }) {
                           ? "blur-xs"
                           : ""
                       } ${isLoaded ? "opacity-100" : "opacity-0"}`}
-                      src={getImageUrl2(product.image)}
+                      src={getImageUrl(product.image)}
                       alt={product.title}
                       width={200}
                       height={200}
@@ -184,7 +184,7 @@ function ProductCard({ product, startTransition }) {
                 </Link>
                 {/* تخفیف سمت چپ */}
                 {product.discount !== 0 && (
-                  <span className="absolute top-2 left-2 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+                  <span className="absolute top-2 left-2 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold z-10">
                     {product.discount}%
                   </span>
                 )}

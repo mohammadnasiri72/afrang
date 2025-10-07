@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { Fancybox } from "@fancyapps/ui";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -72,8 +72,8 @@ const ShowImgProduct = ({ product }) => {
       Fancybox.show(
         [product.image, ...response.map((obj) => obj.fileUrl)].map(
           (src, index) => ({
-            src: getImageUrl2(src),
-            thumb: getImageUrl2(src),
+            src: getImageUrl(src),
+            thumb: getImageUrl(src),
           })
         ),
         { startIndex: 0 }
@@ -104,9 +104,9 @@ const ShowImgProduct = ({ product }) => {
         {allAttachments.map((src, index) => (
           <a
             key={index}
-            href={getImageUrl2(src)}
+            href={getImageUrl(src)}
             data-fancybox="gallery"
-            data-thumb={getImageUrl2(src)}
+            data-thumb={getImageUrl(src)}
           ></a>
         ))}
       </div>

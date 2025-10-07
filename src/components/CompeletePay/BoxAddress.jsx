@@ -125,7 +125,7 @@ function BoxAddress({ onAddressDelete }) {
           <h2 className="text-gray-700 font-bold text-lg">آدرس‌های ثبت شده</h2>
           <button
             onClick={handleAddClick}
-            className="flex items-center gap-1 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
+            className="flex items-center gap-1 text-center !text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
           >
             <FaPlus className="text-xs" />
             <span>افزودن</span>

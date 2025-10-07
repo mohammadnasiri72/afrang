@@ -46,7 +46,7 @@ function ConfirmModal({ isOpen, onClose, onConfirm, title, message, isLoading })
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className={`px-4 py-2 text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] ${
+            className={`px-4 py-2 text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] ${
               isLoading ? "cursor-not-allowed" : "cursor-pointer hover:bg-[#b91626]"
             }`}
           >

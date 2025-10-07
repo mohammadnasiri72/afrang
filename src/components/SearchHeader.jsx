@@ -1,7 +1,7 @@
 "use client";
 
 import { getProductTerm } from "@/services/products/productService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -163,7 +163,7 @@ const SearchHeader = () => {
                       >
                         <div className="w-20 h-20 relative flex-shrink-0 overflow-hidden">
                           <Image
-                            src={getImageUrl2(product.image)}
+                            src={getImageUrl(product.image)}
                             alt={product.title.slice(0, 20)}
                             width={80}
                             height={80}

@@ -1,12 +1,14 @@
 "use client";
 
+import { setMenuItems } from "@/redux/slices/menuResSlice";
+import { setSettings } from "@/redux/slices/settingsSlice";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "./Header";
 import Loading from "./Loading";
 import NavBar from "./NavBar";
 
-const HeaderNavbarWrapper = ({ menuItems }) => {
+const HeaderNavbarWrapper = ({ menuItems, settings }) => {
   const [headerFixed, setHeaderFixed] = useState(false);
   const [navbarFixed, setNavbarFixed] = useState(false);
   const headerRef = useRef(null);
@@ -14,9 +16,30 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [headerLoaded, setHeaderLoaded] = useState(false);
-  const { loading } = useSelector((state) => state.settings);
   const [activeMenu, setActiveMenu] = useState(null);
   const [isPending, startTransition] = useTransition();
+
+  const disPatch = useDispatch();
+
+  useEffect(() => {
+    if (menuItems && menuItems.length > 0) {
+      disPatch(
+        setMenuItems((prev) => ({
+          ...prev,
+          items: menuItems,
+          openMenuRes: false,
+          loading: false,
+          error: null,
+        }))
+      );
+    }
+  }, [menuItems]);
+
+  useEffect(() => {
+    if (settings && settings.length > 0) {
+      disPatch(setSettings(settings));
+    }
+  }, [settings]);
 
   // فقط بعد از لود شدن هدر اصلی، ارتفاع را محاسبه کن
   useEffect(() => {
@@ -28,7 +51,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
     if (navbarRef.current) {
       setNavbarHeight(navbarRef.current.getBoundingClientRect().height);
     }
-    // اندازه‌گیری مجدد بعد از ۵ ثانیه
+    
     const timeout = setTimeout(() => {
       if (headerRef.current) {
         setHeaderHeight(headerRef.current.getBoundingClientRect().height);
@@ -38,7 +61,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
       }
     }, 100);
     return () => clearTimeout(timeout);
-  }, [loading]);
+  }, []);
 
   useEffect(() => {
     if (!headerLoaded) return;
@@ -112,7 +135,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
             padding: 0,
           }}
         >
-          <Header onLoaded={() => setHeaderLoaded(true)} />
+          <Header onLoaded={() => setHeaderLoaded(true)} settings={settings} />
         </div>
       </div>
       {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
@@ -152,7 +175,7 @@ const HeaderNavbarWrapper = ({ menuItems }) => {
       </div>
       {/* header اصلی که همیشه در جای خودش هست */}
       <div ref={headerRef} className="z-[1001] relative">
-        <Header onLoaded={() => setHeaderLoaded(true)} />
+        <Header onLoaded={() => setHeaderLoaded(true)} settings={settings} />
       </div>
       {/* navbar اصلی که همیشه در جای خودش هست */}
       <div

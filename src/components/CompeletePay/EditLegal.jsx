@@ -6,7 +6,7 @@ function EditLegal({ showModal }) {
     return (
         <button
             onClick={showModal}
-            className="text-center text-[#fff] w-full rounded-[5px] bg-[#1677ff] block font-[600] p-2 cursor-pointer"
+            className="text-center !text-[#fff] w-full rounded-[5px] bg-[#1677ff] block font-[600] p-2 cursor-pointer"
         >
             <div className="flex items-center justify-center">
                 <MdEditSquare />

@@ -278,7 +278,7 @@ const SendCommentBox = forwardRef(({ itemId, parentId = -1, type }, ref) => {
             <div className="mt-5 flex justify-end">
               <button
                 type="submit"
-                className="w-[260px] bg-[#d1182b] text-white cursor-pointer py-2 relative group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-[260px] bg-[#d1182b] !text-white cursor-pointer py-2 relative group disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isSubmitting}
               >
                 <div className="absolute right-0 top-0 bottom-0 left-full group-hover:left-0 bg-[#18d1be] duration-300"></div>

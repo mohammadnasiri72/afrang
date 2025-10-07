@@ -44,7 +44,7 @@ const ProgressButton = () => {
     <div className="flex flex-col items-center justify-center p-8">
       <div className="relative w-64 h-12 mb-4">
         <motion.button
-          className={`relative w-full cursor-pointer !bg-blue-400 hover:bg-blue-700 h-full rounded-lg font-medium text-white overflow-hidden `}
+          className={`relative w-full cursor-pointer !bg-blue-400 hover:bg-blue-700 h-full rounded-lg font-medium !text-white overflow-hidden `}
           onClick={() => {
             setProgress(100);
             router.push("/");

@@ -34,7 +34,7 @@ async function HeaderGallery() {
               <SelectCat category={category} />
             </div>
             <Link href={"/profile/Send-Photo"}>
-              <div className="flex items-center rounded-sm bg-[#18d1be] text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
+              <div className="flex items-center rounded-sm bg-[#18d1be] !text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                 <FaTelegram className="text-lg" />
                 <span className="whitespace-nowrap pr-2 font-semibold text-sm">
                   ارسال تصویر

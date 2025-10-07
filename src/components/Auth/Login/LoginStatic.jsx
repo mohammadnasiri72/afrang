@@ -24,6 +24,7 @@ function LoginStatic({ setStateLogin, from }) {
   const [errors, setErrors] = useState({});
   const { settings } = useSelector((state) => state.settings);
 
+
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   // import sweet alert 2
@@ -251,7 +252,7 @@ function LoginStatic({ setStateLogin, from }) {
                   <button
                     disabled={loading}
                     onClick={submitLogin}
-                    className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                    className={`text-center !text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
                       loading ? "cursor-not-allowed" : "cursor-pointer"
                     }`}
                   >

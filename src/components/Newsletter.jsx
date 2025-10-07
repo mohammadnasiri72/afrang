@@ -60,7 +60,7 @@ function Newsletter() {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className={`bg-[#d1182b] rounded-[50px] px-8 py-1.5 text-white cursor-pointer hover:bg-[#18d1be] duration-300 ${
+          className={`bg-[#d1182b] rounded-[50px] px-8 py-1.5 !text-white cursor-pointer hover:bg-[#18d1be] duration-300 ${
             loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >

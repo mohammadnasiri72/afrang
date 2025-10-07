@@ -1,7 +1,7 @@
 "use client";
 import { getLikes, postLike } from "@/services/UserActivity/UserActivityService";
 import { getItemByIds } from "@/services/Item/item";
-import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -126,7 +126,7 @@ export default function FavoritesList() {
                             <Link href={item.url} target="_blank">
                                 <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                     <img
-                                        src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)|| "/images/gallery/blog-img1.jpg"}
+                                        src={item.url.includes('product') ? getImageUrl(item.image) : getImageUrl(item.image)|| "/images/gallery/blog-img1.jpg"}
                                         alt={item.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -162,7 +162,7 @@ export default function FavoritesList() {
                         <p className="text-gray-500">محصولات مورد علاقه خود را اینجا ذخیره کنید</p>
                         <Link
                             href="/"
-                            className="mt-4 px-6 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#d1182b]/90 transition-colors"
+                            className="mt-4 px-6 py-2 bg-[#d1182b] !text-white rounded-lg hover:bg-[#d1182b]/90 transition-colors"
                         >
                             مشاهده محصولات
                         </Link>

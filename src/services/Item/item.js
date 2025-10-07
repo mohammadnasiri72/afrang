@@ -96,12 +96,12 @@ export const itemVisit = async (id, url, ip, userAgent) => {
   }
 };
 
-export const getListItemBanner = async (id) => {
+export const getListItemBanner = async () => {
   try {
     const response = await axios.get(`${mainDomain}/api/Item/Banner`, {
       params: {
         langCode: "fa",
-        categoryId: id,
+        categoryId: -1,
       },
     });
     return response.data;

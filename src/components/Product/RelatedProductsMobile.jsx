@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination, Grid } from "swiper/modules";
@@ -69,7 +69,7 @@ function RelatedProductsMobile({ products }) {
                 <div className="">
                   {product.discount !== 0 && (
                     <div className="absolute top-3 left-3 z-50 duration-300">
-                      <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                      <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                         {product.discount}%
                       </span>
                     </div>
@@ -78,7 +78,7 @@ function RelatedProductsMobile({ products }) {
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain flex items-center justify-center"
                       // style={{ filter: " brightness(0.95)" }}
-                      src={getImageUrl2(product.image)}
+                      src={getImageUrl(product.image)}
                       alt={product.title}
                     />
                   </Link>
@@ -155,10 +155,10 @@ function RelatedProductsMobile({ products }) {
 
                     {product.canAddCart && (
                       <div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
+                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center !text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-[#40768c] font-bold">
                           <AddToCartButtonCard productId={product.productId} />
                         </div>
-                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
+                        <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center !text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-[#40768c] font-bold absolute">
                           <AddToCartButtonCard productId={product.productId} />
                         </div>
                       </div>
@@ -166,13 +166,13 @@ function RelatedProductsMobile({ products }) {
 
                     {!product.canAddCart && (
                       <div>
-                        <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold">
+                        <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 !text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold">
                           <SlBasket className="text-xl text-[#333]" />
                           <span className="px-1 text-[#666]">
                             {product.statusDesc}
                           </span>
                         </div>
-                        <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 text-white rounded-b-lg  duration-300 font-bold absolute">
+                        <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 !text-white rounded-b-lg  duration-300 font-bold absolute">
                           <SlBasket className="text-xl text-[#333]" />
                           <span className="px-1 text-[#666]">
                             {product.statusDesc}

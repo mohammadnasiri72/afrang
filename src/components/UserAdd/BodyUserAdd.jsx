@@ -42,7 +42,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
               }}
             >
               <div
-                className={` text-white rounded-lg  p-3 flex flex-col items-center justify-start gap-2 relative z-50 duration-300 h-44 ${
+                className={` !text-white rounded-lg  p-3 flex flex-col items-center justify-start gap-2 relative z-50 duration-300 h-44 ${
                   pathname === "useds" ? "bg-amber-500" : "bg-amber-400"
                 }`}
               >
@@ -76,7 +76,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
               }}
             >
               <div
-                className={` text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
+                className={` !text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
                   pathname === "buyers" ? "bg-teal-500" : "bg-teal-400"
                 }`}
               >
@@ -110,7 +110,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
               }}
             >
               <div
-                className={` text-white rounded-lg bg-[#720807] p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44`}
+                className={` !text-white rounded-lg bg-[#720807] p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44`}
               >
                 {/* <img className="w-20" src="/images/gallery/image11.jpg" alt="" /> */}
                 <div className="used-icon-thumb icon1 ">
@@ -135,7 +135,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
               }}
             >
               <div
-                className={` text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
+                className={` !text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
                   pathname === "useds" && archived
                     ? "bg-blue-500"
                     : "bg-blue-400"

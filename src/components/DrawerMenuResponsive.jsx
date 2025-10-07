@@ -186,7 +186,7 @@ function DrawerMenuResponsive() {
         }}
         open={open}
         closeIcon={
-          <div className="bg-[#d1182b] rounded-full p-1 text-white ">
+          <div className="bg-[#d1182b] rounded-full p-1 !text-white ">
             <FaXmark className="text-xl" />
           </div>
         }

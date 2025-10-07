@@ -221,7 +221,7 @@ export default function PayOnline({ orderData }) {
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer
                             ${
                               selectedGateway
-                                ? "bg-[#d1182b] text-white hover:bg-[#40768c]"
+                                ? "bg-[#d1182b] !text-white hover:bg-[#40768c]"
                                 : "bg-gray-100 text-gray-400 cursor-not-allowed"
                             }`}
             >

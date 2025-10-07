@@ -19,7 +19,7 @@ function GoogleMap() {
           </div>
 
           <div className="max-w-[600px] py-[25px] px-[20px] flex rounded-[7px] bg-[#ffffffeb] m-auto relative z-10 mt-[-40px] items-center text-[13px] text-[#210600]">
-            <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center h-[40px] justify-center rounded-[4px] ml-[15px]">
+            <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center h-[40px] justify-center rounded-[4px] ml-[15px]">
               <GrLocation />
             </div>
             <div>

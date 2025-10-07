@@ -1,5 +1,5 @@
 "use client";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -145,7 +145,7 @@ function NewProduct({ products }) {
                     ? "blur-xs"
                     : ""
                 }`}
-                src={getImageUrl2(product.image)}
+                src={getImageUrl(product.image)}
                 alt={product.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 300px"
@@ -212,7 +212,7 @@ function NewProduct({ products }) {
             {/* تخفیف */}
             {product.discount !== 0 && (
               <div className="absolute top-3 left-3 z-50 duration-300">
-                <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                   {product.discount}%
                 </span>
               </div>

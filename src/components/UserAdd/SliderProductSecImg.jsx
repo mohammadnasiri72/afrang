@@ -89,11 +89,11 @@ export default function SliderProductSecImg({ attachments, isAfrangOffer }) {
                 </div>
                 {/* پیشنهاد کاربران */}
                 {isAfrangOffer ? (
-                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                     پیشنهاد افرنگ
                   </div>
                 ) : (
-                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                     پیشنهاد کاربران
                   </div>
                 )}

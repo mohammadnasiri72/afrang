@@ -181,7 +181,7 @@ function BoxLegal() {
         {isLegalEnabled && (
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1 text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
+            className="flex items-center gap-1 text-center !text-[#fff] rounded-[5px] bg-[#d1182b] font-[600] px-3 py-1.5 text-sm cursor-pointer hover:bg-[#b91626] transition-colors"
           >
             <FaPlus className="text-xs" />
             <span>افزودن</span>

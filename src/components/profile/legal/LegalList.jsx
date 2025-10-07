@@ -143,7 +143,7 @@ export default function LegalList() {
         <h1 className="text-2xl font-bold text-gray-800">اطلاعات حقوقی</h1>
         <button
           onClick={() => handleModalOpen('add')}
-          className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] !text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer"
         >
           <FaPlus className="text-sm" />
           <span>افزودن</span>
@@ -209,7 +209,7 @@ export default function LegalList() {
           <p className="text-gray-500">هنوز اطلاعات حقوقی ثبت نشده است</p>
           <button
             onClick={() => handleModalOpen('add')}
-            className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer mx-auto mt-4"
+            className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] !text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer mx-auto mt-4"
           >
             <FaPlus className="text-sm" />
             <span>افزودن اطلاعات حقوقی جدید</span>

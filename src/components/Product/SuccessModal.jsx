@@ -28,7 +28,7 @@ const SuccessModal = ({ isOpen, onClose }) => {
         <div className="flex gap-2 w-full mt-4">
           <button
             onClick={handleGoToCart}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-[#d1182b] text-white py-1.5 px-3 rounded-md hover:bg-red-700 transition-colors text-sm cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-[#d1182b] !text-white py-1.5 px-3 rounded-md hover:bg-red-700 transition-colors text-sm cursor-pointer"
           >
             <FaShoppingCart className="text-sm" />
             <span>سبد خرید</span>

@@ -61,8 +61,8 @@ export default function DescPaymentFinal({ orderData }) {
                                     <FaRegMoneyBill1 className="text-xl" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm text-white/80 mb-1">مبلغ قابل پرداخت</p>
-                                    <p className="font-medium text-white text-lg">
+                                    <p className="text-sm !text-white/80 mb-1">مبلغ قابل پرداخت</p>
+                                    <p className="font-medium !text-white text-lg">
                                         {orderData?.order?.orderTotal.toLocaleString()} تومان
                                     </p>
                                 </div>

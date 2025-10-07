@@ -1,7 +1,7 @@
 "use client";
 
 import { getRelatedProductsByIdString } from "@/services/products/productService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ async function BundleProducts({ product }) {
             <div className="w-full p-3 relative h-full">
               {item.discount !== 0 && (
                 <div className="absolute top-5 left-5 z-50 duration-300">
-                  <span className="bg-[#d1182b] text-white rounded-md px-3 py-1">
+                  <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1">
                     {item.discount}%
                   </span>
                 </div>
@@ -56,7 +56,7 @@ async function BundleProducts({ product }) {
                     className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"
                     style={{ filter: "brightness(0.95)" }}
                     // src={`${mainDomainImg}/${item.image}`}
-                    src={getImageUrl2(item.image)}
+                    src={getImageUrl(item.image)}
                     alt={item.title}
                   />
                 </Link>
@@ -95,7 +95,7 @@ async function BundleProducts({ product }) {
                     )}
                    
 
-                    <div className="bg-[#d1182b] left-0 right-0 w-full flex justify-center items-center text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
+                    <div className="bg-[#d1182b] left-0 right-0 w-full flex justify-center items-center !text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
                       <AddToCartButtonCard productId={item.productId} />
                     </div>
                   </div>

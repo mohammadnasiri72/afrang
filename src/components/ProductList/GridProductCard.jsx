@@ -1,5 +1,5 @@
 "use client";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton, Tooltip } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,7 +34,7 @@ function GridProductCard({ product, startTransition }) {
                       ? "blur-xs"
                       : ""
                   } ${isLoaded ? "opacity-100" : "opacity-0"}`}
-                  src={getImageUrl2(product.image)}
+                  src={getImageUrl(product.image)}
                   alt={product.title}
                   width={160}
                   height={160}
@@ -75,7 +75,7 @@ function GridProductCard({ product, startTransition }) {
             )}
             {/* تخفیف سمت چپ */}
             {product.discount !== 0 && (
-              <span className="absolute top-0 left-0 bg-[#d1182b] px-2 py-0.5 rounded-sm text-white text-xs font-bold z-10">
+              <span className="absolute top-0 left-0 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold z-10">
                 {product.discount}%
               </span>
             )}

@@ -321,7 +321,7 @@ export default function PayOffline({ orderData }) {
                                 disabled={!selectedGateway}
                                 className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 ${
                                     selectedGateway 
-                                        ? 'bg-[#d1182b] text-white hover:bg-[#40768c] cursor-pointer' 
+                                        ? 'bg-[#d1182b] !text-white hover:bg-[#40768c] cursor-pointer' 
                                         : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                 }`}
                             >
@@ -374,7 +374,7 @@ export default function PayOffline({ orderData }) {
                         <button
                             disabled={loading}
                             onClick={handlePaymentSubmit}
-                            className={`text-center text-[#fff] rounded-[5px] bg-[#d1182b] font-[500] px-4 py-2 ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
+                            className={`text-center !text-[#fff] rounded-[5px] bg-[#d1182b] font-[500] px-4 py-2 ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
                         >
                             {loading ? (
                                 <div className="flex items-center gap-2 justify-center">

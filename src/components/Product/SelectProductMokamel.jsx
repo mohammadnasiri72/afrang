@@ -6,7 +6,7 @@ import {
   getProductListId,
 } from "@/services/products/productService";
 import { getUserCookie } from "@/utils/cookieUtils";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
@@ -338,7 +338,7 @@ function SelectProductMokamel({ product }) {
                             )}
                             <div className="w-16 h-16 relative flex-shrink-0 overflow-hidden">
                               <img
-                                src={getImageUrl2(product.image)}
+                                src={getImageUrl(product.image)}
                                 alt={product.title}
                                 width={64}
                                 height={64}
@@ -412,7 +412,7 @@ function SelectProductMokamel({ product }) {
               )}
               <div className="w-16 h-16 relative flex-shrink-0 overflow-hidden">
                 <img
-                  src={getImageUrl2(product.image)}
+                  src={getImageUrl(product.image)}
                   alt={product.title}
                   width={64}
                   height={64}

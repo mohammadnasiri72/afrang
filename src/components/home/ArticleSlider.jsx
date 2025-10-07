@@ -90,7 +90,7 @@ export default function ArticleSlider({ blogs }) {
               <div className="w-full p-2 h-full select-none">
                 <div className="relative rounded-lg group overflow-hidden h-full flex flex-col">
                   {/* <div className="absolute top-0 left-0 z-50  duration-300">
-                      <span className="bg-[#d1182b] text-white px-3 py-1 rounded-br-2xl flex items-center">
+                      <span className="bg-[#d1182b] !text-white px-3 py-1 rounded-br-2xl flex items-center">
                         2.4 <FaStar className="px-1 text-xl" />
                       </span>
                     </div> */}

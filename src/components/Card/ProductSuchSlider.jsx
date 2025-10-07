@@ -49,7 +49,7 @@ export default function ProductSuchSlider() {
               <div className="w-full p-2">
                 <div className="relative rounded-lg group overflow-hidden">
                   <div className="absolute top-3 left-3 z-50 duration-300">
-                    <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                    <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                       20%
                     </span>
                   </div>
@@ -82,11 +82,11 @@ export default function ProductSuchSlider() {
                       18,000,000
                     </span>
                   </div>
-                  <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-teal-500 font-bold">
+                  <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 !text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute cursor-pointer hover:bg-teal-500 font-bold">
                     <SlBasket className="text-xl" />
                     <span className="px-1">افزودن به سبد خرید</span>
                   </div>
-                  <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-teal-500 font-bold">
+                  <div className="bg-[#d1182b] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 !text-white rounded-b-lg  duration-300 cursor-pointer hover:bg-teal-500 font-bold">
                     <SlBasket className="text-xl" />
                     <span className="px-1">افزودن به سبد خرید</span>
                   </div>

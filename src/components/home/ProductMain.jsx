@@ -139,7 +139,7 @@ export default function ProductMain({ products, noLazy }) {
                     {/* دکمه افزودن به سبد یا وضعیت */}
                     <div className=" ">
                       {product.canAddCart ? (
-                        <div className="bg-[#d1182b] w-full flex justify-center items-center text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
+                        <div className="bg-[#d1182b] w-full flex justify-center items-center !text-white cursor-pointer hover:bg-[#40768c] font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-[90%] group-hover:translate-y-[0%]">
                           <AddToCartButtonCard productId={product.productId} />
                         </div>
                       ) : (
@@ -155,7 +155,7 @@ export default function ProductMain({ products, noLazy }) {
                   {/* تخفیف */}
                   {product.discount !== 0 && (
                     <div className="absolute top-3 left-3 z-50 duration-300">
-                      <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+                      <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                         {product.discount}%
                       </span>
                     </div>

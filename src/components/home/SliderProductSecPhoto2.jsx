@@ -1,4 +1,4 @@
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import { useState } from "react";
@@ -14,7 +14,7 @@ function SliderProductSecPhoto2({ product }) {
         className={`w-full object-contain ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
-        src={getImageUrl2(product.image)}
+        src={getImageUrl(product.image)}
         alt={product.title}
         fill
         sizes="(max-width: 768px) 100vw, 300px"

@@ -1,4 +1,4 @@
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Modal, Radio, Tooltip } from "antd";
 import Link from "next/link";
 import { FaCheck, FaInfoCircle } from "react-icons/fa";
@@ -34,7 +34,7 @@ function ModalAddtoBasket({
             <div className="flex gap-4">
               <div className="sm:w-32 w-24 sm:h-32 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src={getImageUrl2(product.product.image)}
+                  src={getImageUrl(product.product.image)}
                   alt={product.product.title}
                   className="w-full h-full object-contain"
                 />
@@ -150,7 +150,7 @@ function ModalAddtoBasket({
                           style={{ backgroundColor: color }}
                         >
                           {isSelected && (
-                            <FaCheck className="absolute text-white text-base bg-blue-500 rounded-full p-0.5 w-3 h-3 -bottom-1 -left-1 shadow" />
+                            <FaCheck className="absolute !text-white text-base bg-blue-500 rounded-full p-0.5 w-3 h-3 -bottom-1 -left-1 shadow" />
                           )}
                         </span>
                         <span
@@ -177,7 +177,7 @@ function ModalAddtoBasket({
                 >
                   <button
                     type="button"
-                    className="bg-[#40768c] sm:w-auto w-full text-white px-4 py-1.5 rounded-lg hover:bg-[#28506a] transition-colors duration-300 text-sm cursor-pointer"
+                    className="bg-[#40768c] sm:w-auto w-full !text-white px-4 py-1.5 rounded-lg hover:bg-[#28506a] transition-colors duration-300 text-sm cursor-pointer"
                   >
                     مشاهده جزئیات محصول
                   </button>
@@ -186,7 +186,7 @@ function ModalAddtoBasket({
               <button
                 onClick={handleConfirm}
                 disabled={isLoading || !product.canAddCart}
-                className="bg-[#d1182b] sm:w-auto w-full text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
+                className="bg-[#d1182b] sm:w-auto w-full !text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
               >
                 {isLoading ? "در حال پردازش..." : "تایید و افزودن به سبد خرید"}
               </button>

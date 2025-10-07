@@ -293,7 +293,7 @@ export default function EditProfile() {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full px-4 py-2 text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${
+          className={`w-full px-4 py-2 !text-white bg-[#d1182b] rounded-lg transition-colors cursor-pointer ${
             loading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#b91626]"
           }`}
         >

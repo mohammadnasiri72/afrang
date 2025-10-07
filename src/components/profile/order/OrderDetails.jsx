@@ -1,7 +1,7 @@
 "use client";
 
 import { getOrderTrackCode } from "@/services/order/orderService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import {
   Accordion,
   AccordionDetails,
@@ -378,11 +378,11 @@ export default function OrderDetails({ trackCode }) {
                     className="w-full sm:w-24 h-24 bg-white rounded-xl relative flex-shrink-0 block hover:opacity-90 transition-opacity border border-gray-100"
                   >
                     <img
-                      src={getImageUrl2(item.image)}
+                      src={getImageUrl(item.image)}
                       alt={item.id}
                       className="w-full h-full object-contain rounded-xl p-2"
                     />
-                    <span className="absolute top-1 right-1 bg-[#40768c] text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] h-5 flex items-center justify-center">
+                    <span className="absolute top-1 right-1 bg-[#40768c] !text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] h-5 flex items-center justify-center">
                       {item.qty} عدد
                     </span>
                   </a>
@@ -472,14 +472,14 @@ export default function OrderDetails({ trackCode }) {
                                   <Image
                                     style={{ filter: " brightness(0.8)" }}
                                     className="w-full h-full object-contain rounded-lg "
-                                    src={getImageUrl2(e.image)}
+                                    src={getImageUrl(e.image)}
                                     alt={e?.title}
                                     width={20}
                                     height={20}
                                     unoptimized
                                   />
                                   {e.discount !== 0 && (
-                                    <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm text-white text-xs font-bold">
+                                    <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
                                       {(e.discount / e.originalPrice) * 100}٪
                                     </span>
                                   )}

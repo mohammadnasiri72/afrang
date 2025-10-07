@@ -2,15 +2,13 @@
 import { getdataDashboard, getRecentViews as getRecentViewsAPI } from "@/services/dashboard/dashboardService";
 import { getItemByIds } from "@/services/Item/item";
 import { getLikes } from "@/services/UserActivity/UserActivityService";
-import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { getRecentViews } from "@/utils/recentViews";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import {
-    FaArrowDown,
-    FaArrowUp,
     FaBox,
     FaClipboardList,
     FaClock,
@@ -256,7 +254,7 @@ export default function Dashboard() {
                     <button
                         onClick={() => setActiveTab("overview")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "overview"
-                            ? "bg-[#d1182b] text-white"
+                            ? "bg-[#d1182b] !text-white"
                             : "text-gray-600 hover:bg-gray-100"
                             }`}
                     >
@@ -265,7 +263,7 @@ export default function Dashboard() {
                     <button
                         onClick={() => setActiveTab("analytics")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "analytics"
-                            ? "bg-[#d1182b] text-white"
+                            ? "bg-[#d1182b] !text-white"
                             : "text-gray-600 hover:bg-gray-100"
                             }`}
                     >
@@ -320,7 +318,7 @@ export default function Dashboard() {
                                             <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                                 {item.image && (
                                                     <img
-                                                        src={getImageUrl2(item.image)}
+                                                        src={getImageUrl(item.image)}
                                                         alt={item.title}
                                                         className="w-full h-full object-cover"
                                                     />
@@ -395,7 +393,7 @@ export default function Dashboard() {
                                                 <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                                     {item.image && (
                                                         <img
-                                                            src={item.url.includes('product') ? getImageUrl2(item.image) : getImageUrl(item.image)}
+                                                            src={item.url.includes('product') ? getImageUrl(item.image) : getImageUrl(item.image)}
                                                             alt={item.title}
                                                             className="w-full h-full object-cover"
                                                         />

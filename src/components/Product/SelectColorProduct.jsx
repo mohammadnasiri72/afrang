@@ -61,7 +61,7 @@ function SelectColorProduct({ product, onChange }) {
                 style={{ backgroundColor: color }}
               >
                 {isSelected && (
-                  <FaCheck className="absolute text-white text-base bg-blue-500 rounded-full p-0.5 w-3 h-3 -bottom-1 -left-1 shadow" />
+                  <FaCheck className="absolute !text-white text-base bg-blue-500 rounded-full p-0.5 w-3 h-3 -bottom-1 -left-1 shadow" />
                 )}
               </span>
               <span

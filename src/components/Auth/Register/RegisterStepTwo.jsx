@@ -345,7 +345,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
               <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
                 <button
                   onClick={submitRegister}
-                  className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                  className={`text-center !text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
                     loading ? "cursor-not-allowed" : "cursor-pointer"
                   }`}
                 >

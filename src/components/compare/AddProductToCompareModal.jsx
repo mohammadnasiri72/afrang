@@ -1,7 +1,7 @@
 "use client";
 
 import { getProductTerm } from "@/services/products/productService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Input, Modal, Spin } from "antd";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -97,7 +97,7 @@ const AddProductToCompareModal = ({ visible, onClose , catIds}) => {
                 >
                   <div className="w-16 h-16 relative flex-shrink-0">
                     <Image
-                      src={getImageUrl2(product.image)}
+                      src={getImageUrl(product.image)}
                       alt={product.title}
                       fill
                       className="object-contain"

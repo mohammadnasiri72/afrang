@@ -27,7 +27,7 @@ export default function CategoryList({ categories }) {
           </p>
           <Link
             href="/"
-            className="bg-[#d1182b] text-white px-6 py-2 rounded-md hover:bg-[#b31525] transition-colors duration-300"
+            className="bg-[#d1182b] !text-white px-6 py-2 rounded-md hover:bg-[#b31525] transition-colors duration-300"
           >
             صفحه اصلی
           </Link>

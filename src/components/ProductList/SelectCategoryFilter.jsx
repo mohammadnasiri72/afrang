@@ -226,7 +226,7 @@ function SelectCategoryFilter({ resultFilter }) {
           className={`p-2.5 my-1 rounded-md transition-all duration-300 cursor-pointer text-right
             ${
               isSelected
-                ? "bg-[#d1182b] text-white hover:bg-[#b31525]"
+                ? "bg-[#d1182b] !text-white hover:bg-[#b31525]"
                 : "hover:bg-gray-100"
             }`}
         >
@@ -383,7 +383,7 @@ function SelectCategoryFilter({ resultFilter }) {
           <div className="mt-4">
             <button
               onClick={handleFilterChange}
-              className="bg-[#18d1be] w-full rounded-lg duration-300 text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
+              className="bg-[#18d1be] w-full rounded-lg duration-300 !text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
             >
               اعمال فیلتر قیمت
             </button>

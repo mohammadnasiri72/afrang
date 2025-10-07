@@ -1,6 +1,6 @@
 import { getListItemByIds } from "@/services/Item/item";
 import { getRelatedProductsByIdString } from "@/services/products/productService";
-import { getImageUrl, getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaClipboardList, FaPlay } from "react-icons/fa";
 import { SlBasket } from "react-icons/sl";
@@ -173,7 +173,7 @@ async function BodyProductServer({ product }) {
                   <div className="bg-gray-50 rounded-lg p-3 hover:shadow-md transition-shadow">
                     <div className="aspect-square mb-3 overflow-hidden rounded-lg">
                       <img
-                        src={getImageUrl2(item.image)}
+                        src={getImageUrl(item.image)}
                         alt={item.title || "محصول"}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         onError={(e) => {

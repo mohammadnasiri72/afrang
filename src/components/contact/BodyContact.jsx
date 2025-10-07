@@ -16,7 +16,7 @@ import Swal from "sweetalert2";
 
 function BodyContact() {
   const [typeArticle, setTypeArticle] = useState("شماره های تماس");
-  const { settings, loading } = useSelector((state) => state.settings);
+  const { settings } = useSelector((state) => state.settings);
 
   // Form states
   const [formData, setFormData] = useState({
@@ -177,9 +177,7 @@ function BodyContact() {
     }
   };
 
-  if (loading) {
-    return <div>در حال بارگذاری...</div>;
-  }
+ 
 
   if (!settings || !Array.isArray(settings)) {
     return <div>اطلاعاتی یافت نشد</div>;
@@ -221,7 +219,7 @@ function BodyContact() {
             <div className="w-full lg:w-1/3 p-3">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                     <FaPhoneVolume />
                   </div>
                 </div>
@@ -237,7 +235,7 @@ function BodyContact() {
             <div className="w-full lg:w-1/3 p-3">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                     <FaMobileScreen />
                   </div>
                 </div>
@@ -258,7 +256,7 @@ function BodyContact() {
             <div className="w-full lg:w-1/3 p-3">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                     <GoMail />
                   </div>
                 </div>
@@ -274,7 +272,7 @@ function BodyContact() {
             <div className="w-full lg:w-1/3 p-3">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                     <LuTag />
                   </div>
                 </div>
@@ -294,7 +292,7 @@ function BodyContact() {
           <div className="w-full lg:w-1/3 p-3">
             <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
               <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                   <LuTag />
                 </div>
               </div>
@@ -314,7 +312,7 @@ function BodyContact() {
             <div className="w-full lg:w-1/3 p-3">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                     <FaPhoneVolume />
                   </div>
                 </div>
@@ -329,7 +327,7 @@ function BodyContact() {
             <div className="w-full lg:w-2/3 p-3">
               <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start  mltp_col_info">
                 <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
                     <FaRegUser />
                   </div>
                 </div>
@@ -515,7 +513,7 @@ function BodyContact() {
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className={`w-[260px] bg-[#d1182b] text-white cursor-pointer py-2 relative group ${
+                  className={`w-[260px] bg-[#d1182b] !text-white cursor-pointer py-2 relative group ${
                     submitting ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >

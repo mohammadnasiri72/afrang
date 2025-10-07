@@ -202,7 +202,7 @@ const ForgotPassword = () => {
                       <button
                         disabled={loading}
                         onClick={handleSubmit}
-                        className={`text-center text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
+                        className={`text-center !text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${
                           loading ? "cursor-not-allowed" : "cursor-pointer"
                         }`}
                       >

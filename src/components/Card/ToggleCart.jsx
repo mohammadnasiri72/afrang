@@ -1,50 +1,52 @@
 "use client";
 
-import { setCartType } from '@/redux/slices/cartSlice';
-import { Segmented } from 'antd';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { setCartType } from "@/redux/slices/cartSlice";
+import { Segmented } from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function ToggleCart() {
   const [typeArticle, setTypeArticle] = useState("سبد خرید");
-  const { currentItems, nextItems, cartType } = useSelector((state) => state.cart);
+  const { currentItems, nextItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(setCartType("current"));
+  }, []);
 
   const handleToggle = (value) => {
     setTypeArticle(value);
-    const newCartType = value === "خرید بعدی" ? 'next' : 'current';
+    const newCartType = value === "خرید بعدی" ? "next" : "current";
     dispatch(setCartType(newCartType));
   };
 
   // ساخت گزینه‌های Segmented با نمایش تعداد محصولات
   const options = [
-
     {
       label: (
         <div className="flex items-center justify-center gap-2">
           <span>سبد خرید</span>
-          {currentItems?.filter((e)=>e.parentId === -1).length > 0 && (
-            <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
-              {currentItems?.filter((e)=>e.parentId === -1).length}
+          {currentItems?.filter((e) => e.parentId === -1).length > 0 && (
+            <span className="bg-[#d1182b] !text-white text-xs px-2 py-0.5 rounded-full">
+              {currentItems?.filter((e) => e.parentId === -1).length}
             </span>
           )}
         </div>
       ),
-      value: "سبد خرید"
+      value: "سبد خرید",
     },
     {
       label: (
         <div className="flex items-center justify-center gap-2">
           <span>خرید بعدی</span>
-          {nextItems?.filter((e)=>e.parentId === -1).length > 0 && (
-            <span className="bg-[#d1182b] text-white text-xs px-2 py-0.5 rounded-full">
-              {nextItems?.filter((e)=>e.parentId === -1).length}
+          {nextItems?.filter((e) => e.parentId === -1).length > 0 && (
+            <span className="bg-[#d1182b] !text-white text-xs px-2 py-0.5 rounded-full">
+              {nextItems?.filter((e) => e.parentId === -1).length}
             </span>
           )}
         </div>
       ),
-      value: "خرید بعدی"
+      value: "خرید بعدی",
     },
   ];
 
@@ -58,7 +60,7 @@ function ToggleCart() {
             style={{
               padding: 0,
               fontFamily: "yekan",
-              gap: '8px'
+              gap: "8px",
             }}
             value={typeArticle}
             onChange={handleToggle}

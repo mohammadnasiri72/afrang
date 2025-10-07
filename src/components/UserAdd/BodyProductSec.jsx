@@ -46,7 +46,7 @@ function BodyProductSec({ product }) {
               </span>
             </div>
             {product.isArchive && (
-              <span className="sm:text-sm text-xs text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
+              <span className="sm:text-sm text-xs !text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
                 آرشیو شده
               </span>
             )}

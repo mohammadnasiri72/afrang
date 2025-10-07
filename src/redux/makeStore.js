@@ -11,7 +11,6 @@ import activeTabReducer from "./slices/activeTab";
 import addressReducer from "./slices/addressSlice";
 import blogReducer from "./slices/blogSlice";
 import cartReducer from "./slices/cartSlice";
-import cartReducer1 from "./slices/cartSlice1";
 import discountReducer from "./slices/discountSlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import idEditReducer from "./slices/idEditSec";

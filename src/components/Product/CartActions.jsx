@@ -107,7 +107,7 @@ function CartActions({ product, warrantySelected }) {
             <button
               onClick={handleAddToCart}
               disabled={isLoading}
-              className="flex items-center bg-[#d1182b] text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex items-center bg-[#d1182b] !text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>

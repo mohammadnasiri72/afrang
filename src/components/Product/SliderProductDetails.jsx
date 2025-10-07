@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Fancybox } from "@fancyapps/ui";
 import { useEffect } from "react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
@@ -60,7 +60,7 @@ export default function SliderProductDetails({ attachments, product }) {
           {/* تخفیف */}
           {product?.discount !== 0 && (
             <div className="absolute top-3 left-3 z-50 duration-300">
-              <span className="bg-[#d1182b] text-white rounded-md px-3 py-1 ">
+              <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                 {product.discount}%
               </span>
             </div>
@@ -86,7 +86,7 @@ export default function SliderProductDetails({ attachments, product }) {
           {/* تصویر LCP - بدون lazy loading و با اولویت بالا */}
           {lcpImage && (
             <img
-              src={getImageUrl2(lcpImage.fileUrl)}
+              src={getImageUrl(lcpImage.fileUrl)}
               alt={product.title}
               className="absolute opacity-0 w-0 h-0"
               fetchPriority="high"
@@ -112,7 +112,7 @@ export default function SliderProductDetails({ attachments, product }) {
                   <SwiperSlide key={attachment.id}>
                     <a
                       className=" h-full"
-                      href={getImageUrl2(attachment.fileUrl)}
+                      href={getImageUrl(attachment.fileUrl)}
                       data-fancybox="gallery"
                       data-caption="Caption Images 4"
                       aria-label="لینک کروسل"
@@ -123,7 +123,7 @@ export default function SliderProductDetails({ attachments, product }) {
                             ? "blur-xs"
                             : ""
                         }`}
-                        src={getImageUrl2(attachment.fileUrl)}
+                        src={getImageUrl(attachment.fileUrl)}
                         alt={product.title}
                         // برای اولین تصویر از eager loading استفاده می‌کنیم
                         loading={index === 0 ? "eager" : "lazy"}
@@ -152,7 +152,7 @@ export default function SliderProductDetails({ attachments, product }) {
                   <SwiperSlide key={attachment.id}>
                     <img
                       className="w-full border rounded-sm border-[#3331]"
-                      src={getImageUrl2(attachment.fileUrl)}
+                      src={getImageUrl(attachment.fileUrl)}
                       alt={product.title}
                       loading="lazy"
                     />

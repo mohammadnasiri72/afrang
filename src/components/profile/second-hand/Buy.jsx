@@ -183,7 +183,7 @@ function Buy({ productsSec, productEdit, id }) {
                     router.back();
                   });
                 }}
-                className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
+                className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
               >
                 بازگشت به لیست
               </button>

@@ -347,7 +347,7 @@ export default function ProfileLayout({ children }) {
                                         flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
                                         ${
                                           isActive
-                                            ? "bg-[#d1182b] text-white"
+                                            ? "bg-[#d1182b] !text-white"
                                             : "text-gray-600 hover:bg-gray-100"
                                         }
                                     `}

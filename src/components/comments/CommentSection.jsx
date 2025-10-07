@@ -87,7 +87,7 @@ function CommentSection({ id, type, comments }) {
                       disabled={replyLoading}
                     />
                     <button
-                      className="bg-[#d1182b] text-white px-4 py-2 rounded-lg hover:bg-[#b31525] transition-colors disabled:opacity-50"
+                      className="bg-[#d1182b] !text-white px-4 py-2 rounded-lg hover:bg-[#b31525] transition-colors disabled:opacity-50"
                       onClick={() => handleReplySubmit(comment.id)}
                       disabled={replyLoading || !replyText.trim()}
                     >

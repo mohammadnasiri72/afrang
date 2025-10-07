@@ -363,7 +363,7 @@ export default function BodyOrder() {
                       key={opt.value}
                       onClick={() => handleTabChange(opt.value)}
                       className={`flex flex-col cursor-pointer items-center justify-center px-2 py-2 rounded-lg text-xs font-bold transition-all duration-200
-                        ${parseInt(statusId) === opt.value ? 'bg-[#d1182b] text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-[#f6f6f6]'}
+                        ${parseInt(statusId) === opt.value ? 'bg-[#d1182b] !text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-[#f6f6f6]'}
                       `}
                     >
                       {React.createElement(options.find(o => o.value === opt.value).label.props.children[1].type, { className: 'text-base mb-1' })}
@@ -397,7 +397,7 @@ export default function BodyOrder() {
                                             <h3 className="text-base sm:text-lg font-bold text-gray-800">سفارش {order.trackCode}</h3>
                                             {order.paymentStatus >= 1 && order.paymentStatus <= 5 && order.status < 4 && (
                                                 <button
-                                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#d1182b] text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#40768c] transition-colors cursor-pointer shadow-sm hover:shadow-md"
+                                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#40768c] transition-colors cursor-pointer shadow-sm hover:shadow-md"
                                                     onClick={() => handlePayment(order.trackCode)}
                                                 >
                                                     <FaCreditCard className="text-base sm:text-lg" />
@@ -461,7 +461,7 @@ export default function BodyOrder() {
                                             <div className="flex justify-end">
                                                 <button
                                                     onClick={() => handleViewDetails(order.trackCode)}
-                                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#40768c] text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#2c5266] transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#40768c] !text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-[#2c5266] transition-all cursor-pointer shadow-sm hover:shadow-md"
                                                 >
                                                     <FaEye className="text-base sm:text-lg" />
                                                     <span>مشاهده جزئیات سفارش</span>

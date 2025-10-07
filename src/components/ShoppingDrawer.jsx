@@ -4,7 +4,7 @@ import DeleteProductModal from "@/components/Product/DeleteProductModal";
 import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import { Badge, Drawer, Tooltip } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
@@ -162,7 +162,7 @@ function ShoppingDrawer({ header }) {
 
           {/* {currentItems.length > 0 &&
             currentItems?.filter((e) => e.parentId === -1).length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#d1182b] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-[#d1182b] !text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {currentItems?.filter((e) => e.parentId === -1).length}
               </span>
             )} */}
@@ -257,7 +257,7 @@ function ShoppingDrawer({ header }) {
                               {item.image ? (
                                 <img
                                   className="w-full h-full object-contain"
-                                  src={getImageUrl2(item.image)}
+                                  src={getImageUrl(item.image)}
                                   alt={item.title}
                                 />
                               ) : (
@@ -267,12 +267,12 @@ function ShoppingDrawer({ header }) {
                               )}
                               {/* لیبل تخفیف */}
                               {item.discount > 0 && (
-                                <div className="absolute top-0 right-0 bg-[#d1182b] text-white text-xs px-2 py-1 rounded-bl-lg">
+                                <div className="absolute top-0 right-0 bg-[#d1182b] !text-white text-xs px-2 py-1 rounded-bl-lg">
                                   {item.discount}%
                                 </div>
                               )}
                               {/* تعداد محصول */}
-                              <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/90 text-white text-xs px-2 py-1 text-center">
+                              <div className="absolute bottom-0 left-0 right-0 bg-[#d1182b]/90 !text-white text-xs px-2 py-1 text-center">
                                 {item.quantity} عدد
                               </div>
                             </div>
@@ -385,7 +385,7 @@ function ShoppingDrawer({ header }) {
                 <div>
                   <button
                     onClick={() => handleNavigation("/cart")}
-                    className={`w-full text-white duration-300 cursor-pointer py-2 mb-3 font-semibold rounded-lg relative z-[10001] ${
+                    className={`w-full !text-white duration-300 cursor-pointer py-2 !mb-3 font-semibold rounded-lg relative z-[10001] ${
                       pathname === "/cart"
                         ? "bg-[#b91626]"
                         : "bg-[#d1182b] hover:bg-[#b91626]"
@@ -395,7 +395,7 @@ function ShoppingDrawer({ header }) {
                   </button>
                   <button
                     onClick={handleCheckout}
-                    className={`w-full text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${
+                    className={`w-full !text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[10001] ${
                       pathname === "/cart/infosend"
                         ? "bg-[#b91626]"
                         : "bg-[#d1182b] hover:bg-[#b91626]"

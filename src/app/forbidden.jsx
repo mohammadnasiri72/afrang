@@ -27,7 +27,7 @@ export default function Forbidden() {
           </button>
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 bg-[#d1182b] text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
+            className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
           >
             <FaHome />
             صفحه اصلی

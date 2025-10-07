@@ -160,10 +160,10 @@ function CriticismProduct() {
           ></textarea>
         </div>
         <div className="mt-5 flex mb-20">
-          <button className="bg-[#18d1be] text-white cursor-pointer relative group rounded-lg px-5 py-2.5 overflow-hidden">
+          <button className="bg-[#18d1be] !text-white cursor-pointer relative group rounded-lg px-5 py-2.5 overflow-hidden">
             <div className="absolute right-0 top-0 bottom-0 rounded-lg left-full group-hover:left-0 bg-[#d1182b] duration-300"></div>
             <div className="flex items-center">
-              <BiMessageSquareDetail className="text-lg text-white relative" />
+              <BiMessageSquareDetail className="text-lg !text-white relative" />
               <span className="relative px-1 font-semibold">ثبت کردن</span>
             </div>
           </button>

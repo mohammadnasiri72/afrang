@@ -3,7 +3,7 @@
 import { IoSearch, IoClose } from "react-icons/io5";
 import { useState, useEffect, useRef } from "react";
 import { getProductTerm } from "@/services/products/productService";
-import { getImageUrl2 } from "@/utils/mainDomain";
+import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -111,7 +111,7 @@ const SearchNavbar = () => {
                                     >
                                         <div className="w-20 h-20 relative flex-shrink-0">
                                             <Image
-                                                src={getImageUrl2(product.image)}
+                                                src={getImageUrl(product.image)}
                                                 alt={product.title.slice(0, 20)}
                                                 fill
                                                 className="object-contain"

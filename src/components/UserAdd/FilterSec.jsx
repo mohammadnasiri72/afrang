@@ -178,7 +178,7 @@ function FilterSec() {
                       `${window.location.pathname}?${params.toString()}`
                     );
                   }}
-                  className="bg-[#18d1be] w-full rounded-lg duration-300 text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
+                  className="bg-[#18d1be] w-full rounded-lg duration-300 !text-white hover:bg-[#d1182b] py-2 font-bold text-[16px] cursor-pointer"
                 >
                   اعمال فیلتر قیمت
                 </button>

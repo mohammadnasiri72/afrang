@@ -193,7 +193,7 @@ export default function SelectCodeDiscount() {
               <button
                 type="submit"
                 disabled={isLoading || !code.trim()}
-                className={`px-4 py-2 rounded-lg text-white transition-colors duration-200 ${
+                className={`px-4 py-2 rounded-lg !text-white transition-colors duration-200 ${
                   isLoading || !code.trim()
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"

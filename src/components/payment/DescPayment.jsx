@@ -265,7 +265,7 @@ function DescPayment({ estimateData }) {
                   handlePayment();
                 }
               }}
-              className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${
+              className={`w-full sm:flex hidden justify-center items-center gap-2 !text-white ${
                 !loading && selectedPayment
                   ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
                   : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
@@ -422,7 +422,7 @@ function DescPayment({ estimateData }) {
                   handlePayment();
                 }
               }}
-              className={`w-full sm:flex hidden justify-center items-center gap-2 text-white ${
+              className={`w-full sm:flex hidden justify-center items-center gap-2 !text-white ${
                 !loading && selectedPayment
                   ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
                   : "bg-gray-400 hover:bg-gray-500 cursor-pointer"
@@ -473,7 +473,7 @@ function DescPayment({ estimateData }) {
                   handlePayment();
                 }
               }}
-              className={`w-full flex justify-center items-center gap-2 text-white ${
+              className={`w-full flex justify-center items-center gap-2 !text-white ${
                 !loading && selectedPayment
                   ? "bg-[#d1182b] hover:bg-[#40768c] cursor-pointer"
                   : "bg-gray-400 hover:bg-gray-500 cursor-pointer"

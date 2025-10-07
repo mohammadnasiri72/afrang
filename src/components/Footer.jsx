@@ -1,16 +1,26 @@
+"use client";
+
 import { mainDomainImg } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import * as FaIcons from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 import Newsletter from "./Newsletter";
 
-const Footer = ({ socialNetworks, footerMenu }) => {
+export function IconRenderer({ iconName, ...props }) {
+  const IconComponent = FaIcons[iconName];
+
+  if (!IconComponent) return null; // یا یه آیکون پیشفرض
+
+  return <IconComponent {...props} />;
+}
+
+const Footer = ({ socialNetworks, footerMenu , settings }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const { settings } = useSelector((state) => state.settings);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -264,9 +274,10 @@ const Footer = ({ socialNetworks, footerMenu }) => {
                     className="bg-[#434347] p-2 flex items-center justify-center overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                   >
                     {item.itemKey && (
-                      <i
+                      <IconRenderer
                         className={`text-white group-hover:text-teal-500 duration-300 text-xl ${item.itemKey}`}
-                      ></i>
+                        iconName={item.itemKey}
+                      />
                     )}
                     {!item.itemKey && (
                       <img

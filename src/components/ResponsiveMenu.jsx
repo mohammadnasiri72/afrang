@@ -551,7 +551,7 @@ function ResponsiveMenu({
     return (
       <div
         ref={navbarRef}
-        className="main-navbar duration-1000 ease-in-out w-full flex text-white relative z-[1200]"
+        className="main-navbar duration-1000 ease-in-out w-full flex !text-white relative z-[1200]"
       >
         <div className="w-full">
           <div className="flex justify-center w-full overflow-x-auto lg:overflow-visible">
@@ -888,7 +888,7 @@ function ResponsiveMenu({
           }}
           open={openMenuRes}
           closeIcon={
-            <div className="bg-[#d1182b] rounded-full p-1 text-white cursor-pointer">
+            <div className="bg-[#d1182b] rounded-full p-1 !text-white cursor-pointer">
               <FaXmark className="text-xl" />
             </div>
           }
