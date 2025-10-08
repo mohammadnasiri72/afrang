@@ -14,11 +14,18 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { FaChevronUp } from "react-icons/fa";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { makeStore } from "../redux/makeStore";
-import DynamicTitle from "./DynamicTitle";
 import Loading from "./Loading";
 
 const generateRandomUserId = () => {
-  return crypto.randomUUID();
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // fallback: ساخت UUID ساده با Math.random
+  return "xxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 };
 
 // کامپوننت برای مدیریت داده‌های اولیه
@@ -196,9 +203,9 @@ function ScrollToTopButton() {
 }
 
 // کامپوننت اصلی که Provider را فراهم می‌کند
-function Layout({ children , settings}) {
+function Layout({ children, settings }) {
   const { store } = makeStore({
-    settings : {settings}
+    settings: { settings },
   });
 
   // no client-time dispatch here to avoid hydration mismatch

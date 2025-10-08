@@ -9,9 +9,8 @@ import CameraAccessoriesSSR from "../../components/home/CameraAccessoriesSSR";
 import EidDiscountSSR from "../../components/home/EidDiscountSSR";
 import SliderHomeSSR from "../../components/home/SliderHomeSSR";
 
-
 export default async function Home() {
-  const  mainBanner = await getListItemBanner();
+  const mainBanner = await getListItemBanner();
 
   const SliderHomeSkeleton = () => {
     return (
@@ -316,7 +315,7 @@ export default async function Home() {
         <Suspense fallback={<SliderHomeSkeleton />}>
           <SliderHomeSSR />
         </Suspense>
-        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
+        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden !mb-10">
           <Suspense fallback={<EidDiscountSkeleton />}>
             <EidDiscountSSR />
           </Suspense>
@@ -325,7 +324,7 @@ export default async function Home() {
           <CameraAccessoriesSSR />
         </Suspense>
 
-        <BoxImgHomeSSR mainBanner={mainBanner}/>
+        <BoxImgHomeSSR mainBanner={mainBanner} />
 
         <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<NewProductSkeleton />}>
@@ -334,9 +333,7 @@ export default async function Home() {
         </div>
         <div className="lg:h-[26rem] sm:h-[48rem] h-[54rem] overflow-hidden">
           <Suspense fallback={<SliderProductSecSkeleton />}>
-            <SliderProductSecSSR
-              mainBanner={mainBanner}
-            />
+            <SliderProductSecSSR mainBanner={mainBanner} />
           </Suspense>
         </div>
         <div className="sm:h-[29rem] h-[31rem] overflow-hidden">

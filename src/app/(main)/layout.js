@@ -12,6 +12,7 @@ export const metadata = {
     default: "خانه عکاسان افرنگ",
     template: " افرنگ | %s ",
   },
+  description: "خانه عکاسان افرنگ",
 };
 export default async function layoutMain({ children }) {
   const settings = await getSettings();

@@ -7,8 +7,9 @@ import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import { mainDomainImg } from "@/utils/mainDomain";
 
+import { getImageUrl } from "@/utils/mainDomain";
+import Image from "next/image";
 import Link from "next/link";
 
 const SliderHome = ({ sliderItems }) => {
@@ -38,7 +39,7 @@ const SliderHome = ({ sliderItems }) => {
             <SwiperSlide key={item.id}>
               <div className="block w-full h-full">
                 <div className="relative w-full h-full cursor-pointer group">
-                  <div
+                  {/* <div
                     className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-300"
                     style={{
                       backgroundImage: `url(${mainDomainImg}${item.image})`,
@@ -56,7 +57,34 @@ const SliderHome = ({ sliderItems }) => {
                         </Link>
                       </div>
                     )}
-                  </div>
+                  </div> */}
+                  <Image
+                    src={getImageUrl(item.image)}
+                    alt={item.title || "تصویر"}
+                    fill
+                    priority
+                    fetchPriority="high"
+                    sizes="100vw"
+                    style={{
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
+                    unoptimized
+                  />
+
+                  {/* دکمه روی عکس */}
+                  {item.sourceLink && item.sourceLink !== "/" && (
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
+                      <Link href={item.sourceLink}>
+                        <button
+                          tabIndex={-1}
+                          className="bg-[#18d1be] rounded-2xl py-1.5 px-3 duration-300 hover:!bg-white hover:!text-[#d1182b] font-bold !text-[#444] cursor-pointer"
+                        >
+                          نمایش بیشتر
+                        </button>
+                      </Link>
+                    </div>
+                  )}
 
                   <div className="absolute inset-0 bg-[#0002] bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                 </div>

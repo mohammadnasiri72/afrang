@@ -21,7 +21,7 @@ export default function BoxImgHome({ mainBanner }) {
           <div className="mt-[-160px] mb-[10px]">
             <div className="flex flex-wrap">
               <div className="md:w-1/4 w-1/2 p-2">
-                <div className="w-full border-2 border-gray-200 rounded-lg relative overflow-hidden h-[400px]">
+                <div className="w-full border-2 border-gray-200 rounded-lg relative overflow-hidden sm:h-[400px] h-[200px]">
                   <Image
                     className={`object-cover ${
                       isLoaded1 ? "opacity-100" : "opacity-0"
@@ -40,17 +40,17 @@ export default function BoxImgHome({ mainBanner }) {
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R" // اختیاری
                   />
                   <div
-                    className={`absolute left-0 right-0 top-0 bottom-0 ${
+                    className={`absolute left-0 right-0 top-0 bottom-0 bg-white ${
                       isLoaded1 ? "!hidden" : ""
                     }`}
                   >
-                    <Skeleton.Image active className={`!w-full !h-full `} />
+                    <Skeleton.Image active className={`!w-full !h-full`} />
                   </div>
                 </div>
               </div>
 
               <div className="w-full sm:w-1/2 md:w-1/2 hidden md:block p-2">
-                <div className="w-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden h-[400px]">
+                <div className="w-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden sm:h-[400px] h-[200px]">
                   <Image
                     className={`w-full object-cover ${
                       isLoaded2 ? "opacity-100" : "opacity-0"
@@ -79,7 +79,7 @@ export default function BoxImgHome({ mainBanner }) {
               </div>
 
               <div className="md:w-1/4 w-1/2 p-2">
-                <div className="w-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden h-[400px]">
+                <div className="w-full bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden sm:h-[400px] h-[200px]">
                   <Image
                     className={`w-full object-cover ${
                       isLoaded3 ? "opacity-100" : "opacity-0"
@@ -108,7 +108,7 @@ export default function BoxImgHome({ mainBanner }) {
               </div>
 
               <div className="w-full md:hidden block">
-                <div className="bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden h-[400px]">
+                <div className="bg-white border-2 border-gray-200 rounded-lg relative overflow-hidden sm:h-[400px] h-[200px]">
                   <Image
                     className={`w-full object-cover ${
                       isLoaded2 ? "opacity-100" : "opacity-0"

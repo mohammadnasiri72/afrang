@@ -10,6 +10,8 @@ import "./globals.css";
 import { getSettings } from "@/services/settings/settingsService";
 
 
+
+
 const settings = await getSettings();
 
 export default async function RootLayout({ children }) {
