@@ -22,9 +22,14 @@ const SearchHeader = () => {
 
   useEffect(() => {
     if (showResults) {
+      // document.body.style.overflow = "hidden";
+      const scrollBarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
     } else {
       document.body.style.overflow = "";
+      document.body.style.paddingRight = `0px`;
     }
   }, [showResults]);
 
@@ -102,7 +107,7 @@ const SearchHeader = () => {
   };
 
   return (
-    <div className="relative lg:w-3/5 w-4/5" ref={searchRef}>
+    <div className="relative w-full" ref={searchRef}>
       <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 w-full">
         <IoSearchSharp className="text-2xl cursor-pointer" />
         <input

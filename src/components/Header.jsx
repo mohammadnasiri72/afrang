@@ -44,10 +44,10 @@ export default function Header({ onLoaded, settings }) {
     <div className="bg-white w-full">
       <div
         style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
-        className="flex items-center justify-between lg:px-16 px-4 py-1"
+        className="flex items-center justify-between lg:px-16 px-4"
       >
-        <div className="flex items-center lg:w-1/2 w-auto">
-          <div className="flex items-center lg:w-2/5 w-auto">
+        <div className="flex items-center w-auto ">
+          <div className="flex items-center ">
             {settings?.find((item) => item.propertyKey === "site_home_url") ? (
               <Link
                 href={
@@ -57,7 +57,7 @@ export default function Header({ onLoaded, settings }) {
                 aria-label="صفحه اصلی"
               >
                 <img
-                  className="lg:w-14 w-24 "
+                  className="w-14"
                   src={getImageUrl(
                     settings.find(
                       (item) => item.propertyKey === "site_footer_logo"
@@ -84,9 +84,11 @@ export default function Header({ onLoaded, settings }) {
               </div>
             </Link>
           </div>
+        </div>
+        <div className="w-1/2">
           <SearchHeader />
         </div>
-        <div className="flex items-center justify-end lg:w-1/2 w-auto gap-7">
+        <div className="flex items-center justify-end w-auto gap-7">
           <div className="lg:flex hidden items-center">
             <div className="bg-slate-200 rounded-lg p-2">
               <BiPhoneCall className="text-xl text-[#0008]" />

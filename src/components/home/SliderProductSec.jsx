@@ -254,7 +254,7 @@ export default function SliderProductSec({
             <Skeleton.Image active className={`!w-full !h-full`} />
           </div>
         </div>
-        <div className="flex justify-start gap-3 px-5 w-full py-3">
+        <div className="flex justify-center gap-3 px-5 w-full py-3">
           <Link
             className=" flex items-center gap-1 group text-lg"
             href={href}
@@ -266,7 +266,7 @@ export default function SliderProductSec({
               });
             }}
           >
-            <span className="font-semibold group-hover:text-[#d1182b] duration-300">
+            <span className="font-semibold group-hover:text-[#d1182b] duration-300 whitespace-nowrap">
               ثبت آگهی فروش
             </span>
           </Link>
@@ -283,7 +283,7 @@ export default function SliderProductSec({
               });
             }}
           >
-            <span className="font-semibold group-hover:text-[#d1182b] duration-300">
+            <span className="font-semibold group-hover:text-[#d1182b] duration-300 whitespace-nowrap">
               ثبت آگهی خرید
             </span>
           </Link>
