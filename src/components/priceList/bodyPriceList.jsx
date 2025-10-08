@@ -5,6 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import {
+  TbArrowBadgeLeftFilled,
+  TbArrowBadgeRightFilled,
+} from "react-icons/tb";
 import Loading from "../Loading";
 
 export default function BodyPriceList({ categories }) {
@@ -17,16 +21,12 @@ export default function BodyPriceList({ categories }) {
   return (
     <>
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center items-center gap-4 mb-8">
-          <img className="w-2" src="/images/icons/Polygon_2.png" alt="" />
-          <h4 className="font-bold text-xl text-[#0a1d39]">
+        <div className="!flex !justify-center items-start gap-4 mb-8">
+          <TbArrowBadgeLeftFilled className="text-[#d1182b] text-2xl" />
+          <h4 className="!font-semibold text-xl text-[#0a1d39]">
             لیست قیمت محصولات
           </h4>
-          <img
-            className="w-2 rotate-180"
-            src="/images/icons/Polygon_2.png"
-            alt=""
-          />
+          <TbArrowBadgeRightFilled className="text-[#d1182b] text-2xl" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">

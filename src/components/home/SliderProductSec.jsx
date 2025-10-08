@@ -52,7 +52,7 @@ export default function SliderProductSec({
   }, []);
 
   return (
-    <div className="flex flex-wrap px-4 py-8 ">
+    <div className="flex flex-wrap py-8 ">
       <div className="lg:w-[37.5%] w-full">
         <div className="flex justify-between items-center pb-5 px-2">
           <div className="flex-wrap gap-4 items-center">

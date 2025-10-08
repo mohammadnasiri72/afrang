@@ -48,11 +48,11 @@ export default function Header({ onLoaded, settings }) {
       >
         <div className="flex items-center w-auto ">
           <div className="flex items-center ">
-            {settings?.find((item) => item.propertyKey === "site_home_url") ? (
+            {settings?.find((item) => item.propertyKey === "site_home_url")?.value && (
               <Link
                 href={
                   settings.find((item) => item.propertyKey === "site_home_url")
-                    ?.value || "/"
+                    ?.value
                 }
                 aria-label="صفحه اصلی"
               >
@@ -63,12 +63,14 @@ export default function Header({ onLoaded, settings }) {
                       (item) => item.propertyKey === "site_footer_logo"
                     )?.value
                   )}
-                  alt=""
+                  alt={
+                    settings.find(
+                      (item) => item.propertyKey === "site_footer_logo"
+                    )?.title
+                  }
                 />
               </Link>
-            ) : (
-              <img className="lg:w-14 w-24" src="/images/logo.png" alt="" />
-            )}
+            ) }
 
             <Link
               aria-label="صفحه اصلی"

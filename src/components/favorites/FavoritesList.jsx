@@ -123,17 +123,17 @@ export default function FavoritesList() {
                             key={item.id}
                             className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg z-50 relative"
                         >
-                            <Link href={item.url} target="_blank">
+                            <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                 <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                     <img
-                                        src={item.url.includes('product') ? getImageUrl(item.image) : getImageUrl(item.image)|| "/images/gallery/blog-img1.jpg"}
+                                        src={item.url.includes('product') ? getImageUrl(item.image) : getImageUrl(item.image)|| "/images/blog-img1.jpg"}
                                         alt={item.title}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                             </Link>
                             <div className="flex-1">
-                                <Link href={item.url} target="_blank">
+                                <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                     <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                         {item.title}
                                     </p>
@@ -146,7 +146,7 @@ export default function FavoritesList() {
                             </div>
                             <button
                                 onClick={(e) => handleRemoveClick(e, item)}
-                                className="flex items-center justify-center gap-1 text-red-500 hover:text-red-600 transition-colors text-xs border border-red-200 hover:border-red-300 rounded px-2 py-1.5 cursor-pointer whitespace-nowrap"
+                                className="flex items-center justify-center gap-1 !text-red-500 hover:!text-red-600 transition-colors text-xs border border-red-200 hover:border-red-300 rounded px-2 py-1.5 cursor-pointer whitespace-nowrap"
                             >
                                 <FaTrash className="text-xs" />
                                 <span>حذف</span>

@@ -77,7 +77,7 @@ async function FeaturedBlog() {
               </div>
               <div className="lg:w-2/3 w-full relative  group overflow-hidden rounded-lg flex items-center justify-center">
                 <img
-                  src={blogs[0].img || '/images/gallery/blog-img1.jpg'}
+                  src={blogs[0].img || '/images/blog-img1.jpg'}
                   alt={blogs[0].title}
                   className="group-hover:scale-105  scale-100 duration-300 group-hover:grayscale-[0.7] filter  brightness-[0.95] object-cover w-full h-full object-contain overflow-hidden"
                 />

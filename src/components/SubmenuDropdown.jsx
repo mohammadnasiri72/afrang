@@ -171,7 +171,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                       src={
                         activeMenu?.image
                           ? getImageUrl(activeMenu.image)
-                          : "/images/gallery/best-video-cameras.png"
+                          : "/images/best-video-cameras.png"
                       }
                       alt=""
                       className="w-full object-contain"

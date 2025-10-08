@@ -297,10 +297,10 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                 <button
                   onClick={handleResendCode}
                   disabled={countdown > 0 || resendLoading}
-                  className={`text-[#d1182b] text-sm font-semibold ${
+                  className={`!text-[#d1182b] text-sm font-semibold ${
                     countdown > 0 || resendLoading
                       ? "opacity-50 cursor-not-allowed"
-                      : "hover:text-[#b91626] cursor-pointer"
+                      : "hover:!text-[#b91626] cursor-pointer"
                   }`}
                 >
                   {resendLoading ? (

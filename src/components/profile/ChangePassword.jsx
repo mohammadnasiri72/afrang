@@ -146,7 +146,7 @@ export default function ChangeUserPassword() {
                                 type="button"
                                 tabIndex="-1"
                                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 !text-gray-500 hover:!text-gray-700 cursor-pointer"
                             >
                                 {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
@@ -180,7 +180,7 @@ export default function ChangeUserPassword() {
                                 type="button"
                                 tabIndex="-1"
                                 onClick={() => setShowNewPassword(!showNewPassword)}
-                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 !text-gray-500 hover:!text-gray-700 cursor-pointer"
                             >
                                 {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
@@ -214,7 +214,7 @@ export default function ChangeUserPassword() {
                                 type="button"
                                 tabIndex="-1"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 !text-gray-500 hover:!text-gray-700 cursor-pointer"
                             >
                                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>

@@ -4,6 +4,7 @@ import BoxImgHomeSSR from "@/components/home/BoxImgHomeSSR";
 import NewProductSSR from "@/components/home/NewProductSSR";
 import SliderProductSecSSR from "@/components/home/SliderProductSecSSR";
 import { getListItemBanner } from "@/services/Item/item";
+import { getSettings } from "@/services/settings/settingsService";
 import { Suspense } from "react";
 import CameraAccessoriesSSR from "../../components/home/CameraAccessoriesSSR";
 import EidDiscountSSR from "../../components/home/EidDiscountSSR";
@@ -11,6 +12,10 @@ import SliderHomeSSR from "../../components/home/SliderHomeSSR";
 
 export default async function Home() {
   const mainBanner = await getListItemBanner();
+  const settings = await getSettings();
+  const pageTitleH1 = settings.find(
+    (item) => item.propertyKey === "site_title"
+  )?.propertyValue;
 
   const SliderHomeSkeleton = () => {
     return (
@@ -311,6 +316,9 @@ export default async function Home() {
 
   return (
     <>
+      <h1 className="sr-only">
+        {pageTitleH1}
+      </h1>
       <div className="bg-[#f6f6f6] overflow-hidden">
         <Suspense fallback={<SliderHomeSkeleton />}>
           <SliderHomeSSR />

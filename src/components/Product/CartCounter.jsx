@@ -76,7 +76,7 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
                 {quantity === 1 ? (
                   <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="text-[#d1182b] cursor-pointer hover:text-red-700 p-0.5"
+                    className="!text-[#d1182b] cursor-pointer hover:!text-red-700 p-0.5"
                   >
                     <FaTrash className="text-xs" />
                   </button>
@@ -85,8 +85,8 @@ const CartCounter = ({ quantity, cartId, ctrl }) => {
                     onClick={handleDecrement}
                     disabled={ctrl}
                     className={`text-xl font-semibold mx-auto flex justify-center w-full transition-colors ${ctrl
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-[#d1182b] cursor-pointer hover:text-red-700'
+                      ? '!text-gray-300 cursor-not-allowed'
+                      : '!text-[#d1182b] cursor-pointer hover:!text-red-700'
                       }`}
                   >
                     -

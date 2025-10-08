@@ -18,7 +18,7 @@ export default function BoxImgBranding({ brands }) {
       <div className="relative">
         <div className="absolute left-0 -top-52">
           <Image
-            src="/images/gallery/bg-shadow-1.png"
+            src="/images/bg-shadow-1.png"
             alt=""
             width={400}
             height={400}
@@ -30,7 +30,7 @@ export default function BoxImgBranding({ brands }) {
         </div>
         <div className="absolute right-0 top-0">
           <Image
-            src="/images/gallery/bg-shadow-2.png"
+            src="/images/bg-shadow-2.png"
             alt=""
             width={400}
             height={400}

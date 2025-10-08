@@ -105,7 +105,7 @@ function DeleteLegal({ id, onDelete, getLegalFu }) {
                     <button
                         onClick={() => setIsModalOpen(false)}
                         disabled={isLoading}
-                        className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${isLoading
+                        className={`px-4 py-2 text-sm bg-gray-100 !text-gray-700 rounded-md transition-colors ${isLoading
                                 ? "opacity-50 cursor-not-allowed"
                                 : "hover:bg-gray-200 cursor-pointer"
                             }`}
@@ -152,7 +152,7 @@ function DeleteLegal({ id, onDelete, getLegalFu }) {
                     e.stopPropagation();
                     setIsModalOpen(true);
                 }}
-                className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
+                className="p-1.5 !text-gray-400 hover:!text-[#d1182b] transition-colors cursor-pointer"
                 title="حذف"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

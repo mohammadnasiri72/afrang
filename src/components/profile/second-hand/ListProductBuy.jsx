@@ -1,4 +1,5 @@
-import { Empty, Popover } from "antd";
+import Loading from "@/components/Loading";
+import { Empty, Popover, Skeleton } from "antd";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { HiDotsVertical } from "react-icons/hi";
@@ -6,13 +7,10 @@ import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
 import ModalDeleteBuy from "./ModalDeleteBuy";
 import ModalShowDetailsBuy from "./ModalShowDetailsBuy";
-import Loading from "@/components/Loading";
 
 function ListProductBuy({ productsSec }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-
- 
 
   return (
     <>
@@ -42,12 +40,7 @@ function ListProductBuy({ productsSec }) {
                   data-id={pr.id}
                   className="relative flex  items-center gap-4 bg-white rounded-xl shadow p-3 w-full max-w-xs min-h-[80px]"
                 >
-                  <img
-                    src={"/public/images/icons/photo.png"}
-                    alt={pr.title}
-                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
-                  />
-
+                  <Skeleton.Image />
                   <div className="flex flex-col items-start gap-1 w-full">
                     <div className="w-full flex items-center justify-between">
                       <span className="font-bold text-base truncate line-clamp-1">
@@ -103,9 +96,7 @@ function ListProductBuy({ productsSec }) {
           )}
         </div>
       </div>
-      {
-        isPending && <Loading />
-      }
+      {isPending && <Loading />}
     </>
   );
 }

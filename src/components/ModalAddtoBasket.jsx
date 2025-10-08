@@ -174,6 +174,7 @@ function ModalAddtoBasket({
                   className="sm:w-auto w-full"
                   href={product.product.url}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <button
                     type="button"

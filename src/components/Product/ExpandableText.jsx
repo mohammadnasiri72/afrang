@@ -69,23 +69,7 @@ const ExpandableText = ({ text, linesToShow = 3, lineHeight = 1.5 }) => {
       </div>
 
       
-      {/* {
-        showToggle &&
-       <div
-            onClick={toggleExpand}
-            className="flex items-center cursor-pointer group mt-3 px-2"
-          >
-            <span className="group-hover:text-[#18d1be] text-[#40768c] duration-300 font-semibold">
-              {isExpanded ? "بستن ویژگی ها" : " همه ویژگی ها"}
-            </span>
-            <img
-              style={{ rotate: isExpanded ? "90deg" : "0deg" }}
-              className="-translate-x-1 group-hover:translate-x-0 duration-300"
-              src="/images/icons/Arrow-Left.png"
-              alt=""
-            />
-          </div>
-      } */}
+    
     </div>
   );
 };

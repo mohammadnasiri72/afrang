@@ -112,7 +112,7 @@ async function BlogDesc({ blog }) {
           </div>
           <div className="mt-4">
             <Image
-              src={getImageUrl(blog.image) || "/images/gallery/blog-img1.jpg"}
+              src={getImageUrl(blog.image) || "/images/blog-img1.jpg"}
               alt={blog?.title || ""}
               width={1200}
               height={800}

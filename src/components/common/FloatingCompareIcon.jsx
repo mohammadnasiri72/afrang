@@ -30,7 +30,7 @@ const FloatingCompareIcon = () => {
         onClick={handleClick}
         className="relative group cursor-pointer bg-white p-2 rounded-lg flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200"
       >
-        <FaBalanceScale className="text-2xl text-[#d1182b]" />
+        <FaBalanceScale className="text-2xl !text-[#d1182b]" />
         {/* شمارنده */}
         <div className="absolute -top-2 -right-2 bg-red-500 !text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-pulse border-2 border-white">
           {itemCount}

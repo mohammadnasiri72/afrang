@@ -853,7 +853,7 @@ function ResponsiveMenu({
                   onClick={() => {
                     handleLogout();
                   }}
-                  className="flex items-center gap-3 w-full text-red-600 bg-transparent py-2 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center gap-3 w-full !text-red-600 bg-transparent py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   <FaSignOutAlt className="text-lg" />
                   <span>خروج از حساب</span>

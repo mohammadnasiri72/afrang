@@ -349,8 +349,8 @@ function ProductTabs({
               px-4 py-2 mx-2 font-semibold text-sm transition-all duration-300 cursor-pointer
               ${
                 tabProDetails === option.value
-                  ? "bg-white text-[#d1182b] rounded-md font-bold text-base"
-                  : "text-gray-700"
+                  ? "bg-white !text-[#d1182b] rounded-md font-bold text-base"
+                  : "!text-gray-700"
               }
               ${isSticky ? "text-xs py-1 mx-1" : "text-sm py-2 mx-2"}
                
@@ -430,7 +430,7 @@ function ProductTabs({
             zIndex: isSticky ? 5000 : 50,
             background: "white",
             position: isSticky ? "fixed" : "relative",
-            top: isSticky ? 100 : "auto",
+            top: isSticky ? 95 : "auto",
             left: isSticky ? boxLeft : "auto",
             width: isSticky ? boxWidth : "100%",
             paddingTop: isSticky ? 0 : 20,

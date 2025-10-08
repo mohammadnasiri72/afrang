@@ -93,7 +93,7 @@ function CommentItem({ comment, onReply, replyTo, onReplySent, depth = 0 }) {
           <div className="mt-1 text-gray-800 text-justify">{comment.body}</div>
           {comment.parentId === -1 && (
             <button
-              className="mt-3 flex cursor-pointer items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full shadow-sm border border-blue-200 hover:bg-blue-100 hover:text-blue-900 hover:shadow-md transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="mt-3 flex cursor-pointer items-center gap-2 px-4 py-1.5 bg-blue-50 !text-blue-700 rounded-full shadow-sm border border-blue-200 hover:bg-blue-100 hover:!text-blue-900 hover:shadow-md transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
               onClick={() => onReply(comment.id)}
             >
               <FaReply className="text-base" />

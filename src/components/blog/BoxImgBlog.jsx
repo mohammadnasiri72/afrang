@@ -72,7 +72,7 @@ function BoxImgBlog({ blogs = [], searchParams }) {
                         src={
                           blog.image && blog.image !== "NULL"
                             ? getImageUrl(blog.image)
-                            : "/images/gallery/blog-img1.jpg"
+                            : "/images/blog-img1.jpg"
                         }
                         alt={blog.title || "تصویر مقاله"}
                         width={200}

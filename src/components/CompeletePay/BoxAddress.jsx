@@ -159,7 +159,7 @@ function BoxAddress({ onAddressDelete }) {
                           e.stopPropagation();
                           handleEditClick(address.id);
                         }}
-                        className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
+                        className="p-1.5 !text-gray-400 hover:!text-[#d1182b] transition-colors cursor-pointer"
                         title="ویرایش"
                       >
                         <svg
@@ -252,7 +252,7 @@ function BoxAddress({ onAddressDelete }) {
                         e.stopPropagation();
                         handleEditClick(address.id);
                       }}
-                      className="p-1.5 text-gray-400 hover:text-[#d1182b] transition-colors cursor-pointer"
+                      className="p-1.5 !text-gray-400 hover:!text-[#d1182b] transition-colors cursor-pointer"
                       title="ویرایش"
                     >
                       <svg

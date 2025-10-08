@@ -222,7 +222,7 @@ export default function PayOnline({ orderData }) {
                             ${
                               selectedGateway
                                 ? "bg-[#d1182b] !text-white hover:bg-[#40768c]"
-                                : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                : "bg-gray-100 !text-gray-400 cursor-not-allowed"
                             }`}
             >
               <FaCreditCard />
@@ -232,7 +232,7 @@ export default function PayOnline({ orderData }) {
             <button
               onClick={handleChangeToOffline}
               disabled={offlineLoading}
-              className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+              className="flex-1 flex items-center justify-center gap-2 bg-gray-100 !text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
             >
               {offlineLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700"></div>
@@ -246,7 +246,7 @@ export default function PayOnline({ orderData }) {
 
             <button
               onClick={() => router.push("/profile/orders")}
-              className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 bg-red-50 !text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
             >
               <FaTimes />
               <span>انصراف از پرداخت</span>

@@ -304,7 +304,7 @@ export default function OrderDetails({ trackCode }) {
         <h2 className="text-xl font-bold text-gray-800">جزئیات سفارش</h2>
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-gray-600 hover:text-[#40768c] transition-colors cursor-pointer"
+          className="flex items-center gap-2 !text-gray-600 hover:!text-[#40768c] transition-colors cursor-pointer"
         >
           <span>بازگشت به لیست </span>
           <FaArrowLeft />

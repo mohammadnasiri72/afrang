@@ -3,6 +3,7 @@
 // };
 
 import { getItemByUrl } from "@/services/Item/item";
+import { mainUrl } from "@/utils/mainDomain";
 
 export async function generateMetadata({ params }) {
   const data = await getItemByUrl(params.slug);
@@ -19,6 +20,13 @@ export async function generateMetadata({ params }) {
     description: data?.seoInfo?.seoDescription,
     keywords: data?.seoInfo?.seoKeywords,
     url: data.seoUrl,
+    alternates: {
+      canonical: data.seoUrl
+        ? mainUrl + data.seoUrl
+        : data.url
+        ? mainUrl + data.url
+        : mainUrl,
+    },
     openGraph: {
       title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
       description: data?.seoInfo?.seoDescription,

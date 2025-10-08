@@ -8,7 +8,7 @@ export default function NotFound() {
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center relative z-50">
         <div className="mb-8">
           <Image
-            src="/images/gallery/404.png"
+            src="/images/404.png"
             alt="404 Illustration"
             width={256}
             height={256}

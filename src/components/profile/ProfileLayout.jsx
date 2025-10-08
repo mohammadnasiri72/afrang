@@ -366,8 +366,8 @@ export default function ProfileLayout({ children }) {
                                     transition-colors cursor-pointer
                                     ${
                                       isLoggingOut
-                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                        : "text-red-600 hover:bg-red-50"
+                                        ? "bg-gray-100 !text-gray-400 cursor-not-allowed"
+                                        : "!text-red-600 hover:bg-red-50"
                                     }
                                 `}
                 >

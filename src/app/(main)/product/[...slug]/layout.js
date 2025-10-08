@@ -1,5 +1,5 @@
 import { getProductId } from "@/services/products/productService";
-import { getImageUrl, mainDomain } from "@/utils/mainDomain";
+import { getImageUrl, mainUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }) {
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
     : product?.product?.title;
   const description = product?.seoInfo?.seoDescription;
   const imageUrl = getImageUrl(product?.product?.image);
-  const url = `${mainDomain}${product?.product?.url}`;
+  const url = `${mainUrl}${product?.product?.url}`;
   const price = String(product?.product?.finalPrice * 10);
   const availability =
     product?.product?.statusId === 1 ? "instock" : "out of stock";
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
   return {
     title: title,
     description: description,
-    metadataBase: new URL(mainDomain),
+    metadataBase: new URL(mainUrl),
     alternates: {
       canonical: url,
     },
@@ -45,10 +45,10 @@ export async function generateMetadata({ params }) {
         },
       ],
       locale: "fa_IR",
-      type: "website", // استفاده از نوع استاندارد OpenGraph
+      type: "website",
     },
     other: {
-      "og:type": "product", // اما همچنان می‌توانید نوع محصول را به صورت دستی تنظیم کنید
+      "og:type": "product",
       "og:brand": brand,
       "product:price:amount": price,
       "product:price:currency": "IRR",

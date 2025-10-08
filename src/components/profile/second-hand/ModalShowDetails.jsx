@@ -94,7 +94,7 @@ function ModalShowDetails({ id }) {
             e.stopPropagation();
             setIsModalOpen(true);
           }}
-          className="p-1.5 text-gray-400 hover:text-teal-500 transition-colors cursor-pointer"
+          className="p-1.5 !text-gray-400 hover:!text-teal-500 transition-colors cursor-pointer"
         >
           <FaEye className="text-lg" />
         </button>

@@ -27,6 +27,7 @@ import { getPropertyItem } from "@/services/Property/propertyService";
 import { getGallery } from "@/services/gallery/galleryServices";
 import { Fancybox } from "@fancyapps/ui";
 import Link from "next/link";
+import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import Loading from "../Loading";
 
 Fancybox.defaults.Keyboard = {
@@ -49,7 +50,7 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-function BodyGallery({ ImagesDataCurrent }) {
+function BodyGallery({ ImagesDataCurrent, settings }) {
   const [ImagesData, setImagesData] = useState(ImagesDataCurrent);
   const [liked, setLiked] = useState(false);
   const [likedNumber, setLikedNumber] = useState(0);
@@ -362,7 +363,32 @@ function BodyGallery({ ImagesDataCurrent }) {
                   </div>
                 </div>
                 <div className="flex sm:flex-row flex-col justify-center sm:justify-start sm:gap-3 gap-0 items-center sm:flex-nowrap flex-wrap mt-5">
-                  <img className="w-10" src="/images/logo.png" alt="" />
+                  {settings?.find(
+                    (item) => item.propertyKey === "site_home_url"
+                  )?.value && (
+                    <Link
+                      href={
+                        settings.find(
+                          (item) => item.propertyKey === "site_home_url"
+                        )?.value
+                      }
+                      aria-label="صفحه اصلی"
+                    >
+                      <img
+                        className="w-10"
+                        src={getImageUrl(
+                          settings.find(
+                            (item) => item.propertyKey === "site_footer_logo"
+                          )?.value
+                        )}
+                        alt={
+                          settings.find(
+                            (item) => item.propertyKey === "site_footer_logo"
+                          )?.title
+                        }
+                      />
+                    </Link>
+                  )}
                   <span className="font-semibold text-lg sm:py-0 py-4">
                     امتیاز تیم افرنگ به این عکس :
                   </span>
@@ -478,15 +504,15 @@ function BodyGallery({ ImagesDataCurrent }) {
                   <div className="flex gap-3 items-center sm:w-auto w-full sm:mt-0 mt-5 sm:justify-start justify-between">
                     <div
                       onClick={handlePrev}
-                      className="bg-[#f9e3e5] p-3 rounded-sm cursor-pointer -rotate-90 hover:bg-[#b6ede8] duration-300"
+                      className="bg-[#f9e3e5] p-3 rounded-sm cursor-pointer hover:bg-[#b6ede8] duration-300"
                     >
-                      <img src="/images/icons/Arrow-Down.png" alt="" />
+                      <FaCaretRight className="text-[#d1182b] text-lg" />
                     </div>
                     <div
                       onClick={handleNext}
-                      className="bg-[#f9e3e5] p-3 rounded-sm cursor-pointer rotate-90 hover:bg-[#b6ede8] duration-300"
+                      className="bg-[#f9e3e5] p-3 rounded-sm cursor-pointer hover:bg-[#b6ede8] duration-300"
                     >
-                      <img src="/images/icons/Arrow-Down.png" alt="" />
+                      <FaCaretLeft className="text-[#d1182b] text-lg" />
                     </div>
                   </div>
                 </div>

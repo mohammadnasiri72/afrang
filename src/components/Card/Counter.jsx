@@ -24,7 +24,7 @@ const Counter = () => {
       <div className="w-1/3">
         <button
           onClick={handleIncrement}
-          className="text-3xl text-[#d1182b] cursor-pointer font-semibold mx-auto flex justify-center"
+          className="text-3xl !text-[#d1182b] cursor-pointer font-semibold mx-auto flex justify-center"
         >
           +
         </button>
@@ -37,14 +37,14 @@ const Counter = () => {
         {count === 1 ? (
           <button
             onClick={handleDelete}
-            className="text-[#d1182b] flex justify-center items-center mx-auto cursor-pointer"
+            className="!text-[#d1182b] flex justify-center items-center mx-auto cursor-pointer"
           >
             <FaTrash />
           </button>
         ) : (
           <button
             onClick={handleDecrement}
-            className="text-3xl text-[#d1182b] cursor-pointer font-semibold mx-auto flex justify-center"
+            className="text-3xl !text-[#d1182b] cursor-pointer font-semibold mx-auto flex justify-center"
           >
             -
           </button>

@@ -79,7 +79,7 @@ export default function EidDiscount({ actionProducts, products }) {
                     router.push(`/products?onlyfest=1&orderby=2`);
                   });
                 }}
-                className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
+                className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
               >
                 <span className="text-sm">نمایش همه</span>
                 <FaCaretLeft className="text-sm" />

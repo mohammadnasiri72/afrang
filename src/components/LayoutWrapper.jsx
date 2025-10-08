@@ -63,10 +63,10 @@ export default function LayoutWrapper({
     return (
       <div className="sm:px-16 px-2 bg-[#f6f6f6] relative z-50">
         <div className="absolute left-0 -top-52">
-          <img src="/images/gallery/bg-shadow-1.png" />
+          <img src="/images/bg-shadow-1.png" />
         </div>
         <div className="absolute right-0 top-0">
-          <img src="/images/gallery/bg-shadow-2.png" />
+          <img src="/images/bg-shadow-2.png" />
         </div>
         <div className="flex gap-2 overflow-hidden justify-between items-center">
           {[...Array(6)].map((_, index) => (

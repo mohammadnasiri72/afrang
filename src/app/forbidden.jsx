@@ -20,7 +20,7 @@ export default function Forbidden() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => router.back()}
-            className="flex items-center justify-center gap-2 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+            className="flex items-center justify-center gap-2 bg-gray-200 !text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
           >
             <FaArrowRight className="rotate-180" />
             بازگشت

@@ -157,7 +157,7 @@ function GridProductCard({ product, startTransition }) {
                 {/* <CompareButton id={product?.productId} /> */}
               </>
             ) : (
-              <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] text-[#666] py-2 rounded-sm">
+              <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] !text-[#666] py-2 rounded-sm">
                 <FaCartShopping />
                 <span>{product.statusDesc}</span>
               </button>

@@ -457,7 +457,7 @@ function Sell({ productsSec, productEdit, id }) {
                     <button
                       type="button"
                       onClick={() => setPurchaseDate(null)}
-                      className="absolute cursor-pointer left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      className="absolute cursor-pointer left-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 transition-colors"
                     >
                       <FaTimes />
                     </button>
@@ -824,7 +824,7 @@ function Sell({ productsSec, productEdit, id }) {
                               e.stopPropagation();
                               handleRemoveImage(file);
                             }}
-                            className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
+                            className="absolute cursor-pointer top-1 left-1 bg-white/90 rounded-full p-1 !text-red-500 hover:bg-red-100 shadow-sm z-10 border border-red-100"
                           >
                             <FaTrash size={16} />
                           </button>
@@ -845,8 +845,8 @@ function Sell({ productsSec, productEdit, id }) {
                             }}
                             className={`absolute cursor-pointer top-1 right-1 bg-white/90 rounded-full p-1 shadow-sm z-10 border border-gray-200 ${
                               mainImageIdx === idx
-                                ? "text-yellow-400"
-                                : "text-[#333] hover:text-yellow-400"
+                                ? "!text-yellow-400"
+                                : "!text-[#333] hover:!text-yellow-400"
                             }`}
                           >
                             <FaStar size={16} />

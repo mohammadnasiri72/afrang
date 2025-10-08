@@ -1,4 +1,5 @@
 import { getItemByUrl } from "@/services/Item/item";
+import { mainUrl } from "@/utils/mainDomain";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
@@ -37,10 +38,13 @@ export async function generateMetadata({ params }) {
       title,
       description,
       keywords: keywords.split(",").map((k) => k.trim()),
+      alternates: {
+        canonical: mainUrl + url,
+      },
       openGraph: {
         title,
         description,
-        url,
+        url: mainUrl + url,
       },
 
       other: {

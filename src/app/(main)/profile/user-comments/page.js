@@ -114,7 +114,7 @@ const DeleteCommentModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
           <button
             onClick={onClose}
             disabled={isLoading}
-            className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${
+            className={`px-4 py-2 text-sm bg-gray-100 !text-gray-700 rounded-md transition-colors ${
               isLoading
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-gray-200 cursor-pointer"
@@ -380,6 +380,7 @@ const UserCommentsPage = () => {
                   <Link
                     href={item.url}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="hover:!text-[#d1182b] !text-[#4B5563] transition-colors duration-200 text-decoration-none"
                   >
                     <h3 className="text-base font-bold break-words">

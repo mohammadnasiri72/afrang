@@ -11,6 +11,10 @@ import {
 } from "react-icons/fa6";
 import { GoMail } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
+import {
+  TbArrowBadgeLeftFilled,
+  TbArrowBadgeRightFilled,
+} from "react-icons/tb";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -176,8 +180,6 @@ function BodyContact() {
       setSubmitting(false);
     }
   };
-
- 
 
   if (!settings || !Array.isArray(settings)) {
     return <div>اطلاعاتی یافت نشد</div>;
@@ -356,14 +358,10 @@ function BodyContact() {
 
   return (
     <>
-      <div className="flex justify-center items-center gap-4 mt-10 py-5">
-        <img className="w-2" src="/images/icons/Polygon_2.png" alt="" />
+      <div className="flex justify-center items-start gap-4 mt-10 py-5">
+        <TbArrowBadgeLeftFilled className="text-[#d1182b] text-2xl" />
         <h4 className="font-bold text-xl text-[#0a1d39]"> تماس باما </h4>
-        <img
-          className="w-2 rotate-180"
-          src="/images/icons/Polygon_2.png"
-          alt=""
-        />
+        <TbArrowBadgeRightFilled className="text-[#d1182b] text-2xl" />
       </div>
 
       <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
@@ -397,16 +395,12 @@ function BodyContact() {
       </div>
       <div className="mt-8">
         <div className="rounded-lg bg-white p-5 relative">
-          <div className="flex justify-center items-center gap-4 py-5">
-            <img src="/images/icons/polygon.png" alt="" />
+          <div className="flex justify-center items-start gap-4 py-5">
+            <TbArrowBadgeLeftFilled className="text-[#d1182b] text-xl" />
             <h4 className="font-semibold text-lg text-[#0a1d39]">
               فرم ارتباط با ما
             </h4>
-            <img
-              className="rotate-180"
-              src="/images/icons/polygon.png"
-              alt=""
-            />
+            <TbArrowBadgeRightFilled className="text-[#d1182b] text-xl" />
           </div>
           <div className="lg:px-10">
             <div className="flex items-start flex-wrap">

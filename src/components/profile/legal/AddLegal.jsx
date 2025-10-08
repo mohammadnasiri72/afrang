@@ -209,7 +209,7 @@ function AddLegal({
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
           >
-            <FaTimes className="text-gray-400 hover:text-gray-600" />
+            <FaTimes className="!text-gray-400 hover:!text-gray-600" />
           </button>
         </div>
       }
@@ -470,7 +470,7 @@ function AddLegal({
           <button
             onClick={onClose}
             disabled={loading}
-            className={`px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md transition-colors ${
+            className={`px-4 py-2 text-sm bg-gray-100 !text-gray-700 rounded-md transition-colors ${
               loading
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-gray-200 cursor-pointer"

@@ -271,6 +271,7 @@ const Footer = ({ socialNetworks, footerMenu , settings }) => {
                     key={item.id}
                     href={item.sourceLink || "#"}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-[#434347] p-2 flex items-center justify-center overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
                   >
                     {item.itemKey && (
@@ -315,17 +316,7 @@ const Footer = ({ socialNetworks, footerMenu , settings }) => {
                 </div>
               </div>
             </div>
-            {/* <div className="lg:w-1/12 sm:w-1/2 w-full p-3 sm:text-start text-center">
-              <h4 className="font-semibold text-[16px]">مجوزها</h4>
-              <div className="flex flex-wrap sm:justify-start justify-center items-center gap-2 mt-3">
-                <div className="py-2 px-5 rounded-lg bg-red-300 w-28 h-28 cursor-pointer duration-300 hover:bg-[#d1182b]">
-                  <img src="/images/icons/namad.png" alt="#" />
-                </div>
-                <div className="py-2 px-5 rounded-lg bg-red-300 w-28 h-28 cursor-pointer duration-300 hover:bg-[#d1182b]">
-                  <img src="/images/icons/namad.png" alt="#" />
-                </div>
-              </div>
-            </div> */}
+            
           </div>
         </div>
         <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
@@ -342,6 +333,7 @@ const Footer = ({ socialNetworks, footerMenu , settings }) => {
                 </span>
                 <Link
                   target="_blank"
+                  rel="noopener noreferrer"
                   href="https://activeidea.net/"
                   className=" px-1 font-semibold"
                 >

@@ -118,6 +118,7 @@ function LinkGuide() {
           <Link
             className=" flex items-center gap-1 group"
             target="_blank"
+            rel="noopener noreferrer"
             href={"https://www.afrangdigital.com/help/help.htm"}
           >
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />

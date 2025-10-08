@@ -79,7 +79,7 @@ const SearchNavbar = () => {
                             setResults([]);
                             setShowResults(false);
                         }}
-                        className="text-white/70 hover:text-white transition-colors cursor-pointer"
+                        className="!text-white/70 hover:!text-white transition-colors cursor-pointer"
                         tabIndex={-1}
                     >
                         <IoClose className="text-xl" />

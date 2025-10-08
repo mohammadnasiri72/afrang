@@ -1,5 +1,6 @@
 export const mainDomain = "https://api.afrangdigital.com";
 export const mainDomainImg = "https://admin.afrangdigital.com";
+export const mainUrl = "https://www.afrangdigital.com";
 
 export const getImageUrl = (image) => {
   if (!image) return null;
@@ -13,5 +14,3 @@ export const getImageUrl = (image) => {
     return null;
   }
 };
-
-

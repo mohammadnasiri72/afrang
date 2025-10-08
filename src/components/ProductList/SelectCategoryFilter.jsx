@@ -444,8 +444,8 @@ function SelectCategoryFilter({ resultFilter }) {
             onClick={handleResetFilters}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 group cursor-pointer"
           >
-            <IoCloseOutline className="text-red-600 text-xl group-hover:rotate-90 transition-transform duration-300" />
-            <span className="text-red-600 text-sm font-semibold">
+            <IoCloseOutline className="!text-red-600 text-xl group-hover:rotate-90 transition-transform duration-300" />
+            <span className="!text-red-600 text-sm font-semibold">
               حذف فیلتر‌ها
             </span>
           </button>

@@ -270,7 +270,7 @@ export default function PayOffline({ orderData }) {
                                                         e.stopPropagation();
                                                         handleCopy(gateway.summary.match(/\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}/)[0], 'شماره کارت');
                                                     }}
-                                                    className="text-gray-400 hover:text-[#d1182b] transition-colors"
+                                                    className="!text-gray-400 hover:!text-[#d1182b] transition-colors"
                                                 >
                                                     <FaCopy />
                                                 </button>
@@ -292,7 +292,7 @@ export default function PayOffline({ orderData }) {
                                                         e.stopPropagation();
                                                         handleCopy(gateway.summary.match(/IR\d+/)[0], 'شماره شبا');
                                                     }}
-                                                    className="text-gray-400 hover:text-[#d1182b] transition-colors"
+                                                    className="!text-gray-400 hover:!text-[#d1182b] transition-colors"
                                                 >
                                                     <FaCopy />
                                                 </button>
@@ -322,7 +322,7 @@ export default function PayOffline({ orderData }) {
                                 className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg transition-colors duration-200 ${
                                     selectedGateway 
                                         ? 'bg-[#d1182b] !text-white hover:bg-[#40768c] cursor-pointer' 
-                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                        : 'bg-gray-200 !text-gray-400 cursor-not-allowed'
                                 }`}
                             >
                                 <FaCreditCard />
@@ -333,7 +333,7 @@ export default function PayOffline({ orderData }) {
                         <button
                             onClick={handleChangeToOnline}
                             disabled={onlineLoading}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 !text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
                         >
                             {onlineLoading ? (
                                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700"></div>
@@ -347,7 +347,7 @@ export default function PayOffline({ orderData }) {
 
                         <button
                             onClick={() => router.push('/profile/orders')}
-                            className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
+                            className="flex-1 flex items-center justify-center gap-2 bg-red-50 !text-red-600 py-3 px-6 rounded-lg hover:bg-red-100 transition-colors duration-200 cursor-pointer"
                         >
                             <FaTimes />
                             <span>انصراف از پرداخت</span>
@@ -387,7 +387,7 @@ export default function PayOffline({ orderData }) {
                         </button>
                         <button
                             onClick={() => setIsPaymentModalOpen(false)}
-                            className="text-[#545454] rounded-[5px] bg-[#eceded] font-[500] px-4 py-2 cursor-pointer"
+                            className="!text-[#545454] rounded-[5px] bg-[#eceded] font-[500] px-4 py-2 cursor-pointer"
                         >
                             بازگشت
                         </button>

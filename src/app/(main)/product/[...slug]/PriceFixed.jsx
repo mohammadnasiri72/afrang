@@ -82,7 +82,7 @@ export default function PriceFixed({ product }) {
             {product.canAddCart ? (
               cartItem ? (
                 <button
-                  className="flex items-center bg-[#e1e1e1] text-[#666] px-5 py-2 rounded-lg font-semibold cursor-not-allowed opacity-70"
+                  className="flex items-center bg-[#e1e1e1] !text-[#666] px-5 py-2 rounded-lg font-semibold cursor-not-allowed opacity-70"
                   disabled
                 >
                   <FaCartShopping className="ml-2" />
@@ -108,7 +108,7 @@ export default function PriceFixed({ product }) {
                 </button>
               )
             ) : (
-              <button className="flex items-center bg-[#e1e1e1] text-[#666] px-5 py-2 rounded-lg font-semibold cursor-not-allowed">
+              <button className="flex items-center bg-[#e1e1e1] !text-[#666] px-5 py-2 rounded-lg font-semibold cursor-not-allowed">
                 <FaCartShopping className="ml-2" />
                 {product?.product?.statusDesc}
               </button>

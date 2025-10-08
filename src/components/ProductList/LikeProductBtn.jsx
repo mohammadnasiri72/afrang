@@ -109,8 +109,8 @@ const LikeProductBtn = ({ productId }) => {
                flex w-full justify-center items-center cursor-pointer py-2 px-2 transition-all duration-300
                ${
                  liked
-                   ? "bg-red-200 text-gray-700 hover:bg-red-300"
-                   : "bg-gray-100 text-gray-700 hover:bg-gray-300"
+                   ? "bg-red-200 !text-gray-700 hover:bg-red-300"
+                   : "bg-gray-100 !text-gray-700 hover:bg-gray-300"
                }
              `}
         >

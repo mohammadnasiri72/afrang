@@ -278,7 +278,7 @@ function SelectProductMokamel({ product }) {
             <button
               type="button"
               onClick={() => setShowResults(false)}
-              className="absolute cursor-pointer left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#d1182b] bg-white rounded-full p-1 transition-colors z-10"
+              className="absolute cursor-pointer left-2 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-[#d1182b] bg-white rounded-full p-1 transition-colors z-10"
               style={{ direction: "ltr" }}
               tabIndex={-1}
               aria-label="بستن جستجو"

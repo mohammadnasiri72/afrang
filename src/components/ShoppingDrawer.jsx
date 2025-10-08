@@ -200,7 +200,7 @@ function ShoppingDrawer({ header }) {
                   onClick={() => {
                     setDeleteModalsOpen(true);
                   }}
-                  className="cursor-pointer text-[#d1182b] font-bold"
+                  className="cursor-pointer !text-[#d1182b] font-bold"
                 >
                   حذف همه
                 </button>
@@ -329,7 +329,7 @@ function ShoppingDrawer({ header }) {
                                 >
                                   <button
                                     onClick={() => handleDeleteClick(item)}
-                                    className="text-[#d1182b] hover:bg-red-50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer"
+                                    className="!text-[#d1182b] hover:bg-red-50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer"
                                   >
                                     <FaTrash className="text-sm" />
                                   </button>

@@ -13,7 +13,7 @@ export default function Register() {
       <div className="bg-[#f4f4f4] min-h-screen relative">
         <div className="w-[70%] min-h-screen absolute top-0 left-0 bottom-0 overflow-hidden">
           <Image
-            src="/images/gallery/background-image.jpg"
+            src="/images/background-image.jpg"
             alt="پس‌زمینه گالری"
             fill
             priority

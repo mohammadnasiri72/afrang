@@ -250,26 +250,6 @@ export default function Dashboard() {
             {/* Page Header */}
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-800">داشبورد</h1>
-                {/* <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setActiveTab("overview")}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "overview"
-                            ? "bg-[#d1182b] !text-white"
-                            : "text-gray-600 hover:bg-gray-100"
-                            }`}
-                    >
-                        نمای کلی
-                    </button>
-                    <button
-                        onClick={() => setActiveTab("analytics")}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "analytics"
-                            ? "bg-[#d1182b] !text-white"
-                            : "text-gray-600 hover:bg-gray-100"
-                            }`}
-                    >
-                        تحلیل و آمار
-                    </button>
-                </div> */}
             </div>
 
             {/* Quick Stats */}
@@ -314,7 +294,7 @@ export default function Dashboard() {
                                         key={item.productId}
                                         className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                                     >
-                                        <Link href={item.url} target="_blank">
+                                        <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                             <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                                 {item.image && (
                                                     <img
@@ -326,7 +306,7 @@ export default function Dashboard() {
                                             </div>
                                         </Link>
                                         <div className="flex-1">
-                                            <Link href={item.url} target="_blank">
+                                            <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                                 <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                                     {item.title}
                                                 </p>
@@ -389,7 +369,7 @@ export default function Dashboard() {
                                             key={item.id}
                                             className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                                         >
-                                            <Link href={item.url} target="_blank">
+                                            <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                                 <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                                     {item.image && (
                                                         <img
@@ -401,7 +381,7 @@ export default function Dashboard() {
                                                 </div>
                                             </Link>
                                             <div className="flex-1">
-                                                <Link href={item.url} target="_blank">
+                                                <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                                     <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                                         {item.title}
                                                     </p>

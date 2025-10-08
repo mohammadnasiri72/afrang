@@ -94,7 +94,7 @@ function FilterSec() {
       <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
         <img
           className="h-64 w-full object-cover"
-          src="/images/gallery/news-thumb-large.jpg"
+          src="/images/news-thumb-large.jpg"
           alt=""
         />
         {pathname.includes("useds") && (

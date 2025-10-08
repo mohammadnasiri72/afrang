@@ -36,7 +36,7 @@ const SuccessModal = ({ isOpen, onClose }) => {
           
           <button
             onClick={onClose}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 text-gray-600 py-1.5 px-3 rounded-md hover:bg-gray-100 transition-colors text-sm border border-gray-200 cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 !text-gray-600 py-1.5 px-3 rounded-md hover:bg-gray-100 transition-colors text-sm border border-gray-200 cursor-pointer"
           >
             <span>ادامه خرید</span>
             <FaStore className="text-sm" />

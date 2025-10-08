@@ -1,5 +1,6 @@
+import Loading from "@/components/Loading";
 import { getImageUrl } from "@/utils/mainDomain";
-import { Empty, Popover } from "antd";
+import { Empty, Popover, Skeleton } from "antd";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { HiDotsVertical } from "react-icons/hi";
@@ -7,7 +8,6 @@ import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
 import ModalDelete from "./ModalDelete";
 import ModalShowDetails from "./ModalShowDetails";
-import Loading from "@/components/Loading";
 
 function ListProductSec({ productsSec }) {
   const router = useRouter();
@@ -50,11 +50,7 @@ function ListProductSec({ productsSec }) {
                       className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-100"
                     />
                   ) : (
-                    <img
-                      src={"/public/images/icons/photo.png"}
-                      alt={pr.title}
-                      className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-300"
-                    />
+                    <Skeleton.Image />
                   )}
                   <div className="flex flex-col items-start flex-1 min-w-0 gap-1">
                     <div className="flex justify-between items-center w-full">

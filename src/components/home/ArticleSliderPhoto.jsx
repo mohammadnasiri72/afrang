@@ -14,7 +14,7 @@ function ArticleSliderPhoto({ blog }) {
         src={
           blog.image && blog.image !== "NULL"
             ? getImageUrl(blog.image)
-            : "/images/gallery/blog-img1.jpg"
+            : "/images/blog-img1.jpg"
         }
         alt={blog.title || "تصویر مقالات"}
         fill

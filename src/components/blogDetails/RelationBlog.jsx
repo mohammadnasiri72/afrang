@@ -47,7 +47,7 @@ async function RelationBlog() {
                   <div className="overflow-hidden w-full aspect-[16/9]  relative cursor-pointer flex items-center justify-center">
                     <Image
                       className="group-hover:scale-105  scale-100 duration-1000 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain"
-                      src={getImageUrl(blog.image) || "/images/gallery/blog-img1.jpg"}
+                      src={getImageUrl(blog.image) || "/images/blog-img1.jpg"}
                       alt={blog.title}
                       width={224}
                       height={224}

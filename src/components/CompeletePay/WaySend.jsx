@@ -2,6 +2,7 @@
 
 import { setDescShipping } from "@/redux/slices/shippingSlice";
 import { getImageUrl } from "@/utils/mainDomain";
+import { Empty } from "antd";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,14 +52,7 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-4">
           <div className="relative w-32 h-32 mb-6">
-            <img
-              src="/images/empty-shipping.svg"
-              alt="روش ارسال"
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                e.target.src = defaultImage;
-              }}
-            />
+            <Empty description={false} />
           </div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
             ابتدا آدرس خود را ثبت کنید

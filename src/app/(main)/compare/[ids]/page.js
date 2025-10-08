@@ -212,7 +212,7 @@ const DynamicComparePage = () => {
                           {compareProducts.length > 1 && (
                             <button
                               onClick={() => handleRemoveItem(item.productId)}
-                              className="absolute cursor-pointer top-2 left-2 text-gray-400 hover:text-red-500 transition-colors"
+                              className="absolute cursor-pointer top-2 left-2 !text-gray-400 hover:text-red-500 transition-colors"
                               title="حذف از مقایسه"
                             >
                               <FaTimes className="text-base" />

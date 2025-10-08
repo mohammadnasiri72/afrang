@@ -125,7 +125,7 @@ const SearchHeader = () => {
               setResults([]);
               setShowResults(false);
             }}
-            className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+            className="!text-gray-500 hover:!text-gray-700 transition-colors cursor-pointer"
           >
             <IoClose className="text-xl" />
           </button>

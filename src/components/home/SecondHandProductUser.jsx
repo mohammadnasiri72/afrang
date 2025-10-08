@@ -19,7 +19,7 @@ function SecondHandProductUser({ filteredProducts }) {
               onClick={() => {
                 router.push(`/useds/-1`);
               }}
-              className="flex items-center gap-1 text-[#d1182b] hover:text-[#d1182b]/80 transition-colors cursor-pointer"
+              className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
             >
               <span className="text-sm">نمایش همه</span>
               <FaCaretLeft className="text-sm" />
@@ -29,7 +29,7 @@ function SecondHandProductUser({ filteredProducts }) {
 
         <div className="flex justify-between items-center sm:px-4">
           <div className="lg:flex hidden flex-wrap gap-4 items-center">
-            <button className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold">
+            <button className="title-SecondHand relative !text-[#222] duration-300 text-lg font-semibold">
               دست دوم های کاربران
             </button>
           </div>

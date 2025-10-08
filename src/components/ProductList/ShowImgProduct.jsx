@@ -90,12 +90,12 @@ const ShowImgProduct = ({ product }) => {
       <Tooltip placement="left" title="نمایش تصاویر" trigger={["hover"]}>
         <button
           onClick={handleShowImgs}
-          className="flex w-full justify-center items-center cursor-pointer py-2 px-2 transition-all duration-300"
+          className="flex w-full justify-center items-center cursor-pointer py-2 px-2 transition-all duration-300 hover:bg-gray-300"
         >
           {isLoading ? (
             <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-[#d1182b]"></div>
           ) : (
-            <FaCamera className="text-[#3338]" />
+            <FaCamera className="!text-[#3338]" />
           )}
         </button>
       </Tooltip>

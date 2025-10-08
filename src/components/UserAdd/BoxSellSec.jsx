@@ -369,8 +369,8 @@ function BoxSellSec({ productList }) {
               onClick={() => setViewMode("list")}
               className={`p-2 rounded-md transition-colors cursor-pointer ${
                 viewMode === "list"
-                  ? "bg-white text-[#d1182b] shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-white !text-[#d1182b] shadow-sm"
+                  : "!text-gray-600 hover:!text-gray-900"
               }`}
               title="نمایش لیستی"
             >
@@ -392,8 +392,8 @@ function BoxSellSec({ productList }) {
               onClick={() => setViewMode("grid")}
               className={`p-2 rounded-md transition-colors cursor-pointer ${
                 viewMode === "grid"
-                  ? "bg-white text-[#d1182b] shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-white !text-[#d1182b] shadow-sm"
+                  : "!text-gray-600 hover:!text-gray-900"
               }`}
               title="نمایش گرید"
             >

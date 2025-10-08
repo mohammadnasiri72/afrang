@@ -59,35 +59,35 @@ const ShareButtons = ({ blog }) => {
           className="hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="اشتراک در تلگرام"
         >
-          <FaTelegram className="text-xl text-[#40768c88] hover:text-blue-500 duration-300" />
+          <FaTelegram className="text-xl !text-[#40768c88] hover:!ext-blue-500 duration-300" />
         </button>
         <button
           onClick={shareOnWhatsApp}
           className="hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="اشتراک در واتساپ"
         >
-          <FaWhatsapp className="text-xl text-[#40768c88] hover:text-green-500 duration-300" />
+          <FaWhatsapp className="text-xl !text-[#40768c88] hover:!text-green-500 duration-300" />
         </button>
         <button
           onClick={shareOnTwitter}
           className="hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="اشتراک در توییتر"
         >
-          <FaTwitter className="text-xl text-[#40768c88] hover:text-blue-400 duration-300" />
+          <FaTwitter className="text-xl !text-[#40768c88] hover:!text-blue-400 duration-300" />
         </button>
         <button
           onClick={shareOnLinkedIn}
           className="hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="اشتراک در لینکدین"
         >
-          <FaLinkedin className="text-xl text-[#40768c88] hover:text-blue-600 duration-300" />
+          <FaLinkedin className="text-xl !text-[#40768c88] hover:!text-blue-600 duration-300" />
         </button>
         <button
           onClick={copyLink}
           className="hover:scale-110 transition-transform duration-300 cursor-pointer"
           title="کپی لینک"
         >
-          <FaLink className="text-xl text-[#40768c88] hover:text-gray-600 duration-300" />
+          <FaLink className="text-xl !text-[#40768c88] hover:!text-gray-600 duration-300" />
         </button>
       </div>
     </div>
