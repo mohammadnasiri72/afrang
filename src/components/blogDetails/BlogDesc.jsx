@@ -117,6 +117,7 @@ async function BlogDesc({ blog }) {
               height={800}
               priority
               unoptimized
+              fetchPriority="high"
               className="w-full h-auto object-cover"
             />
           </div>

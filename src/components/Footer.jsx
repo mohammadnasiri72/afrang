@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import * as FaIcons from "react-icons/fa";
-import { useSelector } from "react-redux";
 import Loading from "./Loading";
 import Newsletter from "./Newsletter";
 
@@ -19,7 +18,7 @@ export function IconRenderer({ iconName, ...props }) {
   return <IconComponent {...props} />;
 }
 
-const Footer = ({ socialNetworks, footerMenu , settings }) => {
+const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -127,7 +126,7 @@ const Footer = ({ socialNetworks, footerMenu , settings }) => {
               </div>
               {/* لینک منو های فوتر در موبایل */}
               <div className="sm:hidden pt-4">
-                <h4 className="font-semibold text-lg">لینک ها</h4>
+                <span className="font-semibold text-lg">لینک ها</span>
                 <ul className="flex sm:hidden flex-wrap items-start w-full px-2">
                   {footerMenu[0]?.menuItems?.map((menuItem) => (
                     <li key={menuItem.id} className="w-full list-none p-1">
@@ -252,9 +251,9 @@ const Footer = ({ socialNetworks, footerMenu , settings }) => {
               </div>
             </div>
             <div className="lg:w-1/3 sm:w-1/2 w-full p-3">
-              <h4 className="font-semibold text-[16px] sm:text-start text-center">
+              <div className="font-semibold text-[16px] sm:text-start text-center">
                 عضویت در خبرنامه <span className="text-[#d1182b]">افرنگ</span>
-              </h4>
+              </div>
 
               <p className="text-[#666] mt-4 sm:text-start text-center">
                 {settings?.find(
@@ -316,7 +315,6 @@ const Footer = ({ socialNetworks, footerMenu , settings }) => {
                 </div>
               </div>
             </div>
-            
           </div>
         </div>
         <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">

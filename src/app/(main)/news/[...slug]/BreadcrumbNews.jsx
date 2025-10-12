@@ -9,16 +9,16 @@ const BreadcrumbNews = ({ breadcrumb }) => {
   const breadcrumbItems = [
     {
       title: (
-        <Link href="/" className="text-gray-800 hover:text-[#d1182b] font-[Yekan]">
+        <Link href="/" className="!text-black hover:text-[#d1182b] font-[Yekan]">
           خانه
         </Link>
       ),
     },
     ...breadcrumb.map((item, index) => ({
       title: item.href ? (
-        <Link 
-          href={item.href} 
-          className="text-gray-800 hover:text-[#d1182b] font-[Yekan]"
+        <Link
+          href={item.href}
+          className="!text-black hover:text-[#d1182b] font-[Yekan]"
         >
           {item.title}
         </Link>
@@ -32,7 +32,9 @@ const BreadcrumbNews = ({ breadcrumb }) => {
     <div className="bg-white py-4 px-5 rounded-lg xl:px-16">
       <Breadcrumb
         items={breadcrumbItems}
-        separator={<span className="text-gray-700 mx-2 text-xs font-[Yekan]">&gt;</span>}
+        separator={
+          <span className="text-black mx-2 text-xs font-[Yekan]">&gt;</span>
+        }
         className="font-[Yekan]"
       />
     </div>
