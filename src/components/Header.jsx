@@ -16,6 +16,9 @@ import ShoppingDrawer from "./ShoppingDrawer";
 
 export default function Header({ onLoaded, settings }) {
   const userCookie = Cookies.get("user");
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -25,6 +28,7 @@ export default function Header({ onLoaded, settings }) {
 
   useEffect(() => {
     if (userCookie) {
+      setIsLoggedIn(!!userCookie);
       try {
         const userData = JSON.parse(userCookie);
         disPatch(setUser(userData));
@@ -48,7 +52,8 @@ export default function Header({ onLoaded, settings }) {
       >
         <div className="flex items-center w-auto ">
           <div className="flex items-center ">
-            {settings?.find((item) => item.propertyKey === "site_home_url")?.value && (
+            {settings?.find((item) => item.propertyKey === "site_home_url")
+              ?.value && (
               <Link
                 href={
                   settings.find((item) => item.propertyKey === "site_home_url")
@@ -70,7 +75,7 @@ export default function Header({ onLoaded, settings }) {
                   }
                 />
               </Link>
-            ) }
+            )}
 
             <Link
               aria-label="صفحه اصلی"
@@ -114,8 +119,8 @@ export default function Header({ onLoaded, settings }) {
           </div>
           {mounted && (
             <div>
-              {userCookie && JSON.parse(userCookie)?.token ? (
-                <ProfileDropdown />
+              {userCookie && JSON.parse(userCookie)?.token && isLoggedIn ? (
+                <ProfileDropdown  setIsLoggedIn={setIsLoggedIn}/>
               ) : (
                 <div className="flex items-center gap-3 font-semibold">
                   <div

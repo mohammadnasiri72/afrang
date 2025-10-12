@@ -1,5 +1,6 @@
 import Loading from "@/components/Loading";
 import { RegisterSendOtp } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Image from "next/image";
@@ -56,7 +57,8 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
     } else {
       setLoading(true);
       try {
-        const res = await RegisterSendOtp(mobile);
+        const csrf = await getCsrf();
+        const res = await RegisterSendOtp(mobile , csrf);
         if (!res) {
           setStateRegister(2);
           Toast.fire({

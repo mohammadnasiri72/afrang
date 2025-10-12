@@ -46,7 +46,7 @@ const resetUserCookie = () => {
   return initialData;
 };
 
-const ProfileDropdown = () => {
+const ProfileDropdown = ({ setIsLoggedIn }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
@@ -119,6 +119,7 @@ const ProfileDropdown = () => {
     if (!user?.token) {
       resetUserCookie();
       dispatch(clearUser());
+      setIsLoggedIn(false);
       router.replace("/");
       return;
     }
@@ -131,6 +132,7 @@ const ProfileDropdown = () => {
         resetUserCookie();
         dispatch(clearUser());
         setIsOpen(false);
+        setIsLoggedIn(false);
         router.replace("/");
       } else {
         Toast.fire({

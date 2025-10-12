@@ -1,5 +1,6 @@
 import Loading from "@/components/Loading";
 import { loginOtp, loginSendOtp } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Alert, Spin } from "antd";
 import Cookies from "js-cookie";
@@ -115,7 +116,8 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
 
     setResendLoading(true);
     try {
-      const res = await loginSendOtp(mobile);
+      const csrf = await getCsrf();
+      const res = await loginSendOtp(mobile , csrf);
       if (!res) {
         setCountdown(120); // Reset timer
         Toast.fire({
@@ -160,9 +162,11 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     setLoading(true);
     try {
       const englishCode = digits.map((d) => toEnglishNumber(d)).join("");
+      const csrf = await getCsrf();
       const userData = await loginOtp({
         mobile,
         code: englishCode,
+        csrf: csrf.csrfToken,
       });
 
       if (userData.token) {

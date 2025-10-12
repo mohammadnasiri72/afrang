@@ -2,6 +2,7 @@
 
 import Loading from "@/components/Loading";
 import { ResetPassword } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Image from "next/image";
@@ -71,7 +72,8 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      const response = await ResetPassword(username);
+      const csrf = await getCsrf();
+      const response = await ResetPassword(username , csrf);
       if (response.type === "error") {
         Toast.fire({
           icon: "error",

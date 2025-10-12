@@ -1,6 +1,7 @@
 import Loading from "@/components/Loading";
 import { setUser } from "@/redux/slices/userSlice";
 import { Register } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
@@ -112,7 +113,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
     setLoading(true);
 
     try {
-      const userData = await Register(data);
+      const csrf = await getCsrf();
+      const userData = await Register(data, csrf);
 
       if (userData.token) {
         Cookies.set("user", JSON.stringify(userData));

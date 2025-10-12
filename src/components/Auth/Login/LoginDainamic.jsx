@@ -1,5 +1,6 @@
 import Loading from "@/components/Loading";
 import { loginSendOtp } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Image from "next/image";
@@ -56,7 +57,8 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
     } else {
       setLoading(true);
       try {
-        const res = await loginSendOtp(mobile);
+        const csrf = await getCsrf();
+        const res = await loginSendOtp(mobile , csrf);
         if (!res) {
           setStateLogin(3);
           Toast.fire({

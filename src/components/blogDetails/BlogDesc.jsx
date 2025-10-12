@@ -122,8 +122,8 @@ async function BlogDesc({ blog }) {
             />
           </div>
           <div className="mt-4 !text-justify">
-            <div dangerouslySetInnerHTML={{ __html: blog?.body || "" }} />
-            <div dangerouslySetInnerHTML={{ __html: blog?.summary || "" }} />
+            <div  dangerouslySetInnerHTML={{ __html: blog?.body || "" }} />
+            <div  dangerouslySetInnerHTML={{ __html: blog?.summary || "" }} />
           </div>
           <hr className="mt-10 border-[#40768c55] border-[1.5px]" />
           <div className="flex flex-wrap justify-between items-center p-3 font-semibold">

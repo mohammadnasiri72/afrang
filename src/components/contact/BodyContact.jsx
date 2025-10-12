@@ -1,5 +1,6 @@
 "use client";
 
+import { getCsrf } from "@/services/csrf/csrf";
 import { PostContactForm } from "@/services/form/formService";
 import { Segmented, Select } from "antd";
 import { useState } from "react";
@@ -142,11 +143,13 @@ function BodyContact() {
 
     setSubmitting(true);
     try {
+      const csrf = await getCsrf();
       const data = {
         langCode: "fa",
+        csrf: csrf.csrfToken,
         ...formData,
       };
-
+      
       const response = await PostContactForm(data);
 
       if (response) {

@@ -18,7 +18,12 @@ const Toast = Swal.mixin({
 
 export const PostContactForm = async (data) => {
     try {
-      await axios.post(`${mainDomain}/api/Form/Contact`, data );
+      await axios.post(`${mainDomain}/api/Form/Contact`, data , {
+        headers: {
+          "X-CSRF-Token": data.csrf,
+        },
+         withCredentials: true,
+      } );
       return true;
     } catch (err) {
       Toast.fire({

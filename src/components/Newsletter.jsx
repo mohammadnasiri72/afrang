@@ -1,3 +1,4 @@
+import { getCsrf } from "@/services/csrf/csrf";
 import { newsletter } from "@/services/Newsletter/NewsletterServices";
 import { message, Spin } from "antd";
 import { useState } from "react";
@@ -23,7 +24,8 @@ function Newsletter() {
 
     setLoading(true);
     try {
-      const result = await newsletter(email);
+      const csrf = await getCsrf();
+      const result = await newsletter(email , csrf);
       if (result.type === "error") {
         message.error(result.message);
       } else {

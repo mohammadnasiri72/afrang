@@ -34,8 +34,8 @@ function ModalAddtoBasket({
             <div className="flex gap-4">
               <div className="sm:w-32 w-24 sm:h-32 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src={getImageUrl(product.product.image)}
-                  alt={product.product.title}
+                  src={getImageUrl(product?.product?.image)}
+                  alt={product?.product?.title}
                   className="w-full h-full object-contain"
                 />
               </div>

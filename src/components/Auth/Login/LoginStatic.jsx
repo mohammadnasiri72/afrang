@@ -1,5 +1,6 @@
 import Loading from "@/components/Loading";
 import { login } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
@@ -72,10 +73,12 @@ function LoginStatic({ setStateLogin, from }) {
 
     setLoading(true);
     try {
+      const csrf = await getCsrf();
       const userData = await login({
         username,
         password,
         remember: true,
+        csrf: csrf.csrfToken,
       });
       if (userData.token) {
         Cookies.set("user", JSON.stringify(userData));

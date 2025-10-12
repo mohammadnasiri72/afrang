@@ -1,4 +1,5 @@
 import { RegisterSendOtp } from "@/services/Account/AccountService";
+import { getCsrf } from "@/services/csrf/csrf";
 import { Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -67,7 +68,8 @@ function EnterCodeSent({ setCode, mobile }) {
 
     setResendLoading(true);
     try {
-      const res = await RegisterSendOtp(mobile);
+      const csrf = await getCsrf();
+      const res = await RegisterSendOtp(mobile , csrf);
       if (!res) {
         setCountdown(120); // Reset timer
         Toast.fire({
