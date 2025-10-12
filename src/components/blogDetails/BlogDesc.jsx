@@ -68,7 +68,6 @@ async function BlogDesc({ blog }) {
 
   const comments = await getComment(blog?.id, 1, 0);
 
-
   return (
     <>
       <div className="lg:w-3/4 w-full p-2">
@@ -121,9 +120,9 @@ async function BlogDesc({ blog }) {
               className="w-full h-auto object-cover"
             />
           </div>
-          <div className="mt-4 !text-justify">
-            <div  dangerouslySetInnerHTML={{ __html: blog?.body || "" }} />
-            <div  dangerouslySetInnerHTML={{ __html: blog?.summary || "" }} />
+          <div className="mt-4 !text-justify [&_img]:mx-auto [&_img]:block [&_img]:text-center box-details-news-html">
+            <div dangerouslySetInnerHTML={{ __html: blog?.body || "" }} />
+            <div dangerouslySetInnerHTML={{ __html: blog?.summary || "" }} />
           </div>
           <hr className="mt-10 border-[#40768c55] border-[1.5px]" />
           <div className="flex flex-wrap justify-between items-center p-3 font-semibold">
@@ -132,7 +131,7 @@ async function BlogDesc({ blog }) {
           </div>
         </div>
 
-        <CommentSection id={blog?.id} type={0} comments={comments}/>
+        <CommentSection id={blog?.id} type={0} comments={comments} />
       </div>
     </>
   );
