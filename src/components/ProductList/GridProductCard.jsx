@@ -124,7 +124,7 @@ function GridProductCard({ product, startTransition }) {
                 <span className="text-[#555]">تومان</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm line-through text-[#888]">
+                <span className="text-sm line-through text-[#222]">
                   {product?.price1?.toLocaleString()}
                 </span>
                 <span className="text-white bg-[#d1182b] px-2 py-0.5 rounded-sm text-sm">
@@ -157,7 +157,7 @@ function GridProductCard({ product, startTransition }) {
                 {/* <CompareButton id={product?.productId} /> */}
               </>
             ) : (
-              <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] !text-[#666] py-2 rounded-sm">
+              <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] !text-[#000] py-2 rounded-sm">
                 <FaCartShopping />
                 <span>{product.statusDesc}</span>
               </button>

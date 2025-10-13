@@ -10,6 +10,7 @@ const CompareButtonBtn = ({ id }) => {
     <div className="w-full flex items-center justify-center">
       <Tooltip placement="left" title="مقایسه محصول" trigger={["hover"]}>
         <button
+          aria-label="مقایسه محصول"
           onClick={() => {
             router.push(`/compare/${id}`);
           }}

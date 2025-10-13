@@ -133,8 +133,8 @@ function ProductCard({ product, startTransition }) {
             <div className="px-3 pb-3">
               {!product.canAddCart ? (
                 <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm text-sm">
-                  <FaCartShopping className="!text-[#333]" />
-                  <span className="!text-[#666]">{product.statusDesc}</span>
+                  <FaCartShopping className="!text-[#000]" />
+                  <span className="!text-[#000]">{product.statusDesc}</span>
                 </button>
               ) : (
                 <div className="flex flex-col gap-2">
@@ -284,8 +284,8 @@ function ProductCard({ product, startTransition }) {
                 <div className="w-full mt-2">
                   {!product.canAddCart && (
                     <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
-                      <FaCartShopping className="!text-[#333]" />
-                      <span className="!text-[#666]">{product.statusDesc}</span>
+                      <FaCartShopping className="!text-[#000]" />
+                      <span className="!text-[#000]">{product.statusDesc}</span>
                     </button>
                   )}
                   {product.canAddCart && (

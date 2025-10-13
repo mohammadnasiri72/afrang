@@ -33,7 +33,7 @@ function PriceProduct({ product }) {
                 <span className="text-[#555] text-lg">تومان</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-lg line-through text-[#888]">
+                <span className="font-semibold text-lg line-through text-[#222]">
                   {priceOriginal?.toLocaleString()}
                 </span>
                 <span className="text-white bg-[#d1182b] px-3 py-0.5 rounded-sm text-sm">

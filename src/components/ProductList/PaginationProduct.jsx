@@ -77,7 +77,6 @@
 
 "use client";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -137,8 +136,6 @@ function PaginationProduct({ total }) {
       );
     }
 
-   
-
     return originalElement;
   };
 
@@ -163,7 +160,11 @@ function PaginationProduct({ total }) {
         />
       </div>
       <div className="flex items-center gap-2 pl-2">
+        <label htmlFor="page-size-select" className="sr-only">
+          تعداد در هر صفحه
+        </label>
         <Select
+          id="page-size-select"
           value={currentPageSize}
           onChange={handlePageSizeChange}
           options={[

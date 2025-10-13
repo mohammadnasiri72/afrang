@@ -89,6 +89,7 @@ const ShowImgProduct = ({ product }) => {
     <div className="w-full flex items-center justify-center">
       <Tooltip placement="left" title="نمایش تصاویر" trigger={["hover"]}>
         <button
+        aria-label="نمایش تصاویر"
           onClick={handleShowImgs}
           className="flex w-full justify-center items-center cursor-pointer py-2 px-2 transition-all duration-300 hover:bg-gray-300"
         >
