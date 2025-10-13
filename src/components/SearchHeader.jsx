@@ -4,9 +4,11 @@ import { getProductTerm } from "@/services/products/productService";
 import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
 import ReactDOM from "react-dom";
 import { IoClose, IoSearchSharp } from "react-icons/io5";
+import Loading from "./Loading";
 
 const SearchHeader = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +21,8 @@ const SearchHeader = () => {
   const MIN_WIDTH = 600;
   const MAX_WIDTH = 900;
   const dropdownRef = useRef(null); // اضافه کردن رفرنس برای دراپ‌داون
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   useEffect(() => {
     if (showResults) {
@@ -162,9 +166,15 @@ const SearchHeader = () => {
                     {results.map((product) => (
                       <Link
                         key={product.productId}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowResults(false);
+                          startTransition(() => {
+                            router.push(product.url);
+                          });
+                        }}
                         href={product.url}
                         className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"
-                        onClick={() => setShowResults(false)}
                       >
                         <div className="w-20 h-20 relative flex-shrink-0 overflow-hidden">
                           <Image
@@ -213,6 +223,7 @@ const SearchHeader = () => {
           </div>,
           document.body
         )}
+      {isPending && <Loading />}
     </div>
   );
 };

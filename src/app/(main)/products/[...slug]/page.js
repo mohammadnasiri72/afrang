@@ -1,4 +1,4 @@
-import NotFound from "@/app/not-found";
+import NotFound from "@/app/(main)/not-found";
 import Container from "@/components/container";
 import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
 import { getListItemBanner } from "@/services/Item/item";

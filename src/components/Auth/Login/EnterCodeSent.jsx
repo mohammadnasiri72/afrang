@@ -25,47 +25,102 @@ const toEnglishNumber = (number) => {
 
 function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [isWebOTPSupported, setIsWebOTPSupported] = useState(false);
+  const [webOTPActive, setWebOTPActive] = useState(false);
   useEffect(() => {
     if ("OTPCredential" in window) {
       setIsWebOTPSupported(true);
     }
   }, []);
-  // دریافت خودکار کد از SMS
+
+  // فعال‌سازی WebOTP با کلیک کاربر
   useEffect(() => {
-    if (!isWebOTPSupported) return;
+    if (!isWebOTPSupported || webOTPActive) return;
 
-    const receiveOTP = async () => {
-      try {
-        const otp = await navigator.credentials.get({
-          otp: { transport: ["sms"] },
-        });
-
-        if (otp && otp.code) {
-          const code = otp.code;
-          const persianCode = toPersianNumber(code);
-          const codeArray = persianCode.split("").slice(0, 6);
-
-          const newDigits = [...digits];
-          codeArray.forEach((digit, index) => {
-            if (index < 6) {
-              newDigits[index] = digit;
-            }
-          });
-
-          setDigits(newDigits);
-
-          // اتوماتیک سابمیت کن اگر کد کامل شد
-          if (codeArray.length === 6) {
-            setTimeout(() => submitLogin(), 500);
-          }
-        }
-      } catch (err) {
-        console.error("WebOTP not supported or user cancelled:", err);
-      }
+    const handleUserInteraction = () => {
+      startWebOTP();
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
     };
 
-    receiveOTP();
-  }, [isWebOTPSupported]);
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("touchstart", handleUserInteraction);
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+    };
+  }, [isWebOTPSupported, webOTPActive]);
+
+  const startWebOTP = async () => {
+    if (webOTPActive) return;
+
+    setWebOTPActive(true);
+
+    try {
+      const otp = await navigator.credentials.get({
+        otp: { transport: ["sms"] },
+      });
+
+      if (otp && otp.code) {
+        processReceivedCode(otp.code);
+      } else {
+        setWebOTPActive(false);
+      }
+    } catch (err) {
+      setWebOTPActive(false);
+    }
+  };
+
+  const processReceivedCode = (code) => {
+    // استخراج کد ۶ رقمی
+    const sixDigitMatch = code.match(/\b\d{6}\b/);
+    let cleanCode = "";
+
+    if (sixDigitMatch) {
+      cleanCode = sixDigitMatch[0];
+    } else {
+      const allNumbers = code.replace(/\D/g, "");
+      if (allNumbers.length >= 6) {
+        cleanCode = allNumbers.slice(0, 6);
+      }
+    }
+
+    if (cleanCode.length === 6) {
+      const persianCode = toPersianNumber(cleanCode);
+      const codeArray = persianCode.split("");
+
+      // ایجاد آرایه جدید
+      const newDigits = ["", "", "", "", "", ""];
+      codeArray.forEach((digit, index) => {
+        newDigits[index] = digit;
+      });
+
+      setDigits(newDigits);
+
+      // تأخیر برای سابمیت اتوماتیک
+      setTimeout(() => {
+        if (inputRefs.current[5]) {
+          inputRefs.current[5].focus();
+        }
+
+        setTimeout(() => {
+          submitLogin();
+        }, 1000);
+      }, 500);
+    }
+  };
+
+  // handlePaste function
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text");
+    const codeMatch = pastedData.match(/\b\d{6}\b/);
+    if (codeMatch) {
+      const code = codeMatch[0];
+      processReceivedCode(code);
+    }
+  };
+
   const [loading, setLoading] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
@@ -143,8 +198,19 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       inputRefs.current[index + 1].focus();
     }
 
-    // پاک کردن خطا فقط زمانی که کاربر در حال وارد کردن کد است
+    // پاک کردن خطا
     setError("");
+
+    // وقتی کاربر شروع به تایپ کرد، WebOTP رو فعال کن
+    if (isWebOTPSupported && !webOTPActive && persianValue) {
+      startWebOTP();
+    }
+  };
+
+  const handleFocus = (index) => {
+    if (isWebOTPSupported && !webOTPActive) {
+      startWebOTP();
+    }
   };
 
   const handleKeyDown = (index, e) => {
@@ -312,6 +378,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                 showIcon
               />
             </div>
+
             <div
               className="flex flex-col items-center gap-4 font-sans"
               dir="ltr"
@@ -324,7 +391,9 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                     maxLength="1"
                     value={digit}
                     onChange={(e) => handleChange(index, e.target.value)}
+                    onFocus={() => handleFocus(index)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={handlePaste}
                     ref={(el) => (inputRefs.current[index] = el)}
                     className="sm:w-14 w-11 h-14 text-center text-2xl border border-gray-300 rounded-md 
                       focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200
@@ -400,6 +469,11 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
             </div>
           </div>
         </div>
+        {isWebOTPSupported && (
+          <div className="text-center text-xs text-green-600 mb-4 bg-green-50 p-2 rounded-lg">
+            ✓ سیستم دریافت خودکار کد فعال است
+          </div>
+        )}
       </div>
       {isPending && <Loading />}
     </>

@@ -28,7 +28,7 @@ const TransactionResult = () => {
           scale: { type: "spring", visualDuration: 1, bounce: 0.3 },
         }}
       >
-        <div className="min-h-screen flex items-center justify-center p-4 relative z-50">
+        <div className="flex items-center justify-center p-4 relative z-50">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-md">
             {/* هدر با رنگ متغیر بر اساس وضعیت */}
             <div
