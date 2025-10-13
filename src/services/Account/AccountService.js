@@ -103,7 +103,7 @@ export const ResetPassword = async (userName, csrf) => {
       type: "error",
       message: err.response.data
         ? err.response.data
-        : "خطا در ارسال لینک بازیابی رمز عبور",
+        : "خطا در بازیابی رمز عبور",
     };
   }
 };

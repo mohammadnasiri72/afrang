@@ -948,3 +948,7 @@ th {
     box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
   }
 }
+
+p {
+  margin-bottom: 0 !important;
+}

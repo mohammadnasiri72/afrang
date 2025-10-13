@@ -131,8 +131,8 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                   شماره تلفن خود را وارد کنید
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errorMobile ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                    errorMobile ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <MdOutlinePhoneAndroid className="text-[#656565] text-2xl" />

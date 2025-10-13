@@ -25,7 +25,6 @@ function LoginStatic({ setStateLogin, from }) {
   const [errors, setErrors] = useState({});
   const { settings } = useSelector((state) => state.settings);
 
-
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   // import sweet alert 2
@@ -172,8 +171,8 @@ function LoginStatic({ setStateLogin, from }) {
                   شماره تلفن/آدرس ایمیل
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.username ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border  ${
+                    errors.username ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <FaUser className="text-[#656565]" />
@@ -183,7 +182,7 @@ function LoginStatic({ setStateLogin, from }) {
                       setErrors((prev) => ({ ...prev, username: "" }));
                     }}
                     value={username}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none "
                     type="text"
                     name=""
                     id=""
@@ -199,8 +198,8 @@ function LoginStatic({ setStateLogin, from }) {
                   رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.password ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                    errors.password ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <FaLock className="text-[#656565]" />

@@ -193,8 +193,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   نام
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.name ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                    errors.name ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <FaUser className="text-[#656565]" />
@@ -220,8 +220,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   نام خانوادگی
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.family ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                    errors.family ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <FaUser className="text-[#656565]" />
@@ -250,8 +250,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.password ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                    errors.password ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <FaLock className="text-[#656565]" />
@@ -277,8 +277,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   تکرار رمز ورود
                 </label>
                 <div
-                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                    errors.password2 ? "border border-red-500" : ""
+                  className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                    errors.password2 ? "border-red-500" : "border-[#ccc]"
                   }`}
                 >
                   <FaLock className="text-[#656565]" />
@@ -307,8 +307,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                 آدرس ایمیل ( اختیاری )
               </label>
               <div
-                className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                  errors.email ? "border border-red-500" : ""
+                className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                  errors.email ? "border-red-500" : "border-[#ccc]"
                 }`}
               >
                 <MdEmail className="text-[#656565]" />

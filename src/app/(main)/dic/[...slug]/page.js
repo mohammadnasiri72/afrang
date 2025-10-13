@@ -59,7 +59,7 @@ export default async function DicItemPage({ params }) {
                 <div className="max-w-4xl mx-auto py-8">
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="border-b border-[#d1182b] pb-4 mb-6">
-                            <h1 className="text-2xl font-bold text-[#0a1d39] text-right">{dic.title}</h1>
+                            <h1 className="text-2xl !font-bold text-[#0a1d39] text-right">{dic.title}</h1>
                         </div>
                         <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: dic.body }} />
                     </div>

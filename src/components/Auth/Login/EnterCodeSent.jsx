@@ -24,6 +24,48 @@ const toEnglishNumber = (number) => {
 };
 
 function EnterCodeSent({ mobile, setStateLogin, from }) {
+  const [isWebOTPSupported, setIsWebOTPSupported] = useState(false);
+  useEffect(() => {
+    if ("OTPCredential" in window) {
+      setIsWebOTPSupported(true);
+    }
+  }, []);
+  // دریافت خودکار کد از SMS
+  useEffect(() => {
+    if (!isWebOTPSupported) return;
+
+    const receiveOTP = async () => {
+      try {
+        const otp = await navigator.credentials.get({
+          otp: { transport: ["sms"] },
+        });
+
+        if (otp && otp.code) {
+          const code = otp.code;
+          const persianCode = toPersianNumber(code);
+          const codeArray = persianCode.split("").slice(0, 6);
+
+          const newDigits = [...digits];
+          codeArray.forEach((digit, index) => {
+            if (index < 6) {
+              newDigits[index] = digit;
+            }
+          });
+
+          setDigits(newDigits);
+
+          // اتوماتیک سابمیت کن اگر کد کامل شد
+          if (codeArray.length === 6) {
+            setTimeout(() => submitLogin(), 500);
+          }
+        }
+      } catch (err) {
+        console.error("WebOTP not supported or user cancelled:", err);
+      }
+    };
+
+    receiveOTP();
+  }, [isWebOTPSupported]);
   const [loading, setLoading] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
@@ -117,7 +159,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     setResendLoading(true);
     try {
       const csrf = await getCsrf();
-      const res = await loginSendOtp(mobile , csrf);
+      const res = await loginSendOtp(mobile, csrf);
       if (!res) {
         setCountdown(120); // Reset timer
         Toast.fire({

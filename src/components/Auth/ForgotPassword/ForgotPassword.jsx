@@ -73,7 +73,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const csrf = await getCsrf();
-      const response = await ResetPassword(username , csrf);
+      const response = await ResetPassword(username, csrf);
       if (response.type === "error") {
         Toast.fire({
           icon: "error",
@@ -161,8 +161,8 @@ const ForgotPassword = () => {
                       شماره تلفن/آدرس ایمیل
                     </label>
                     <div
-                      className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 ${
-                        errors.username ? "border border-red-500" : ""
+                      className={`bg-[#f9f9f9] rounded-[12px] w-full px-[20px] py-[10px] flex items-center mt-2 border ${
+                        errors.username ? "border-red-500" : "border-[#ccc]"
                       }`}
                     >
                       <FaUser className="text-[#656565]" />
@@ -214,7 +214,7 @@ const ForgotPassword = () => {
                             <Spin className="white-spin" size="small" />
                           </div>
                         ) : (
-                          "ارسال لینک بازیابی"
+                          "بازیابی رمز عبور"
                         )}
                       </button>
                     </div>
