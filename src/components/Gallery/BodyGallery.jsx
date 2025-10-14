@@ -54,7 +54,9 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
   const [ImagesData, setImagesData] = useState(ImagesDataCurrent);
   const [liked, setLiked] = useState(false);
   const [likedNumber, setLikedNumber] = useState(0);
-  const [imgSelected, setImgSelected] = useState(ImagesDataCurrent[0]);
+  const [imgSelected, setImgSelected] = useState(
+    ImagesDataCurrent?.length > 0 ? ImagesDataCurrent[0] : ""
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPageImages, setNextPageImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -69,6 +71,10 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
   const searchParams = useSearchParams();
   const params = useParams();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+      import("@fancyapps/ui/dist/fancybox/fancybox.css");
+    }, []);
 
   useEffect(() => {
     if (imgSelected) {
@@ -159,7 +165,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
   const orderByParam = searchParams.get("orderBy");
 
   useEffect(() => {
-    if (ImagesData.length > 0) {
+    if (ImagesData?.length > 0) {
       fetchNextPage(2); // لود کردن صفحه دوم در ابتدا
     }
   }, [ImagesData]);

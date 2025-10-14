@@ -3,6 +3,8 @@ import { getItemByUrl } from "@/services/Item/item";
 import { Divider } from "antd";
 import { notFound } from "next/navigation";
 
+export const runtime = 'edge';
+
 export default async function DynamicPage({ params }) {
   try {
     const data = await getItemByUrl(params.slug);

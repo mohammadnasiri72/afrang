@@ -39,5 +39,6 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function layoutSlug({ children }) {
+  
   return <div>{children}</div>;
 }
