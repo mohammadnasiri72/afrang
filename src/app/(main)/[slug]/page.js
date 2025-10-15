@@ -2,8 +2,9 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { getItemByUrl } from "@/services/Item/item";
 import { Divider } from "antd";
 import { notFound } from "next/navigation";
+import CalculationInstallments from "./CalculationInstallments";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export default async function DynamicPage({ params }) {
   try {
@@ -16,6 +17,7 @@ export default async function DynamicPage({ params }) {
       <>
         {data.breadcrumb && <Breadcrumb items={data.breadcrumb} />}
         <Divider style={{ marginTop: "0px" }} />
+        {params.slug === "afrang-leasing" && <CalculationInstallments />}
         <div className="container mx-auto px-4 pb-8 z-50 relative">
           <h1 className="text-3xl font-bold mb-6">{data.title}</h1>
           <div className="relative">
