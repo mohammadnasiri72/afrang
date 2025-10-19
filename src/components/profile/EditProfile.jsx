@@ -202,7 +202,7 @@ export default function EditProfile() {
                   setErrors({ ...errors, firstName: "" });
                 }
               }}
-              className={`w-full px-4 py-2 rounded-lg border ${
+              className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
                 errors.firstName ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="نام"
@@ -227,7 +227,7 @@ export default function EditProfile() {
                   setErrors({ ...errors, lastName: "" });
                 }
               }}
-              className={`w-full px-4 py-2 rounded-lg border ${
+              className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
                 errors.lastName ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="نام خانوادگی"
@@ -279,7 +279,7 @@ export default function EditProfile() {
                 setErrors({ ...errors, email: "" });
               }
             }}
-            className={`w-full px-4 py-2 rounded-lg border ${
+            className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
               errors.email ? "border-red-500" : "border-gray-300"
             } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
             placeholder="example@gmail.com"

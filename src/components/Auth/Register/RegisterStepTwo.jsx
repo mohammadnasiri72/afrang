@@ -204,7 +204,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                       setErrors((prev) => ({ ...prev, name: "" }));
                     }}
                     value={name}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                     type="text"
                     name=""
                     id=""
@@ -231,7 +231,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                       setErrors((prev) => ({ ...prev, family: "" }));
                     }}
                     value={family}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                     type="text"
                     name=""
                     id=""
@@ -261,7 +261,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                       setErrors((prev) => ({ ...prev, password: "" }));
                     }}
                     value={password}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                     type="password"
                     name=""
                     id=""
@@ -288,7 +288,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                       setErrors((prev) => ({ ...prev, password2: "" }));
                     }}
                     value={password2}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                     type="password"
                     name=""
                     id=""
@@ -318,7 +318,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                     setErrors((prev) => ({ ...prev, email: "" }));
                   }}
                   value={email}
-                  className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                  className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                   type="text"
                   name=""
                   id=""

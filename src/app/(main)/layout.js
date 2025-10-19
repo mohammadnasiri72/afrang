@@ -3,6 +3,7 @@ import FooterSSR from "@/components/FooterSSR";
 import HeaderNavbarWrapperSSR from "@/components/HeaderNavbarWrapperSSR";
 import ServerError from "@/components/ServerError";
 import SocialNetworks from "@/components/SocialNetworks";
+import SubFooter from "@/components/SubFooter";
 import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
 import { getSettings } from "@/services/settings/settingsService";
@@ -273,11 +274,12 @@ export default async function layoutMain({ children }) {
     );
   };
 
- 
-
   // اگر settings دریافت نشد یا خطا داشت، ServerError نمایش داده شود
-  if (!settings || settings.type === "error") {
+  if (!settings || (settings.type === "error" && settings.isHard404)) {
     return <ServerError />;
+  }
+  if (!settings || (settings.type === "error" && !settings.isHard404)) {
+    return notFound();
   }
 
   return (
@@ -298,6 +300,7 @@ export default async function layoutMain({ children }) {
       <Suspense fallback={<FooterSkeleton />}>
         <FooterSSR settings={settings} />
       </Suspense>
+      <SubFooter />
     </div>
   );
 }

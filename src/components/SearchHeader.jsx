@@ -115,7 +115,7 @@ const SearchHeader = () => {
       <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 w-full">
         <IoSearchSharp className="text-2xl cursor-pointer" />
         <input
-          className="bg-transparent border-none outline-none p-2 w-full"
+          className="bg-transparent border-none outline-none p-2 w-full !text-[16px]"
           type="text"
           placeholder="جستجو..."
           value={searchTerm}

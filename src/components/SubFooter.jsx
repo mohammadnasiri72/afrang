@@ -1,3 +1,5 @@
+"use client";
+
 import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import Link from "next/link";
 import { useDispatch } from "react-redux";

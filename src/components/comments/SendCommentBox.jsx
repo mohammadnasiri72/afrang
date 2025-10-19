@@ -197,7 +197,7 @@ const SendCommentBox = forwardRef(({ itemId, parentId = -1, type }, ref) => {
               <div className="flex flex-wrap">
                 <div className="sm:w-1/2 w-full sm:pl-3">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg !text-[16px] ${
                       errors.name
                         ? "border-2 border-red-500 placeholder-red-500"
                         : ""
@@ -216,7 +216,7 @@ const SendCommentBox = forwardRef(({ itemId, parentId = -1, type }, ref) => {
                 </div>
                 <div className="sm:w-1/2 w-full sm:pr-3 sm:mt-0 mt-5">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-14 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg !text-[16px] ${
                       errors.email
                         ? "border-2 border-red-500 placeholder-red-500"
                         : ""

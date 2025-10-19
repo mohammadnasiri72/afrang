@@ -182,7 +182,7 @@ function LoginStatic({ setStateLogin, from }) {
                       setErrors((prev) => ({ ...prev, username: "" }));
                     }}
                     value={username}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none "
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                     type="text"
                     name=""
                     id=""
@@ -209,7 +209,7 @@ function LoginStatic({ setStateLogin, from }) {
                       setErrors((prev) => ({ ...prev, password: "" }));
                     }}
                     value={password}
-                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                    className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                     type="password"
                     name=""
                     id=""

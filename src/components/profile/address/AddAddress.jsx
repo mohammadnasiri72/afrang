@@ -159,7 +159,7 @@ const CustomSearch = ({ onLocationSelect }) => {
           value={searchValue}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder="جستجوی آدرس..."
-          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent text-right"
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent text-right !text-[16px]"
           dir="rtl"
         />
         {isLoading && (
@@ -648,7 +648,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
                 setFullName(e.target.value);
                 setErrors((prev) => ({ ...prev, fullName: "" }));
               }}
-              className={`w-full px-4 py-2 rounded-lg border ${
+              className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
                 errors.fullName ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="نام و نام خانوادگی"
@@ -736,7 +736,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
                 setMobile(value);
                 setErrors((prev) => ({ ...prev, mobile: "" }));
               }}
-              className={`w-full px-4 py-2 rounded-lg border ${
+              className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
                 errors.mobile ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="09xxxxxxxxx"
@@ -759,7 +759,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
                 setNationalCode(value);
                 setErrors((prev) => ({ ...prev, nationalCode: "" }));
               }}
-              className={`w-full px-4 py-2 rounded-lg border ${
+              className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
                 errors.nationalCode ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="کد ملی 10 رقمی"
@@ -793,7 +793,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
                   setErrors((prev) => ({ ...prev, postalCode: "" }));
                 }
               }}
-              className={`w-full px-4 py-2 rounded-lg border ${
+              className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${
                 errors.postalCode ? "border-red-500" : "border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
               placeholder="کد پستی 10 رقمی"

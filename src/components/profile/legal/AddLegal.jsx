@@ -247,7 +247,7 @@ function AddLegal({
                     organizationNameLength: "",
                   }));
                 }}
-                className="w-full bg-transparent text-right outline-none text-sm"
+                className="w-full bg-transparent text-right outline-none text-sm !text-[16px]"
                 placeholder="نام سازمان"
               />
             </div>
@@ -285,7 +285,7 @@ function AddLegal({
                     setErrors((prev) => ({ ...prev, economicCodeLength: "" }));
                   }
                 }}
-                className="w-full bg-transparent text-right outline-none text-sm"
+                className="w-full bg-transparent text-right outline-none text-sm !text-[16px]"
                 placeholder="کد اقتصادی"
               />
             </div>
@@ -320,7 +320,7 @@ function AddLegal({
                     setErrors((prev) => ({ ...prev, nationalIdLength: "" }));
                   }
                 }}
-                className="w-full bg-transparent text-right outline-none text-sm"
+                className="w-full bg-transparent text-right outline-none text-sm !text-[16px]"
                 placeholder="شناسه ملی"
               />
             </div>
@@ -421,7 +421,7 @@ function AddLegal({
                   }));
                   setErrors((prev) => ({ ...prev, registrationId: "" }));
                 }}
-                className="w-full bg-transparent text-right outline-none text-sm"
+                className="w-full bg-transparent text-right outline-none text-sm !text-[16px]"
                 placeholder="شماره ثبت"
               />
             </div>
@@ -452,7 +452,7 @@ function AddLegal({
                   }));
                   setErrors((prev) => ({ ...prev, landlineNumber: "" }));
                 }}
-                className="w-full bg-transparent text-right outline-none text-sm"
+                className="w-full bg-transparent text-right outline-none text-sm !text-[16px]"
                 type="tel"
                 placeholder="شماره تماس"
               />

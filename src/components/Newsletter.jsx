@@ -52,7 +52,7 @@ function Newsletter() {
           <MdMailOutline className="text-xl text-[#666] " />
         </div>
         <input
-          className="w-full outline-none"
+          className="w-full outline-none !text-[16px]"
           type="email"
           value={email}
           onChange={(e) => setEmail(toEnglishNumber(e.target.value))}

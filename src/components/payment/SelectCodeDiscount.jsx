@@ -183,7 +183,7 @@ export default function SelectCodeDiscount() {
                 value={code}
                 onChange={handleInputChange}
                 placeholder="کد تخفیف خود را وارد کنید"
-                className={`w-full p-2 border rounded-lg focus:outline-none transition-colors duration-200 ${
+                className={`w-full p-2 border rounded-lg focus:outline-none transition-colors duration-200 !text-[16px] ${
                   inputError
                     ? "border-red-500 focus:border-red-500 bg-red-50"
                     : "border-gray-200 focus:border-[#d1182b] hover:border-[#d1182b]"

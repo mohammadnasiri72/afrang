@@ -412,7 +412,7 @@ function BodyContact() {
 
                 <div className="w-full mt-2">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg !text-[16px] ${
                       errors.nameFamily ? "border border-red-500" : ""
                     }`}
                     type="text"
@@ -454,7 +454,7 @@ function BodyContact() {
 
                 <div className="w-full mt-2">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg !text-[16px] ${
                       errors.tel ? "border border-red-500" : ""
                     }`}
                     type="text"
@@ -473,7 +473,7 @@ function BodyContact() {
 
                 <div className="w-full mt-2">
                   <input
-                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg ${
+                    className={`w-full outline-none bg-[#f1f2f2] px-5 h-12 rounded-lg focus:bg-white duration-300 focus:shadow-[0px_0px_10px_1px_#0005] focus:text-lg !text-[16px] ${
                       errors.email ? "border border-red-500" : ""
                     }`}
                     type="text"

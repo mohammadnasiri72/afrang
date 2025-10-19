@@ -80,7 +80,7 @@ function CommentSection({ id, type, comments }) {
                   <div className="flex items-center gap-2 mt-3 ml-8">
                     <input
                       type="text"
-                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#d1182b]"
+                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#d1182b] !text-[16px]"
                       placeholder="پاسخ خود را بنویسید..."
                       value={replyText}
                       onChange={(e) => setReplyText(e.target.value)}

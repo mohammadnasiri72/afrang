@@ -244,7 +244,7 @@ export default function PayOffline({ orderData }) {
                                                 name="paymentGateway"
                                                 checked={selectedGateway === gateway.id}
                                                 onChange={() => setSelectedGateway(gateway.id)}
-                                                className="w-4 h-4 text-[#d1182b] border-gray-300 focus:ring-[#d1182b]"
+                                                className="w-4 h-4 !text-[16px] text-[#d1182b] border-gray-300 focus:ring-[#d1182b]"
                                             />
                                             <h3 className="font-bold text-gray-800 flex items-center gap-2">
                                                 <FaCreditCard className="text-[#d1182b]" />
@@ -412,7 +412,7 @@ export default function PayOffline({ orderData }) {
                                     setPaymentData(prev => ({ ...prev, referenceNumber: e.target.value }));
                                     if (errors.referenceNumber) setErrors(prev => ({ ...prev, referenceNumber: '' }));
                                 }}
-                                className="mr-2 w-full bg-transparent text-right outline-none text-sm"
+                                className="mr-2 !text-[16px] w-full bg-transparent text-right outline-none text-sm"
                                 placeholder="شماره ارجاع/پیگیری/سند"
                             />
                         </div>
@@ -441,7 +441,7 @@ export default function PayOffline({ orderData }) {
                                         if (errors.amount) setErrors(prev => ({ ...prev, amount: '' }));
                                     }
                                 }}
-                                className="mr-2 w-full bg-transparent text-right outline-none text-sm"
+                                className="mr-2 w-full !text-[16px] bg-transparent text-right outline-none text-sm"
                                 placeholder="مبلغ واریزی"
                             />
                         </div>

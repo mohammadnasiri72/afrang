@@ -263,7 +263,7 @@ function SelectProductMokamel({ product }) {
         <div className="text-2xl font-bold py-3 text-[#d1182b]">کالای مکمل</div>
         <div className="" ref={searchRef} style={{ position: "relative" }}>
           <input
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#d1182b]"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#d1182b] !text-[16px]"
             type="text"
             placeholder="جستجو و انتخاب کالای مکمل..."
             value={searchTerm}

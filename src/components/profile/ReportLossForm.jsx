@@ -90,7 +90,7 @@ const ReportLossForm = ({ categories }) => {
           label="نام محصول"
           rules={[{ required: true, message: "لطفا نام محصول را وارد کنید" }]}
         >
-          <Input size="large" placeholder="نام محصول" />
+          <Input className="!text-[16px]" size="large" placeholder="نام محصول" />
         </Form.Item>
 
         <Form.Item
@@ -98,7 +98,7 @@ const ReportLossForm = ({ categories }) => {
           label="سریال محصول"
           rules={[{ required: true, message: "لطفا سریال محصول را وارد کنید" }]}
         >
-          <Input size="large" placeholder="سریال محصول" />
+          <Input className="!text-[16px]" size="large" placeholder="سریال محصول" />
         </Form.Item>
 
         <Form.Item>

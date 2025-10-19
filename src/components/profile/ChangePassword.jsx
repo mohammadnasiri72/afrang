@@ -137,7 +137,7 @@ export default function ChangeUserPassword() {
                                         setErrors({ ...errors, currentPassword: '' });
                                     }
                                 }}
-                                className={`w-full px-4 py-2 rounded-lg border ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'
+                                className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'
                                     } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                                 placeholder="رمز عبور فعلی خود را وارد کنید"
                                 dir="rtl"
@@ -171,7 +171,7 @@ export default function ChangeUserPassword() {
                                         setErrors({ ...errors, newPassword: '' });
                                     }
                                 }}
-                                className={`w-full px-4 py-2 rounded-lg border ${errors.newPassword ? 'border-red-500' : 'border-gray-300'
+                                className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${errors.newPassword ? 'border-red-500' : 'border-gray-300'
                                     } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                                 placeholder="رمز عبور جدید را وارد کنید"
                                 dir="rtl"
@@ -205,7 +205,7 @@ export default function ChangeUserPassword() {
                                         setErrors({ ...errors, confirmPassword: '' });
                                     }
                                 }}
-                                className={`w-full px-4 py-2 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                                className={`w-full px-4 py-2 rounded-lg border !text-[16px] ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
                                     } focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent`}
                                 placeholder="رمز عبور جدید را مجدداً وارد کنید"
                                 dir="rtl"

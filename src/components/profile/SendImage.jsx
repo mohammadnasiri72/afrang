@@ -620,7 +620,7 @@ const SendImage = () => {
               { required: true, message: "لطفا نوع دوربین را وارد کنید" },
             ]}
           >
-            <Input placeholder="نوع دوربین را وارد کنید" />
+            <Input className="!text-[16px]" placeholder="نوع دوربین را وارد کنید" />
           </Form.Item>
 
           <Form.Item
@@ -628,7 +628,7 @@ const SendImage = () => {
             label="نوع لنز"
             rules={[{ required: true, message: "لطفا نوع لنز را وارد کنید" }]}
           >
-            <Input placeholder="نوع لنز را وارد کنید" />
+            <Input className="!text-[16px]" placeholder="نوع لنز را وارد کنید" />
           </Form.Item>
 
           <Form.Item
@@ -641,7 +641,7 @@ const SendImage = () => {
               },
             ]}
           >
-            <Input placeholder="تاریخ و زمان عکاسی را وارد کنید" />
+            <Input className="!text-[16px]" placeholder="تاریخ و زمان عکاسی را وارد کنید" />
           </Form.Item>
 
           <Form.Item

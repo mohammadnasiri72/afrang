@@ -97,7 +97,7 @@ export default function PriceListClient({ pricing }) {
                                         placeholder="جستجو در محصولات..."
                                         value={searchTerms[categoryId] || ''}
                                         onChange={(e) => handleSearch(categoryId, e.target.value)}
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#18d1be] focus:border-transparent text-right"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#18d1be] focus:border-transparent text-right !text-[16px]"
                                     />
                                     <svg 
                                         className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"

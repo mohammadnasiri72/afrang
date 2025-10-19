@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const AddProductToCompareModal = ({ visible, onClose , catIds}) => {
+const AddProductToCompareModal = ({ visible, onClose, catIds }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ const AddProductToCompareModal = ({ visible, onClose , catIds}) => {
     setLoading(true);
     timeoutRef.current = setTimeout(async () => {
       try {
-        const data = await getProductTerm(value , catIds);
+        const data = await getProductTerm(value, catIds);
         setResults(data || []);
       } catch (error) {
         console.error("Search error:", error);
@@ -73,6 +73,12 @@ const AddProductToCompareModal = ({ visible, onClose , catIds}) => {
     >
       <div className="py-4">
         <Input.Search
+          size="large"
+          styles={{
+            input: {
+              fontSize: "16px",
+            },
+          }}
           placeholder="جستجوی محصول..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}

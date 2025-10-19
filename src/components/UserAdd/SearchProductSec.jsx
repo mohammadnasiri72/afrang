@@ -30,7 +30,6 @@ function SearchProductSec() {
   const boxResultsSearch = useRef(null);
   const timeoutRef = useRef(null);
 
-
   const searchParams = useSearchParams();
   const orderBy = searchParams.get("orderby") || "1";
   const pageIndex = searchParams.get("page") || "1";
@@ -39,7 +38,7 @@ function SearchProductSec() {
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
 
-const pathname = usePathname();
+  const pathname = usePathname();
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
     return new Intl.NumberFormat("fa-IR").format(price);
@@ -62,12 +61,11 @@ const pathname = usePathname();
   const fetchProductsSec = async (data) => {
     setLoading(true);
     try {
-      const productsData =
-        pathname.includes("useds")
-          ? await getUserAdSell(data)
-          : pathname.includes("buyers")
-          ? await getUserAdBuy(data)
-          : [];
+      const productsData = pathname.includes("useds")
+        ? await getUserAdSell(data)
+        : pathname.includes("buyers")
+        ? await getUserAdBuy(data)
+        : [];
       if (productsData?.type === "error") {
         Toast.fire({
           icon: "error",
@@ -225,7 +223,7 @@ const pathname = usePathname();
         <Input
           size="large"
           onFocus={() => searchTerm.length >= 2 && setShow(true)}
-          className="w-full"
+          className="w-full !text-[16px]"
           value={searchTerm}
           onChange={handleSearch}
           prefix={<IoSearch />}

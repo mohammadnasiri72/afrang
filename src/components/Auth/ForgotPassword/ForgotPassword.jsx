@@ -172,7 +172,7 @@ const ForgotPassword = () => {
                           setErrors((prev) => ({ ...prev, username: "" }));
                         }}
                         value={username}
-                        className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none"
+                        className="mr-[10px] p-[4px] w-full bg-transparent text-right outline-none !text-[16px]"
                         type="text"
                         placeholder="شماره تلفن یا ایمیل خود را وارد کنید"
                       />

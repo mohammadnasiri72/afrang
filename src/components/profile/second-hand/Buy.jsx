@@ -262,7 +262,7 @@ function Buy({ productsSec, productEdit, id }) {
                     }
                   }}
                   placeholder="نام محصول را وارد کنید"
-                  className={`w-full${
+                  className={`w-full !text-[16px] ${
                     errors.productName ? " border-red-important" : ""
                   }`}
                 />
@@ -282,7 +282,7 @@ function Buy({ productsSec, productEdit, id }) {
               {/* نام کاربر */}
               <div className="mb-6">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2${
+                  className={`block text-gray-700 text-sm font-bold mb-2 !text-[16px] ${
                     errors.nickname ? " text-red-important" : ""
                   }`}
                 >
@@ -297,7 +297,7 @@ function Buy({ productsSec, productEdit, id }) {
                     }
                   }}
                   placeholder="نام دلخواه جهت نمایش عمومی"
-                  className={`w-full${
+                  className={`w-full !text-[16px] ${
                     errors.nickname ? " border-red-important" : ""
                   }`}
                 />

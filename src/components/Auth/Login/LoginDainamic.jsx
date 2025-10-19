@@ -142,7 +142,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                       setErrorMobile("");
                     }}
                     value={mobile}
-                    className="mr-[10px] py-[4px] w-full bg-transparent text-right outline-none text-lg"
+                    className="mr-[10px] py-[4px] w-full bg-transparent text-right outline-none text-lg !text-[16px]"
                     type="tel"
                     name=""
                     id=""

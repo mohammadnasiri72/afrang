@@ -49,7 +49,7 @@ function SearchSubfooter() {
           </svg>
         </span>
       </Link>
-      <div
+      {/* <div
         style={{ zIndex: "80" }}
         className={`bg-[#d1182b] w-full fixed duration-300 py-3 ${
           open
@@ -74,7 +74,7 @@ function SearchSubfooter() {
           style={{ zIndex: "70" }}
           className="fixed top-0 bottom-0 left-0 right-0 bg-[#0005]"
         ></div>
-      )}
+      )} */}
     </>
   );
 }

@@ -482,7 +482,7 @@ function Sell({ productsSec, productEdit, id }) {
                     }
                   }}
                   placeholder="نام محصول را وارد کنید"
-                  className={`w-full${
+                  className={`w-full !text-[16px] ${
                     errors.productName ? " border-red-important" : ""
                   }`}
                 />
@@ -496,7 +496,7 @@ function Sell({ productsSec, productEdit, id }) {
                   value={productType}
                   onChange={(e) => setProductType(e.target.value)}
                   placeholder="نوع محصول را وارد کنید"
-                  className="w-full"
+                  className="w-full !text-[16px]"
                 />
               </div>
               {/* قیمت پیشنهادی */}
@@ -521,7 +521,7 @@ function Sell({ productsSec, productEdit, id }) {
                     }
                   }}
                   placeholder="قیمت پیشنهادی را وارد کنید"
-                  className="w-full"
+                  className="w-full !text-[16px]"
                 />
               </div>
               {/* شماره سریال محصول */}
@@ -542,7 +542,7 @@ function Sell({ productsSec, productEdit, id }) {
                     }
                   }}
                   placeholder="سریال محصول را وارد کنید"
-                  className={`w-full${
+                  className={`w-full !text-[16px] ${
                     errors.serialNumber ? " border-red-important" : ""
                   }`}
                 />
@@ -556,7 +556,7 @@ function Sell({ productsSec, productEdit, id }) {
                   value={shutterCount}
                   onChange={(e) => setShutterCount(e.target.value)}
                   placeholder="تعداد شات یا کارکرد شاتر را وارد کنید"
-                  className="w-full"
+                  className="w-full !text-[16px]"
                 />
               </div>
               {/* مدت زمان استفاده */}
@@ -568,7 +568,7 @@ function Sell({ productsSec, productEdit, id }) {
                   value={usageDuration}
                   onChange={(e) => setUsageDuration(e.target.value)}
                   placeholder="مدت زمان استفاده را وارد کنید"
-                  className="w-full"
+                  className="w-full !text-[16px]"
                 />
               </div>
               {/* وضعیت ظاهری */}
@@ -699,7 +699,7 @@ function Sell({ productsSec, productEdit, id }) {
                           }
                         }}
                         placeholder="تعداد ماه‌های باقی‌مانده گارانتی"
-                        className="w-40"
+                        className="w-40 !text-[16px]"
                       />
                     </div>
                   )}
@@ -740,7 +740,7 @@ function Sell({ productsSec, productEdit, id }) {
                           }
                         }}
                         placeholder="تعداد ماه‌های باقی‌مانده بیمه"
-                        className="w-40"
+                        className="w-40 !text-[16px]"
                       />
                     </div>
                   )}

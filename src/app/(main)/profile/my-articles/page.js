@@ -789,7 +789,7 @@ export default function MyArticles() {
               { required: true, message: "لطفا عنوان مقاله را وارد کنید" },
             ]}
           >
-            <Input placeholder="عنوان مقاله را وارد کنید" />
+            <Input className="!text-[16px]" placeholder="عنوان مقاله را وارد کنید" />
           </Form.Item>
 
           <Form.Item
@@ -813,7 +813,7 @@ export default function MyArticles() {
               { required: true, message: "لطفا خلاصه مقاله را وارد کنید" },
             ]}
           >
-            <TextArea rows={3} placeholder="خلاصه مقاله را وارد کنید" />
+            <TextArea className="!text-[16px]" rows={3} placeholder="خلاصه مقاله را وارد کنید" />
           </Form.Item>
 
           <Form.Item
@@ -821,11 +821,11 @@ export default function MyArticles() {
             label="متن مقاله"
             rules={[{ required: true, message: "لطفا متن مقاله را وارد کنید" }]}
           >
-            <TextArea rows={6} placeholder="متن مقاله را وارد کنید" />
+            <TextArea className="!text-[16px]" rows={6} placeholder="متن مقاله را وارد کنید" />
           </Form.Item>
 
           <Form.Item name="source" label="منبع">
-            <Input placeholder="منبع مقاله را وارد کنید (اختیاری)" />
+            <Input className="!text-[16px]" placeholder="منبع مقاله را وارد کنید (اختیاری)" />
           </Form.Item>
 
           <Form.Item
