@@ -275,12 +275,10 @@ export default async function layoutMain({ children }) {
   };
 
   // اگر settings دریافت نشد یا خطا داشت، ServerError نمایش داده شود
-  if (!settings || (settings.type === "error" && settings.isHard404)) {
+  if (!settings || (settings.type === "error")) {
     return <ServerError />;
   }
-  if (!settings || (settings.type === "error" && !settings.isHard404)) {
-    return notFound();
-  }
+ 
 
   return (
     <div>
