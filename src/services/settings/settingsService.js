@@ -2,44 +2,57 @@ import { mainDomain } from "@/utils/mainDomain";
 
 export const getSettings = async () => {
   try {
-    let res = ''
-    if (typeof window !== 'undefined'){
-       res = await fetch(`${mainDomain}/api/Property/value/setting`, {
-        // revalidate هر 60 ثانیه
-        next: { revalidate: 60 },
-        
-         cache: 'no-store', 
-      });
-
-    } else {
-      res = await fetch(`${mainDomain}/api/Property/value/setting`, {
-        // revalidate هر 60 ثانیه
-        next: { revalidate: 60 },
-        
-      });
-    }
+    const res = await fetch(`${mainDomain}/api/Property/value/setting`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+      signal: AbortSignal.timeout(3000),
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch settings");
+      // اگر response status 503 یا خطای سرور باشد
+      if (res.status >= 500) {
+        return {
+          type: "error",
+          message: "خطای سرور - سرور در دسترس نیست",
+          status: res.status,
+          isHard404: false
+        };
+      }
+      
+      // برای خطاهای 4xx
+      return {
+        type: "error", 
+        message: "خطا در دریافت تنظیمات",
+        status: res.status,
+        isHard404: res.status === 404
+      };
     }
 
     return res.json();
   } catch (err) {
-    const responseData = err.response?.data;
-    const isHard404 =
-      typeof responseData === "string" &&
-      (responseData.includes("<!DOCTYPE") ||
-        responseData.includes("<html") ||
-        responseData.includes("Not Found") ||
-        responseData.includes("HTTP Error") ||
-        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
-   
-
+    // برای خطاهای شبکه (قطع سرور، timeout و غیره)
+    console.error('Error fetching settings:', err);
+    
+    // بررسی نوع خطا
+    if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+      return {
+        type: "error",
+        message: "خطای شبکه - سرور در دسترس نیست",
+        status: 0,
+        isHard404: false
+      };
+    }
+    
     return {
       type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
-      status: err.response?.status,
-      isHard404
+      message: "خطای شبکه - سرور در دسترس نیست",
+      status: 0,
+      isHard404: false
     };
   }
 };

@@ -11,7 +11,7 @@ export default function ServerError() {
             {/* لوگو */}
             <div className="w-24 h-16 flex items-center justify-center">
               <img
-                src="/images/logo.png"
+                src="/public/images/logo.png"
                 alt="لوگو"
                 className="w-full h-full object-contain opacity-80"
               />
@@ -19,7 +19,7 @@ export default function ServerError() {
             {/* تصویر خطای سرور */}
             <div className="w-32 h-32 mt-6 flex items-center justify-center">
               <img
-                src="/images/server-error.png"
+                src="/public/images/server-error.png"
                 alt="خطای سرور"
                 className="w-full h-full object-contain drop-shadow-md"
               />

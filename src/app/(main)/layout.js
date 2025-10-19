@@ -10,6 +10,11 @@ import { mainUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+// Force dynamic rendering for this segment to avoid serving cached/static output
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "default-no-store";
+
 export const metadata = {
   title: {
     default: "خانه عکاسان افرنگ",
@@ -270,11 +275,8 @@ export default async function layoutMain({ children }) {
 
  
 
- if (!settings || (settings.type === "error" && settings?.isHard404)) {
-    return <ServerError />;
-  }
-
-  if (!settings || (settings.type === "error" && !settings?.isHard404)) {
+  // اگر settings دریافت نشد یا خطا داشت، ServerError نمایش داده شود
+  if (!settings || settings.type === "error") {
     return <ServerError />;
   }
 
