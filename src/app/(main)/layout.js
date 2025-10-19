@@ -268,16 +268,19 @@ export default async function layoutMain({ children }) {
     );
   };
 
-  if (!settings || (settings.type === "error" && settings?.isHard404)) {
-    return notFound();
+ 
+
+ if (!settings || (settings.type === "error" && settings?.isHard404)) {
+    return <ServerError />;
   }
+
   if (!settings || (settings.type === "error" && !settings?.isHard404)) {
     return <ServerError />;
   }
 
   return (
     <div>
-      <SubHeaderSSR />
+      {settings.length > 0 && <SubHeaderSSR />}
       <Suspense fallback={<HeaderNavbarSkeleton />}>
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>

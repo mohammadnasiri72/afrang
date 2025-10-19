@@ -2,10 +2,22 @@ import { mainDomain } from "@/utils/mainDomain";
 
 export const getSettings = async () => {
   try {
-    const res = await fetch(`${mainDomain}/api/Property/value/setting`, {
-      // revalidate هر 60 ثانیه
-      next: { revalidate: 60 },
-    });
+    let res = ''
+    if (typeof window !== 'undefined'){
+       res = await fetch(`${mainDomain}/api/Property/value/setting`, {
+        // revalidate هر 60 ثانیه
+        next: { revalidate: 60 },
+        
+         cache: 'no-store', 
+      });
+
+    } else {
+      res = await fetch(`${mainDomain}/api/Property/value/setting`, {
+        // revalidate هر 60 ثانیه
+        next: { revalidate: 60 },
+        
+      });
+    }
 
     if (!res.ok) {
       throw new Error("Failed to fetch settings");
@@ -13,8 +25,6 @@ export const getSettings = async () => {
 
     return res.json();
   } catch (err) {
-    // console.error("Error fetching settings:", error);
-    // return null;
     const responseData = err.response?.data;
     const isHard404 =
       typeof responseData === "string" &&

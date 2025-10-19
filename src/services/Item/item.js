@@ -124,6 +124,5 @@ export const getListItemBanner = async () => {
       type: "error",
       message: err.response?.data ? err.response?.data : "خطای شبکه",
     };
-    // throw new Error("api fetching error!!!");
   }
 };

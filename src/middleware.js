@@ -109,13 +109,10 @@ export async function middleware(request) {
         }
         if (
           productCategory?.type === "error" &&
-          productCategory?.status === 404 &&
           productCategory?.isHard404
         ) {
-          return NextResponse.json(
-            { error: "Service Unavailable", message: "Hard 404 detected" },
-            { status: 503 }
-          );
+         
+          return NextResponse.rewrite(new URL(request.url) , { status: 503 });
         }
 
         if (productCategory?.url && productCategory.url !== decodedPathname) {
@@ -165,13 +162,10 @@ export async function middleware(request) {
           return NextResponse.rewrite(new URL("/404", request.url));
         } else if (
           productData?.type === "error" &&
-          productData?.status === 404 &&
           productData?.isHard404
         ) {
-          return NextResponse.json(
-            { error: "Service Unavailable", message: "Hard 404 detected" },
-            { status: 503 }
-          );
+         
+           return NextResponse.rewrite(new URL(request.url) , { status:503 });
         }
 
         if (
@@ -224,13 +218,10 @@ export async function middleware(request) {
           return NextResponse.rewrite(new URL("/404", request.url));
         } else if (
           productCategory?.type === "error" &&
-          productCategory?.status === 404 &&
           productCategory?.isHard404
         ) {
-          return NextResponse.json(
-            { error: "Service Unavailable", message: "Hard 404 detected" },
-            { status: 503 }
-          );
+         
+           return NextResponse.rewrite(new URL(request.url) , { status: 503 });
         }
 
         if (productCategory?.url && productCategory.url !== decodedPathname) {
@@ -273,11 +264,8 @@ export async function middleware(request) {
     if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
       return NextResponse.rewrite(new URL("/404", request.url));
     }
-    if (blog?.type === "error" && blog?.status === 404 && blog?.isHard404) {
-      return NextResponse.json(
-        { error: "Service Unavailable", message: "Hard 404 detected" },
-        { status: 503 }
-      );
+    if (blog?.type === "error"  && blog?.isHard404) {
+      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
     }
   }
   if (pathname.startsWith("/dic/") || pathname.startsWith("/Dic/")) {
@@ -285,11 +273,8 @@ export async function middleware(request) {
     const dic = await getItemByUrl(slug);
     if (dic?.type === "error" && dic?.status === 404 && !dic?.isHard404) {
       return NextResponse.rewrite(new URL("/404", request.url));
-    } else if (dic?.type === "error" && dic?.status === 404 && dic?.isHard404) {
-      return NextResponse.json(
-        { error: "Service Unavailable", message: "Hard 404 detected" },
-        { status: 503 }
-      );
+    } else if (dic?.type === "error" && dic?.isHard404) {
+      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
     }
   }
   if (pathname === "/usedproduct" || pathname === "/Usedproduct") {
@@ -321,13 +306,9 @@ export async function middleware(request) {
       return NextResponse.rewrite(new URL("/404", request.url));
     } else if (
       pricing?.type === "error" &&
-      pricing?.status === 404 &&
       pricing?.isHard404
     ) {
-      return NextResponse.json(
-        { error: "Service Unavailable", message: "Hard 404 detected" },
-        { status: 503 }
-      );
+      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
     }
   }
 
@@ -340,11 +321,8 @@ export async function middleware(request) {
       url.pathname = "/404";
       url.searchParams.set("from", slug);
       return NextResponse.rewrite(url);
-    } else if (data?.type === "error" && data?.status === 404 && data?.isHard404) {
-      return NextResponse.json(
-        { error: "Service Unavailable", message: "Hard 404 detected" },
-        { status: 503 }
-      );
+    } else if (data?.type === "error" && data?.isHard404) {
+      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
     }
   }
 

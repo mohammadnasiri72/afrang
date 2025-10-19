@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-css-tags */
+import Layout from "@/components/Layout";
+import ServerError from "@/components/ServerError";
+import { getSettings } from "@/services/settings/settingsService";
 import "@ant-design/v5-patch-for-react-19";
 import "react-circular-progressbar/dist/styles.css";
-import Layout from "@/components/Layout";
-import { getSettings } from "@/services/settings/settingsService";
 import "./globals.css";
 
 const settings = await getSettings();
+
 
 
 
