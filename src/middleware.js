@@ -34,20 +34,31 @@ export async function middleware(request) {
     pathname !== "/register" &&
     pathname !== "/contect-us" &&
     pathname !== "/payment/result" &&
+    pathname !== "/gallery" &&
+    pathname !== "/news" &&
+    pathname !== "/pricelist" &&
+    pathname !== "/products" &&
+    pathname !== "/product" &&
+    pathname !== "/profile" &&
+    pathname !== "/buyers" &&
+    pathname !== "/compare" &&
+    pathname !== "/dic" &&
+    pathname !== "/usedproduct" &&
+    pathname !== "/useds" &&
+    !pathname.startsWith("/gallery/") &&
     !pathname.includes(".") && // فایل‌ها مثل .css, .js
     !pathname.startsWith("/_next") &&
     !pathname.startsWith("/api") &&
-    !pathname.startsWith("/products") && // مسیرهای شناخته شده
-    !pathname.startsWith("/product") &&
-    !pathname.startsWith("/profile") &&
-    !pathname.startsWith("/buyers") &&
-    !pathname.startsWith("/compare") &&
-    !pathname.startsWith("/dic") &&
-    !pathname.startsWith("/gallery") &&
-    !pathname.startsWith("/news") &&
-    !pathname.startsWith("/pricelist") &&
-    !pathname.startsWith("/usedproduct") &&
-    !pathname.startsWith("/useds") &&
+    !pathname.startsWith("/products/") && // مسیرهای شناخته شده
+    !pathname.startsWith("/product/") &&
+    !pathname.startsWith("/profile/") &&
+    !pathname.startsWith("/buyers/") &&
+    !pathname.startsWith("/compare/") &&
+    !pathname.startsWith("/dic/") &&
+    !pathname.startsWith("/news/") &&
+    !pathname.startsWith("/pricelist/") &&
+    !pathname.startsWith("/usedproduct/") &&
+    !pathname.startsWith("/useds/") &&
     !pathname.match(/\.(jpg|jpeg|png|gif|webp|svg|ico|css|js)$/i); // فایل‌های استاتیک
 
   try {
@@ -89,8 +100,22 @@ export async function middleware(request) {
         const productCategory = await getProductCategory(productId);
         const decodedPathname = decodeURIComponent(pathname);
 
-        if (productCategory?.type === "error") {
+        if (
+          productCategory?.type === "error" &&
+          productCategory?.status === 404 &&
+          !productCategory?.isHard404
+        ) {
           return NextResponse.rewrite(new URL("/404", request.url));
+        }
+        if (
+          productCategory?.type === "error" &&
+          productCategory?.status === 404 &&
+          productCategory?.isHard404
+        ) {
+          return NextResponse.json(
+            { error: "Service Unavailable", message: "Hard 404 detected" },
+            { status: 503 }
+          );
         }
 
         if (productCategory?.url && productCategory.url !== decodedPathname) {
@@ -132,8 +157,21 @@ export async function middleware(request) {
         const productData = await getProductId(productId);
         const decodedPathname = decodeURIComponent(pathname);
 
-        if (productData?.type === "error") {
+        if (
+          productData?.type === "error" &&
+          productData?.status === 404 &&
+          !productData?.isHard404
+        ) {
           return NextResponse.rewrite(new URL("/404", request.url));
+        } else if (
+          productData?.type === "error" &&
+          productData?.status === 404 &&
+          productData?.isHard404
+        ) {
+          return NextResponse.json(
+            { error: "Service Unavailable", message: "Hard 404 detected" },
+            { status: 503 }
+          );
         }
 
         if (
@@ -178,8 +216,21 @@ export async function middleware(request) {
         const productCategory = await getProductSecId(productId);
         const decodedPathname = decodeURIComponent(pathname);
 
-        if (productCategory?.type === "error") {
+        if (
+          productCategory?.type === "error" &&
+          productCategory?.status === 404 &&
+          !productCategory?.isHard404
+        ) {
           return NextResponse.rewrite(new URL("/404", request.url));
+        } else if (
+          productCategory?.type === "error" &&
+          productCategory?.status === 404 &&
+          productCategory?.isHard404
+        ) {
+          return NextResponse.json(
+            { error: "Service Unavailable", message: "Hard 404 detected" },
+            { status: 503 }
+          );
         }
 
         if (productCategory?.url && productCategory.url !== decodedPathname) {
@@ -219,19 +270,32 @@ export async function middleware(request) {
   if (pathname.startsWith("/news/") || pathname.startsWith("/News/")) {
     const slug = decodeURIComponent(pathname).slice(1);
     const blog = await getItemByUrl(slug);
-    if (blog?.type === "error") {
+    if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
       return NextResponse.rewrite(new URL("/404", request.url));
+    }
+    if (blog?.type === "error" && blog?.status === 404 && blog?.isHard404) {
+      return NextResponse.json(
+        { error: "Service Unavailable", message: "Hard 404 detected" },
+        { status: 503 }
+      );
     }
   }
   if (pathname.startsWith("/dic/") || pathname.startsWith("/Dic/")) {
     const slug = decodeURIComponent(pathname).slice(1);
     const dic = await getItemByUrl(slug);
-    if (dic?.type === "error") {
+    if (dic?.type === "error" && dic?.status === 404 && !dic?.isHard404) {
       return NextResponse.rewrite(new URL("/404", request.url));
+    } else if (dic?.type === "error" && dic?.status === 404 && dic?.isHard404) {
+      return NextResponse.json(
+        { error: "Service Unavailable", message: "Hard 404 detected" },
+        { status: 503 }
+      );
     }
   }
   if (pathname === "/usedproduct" || pathname === "/Usedproduct") {
-   return NextResponse.redirect(new URL("/useds/-1", request.url), { status: 301 });
+    return NextResponse.redirect(new URL("/useds/-1", request.url), {
+      status: 301,
+    });
   }
   if (
     pathname.startsWith("/pricelist/") ||
@@ -249,8 +313,21 @@ export async function middleware(request) {
     }
 
     const pricing = await getProductPricing(id);
-    if (pricing?.type === "error" || pricing.length === 0 || !pricing) {
+    if (
+      pricing?.type === "error" &&
+      pricing?.status === 404 &&
+      !pricing?.isHard404
+    ) {
       return NextResponse.rewrite(new URL("/404", request.url));
+    } else if (
+      pricing?.type === "error" &&
+      pricing?.status === 404 &&
+      pricing?.isHard404
+    ) {
+      return NextResponse.json(
+        { error: "Service Unavailable", message: "Hard 404 detected" },
+        { status: 503 }
+      );
     }
   }
 
@@ -258,14 +335,16 @@ export async function middleware(request) {
     const slug = pathname.slice(1);
     const data = await getItemByUrl(slug);
 
-    if (data?.type === "error") {
-      // 🔥 ایجاد URL جدید برای rewrite
+    if (data?.type === "error" && data?.status === 404 && !data?.isHard404) {
       const url = new URL(request.url);
       url.pathname = "/404";
       url.searchParams.set("from", slug);
-
-      // rewrite با حفظ host و protocol
       return NextResponse.rewrite(url);
+    } else if (data?.type === "error" && data?.status === 404 && data?.isHard404) {
+      return NextResponse.json(
+        { error: "Service Unavailable", message: "Hard 404 detected" },
+        { status: 503 }
+      );
     }
   }
 

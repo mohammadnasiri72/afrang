@@ -1,5 +1,5 @@
-import axios from "axios";
 import { mainDomain } from "@/utils/mainDomain";
+import axios from "axios";
 
 export const fetchMenuItems = async () => {
   try {
@@ -9,9 +9,9 @@ export const fetchMenuItems = async () => {
         menuKey: "primary",
       },
       headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      }
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+      },
     });
 
     if (response.data && response.data.length > 0) {
@@ -63,7 +63,7 @@ export const fetchMenuItems = async () => {
     }
     return [];
   } catch (error) {
-     console.error("Error fetching menu items:", error);
+    //  console.error("Error fetching menu items:", error);
     return [];
   }
-}; 
+};

@@ -48,8 +48,23 @@ export const getProductId = async (id) => {
   try {
     const response = await axios.get(`${mainDomain}/api/Product/${id}`);
     return response.data
-  } catch (error) {
-   return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  } catch (err) {
+     const responseData = err.response?.data;
+    const isHard404 =
+      typeof responseData === "string" &&
+      (responseData.includes("<!DOCTYPE") ||
+        responseData.includes("<html") ||
+        responseData.includes("Not Found") ||
+        responseData.includes("HTTP Error") ||
+        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
+   
+
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+      status: err.response?.status,
+      isHard404
+    };
   }
 };
 
@@ -120,13 +135,27 @@ export const getProductPricing = async (categoryId) => {
       }
     });
     return response.data
-  } catch (error) {
-    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  } catch (err) {
+     const responseData = err.response?.data;
+    const isHard404 =
+      typeof responseData === "string" &&
+      (responseData.includes("<!DOCTYPE") ||
+        responseData.includes("<html") ||
+        responseData.includes("Not Found") ||
+        responseData.includes("HTTP Error") ||
+        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
+   
+
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+      status: err.response?.status,
+      isHard404
+    };
   }
 };
 
-// تابع کمکی برای ایجاد تاخیر
-// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 
 export const getProductCategory = async (categoryId) => {
   try {
@@ -134,8 +163,23 @@ export const getProductCategory = async (categoryId) => {
       cache: 'force-cache'
     });
     return response.data
-  } catch (error) {
-    return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
+  } catch (err) {    
+     const responseData = err.response?.data;
+    const isHard404 =
+      typeof responseData === "string" &&
+      (responseData.includes("<!DOCTYPE") ||
+        responseData.includes("<html") ||
+        responseData.includes("Not Found") ||
+        responseData.includes("HTTP Error") ||
+        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
+   
+
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+      status: err.response?.status,
+      isHard404
+    };
   }
 };
 

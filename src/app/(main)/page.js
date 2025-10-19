@@ -316,23 +316,20 @@ export default async function Home() {
 
   return (
     <>
-      <h1 className="sr-only">
-        {pageTitleH1}
-      </h1>
+      <h1 className="sr-only">{pageTitleH1}</h1>
       <div className="bg-[#f6f6f6] overflow-hidden">
         <Suspense fallback={<SliderHomeSkeleton />}>
           <SliderHomeSSR />
         </Suspense>
-        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden !mb-10">
-          <Suspense fallback={<EidDiscountSkeleton />}>
-            <EidDiscountSSR />
-          </Suspense>
-        </div>
+
+        <Suspense fallback={<EidDiscountSkeleton />}>
+          <EidDiscountSSR />
+        </Suspense>
+
         <Suspense fallback={<CameraAccessoriesSkeleton />}>
           <CameraAccessoriesSSR />
         </Suspense>
-
-        <BoxImgHomeSSR mainBanner={mainBanner} />
+        {mainBanner.length > 0 && <BoxImgHomeSSR mainBanner={mainBanner} />}
 
         <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
           <Suspense fallback={<NewProductSkeleton />}>

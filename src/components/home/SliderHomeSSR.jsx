@@ -6,7 +6,9 @@ async function SliderHomeSSR() {
     TypeId: 6,
     LangCode: "fa",
   });
-  return <SliderHome sliderItems={sliderItems} />;
+  return (
+    <>{sliderItems.length > 0 && <SliderHome sliderItems={sliderItems} />}</>
+  );
 }
 
 export default SliderHomeSSR;

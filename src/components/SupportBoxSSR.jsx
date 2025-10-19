@@ -7,7 +7,7 @@ async function SupportBoxSSR() {
     LangCode: "fa",
     CategoryIdArray: 3227,
   });
-  return <SupportBox items={itemsSupport} />;
+  return <>{itemsSupport.length > 0 && <SupportBox items={itemsSupport} />}</>;
 }
 
 export default SupportBoxSSR;

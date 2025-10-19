@@ -1,6 +1,9 @@
 "use client";
 
+import { getCsrf } from "@/services/csrf/csrf";
+import { getInstallments } from "@/services/Installments/Installments";
 import { CalculatorOutlined } from "@ant-design/icons";
+import { Box, CircularProgress, Skeleton } from "@mui/material";
 import {
   Button,
   Card,
@@ -13,74 +16,73 @@ import {
   Typography,
 } from "antd";
 import { useState } from "react";
+import { FaCalculator, FaMoneyBillWave, FaWallet } from "react-icons/fa";
+import Swal from "sweetalert2";
+
+// تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+const toEnglishNumber = (number) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+};
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 const { Option } = Select;
 const { Title, Text } = Typography;
 
 function CalculationInstallments() {
+  const [loading, setLoading] = useState(false);
   const [totalAmount, setTotalAmount] = useState("");
-  const [installmentMonths, setInstallmentMonths] = useState(3);
+  const [installmentMonths, setInstallmentMonths] = useState(10);
   const [prepaymentType, setPrepaymentType] = useState("suggested");
   const [customPrepayment, setCustomPrepayment] = useState("");
   const [calculationResult, setCalculationResult] = useState(null);
-
-  // فرمت کردن اعداد با جداکننده هزارگان
-  const formatNumber = (num) => {
-    return new Intl.NumberFormat("fa-IR").format(num);
-  };
-
-  // تبدیل رشته به عدد (حذف جداکننده‌ها)
-  const parseNumber = (str) => {
-    // if (!str) return 0;
-    // const numericString = str.replace(/[^\d]/g, "");
-    // return parseInt(numericString) || 0;
-  };
-
-  // هندل تغییر پیش پرداخت دستی
-  const handleCustomPrepaymentChange = (e) => {
-    const value = e.target.value;
-
-    // استخراج فقط اعداد از مقدار جدید
-    const newNumericValue = value.replace(/[^\d]/g, "");
-
-    if (newNumericValue === "") {
-      setCustomPrepayment("");
-    } else {
-      // تبدیل به عدد و سپس فرمت کردن
-      const number = parseInt(newNumericValue);
-      setCustomPrepayment(formatNumber(number));
-    }
-  };
+  const [installmentsData, setInstallmentsData] = useState({});
 
   // محاسبات اقساط
-  const calculateInstallments = () => {
-    const amount = parseNumber(totalAmount);
-    if (!amount || amount <= 0) {
-      return;
+  const calculateInstallments = async () => {
+    setLoading(true);
+    setInstallmentsData({});
+    const data = {
+      total: Number(totalAmount.replace(/,/g, "")),
+      number: installmentMonths,
+      prePayment:
+        prepaymentType === "suggested"
+          ? 0
+          : Number(customPrepayment.replace(/,/g, "")),
+    };
+
+    try {
+      const csrf = await getCsrf();
+      const response = await getInstallments(data, csrf);
+      if (response.type === "error") {
+        Toast.fire({
+          icon: "error",
+          text: response.message,
+        });
+        return;
+      }
+      setInstallmentsData(response);
+    } catch (err) {
+      setInstallmentsData({});
+      Toast.fire({
+        icon: "error",
+        text: err.response?.data ? err.response?.data : "خطای شبکه",
+        customClass: {
+          container: "toast-modal",
+        },
+      });
+    } finally {
+      setLoading(false);
     }
-
-    let prepaymentAmount;
-    if (prepaymentType === "suggested") {
-      prepaymentAmount = Math.ceil(amount / 3);
-    } else {
-      prepaymentAmount = parseNumber(customPrepayment);
-    }
-
-    const totalWithInterest = Math.ceil(amount * 1.1);
-    const remainingAmount = totalWithInterest - prepaymentAmount;
-    const installmentAmount = Math.ceil(remainingAmount / installmentMonths);
-
-    setCalculationResult({
-      cashPrepayment: prepaymentAmount,
-      totalInstallmentAmount: totalWithInterest,
-      monthlyInstallment: installmentAmount,
-      finalProductPrice: totalWithInterest,
-    });
   };
-
-  const suggestedPrepayment = totalAmount
-    ? formatNumber(Math.ceil(parseNumber(totalAmount) / 3))
-    : "";
 
   const prepaymentSelect = (
     <Select
@@ -93,28 +95,34 @@ function CalculationInstallments() {
     </Select>
   );
 
+
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "20px" }}>
+    <div className="w-full sm:px-10 px-3 py-3">
       <Title level={3} style={{ textAlign: "center", marginBottom: 30 }}>
         <CalculatorOutlined /> محاسبه گر اقساط
       </Title>
 
-      <Row gutter={24} align="stretch">
-        {/* بخش ورودی‌ها */}
-        <Col span={12}>
-          <Card
-            title="ورودی اطلاعات"
-            style={{ height: "100%" }}
-          >
+      <div className="flex flex-wrap">
+        <div className="sm:w-1/2 w-full p-2">
+          <Card title="ورودی اطلاعات" style={{ height: "100%" }}>
             <Space direction="vertical" size="middle" style={{ width: "100%" }}>
               {/* سطر اول: مبلغ کل و تعداد اقساط */}
               <Row gutter={16}>
                 <Col span={12}>
                   <Text strong>مبلغ کل به تومان *</Text>
                   <Input
+                    type="tel"
                     value={totalAmount}
                     onChange={(e) => {
-                      setTotalAmount(e.target.value);
+                      const raw = toEnglishNumber(e.target.value).replace(
+                        /,/g,
+                        ""
+                      );
+                      if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
+                        const formatted =
+                          raw === "" ? "" : Number(raw).toLocaleString();
+                        setTotalAmount(formatted);
+                      }
                     }}
                     placeholder="مثال: ۱۰,۰۰۰,۰۰۰"
                     style={{ marginTop: 4 }}
@@ -144,14 +152,19 @@ function CalculationInstallments() {
               <div>
                 <Text strong>پیش پرداخت</Text>
                 <Input
+                  type="tel"
                   addonBefore={prepaymentSelect}
-                  value={
-                    prepaymentType === "suggested"
-                      ? suggestedPrepayment
-                      : customPrepayment
-                  }
+                  value={prepaymentType === "suggested" ? "" : customPrepayment}
                   onChange={(e) => {
-                    setCustomPrepayment(e.target.value);
+                    const raw = toEnglishNumber(e.target.value).replace(
+                      /,/g,
+                      ""
+                    );
+                    if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
+                      const formatted =
+                        raw === "" ? "" : Number(raw).toLocaleString();
+                      setCustomPrepayment(formatted);
+                    }
                   }}
                   disabled={prepaymentType === "suggested"}
                   placeholder={
@@ -169,37 +182,30 @@ function CalculationInstallments() {
                 type="primary"
                 size="middle"
                 onClick={calculateInstallments}
-                disabled={!totalAmount}
+                disabled={
+                  !totalAmount ||
+                  (prepaymentType === "custom" && !customPrepayment)
+                }
                 style={{ width: "100%", height: 40 }}
-                icon={<CalculatorOutlined />}
+                // icon={!loading ? <CircularProgress size={15} color="inherit" /> : <CalculatorOutlined />}
               >
-                محاسبه
+                <div className="flex items-center gap-1">
+                  {loading ? (
+                    <CircularProgress size={15} color="inherit" />
+                  ) : (
+                    <CalculatorOutlined />
+                  )}
+                  <span>محاسبه</span>
+                </div>
               </Button>
             </Space>
           </Card>
-        </Col>
-
-        {/* بخش نتایج */}
-        <Col span={12}>
-          <Card
-            title="نتایج محاسبه"
-            style={{ height: "100%" }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                height: "100%",
-                minHeight: "200px",
-              }}
-            >
-              {calculationResult ? (
-                <Space
-                  direction="vertical"
-                  style={{ width: "100%" }}
-                  size="middle"
-                >
+        </div>
+        <div className="sm:w-1/2 w-full p-2">
+          <Card title="نتایج محاسبه" style={{ height: "100%" }}>
+            <div>
+              {!loading && installmentsData?.prePayment && (
+                <div>
                   <div
                     style={{
                       display: "flex",
@@ -208,29 +214,16 @@ function CalculationInstallments() {
                       padding: "8px 0",
                     }}
                   >
-                    <Text style={{ fontSize: "14px" }}>
-                      مبلغ نقدی پیش پرداخت :
-                    </Text>
-                    <Text strong style={{ color: "#1890ff", fontSize: "14px" }}>
-                      {formatNumber(calculationResult.cashPrepayment)} تومان
-                    </Text>
-                  </div>
-
-                  <Divider style={{ margin: "4px 0" }} />
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      padding: "8px 0",
-                    }}
-                  >
-                    <Text style={{ fontSize: "14px" }}>
-                      جمع کل مبلغ اقساط :
-                    </Text>
-                    <Text strong style={{ color: "#52c41a", fontSize: "14px" }}>
-                      {formatNumber(calculationResult.totalInstallmentAmount)}{" "}
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FaMoneyBillWave style={{ color: "#2e7d32" }} />
+                      <Typography color="text.secondary">
+                        پیش پرداخت (حداقل یک سوم):
+                      </Typography>
+                    </Box>
+                    <Text strong style={{ color: "#2e7d32", fontSize: "14px" }}>
+                      <span className="font-bold text-lg">
+                        {installmentsData?.prePayment?.toLocaleString()}
+                      </span>{" "}
                       تومان
                     </Text>
                   </div>
@@ -245,9 +238,17 @@ function CalculationInstallments() {
                       padding: "8px 0",
                     }}
                   >
-                    <Text style={{ fontSize: "14px" }}>مبلغ هر قسط :</Text>
-                    <Text strong style={{ color: "#fa8c16", fontSize: "14px" }}>
-                      {formatNumber(calculationResult.monthlyInstallment)} تومان
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FaMoneyBillWave style={{ color: "#1976d2" }} />
+                      <Typography color="text.secondary">
+                        مبلغ هر قسط:
+                      </Typography>
+                    </Box>
+                    <Text strong style={{ color: "#1976d2", fontSize: "14px" }}>
+                      <span className="font-bold text-lg">
+                        {installmentsData?.amountEachInstallment?.toLocaleString()}
+                      </span>
+                      تومان
                     </Text>
                   </div>
 
@@ -261,15 +262,47 @@ function CalculationInstallments() {
                       padding: "8px 0",
                     }}
                   >
-                    <Text style={{ fontSize: "14px" }}>
-                      قیمت تمام شده کالا :
-                    </Text>
-                    <Text strong style={{ color: "#722ed1", fontSize: "14px" }}>
-                      {formatNumber(calculationResult.finalProductPrice)} تومان
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FaCalculator style={{ color: "#ed6c02" }} />
+                      <Typography color="text.secondary">
+                        جمع کل مبلغ اقساط:
+                      </Typography>
+                    </Box>
+                    <Text strong style={{ color: "#ed6c02", fontSize: "14px" }}>
+                      <span className="font-bold text-lg">
+                        {installmentsData?.sumAmountInstallment?.toLocaleString()}
+                      </span>
+                      تومان
                     </Text>
                   </div>
-                </Space>
-              ) : (
+
+                  <Divider style={{ margin: "4px 0" }} />
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "8px 0",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FaWallet style={{ color: "#374151" }} />
+                      <Typography color="text.secondary">
+                        قیمت تمام شده کالا:
+                      </Typography>
+                    </Box>
+                    <Text strong style={{ color: "#374151", fontSize: "14px" }}>
+                      <span className="font-bold text-lg">
+                        {installmentsData?.finalAmountInstallment?.toLocaleString()}
+                      </span>
+                      تومان
+                    </Text>
+                  </div>
+                </div>
+              )}
+
+              {!loading && !installmentsData?.prePayment && (
                 <div
                   style={{
                     textAlign: "center",
@@ -288,15 +321,23 @@ function CalculationInstallments() {
                       opacity: 0.5,
                     }}
                   />
-                  <Text style={{ fontStyle: "italic" }}>
+                  <Text>
                     لطفاً اطلاعات را وارد کرده و روی دکمه "محاسبه" کلیک کنید
                   </Text>
                 </div>
               )}
+              {loading && (
+                <div className="flex flex-col gap-2.5 mt-0.5">
+                  <Skeleton variant="rounded" width={"100%"} height={43} />
+                  <Skeleton variant="rounded" width={"100%"} height={43} />
+                  <Skeleton variant="rounded" width={"100%"} height={43} />
+                  <Skeleton variant="rounded" width={"100%"} height={43} />
+                </div>
+              )}
             </div>
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 }

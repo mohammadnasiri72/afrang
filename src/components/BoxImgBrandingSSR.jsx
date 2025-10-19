@@ -3,7 +3,7 @@ import BoxImgBranding from "./home/BoxImgBranding";
 
 async function BoxImgBrandingSSR() {
   const brandItems = await fetchBrandingItems();
-  return <BoxImgBranding brands={brandItems} />;
+  return <>{brandItems && <BoxImgBranding brands={brandItems} />}</>;
 }
 
 export default BoxImgBrandingSSR;

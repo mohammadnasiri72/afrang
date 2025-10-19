@@ -34,12 +34,26 @@ export const getItemByUrl = async (url) => {
         url,
         langCode: "fa",
       },
+      headers: { "Cache-Control": "no-cache" },
     });
+
     return response.data;
   } catch (err) {
+    const responseData = err.response?.data;
+    const isHard404 =
+      typeof responseData === "string" &&
+      (responseData.includes("<!DOCTYPE") ||
+        responseData.includes("<html") ||
+        responseData.includes("Not Found") ||
+        responseData.includes("HTTP Error") ||
+        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
+   
+
     return {
       type: "error",
       message: err.response?.data ? err.response?.data : "خطای شبکه",
+      status: err.response?.status,
+      isHard404
     };
   }
 };

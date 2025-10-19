@@ -12,8 +12,24 @@ export const getSettings = async () => {
     }
 
     return res.json();
-  } catch (error) {
-    console.error("Error fetching settings:", error);
-    return null;
+  } catch (err) {
+    // console.error("Error fetching settings:", error);
+    // return null;
+    const responseData = err.response?.data;
+    const isHard404 =
+      typeof responseData === "string" &&
+      (responseData.includes("<!DOCTYPE") ||
+        responseData.includes("<html") ||
+        responseData.includes("Not Found") ||
+        responseData.includes("HTTP Error") ||
+        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
+   
+
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+      status: err.response?.status,
+      isHard404
+    };
   }
 };

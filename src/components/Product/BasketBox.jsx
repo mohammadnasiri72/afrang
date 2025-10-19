@@ -183,7 +183,7 @@ function BasketBox({ product }) {
             )}
         </div>
       </div>
-      <ModalInstallment openModal={openModal} setOpenModal={setOpenModal} />
+      <ModalInstallment openModal={openModal} setOpenModal={setOpenModal} product={product}/>
     </>
   );
 }

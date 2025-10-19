@@ -1,3 +1,4 @@
+import ServerError from "@/components/ServerError";
 import { getItemByUrl } from "@/services/Item/item";
 import { mainUrl } from "@/utils/mainDomain";
 import { headers } from "next/headers";
@@ -73,12 +74,6 @@ export default async function LayoutNewsDetails({ children, params }) {
       const path = new URL(referer).pathname;
       url = decodeURIComponent(path);
     }
-  }
-
-  const blog = await getItemByUrl(url);
-
-  if (!blog || blog.type === "error") {
-    return notFound();
   }
 
   return <main>{children}</main>;

@@ -1,11 +1,13 @@
 import BoxImgBrandingSSR from "@/components/BoxImgBrandingSSR";
 import FooterSSR from "@/components/FooterSSR";
 import HeaderNavbarWrapperSSR from "@/components/HeaderNavbarWrapperSSR";
+import ServerError from "@/components/ServerError";
 import SocialNetworks from "@/components/SocialNetworks";
 import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
 import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -265,6 +267,13 @@ export default async function layoutMain({ children }) {
       </div>
     );
   };
+
+  if (!settings || (settings.type === "error" && settings?.isHard404)) {
+    return notFound();
+  }
+  if (!settings || (settings.type === "error" && !settings?.isHard404)) {
+    return <ServerError />;
+  }
 
   return (
     <div>
