@@ -3,7 +3,7 @@
 export default function SliderHomeSkeleton() {
   return (
     <div className="relative w-full h-64 slider-homePage animate-pulse">
-      <div className="inner-curve w-full h-full overflow-hidden">
+      <div className="w-full h-full overflow-hidden">
         <div className="w-full h-full bg-gray-200" />
       </div>
 
@@ -16,6 +16,7 @@ export default function SliderHomeSkeleton() {
     </div>
   );
 }
+
 
 
 

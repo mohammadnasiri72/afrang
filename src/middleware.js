@@ -5,6 +5,7 @@ import {
   getProductId,
   getProductPricing,
 } from "./services/products/productService";
+import { getSettings } from "./services/settings/settingsService";
 import { getProductSecId } from "./services/UserAd/UserAdServices";
 
 // مسیرهای محافظت شده که نیاز به احراز هویت دارند
@@ -73,17 +74,16 @@ export async function middleware(request) {
   // بررسی مسیرهای محافظت شده
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!userToken) {
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL("/login", request.url), {
+        status: 301,
+      });
     }
   }
 
   // بررسی ریدایرکت محصولات
   if (pathname === "/index" || pathname === "/home") {
     return NextResponse.redirect(new URL("/", request.url), { status: 301 });
-  } else if (
-    pathname.startsWith("/Products/") ||
-    pathname.startsWith("/products/")
-  ) {
+  } else if (pathname.startsWith("/products/")||pathname.startsWith("/Products/")) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
@@ -106,13 +106,16 @@ export async function middleware(request) {
           !productCategory?.isHard404
         ) {
           return NextResponse.rewrite(new URL("/404", request.url));
-        }
-        if (
+        } else if (
           productCategory?.type === "error" &&
+          productCategory?.status === 404 &&
           productCategory?.isHard404
         ) {
-         
-          return NextResponse.rewrite(new URL(request.url) , { status: 503 });
+          return NextResponse.rewrite(new URL(request.url), { status: 503 });
+        } else if (productCategory?.type === "error") {
+          return NextResponse.rewrite(new URL(request.url), {
+            status: productCategory?.status,
+          });
         }
 
         if (productCategory?.url && productCategory.url !== decodedPathname) {
@@ -134,10 +137,7 @@ export async function middleware(request) {
     } catch (error) {
       console.error("Error in product redirect:", error);
     }
-  } else if (
-    pathname.startsWith("/Product/") ||
-    pathname.startsWith("/product/")
-  ) {
+  } else if (pathname.startsWith("/product/")||pathname.startsWith("/Product/")) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
@@ -162,10 +162,14 @@ export async function middleware(request) {
           return NextResponse.rewrite(new URL("/404", request.url));
         } else if (
           productData?.type === "error" &&
+          productData?.status === 404 &&
           productData?.isHard404
         ) {
-         
-           return NextResponse.rewrite(new URL(request.url) , { status:503 });
+          return NextResponse.rewrite(new URL(request.url), { status: 503 });
+        } else if (productData?.type === "error") {
+          return NextResponse.rewrite(new URL(request.url), {
+            status: productData?.status,
+          });
         }
 
         if (
@@ -190,10 +194,7 @@ export async function middleware(request) {
     } catch (error) {
       console.error("Error in product redirect:", error);
     }
-  } else if (
-    pathname.startsWith("/Usedproduct/") ||
-    pathname.startsWith("/usedproduct/")
-  ) {
+  } else if (pathname.startsWith("/usedproduct/")||pathname.startsWith("/Usedproduct/")) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
@@ -218,10 +219,14 @@ export async function middleware(request) {
           return NextResponse.rewrite(new URL("/404", request.url));
         } else if (
           productCategory?.type === "error" &&
+          productCategory?.status === 404 &&
           productCategory?.isHard404
         ) {
-         
-           return NextResponse.rewrite(new URL(request.url) , { status: 503 });
+          return NextResponse.rewrite(new URL(request.url), { status: 503 });
+        } else if (productCategory?.type === "error") {
+          return NextResponse.rewrite(new URL(request.url), {
+            status: productCategory?.status,
+          });
         }
 
         if (productCategory?.url && productCategory.url !== decodedPathname) {
@@ -243,46 +248,39 @@ export async function middleware(request) {
     } catch (error) {
       console.error("Error in product redirect:", error);
     }
-  } else if (!staticPaths.some((path) => pathname.startsWith(path))) {
-    try {
-      const decodedPath = decodeURIComponent(pathname);
-      const lowerCasePath = decodedPath.toLowerCase();
-
-      if (decodedPath !== lowerCasePath) {
-        const newUrl = new URL(request.url);
-        newUrl.pathname = lowerCasePath;
-        return NextResponse.redirect(newUrl, { status: 301 });
-      }
-    } catch (error) {
-      console.error("Error in lowercase conversion:", error);
-    }
-  }
-
-  if (pathname.startsWith("/news/") || pathname.startsWith("/News/")) {
+  } else if (pathname.startsWith("/news/")||pathname.startsWith("/News/")) {
     const slug = decodeURIComponent(pathname).slice(1);
     const blog = await getItemByUrl(slug);
     if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
       return NextResponse.rewrite(new URL("/404", request.url));
+    } else if (
+      blog?.type === "error" &&
+      blog?.status === 404 &&
+      blog?.isHard404
+    ) {
+      return NextResponse.rewrite(new URL(request.url), { status: 503 });
+    } else if (blog?.type === "error") {
+      return NextResponse.rewrite(new URL(request.url), {
+        status: blog?.status,
+      });
     }
-    if (blog?.type === "error"  && blog?.isHard404) {
-      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
-    }
-  }
-  if (pathname.startsWith("/dic/") || pathname.startsWith("/Dic/")) {
+  } else if (pathname.startsWith("/dic/")||pathname.startsWith("/Dic/")) {
     const slug = decodeURIComponent(pathname).slice(1);
     const dic = await getItemByUrl(slug);
     if (dic?.type === "error" && dic?.status === 404 && !dic?.isHard404) {
       return NextResponse.rewrite(new URL("/404", request.url));
-    } else if (dic?.type === "error" && dic?.isHard404) {
-      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
+    } else if (dic?.type === "error" && dic?.status === 404 && dic?.isHard404) {
+      return NextResponse.rewrite(new URL(request.url), { status: 503 });
+    } else if (dic?.type === "error") {
+      return NextResponse.rewrite(new URL(request.url), {
+        status: dic?.status,
+      });
     }
-  }
-  if (pathname === "/usedproduct" || pathname === "/Usedproduct") {
+  } else if (pathname === "/usedproduct" || pathname === "/Usedproduct") {
     return NextResponse.redirect(new URL("/useds/-1", request.url), {
       status: 301,
     });
-  }
-  if (
+  } else if (
     pathname.startsWith("/pricelist/") ||
     pathname.startsWith("/Pricelist/")
   ) {
@@ -306,26 +304,69 @@ export async function middleware(request) {
       return NextResponse.rewrite(new URL("/404", request.url));
     } else if (
       pricing?.type === "error" &&
+      pricing?.status === 404 &&
       pricing?.isHard404
     ) {
-      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
+      return NextResponse.rewrite(new URL(request.url), { status: 503 });
+    } else if (pricing?.type === "error") {
+      return NextResponse.rewrite(new URL(request.url), {
+        status: pricing?.status,
+      });
     }
-  }
-
-  if (isDainamic) {
+  } else if (isDainamic) {
     const slug = pathname.slice(1);
     const data = await getItemByUrl(slug);
 
     if (data?.type === "error" && data?.status === 404 && !data?.isHard404) {
-      const url = new URL(request.url);
-      url.pathname = "/404";
-      url.searchParams.set("from", slug);
-      return NextResponse.rewrite(url);
-    } else if (data?.type === "error" && data?.isHard404) {
-      return NextResponse.rewrite(new URL(request.url) , { status: 503 });
+      return NextResponse.rewrite(new URL("/404", request.url));
+    } else if (
+      data?.type === "error" &&
+      data?.status === 404 &&
+      data?.isHard404
+    ) {
+      return NextResponse.rewrite(new URL(request.url), { status: 503 });
+    } else if (data?.type === "error") {
+      return NextResponse.rewrite(new URL(request.url), {
+        status: data?.status,
+      });
+    }
+  } else if (!staticPaths.some((path) => pathname.startsWith(path))) {
+    try {
+      const decodedPath = decodeURIComponent(pathname);
+      const lowerCasePath = decodedPath.toLowerCase();
+
+      if (decodedPath !== lowerCasePath) {
+        const newUrl = new URL(request.url);
+        newUrl.pathname = lowerCasePath;
+        return NextResponse.redirect(newUrl, { status: 301 });
+      }
+    } catch (error) {
+      console.error("Error in lowercase conversion:", error);
     }
   }
 
+  try {
+    const settings = await getSettings();
+    if (
+      settings?.type === "error" &&
+      settings?.status === 404 &&
+      !settings?.isHard404
+    ) {
+      return NextResponse.rewrite(new URL("/404", request.url));
+    } else if (
+      settings?.type === "error" &&
+      settings?.status === 404 &&
+      settings?.isHard404
+    ) {
+      return NextResponse.rewrite(new URL(request.url), { status: 503 });
+    } else if (settings?.type === "error") {
+      return NextResponse.rewrite(new URL(request.url), {
+        status: settings?.status,
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching setting:", error);
+  }
   return NextResponse.next();
 }
 

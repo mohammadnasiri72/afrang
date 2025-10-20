@@ -1,4 +1,5 @@
 export const mainDomain = "https://api.afrangdigital.com";
+// export const mainDomain = "https://afrangapi.aitest2.ir";
 export const mainDomainImg = "https://admin.afrangdigital.com";
 export const mainUrl = "https://www.afrangdigital.com";
 

@@ -6,7 +6,7 @@ import { Badge } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { BiPhoneCall } from "react-icons/bi";
 import { FaArrowRightLong, FaCartShopping } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
@@ -18,6 +18,7 @@ export default function Header({ onLoaded, settings }) {
   const userCookie = Cookies.get("user");
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
