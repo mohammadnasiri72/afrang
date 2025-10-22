@@ -53,19 +53,63 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
   const profileBtnRef = useRef(null);
   const [user, setUser] = useState(null);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
-  const [menuAnimate, setMenuAnimate] = useState(false); // <-- new state
+  const [menuAnimate, setMenuAnimate] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const scrollBarWidthRef = useRef(0);
 
   const router = useRouter();
   const dispatch = useDispatch();
+
+  // محاسبه عرض اسکرول بار
+  const getScrollbarWidth = () => {
+    if (typeof document === "undefined") return 0;
+
+    // ایجاد یک المان موقت برای اندازه‌گیری
+    const outer = document.createElement("div");
+    outer.style.visibility = "hidden";
+    outer.style.overflow = "scroll";
+    document.body.appendChild(outer);
+
+    const inner = document.createElement("div");
+    outer.appendChild(inner);
+
+    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+
+    outer.parentNode?.removeChild(outer);
+
+    return scrollbarWidth;
+  };
+
+  // غیرفعال کردن اسکرول بدون ایجاد جهش
+  const disableBodyScroll = () => {
+    if (typeof document === "undefined") return;
+
+    const scrollBarWidth = getScrollbarWidth();
+    scrollBarWidthRef.current = scrollBarWidth;
+
+    document.body.style.overflow = "hidden";
+
+    // فقط اگر اسکرول بار وجود دارد، padding اضافه کنیم
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    }
+  };
+
+  // فعال کردن اسکرول
+  const enableBodyScroll = () => {
+    if (typeof document === "undefined") return;
+
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  };
 
   // تابع به‌روزرسانی موقعیت منو
   const updateMenuPos = () => {
     if (profileBtnRef.current) {
       const rect = profileBtnRef.current.getBoundingClientRect();
       setMenuPos({
-        top: rect.bottom + 6, // فقط فاصله، بدون window.scrollY
-        left: rect.left, // فقط مختصات، بدون window.scrollX
+        top: rect.bottom + 6,
+        left: rect.left,
       });
     }
   };
@@ -79,6 +123,8 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
     if (
       dropdownRef.current &&
       !dropdownRef.current.contains(event.target) &&
+      profileBtnRef.current &&
+      !profileBtnRef.current.contains(event.target) &&
       isOpen
     ) {
       setIsOpen(false);
@@ -87,23 +133,26 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+
     if (isOpen) {
-      setMenuAnimate(false); // reset before showing
-      document.body.style.overflow = "hidden";
+      setMenuAnimate(false);
+      disableBodyScroll();
       updateMenuPos();
       window.addEventListener("scroll", updateMenuPos, true);
       window.addEventListener("resize", updateMenuPos, true);
-      // Always trigger animation after mount
+
+      // تاخیر برای انیمیشن
       setTimeout(() => setMenuAnimate(true), 10);
     } else {
-      document.body.style.overflow = "";
+      enableBodyScroll();
       window.removeEventListener("scroll", updateMenuPos, true);
       window.removeEventListener("resize", updateMenuPos, true);
-      setMenuAnimate(false); // reset on close
+      setMenuAnimate(false);
     }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = "";
+      enableBodyScroll();
       window.removeEventListener("scroll", updateMenuPos, true);
       window.removeEventListener("resize", updateMenuPos, true);
     };
@@ -150,7 +199,7 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
     }
   };
 
-  // آیتم‌های داشبورد کاربری (مطابق ResponsiveMenu.jsx)
+  // آیتم‌های داشبورد کاربری
   const dashboardMenuItems = [
     {
       id: "dashboard",
@@ -245,44 +294,59 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
             {/* منو */}
             <div
               ref={dropdownRef}
-              className={`fixed w-64 bg-white/95 shadow-lg rounded-lg z-[99999] transition-all duration-300 ease-out
+              className={`fixed w-64 bg-white/95 backdrop-blur-sm shadow-xl rounded-lg z-[99999] transition-all duration-300 ease-out border border-gray-200
           ${
             menuAnimate
-              ? "opacity-100 scale-105 translate-y-5"
-              : "opacity-0 scale-95 pointer-events-none translate-y-0"
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-95 pointer-events-none translate-y-2"
           }`}
-              style={{ top: menuPos.top, left: menuPos.left }}
+              style={{
+                top: menuPos.top,
+                left: menuPos.left,
+                maxHeight: "calc(100vh - 100px)",
+              }}
             >
               {/* هدر منو */}
-              <div className="p-4 border-b border-gray-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden shadow-md cursor-pointer">
+              <div className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white rounded-t-lg">
+                <div className="w-10 h-10 rounded-full overflow-hidden shadow-md cursor-pointer border border-gray-200">
                   {user?.avatar ? (
                     <img
                       src={getImageUrl(user.avatar)}
                       alt={`${user?.displayName?.slice(0, 1)}`}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "flex";
+                      }}
                     />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600 text-sm">
-                      {user?.displayName?.charAt(0) || "?"}
-                    </div>
-                  )}
+                  ) : null}
+                  <div
+                    className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-sm font-bold ${
+                      user?.avatar ? "hidden" : "flex"
+                    }`}
+                  >
+                    {user?.displayName?.charAt(0) || "?"}
+                  </div>
                 </div>
-                <div className="select-none">
-                  <p className="text-sm font-bold text-gray-900">
+                <div className="select-none flex-1 min-w-0">
+                  <p className="text-sm font-bold text-gray-900 truncate">
                     {user?.displayName || "کاربر مهمان"}
                   </p>
                   {user?.userId && (
-                    <p className="text-xs text-gray-500">{user.userId}</p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {user.userId}
+                    </p>
                   )}
                 </div>
               </div>
+
               {/* خط جداکننده */}
-              <div className="px-6">
-                <div className="h-px bg-[#0002] w-full" />
+              <div className="px-4">
+                <div className="h-px bg-gray-200 w-full" />
               </div>
+
               {/* آیتم‌های منو */}
-              <div className="py-2 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+              <div className="py-2 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {dashboardMenuItems.map((item) => (
                   <Link
                     onClick={(e) => {
@@ -294,26 +358,28 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
                     }}
                     key={item.id}
                     href={item.href}
-                    className={`flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-300`}
+                    className={`flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 border-b border-gray-50 last:border-b-0`}
                   >
-                    <span className="ml-2">{item.icon}</span>
-                    <span>{item.label}</span>
+                    <span className="ml-3 text-gray-500">{item.icon}</span>
+                    <span className="flex-1">{item.label}</span>
                   </Link>
                 ))}
+
+                {/* دکمه خروج */}
                 <div
                   onClick={LogoutHandler}
-                  className="flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors duration-300 cursor-pointer"
+                  className="flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 cursor-pointer border-t border-gray-100 mt-2"
                 >
-                  <span className="ml-2">
+                  <span className="ml-3">
                     <RiLogoutBoxLine className="text-lg" />
                   </span>
                   {loading ? (
-                    <div className="flex items-center gap-2 justify-center">
+                    <div className="flex items-center gap-2 justify-center flex-1">
                       <span>درحال خروج</span>
                       <Spin className="red-spin" size="small" />
                     </div>
                   ) : (
-                    <span>خروج</span>
+                    <span className="flex-1">خروج</span>
                   )}
                 </div>
               </div>
@@ -329,18 +395,21 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
         {/* آیکون پروفایل */}
         <div
           ref={profileBtnRef}
-          className="inline-block"
-          style={{ cursor: "pointer" }}
+          className="cursor-pointer p-1 rounded-full  transition-colors duration-200 flex items-center gap-1"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          <div
-            className={`overflow-hidden transition-all duration-300 flex items-center justify-center bg-white rounded-full shadow-lg`}
-          >
+          <div className="overflow-hidden transition-all duration-300 flex items-center justify-center bg-slate-200 rounded-full shadow-2xl w-8 h-8">
             <FaUser
               className={
-                isOpen ? "text-2xl text-[#d1182b]" : "text-2xl text-gray-500"
+                isOpen ? "text-xl text-[#d1182b]" : "text-xl text-gray-600"
               }
             />
+          </div>
+          <div className="select-none flex-1 min-w-0">
+            <p className="text-sm font-bold text-gray-900 truncate max-w-28">
+              {user?.displayName || "کاربر مهمان"} !
+            </p>
+            <p className="text-xs text-gray-500 truncate">خوش آمدید</p>
           </div>
         </div>
         {menuPortal}

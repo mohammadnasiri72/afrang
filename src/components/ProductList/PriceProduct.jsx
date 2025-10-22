@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector } from "react-redux";
 
 function PriceProduct({ product }) {
@@ -36,9 +35,11 @@ function PriceProduct({ product }) {
                 <span className="font-semibold text-lg line-through text-[#222]">
                   {priceOriginal?.toLocaleString()}
                 </span>
-                <span className="text-white bg-[#d1182b] px-3 py-0.5 rounded-sm text-sm">
-                  {discount}%
-                </span>
+                {product.showOffPercent && (
+                  <span className="text-white bg-[#d1182b] px-3 py-0.5 rounded-sm text-sm">
+                    {discount}%
+                  </span>
+                )}
               </div>
             </div>
           ) : (

@@ -100,14 +100,18 @@ const TransactionResult = () => {
                 <Button
                   onClick={() => {
                     startTransition(() => {
-                      router.push("/profile/orders");
+                      router.push(
+                        status === "true"
+                          ? "/profile/orders?statusId=2"
+                          : "/profile/orders"
+                      );
                     });
                   }}
                   sx={{ width: "50%" }}
                   color="primary"
                   variant="contained"
                 >
-                  جزئیات سفارش
+                  سفارشات من
                 </Button>
                 <Button
                   onClick={() => {

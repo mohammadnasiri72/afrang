@@ -3,6 +3,7 @@ import BodyProductSec from "@/components/UserAdd/BodyProductSec";
 import BreadCrumbUsedProduct from "@/components/UserAdd/BreadCrumbUsedProduct";
 import SliderProductSecImg from "@/components/UserAdd/SliderProductSecImg";
 import { getProductSecId } from "@/services/UserAd/UserAdServices";
+import { Empty } from "antd";
 import { notFound } from "next/navigation";
 
 export default async function UserAddDetails(props) {
@@ -17,7 +18,6 @@ export default async function UserAddDetails(props) {
     notFound();
   }
 
-
   return (
     <>
       <Container>
@@ -29,6 +29,11 @@ export default async function UserAddDetails(props) {
                 attachments={product.imageList}
                 isAfrangOffer={product.isAfrangOffer}
               />
+            )}
+            {product?.imageList?.length === 0 && (
+              <div>
+                <Empty description="تصویری موجود نیست" />
+              </div>
             )}
           </div>
           <div className="lg:w-[70%] w-full p-2">

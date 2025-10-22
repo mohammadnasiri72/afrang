@@ -57,9 +57,11 @@ function ModalAddtoBasket({
                         <span className="text-[#d1182b] text-lg font-bold">
                           {product.product.finalPrice?.toLocaleString()} تومان
                         </span>
-                        <span className="text-xs bg-red-100 text-[#d1182b] px-1.5 py-0.5 rounded">
-                          {product.product.discount}% تخفیف
-                        </span>
+                        {product.product.showOffPercent && (
+                          <span className="text-xs bg-red-100 text-[#d1182b] px-1.5 py-0.5 rounded">
+                            {product.product.discount}% تخفیف
+                          </span>
+                        )}
                       </div>
                     </div>
                   ) : (

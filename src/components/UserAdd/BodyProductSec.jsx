@@ -6,7 +6,6 @@ import LikeProduct from "../Product/LikeProduct";
 import BoxTabDetailsProduct from "./BoxTabDetailsProduct";
 
 function BodyProductSec({ product }) {
-
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
     return new Intl.NumberFormat("fa-IR").format(price);
@@ -25,7 +24,18 @@ function BodyProductSec({ product }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 overflow-hidden">
+      {product.isArchive && (
+        <span className="sm:text-sm text-xs !text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap absolute left-10 top-10">
+          آرشیو شده
+        </span>
+      )}
+      <div
+        className={` rounded-lg shadow-lg p-6 border border-gray-200 overflow-hidden  ${
+          product.isArchive
+            ? "grayscale-[80%] saturate-50 bg-[#0001]"
+            : "bg-[#fff]"
+        }`}
+      >
         {/* Header */}
         <div className="border-b border-gray-200 pb-4 mb-6">
           <div className="flex items-start flex-wrap justify-between mb-2">
@@ -37,19 +47,16 @@ function BodyProductSec({ product }) {
                 >
                   {product.title}
                 </h1>
-                <div>
-                  <LikeProduct productId={product?.id} />
-                </div>
+                {!product.isArchive && (
+                  <div>
+                    <LikeProduct productId={product?.id} />
+                  </div>
+                )}
               </div>
               <span className="sm:text-sm text-xs text-gray-500 bg-gray-100 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
                 {product.categoryTitle}
               </span>
             </div>
-            {product.isArchive && (
-              <span className="sm:text-sm text-xs !text-white bg-yellow-500 sm:px-3 px-2 py-1 rounded-full whitespace-nowrap">
-                آرشیو شده
-              </span>
-            )}
           </div>
           <div className="flex flex-wrap items-center justify-between">
             {(!product.price || product.price === 0) && (

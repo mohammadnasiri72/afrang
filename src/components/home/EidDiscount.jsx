@@ -246,7 +246,7 @@ export default function EidDiscount({ actionProducts, products }) {
                     </div>
                   </div>
                   {/* تخفیف */}
-                  {product.discount !== 0 && (
+                  {product.discount !== 0 && product.showOffPercent && (
                     <div className="absolute top-3 left-3 z-50 duration-300">
                       <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                         {product.discount}%

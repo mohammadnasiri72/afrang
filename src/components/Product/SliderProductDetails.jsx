@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
 import { getImageUrl } from "@/utils/mainDomain";
@@ -53,12 +53,14 @@ export default function SliderProductDetails({ attachments, product }) {
   // شناسایی تصویر LCP (اولین تصویر محصول)
   const lcpImage = attachments.length > 0 ? attachments[0] : null;
 
+  
+
   return (
     <>
       <div className="flex justify-between relative h-full ">
         <div className="w-full mx-auto h-full">
           {/* تخفیف */}
-          {product?.discount !== 0 && (
+          {product?.discount !== 0 && product.showOffPercent && (
             <div className="absolute top-3 left-3 z-50 duration-300">
               <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                 {product.discount}%

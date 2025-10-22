@@ -62,7 +62,7 @@ function ProductCard({ product, startTransition }) {
                     )}
                   </Link>
                   {/* تخفیف سمت چپ */}
-                  {product.discount !== 0 && (
+                  {product.discount !== 0 && product.showOffPercent && (
                     <span className="absolute top-1 left-1 bg-[#d1182b] px-1.5 py-0.5 rounded-sm !text-white text-xs font-bold z-10">
                       {product.discount}%
                     </span>
@@ -183,7 +183,7 @@ function ProductCard({ product, startTransition }) {
                   )}
                 </Link>
                 {/* تخفیف سمت چپ */}
-                {product.discount !== 0 && (
+                {product.discount !== 0 && product.showOffPercent && (
                   <span className="absolute top-2 left-2 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold z-10">
                     {product.discount}%
                   </span>

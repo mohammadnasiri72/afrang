@@ -67,7 +67,7 @@ function ListProductBuy({ productsSec }) {
                     <span className="text-gray-500 text-sm truncate">
                       {pr.categoryTitle}
                     </span>
-                    <span className="text-gray-500 text-sm font-semibold">
+                    <span className="text-gray-500 text-sm">
                       {pr.isActive ? (
                         <span className="text-emerald-600 flex items-center gap-1 bg-emerald-100 rounded-lg px-3">
                           <MdDone />

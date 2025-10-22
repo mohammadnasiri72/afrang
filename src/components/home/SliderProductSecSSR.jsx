@@ -17,6 +17,7 @@ async function SliderProductSecSSR({ mainBanner }) {
     IsArchive: 0,
     IsActive: 1,
   });
+
   return (
     <SliderProductSec
       oldProducts={oldProducts}

@@ -1,6 +1,8 @@
 "use client";
 import { changePayment, getWayPayment } from "@/services/order/orderService";
 import { mainDomain, mainDomainImg } from "@/utils/mainDomain";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,18 +11,18 @@ import { FaCheck, FaCreditCard, FaExchangeAlt, FaTimes } from "react-icons/fa";
 
 import Swal from "sweetalert2";
 
-const redirectWithToken = (token, targetUrl) => {
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = targetUrl;
-  const input = document.createElement("input");
-  input.type = "hidden";
-  input.name = "token";
-  input.value = token;
-  form.appendChild(input);
-  document.body.appendChild(form);
-  form.submit();
-};
+// const redirectWithToken = (token, targetUrl) => {
+//   const form = document.createElement("form");
+//   form.method = "POST";
+//   form.action = targetUrl;
+//   const input = document.createElement("input");
+//   input.type = "hidden";
+//   input.name = "token";
+//   input.value = token;
+//   form.appendChild(input);
+//   document.body.appendChild(form);
+//   form.submit();
+// };
 
 export default function PayOnline({ orderData }) {
   const router = useRouter();
@@ -30,8 +32,8 @@ export default function PayOnline({ orderData }) {
   const [selectedGateway, setSelectedGateway] = useState(null);
   const [gateways, setGateways] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [offlineLoading, setOfflineLoading] = useState(false);
-
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -107,11 +109,11 @@ export default function PayOnline({ orderData }) {
     }
   };
 
-
   const payHandler = () => {
+    setLoadingBtn(true);
     const data = {
       orderId: Number(param.get("trackCode")),
-      bank: "pasargad",
+      bank: gateways.find((e) => e.id === selectedGateway)?.itemKey,
     };
     axios
       .post(`${mainDomain}/api/Payment/Pay`, data, {
@@ -120,7 +122,8 @@ export default function PayOnline({ orderData }) {
         },
       })
       .then((res) => {
-        redirectWithToken(res.data.form[0].value, res.data.url);
+        window.location.href = res.data.url;
+        // redirectWithToken(res.data.form[0]?.value, res.data.url);
       })
       .catch((error) => {
         Toast.fire({
@@ -130,6 +133,9 @@ export default function PayOnline({ orderData }) {
             container: "toast-modal",
           },
         });
+      })
+      .finally(() => {
+        setLoadingBtn(false);
       });
   };
 
@@ -174,7 +180,7 @@ export default function PayOnline({ orderData }) {
                       <img
                         src={mainDomainImg + gateway.image}
                         alt={gateway.id}
-                        className="w-7 h-7 object-contain"
+                        className="w-14 h-14 object-contain"
                       />
                     ) : (
                       <FaCreditCard className="text-xl text-[#d1182b]" />
@@ -225,8 +231,17 @@ export default function PayOnline({ orderData }) {
                                 : "bg-gray-100 !text-gray-400 cursor-not-allowed"
                             }`}
             >
-              <FaCreditCard />
-              <span>انتقال به صفحه پرداخت</span>
+              {loadingBtn ? (
+                <div className="flex items-center gap-1">
+                  <span>در حال انتقال</span>
+                  <Spin indicator={<LoadingOutlined spin />} size="small" className="!text-white" />
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <FaCreditCard />
+                  <span>انتقال به صفحه پرداخت</span>
+                </div>
+              )}
             </button>
 
             <button

@@ -74,7 +74,7 @@ function GridProductCard({ product, startTransition }) {
               </div>
             )}
             {/* تخفیف سمت چپ */}
-            {product.discount !== 0 && (
+            {product.discount !== 0 && product.showOffPercent && (
               <span className="absolute top-0 left-0 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold z-10">
                 {product.discount}%
               </span>
@@ -127,9 +127,12 @@ function GridProductCard({ product, startTransition }) {
                 <span className="text-sm line-through text-[#222]">
                   {product?.price1?.toLocaleString()}
                 </span>
+                {
+                  product.showOffPercent &&
                 <span className="text-white bg-[#d1182b] px-2 py-0.5 rounded-sm text-sm">
                   {product.discount}%
                 </span>
+                }
               </div>
             </div>
           )}

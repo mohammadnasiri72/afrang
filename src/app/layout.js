@@ -6,8 +6,10 @@ import "@ant-design/v5-patch-for-react-19";
 import "react-circular-progressbar/dist/styles.css";
 import "./globals.css";
 
-const settings = await getSettings();
 
+export const revalidate = 60;
+
+const settings = await getSettings();
 
 
 
@@ -20,8 +22,6 @@ export default async function RootLayout({ children }) {
 
       <body>
         <Layout settings={settings}>{children}</Layout>
-
-        {/* <Toaster position="top-center" /> */}
       </body>
     </html>
   );

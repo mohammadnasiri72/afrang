@@ -112,7 +112,7 @@ function BoxTabDetailsProduct({ product }) {
                 <>
                   {!dataContact.contactInfoType && (
                     <div className="pt-4">
-                      <Button type="primary" onClick={showModal}>
+                      <Button type="primary" onClick={showModal} disabled={product.isArchive}>
                         نمایش اطلاعات تماس
                       </Button>
                       <Modal

@@ -80,10 +80,28 @@ export async function middleware(request) {
     }
   }
 
+  if (!staticPaths.some((path) => pathname.startsWith(path))) {
+    try {
+      const decodedPath = decodeURIComponent(pathname);
+      const lowerCasePath = decodedPath.toLowerCase();
+
+      if (decodedPath !== lowerCasePath) {
+        const newUrl = new URL(request.url);
+        newUrl.pathname = lowerCasePath;
+        return NextResponse.redirect(newUrl, { status: 301 });
+      }
+    } catch (error) {
+      console.error("Error in lowercase conversion:", error);
+    }
+  }
+
   // بررسی ریدایرکت محصولات
   if (pathname === "/index" || pathname === "/home") {
     return NextResponse.redirect(new URL("/", request.url), { status: 301 });
-  } else if (pathname.startsWith("/products/")||pathname.startsWith("/Products/")) {
+  } else if (
+    pathname.startsWith("/products/") ||
+    pathname.startsWith("/Products/")
+  ) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
@@ -137,7 +155,10 @@ export async function middleware(request) {
     } catch (error) {
       console.error("Error in product redirect:", error);
     }
-  } else if (pathname.startsWith("/product/")||pathname.startsWith("/Product/")) {
+  } else if (
+    pathname.startsWith("/product/") ||
+    pathname.startsWith("/Product/")
+  ) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
@@ -194,7 +215,11 @@ export async function middleware(request) {
     } catch (error) {
       console.error("Error in product redirect:", error);
     }
-  } else if (pathname.startsWith("/usedproduct/")||pathname.startsWith("/Usedproduct/")) {
+  } else if (
+    pathname.startsWith("/usedproduct/") ||
+    pathname.startsWith("/Usedproduct/") ||
+    pathname.startsWith("/u/add/")
+  ) {
     try {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
@@ -248,7 +273,7 @@ export async function middleware(request) {
     } catch (error) {
       console.error("Error in product redirect:", error);
     }
-  } else if (pathname.startsWith("/news/")||pathname.startsWith("/News/")) {
+  } else if (pathname.startsWith("/news/") || pathname.startsWith("/News/")) {
     const slug = decodeURIComponent(pathname).slice(1);
     const blog = await getItemByUrl(slug);
     if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
@@ -264,7 +289,7 @@ export async function middleware(request) {
         status: blog?.status,
       });
     }
-  } else if (pathname.startsWith("/dic/")||pathname.startsWith("/Dic/")) {
+  } else if (pathname.startsWith("/dic/") || pathname.startsWith("/Dic/")) {
     const slug = decodeURIComponent(pathname).slice(1);
     const dic = await getItemByUrl(slug);
     if (dic?.type === "error" && dic?.status === 404 && !dic?.isHard404) {
@@ -330,43 +355,31 @@ export async function middleware(request) {
         status: data?.status,
       });
     }
-  } else if (!staticPaths.some((path) => pathname.startsWith(path))) {
+  } else {
     try {
-      const decodedPath = decodeURIComponent(pathname);
-      const lowerCasePath = decodedPath.toLowerCase();
-
-      if (decodedPath !== lowerCasePath) {
-        const newUrl = new URL(request.url);
-        newUrl.pathname = lowerCasePath;
-        return NextResponse.redirect(newUrl, { status: 301 });
+      const settings = await getSettings();
+      if (
+        settings?.type === "error" &&
+        settings?.status === 404 &&
+        !settings?.isHard404
+      ) {
+        return NextResponse.rewrite(new URL("/404", request.url));
+      } else if (
+        settings?.type === "error" &&
+        settings?.status === 404 &&
+        settings?.isHard404
+      ) {
+        return NextResponse.rewrite(new URL(request.url), { status: 503 });
+      } else if (settings?.type === "error") {
+        return NextResponse.rewrite(new URL(request.url), {
+          status: settings?.status,
+        });
       }
     } catch (error) {
-      console.error("Error in lowercase conversion:", error);
+      console.error("Error fetching setting:", error);
     }
   }
 
-  try {
-    const settings = await getSettings();
-    if (
-      settings?.type === "error" &&
-      settings?.status === 404 &&
-      !settings?.isHard404
-    ) {
-      return NextResponse.rewrite(new URL("/404", request.url));
-    } else if (
-      settings?.type === "error" &&
-      settings?.status === 404 &&
-      settings?.isHard404
-    ) {
-      return NextResponse.rewrite(new URL(request.url), { status: 503 });
-    } else if (settings?.type === "error") {
-      return NextResponse.rewrite(new URL(request.url), {
-        status: settings?.status,
-      });
-    }
-  } catch (error) {
-    console.error("Error fetching setting:", error);
-  }
   return NextResponse.next();
 }
 

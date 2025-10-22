@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BsCreditCard2BackFill } from "react-icons/bs";
 import {
   FaAngleDown,
   FaArrowLeft,
@@ -28,6 +29,7 @@ import {
   FaMapMarkerAlt,
   FaMoneyBillWave,
   FaPhone,
+  FaReceipt,
   FaRecycle,
   FaTruck,
   FaUser,
@@ -220,7 +222,6 @@ export default function OrderDetails({ trackCode }) {
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-
 
   const formatPersianDate = (dateString) => {
     try {
@@ -529,32 +530,82 @@ export default function OrderDetails({ trackCode }) {
                 {orderDetails.payments.map((payment) => (
                   <div
                     key={payment.id}
-                    className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
+                    className={`flex items-start gap-3 p-3  rounded-lg border  transition-colors duration-200 ${
+                      payment.transactionCode
+                        ? "bg-emerald-50 border-emerald-100 hover:bg-emerald-100"
+                        : "bg-red-50 border-red-100 hover:bg-red-100"
+                    }`}
                   >
+                    {/* آیکون پرداخت */}
                     <div className="mt-1">
-                      <FaMoneyBillWave className="text-[#40768c]" />
+                      <BsCreditCard2BackFill className="text-xl text-[#40768c]" />
                     </div>
+
+                    {/* محتوای اصلی */}
                     <div className="flex-1">
-                      <div className="">
-                        <div className="flex flex-wrap justify-between items-start">
-                          <p className="font-medium text-gray-800">
-                            {payment.getWay}
-                          </p>
-                          <p className="font-semibold text-[#40768c]">
-                            {payment.amount.toLocaleString()} تومان
-                          </p>
+                      {/* هدر پرداخت */}
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="px-2 py-1 bg-white text-blue-700 rounded text-sm font-medium border border-blue-200">
+                          {payment.getWay}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <span className="font-bold text-gray-800">
+                            {payment.amount.toLocaleString()}
+                          </span>
+                          <span className="text-xs text-gray-500">تومان</span>
                         </div>
-                        <div className="flex flex-wrap justify-between items-start">
-                          <p className="text-sm text-gray-500 mt-1">
-                            کد تراکنش:{" "}
-                          </p>
+                      </div>
+
+                      {/* جزئیات پرداخت */}
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center justify-between">
+                          {/* شماره پیگیری */}
+                          {payment.trackingNumber && (
+                            <div className="flex items-center gap-2 text-sm">
+                              <FaReceipt className="text-gray-400" />
+                              <span className="text-gray-600 whitespace-nowrap">
+                                شماره پیگیری :
+                              </span>
+                              <span className="font-mono text-gray-800 bg-white px-2 py-1 rounded border border-gray-200 text-xs">
+                                {payment.trackingNumber}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* شماره سند */}
                           {payment.transactionCode && (
-                            <p>{payment.transactionCode}</p>
+                            <div className="flex items-center gap-2 text-sm">
+                              <FaReceipt className="text-gray-400" />
+                              <span className="text-gray-600 whitespace-nowrap">
+                                شماره سند / ارجاع :
+                              </span>
+                              <span className="font-mono text-gray-800 bg-white px-2 py-1 rounded border border-gray-200 text-xs">
+                                {payment.transactionCode}
+                              </span>
+                            </div>
+                          )}
+                          
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-between">
+                          {/* تاریخ پرداخت */}
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <FaCalendarAlt className="text-gray-400" />
+                            <span>{formatPersianDate(payment.created)}</span>
+                          </div>
+                          {payment.isSuccess && (
+                            <span className="px-3 py-1 font-bold text-xs text-emerald-700 bg-emerald-200 rounded-full">
+                              موفق
+                            </span>
+                          )}
+                          {!payment.isSuccess && (
+                            <div>
+                              <span className="px-3 py-1 font-bold text-xs text-red-700 bg-red-200 rounded-full">
+                                ناموفق
+                              </span>
+                            </div>
                           )}
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {formatPersianDate(payment.created)}
-                        </p>
                       </div>
                     </div>
                   </div>

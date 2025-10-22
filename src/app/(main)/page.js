@@ -10,6 +10,8 @@ import CameraAccessoriesSSR from "../../components/home/CameraAccessoriesSSR";
 import EidDiscountSSR from "../../components/home/EidDiscountSSR";
 import SliderHomeSSR from "../../components/home/SliderHomeSSR";
 
+export const revalidate = 60;
+
 export default async function Home() {
   const mainBanner = await getListItemBanner();
   const settings = await getSettings();

@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import { setActiveTab } from "@/redux/slices/idEditSec";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
-import { Divider, Skeleton } from "antd";
+import { Divider, Empty, Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -74,17 +74,17 @@ export default function SliderProductSec({
           <Swiper
             modules={[Autoplay, Navigation, EffectCoverflow]}
             spaceBetween={20}
-            slidesPerView={1}
+            slidesPerView={2}
             loop={true}
             grabCursor={true}
-            centeredSlides={false}
+            centeredSlides={true}
             effect="coverflow"
             coverflowEffect={{
               rotate: 20,
               stretch: 20,
-              depth: 50,
-              modifier: 0,
-              slideShadows: false,
+              depth: 200,
+              modifier: 1,
+              slideShadows: true,
             }}
             navigation={{
               nextEl: ".creative-next",
@@ -167,11 +167,11 @@ export default function SliderProductSec({
                       {!product.callPriceButton && product.finalPrice !== 0 && (
                         <div className="flex flex-col">
                           <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300 group-hover:text-lg ">
-                            {product.finalPrice.toLocaleString()} تومان
+                            {product?.finalPrice?.toLocaleString()} تومان
                           </span>
                           {product.discount !== 0 && (
                             <span className="text-[#333] font-semibold text-sm line-through">
-                              {product.price1.toLocaleString()}
+                              {product?.price1?.toLocaleString()}
                             </span>
                           )}
                         </div>
@@ -204,7 +204,7 @@ export default function SliderProductSec({
                     </div>
                   </div>
                   {/* تخفیف */}
-                  {product.discount !== 0 && (
+                  {product.discount !== 0 && product.showOffPercent && (
                     <div className="absolute top-3 left-3 z-50 duration-300">
                       <span className="bg-[#d1182b] !text-white rounded-md px-3 py-1 ">
                         {product.discount}%
@@ -307,58 +307,41 @@ export default function SliderProductSec({
             <FaCaretLeft />
           </div>
         </div>
-        <div className="relative w-full ">
-          <Swiper
-            modules={[Autoplay, Navigation, EffectCoverflow]}
-            spaceBetween={20}
-            slidesPerView={1}
-            loop={true}
-            grabCursor={true}
-            centeredSlides={false}
-            effect="coverflow"
-            coverflowEffect={{
-              rotate: 20,
-              stretch: 20,
-              depth: 50,
-              modifier: 0,
-              slideShadows: false,
-            }}
-            navigation={{
-              nextEl: ".creative-next",
-              prevEl: ".creative-prev",
-            }}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            speed={1000}
-            breakpoints={{
-              768: { slidesPerView: 2 },
-              1280: { slidesPerView: 2 },
-            }}
-            className="relative"
-          >
-            {productsData.map((product) => (
-              <SwiperSlide key={product.id} className="group cursor-pointer">
-                <div className="relative group w-full sm:min-h-[14rem] min-h-[12rem] overflow-hidden rounded-xl bg-white shadow-md">
-                  <Link
-                    onClick={(e) => {
-                      e.preventDefault();
-
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
-                    }}
-                    href={product.url}
-                    className="w-full min-h-36 flex items-center justify-center bg-[#fff] overflow-hidden relative"
-                  >
-                    <SliderProductSecPhoto2 product={product} />
-                    <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                      دست دوم کاربران
-                    </div>
-                  </Link>
-
-                  <div className="flex flex-col flex-1 justify-between mt-2">
+        {productsData.length > 0 && (
+          <div className="relative w-full ">
+            <Swiper
+              modules={[Autoplay, Navigation, EffectCoverflow]}
+              spaceBetween={20}
+              slidesPerView={2}
+              loop={true}
+              grabCursor={true}
+              centeredSlides={true}
+              effect="coverflow"
+              coverflowEffect={{
+                rotate: 20,
+                stretch: 20,
+                depth: 200,
+                modifier: 1,
+                slideShadows: true,
+              }}
+              navigation={{
+                nextEl: ".creative-next",
+                prevEl: ".creative-prev",
+              }}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              speed={1000}
+              breakpoints={{
+                768: { slidesPerView: 2 },
+                1280: { slidesPerView: 2 },
+              }}
+              className="relative"
+            >
+              {productsData.map((product) => (
+                <SwiperSlide key={product.id} className="group cursor-pointer">
+                  <div className="relative group w-full sm:min-h-[14rem] min-h-[12rem] overflow-hidden rounded-xl bg-white shadow-md">
                     <Link
                       onClick={(e) => {
                         e.preventDefault();
@@ -367,58 +350,82 @@ export default function SliderProductSec({
                           router.push(product.url);
                         });
                       }}
-                      href={product.url}
-                      className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
+                      href={product.url ? product.url : "#"}
+                      className="w-full min-h-36 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                     >
-                      <h3 className="text-justify line-clamp-3 w-full">
-                        {product.title}
-                      </h3>
+                      <SliderProductSecPhoto2 product={product} />
+                      <div className="absolute top-2 right-2 bg-[#fff] border border-[#40768c] text-[#40768c] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                        دست دوم کاربران
+                      </div>
                     </Link>
-                    <Divider style={{ margin: 5, padding: 0 }} />
 
-                    <div className="h-[4.5rem] px-2 duration-300">
-                      <div className="px-2 duration-300">
-                        {product.price !== 0 && (
-                          <div className="flex flex-col">
-                            <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300">
-                              {product.price.toLocaleString()} تومان
+                    <div className="flex flex-col flex-1 justify-between mt-2">
+                      <Link
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          startTransition(() => {
+                            router.push(product.url);
+                          });
+                        }}
+                        href={product.url ? product.url : "#"}
+                        className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
+                      >
+                        <h3 className="text-justify line-clamp-3 w-full">
+                          {product.title}
+                        </h3>
+                      </Link>
+                      <Divider style={{ margin: 5, padding: 0 }} />
+
+                      <div className="h-[4.5rem] px-2 duration-300">
+                        <div className="px-2 duration-300">
+                          {product.price !== 0 && (
+                            <div className="flex flex-col">
+                              <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300">
+                                {product?.price?.toLocaleString()} تومان
+                              </span>
+                            </div>
+                          )}
+                          {product.price === 0 && (
+                            <span className="font-bold text-base text-[#333]">
+                              توافقی (تماس بگیرید)
                             </span>
-                          </div>
-                        )}
-                        {product.price === 0 && (
-                          <span className="font-bold text-base text-[#333]">
-                            توافقی (تماس بگیرید)
-                          </span>
-                        )}
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          startTransition(() => {
+                            router.push(product.url);
+                          });
+                        }}
+                        className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%]"
+                      >
+                        <FaSearch className="text-xl text-[#333]" />
+                        <span className="px-1 text-[#333]">جزئیات</span>
                       </div>
                     </div>
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                      }}
-                      className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%]"
-                    >
-                      <FaSearch className="text-xl text-[#333]" />
-                      <span className="px-1 text-[#333]">جزئیات</span>
-                    </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+              ))}
 
-            <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
-              <FaAngleLeft size={24} className="pointer-events-none" />
-            </div>
-            <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
-              <FaAngleRight size={24} className="pointer-events-none" />
-            </div>
-          </Swiper>
+              <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
+                <FaAngleLeft size={24} className="pointer-events-none" />
+              </div>
+              <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
+                <FaAngleRight size={24} className="pointer-events-none" />
+              </div>
+            </Swiper>
 
-          {isPending && <Loading />}
-        </div>
+            {isPending && <Loading />}
+          </div>
+        )}
+        {productsData.length === 0 && (
+          <div className="flex justify-center items-center mx-auto text-center h-full w-full">
+            <Empty description={"کالایی ثبت نشده است"} />
+          </div>
+        )}
       </div>
     </div>
   );

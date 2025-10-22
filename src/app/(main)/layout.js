@@ -8,13 +8,13 @@ import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
 import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+
 // Force dynamic rendering for this segment to avoid serving cached/static output
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "default-no-store";
+// export const dynamic = "force-dynamic";
+// export const revalidate = 0;
+// export const fetchCache = "default-no-store";
 
 export const metadata = {
   title: {

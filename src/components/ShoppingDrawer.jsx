@@ -266,7 +266,7 @@ function ShoppingDrawer({ header }) {
                                 </span>
                               )}
                               {/* لیبل تخفیف */}
-                              {item.discount > 0 && (
+                              {item.discount > 0 &&  (
                                 <div className="absolute top-0 right-0 bg-[#d1182b] !text-white text-xs px-2 py-1 rounded-bl-lg">
                                   {item.discount}%
                                 </div>

@@ -140,9 +140,16 @@ function ModalShowDetails({ id }) {
             {/* عنوان و قیمت */}
             <div className="flex flex-col items-center space-y-1">
               <h2 className="text-lg font-bold">{productDetails.title}</h2>
-              <span className="text-teal-600 font-semibold text-base">
-                {productDetails.price?.toLocaleString()} تومان
-              </span>
+              {productDetails.price > 0 && (
+                <span className="text-teal-600 font-semibold text-base">
+                  {productDetails.price?.toLocaleString()} تومان
+                </span>
+              )}
+              {productDetails.price === 0 && (
+                <span className="text-[#d1182b] font-bold text-sm">
+                  توافقی (تماس بگیرید)
+                </span>
+              )}
               <span className="text-gray-500 text-sm">
                 {productDetails.categoryTitle}
               </span>
