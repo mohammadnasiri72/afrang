@@ -91,11 +91,11 @@ function AddLegal({
       const data = {
         ...formData,
         provinceId: selectedProvince,
-        provinceTitle: provinceList.find(
+        provinceTitle: provinceList?.find(
           (ev) => ev.provinceId === selectedProvince
         ).title,
         cityId: selectedCity,
-        cityTitle: cityList.find((ev) => ev.id === selectedCity).title,
+        cityTitle: cityList?.find((ev) => ev.id === selectedCity).title,
       };
       const response = await addLegal(data, token);
       if (response.type === "error") {

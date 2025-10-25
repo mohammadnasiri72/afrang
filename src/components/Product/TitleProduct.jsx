@@ -11,7 +11,7 @@ function TitleProduct({ product }) {
         itemKey: "Image",
         fileUrl: product?.product?.image,
         priority: 0, // اولویت صفر برای نمایش در اول اسلایدر
-        title: "تصویر اصلی محصول",
+        title: "",
       }
     : null;
 

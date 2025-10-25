@@ -42,7 +42,7 @@ async function BodyProductServer({ product }) {
   let listVideo = [];
   try {
     if (hasRelatedVideos) {
-      const ids = product.properties.find(
+      const ids = product.properties?.find(
         (e) => e.propertyKey === "related_videos"
       )?.value;
       if (ids) {

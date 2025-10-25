@@ -36,9 +36,9 @@ export default function SubHeader({ popupsList }) {
   useEffect(() => {
     if (
       popupsList.length > 0 &&
-      popupsList.find((e) => e.category === "popup_site")
+      popupsList?.find((e) => e.category === "popup_site")
     ) {
-      setDataPopup(popupsList.find((e) => e.category === "popup_site"));
+      setDataPopup(popupsList?.find((e) => e.category === "popup_site"));
     }
   }, [popupsList]);
 
@@ -48,42 +48,42 @@ export default function SubHeader({ popupsList }) {
         <div className="h-10  !overflow-hidden">
           <div className="hidden">
             <h4>
-              {popupsList.find((e) => e.category === "popup_header").title}
+              {popupsList?.find((e) => e.category === "popup_header").title}
             </h4>
             <div
               style={{
-                color: popupsList.find((e) => e.category === "popup_header")
+                color: popupsList?.find((e) => e.category === "popup_header")
                   .color,
               }}
               className="sm:block hidden"
               dangerouslySetInnerHTML={renderHTML(
-                popupsList.find((e) => e.category === "popup_header")
+                popupsList?.find((e) => e.category === "popup_header")
                   .desktopBody
               )}
             />
             <div
               style={{
-                color: popupsList.find((e) => e.category === "popup_header")
+                color: popupsList?.find((e) => e.category === "popup_header")
                   .color,
               }}
               className="sm:hidden block"
               dangerouslySetInnerHTML={renderHTML(
-                popupsList.find((e) => e.category === "popup_header").mobileBody
+                popupsList?.find((e) => e.category === "popup_header").mobileBody
               )}
             />
           </div>
-          {(popupsList.find((e) => e.category === "popup_header").showInPage ===
+          {(popupsList?.find((e) => e.category === "popup_header").showInPage ===
             "all" ||
-            (popupsList.find((e) => e.category === "popup_header")
+            (popupsList?.find((e) => e.category === "popup_header")
               .showInPage === "main" &&
               pathname === "/")) && (
             <div className="z-[1200] relative !overflow-hidden">
-              {popupsList.find((e) => e.category === "popup_header").id && (
+              {popupsList?.find((e) => e.category === "popup_header").id && (
                 <div
                   className={`marquee flex items-center py-3 w-full !overflow-hidden h-10 !text-white text-sm`}
                   style={{
                     direction: "ltr",
-                    backgroundColor: popupsList.find(
+                    backgroundColor: popupsList?.find(
                       (e) => e.category === "popup_header"
                     ).backgroundColor,
                   }}
@@ -96,25 +96,25 @@ export default function SubHeader({ popupsList }) {
                   >
                     <div
                       style={{
-                        color: popupsList.find(
+                        color: popupsList?.find(
                           (e) => e.category === "popup_header"
                         ).color,
                       }}
                       className="sm:block hidden mt-2"
                       dangerouslySetInnerHTML={renderHTML(
-                        popupsList.find((e) => e.category === "popup_header")
+                        popupsList?.find((e) => e.category === "popup_header")
                           .desktopBody
                       )}
                     />
                     <div
                       style={{
-                        color: popupsList.find(
+                        color: popupsList?.find(
                           (e) => e.category === "popup_header"
                         ).color,
                       }}
                       className="sm:hidden block mt-2"
                       dangerouslySetInnerHTML={renderHTML(
-                        popupsList.find((e) => e.category === "popup_header")
+                        popupsList?.find((e) => e.category === "popup_header")
                           .mobileBody
                       )}
                     />

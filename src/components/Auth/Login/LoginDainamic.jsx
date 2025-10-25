@@ -199,7 +199,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
                 حساب کاربری ندارید؟
-                <Link className="text-[#d1182b]" href={"/register"}>
+                <Link className="text-[#d1182b] px-2" href={"/register"}>
                   ساخت حساب کاربری
                 </Link>
               </div>

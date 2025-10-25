@@ -10,10 +10,11 @@ import { Affix, Divider, message } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { FaTimes } from "react-icons/fa";
 
 const DynamicComparePage = () => {
+   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
   const [compareProducts, setCompareProducts] = useState([]);
@@ -141,6 +142,12 @@ const DynamicComparePage = () => {
           <p className="text-gray-500 mb-6">{error}</p>
           <Link
             href="/products"
+             onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push("/products");
+                });
+              }}
             className="bg-blue-500 !text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
           >
             بازگشت به محصولات
@@ -163,6 +170,12 @@ const DynamicComparePage = () => {
           </p>
           <Link
             href="/products"
+             onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push("/products");
+                });
+              }}
             className="bg-blue-500 !text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
           >
             مشاهده محصولات
@@ -184,6 +197,7 @@ const DynamicComparePage = () => {
   };
 
   return (
+    <>
     <div
       ref={parentRef}
       className="min-h-screen bg-gray-50 py-8 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300"
@@ -222,7 +236,16 @@ const DynamicComparePage = () => {
                           {/* عکس و عنوان */}
                           <div className="w-full ">
                             <div className="flex flex-col items-center w-full">
-                              <Link href={`/product/${item.productId}`}>
+                              <Link
+                              
+                              href={`/product/${item.productId}`}
+                               onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push(`/product/${item.productId}`);
+                });
+              }}
+                              >
                                 <Image
                                   src={
                                     getImageUrl(item.image) ||
@@ -236,51 +259,7 @@ const DynamicComparePage = () => {
                                   unoptimized
                                 />
                               </Link>
-                              {/* <div className="w-full  ">
-                          {affixActive ? (
-                            <Affix offsetTop={105}>
-                              <div
-                                className="bg-white w-full p-3"
-                                style={{
-                                  position: affixActive ? "" : "static",
-                                  top: affixActive ? 105 : "auto",
-                                  width: "100%",
-                                  zIndex: 10,
-                                }}
-                              >
-                                <Link href={`/product/${item.productId}`}>
-                                  <div className="font-bold mt-2 text-center text-sm !line-clamp-2 h-10 flex items-center justify-center text-black">
-                                    {item.title}
-                                  </div>
-                                </Link>
-                                <div className="font-bold text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
-                                  {item?.finalPrice?.toLocaleString()} تومان
-                                </div>
-                                <AddToCartButton productId={item.productId} />
-                              </div>
-                            </Affix>
-                          ) : (
-                            <div
-                              className="bg-white w-full p-3"
-                              style={{
-                                position: affixActive ? "" : "static",
-                                top: affixActive ? 105 : "auto",
-                                width: "100%",
-                                zIndex: 10,
-                              }}
-                            >
-                              <Link href={`/product/${item.productId}`}>
-                                <div className="font-bold mt-2 text-center text-sm !line-clamp-2 h-10 flex items-center justify-center text-black">
-                                  {item.title}
-                                </div>
-                              </Link>
-                              <div className="font-bold text-center text-sm line-clamp-2 h-10 flex items-center justify-center">
-                                {item?.finalPrice?.toLocaleString()} تومان
-                              </div>
-                              <AddToCartButton productId={item.productId} />
-                            </div>
-                          )}
-                        </div> */}
+                           
                               <div
                                 className="bg-white w-full p-3"
                                 style={{
@@ -290,7 +269,14 @@ const DynamicComparePage = () => {
                                   zIndex: 10,
                                 }}
                               >
-                                <Link href={`/product/${item.productId}`}>
+                                <Link href={`/product/${item.productId}`}
+                                 onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push(`/product/${item.productId}`);
+                });
+              }}
+                                >
                                   <div className="font-bold mt-2 text-center text-sm !line-clamp-2 h-10 flex items-center justify-center text-black">
                                     {item.title}
                                   </div>
@@ -372,6 +358,8 @@ const DynamicComparePage = () => {
         ))}
       </div>
     </div>
+    {isPending && <Loading />}
+    </>
   );
 };
 

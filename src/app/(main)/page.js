@@ -15,7 +15,7 @@ export const revalidate = 60;
 export default async function Home() {
   const mainBanner = await getListItemBanner();
   const settings = await getSettings();
-  const pageTitleH1 = settings.find(
+  const pageTitleH1 = settings?.find(
     (item) => item.propertyKey === "site_title"
   )?.propertyValue;
 

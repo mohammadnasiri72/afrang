@@ -22,7 +22,7 @@ async function SliderProductSecSSR({ mainBanner }) {
     <SliderProductSec
       oldProducts={oldProducts}
       productsData={productsData}
-      mainBanner={mainBanner.find((e) => e.categoryKey === "banner_used")}
+      mainBanner={mainBanner?.find((e) => e.categoryKey === "banner_used")}
     />
   );
 }

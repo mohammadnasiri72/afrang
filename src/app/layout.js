@@ -1,17 +1,14 @@
 /* eslint-disable @next/next/no-css-tags */
 import Layout from "@/components/Layout";
-import ServerError from "@/components/ServerError";
+import LoadingScript from "@/components/LoadingScript";
 import { getSettings } from "@/services/settings/settingsService";
 import "@ant-design/v5-patch-for-react-19";
 import "react-circular-progressbar/dist/styles.css";
 import "./globals.css";
 
-
 export const revalidate = 60;
 
 const settings = await getSettings();
-
-
 
 export default async function RootLayout({ children }) {
   return (
@@ -21,6 +18,7 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
+        <LoadingScript />
         <Layout settings={settings}>{children}</Layout>
       </body>
     </html>

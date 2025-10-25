@@ -106,16 +106,41 @@ export async function middleware(request) {
       const pathParts = pathname.split("/");
       // پیدا کردن آخرین عدد در URL
       let productId = null;
-      for (let i = pathParts.length - 1; i >= 0; i--) {
+      let secondLastId = null;
+      let numbersFound = [];
+
+      // for (let i = pathParts.length - 1; i >= 0; i--) {
+      //   const num = Number(pathParts[i]);
+      //   if (!isNaN(num)) {
+      //     productId = num;
+      //     break;
+      //   }
+      // }
+
+      // جمع‌آوری تمام اعداد موجود در مسیر
+      for (let i = 0; i < pathParts.length; i++) {
         const num = Number(pathParts[i]);
-        if (!isNaN(num)) {
-          productId = num;
-          break;
+        if (!isNaN(num) && pathParts[i].trim() !== "") {
+          numbersFound.push(num);
         }
       }
 
+      // آخرین عدد
+      if (numbersFound.length > 0) {
+        productId = numbersFound[numbersFound.length - 1];
+      }
+
+      // عدد یکی مونده به آخر (اگر وجود داشته باشد)
+      if (numbersFound.length > 1) {
+        secondLastId = numbersFound[numbersFound.length - 2];
+      }
+
+
       if (productId !== null) {
-        const productCategory = await getProductCategory(productId);
+        const productCategory = await getProductCategory(
+          productId,
+          secondLastId
+        );
         const decodedPathname = decodeURIComponent(pathname);
 
         if (

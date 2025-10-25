@@ -46,7 +46,7 @@ function ModalSelectCategoryBlog({ onCategorySelect }) {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
       const categoryId = Number(categoryParam);
-      const category = categories.find(cat => cat.id === categoryId);
+      const category = categories?.find(cat => cat.id === categoryId);
       if (category) {
         setTitleModalCategory(category.title);
       }

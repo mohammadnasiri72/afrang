@@ -166,7 +166,7 @@ function LoginStatic({ setStateLogin, from }) {
         <div className="text-[16px]">
           <div>
             <div className="flex flex-wrap">
-              <div className="w-full mb-4">
+              <div className="w-full mb-3">
                 <label className="text-[#656565] text-[16px] mb-[10px]">
                   شماره تلفن/آدرس ایمیل
                 </label>
@@ -193,7 +193,7 @@ function LoginStatic({ setStateLogin, from }) {
                   <p className="text-red-500 text-sm mt-1">{errors.username}</p>
                 )}
               </div>
-              <div className="w-full my-4 ">
+              <div className="w-full mb-4 ">
                 <label className="text-[#656565] text-[16px] mb-[10px]">
                   رمز ورود
                 </label>
@@ -272,7 +272,7 @@ function LoginStatic({ setStateLogin, from }) {
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
                 حساب کاربری ندارید؟
-                <Link className="text-[#d1182b]" href={"/register"}>
+                <Link className="text-[#d1182b] px-2" href={"/register"}>
                   ساخت حساب کاربری
                 </Link>
               </div>

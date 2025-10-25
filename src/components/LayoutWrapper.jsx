@@ -50,7 +50,7 @@ export default function LayoutWrapper({
 
   useEffect(() => {
     if (popupsList.length > 0) {
-      setDataPopup(popupsList.find((e) => e.category === "popup_site"));
+      setDataPopup(popupsList?.find((e) => e.category === "popup_site"));
     }
   }, [popupsList]);
 

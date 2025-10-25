@@ -288,13 +288,13 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
           <>
             {/* overlay */}
             <div
-              className="fixed inset-0 bg-[#0008] bg-opacity-30 backdrop-blur-sm z-[99998]"
+              className="fixed inset-0 bg-[#0008] bg-opacity-30  z-[99998]"
               onClick={() => setIsOpen(false)}
             />
             {/* منو */}
             <div
               ref={dropdownRef}
-              className={`fixed w-64 bg-white/95 backdrop-blur-sm shadow-xl rounded-lg z-[99999] transition-all duration-300 ease-out border border-gray-200
+              className={`fixed w-64 bg-white/95 shadow-xl rounded-lg z-[99999] transition-all duration-300 ease-out border border-gray-200
           ${
             menuAnimate
               ? "opacity-100 scale-100 translate-y-0"

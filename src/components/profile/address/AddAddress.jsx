@@ -463,11 +463,11 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
       fullName,
       mobile,
       provinceId: selectedProvince,
-      provinceTitle: provinceList.find(
+      provinceTitle: provinceList?.find(
         (ev) => ev.provinceId === selectedProvince
       ).title,
       cityId: selectedCity,
-      cityTitle: cityList.find((ev) => ev.id === selectedCity).title,
+      cityTitle: cityList?.find((ev) => ev.id === selectedCity).title,
       address,
       nationalCode,
       postalCode,

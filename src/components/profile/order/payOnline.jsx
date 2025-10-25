@@ -113,7 +113,7 @@ export default function PayOnline({ orderData }) {
     setLoadingBtn(true);
     const data = {
       orderId: Number(param.get("trackCode")),
-      bank: gateways.find((e) => e.id === selectedGateway)?.itemKey,
+      bank: gateways?.find((e) => e.id === selectedGateway)?.itemKey,
     };
     axios
       .post(`${mainDomain}/api/Payment/Pay`, data, {

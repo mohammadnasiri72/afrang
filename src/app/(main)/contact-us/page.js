@@ -15,7 +15,7 @@ export default async function Contact() {
 
     return (
       <div>
-        <HeaderContact data={data} />
+        {data.image && <HeaderContact data={data} />}
         <div className="bg-[#f6f6f6] overflow-hidden">
           <Container>
             <BodyContact />

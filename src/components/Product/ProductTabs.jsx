@@ -315,7 +315,7 @@ function ProductTabs({
   const handleKeyDown = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      const currentIndex = options.findIndex(
+      const currentIndex = options?.findIndex(
         (opt) => opt.value === tabProDetails
       );
       const targetIndex = e.currentTarget.getAttribute("data-index");

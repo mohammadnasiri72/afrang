@@ -17,7 +17,7 @@ function SelectCat({ category }) {
     if (value === 0) {
       router.push("/gallery");
     } else {
-      const selectedCategoryData = category.find(
+      const selectedCategoryData = category?.find(
         (item) => item.categoryKey === value
       );
       if (selectedCategoryData) {
@@ -30,7 +30,7 @@ function SelectCat({ category }) {
   useEffect(() => {
     if (params?.slug?.[0]) {
       const categoryId = Number(params.slug[0]);
-      const foundCategory = category.find(
+      const foundCategory = category?.find(
         (item) => Number(item.categoryKey) === categoryId
       );
       if (foundCategory) {

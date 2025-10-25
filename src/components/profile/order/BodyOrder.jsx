@@ -366,7 +366,7 @@ export default function BodyOrder() {
                         ${parseInt(statusId) === opt.value ? 'bg-[#d1182b] !text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-[#f6f6f6]'}
                       `}
                     >
-                      {React.createElement(options.find(o => o.value === opt.value).label.props.children[1].type, { className: 'text-base mb-1' })}
+                      {React.createElement(options?.find(o => o.value === opt.value).label.props.children[1].type, { className: 'text-base mb-1' })}
                       <span className="whitespace-nowrap">{ORDER_STATUS_TITLES[opt.value]}</span>
                       <span className="text-[10px] font-normal">({dashboardData[
                         opt.value === 1 ? 'Record' :

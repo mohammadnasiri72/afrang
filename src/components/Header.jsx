@@ -70,12 +70,12 @@ export default function Header({ onLoaded, settings }) {
                   <img
                     className="w-14"
                     src={getImageUrl(
-                      settings.find(
+                      settings?.find(
                         (item) => item.propertyKey === "site_footer_logo"
                       )?.value
                     )}
                     alt={
-                      settings.find(
+                      settings?.find(
                         (item) => item.propertyKey === "site_footer_logo"
                       )?.title
                     }
@@ -135,25 +135,21 @@ export default function Header({ onLoaded, settings }) {
                   </div>
                 ) : (
                   <div className="flex items-center gap-3 font-semibold w-32 ">
-                    <div
-                      onClick={() => {
-                        route.push("/login");
-                      }}
+                    <Link
+                      href={"/login"}
                       className="flex items-center gap-1 cursor-pointer hover:text-[#d1182b] duration-300"
                     >
                       <FaArrowRightLong />
                       <span>ورود</span>
-                    </div>
-                    <div
-                      onClick={() => {
-                        route.push("/register");
-                      }}
+                    </Link>
+                    <Link
+                      href={"/register"}
                       className="border-r border-[#0005] pr-3"
                     >
                       <span className="cursor-pointer hover:text-[#d1182b] duration-300">
                         عضویت
                       </span>
-                    </div>
+                    </Link>
                   </div>
                 )}
               </div>

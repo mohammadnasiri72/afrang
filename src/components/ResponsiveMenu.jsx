@@ -302,13 +302,13 @@ function ResponsiveMenu({
       <Link
         onClick={onClose}
         href={
-          settings.find((item) => item.propertyKey === "site_home_url")?.value
+          settings?.find((item) => item.propertyKey === "site_home_url")?.value
         }
       >
         <img
           className="w-14 "
           src={getImageUrl(
-            settings.find((item) => item.propertyKey === "site_footer_logo")
+            settings?.find((item) => item.propertyKey === "site_footer_logo")
               ?.value
           )}
           alt=""
@@ -411,7 +411,7 @@ function ResponsiveMenu({
     let navbar = navbarRef.current;
     if (navbar && window.getComputedStyle(navbar).visibility === "hidden") {
       const navbars = document.querySelectorAll(".main-navbar");
-      navbar = Array.from(navbars).find(
+      navbar = Array.from(navbars)?.find(
         (el) => window.getComputedStyle(el).visibility !== "hidden"
       );
     }
@@ -491,7 +491,7 @@ function ResponsiveMenu({
             window.getComputedStyle(navbar).visibility === "hidden"
           ) {
             const navbars = document.querySelectorAll(".main-navbar");
-            navbar = Array.from(navbars).find(
+            navbar = Array.from(navbars)?.find(
               (el) => window.getComputedStyle(el).visibility !== "hidden"
             );
           }

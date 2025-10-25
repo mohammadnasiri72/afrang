@@ -15,7 +15,7 @@ function Warranties({
   const handleWarrantyChange = (e) => {
     if (!disabled) {
       setWarrantySelected(
-        warrantiesArray.find((ev) => ev.id === Number(e.target.value))
+        warrantiesArray?.find((ev) => ev.id === Number(e.target.value))
       );
     }
   };

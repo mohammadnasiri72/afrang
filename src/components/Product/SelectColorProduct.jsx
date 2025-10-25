@@ -21,7 +21,7 @@ function SelectColorProduct({ product, onChange }) {
 
   useEffect(() => {
     if (selectedColorId !== null) {
-      const selectedMode = modes.find((m) => m.id === selectedColorId);
+      const selectedMode = modes?.find((m) => m.id === selectedColorId);
       if (selectedMode) dispatch(setSelectedColorMode(selectedMode));
     }
   }, [selectedColorId]);
@@ -29,7 +29,7 @@ function SelectColorProduct({ product, onChange }) {
   const handleSelect = (id) => {
     setSelectedColorId(id);
     if (onChange) onChange(id);
-    const selectedMode = modes.find((m) => m.id === id);
+    const selectedMode = modes?.find((m) => m.id === id);
     if (selectedMode) dispatch(setSelectedColorMode(selectedMode));
   };
 

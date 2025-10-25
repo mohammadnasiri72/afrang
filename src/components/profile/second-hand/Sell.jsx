@@ -282,7 +282,7 @@ function Sell({ productsSec, productEdit, id }) {
   };
 
   const handleRemoveImage = (img) => {
-    const index = fileList.findIndex((item) => item.uid === img.uid);
+    const index = fileList?.findIndex((item) => item.uid === img.uid);
     setFileList((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -757,7 +757,7 @@ function Sell({ productsSec, productEdit, id }) {
                   onChange={({ fileList: newFileList }) => {
                     setFileList((prevList) =>
                       newFileList.map((file) => {
-                        const old = prevList.find((f) => f.uid === file.uid);
+                        const old = prevList?.find((f) => f.uid === file.uid);
                         return old
                           ? { ...file, uploadedData: old.uploadedData }
                           : file;

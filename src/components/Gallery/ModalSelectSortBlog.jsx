@@ -22,7 +22,7 @@ function ModalSelectSortBlog({ onSortSelect }) {
   useEffect(() => {
     const orderByParam = searchParams.get('orderBy');
     if (orderByParam) {
-      const sortOption = SORT_OPTIONS.find(option => option.value === orderByParam);
+      const sortOption = SORT_OPTIONS?.find(option => option.value === orderByParam);
       if (sortOption) {
         setTitleModalCategory(sortOption.title);
       }

@@ -19,13 +19,13 @@ function CheckboxInsurance({ insurance, product }) {
 
   useEffect(() => {
     if (currentItems.length > 0 && insurance.id > 0) {
-      setCartId(currentItems.find((e) => e.productId === insurance.id)?.id);
+      setCartId(currentItems?.find((e) => e.productId === insurance.id)?.id);
     }
   }, [currentItems, insurance]);
 
   useEffect(() => {
     if (
-      currentItems.find(
+      currentItems?.find(
         (e) =>
           e.parentId === product?.product?.productId &&
           e.productId === insurance.id

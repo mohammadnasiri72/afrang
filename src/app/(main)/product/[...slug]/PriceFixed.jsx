@@ -17,7 +17,7 @@ export default function PriceFixed({ product }) {
 
   const { currentItems } = useSelector((state) => state.cart);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
-  const cartItem = itemsArray.find(
+  const cartItem = itemsArray?.find(
     (item) => item.productId === product?.product?.productId
   );
   const [isLoading, setIsLoading] = useState(false);

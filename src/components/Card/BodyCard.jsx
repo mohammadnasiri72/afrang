@@ -38,7 +38,7 @@ function buildTree(items) {
       tree.push(itemMap[uniqueKey]);
     } else {
       // پیدا کردن والد بر اساس productId بدون در نظر گرفتن colorId
-      const parentEntries = Object.entries(itemMap).find(
+      const parentEntries = Object.entries(itemMap)?.find(
         ([key, value]) => value.productId === item.parentId
       );
 

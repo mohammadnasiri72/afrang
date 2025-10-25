@@ -52,7 +52,7 @@ async function BodyProduct({ product }) {
   let listVideo = [];
   if (product?.product?.relatedId) {
     listVideo = await getListItemByIds(
-      product.properties.find((e) => e.propertyKey === "related_videos")?.value
+      product.properties?.find((e) => e.propertyKey === "related_videos")?.value
     );
   }
 

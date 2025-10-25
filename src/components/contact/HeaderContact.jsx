@@ -1,5 +1,4 @@
 import { getImageUrl } from "@/utils/mainDomain";
-import React from "react";
 
 function HeaderContact({ data }) {
 

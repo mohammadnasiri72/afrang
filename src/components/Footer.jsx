@@ -114,7 +114,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                       {settings?.find(
                         (item) => item.propertyKey === "site_worktime"
                       )?.value ? (
-                        settings.find(
+                        settings?.find(
                           (item) => item.propertyKey === "site_worktime"
                         )?.value
                       ) : (

@@ -48,7 +48,7 @@ function BasketBox({ product }) {
     }
   }, [product, currentItems]);
 
-  const insur = currentItems.find(
+  const insur = currentItems?.find(
     (e) => e.parentId === product?.product?.productId
   );
 

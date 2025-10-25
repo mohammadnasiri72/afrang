@@ -13,7 +13,7 @@ const DynamicTitle = () => {
   useEffect(() => {
     if (settings && settings.length > 0) {
       // Update title
-      const siteTitle = settings.find(
+      const siteTitle = settings?.find(
         (item) => item.propertyKey === "site_title"
       )?.value;
       if (siteTitle) {
@@ -23,7 +23,7 @@ const DynamicTitle = () => {
       }
 
       // Update favicon
-      const favicon = settings.find(
+      const favicon = settings?.find(
         (item) => item.propertyKey === "site_icon"
       )?.value;
       if (favicon) {

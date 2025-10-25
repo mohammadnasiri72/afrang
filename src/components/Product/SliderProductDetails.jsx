@@ -53,8 +53,6 @@ export default function SliderProductDetails({ attachments, product }) {
   // شناسایی تصویر LCP (اولین تصویر محصول)
   const lcpImage = attachments.length > 0 ? attachments[0] : null;
 
-  
-
   return (
     <>
       <div className="flex justify-between relative h-full ">
@@ -116,7 +114,7 @@ export default function SliderProductDetails({ attachments, product }) {
                       className=" h-full"
                       href={getImageUrl(attachment.fileUrl)}
                       data-fancybox="gallery"
-                      data-caption="Caption Images 4"
+                      data-caption={attachment.title || product.title}
                       aria-label="لینک کروسل"
                     >
                       <img

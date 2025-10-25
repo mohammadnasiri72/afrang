@@ -275,7 +275,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
   }, [params?.slug?.[0], orderByParam]);
 
   const handleNext = () => {
-    const currentIndex = ImagesData.findIndex(
+    const currentIndex = ImagesData?.findIndex(
       (obj) => obj.id === imgSelected.id
     );
     const nextIndex = (currentIndex + 1) % ImagesData.length;
@@ -283,7 +283,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
   };
 
   const handlePrev = () => {
-    const currentIndex = ImagesData.findIndex(
+    const currentIndex = ImagesData?.findIndex(
       (obj) => obj.id === imgSelected.id
     );
     const prevIndex =
@@ -374,7 +374,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                   )?.value && (
                     <Link
                       href={
-                        settings.find(
+                        settings?.find(
                           (item) => item.propertyKey === "site_home_url"
                         )?.value
                       }
@@ -383,12 +383,12 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                       <img
                         className="w-10"
                         src={getImageUrl(
-                          settings.find(
+                          settings?.find(
                             (item) => item.propertyKey === "site_footer_logo"
                           )?.value
                         )}
                         alt={
-                          settings.find(
+                          settings?.find(
                             (item) => item.propertyKey === "site_footer_logo"
                           )?.title
                         }
@@ -404,7 +404,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                     style={{ direction: "ltr", color: "#18d1be" }}
                     value={
                       (Number(
-                        propertySelected.find(
+                        propertySelected?.find(
                           (item) => item.propertyKey === "gal_afrangscore"
                         )?.value
                       ) || 0) / 2
@@ -432,7 +432,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                     <LuCalendarRange className="text-[#444]" />
                     <span className="text-[#444]">زمان عکاسی :</span>
                     <span className="font-semibold text-[16px]">
-                      {propertySelected.find(
+                      {propertySelected?.find(
                         (item) => item.propertyKey === "gal_time"
                       )?.value || "نامشخص"}
                     </span>
@@ -452,7 +452,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                       نوع دوربین :
                     </span>
                     <span className="font-bold">
-                      {propertySelected.find(
+                      {propertySelected?.find(
                         (item) => item.propertyKey === "gal_camera"
                       )?.value || "نامشخص"}
                     </span>
@@ -462,7 +462,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                       نوع لنز :
                     </span>
                     <span className="font-bold">
-                      {propertySelected.find(
+                      {propertySelected?.find(
                         (item) => item.propertyKey === "gal_lenz"
                       )?.value || "نامشخص"}
                     </span>

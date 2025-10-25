@@ -150,14 +150,28 @@ export const getProductPricing = async (categoryId) => {
   }
 };
 
-export const getProductCategory = async (categoryId) => {
+export const getProductCategory = async (categoryId, id2) => {
   try {
-    const response = await axios.get(
-      `${mainDomain}/api/Product/Category/${categoryId}`,
-      {
-        cache: "force-cache",
-      }
-    );
+    let response = "";
+    if (id2) {
+      response = await axios.get(
+        `${mainDomain}/api/Product/Category/${categoryId}`,
+        {
+          params: {
+            id2,
+          },
+          cache: "force-cache",
+        }
+      );
+    } else {
+      response = await axios.get(
+        `${mainDomain}/api/Product/Category/${categoryId}`,
+        {
+          cache: "force-cache",
+        }
+      );
+    }
+   
     return response.data;
   } catch (err) {
     const responseData = err.response?.data;
