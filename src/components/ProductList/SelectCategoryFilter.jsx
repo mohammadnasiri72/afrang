@@ -1,16 +1,16 @@
 "use client";
 
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
-import { getCategoryChild } from "@/services/Property/propertyService";
 import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Collapse, Divider, Skeleton, Switch } from "antd";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Collapse, Divider, Switch } from "antd";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { FaSearch } from "react-icons/fa";
 import { FaAngleUp } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
+import Loading from "../Loading";
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
@@ -20,12 +20,9 @@ function SelectCategoryFilter({ resultFilter }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams();
-
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [valuePrice, setValuePrice] = useState([0, resultFilter?.maxPrice]);
   const [selectedBrands, setSelectedBrands] = useState([]);
-  const [valueCategory, setValueCategory] = useState([]);
   const [activeKeys, setActiveKeys] = useState(["1"]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [switchStates, setSwitchStates] = useState({
@@ -39,8 +36,6 @@ function SelectCategoryFilter({ resultFilter }) {
   const [categorySearch, setCategorySearch] = useState("");
   const [brandSearch, setBrandSearch] = useState("");
 
-  
-
   useEffect(() => {
     const urlCategories = searchParams.get("category") || "";
     const price1 = searchParams.get("price1");
@@ -51,12 +46,6 @@ function SelectCategoryFilter({ resultFilter }) {
       price1 ? parseInt(price1) : 0,
       price2 ? parseInt(price2) : resultFilter.maxPrice,
     ]);
-
-    if (searchParams.get("category")) {
-      setValueCategory(searchParams.get("category").split(",") || []);
-    } else {
-      setValueCategory([]);
-    }
 
     // خواندن برندهای انتخاب شده از URL در لود اولیه
     const brandsFromUrl = searchParams.get("brandid");
@@ -99,7 +88,9 @@ function SelectCategoryFilter({ resultFilter }) {
     } else {
       params.delete("brandid");
     }
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${window.location.pathname}?${params.toString()}`);
+    });
   };
 
   const handleFilterChange = () => {
@@ -118,8 +109,9 @@ function SelectCategoryFilter({ resultFilter }) {
     } else {
       params.delete("price2");
     }
-
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${window.location.pathname}?${params.toString()}`);
+    });
   };
 
   const handleResetFilters = () => {
@@ -131,7 +123,9 @@ function SelectCategoryFilter({ resultFilter }) {
     // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=2
     const params = new URLSearchParams();
     params.set("OrderBy", "2");
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${window.location.pathname}?${params.toString()}`);
+    });
   };
 
   const handleChange = (event, newValue) => {
@@ -148,7 +142,9 @@ function SelectCategoryFilter({ resultFilter }) {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("page");
 
-    router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
+    startTransition(() => {
+      router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
+    });
   };
 
   const handleSwitchChange = (type) => {
@@ -188,8 +184,9 @@ function SelectCategoryFilter({ resultFilter }) {
     } else {
       params.delete("conditionId");
     }
-
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.push(`${window.location.pathname}?${params.toString()}`);
+    });
   };
 
   const filteredCategories = Array.isArray(resultFilter.categories)
@@ -205,8 +202,6 @@ function SelectCategoryFilter({ resultFilter }) {
   );
 
   const renderCategories = () => {
-   
-
     if (filteredCategories.length === 0) {
       return (
         <div className="text-center py-4 text-gray-500">
@@ -239,8 +234,6 @@ function SelectCategoryFilter({ resultFilter }) {
   };
 
   const renderBrands = () => {
-   
-
     if (filteredBrands.length === 0) {
       return (
         <div className="text-center py-4 text-gray-500">
@@ -394,26 +387,23 @@ function SelectCategoryFilter({ resultFilter }) {
   ];
 
   // فیلتر کردن آیتم‌ها بعد از اتمام لودینگ
-  const filteredItems = loading
-    ? outerItems
-    : outerItems.filter((item, index) => {
-        if (index === 0)
-          return (
-            Object.keys(resultFilter.categories).length > 0 ||
-            categorySearch.length > 0
-          );
-        if (index === 1)
-          return resultFilter.brands.length > 0 || brandSearch.length > 0;
-        return true; // همیشه محدوده قیمت رو نشون بده
-      });
+  const filteredItems = outerItems.filter((item, index) => {
+    if (index === 0)
+      return (
+        Object.keys(resultFilter.categories).length > 0 ||
+        categorySearch.length > 0
+      );
+    if (index === 1)
+      return resultFilter.brands.length > 0 || brandSearch.length > 0;
+    return true; // همیشه محدوده قیمت رو نشون بده
+  });
 
   // اگر هیچ داده‌ای وجود نداشت و در حالت جستجو نیستیم، اکوردئون‌ها را مخفی کن
   const shouldShowCollapse =
-    !loading &&
-    (Object.keys(resultFilter.categories).length > 0 ||
-      resultFilter.brands.length > 0 ||
-      categorySearch.length > 0 ||
-      brandSearch.length > 0);
+    Object.keys(resultFilter.categories).length > 0 ||
+    resultFilter.brands.length > 0 ||
+    categorySearch.length > 0 ||
+    brandSearch.length > 0;
 
   // تابع برای بررسی وجود فیلترهای فعال
   const hasActiveFilters = () => {
@@ -452,43 +442,7 @@ function SelectCategoryFilter({ resultFilter }) {
         )}
       </div>
       <Divider style={{ marginBottom: "0px" }} />
-      {loading ? (
-        <div className="space-y-6 mt-4">
-          {/* Category Section Skeleton */}
-          <div>
-            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
-            <div className="space-y-2">
-              {[...Array(5)].map((_, index) => (
-                <div key={index} className="p-2.5 my-1">
-                  <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Brand Section Skeleton */}
-          <div>
-            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
-            <div className="space-y-2">
-              {[...Array(5)].map((_, index) => (
-                <div key={index} className="p-2">
-                  <div className="h-8 bg-gray-200 animate-pulse rounded-md" />
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Price Section Skeleton */}
-          <div>
-            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
-            <div className="px-4">
-              <div className="h-2 bg-gray-200 animate-pulse rounded-full !mb-4" />
-              <div className="flex flex-col gap-2">
-                <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
-                <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : shouldShowCollapse ? (
+      {shouldShowCollapse ? (
         <Collapse
           ghost
           expandIconPosition="end"
@@ -557,6 +511,7 @@ function SelectCategoryFilter({ resultFilter }) {
           />
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

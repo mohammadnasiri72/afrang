@@ -7,7 +7,6 @@ import {
 } from "@/services/payment/paymentLink";
 import { message } from "antd";
 import { motion } from "framer-motion";
-import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import {
   FaCreditCard,
@@ -109,7 +108,6 @@ function BoxShowInformationBank({ id }) {
   const [isLoading, setIsLoading] = useState(true);
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [isPaying, setIsPaying] = useState(false);
- 
 
   const fetchLinkPaymentInfo = async () => {
     setIsLoading(true);
@@ -147,7 +145,7 @@ function BoxShowInformationBank({ id }) {
   const handleSMS = async () => {
     try {
       const response = await smsPaymentAlert(id);
-      
+
       if (response.response.status === 200) {
         message.success("پیامک با موفقیت ارسال شد");
       } else {
@@ -252,7 +250,11 @@ function BoxShowInformationBank({ id }) {
             className={`rounded-lg p-2 mb-4 text-center ${
               paymentInfo.statusId === 5725
                 ? "bg-red-100 text-red-700 border border-red-200"
-                : "bg-green-100 text-green-700 border border-green-200"
+                : paymentInfo.statusId === 5726
+                ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                : paymentInfo.statusId === 5727
+                ? "bg-green-100 text-green-700 border border-green-200"
+                : "bg-slate-100 text-slate-700 border border-slate-200"
             }`}
           >
             <span className="font-semibold text-sm">
