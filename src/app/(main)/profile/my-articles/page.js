@@ -78,7 +78,7 @@ const DeleteArticleModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         }}
       >
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 !mb-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-[#d1182b]"
@@ -95,7 +95,7 @@ const DeleteArticleModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
             </svg>
             <h3 className="text-lg font-bold text-gray-900">حذف مقاله</h3>
           </div>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 !mb-6">
             آیا از حذف این مقاله اطمینان دارید؟
           </p>
         </div>
@@ -605,7 +605,7 @@ export default function MyArticles() {
                     </div>
                   </div>
                   <div className="px-4 pt-2">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between !mb-2">
                       {article?.url ? (
                         <Link href={article.url}>
                           <h3 className="text-lg font-semibold text-gray-800 line-clamp-1 hover:text-[#d1182b] duration-300">
@@ -636,7 +636,7 @@ export default function MyArticles() {
                         </Tooltip>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 text-sm mb-1">
+                    <div className="flex flex-wrap gap-2 text-sm !mb-1">
                       <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
                         <span className="text-gray-600">دسته‌بندی :</span>
                         <span className="text-gray-700">
@@ -699,13 +699,13 @@ export default function MyArticles() {
           </>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center !mb-4">
               <UploadOutlined className="text-3xl text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            <h3 className="text-lg font-semibold text-gray-700 !mb-2">
               مقاله‌ای ارسال نشده
             </h3>
-            <p className="text-gray-500 mb-4">
+            <p className="text-gray-500 !mb-4">
               هنوز هیچ مقاله‌ای ارسال نکرده‌اید
             </p>
             <Button

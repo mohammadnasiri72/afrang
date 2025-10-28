@@ -156,7 +156,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
-          <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
+          <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
               <Link href="/">
                 <Image
@@ -179,7 +179,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
               </Link>
             </div>
           </div>
-          <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">
+          <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] !mb-[40px]">
             ورود به حساب کاربری
           </div>
         </div>
@@ -188,8 +188,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
           <div className="flex flex-wrap">
             <EnterCodeSent setCode={setCode} />
             <div className="w-full flex items-center flex-wrap mt-4">
-              <div className="sm:w-1/2 w-full mb-4 sm:pl-2">
-                <label className="text-[#656565] text-[16px] mb-[10px]">
+              <div className="sm:w-1/2 w-full !mb-4 sm:pl-2">
+                <label className="text-[#656565] text-[16px] !mb-[10px]">
                   نام
                 </label>
                 <div
@@ -215,8 +215,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                   <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                 )}
               </div>
-              <div className="sm:w-1/2 w-full mb-4 sm:pr-2">
-                <label className="text-[#656565] text-[16px] mb-[10px]">
+              <div className="sm:w-1/2 w-full !mb-4 sm:pr-2">
+                <label className="text-[#656565] text-[16px] !mb-[10px]">
                   نام خانوادگی
                 </label>
                 <div
@@ -246,7 +246,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
 
             <div className="flex items-start gap-3">
               <div className="w-full my-4 ">
-                <label className="text-[#656565] text-[16px] mb-[10px]">
+                <label className="text-[#656565] text-[16px] !mb-[10px]">
                   رمز ورود
                 </label>
                 <div
@@ -273,7 +273,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                 )}
               </div>
               <div className="w-full my-4 ">
-                <label className="text-[#656565] text-[16px] mb-[10px]">
+                <label className="text-[#656565] text-[16px] !mb-[10px]">
                   تکرار رمز ورود
                 </label>
                 <div
@@ -302,8 +302,8 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                 )}
               </div>
             </div>
-            <div className="w-full mb-4">
-              <label className="text-[#656565] text-[16px] mb-[10px]">
+            <div className="w-full !mb-4">
+              <label className="text-[#656565] text-[16px] !mb-[10px]">
                 آدرس ایمیل ( اختیاری )
               </label>
               <div
@@ -333,7 +333,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
 
           <div className="flex flex-wrap mt-5">
             <div className="flex flex-col-reverse sm:flex-row w-full">
-              <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+              <div className="sm:w-1/2 w-full !mb-4 sm:pl-3">
                 <div
                   onClick={() => {
                     setStateRegister(1);
@@ -344,7 +344,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
                 </div>
               </div>
 
-              <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+              <div className="sm:w-1/2 w-full !mb-4 sm:pr-3">
                 <button
                   onClick={submitRegister}
                   className={`text-center !text-[#fff] w-full rounded-[5px] bg-[#d1182b] block font-[600] px-0 py-[12px] ${

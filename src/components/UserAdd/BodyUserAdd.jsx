@@ -17,7 +17,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
   return (
     <>
       <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
-        <div className="flex flex-wrap sm:flex-nowrap items-center mb-6 gap-4">
+        <div className="flex flex-wrap sm:flex-nowrap items-center !mb-6 gap-4">
           <div className="flex items-center gap-2 whitespace-nowrap">
             <FaRecycle className="text-gray-800 text-2xl" />
             <h1 className="text-2xl font-bold text-gray-800 ">

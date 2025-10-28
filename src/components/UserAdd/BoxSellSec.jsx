@@ -69,7 +69,7 @@ function BoxSellSec({ productList }) {
 
   // کامپوننت محصول برای حالت لیست
   const ProductListItem = ({ product }) => (
-    <div className="border border-gray-200 rounded-lg p-1 mb-4 hover:shadow-md transition-shadow">
+    <div className="border border-gray-200 rounded-lg p-1 !mb-4 hover:shadow-md transition-shadow">
       <div className="flex items-center space-x-reverse">
         <div className="flex-shrink-0 pl-3">
           <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -130,7 +130,7 @@ function BoxSellSec({ productList }) {
         </div>
         <div className="flex-1 min-w-0">
           {product.url && (
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center justify-between !mb-1">
               <h3 className="text-lg font-semibold text-gray-900">
                 <Link
                   href={product.url}
@@ -166,7 +166,7 @@ function BoxSellSec({ productList }) {
             </div>
           )}
           {product.categoryTitle && (
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-sm text-gray-600 !mb-2">
               {product.categoryTitle}
             </p>
           )}
@@ -197,7 +197,7 @@ function BoxSellSec({ productList }) {
   // کامپوننت محصول برای حالت گرید
   const ProductGridItem = ({ product }) => (
     <div className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-      <div className="mb-3">
+      <div className="!mb-3">
         <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
           {product.image && product.url ? (
             <Link
@@ -250,7 +250,7 @@ function BoxSellSec({ productList }) {
       </div>
       <div className="px-3">
         {product.url && (
-          <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
+          <h3 className="text-base font-semibold text-gray-900 !mb-2 line-clamp-2">
             <Link
               href={product.url}
               onClick={(e) => {
@@ -268,7 +268,7 @@ function BoxSellSec({ productList }) {
         )}
         {product.categoryTitle && (
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-sm text-gray-600 !mb-2">
               {product.categoryTitle}
             </p>
             {product.isArchive && (
@@ -330,7 +330,7 @@ function BoxSellSec({ productList }) {
   return (
     <>
       <div className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center !mb-4">
           <div className="flex flex-wrap items-center sm:gap-10 gap-1">
             <div className="flex items-center gap-2">
               <label className={` text-gray-700 text-sm font-bold`}>
@@ -431,7 +431,7 @@ function BoxSellSec({ productList }) {
         {productList.length === 0 ? (
           <div className="text-center py-12">
             <svg
-              className="w-16 h-16 text-gray-400 mx-auto mb-4"
+              className="w-16 h-16 text-gray-400 mx-auto !mb-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -443,7 +443,7 @@ function BoxSellSec({ productList }) {
                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
               />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 !mb-2">
               محصولی یافت نشد
             </h3>
             <p className="text-gray-600">

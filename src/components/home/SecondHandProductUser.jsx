@@ -11,7 +11,7 @@ function SecondHandProductUser({ filteredProducts }) {
       <div className="sm:px-16 px-2">
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
-          <div className="flex items-center justify-between mb-3 px-2">
+          <div className="flex items-center justify-between !mb-3 px-2">
             <h2 className="title-SecondHand relative text-[#222] duration-300 text-lg font-semibold">
               دست دوم های کاربران
             </h2>

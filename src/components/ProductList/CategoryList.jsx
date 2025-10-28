@@ -16,13 +16,13 @@ export default function CategoryList({ categories }) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-sm text-center max-w-lg mx-4 relative z-50">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center !mb-6">
             <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          <h2 className="text-2xl font-bold !mb-4 text-gray-800">
             دسته‌بندی یافت نشد!
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 !mb-6">
             متأسفانه در حال حاضر دسته‌بندی‌ای برای نمایش وجود ندارد.
           </p>
           <Link
@@ -39,7 +39,7 @@ export default function CategoryList({ categories }) {
   return (
     <>
       <div>
-        <h1 className="text-2xl font-bold mb-8 text-center">
+        <h1 className="text-2xl font-bold !mb-8 text-center">
           دسته‌بندی‌های محصولات
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
@@ -57,7 +57,7 @@ export default function CategoryList({ categories }) {
             >
               <div className="flex flex-col items-center text-center">
                 {category.image && (
-                  <div className="bg-gray-600 p-10 rounded-full mb-4 group-hover:bg-[#d1182b] transition-colors duration-300 shadow-sm flex items-center justify-center">
+                  <div className="bg-gray-600 p-10 rounded-full !mb-4 group-hover:bg-[#d1182b] transition-colors duration-300 shadow-sm flex items-center justify-center">
                     <Image
                       src={getImageUrl(category.image)}
                       alt={category.title}
@@ -68,7 +68,7 @@ export default function CategoryList({ categories }) {
                     />
                   </div>
                 )}
-                <h2 className="text-xl font-semibold mb-2 group-hover:text-[#d1182b] transition-colors duration-300">
+                <h2 className="text-xl font-semibold !mb-2 group-hover:text-[#d1182b] transition-colors duration-300">
                   {category.title}
                 </h2>
                 {category.count > 0 && (

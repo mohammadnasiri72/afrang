@@ -1,6 +1,9 @@
 import { getComment } from "@/services/comments/serviceComment";
 import { getListItemByIds } from "@/services/Item/item";
-import { getRelatedProductsByIdString } from "@/services/products/productService";
+import {
+  getProductId,
+  getRelatedProductsByIdString,
+} from "@/services/products/productService";
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
 import { FaClipboardList } from "react-icons/fa";
@@ -8,7 +11,9 @@ import { SlBasket } from "react-icons/sl";
 import CommentProduct from "./CommentProduct";
 import ProductTabs from "./ProductTabs";
 
-async function BodyProduct({ product }) {
+async function BodyProduct({ id }) {
+  const product = await getProductId(id);
+
   function groupByCategory(properties) {
     // فقط آیتم‌هایی که isTechnicalProperty=true دارند
     const filtered = properties.filter((prop) => prop.isTechnicalProperty);
@@ -57,12 +62,12 @@ async function BodyProduct({ product }) {
   }
 
   let comments = [];
-  if (product?.product?.relatedId) {
+  if (product?.product?.productId) {
     comments = await getComment(product.product.productId, 1, 0);
   }
 
   let commentsQuestion = [];
-  if (product?.product?.relatedId) {
+  if (product?.product?.productId) {
     commentsQuestion = await getComment(product.product.productId, 1, 1);
   }
 
@@ -80,7 +85,7 @@ async function BodyProduct({ product }) {
           {grouped.map((group, idx) => (
             <div
               key={idx}
-              className="mb-7 bg-white rounded-lg shadow border border-gray-100"
+              className="!mb-7 bg-white rounded-lg shadow border border-gray-100"
             >
               <div className="bg-[#f3f3f3] rounded-t-lg px-6 py-3 border-b border-gray-100 flex items-center">
                 <FaClipboardList className="text-[#d1182b] mr-2 text-lg" />
@@ -127,7 +132,7 @@ async function BodyProduct({ product }) {
                 <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                   <Link
                     href={item.url}
-                    className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm mb-1"
+                    className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                   >
                     {item.title}
                   </Link>
@@ -154,7 +159,7 @@ async function BodyProduct({ product }) {
                 </div>
                 <div className="flex flex-col items-end justify-between h-full ml-2 ">
                   {item.discount !== 0 && !item.callPriceButton && (
-                    <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs mb-1">
+                    <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs !mb-1">
                       {item.discount}%
                     </span>
                   )}

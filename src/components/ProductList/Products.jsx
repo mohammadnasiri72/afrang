@@ -43,13 +43,13 @@ function Products({ products }) {
               className="bg-white rounded-lg p-4 shadow-sm h-full"
             >
               <div className="flex flex-col items-center">
-                <div className="w-full flex justify-center mb-4">
+                <div className="w-full flex justify-center !mb-4">
                   <Skeleton.Image active className="w-40 h-40" />
                 </div>
                 <Skeleton
                   active
                   paragraph={{ rows: 2 }}
-                  className="w-full mb-4"
+                  className="w-full !mb-4"
                 />
                 <div className="w-full space-y-2">
                   <Skeleton.Button active block size="large" />

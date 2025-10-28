@@ -129,7 +129,7 @@ const ProfileLayoutSkeleton = () => {
               <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
               {/* User Name and ID */}
               <div className="flex-1 min-w-0">
-                <div className="h-4 bg-gray-200 animate-pulse rounded w-24 mb-2" />
+                <div className="h-4 bg-gray-200 animate-pulse rounded w-24 !mb-2" />
                 <div className="h-3 bg-gray-200 animate-pulse rounded w-32" />
               </div>
             </div>

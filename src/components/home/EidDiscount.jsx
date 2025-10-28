@@ -40,7 +40,7 @@ export default function EidDiscount({ actionProducts, products }) {
   return (
     <>
       {products.length > 0 && (
-        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden !mb-10">
+        <div className="sm:px-0 px-2 lg:h-[29rem] h-[35rem] overflow-hidden !mb-10">
           <div className="mt-5">
             <div className="lg:hidden flex justify-center items-center">
               <div className="flex items-center title-newProduct relative">
@@ -55,7 +55,7 @@ export default function EidDiscount({ actionProducts, products }) {
                 )}
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-4 sm:px-3">
               <div className="lg:flex hidden items-center title-newProduct relative">
                 <h2 className="font-semibold text-xl ">
                   {actionProducts?.title || "محصولات ویژه"}
@@ -71,7 +71,7 @@ export default function EidDiscount({ actionProducts, products }) {
               {/* بخش موبایل */}
               <div className="lg:hidden w-full">
                 {/* هدر دسته‌بندی‌ها */}
-                <div className="flex items-center justify-between mb-3 px-2">
+                <div className="flex items-center justify-between !mb-3 px-2">
                   <h3 className="text-lg font-semibold text-gray-700">
                     دسته‌بندی‌ها
                   </h3>
@@ -200,7 +200,7 @@ export default function EidDiscount({ actionProducts, products }) {
                         <img
                           draggable="false"
                           className="w-36"
-                          src="/public/images/soldout.png"
+                          src="/images/soldout.png"
                           alt=""
                         />
                       </div>

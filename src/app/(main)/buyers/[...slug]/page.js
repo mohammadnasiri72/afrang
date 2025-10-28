@@ -1,6 +1,6 @@
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import BodyUserAdd from "@/components/UserAdd/BodyUserAdd";
-import BreadCrumbUseds from "@/components/UserAdd/BreadCrumbUseds";
 import FilterSec from "@/components/UserAdd/FilterSec";
 import { getUserAdBuy } from "@/services/UserAd/UserAdServices";
 
@@ -28,21 +28,24 @@ export default async function UserAddDetails(props) {
     PageIndex: Number(searchParams.page) || "1",
   };
 
-
   const productsData = await getUserAdBuy(data);
   return (
     <>
-      <Container>
-        <BreadCrumbUseds />
-        <div className="flex items-start">
-          <div className="w-1/4 lg:block hidden px-3">
-            <FilterSec />
+      <BreadcrumbMain
+        breadcrumb={[{ title: "کالای دسته دوم", format: "type" }]}
+      />
+      <div className="max-w-[2000px] mx-auto overflow-hidden">
+        <Container>
+          <div className="flex items-start">
+            <div className="w-1/4 lg:block hidden px-3">
+              <FilterSec />
+            </div>
+            <div className="lg:w-3/4 w-full">
+              <BodyUserAdd productList={productsData} pathname={"buyers"} />
+            </div>
           </div>
-          <div className="lg:w-3/4 w-full">
-            <BodyUserAdd productList={productsData} pathname={"buyers"} />
-          </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </>
   );
 }

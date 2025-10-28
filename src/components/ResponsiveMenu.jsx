@@ -163,14 +163,15 @@ const AnimatedPaper = styled(StyledPaper)`
 
 // تابع کمکی برای مدیریت اسکرول بدن
 const disableBodyScroll = () => {
-  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-  document.body.style.overflow = 'hidden';
+  const scrollBarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = "hidden";
   document.body.style.paddingRight = `${scrollBarWidth}px`;
 };
 
 const enableBodyScroll = () => {
-  document.body.style.overflow = '';
-  document.body.style.paddingRight = '';
+  document.body.style.overflow = "";
+  document.body.style.paddingRight = "";
 };
 
 function ResponsiveMenu({
@@ -195,13 +196,12 @@ function ResponsiveMenu({
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
-  const childDropdownTimeoutRef = useRef(null);
-  const isHoveringRef = useRef(false);
-  
+ 
+
   const [headerHeight, setHeaderHeight] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [dropdownTop, setDropdownTop] = useState(0);
-  
+
   const firstNavItemRef = useRef(null);
   const lastNavItemRef = useRef(null);
   const [dropdownOffsets, setDropdownOffsets] = useState({
@@ -209,15 +209,63 @@ function ResponsiveMenu({
     left: 50,
   });
 
+
+ // تابع برای محاسبه dropdownOffsets بر اساس عرض صفحه
+  const calculateDropdownOffsets = useCallback(() => {
+    const windowWidth = window.innerWidth;
+    const maxWidth = 2000; // حداکثر عرض
+    const baseOffset = 50; // offset پایه
+
+    if (windowWidth > maxWidth) {
+      // اگر صفحه از 2000px بیشتر است، offsetها را طوری محاسبه کن که 50px کمتر از 2000px باشد
+      const extraWidth = windowWidth - maxWidth;
+      const calculatedOffset = baseOffset + Math.floor(extraWidth / 2);
+      
+      setDropdownOffsets({
+        right: calculatedOffset,
+        left: calculatedOffset,
+      });
+    } else {
+      // برای صفحات کوچکتر از 2000px از مقادیر پیش‌فرض استفاده کن
+      setDropdownOffsets({
+        right: baseOffset,
+        left: baseOffset,
+      });
+    }
+  }, []);
+
+
+  useEffect(() => {
+    // محاسبه اولیه
+    calculateDropdownOffsets();
+
+    // گوش دادن به تغییرات سایز صفحه
+    const handleResize = () => {
+      calculateDropdownOffsets();
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // تمیز کردن event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [calculateDropdownOffsets]);
+
   const { settings } = useSelector((state) => state.settings);
 
   const open = Boolean(anchorEl);
 
   // مدیریت اسکرول صفحه وقتی زیرمنو باز است
   useEffect(() => {
-    if (open && activeMenu && activeMenu.Children && activeMenu.Children.length > 0) {
+    if (
+      open &&
+      activeMenu &&
+      activeMenu.Children &&
+      activeMenu.Children.length > 0
+    ) {
       disableBodyScroll();
-      
+
       const handleEscapeKey = (event) => {
         if (event.key === "Escape") {
           handleMenuClose();
@@ -259,7 +307,7 @@ function ResponsiveMenu({
         document.querySelector("div[ref-header]") ||
         document.querySelector("header");
       const navbar = navbarRef.current;
-      
+
       if (
         headerFixed &&
         headerFixed.getAttribute("data-header-fixed") === "true"
@@ -268,7 +316,7 @@ function ResponsiveMenu({
       } else if (header) {
         setHeaderHeight(header.offsetHeight || 0);
       }
-      
+
       if (
         navbarFixed &&
         navbarFixed.getAttribute("data-navbar-fixed") === "true"
@@ -403,7 +451,7 @@ function ResponsiveMenu({
     if (!menuItem.Children || menuItem.Children.length === 0) {
       return;
     }
-    
+
     if (activeMenu && activeMenu.id === menuItem.id && open) {
       return;
     }
@@ -418,7 +466,7 @@ function ResponsiveMenu({
 
     const headerFixed = document.querySelector('[data-header-fixed="true"]');
     const navbarFixed = document.querySelector('[data-navbar-fixed="true"]');
-    
+
     let topPosition = 0;
     if (navbarFixed) {
       const headerH = headerFixed ? headerFixed.offsetHeight : headerHeight;
@@ -428,9 +476,9 @@ function ResponsiveMenu({
       const navbarRect = navbar.getBoundingClientRect();
       topPosition = navbarRect.bottom - window.scrollY;
     }
-    
+
     setDropdownTop(topPosition);
-    
+
     const createAnchorElement = () => ({
       getBoundingClientRect: () => ({
         top: topPosition,
@@ -443,17 +491,8 @@ function ResponsiveMenu({
         y: topPosition,
       }),
     });
-    
     setAnchorEl(createAnchorElement());
     setActiveMenu(menuItem);
-    
-    if (firstNavItemRef.current && lastNavItemRef.current && navbarRef.current) {
-      const firstRect = firstNavItemRef.current.getBoundingClientRect();
-      const lastRect = lastNavItemRef.current.getBoundingClientRect();
-      const right = window.innerWidth - firstRect.right;
-      const left = lastRect.left;
-      // setDropdownOffsets({ right, left });
-    }
   };
 
   const handleMenuClose = () => {
@@ -495,14 +534,14 @@ function ResponsiveMenu({
               (el) => window.getComputedStyle(el).visibility !== "hidden"
             );
           }
-          
+
           const headerFixed = document.querySelector(
             '[data-header-fixed="true"]'
           );
           const navbarFixed = document.querySelector(
             '[data-navbar-fixed="true"]'
           );
-          
+
           let topPosition = 0;
           if (navbarFixed) {
             const headerH = headerFixed
@@ -514,7 +553,7 @@ function ResponsiveMenu({
             const navbarRect = navbar.getBoundingClientRect();
             topPosition = navbarRect.bottom - window.scrollY;
           }
-          
+
           setDropdownTop(topPosition);
           const updatedAnchorEl = {
             getBoundingClientRect: () => ({
@@ -532,10 +571,10 @@ function ResponsiveMenu({
         }, 16);
       }
     };
-    
+
     window.addEventListener("scroll", handleScrollAndResize, { passive: true });
     window.addEventListener("resize", handleScrollAndResize, { passive: true });
-    
+
     return () => {
       window.removeEventListener("scroll", handleScrollAndResize);
       window.removeEventListener("resize", handleScrollAndResize);
@@ -789,7 +828,9 @@ function ResponsiveMenu({
         Cookies.remove("user");
         dispatch(setOpenMenuRes(false));
         enableBodyScroll();
-        router.push("/");
+        startTransition(() => {
+          router.push("/");
+        });
       } catch (error) {
         console.error("Logout error:", error);
       }
@@ -950,8 +991,8 @@ function ResponsiveMenu({
 
   return (
     <>
-      <DesktopMenu />
-      <MobileMenu />
+        <DesktopMenu />
+        <MobileMenu />
     </>
   );
 }

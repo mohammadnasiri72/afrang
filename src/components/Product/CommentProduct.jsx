@@ -90,10 +90,12 @@ function CommentItem({ comment, onReply, replyTo, onReplySent, depth = 0 }) {
               {formatPersianDate(comment.created)}
             </span>
           </div>
-          <div className="mt-1 text-gray-800 text-justify">{comment.body}</div>
+          <div className="mt-1 !mb-1 text-gray-800 text-justify">
+            {comment.body}
+          </div>
           {comment.parentId === -1 && (
             <button
-              className="mt-3 flex cursor-pointer items-center gap-2 px-4 py-1.5 bg-blue-50 !text-blue-700 rounded-full shadow-sm border border-blue-200 hover:bg-blue-100 hover:!text-blue-900 hover:shadow-md transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="mt-3 flex cursor-pointer items-center gap-2 px-4 py-1 bg-blue-50 !text-blue-700 rounded-full shadow-sm border border-blue-200 hover:bg-blue-100 hover:!text-blue-900 hover:shadow-md transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
               onClick={() => onReply(comment.id)}
             >
               <FaReply className="text-base" />
@@ -162,11 +164,11 @@ function CommentProduct({ comments, type, id }) {
     return (
       <div className="flex flex-col items-center justify-center py-10">
         {type === 0 ? (
-          <FaCommentSlash className="text-6xl text-gray-300 mb-4" />
+          <FaCommentSlash className="text-6xl text-gray-300 !mb-4" />
         ) : (
-          <FaQuestionCircle className="text-6xl text-gray-300 mb-4" />
+          <FaQuestionCircle className="text-6xl text-gray-300 !mb-4" />
         )}
-        <span className="text-xl font-semibold text-gray-700 mb-2">
+        <span className="text-xl font-semibold text-gray-700 !mb-2">
           {type === 0 ? "هنوز نظری ثبت نشده است" : "هنوز پرسشی ثبت نشده است"}
         </span>
         <p className="text-gray-500 text-center max-w-md">

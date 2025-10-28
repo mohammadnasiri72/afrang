@@ -33,7 +33,7 @@ function TitleProduct({ product }) {
         )}
         {(!allAttachments || allAttachments.length === 0) && (
           <div className="flex flex-col items-center justify-center h-full bg-gray-50 rounded-lg p-6">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center !mb-4">
               <svg
                 className="w-12 h-12 text-gray-400"
                 fill="none"
@@ -49,7 +49,7 @@ function TitleProduct({ product }) {
                 ></path>
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            <h3 className="text-lg font-semibold text-gray-700 !mb-2">
               تصویری موجود نیست
             </h3>
             <p className="text-gray-500 text-center text-sm">

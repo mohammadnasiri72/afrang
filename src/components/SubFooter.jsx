@@ -2,18 +2,21 @@
 
 import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import Link from "next/link";
+import { useTransition } from "react";
 import { useDispatch } from "react-redux";
+import Loading from "./Loading";
 import SearchSubfooter from "./SearchSubfooter";
 import ShoppingDrawer from "./ShoppingDrawer";
 
 export default function SubFooter() {
   const disPatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
   return (
     <>
       <div className="sm:hidden flex justify-around px-2 fixed bottom-0 bg-white left-0 right-0 py-[7px] text-[#666] z-50">
         <SearchSubfooter />
 
-        <ShoppingDrawer />
+        <ShoppingDrawer startTransition={startTransition} />
 
         <Link href="/profile/dashboard">
           {/* Custom SVG User Icon */}
@@ -95,6 +98,7 @@ export default function SubFooter() {
           </svg>
         </span>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

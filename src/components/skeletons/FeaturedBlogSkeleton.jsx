@@ -2,7 +2,7 @@ export default function FeaturedBlogSkeleton() {
   return (
     <div className="flex flex-wrap bg-white p-5 rounded-lg overflow-hidden items-start">
       <div className="lg:w-1/3 w-full py-3 px-5">
-        <div className="h-8 bg-gray-200 rounded animate-pulse w-full mb-4"></div>
+        <div className="h-8 bg-gray-200 rounded animate-pulse w-full !mb-4"></div>
         <div className="space-y-3">
           <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
           <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>

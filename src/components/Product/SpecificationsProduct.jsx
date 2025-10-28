@@ -5,10 +5,10 @@ function SpecificationsProduct({ product }) {
     return (
       <div className="flex justify-center p-8">
         <div className="bg-[#f3f3f3] p-8 rounded-lg text-center max-w-lg">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center !mb-6">
             <FaClipboardList className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <span className="text-2xl font-bold mb-4 text-gray-800">
+          <span className="text-2xl font-bold !mb-4 text-gray-800">
             مشخصاتی ثبت نشده!
           </span>
           <p className="text-gray-600">
@@ -27,7 +27,7 @@ function SpecificationsProduct({ product }) {
       {grouped.map((group, idx) => (
         <div
           key={idx}
-          className="mb-7 bg-white rounded-lg shadow border border-gray-100"
+          className="!mb-7 bg-white rounded-lg shadow border border-gray-100"
         >
           <div className="bg-[#f3f3f3] rounded-t-lg px-6 py-3 border-b border-gray-100 flex items-center">
             <FaClipboardList className="text-[#d1182b] mr-2 text-lg" />

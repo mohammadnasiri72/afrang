@@ -36,7 +36,7 @@ const CommentsSkeleton = () => {
           <Card key={index} className="w-full !p-4 !mt-2">
             <div className="flex-1 min-w-0">
               {/* Title and Link Skeleton */}
-              <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+              <div className="flex items-center justify-between !mb-1 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-gray-200 animate-pulse flex-shrink-0" />
                   <div className="h-5 bg-gray-200 animate-pulse rounded w-3/4 md:w-48" />
@@ -45,13 +45,13 @@ const CommentsSkeleton = () => {
               </div>
 
               {/* Name and Rating Skeleton */}
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <div className="flex items-center gap-2 !mb-1 flex-wrap">
                 <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
                 <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
               </div>
 
               {/* Comment Text Skeleton */}
-              <div className="space-y-1 mb-1">
+              <div className="space-y-1 !mb-1">
                 <div className="h-4 bg-gray-200 animate-pulse rounded w-full" />
                 <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
               </div>
@@ -89,7 +89,7 @@ const DeleteCommentModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         }}
       >
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 !mb-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-[#d1182b]"
@@ -106,7 +106,7 @@ const DeleteCommentModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
             </svg>
             <h3 className="text-lg font-bold text-gray-900">حذف نظر</h3>
           </div>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 !mb-6">
             آیا از حذف این نظر اطمینان دارید؟
           </p>
         </div>
@@ -167,7 +167,7 @@ const MiniCommentsSkeleton = () => (
       <Card key={index} className="w-full !p-4 !mt-2">
         <div className="flex-1 min-w-0">
           {/* Title and Link Skeleton */}
-          <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+          <div className="flex items-center justify-between !mb-1 flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gray-200 animate-pulse flex-shrink-0" />
               <div className="h-5 bg-gray-200 animate-pulse rounded w-3/4 md:w-48" />
@@ -176,13 +176,13 @@ const MiniCommentsSkeleton = () => (
           </div>
 
           {/* Name and Rating Skeleton */}
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <div className="flex items-center gap-2 !mb-1 flex-wrap">
             <div className="h-4 bg-gray-200 animate-pulse rounded w-32" />
             <div className="h-4 bg-gray-200 animate-pulse rounded w-24" />
           </div>
 
           {/* Comment Text Skeleton */}
-          <div className="space-y-1 mb-1">
+          <div className="space-y-1 !mb-1">
             <div className="h-4 bg-gray-200 animate-pulse rounded w-full" />
             <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
           </div>
@@ -372,7 +372,7 @@ const UserCommentsPage = () => {
             }`}
           >
             <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+              <div className="flex items-center justify-between !mb-1 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                     <CommentOutlined className="text-lg text-gray-400" />
@@ -407,12 +407,12 @@ const UserCommentsPage = () => {
                   </Tooltip>
                 </div>
               </div>
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <div className="flex items-center gap-2 !mb-1 flex-wrap">
                 {(item.score || item.score === 0) && (
                   <Rate disabled value={item.score} className="text-sm" />
                 )}
               </div>
-              <p className="text-sm text-gray-600 mb-1 whitespace-pre-wrap text-justify break-words">
+              <p className="text-sm text-gray-600 !mb-1 whitespace-pre-wrap text-justify break-words">
                 {item.body}
               </p>
               <p className="text-xs text-gray-500">
@@ -601,7 +601,7 @@ const UserCommentsPage = () => {
             }
           `}</style>
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h1 className="text-2xl font-bold mb-6">نظرات ارسالی</h1>
+            <h1 className="text-2xl font-bold !mb-6">نظرات ارسالی</h1>
 
             <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 relative">
               <div className="w-full SegmentedProduct overflow-hidden mx-auto flex justify-center">
@@ -685,7 +685,7 @@ const UserCommentsPage = () => {
               {editingComment && (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 !mb-1">
                       متن نظر
                     </label>
                     <textarea

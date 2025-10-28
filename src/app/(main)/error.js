@@ -14,14 +14,14 @@ export default function Error({ error, reset }) {
     <>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center relative z-50">
-          <div className="mb-8">
+          <div className="!mb-8">
             <FaExclamationTriangle className="w-16 h-16 text-red-500 mx-auto" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">خطای سرور</h1>
-          <p className="text-gray-600 mb-4">
+          <span className="text-4xl font-bold text-gray-800 !mb-4">خطای سرور</span>
+          <p className="text-gray-600 !mb-4">
             متأسفانه مشکلی در سرور رخ داده است. لطفاً دوباره تلاش کنید.
           </p>
-          <p className="text-sm text-gray-500 mb-8">
+          <p className="text-sm text-gray-500 !mb-8">
             {error?.message || "خطای ناشناخته"}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

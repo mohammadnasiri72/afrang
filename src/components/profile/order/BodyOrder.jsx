@@ -51,7 +51,7 @@ const OrderSkeleton = () => {
         <div className="mt-4">
             <div id="orders-top" className="bg-white rounded-xl p-4 sm:p-6 shadow-lg z-50 relative max-w-full">
                 {/* Title */}
-                <div className="h-7 bg-gray-200 animate-pulse rounded w-48 mb-4 sm:mb-6" />
+                <div className="h-7 bg-gray-200 animate-pulse rounded w-48 !mb-4 sm:mb-6" />
 
                 {/* Segmented Tabs Skeleton */}
                 <div className="flex flex-wrap bg-white rounded-lg mt-3 z-50 absolute w-full left-0 right-0 top-10">
@@ -65,7 +65,7 @@ const OrderSkeleton = () => {
                     {[...Array(3)].map((_, index) => (
                         <div key={index} className="border border-gray-200 rounded-lg p-4 sm:p-6">
                             {/* Order Header */}
-                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 !mb-4 sm:mb-6">
                                 <div className="h-6 bg-gray-200 animate-pulse rounded w-32" />
                                 <div className="h-10 bg-gray-200 animate-pulse rounded w-40" />
                             </div>
@@ -336,7 +336,7 @@ export default function BodyOrder() {
       `}</style>
         <div className="mt-4">
             <div id="orders-top" className="bg-white rounded-xl p-4 sm:p-6 shadow-lg z-50 relative max-w-full">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">تاریخچه سفارشات من</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 !mb-4 sm:mb-6">تاریخچه سفارشات من</h2>
 
                 {/* تب‌ها: موبایل و دسکتاپ */}
                 {/* دسکتاپ: Segmented */}
@@ -357,7 +357,7 @@ export default function BodyOrder() {
                   </div>
                 </div>
                 {/* موبایل: گرید دو ستونه تب‌ها */}
-                <div className="sm:hidden grid grid-cols-2 gap-2 bg-white rounded-lg mt-3 mb-3 w-full px-2 py-2 shadow">
+                <div className="sm:hidden grid grid-cols-2 gap-2 bg-white rounded-lg mt-3 !mb-3 w-full px-2 py-2 shadow">
                   {options.map((opt) => (
                     <button
                       key={opt.value}
@@ -366,7 +366,7 @@ export default function BodyOrder() {
                         ${parseInt(statusId) === opt.value ? 'bg-[#d1182b] !text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-[#f6f6f6]'}
                       `}
                     >
-                      {React.createElement(options?.find(o => o.value === opt.value).label.props.children[1].type, { className: 'text-base mb-1' })}
+                      {React.createElement(options?.find(o => o.value === opt.value).label.props.children[1].type, { className: 'text-base !mb-1' })}
                       <span className="whitespace-nowrap">{ORDER_STATUS_TITLES[opt.value]}</span>
                       <span className="text-[10px] font-normal">({dashboardData[
                         opt.value === 1 ? 'Record' :
@@ -393,7 +393,7 @@ export default function BodyOrder() {
                             >
                                 {orderData.map((order) => (
                                     <div key={order.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 !mb-4 sm:mb-6">
                                             <h3 className="text-base sm:text-lg font-bold text-gray-800">سفارش {order.trackCode}</h3>
                                             {order.paymentStatus >= 1 && order.paymentStatus <= 5 && order.status < 4 && (
                                                 <button
@@ -474,7 +474,7 @@ export default function BodyOrder() {
                         </AnimatePresence>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-gray-500">
-                            <svg className="w-12 sm:w-16 h-12 sm:h-16 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-12 sm:w-16 h-12 sm:h-16 !mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                             <p className="text-base sm:text-lg">سفارشی در این دسته‌بندی یافت نشد</p>

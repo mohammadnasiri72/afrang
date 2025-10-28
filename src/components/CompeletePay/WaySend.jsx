@@ -47,17 +47,16 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
   ) {
     return (
       <div className="bg-white rounded-xl p-4 shadow-lg">
-        <div className="flex items-center justify-between mb-4 border-b pb-3">
+        <div className="flex items-center justify-between !mb-4 border-b pb-3">
           <h2 className="text-2xl font-bold text-gray-800">روش ارسال</h2>
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-4">
-          <div className="relative w-32 h-32 mb-6">
+         
             <Empty description={false} />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          <h3 className="text-xl font-semibold text-gray-700 !mb-2">
             ابتدا آدرس خود را ثبت کنید
           </h3>
-          <p className="text-gray-500 text-center mb-6">
+          <p className="text-gray-500 text-center !mb-6">
             برای مشاهده روش‌های ارسال، لطفاً ابتدا یک آدرس ثبت کنید.
           </p>
         </div>

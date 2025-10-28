@@ -49,7 +49,7 @@ function DescProductDetails({ product }) {
           )}
         </div>
         {product?.product?.summary && (
-          <div className="mb-4">
+          <div className="!mb-4">
             {/* <ExpandableText text={product.product.summary} /> */}
             <p className="text-justify">{product.product.summary}</p>
           </div>
@@ -85,7 +85,7 @@ function DescProductDetails({ product }) {
           </div> */}
         </div>
         {product?.product?.conditionId === 20 && (
-          <div className="mb-5 mt-1">
+          <div className="!mb-5 mt-1">
             <div>
               <Alert
                 message={

@@ -4,8 +4,9 @@ import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
+import Loading from "../Loading";
 import ProductMain from "./ProductMain";
 
 function NewProduct({ products }) {
@@ -13,6 +14,7 @@ function NewProduct({ products }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
   const categories = products
@@ -34,12 +36,12 @@ function NewProduct({ products }) {
 
   return (
     <>
-      <div className="lg:hidden flex justify-center items-center pb-3">
+      <div className="lg:hidden flex justify-center items-center pb-3 ">
         <div className="flex items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-center gap-4 px-3">
         <div className="lg:flex hidden items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
         </div>
@@ -47,13 +49,18 @@ function NewProduct({ products }) {
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
-          <div className="flex items-center justify-between mb-3 px-2">
+          <div className="flex items-center justify-between !mb-3 px-2">
             <h3 className="text-lg font-semibold text-gray-700">
               دسته‌بندی‌ها
             </h3>
             <button
+              // onClick={() => {
+              //   router.push(`/products?orderby=2`);
+              // }}
               onClick={() => {
-                router.push(`/products?orderby=2`);
+                startTransition(() => {
+                  router.push(`/products?orderby=2`);
+                });
               }}
               className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
             >
@@ -116,7 +123,9 @@ function NewProduct({ products }) {
         {/* دکمه نمایش همه در دسکتاپ */}
         <div
           onClick={() => {
-            router.push(`/products?orderby=2`);
+            startTransition(() => {
+              router.push(`/products?orderby=2`);
+            });
           }}
           className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
         >
@@ -164,7 +173,7 @@ function NewProduct({ products }) {
                   <img
                     draggable="false"
                     className="w-36"
-                    src="/public/images/soldout.png"
+                    src="/images/soldout.png"
                     alt=""
                   />
                 </div>
@@ -220,6 +229,7 @@ function NewProduct({ products }) {
           </div>
         ))}
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

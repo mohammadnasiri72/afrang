@@ -1,6 +1,6 @@
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import BodyProductSec from "@/components/UserAdd/BodyProductSec";
-import BreadCrumbUsedProduct from "@/components/UserAdd/BreadCrumbUsedProduct";
 import SliderProductSecImg from "@/components/UserAdd/SliderProductSecImg";
 import { getProductSecId } from "@/services/UserAd/UserAdServices";
 import { Empty } from "antd";
@@ -20,9 +20,9 @@ export default async function UserAddDetails(props) {
 
   return (
     <>
+    <BreadcrumbMain breadcrumb={[{ title: product.title }]} />
       <Container>
-        <BreadCrumbUsedProduct title={product.title} />
-        <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative">
+        <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative overflow-hidden max-w-[2000px] mx-auto">
           <div className="lg:w-[30%] w-full p-2">
             {product?.imageList?.length > 0 && (
               <SliderProductSecImg

@@ -125,7 +125,7 @@ const ForgotPassword = () => {
         <div className="flex justify-start min-h-screen items-center">
           <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
             <div className="flex flex-wrap">
-              <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
+              <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
                 <div>
                   <Link href="/">
                     <Image
@@ -148,7 +148,7 @@ const ForgotPassword = () => {
                   </Link>
                 </div>
               </div>
-              <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">
+              <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] !mb-[40px]">
                 فراموشی رمز عبور
               </div>
             </div>
@@ -156,8 +156,8 @@ const ForgotPassword = () => {
             <div className="text-[16px]">
               <div>
                 <div className="flex flex-wrap">
-                  <div className="w-full mb-4">
-                    <label className="text-[#656565] text-[16px] mb-[10px]">
+                  <div className="w-full !mb-4">
+                    <label className="text-[#656565] text-[16px] !mb-[10px]">
                       شماره تلفن/آدرس ایمیل
                     </label>
                     <div
@@ -187,7 +187,7 @@ const ForgotPassword = () => {
 
                 <div className="flex flex-wrap mt-5">
                   <div className="flex flex-col-reverse sm:flex-row w-full">
-                    <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                    <div className="sm:w-1/2 w-full !mb-4 sm:pl-3">
                       <div
                         onClick={() => {
                           startTransition(() => {
@@ -200,7 +200,7 @@ const ForgotPassword = () => {
                       </div>
                     </div>
 
-                    <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                    <div className="sm:w-1/2 w-full !mb-4 sm:pr-3">
                       <button
                         disabled={loading}
                         onClick={handleSubmit}

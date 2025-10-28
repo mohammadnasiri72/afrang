@@ -6,6 +6,8 @@ async function SliderHomeSSR() {
     TypeId: 6,
     LangCode: "fa",
   });
+
+
   return (
     <>{sliderItems.length > 0 && <SliderHome sliderItems={sliderItems} />}</>
   );

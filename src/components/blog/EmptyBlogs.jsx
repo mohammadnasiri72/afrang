@@ -6,17 +6,17 @@ function EmptyBlogs() {
     <div className="min-h-[60vh] flex flex-col items-center justify-center py-12 px-4 relative z-50">
       <div className="max-w-md w-full text-center">
         {/* آیکون اصلی */}
-        <div className="relative mb-8">
+        <div className="relative !mb-8">
           <div className="w-24 h-24 bg-[#f1f2f2] rounded-full flex items-center justify-center mx-auto">
             <FaBookOpen className="text-4xl text-[#40768c]" />
           </div>
         </div>
 
         {/* متن اصلی */}
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <h2 className="text-2xl font-bold text-gray-800 !mb-4">
           هیچ مطلبی یافت نشد
         </h2>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 !mb-8">
           متاسفانه در حال حاضر هیچ مطلبی در این بخش وجود ندارد. به زودی مطالب
           جدیدی اضافه خواهد شد.
         </p>

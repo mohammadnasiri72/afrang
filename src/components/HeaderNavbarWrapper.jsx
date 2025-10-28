@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { setMenuItems } from "@/redux/slices/menuResSlice";
 import { setSettings } from "@/redux/slices/settingsSlice";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -20,6 +21,14 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
   const [isPending, startTransition] = useTransition();
 
   const disPatch = useDispatch();
+
+  const open = useSelector((store) => store.shopping.openShopping);
+
+  useEffect(() => {
+    if (open) {
+      disPatch(fetchCurrentCart());
+    }
+  }, [open]);
 
   useEffect(() => {
     if (menuItems && menuItems.length > 0) {
@@ -51,7 +60,7 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
     if (navbarRef.current) {
       setNavbarHeight(navbarRef.current.getBoundingClientRect().height);
     }
-    
+
     const timeout = setTimeout(() => {
       if (headerRef.current) {
         setHeaderHeight(headerRef.current.getBoundingClientRect().height);
@@ -115,54 +124,87 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
   return (
     <>
       {/* header ثابت که با اسکرول ظاهر می‌شود */}
-      <div
-        className={`fixed top-0 left-0 right-0 z-[1001] transition-all duration-300 ease-out ${
-          headerFixed ? "translate-y-0" : "-translate-y-full"
-        }`}
-        data-header-fixed={headerFixed ? "true" : "false"}
-      >
+      <header>
         <div
-          style={{
-            maxWidth: "2000px",
-            margin: "0 auto",
-            width: "100%",
-            background: "#fff",
-            boxShadow: headerFixed ? "0 2px 16px #0002" : "none",
-            transition: "box-shadow 0.3s",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            padding: 0,
-          }}
+          className={`fixed !bg-amber-700 top-0 left-0 right-0 z-[1001] transition-all duration-300 ease-out ${
+            headerFixed ? "translate-y-0" : "-translate-y-full"
+          }`}
+          data-header-fixed={headerFixed ? "true" : "false"}
         >
+          <div
+            style={{
+              margin: "0 auto",
+              width: "100%",
+              background: "#fff",
+              boxShadow: headerFixed ? "0 2px 16px #0002" : "none",
+              transition: "box-shadow 0.3s",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              padding: 0,
+            }}
+          >
+            <Header
+              onLoaded={() => setHeaderLoaded(true)}
+              settings={settings}
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
+      <nav>
+        <div
+          className={`fixed left-0 right-0 z-[1000] transition-all duration-300 ease-out ${
+            navbarFixed ? "translate-y-0" : "-translate-y-full"
+          }`}
+          style={{
+            top: getNavbarFixedTop(),
+            height: navbarHeight ? `${navbarHeight}px` : "auto",
+          }}
+          data-navbar-fixed={navbarFixed ? "true" : "false"}
+        >
+          <div
+            style={{
+              margin: "0 auto",
+              width: "100%",
+              background: "#d1182b",
+              boxShadow: navbarFixed ? "0 2px 16px #0002" : "none",
+              paddingLeft: 16,
+              paddingRight: 16,
+              transition: "box-shadow 0.3s",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <NavBar
+              activeMenu={activeMenu}
+              setActiveMenu={setActiveMenu}
+              menuItems={menuItems}
+              startTransition={startTransition}
+            />
+          </div>
+        </div>
+      </nav>
+      {/* header اصلی که همیشه در جای خودش هست */}
+      <header>
+        <div ref={headerRef} className="z-[1001] relative">
           <Header onLoaded={() => setHeaderLoaded(true)} settings={settings} />
         </div>
-      </div>
-      {/* navbar ثابت که با اسکرول ظاهر می‌شود */}
-      <div
-        className={`fixed left-0 right-0 z-[1000] transition-all duration-300 ease-out ${
-          navbarFixed ? "translate-y-0" : "-translate-y-full"
-        }`}
-        style={{
-          top: getNavbarFixedTop(),
-          height: navbarHeight ? `${navbarHeight}px` : "auto",
-        }}
-        data-navbar-fixed={navbarFixed ? "true" : "false"}
-      >
+      </header>
+      {/* navbar اصلی که همیشه در جای خودش هست */}
+      <nav>
         <div
+          className="z-[1000] relative"
+          ref={navbarRef}
           style={{
-            maxWidth: "2000px",
-            margin: "0 auto",
+            visibility: navbarFixed ? "hidden" : "visible",
+            position: navbarFixed ? "absolute" : "relative",
+            top: 0,
+            left: 0,
             width: "100%",
-            background: "#d1182b",
-            boxShadow: navbarFixed ? "0 2px 16px #0002" : "none",
-            paddingLeft: 16,
-            paddingRight: 16,
-            transition: "box-shadow 0.3s",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
           }}
         >
           <NavBar
@@ -172,30 +214,7 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
             startTransition={startTransition}
           />
         </div>
-      </div>
-      {/* header اصلی که همیشه در جای خودش هست */}
-      <div ref={headerRef} className="z-[1001] relative">
-        <Header onLoaded={() => setHeaderLoaded(true)} settings={settings} />
-      </div>
-      {/* navbar اصلی که همیشه در جای خودش هست */}
-      <div
-        className="z-[1000] relative"
-        ref={navbarRef}
-        style={{
-          visibility: navbarFixed ? "hidden" : "visible",
-          position: navbarFixed ? "absolute" : "relative",
-          top: 0,
-          left: 0,
-          width: "100%",
-        }}
-      >
-        <NavBar
-          activeMenu={activeMenu}
-          setActiveMenu={setActiveMenu}
-          menuItems={menuItems}
-          startTransition={startTransition}
-        />
-      </div>
+      </nav>
       {activeMenu?.id && (
         <div
           className={`fixed top-0 right-0 left-0 bottom-0 transition-all duration-300 bg-[#0007]`}

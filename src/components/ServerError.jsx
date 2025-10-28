@@ -42,7 +42,7 @@ export default function ServerError() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-blue-100">
         {/* آیکون و لوگو */}
-        <div className="mb-8">
+        <div className="!mb-8">
           <div className="relative flex flex-col items-center">
             {/* لوگو */}
             <div className="w-24 h-16 flex items-center justify-center">
@@ -64,7 +64,7 @@ export default function ServerError() {
         </div>
 
         {/* متن */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 !mb-8">
           <h1 className="text-2xl font-bold text-gray-800">
             خطا در اتصال به سرور
           </h1>
@@ -80,7 +80,7 @@ export default function ServerError() {
         </div>
 
         {/* دکمه اقدام با تایمر */}
-        <div className="mb-6 space-y-3">
+        <div className="!mb-6 space-y-3">
           <button
             onClick={handleManualRefresh}
             disabled={!isAutoRefreshEnabled && countdown > 0}

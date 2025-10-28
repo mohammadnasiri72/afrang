@@ -171,9 +171,9 @@ export default function SelectCodeDiscount() {
   return (
     <div className="container mx-auto px-4 mt-5">
       <div className="bg-white rounded-xl p-3 shadow-lg">
-        <div className="flex items-center gap-2 mb-4 px-3">
+        <div className="flex items-center gap-2 !mb-4 px-3">
           <FaTicketAlt className="text-xl text-[#d1182b]" />
-          <h2 className="text-xl font-bold text-gray-800">کد تخفیف</h2>
+          <span className="text-xl font-bold text-gray-800">کد تخفیف</span>
         </div>
         {!discountCode ? (
           <form onSubmit={handleSubmit} className="space-y-2">

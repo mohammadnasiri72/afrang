@@ -4,14 +4,14 @@ export default function ProductListSkeleton() {
       {/* Right Side - Filter Box */}
       <div className="lg:w-1/4">
         <div className="bg-white rounded-lg p-4 shadow-sm sticky">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center !mb-4">
             <div className="h-6 bg-gray-200 animate-pulse rounded w-24" />
             <div className="h-8 bg-gray-200 animate-pulse rounded w-32" />
           </div>
           <div className="space-y-6">
             {/* Category Section */}
             <div>
-              <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+              <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
               <div className="space-y-2">
                 {[...Array(5)].map((_, index) => (
                   <div key={index} className="p-2.5 my-1">
@@ -22,7 +22,7 @@ export default function ProductListSkeleton() {
             </div>
             {/* Brand Section */}
             <div>
-              <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+              <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
               <div className="space-y-2">
                 {[...Array(5)].map((_, index) => (
                   <div key={index} className="p-2">
@@ -33,9 +33,9 @@ export default function ProductListSkeleton() {
             </div>
             {/* Price Section */}
             <div>
-              <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+              <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
               <div className="px-4">
-                <div className="h-2 bg-gray-200 animate-pulse rounded-full mb-4" />
+                <div className="h-2 bg-gray-200 animate-pulse rounded-full !mb-4" />
                 <div className="flex flex-col gap-2">
                   <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
                   <div className="h-10 bg-gray-200 animate-pulse rounded-md" />

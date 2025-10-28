@@ -287,7 +287,7 @@ function SelectCategoryFilter({ resultFilter }) {
       ),
       children: (
         <div>
-          <div className="mb-3 relative">
+          <div className="!mb-3 relative">
             <input
               type="text"
               placeholder="جستجو در دسته‌بندی‌ها..."
@@ -308,7 +308,7 @@ function SelectCategoryFilter({ resultFilter }) {
       label: <div className="text-[16px] font-semibold select-none">برند</div>,
       children: (
         <div>
-          <div className="mb-3 relative">
+          <div className="!mb-3 relative">
             <input
               type="text"
               placeholder="جستجو در برندها..."
@@ -456,7 +456,7 @@ function SelectCategoryFilter({ resultFilter }) {
         <div className="space-y-6 mt-4">
           {/* Category Section Skeleton */}
           <div>
-            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
             <div className="space-y-2">
               {[...Array(5)].map((_, index) => (
                 <div key={index} className="p-2.5 my-1">
@@ -467,7 +467,7 @@ function SelectCategoryFilter({ resultFilter }) {
           </div>
           {/* Brand Section Skeleton */}
           <div>
-            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
             <div className="space-y-2">
               {[...Array(5)].map((_, index) => (
                 <div key={index} className="p-2">
@@ -478,9 +478,9 @@ function SelectCategoryFilter({ resultFilter }) {
           </div>
           {/* Price Section Skeleton */}
           <div>
-            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 mb-4" />
+            <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3 !mb-4" />
             <div className="px-4">
-              <div className="h-2 bg-gray-200 animate-pulse rounded-full mb-4" />
+              <div className="h-2 bg-gray-200 animate-pulse rounded-full !mb-4" />
               <div className="flex flex-col gap-2">
                 <div className="h-10 bg-gray-200 animate-pulse rounded-md" />
                 <div className="h-10 bg-gray-200 animate-pulse rounded-md" />

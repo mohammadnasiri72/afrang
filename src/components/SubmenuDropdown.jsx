@@ -78,7 +78,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       ? `${columns.length * COLUMN_PIXEL_WIDTH}px`
       : "100%";
     return (
-      <div
+      <div 
         ref={boxRef}
         onWheel={handleWheel}
         className="rounded-b-xl relative"

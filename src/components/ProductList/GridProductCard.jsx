@@ -29,7 +29,7 @@ function GridProductCard({ product, startTransition }) {
             >
               {product.image && (
                 <Image
-                  className={`w-40 h-40 object-contain rounded-lg mb-4 ${
+                  className={`w-40 h-40 object-contain rounded-lg !mb-4 ${
                     product?.statusId !== 1 && product?.conditionId === 20
                       ? "blur-xs"
                       : ""
@@ -68,7 +68,7 @@ function GridProductCard({ product, startTransition }) {
                 <img
                   draggable="false"
                   className="w-36"
-                  src="/public/images/soldout.png"
+                  src="/images/soldout.png"
                   alt=""
                 />
               </div>
@@ -97,13 +97,13 @@ function GridProductCard({ product, startTransition }) {
                 router.push(product.url);
               });
             }}
-            className="font-semibold text-lg text-center mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
+            className="font-semibold text-lg text-center !mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
           >
             <h2 data-id={product.productId} className="text-justify">
               {product.title}
             </h2>
           </Link>
-          <div className="flex items-center justify-center gap-3 mb-2">
+          <div className="flex items-center justify-center gap-3 !mb-2">
             {product.fastShipping && (
               <Tooltip title="ارسال سریع" placement="top">
                 <FaTruckFast className="text-2xl text-[#d1182b] cursor-pointer" />
@@ -116,7 +116,7 @@ function GridProductCard({ product, startTransition }) {
             )}
           </div>
           {product.statusId === 1 && product.discount > 0 && (
-            <div className="flex flex-col items-center mb-4">
+            <div className="flex flex-col items-center !mb-4">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-xl text-[#d1182b]">
                   {product?.finalPrice?.toLocaleString()}
@@ -138,7 +138,7 @@ function GridProductCard({ product, startTransition }) {
           )}
           <div className="mt-auto w-full space-y-2 flex flex-col justify-center items-center">
             {product.statusId === 1 && product.discount === 0 && (
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 !mb-4">
                 {product?.price1 !== 0 && (
                   <div>
                     <span className="font-semibold text-xl">

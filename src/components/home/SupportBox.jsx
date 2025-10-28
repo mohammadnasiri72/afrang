@@ -10,7 +10,7 @@ import SupportBoxPhoto from "./SupportBoxPhoto";
 
 const SupportBox = ({ items }) => {
   return (
-    <div className="sm:px-16 px-2 bg-[#f6f6f6]">
+    <div className="sm:px-16 px-2 bg-[#f6f6f6] ">
       <div className="bg-[#18d1be] p-3 rounded-lg">
         <Swiper
           pagination={{

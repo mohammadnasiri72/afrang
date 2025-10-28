@@ -14,13 +14,13 @@ export default function Forbidden() {
     <>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-          <div className="mb-8">
+          <div className="!mb-8">
             <FaLock className="w-16 h-16 text-yellow-500 mx-auto" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          <span className="text-4xl font-bold text-gray-800 !mb-4">
             دسترسی غیرمجاز
-          </h1>
-          <p className="text-gray-600 mb-8">
+          </span>
+          <p className="text-gray-600 !mb-8">
             متأسفانه شما دسترسی لازم برای مشاهده این صفحه را ندارید.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -13,7 +13,7 @@ const AboutMePage = () => {
     return (
         <div className="space-y-6">
             <Card className="shadow-sm z-50 relative">
-                <div className="flex items-center gap-6 mb-6">
+                <div className="flex items-center gap-6 !mb-6">
                     <Avatar
                         size={100}
                         src={user?.avatar || null}
@@ -23,7 +23,7 @@ const AboutMePage = () => {
                         {user?.avatar ? null : user?.displayName?.charAt(0) || '?'}
                     </Avatar>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800 mb-2">{user?.displayName}</h1>
+                        <h1 className="text-2xl font-bold text-gray-800 !mb-2">{user?.displayName}</h1>
                         <p className="text-gray-500">شناسه کاربری: {user?.userId}</p>
                     </div>
                 </div>

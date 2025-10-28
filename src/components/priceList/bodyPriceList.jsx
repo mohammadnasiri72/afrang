@@ -21,7 +21,7 @@ export default function BodyPriceList({ categories }) {
   return (
     <>
       <div className="container mx-auto px-4 py-8">
-        <div className="!flex !justify-center items-start gap-4 mb-8">
+        <div className="!flex !justify-center items-start gap-4 !mb-8">
           <TbArrowBadgeLeftFilled className="text-[#d1182b] text-2xl" />
           <h4 className="!font-semibold text-xl text-[#0a1d39]">
             لیست قیمت محصولات
@@ -55,7 +55,7 @@ export default function BodyPriceList({ categories }) {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[#0a1d39] mb-2 group-hover:text-[#18d1be] transition-colors duration-300">
+                  <h3 className="text-lg font-semibold text-[#0a1d39] !mb-2 group-hover:text-[#18d1be] transition-colors duration-300">
                     {category.title}
                   </h3>
                 </div>

@@ -22,8 +22,8 @@ const SuccessModal = ({ isOpen, onClose }) => {
       maskClosable={false}
     >
       <div className="flex flex-col items-center p-4">
-        <FaCheckCircle className="text-4xl text-green-500 mb-3" />
-        <h3 className="text-base font-semibold text-gray-800 mb-1 text-center">محصول به سبد خرید اضافه شد</h3>
+        <FaCheckCircle className="text-4xl text-green-500 !mb-3" />
+        <h3 className="text-base font-semibold text-gray-800 !mb-1 text-center">محصول به سبد خرید اضافه شد</h3>
         
         <div className="flex gap-2 w-full mt-4">
           <button

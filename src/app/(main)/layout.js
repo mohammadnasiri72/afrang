@@ -10,7 +10,6 @@ import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
 import { Suspense } from "react";
 
-
 // Force dynamic rendering for this segment to avoid serving cached/static output
 // export const dynamic = "force-dynamic";
 // export const revalidate = 0;
@@ -275,10 +274,9 @@ export default async function layoutMain({ children }) {
   };
 
   // اگر settings دریافت نشد یا خطا داشت، ServerError نمایش داده شود
-  if (!settings || (settings.type === "error")) {
+  if (!settings || settings.type === "error") {
     return <ServerError />;
   }
- 
 
   return (
     <div>
@@ -286,19 +284,25 @@ export default async function layoutMain({ children }) {
       <Suspense fallback={<HeaderNavbarSkeleton />}>
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>
-      <SocialNetworks />
-      {children}
-      <Suspense fallback={<LoadingSkeletonBrand />}>
-        <BoxImgBrandingSSR />
-      </Suspense>
-      <div className="h-10"></div>
-      <Suspense fallback={<LoadingSkeletonSupport />}>
-        <SupportBoxSSR />
-      </Suspense>
-      <Suspense fallback={<FooterSkeleton />}>
-        <FooterSSR settings={settings} />
-      </Suspense>
-      <SubFooter />
+      <main>
+        <SocialNetworks />
+        {children}
+        <Suspense fallback={<LoadingSkeletonBrand />}>
+          <BoxImgBrandingSSR />
+        </Suspense>
+        <div className="h-10"></div>
+        <Suspense fallback={<LoadingSkeletonSupport />}>
+          <div className="max-w-[2000px] mx-auto overflow-hidden">
+            <SupportBoxSSR />
+          </div>
+        </Suspense>
+      </main>
+      <footer>
+        <Suspense fallback={<FooterSkeleton />}>
+          <FooterSSR settings={settings} />
+        </Suspense>
+        <SubFooter />
+      </footer>
     </div>
   );
 }

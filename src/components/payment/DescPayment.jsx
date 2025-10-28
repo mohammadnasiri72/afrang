@@ -243,7 +243,7 @@ function DescPayment({ estimateData }) {
             <hr className="border-[#6666] my-3" />
 
             {/* مبلغ نهایی */}
-            <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
+            <div className="bg-white p-3 rounded-lg !mb-3 sm:block hidden">
               <div className="flex justify-center items-center flex-col">
                 <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
                 <div className="flex items-center">
@@ -281,13 +281,15 @@ function DescPayment({ estimateData }) {
               )}
             </button>
           </div>
-          <Link
-            className="text-red-500 hover:text-red-600 duration-300 font-semibold"
-            href={"/cart"}
-          >
-            <FaCartShopping className="inline" />
-            <span className="pl-0.5">بازگشت به سبد خرید</span>
-          </Link>
+          <div className="!pt-3 !pb-1">
+            <Link
+              className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+              href={"/cart"}
+            >
+              <FaCartShopping className="inline" />
+              <span className="pl-0.5">بازگشت به سبد خرید</span>
+            </Link>
+          </div>
           <p className="text-[#444]">
             این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها
             نمی‌باشد.
@@ -400,7 +402,7 @@ function DescPayment({ estimateData }) {
             <hr className="border-[#6666] my-3" />
 
             {/* مبلغ نهایی */}
-            <div className="bg-white p-3 rounded-lg mb-3 sm:block hidden">
+            <div className="bg-white p-3 rounded-lg !mb-3 sm:block hidden">
               <div className="flex justify-center items-center flex-col">
                 <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
                 <div className="flex items-center">
@@ -438,13 +440,15 @@ function DescPayment({ estimateData }) {
               )}
             </button>
           </div>
-          <Link
-            className="text-red-500 hover:text-red-600 duration-300 font-semibold"
-            href={"/cart"}
-          >
-            <FaCartShopping className="inline" />
-            <span className="pl-0.5">بازگشت به سبد خرید</span>
-          </Link>
+          <div className="!pt-3 !pb-1">
+            <Link
+              className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+              href={"/cart"}
+            >
+              <FaCartShopping className="inline" />
+              <span className="pl-0.5">بازگشت به سبد خرید</span>
+            </Link>
+          </div>
           <p className="text-[#444]">
             این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو آنها
             نمی‌باشد.
@@ -453,7 +457,7 @@ function DescPayment({ estimateData }) {
         {/* نسخه موبایل */}
         <div className="fixed sm:hidden block bottom-10 left-0 right-0 z-[50] bg-[#ececec]">
           {/* مبلغ نهایی */}
-          <div className="bg-white p-3 rounded-lg mb-3">
+          <div className="bg-white p-3 rounded-lg !mb-3">
             <div className="flex justify-between items-center">
               <span className="font-bold text-lg">مبلغ قابل پرداخت:</span>
               <div className="flex items-center">

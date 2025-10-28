@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumb";
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import { getItemByUrl } from "@/services/Item/item";
 import { Divider } from "antd";
 import { notFound } from "next/navigation";
@@ -14,16 +14,18 @@ export default async function DynamicPage({ params }) {
       notFound();
     }
 
+
     return (
       <>
-        {data.breadcrumb && <Breadcrumb items={data.breadcrumb} />}
+       
+        {data.breadcrumb && <BreadcrumbMain breadcrumb={data.breadcrumb} />}
         <Divider style={{ marginTop: "0px" }} />
         {params.slug === "afrang-leasing" && <CalculationInstallments />}
         <div className="container mx-auto px-4 pb-8 z-50 relative">
-          <h1 className="text-3xl font-bold mb-6">{data.title}</h1>
+          <h1 className="text-3xl font-bold !mb-6">{data.title}</h1>
           <div className="relative">
             {data.image && (
-              <div className="float-right ml-6 mb-6">
+              <div className="float-right ml-6 !mb-6">
                 <img
                   alt={data.title}
                   className="w-full h-auto rounded-lg shadow-lg"

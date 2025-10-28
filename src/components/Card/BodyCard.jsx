@@ -73,9 +73,9 @@ const BodyCardSkeleton = () => {
               </div>
               <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                 <div>
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-3" />
-                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-2" />
-                  <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
+                  <div className="h-6 bg-gray-200 rounded w-3/4 !mb-3" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2 !mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-2/3 !mb-2" />
                   <div className="h-4 bg-gray-200 rounded w-1/3" />
                 </div>
                 <div>
@@ -103,7 +103,7 @@ const BodyCardSkeleton = () => {
             <div className="h-5 bg-gray-200 rounded w-20" />
           </div>
           <hr className="border-[#6666] my-3" />
-          <div className="bg-white p-3 rounded-lg mb-3">
+          <div className="bg-white p-3 rounded-lg !mb-3">
             <div className="flex justify-center items-center flex-col gap-2">
               <div className="h-6 bg-gray-200 rounded w-32" />
               <div className="h-8 bg-gray-200 rounded w-40" />
@@ -349,10 +349,10 @@ const BodyCard = () => {
       <div className="flex flex-wrap z-[50] relative">
         {items?.length === 0 ? (
           <div className="w-full flex flex-col items-center justify-center py-10">
-            <div className="text-4xl text-[#d1182b] mb-4">
+            <div className="text-4xl text-[#d1182b] !mb-4">
               <FaShoppingCart />
             </div>
-            <h2 className="text-2xl font-semibold text-[#333] mb-2">
+            <h2 className="text-2xl font-semibold text-[#333] !mb-2">
               {cartType === "next" ? "لیست خرید بعدی" : "سبد خرید"} شما خالی است
             </h2>
             <p className="text-[#666]">
@@ -408,7 +408,7 @@ const BodyCard = () => {
                           }}
                           href={item.url}
                         >
-                          <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] mb-3 hover:text-[#d1182b] transition-colors duration-300">
+                          <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300">
                             {item.title}
                           </h3>
                         </Link>
@@ -616,7 +616,7 @@ const BodyCard = () => {
                   )}
                   {/* جمع سبد خرید و دکمه فقط در md و پایین‌تر از lg اما بالاتر از sm نمایش داده شود */}
                   <div className="hidden md:block sm:block mt-3">
-                    <div className="bg-white p-3 rounded-lg mb-3">
+                    <div className="bg-white p-3 rounded-lg !mb-3">
                       <div className="flex justify-center items-center flex-col gap-2">
                         <span className="font-bold text-lg">جمع سبد خرید:</span>
                         <div className="flex items-center">
@@ -669,7 +669,7 @@ const BodyCard = () => {
                       </div>
                     )}
                     <hr className="border-[#6666] my-3" />
-                    <div className="bg-white p-3 rounded-lg mb-3">
+                    <div className="bg-white p-3 rounded-lg !mb-3">
                       <div className="flex justify-center items-center flex-col">
                         <span className="font-bold text-lg">جمع سبد خرید:</span>
                         <div className="flex items-center">
@@ -701,7 +701,7 @@ const BodyCard = () => {
             )}
 
             <div className="fixed sm:hidden block bottom-10 left-0 right-0 z-[50] bg-[#ececec]">
-              <div className="bg-white p-3 rounded-lg mb-3">
+              <div className="bg-white p-3 rounded-lg !mb-3">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-lg">جمع سبد خرید:</span>
                   <div className="flex items-center">

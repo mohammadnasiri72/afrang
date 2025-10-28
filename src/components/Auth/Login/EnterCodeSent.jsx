@@ -26,16 +26,33 @@ const toEnglishNumber = (number) => {
 function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [isWebOTPSupported, setIsWebOTPSupported] = useState(false);
   const [webOTPActive, setWebOTPActive] = useState(false);
+
   useEffect(() => {
     if ("OTPCredential" in window) {
       setIsWebOTPSupported(true);
     }
   }, []);
 
-  // فعال‌سازی WebOTP با کلیک کاربر
+  // فعال‌سازی WebOTP
   useEffect(() => {
     if (!isWebOTPSupported || webOTPActive) return;
 
+    const startWebOTP = async () => {
+      setWebOTPActive(true);
+      try {
+        const otp = await navigator.credentials.get({
+          otp: { transport: ["sms"] },
+        });
+
+        if (otp && otp.code) {
+          processReceivedCode(otp.code);
+        }
+      } catch (err) {
+        setWebOTPActive(false);
+      }
+    };
+
+    // شروع WebOTP وقتی کاربر با صفحه تعامل دارد
     const handleUserInteraction = () => {
       startWebOTP();
       document.removeEventListener("click", handleUserInteraction);
@@ -51,58 +68,25 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     };
   }, [isWebOTPSupported, webOTPActive]);
 
-  const startWebOTP = async () => {
-    if (webOTPActive) return;
-
-    setWebOTPActive(true);
-
-    try {
-      const otp = await navigator.credentials.get({
-        otp: { transport: ["sms"] },
-      });
-
-      if (otp && otp.code) {
-        processReceivedCode(otp.code);
-      } else {
-        setWebOTPActive(false);
-      }
-    } catch (err) {
-      setWebOTPActive(false);
-    }
-  };
-
   const processReceivedCode = (code) => {
-    // استخراج کد ۶ رقمی
-    const sixDigitMatch = code.match(/\b\d{6}\b/);
-    let cleanCode = "";
+
+    // استخراج کد ۶ رقمی - الگوی ساده‌تر
+    const sixDigitMatch = code.match(/\d{6}/);
 
     if (sixDigitMatch) {
-      cleanCode = sixDigitMatch[0];
-    } else {
-      const allNumbers = code.replace(/\D/g, "");
-      if (allNumbers.length >= 6) {
-        cleanCode = allNumbers.slice(0, 6);
-      }
-    }
+      const cleanCode = sixDigitMatch[0];
 
-    if (cleanCode.length === 6) {
       const persianCode = toPersianNumber(cleanCode);
-      const codeArray = persianCode.split("");
-
-      // ایجاد آرایه جدید
-      const newDigits = ["", "", "", "", "", ""];
-      codeArray.forEach((digit, index) => {
-        newDigits[index] = digit;
-      });
+      const newDigits = persianCode.split("");
 
       setDigits(newDigits);
+      setError("");
 
-      // تأخیر برای سابمیت اتوماتیک
+      // فوکوس روی آخرین فیلد و سابمیت خودکار
       setTimeout(() => {
         if (inputRefs.current[5]) {
           inputRefs.current[5].focus();
         }
-
         setTimeout(() => {
           submitLogin();
         }, 1000);
@@ -110,22 +94,17 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     }
   };
 
-  // handlePaste function
   const handlePaste = (e) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text");
-    const codeMatch = pastedData.match(/\b\d{6}\b/);
-    if (codeMatch) {
-      const code = codeMatch[0];
-      processReceivedCode(code);
-    }
+    processReceivedCode(pastedData);
   };
 
   const [loading, setLoading] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [resendLoading, setResendLoading] = useState(false);
-  const [countdown, setCountdown] = useState(120); // 2 minutes in seconds
+  const [countdown, setCountdown] = useState(120);
 
   const inputRefs = useRef([]);
   const { settings } = useSelector((state) => state.settings);
@@ -144,7 +123,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === "Enter") {
-        e.preventDefault(); // جلوگیری از رفتار پیش‌فرض Enter
+        e.preventDefault();
         submitLogin();
       }
     };
@@ -153,7 +132,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     return () => {
       window.removeEventListener("keypress", handleKeyPress);
     };
-  }, [digits]); // فقط به digits وابسته است
+  }, [digits]);
 
   useEffect(() => {
     if (inputRefs.current[0]) {
@@ -172,7 +151,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     return () => clearInterval(timer);
   }, [countdown]);
 
-  // Format time to MM:SS
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -182,10 +160,8 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   };
 
   const handleChange = (index, value) => {
-    // تبدیل اعداد وارد شده به فارسی
     const persianValue = toPersianNumber(value);
 
-    // بررسی عدد بودن
     if (persianValue && !/^[۰۱۲۳۴۵۶۷۸۹]$/.test(persianValue)) {
       return;
     }
@@ -198,19 +174,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       inputRefs.current[index + 1].focus();
     }
 
-    // پاک کردن خطا
     setError("");
-
-    // وقتی کاربر شروع به تایپ کرد، WebOTP رو فعال کن
-    if (isWebOTPSupported && !webOTPActive && persianValue) {
-      startWebOTP();
-    }
-  };
-
-  const handleFocus = (index) => {
-    if (isWebOTPSupported && !webOTPActive) {
-      startWebOTP();
-    }
   };
 
   const handleKeyDown = (index, e) => {
@@ -227,30 +191,21 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       const csrf = await getCsrf();
       const res = await loginSendOtp(mobile, csrf);
       if (!res) {
-        setCountdown(120); // Reset timer
+        setCountdown(120);
         Toast.fire({
           icon: "success",
           text: "کد جدید ارسال شد",
-          customClass: {
-            container: "toast-modal",
-          },
         });
       } else {
         Toast.fire({
           icon: "error",
           text: res.response?.data ? res.response?.data : "خطای شبکه",
-          customClass: {
-            container: "toast-modal",
-          },
         });
       }
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
       });
     } finally {
       setResendLoading(false);
@@ -258,14 +213,13 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   };
 
   const submitLogin = async () => {
-    // بررسی تعداد اعداد وارد شده
     const filledDigits = digits.filter((digit) => digit !== "").length;
     if (filledDigits < 6) {
       setError("لطفا کد 6 رقمی را کامل وارد کنید");
       return;
     }
 
-    if (loading) return; // جلوگیری از ارسال چندباره در زمان لودینگ
+    if (loading) return;
 
     setLoading(true);
     try {
@@ -278,17 +232,15 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
       });
 
       if (userData.token) {
-        // تنظیم کوکی با زمان انقضا
         Cookies.set("user", JSON.stringify(userData), {
           expires: new Date(userData.expiration),
           secure: true,
           sameSite: "strict",
         });
 
-        // بررسی مسیر ذخیره شده در localStorage
         const redirectPath = localStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
-          localStorage.removeItem("redirectAfterLogin"); // پاک کردن مسیر از localStorage
+          localStorage.removeItem("redirectAfterLogin");
           startTransition(() => {
             router.push(redirectPath);
           });
@@ -307,9 +259,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         Toast.fire({
           icon: "success",
           text: "با موفقیت وارد شدید",
-          customClass: {
-            container: "toast-modal",
-          },
         });
       } else {
         Toast.fire({
@@ -317,18 +266,12 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
           text: userData.response?.data
             ? userData.response?.data
             : "کد وارد شده اشتباه است",
-          customClass: {
-            container: "toast-modal",
-          },
         });
       }
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
       });
     } finally {
       setLoading(false);
@@ -339,7 +282,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
     <>
       <div className="bg-white sm:mr-[4%] sm:w-[560px] w-full sm:min-h-auto min-h-screen relative z-10 p-[30px] sm:rounded-[24px] shadow-lg">
         <div className="flex flex-wrap">
-          <div className="sm:w-1/2 w-full mb-[40px] sm:border-l align-middle flex items-center">
+          <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
               <Link href="/">
                 <Image
@@ -362,7 +305,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               </Link>
             </div>
           </div>
-          <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] mb-[40px]">
+          <div className="sm:w-1/2 w-full items-center flex justify-center text-[#656565] text-[16px] font-[600] !mb-[40px]">
             ورود به حساب کاربری
           </div>
         </div>
@@ -391,7 +334,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                     maxLength="1"
                     value={digit}
                     onChange={(e) => handleChange(index, e.target.value)}
-                    onFocus={() => handleFocus(index)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
                     ref={(el) => (inputRefs.current[index] = el)}
@@ -434,7 +376,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
 
             <div className="flex flex-wrap mt-5">
               <div className="flex flex-col-reverse sm:flex-row w-full">
-                <div className="sm:w-1/2 w-full mb-4 sm:pl-3">
+                <div className="sm:w-1/2 w-full !mb-4 sm:pl-3">
                   <div
                     onClick={() => {
                       setStateLogin(2);
@@ -445,7 +387,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
                   </div>
                 </div>
 
-                <div className="sm:w-1/2 w-full mb-4 sm:pr-3">
+                <div className="sm:w-1/2 w-full !mb-4 sm:pr-3">
                   <button
                     disabled={loading || !digits.every((digit) => digit !== "")}
                     onClick={submitLogin}
@@ -469,9 +411,16 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
             </div>
           </div>
         </div>
+
         {isWebOTPSupported && (
-          <div className="text-center text-xs text-green-600 mb-4 bg-green-50 p-2 rounded-lg">
-            ✓ سیستم دریافت خودکار کد فعال است
+          <div className="text-center text-xs text-green-600 !mb-4 bg-green-50 p-2 rounded-lg">
+            ✓ سیستم دریافت خودکار کد فعال است - منتظر دریافت پیامک باشید
+          </div>
+        )}
+
+        {!isWebOTPSupported && (
+          <div className="text-center text-xs text-orange-600 !mb-4 bg-orange-50 p-2 rounded-lg">
+            ⚠️ مرورگر شما از دریافت خودکار کد پشتیبانی نمی‌کند
           </div>
         )}
       </div>

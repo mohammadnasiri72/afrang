@@ -40,10 +40,10 @@ function ModalAddtoBasket({
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-gray-800 mb-1 line-clamp-2 pl-2">
+                <h3 className="text-base font-bold text-gray-800 !mb-1 line-clamp-2 pl-2">
                   {product.product.title}
                 </h3>
-                <p className="text-gray-600 text-xs mb-2 line-clamp-2">
+                <p className="text-gray-600 text-xs !mb-2 line-clamp-2">
                   {product.product.description}
                 </p>
                 {/* قیمت */}
@@ -78,7 +78,7 @@ function ModalAddtoBasket({
             {/* گارانتی‌ها */}
             {product?.warranty?.warrantyWays.length > 0 && (
               <div className="mt-3">
-                <h4 className="font-semibold text-gray-800 text-sm mb-2">
+                <h4 className="font-semibold text-gray-800 text-sm !mb-2">
                   انتخاب گارانتی
                 </h4>
 
@@ -125,7 +125,7 @@ function ModalAddtoBasket({
             {/* رنگ‌ها */}
             {product?.productModes && product.productModes.length > 0 && (
               <div className="mt-3">
-                <h4 className="font-semibold text-gray-800 text-sm mb-2">
+                <h4 className="font-semibold text-gray-800 text-sm !mb-2">
                   انتخاب رنگ
                 </h4>
                 <div className="flex gap-4 flex-wrap">
@@ -144,7 +144,7 @@ function ModalAddtoBasket({
                         className={`flex flex-col items-center group focus:outline-none cursor-pointer`}
                       >
                         <span
-                          className={`w-8 h-8 rounded-full border-2 transition-all duration-200 mb-1 relative flex items-center justify-center ${
+                          className={`w-8 h-8 rounded-full border-2 transition-all duration-200 !mb-1 relative flex items-center justify-center ${
                             isSelected
                               ? "border-blue-600 shadow-lg scale-110"
                               : "border-gray-300"

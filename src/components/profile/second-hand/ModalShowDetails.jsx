@@ -244,7 +244,7 @@ function ModalShowDetails({ id }) {
             {/* وضعیت ظاهری */}
             {productDetails.appearance && (
               <div>
-                <div className="font-medium mb-1">وضعیت ظاهری :</div>
+                <div className="font-medium !mb-1">وضعیت ظاهری :</div>
                 <div className="bg-gray-50 rounded p-2 text-justify text-gray-700 leading-relaxed">
                   {productDetails.appearance}
                 </div>
@@ -253,7 +253,7 @@ function ModalShowDetails({ id }) {
             {/* توضیحات بدنه */}
             {productDetails.body && (
               <div>
-                <div className="font-medium mb-1">شرح کامل :</div>
+                <div className="font-medium !mb-1">شرح کامل :</div>
                 <div className="bg-gray-50 rounded p-2 text-justify text-gray-700 leading-relaxed">
                   {htmlToText(productDetails.body)}
                 </div>

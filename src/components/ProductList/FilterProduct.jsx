@@ -1,4 +1,5 @@
 import { getImageUrl } from "@/utils/mainDomain";
+import Link from "next/link";
 import SelectCategoryFilter from "./SelectCategoryFilter";
 
 function FilterProduct({ BannerProduct, id, resultFilter }) {
@@ -21,11 +22,13 @@ function FilterProduct({ BannerProduct, id, resultFilter }) {
                 {(item?.productCats?.filter((ev) => ev === id).length > 0 ||
                   item?.productCats?.length <= 0) && (
                   <div className="mt-5 rounded-lg">
-                    <img
-                      className="rounded-lg w-full"
-                      src={getImageUrl(item.image)}
-                      alt=""
-                    />
+                    <Link href={item.link || "#"}>
+                      <img
+                        className="rounded-lg w-full"
+                        src={getImageUrl(item.image)}
+                        alt=""
+                      />
+                    </Link>
                   </div>
                 )}
               </div>

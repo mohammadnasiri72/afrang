@@ -37,8 +37,8 @@ function BodyProductSec({ product }) {
         }`}
       >
         {/* Header */}
-        <div className="border-b border-gray-200 pb-4 mb-6">
-          <div className="flex items-start flex-wrap justify-between mb-2">
+        <div className="border-b border-gray-200 pb-4 !mb-6">
+          <div className="flex items-start flex-wrap justify-between !mb-2">
             <div className="flex flex-col items-start w-full">
               <div className="flex flex-wrap w-full justify-between items-center">
                 <h1
@@ -91,7 +91,7 @@ function BodyProductSec({ product }) {
         </div>
 
         {/* Product Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 !mb-6">
           {/* Basic Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">

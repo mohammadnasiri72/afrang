@@ -60,13 +60,13 @@ export default async function ProductListWithFilters({ searchParams }) {
       bannerProduct.type === "error" ? (
         <div className="flex justify-center w-full">
           <div className="bg-white p-8 rounded-lg mt-3 shadow-sm text-center max-w-lg mx-4 w-full">
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center !mb-6">
               <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">
+            <h2 className="text-2xl font-bold !mb-4 text-gray-800">
               محصولی یافت نشد!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 !mb-6">
               متأسفانه با فیلترهای انتخاب شده محصولی پیدا نکردیم. لطفاً فیلترها
               را تغییر دهید.
             </p>

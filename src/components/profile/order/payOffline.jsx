@@ -218,14 +218,14 @@ export default function PayOffline({ orderData }) {
             <div className="lg:w-2/3 w-full lg:pl-5">
                 <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
                     {/* عنوان و توضیحات */}
-                    <div className="mb-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-2">{paymentInfo?.title}</h2>
+                    <div className="!mb-6">
+                        <h2 className="text-xl font-bold text-gray-800 !mb-2">{paymentInfo?.title}</h2>
                         {/* <p className="text-gray-600 text-sm">sdfsdfsdf</p> */}
                     </div>
 
                     {/* اطلاعات پرداخت */}
-                    <div className="bg-gray-50 rounded-lg p-6 mb-8">
-                        <p className="text-gray-700 mb-6 text-justify">
+                    <div className="bg-gray-50 rounded-lg p-6 !mb-8">
+                        <p className="text-gray-700 !mb-6 text-justify">
                             {paymentInfo?.summary}
                         </p>
 
@@ -238,7 +238,7 @@ export default function PayOffline({ orderData }) {
                                         }`}
                                         onClick={() => setSelectedGateway(gateway.id)}
                                     >
-                                        <div className="flex items-center gap-3 mb-3">
+                                        <div className="flex items-center gap-3 !mb-3">
                                             <input
                                                 type="radio"
                                                 name="paymentGateway"
@@ -259,7 +259,7 @@ export default function PayOffline({ orderData }) {
                                     {gateway.id === "card-to-card" && gateway.summary.includes("6104") && selectedGateway === gateway.id && (
                                         <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
                                             <div>
-                                                <p className="text-sm text-gray-500 mb-1">شماره کارت</p>
+                                                <p className="text-sm text-gray-500 !mb-1">شماره کارت</p>
                                                 <p className="font-medium text-gray-800 font-mono">
                                                     {gateway.summary.match(/\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}/)[0]}
                                                 </p>
@@ -281,7 +281,7 @@ export default function PayOffline({ orderData }) {
                                     {gateway.id === "bank-transfer" && gateway.summary.includes("IR") && selectedGateway === gateway.id && (
                                         <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
                                             <div>
-                                                <p className="text-sm text-gray-500 mb-1">شماره شبا</p>
+                                                <p className="text-sm text-gray-500 !mb-1">شماره شبا</p>
                                                 <p className="font-medium text-gray-800 font-mono">
                                                     {gateway.summary.match(/IR\d+/)[0]}
                                                 </p>
@@ -398,7 +398,7 @@ export default function PayOffline({ orderData }) {
                 <div className="space-y-4">
                     {/* شماره ارجاع */}
                     <div>
-                        <label className="text-[#656565] text-sm block mb-1">
+                        <label className="text-[#656565] text-sm block !mb-1">
                             شماره ارجاع/پیگیری/سند*
                         </label>
                         <div
@@ -423,7 +423,7 @@ export default function PayOffline({ orderData }) {
 
                     {/* مبلغ واریزی */}
                     <div>
-                        <label className="text-[#656565] text-sm block mb-1">
+                        <label className="text-[#656565] text-sm block !mb-1">
                             مبلغ واریزی (تومان)*
                         </label>
                         <div
@@ -452,7 +452,7 @@ export default function PayOffline({ orderData }) {
 
                     {/* تاریخ و ساعت */}
                     <div>
-                        <label className="text-[#656565] text-sm block mb-1">
+                        <label className="text-[#656565] text-sm block !mb-1">
                             تاریخ و ساعت واریز*
                         </label>
                         <div

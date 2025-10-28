@@ -1,7 +1,6 @@
 "use client";
 
 import DeleteProductModal from "@/components/Product/DeleteProductModal";
-import { fetchCurrentCart } from "@/redux/slices/cartSlice";
 import { setOpenShopping } from "@/redux/slices/shoppingSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -15,26 +14,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
-function ShoppingDrawer({ header }) {
+function ShoppingDrawer({ header , startTransition}) {
   const open = useSelector((store) => store.shopping.openShopping);
   const { currentItems } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState(null);
-  const [isPending, startTransition] = useTransition();
+
 
   useEffect(() => {
     const userData = getUserCookie();
     setToken(userData?.token || null);
   }, []);
-
-  useEffect(() => {
-    if (open) {
-      dispatch(fetchCurrentCart());
-    }
-  }, [open]);
-
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteModalsOpen, setDeleteModalsOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -159,13 +151,6 @@ function ShoppingDrawer({ header }) {
               <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
             </svg>
           </span>
-
-          {/* {currentItems.length > 0 &&
-            currentItems?.filter((e) => e.parentId === -1).length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#d1182b] !text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {currentItems?.filter((e) => e.parentId === -1).length}
-              </span>
-            )} */}
         </div>
       )}
 
@@ -211,7 +196,7 @@ function ShoppingDrawer({ header }) {
             currentItems?.filter((e) => e.parentId === -1).length === 0) ||
           currentItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">
-              <div className="text-4xl text-[#d1182b] mb-4">
+              <div className="text-4xl text-[#d1182b] !mb-4">
                 {/* Custom SVG Cart Icon for empty state */}
                 <svg
                   width="2.5em"
@@ -266,7 +251,7 @@ function ShoppingDrawer({ header }) {
                                 </span>
                               )}
                               {/* لیبل تخفیف */}
-                              {item.discount > 0 &&  (
+                              {item.discount > 0 && (
                                 <div className="absolute top-0 right-0 bg-[#d1182b] !text-white text-xs px-2 py-1 rounded-bl-lg">
                                   {item.discount}%
                                 </div>
@@ -373,7 +358,7 @@ function ShoppingDrawer({ header }) {
               </div>
 
               <div className="mt-auto pt-4 border-t">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex justify-between items-center !mb-4">
                   <span className="font-semibold text-[#666] text-[17px]">
                     جمع خرید:
                   </span>
@@ -433,7 +418,6 @@ function ShoppingDrawer({ header }) {
           z-index: 99999;
         }
       `}</style>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -5,7 +5,7 @@ import Loading from "@/components/Loading";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const HeaderCard = dynamic(() => import("@/components/Card/HeaderCard"));
@@ -15,14 +15,13 @@ const CompeletePayWrapper = dynamic(() =>
 
 export default function CompletePay() {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const dispatch = useDispatch();
   const { currentItems } = useSelector((state) => state.cart);
   const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-      setMounted(true);
-    }, []);
-
-    
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkAuthAndCart = async () => {
@@ -31,24 +30,26 @@ export default function CompletePay() {
         const userCookie = Cookies.get("user");
 
         if (!userCookie) {
-          router.push("/cart");
+          startTransition(() => {
+            router.push("/cart");
+          });
+
           return;
         }
 
         const userData = JSON.parse(userCookie);
         if (!userData?.token) {
-          router.push("/cart");
+          startTransition(() => {
+            router.push("/cart");
+          });
+
           return;
         }
-
-        // Check cart items
-        // if (!currentItems || currentItems.length === 0) {
-        //     router.push('/cart');
-        //     return;
-        // }
       } catch (error) {
         console.error("Error checking auth:", error);
-        router.push("/cart");
+        startTransition(() => {
+          router.push("/cart");
+        });
       }
     };
 
@@ -64,11 +65,14 @@ export default function CompletePay() {
   }
 
   return (
-    <div className="bg-[#f6f6f6] overflow-hidden">
-      <Container>
-        <HeaderCard />
-        <CompeletePayWrapper />
-      </Container>
-    </div>
+    <>
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
+        <Container>
+          <HeaderCard />
+          <CompeletePayWrapper />
+        </Container>
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 }

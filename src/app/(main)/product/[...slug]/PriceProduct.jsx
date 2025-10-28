@@ -25,7 +25,7 @@ function PriceProduct({ product }) {
         <div className="bg-white px-2 pb-1 rounded-lg shadow flex flex-col items-center justify-center">
           {discount > 0 ? (
             <div className="flex flex-col items-center w-full">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 !mb-1">
                 <span className="font-bold sm:text-2xl text-lg text-[#d1182b]">
                   {price.toLocaleString()}
                 </span>
@@ -45,7 +45,7 @@ function PriceProduct({ product }) {
           ) : (
             <div className="flex flex-col items-center w-full">
               {priceOriginal !== 0 ? (
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-2 !mb-1">
                   <span className="font-bold sm:text-3xl text-xl text-[#d1182b]">
                     {priceOriginal?.toLocaleString()}
                   </span>

@@ -2,11 +2,14 @@
 
 import { getImageUrl } from "@/utils/mainDomain";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import Container from "../container";
+import Loading from "../Loading";
 
 function CategoryBlog({ category, searchParams }) {
   const router = useRouter();
   const activeCategory = searchParams?.category;
+  const [isPending, startTransition] = useTransition();
 
   const handleChangCategory = (cat) => {
     // dispatch(setLoadingBlog(true));
@@ -17,7 +20,9 @@ function CategoryBlog({ category, searchParams }) {
       params.set("category", cat.id);
       params.delete("page");
     }
-    router.push(`?${params.toString()}`);
+    startTransition(() => {
+      router.push(`?${params.toString()}`);
+    });
   };
   return (
     <>
@@ -56,6 +61,7 @@ function CategoryBlog({ category, searchParams }) {
           ))}
         </div>
       </Container>
+      {isPending && <Loading />}
     </>
   );
 }

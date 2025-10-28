@@ -47,7 +47,7 @@ function SecondHandProduct({ oldProducts }) {
         {/* بخش موبایل */}
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
-          <div className="flex items-center justify-between mb-3 px-2">
+          <div className="flex items-center justify-between !mb-3 px-2">
             <h3 className="text-lg font-semibold text-gray-700">
               دسته‌بندی‌ها
             </h3>
@@ -172,7 +172,7 @@ function SecondHandProduct({ oldProducts }) {
                     <img
                       draggable="false"
                       className="w-36"
-                      src="/public/images/soldout.png"
+                      src="/images/soldout.png"
                       alt=""
                     />
                   </div>

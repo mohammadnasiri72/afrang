@@ -9,6 +9,7 @@ const CategoryBlog = dynamic(() => import("@/components/blog/CategoryBlog"));
 const BoxImgBlog = dynamic(() => import("@/components/blog/BoxImgBlog"));
 
 // Import skeleton components
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import BoxImgBlogSkeleton from "@/components/skeletons/BoxImgBlogSkeleton";
 import CategoryBlogSkeleton from "@/components/skeletons/CategoryBlogSkeleton";
 import FeaturedBlogSkeleton from "@/components/skeletons/FeaturedBlogSkeleton";
@@ -43,21 +44,23 @@ export default async function Blog(prop) {
     blogs = [];
   }
 
-
   return (
-    <div className="bg-[#f6f6f6] overflow-hidden">
-      <Suspense fallback={<HeaderBlogSkeleton />}>
-        <HeaderBlog searchParams={searchParams} category={category} />
-      </Suspense>
-      <Suspense fallback={<FeaturedBlogSkeleton />}>
-        <FeaturedBlog />
-      </Suspense>
-      <Suspense fallback={<CategoryBlogSkeleton />}>
-        <CategoryBlog category={category} searchParams={searchParams} />
-      </Suspense>
-      <Suspense fallback={<BoxImgBlogSkeleton />}>
-        <BoxImgBlog blogs={blogs} searchParams={searchParams}/>
-      </Suspense>
-    </div>
+    <>
+      <BreadcrumbMain breadcrumb={[{ title: "تازه‌های سایت" }]} />
+      <div className="bg-[#f6f6f6] max-w-[2000px] mx-auto overflow-hidden">
+        <Suspense fallback={<HeaderBlogSkeleton />}>
+          <HeaderBlog searchParams={searchParams} category={category} />
+        </Suspense>
+        <Suspense fallback={<FeaturedBlogSkeleton />}>
+          <FeaturedBlog />
+        </Suspense>
+        <Suspense fallback={<CategoryBlogSkeleton />}>
+          <CategoryBlog category={category} searchParams={searchParams} />
+        </Suspense>
+        <Suspense fallback={<BoxImgBlogSkeleton />}>
+          <BoxImgBlog blogs={blogs} searchParams={searchParams} />
+        </Suspense>
+      </div>
+    </>
   );
 }

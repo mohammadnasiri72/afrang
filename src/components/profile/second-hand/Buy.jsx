@@ -172,7 +172,7 @@ function Buy({ productsSec, productEdit, id }) {
           pathname.includes("/profile/second-hand/edit/")) && (
           <div className="bg-white sm:p-5 p-1 rounded-lg">
             {/* عنوان */}
-            <div className="flex justify-between items-center mb-4 sm:mt-0 mt-4">
+            <div className="flex justify-between items-center !mb-4 sm:mt-0 mt-4">
               <h2 className="sm:text-xl font-semibold text-gray-800 line-clamp-1">
                 فرم خرید کالای دسته دوم
               </h2>
@@ -190,7 +190,7 @@ function Buy({ productsSec, productEdit, id }) {
             </div>
             <div className="max-w-2xl mx-auto">
               {/* راهنما */}
-              <div className="mb-8">
+              <div className="!mb-8">
                 <Alert
                   message={
                     <span className="font-bold">
@@ -203,9 +203,9 @@ function Buy({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* دسته بندی محصول */}
-              <div className="mb-6">
+              <div className="!mb-6">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2${
+                  className={`block text-gray-700 text-sm font-bold !mb-2${
                     errors.selectedCategory ? " text-red-important" : ""
                   }`}
                 >
@@ -245,9 +245,9 @@ function Buy({ productsSec, productEdit, id }) {
               </div>
 
               {/* عنوان محصول */}
-              <div className="mb-6">
+              <div className="!mb-6">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2${
+                  className={`block text-gray-700 text-sm font-bold !mb-2${
                     errors.productName ? " text-red-important" : ""
                   }`}
                 >
@@ -268,8 +268,8 @@ function Buy({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* نوع محصول */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   نوع محصول
                 </label>
                 <Input
@@ -280,9 +280,9 @@ function Buy({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* نام کاربر */}
-              <div className="mb-6">
+              <div className="!mb-6">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2 !text-[16px] ${
+                  className={`block text-gray-700 text-sm font-bold !mb-2 !text-[16px] ${
                     errors.nickname ? " text-red-important" : ""
                   }`}
                 >
@@ -303,8 +303,8 @@ function Buy({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* اطلاعات تماس */}
-              <div className="mb-6 sm:hidden block">
-                <label className={`block text-gray-700 text-sm font-bold mb-2`}>
+              <div className="!mb-6 sm:hidden block">
+                <label className={`block text-gray-700 text-sm font-bold !mb-2`}>
                   اطلاعات تماس <span className="text-red-500">*</span>
                 </label>
                 <Select
@@ -320,8 +320,8 @@ function Buy({ productsSec, productEdit, id }) {
                   ]}
                 />
               </div>
-              <div className="sm:flex hidden flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
-                <span className="mb-2 font-bold text-gray-700">
+              <div className="sm:flex hidden flex-col !mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+                <span className="!mb-2 font-bold text-gray-700">
                   اطلاعات تماس
                 </span>
                 <div className="SegmentedBuy overflow-hidden flex justify-center bg-white z-50 transition-all duration-300 w-full ">
@@ -384,8 +384,8 @@ function Buy({ productsSec, productEdit, id }) {
               </div>
 
               {/* شرح کامل */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   شرح کامل
                 </label>
                 <TextArea

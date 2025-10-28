@@ -189,7 +189,7 @@ html {
   width: 94%;
   background-color: #d1182b;
   right: 0;
-  bottom: -10px;
+  bottom: -1px;
 }
 .title-newProduct:before {
   left: 0;
@@ -203,7 +203,7 @@ html {
   width: 94%;
   background-color: #40768c;
   right: 0;
-  bottom: -10px;
+  bottom: -1px;
 }
 .title-SecondHand:before {
   content: "";
@@ -212,7 +212,7 @@ html {
   width: 94%;
   background-color: #18d1be;
   right: 0;
-  bottom: -10px;
+  bottom: -1px;
 }
 .title-SecondHand:before {
   left: 0;

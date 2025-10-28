@@ -24,7 +24,6 @@
 - `DescProductDetails.jsx`: چک کردن وجود product
 - `BasketFixed.jsx`: return null اگر product نباشه
 - `PriceFixed.jsx`: return null اگر product نباشه
-- `BreadcrumbNavProduct.jsx`: fallback UI برای breadcrumb
 
 ### 3. Error Boundary
 - ایجاد `ErrorBoundary.jsx` برای catch کردن خطاهای React
@@ -57,7 +56,6 @@
 - `src/components/Product/DescProductDetails.jsx`
 - `src/app/product/[...slug]/BasketFixed.jsx`
 - `src/app/product/[...slug]/PriceFixed.jsx`
-- `src/app/product/[...slug]/BreadcrumbNavProduct.jsx`
 - `src/components/ErrorBoundary.jsx` (جدید)
 
 ## ویژگی‌های اضافه شده

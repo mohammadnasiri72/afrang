@@ -130,7 +130,7 @@ function EnterCodeSent({ setCode, mobile }) {
   return (
     <>
       <div className="flex w-full">
-        <label className="text-[#656565] text-[16px] mb-[10px]">
+        <label className="text-[#656565] text-[16px] !mb-[10px]">
           کد ارسالی
         </label>
       </div>

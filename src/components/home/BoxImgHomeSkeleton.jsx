@@ -1,7 +1,7 @@
 export default function BoxImgHomeSkeleton() {
   return (
     <div className="max-w-[1250px] py-0 px-[10px] my-0 mx-auto text-right animate-pulse">
-      <div className="mt-[-160px] mb-[50px]">
+      <div className="mt-[-160px] !mb-[50px]">
         {/* ردیف اول */}
         <div className="flex flex-wrap">
           <div className="md:w-1/4 w-1/2 p-2">

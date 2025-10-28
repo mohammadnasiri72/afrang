@@ -10,7 +10,7 @@ import { getCategoryChild } from "@/services/Property/propertyService";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { FaBoxOpen } from "react-icons/fa6";
-import BreadcrumbNav from "./BreadcrumbNav";
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 
 const BodyProductList = dynamic(() =>
   import("@/components/ProductList/BodyProductList")
@@ -68,8 +68,8 @@ async function ProductContent({ id, searchParams }) {
 
   return (
     <>
-      <BreadcrumbNav breadcrumb={productCategory?.breadcrumb} />
-      <div className="bg-[#f6f6f6] overflow-hidden py-10">
+      <BreadcrumbMain breadcrumb={productCategory?.breadcrumb} />
+      <div className="bg-[#f6f6f6] overflow-hidden py-10 max-w-[2000px] mx-auto">
         <div className="xl:px-16">
           {productCategory?.breadcrumb[productCategory?.breadcrumb?.length - 1]
             ?.title && (
@@ -91,13 +91,13 @@ async function ProductContent({ id, searchParams }) {
               {!products || products.length === 0 ? (
                 <div className="flex justify-center">
                   <div className="bg-white p-8 rounded-lg shadow-sm text-center max-w-lg mx-4">
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center !mb-6">
                       <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
                     </div>
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                    <h2 className="text-2xl font-bold !mb-4 text-gray-800">
                       محصولی یافت نشد!
                     </h2>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 !mb-6">
                       متأسفانه با فیلترهای انتخاب شده محصولی پیدا نکردیم. لطفاً
                       فیلترها را تغییر دهید.
                     </p>

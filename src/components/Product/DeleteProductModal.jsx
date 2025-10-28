@@ -3,7 +3,7 @@ import { deleteCartItem } from "@/services/cart/cartService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { FaSpinner } from "react-icons/fa";
+import { FaRegTrashAlt, FaSpinner } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -91,24 +91,11 @@ function DeleteProductModal({ isOpen, onClose, cartId }) {
         }}
       >
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-[#d1182b]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-            <h3 className="text-lg font-bold text-gray-900">حذف از سبد خرید</h3>
+          <div className="!flex !items-center !justify-center !gap-2 !mb-2">
+            <FaRegTrashAlt className="!text-[#d1182b] text-lg " />
+            <span className="!text-lg !font-bold text-gray-900">حذف از سبد خرید</span>
           </div>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 !mb-6">
             آیا از حذف این محصول از سبد خرید اطمینان دارید؟
           </p>
         </div>

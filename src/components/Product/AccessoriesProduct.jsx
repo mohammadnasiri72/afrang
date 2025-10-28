@@ -46,10 +46,10 @@ function AccessoriesProduct({ product, relatedProducts }) {
     return (
       <div className="flex justify-center p-8">
         <div className="bg-[#f3f3f3] p-8 rounded-lg text-center max-w-lg">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center !mb-6">
             <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <span className="text-2xl font-bold mb-4 text-gray-800">
+          <span className="text-2xl font-bold !mb-4 text-gray-800">
             محصول مرتبطی یافت نشد!
           </span>
           <p className="text-gray-600">
@@ -133,7 +133,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                             <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                               <Link
                                 href={item.url}
-                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm mb-1"
+                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                               >
                                 {item.title}
                               </Link>
@@ -164,7 +164,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                             </div>
                             <div className="flex flex-col items-end justify-between h-full ml-2 ">
                               {item.discount !== 0 && !item.callPriceButton && (
-                                <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs mb-1">
+                                <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs !mb-1">
                                   {item.discount}%
                                 </span>
                               )}
@@ -252,7 +252,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                     <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                       <Link
                         href={item.url}
-                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm mb-1"
+                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                       >
                         {item.title}
                       </Link>
@@ -279,7 +279,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                     </div>
                     <div className="flex flex-col items-end justify-between h-full ml-2 ">
                       {item.discount !== 0 && !item.callPriceButton && (
-                        <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs mb-1">
+                        <span className="bg-[#d1182b] !text-white rounded-md px-2 py-0.5 text-xs !mb-1">
                           {item.discount}%
                         </span>
                       )}

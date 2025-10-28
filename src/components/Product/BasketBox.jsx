@@ -1,6 +1,6 @@
 "use client";
 
-import { Divider } from "antd";
+import { Button, Divider } from "antd";
 import { useEffect, useState } from "react";
 import { FaCreditCard } from "react-icons/fa";
 import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
@@ -101,17 +101,29 @@ function BasketBox({ product }) {
             ))}
           {/* قابلیت خرید قسطی */}
           {product?.product?.isInstallmentSale && (
-            <div className="flex items-center gap-2 px-1 mt-1 bg-blue-50 rounded-md py-1 pr-2 text-blue-700 border border-blue-200">
+            // <div className="flex items-center gap-2 px-1 mt-1 bg-blue-50 rounded-md py-1 pr-2 text-blue-700 border border-blue-200">
+            //   <FaCreditCard className="text-blue-500 text-base" />
+            //   <span
+            //     onClick={() => {
+            //       setOpenModal(true);
+            //     }}
+            //     className="text-xs font-semibold underline cursor-pointer hover:text-blue-900 duration-300"
+            //   >
+            //     امکان خرید قسطی این محصول فعال است
+            //   </span>
+            // </div>
+            <Button
+              onClick={() => {
+                setOpenModal(true);
+              }}
+              className=" flex w-full items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300"
+            >
               <FaCreditCard className="text-blue-500 text-base" />
-              <span
-                onClick={() => {
-                  setOpenModal(true);
-                }}
-                className="text-xs font-semibold underline cursor-pointer hover:text-blue-900 duration-300"
-              >
+
+              <span className="text-xs font-medium px-2">
                 امکان خرید قسطی این محصول فعال است
               </span>
-            </div>
+            </Button>
           )}
           <div className="flex items-center gap-3 px-1 mt-3">
             {product?.product?.fastShipping && (
@@ -183,7 +195,11 @@ function BasketBox({ product }) {
             )}
         </div>
       </div>
-      <ModalInstallment openModal={openModal} setOpenModal={setOpenModal} product={product}/>
+      <ModalInstallment
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        product={product}
+      />
     </>
   );
 }

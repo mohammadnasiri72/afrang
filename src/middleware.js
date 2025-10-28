@@ -46,7 +46,9 @@ export async function middleware(request) {
     pathname !== "/dic" &&
     pathname !== "/usedproduct" &&
     pathname !== "/useds" &&
+    pathname !== "/brands" &&
     !pathname.startsWith("/gallery/") &&
+    !pathname.startsWith("/payment/link/") &&
     !pathname.includes(".") && // فایل‌ها مثل .css, .js
     !pathname.startsWith("/_next") &&
     !pathname.startsWith("/api") &&

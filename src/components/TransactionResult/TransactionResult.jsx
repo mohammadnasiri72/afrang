@@ -17,6 +17,7 @@ const TransactionResult = () => {
   const searchParams = useSearchParams();
   const status = searchParams.get("success");
   const msg = searchParams.get("msg");
+  const type = searchParams.get("type");
 
   return (
     <ThemeProvider theme={theme}>
@@ -86,7 +87,7 @@ const TransactionResult = () => {
               </div>
 
               {/* پیام وضعیت */}
-              <div className="text-center mb-6">
+              <div className="text-center !mb-6">
                 <h2 className="text-xl font-semibold text-gray-800">
                   {status === "true"
                     ? "پرداخت شما با موفقیت انجام شد"
@@ -97,29 +98,32 @@ const TransactionResult = () => {
 
               {/* <ProgressButton /> */}
               <div className="flex items-center gap-2 w-full">
-                <Button
-                  onClick={() => {
-                    startTransition(() => {
-                      router.push(
-                        status === "true"
-                          ? "/profile/orders?statusId=2"
-                          : "/profile/orders"
-                      );
-                    });
-                  }}
-                  sx={{ width: "50%" }}
-                  color="primary"
-                  variant="contained"
-                >
-                  سفارشات من
-                </Button>
+                {!type ||
+                  (Number(type) !== 2 && (
+                    <Button
+                      onClick={() => {
+                        startTransition(() => {
+                          router.push(
+                            status === "true"
+                              ? "/profile/orders?statusId=2"
+                              : "/profile/orders"
+                          );
+                        });
+                      }}
+                      sx={{ width: "50%" }}
+                      color="primary"
+                      variant="contained"
+                    >
+                      سفارشات من
+                    </Button>
+                  ))}
                 <Button
                   onClick={() => {
                     startTransition(() => {
                       router.push("/");
                     });
                   }}
-                  sx={{ width: "50%" }}
+                  sx={{ width: type && Number(type) === 2 ? "100%" : "50%" }}
                   color="inherit"
                   variant="contained"
                 >

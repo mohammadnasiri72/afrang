@@ -25,11 +25,9 @@ const ReportLossForm = ({ categories }) => {
 
       setLoading(true);
 
-      
-
       const response = await reportMissing(values, user.token);
 
-      if(response.type === "error"){
+      if (response.type === "error") {
         message.error(response.message);
         return;
       }
@@ -55,13 +53,17 @@ const ReportLossForm = ({ categories }) => {
       <Alert
         message="راهنمای اعلام مفقودی"
         description={
-          <div className="mt-2">           
-           <p className="text-justify">کاربر گرامی لطفا اطلاعات کالای مفقودی خود را در این قسمت وارد نمایید ، در اینصورت  هنگام جستجو در فروش محصولات دست دوم چک می گردد که این کالا به کسی فروخته نشود</p>
+          <div>
+            <p className="text-justify">
+              کاربر گرامی لطفا اطلاعات کالای مفقودی خود را در این قسمت وارد
+              نمایید ، در اینصورت هنگام جستجو در فروش محصولات دست دوم چک می گردد
+              که این کالا به کسی فروخته نشود
+            </p>
           </div>
         }
         type="info"
         showIcon
-        className="mb-6"
+        className="!mb-6 !px-3 !py-2"
       />
 
       <h2 className="text-xl font-bold my-6 text-gray-800">گزارش مفقودی</h2>
@@ -74,10 +76,12 @@ const ReportLossForm = ({ categories }) => {
         <Form.Item
           name="categoryId"
           label="گروه محصولات"
-          rules={[{ required: true, message: "لطفا گروه محصولات را انتخاب کنید" }]}
+          rules={[
+            { required: true, message: "لطفا گروه محصولات را انتخاب کنید" },
+          ]}
         >
           <Select size="large" placeholder="گروه محصولات را انتخاب کنید">
-            {categories?.map(category => (
+            {categories?.map((category) => (
               <Option key={category.id} value={category.id}>
                 {category.title}
               </Option>
@@ -90,7 +94,11 @@ const ReportLossForm = ({ categories }) => {
           label="نام محصول"
           rules={[{ required: true, message: "لطفا نام محصول را وارد کنید" }]}
         >
-          <Input className="!text-[16px]" size="large" placeholder="نام محصول" />
+          <Input
+            className="!text-[16px]"
+            size="large"
+            placeholder="نام محصول"
+          />
         </Form.Item>
 
         <Form.Item
@@ -98,11 +106,15 @@ const ReportLossForm = ({ categories }) => {
           label="سریال محصول"
           rules={[{ required: true, message: "لطفا سریال محصول را وارد کنید" }]}
         >
-          <Input className="!text-[16px]" size="large" placeholder="سریال محصول" />
+          <Input
+            className="!text-[16px]"
+            size="large"
+            placeholder="سریال محصول"
+          />
         </Form.Item>
 
         <Form.Item>
-          <Button 
+          <Button
             size="large"
             type="primary"
             htmlType="submit"
@@ -112,7 +124,7 @@ const ReportLossForm = ({ categories }) => {
               backgroundColor: isHovered ? "#b91626" : "#d1182b",
               color: "white",
               border: "none",
-              transition: "background-color 0.3s ease"
+              transition: "background-color 0.3s ease",
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -125,4 +137,4 @@ const ReportLossForm = ({ categories }) => {
   );
 };
 
-export default ReportLossForm; 
+export default ReportLossForm;

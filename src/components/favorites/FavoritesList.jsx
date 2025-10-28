@@ -16,7 +16,7 @@ const FavoritesSkeleton = () => {
                 <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
                     <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-lg" />
                     <div className="flex-1">
-                        <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mb-2" />
+                        <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 !mb-2" />
                         <div className="h-3 bg-gray-200 animate-pulse rounded w-1/2" />
                     </div>
                 </div>
@@ -134,7 +134,7 @@ export default function FavoritesList() {
                             </Link>
                             <div className="flex-1">
                                 <Link href={item.url} target="_blank" rel="noopener noreferrer">
-                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                                    <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                         {item.title}
                                     </p>
                                 </Link>

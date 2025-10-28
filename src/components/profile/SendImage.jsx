@@ -96,7 +96,7 @@ const DeleteImageModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         }}
       >
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 !mb-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-[#d1182b]"
@@ -113,7 +113,7 @@ const DeleteImageModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
             </svg>
             <h3 className="text-lg font-bold text-gray-900">حذف تصویر</h3>
           </div>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 !mb-6">
             آیا از حذف این تصویر اطمینان دارید؟
           </p>
         </div>
@@ -548,13 +548,13 @@ const SendImage = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center !mb-4">
               <UploadOutlined className="text-3xl text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            <h3 className="text-lg font-semibold text-gray-700 !mb-2">
               تصویری ارسال نشده
             </h3>
-            <p className="text-gray-500 mb-4">
+            <p className="text-gray-500 !mb-4">
               هنوز هیچ تصویری ارسال نکرده‌اید
             </p>
             <Button
@@ -663,7 +663,7 @@ const SendImage = () => {
             </Upload>
           </Form.Item>
 
-          <Form.Item className="mb-0">
+          <Form.Item className="!mb-0">
             <div className="flex justify-end gap-2">
               <Button
                 onClick={handleCancel}

@@ -46,11 +46,11 @@ function CommentSection({ id, type, comments }) {
     return (
       <div className="flex flex-col items-center justify-center py-10">
         {type === 0 ? (
-          <FaCommentSlash className="text-6xl text-gray-300 mb-4" />
+          <FaCommentSlash className="text-6xl text-gray-300 !mb-4" />
         ) : (
-          <FaQuestionCircle className="text-6xl text-gray-300 mb-4" />
+          <FaQuestionCircle className="text-6xl text-gray-300 !mb-4" />
         )}
-        <span className="text-xl font-semibold text-gray-700 mb-2">
+        <span className="text-xl font-semibold text-gray-700 !mb-2">
           {type === 0 ? "هنوز نظری ثبت نشده است" : "هنوز پرسشی ثبت نشده است"}
         </span>
         <p className="text-gray-800 text-center max-w-md">
@@ -70,7 +70,7 @@ function CommentSection({ id, type, comments }) {
           {comments
             .filter((c) => c && c.id)
             .map((comment) => (
-              <div key={comment.id} className="mb-6">
+              <div key={comment.id} className="!mb-6">
                 <CommentUser
                   comments={[comment]}
                   onReply={handleReply}

@@ -52,16 +52,16 @@ function BoxBuySec({ productList }) {
 
   // کامپوننت محصول برای حالت لیست
   const ProductListItem = ({ product }) => (
-    <div className="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow">
-      <h3 className="text-lg font-bold text-[#d1182b] mb-3">
+    <div className="border border-gray-200 rounded-lg p-4 !mb-4 hover:shadow-md transition-shadow">
+      <h3 className="text-lg font-bold text-[#d1182b] !mb-3">
         {product.nickname}
       </h3>
       <div className="flex items-center space-x-4 space-x-reverse">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          <h3 className="text-lg font-semibold text-gray-900 !mb-1">
             <span>{product.title}</span>
           </h3>
-          <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
+          <p className="text-sm text-gray-600 !mb-2">{product.categoryTitle}</p>
         </div>
       </div>
       <div className="flex items-start py-2 text-xs text-gray-600 gap-1">
@@ -81,13 +81,13 @@ function BoxBuySec({ productList }) {
   // کامپوننت محصول برای حالت گرید
   const ProductGridItem = ({ product }) => (
     <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <h3 className="text-lg font-bold text-[#d1182b] mb-3">
+      <h3 className="text-lg font-bold text-[#d1182b] !mb-3">
         {product.nickname}
       </h3>
-      <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
+      <h3 className="text-base font-semibold text-gray-900 !mb-2 line-clamp-2">
         <span>{product.title}</span>
       </h3>
-      <p className="text-sm text-gray-600 mb-2">{product.categoryTitle}</p>
+      <p className="text-sm text-gray-600 !mb-2">{product.categoryTitle}</p>
       <div className="flex flex-col items-start py-2 text-xs text-gray-600 gap-1">
         <span className="text-black font-bold whitespace-nowrap">
           توضیحات :
@@ -103,7 +103,7 @@ function BoxBuySec({ productList }) {
   return (
     <div className="container mx-auto px-4 py-6">
       {/* Header with view toggle */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center !mb-4">
         <div className="flex flex-wrap items-center sm:gap-10 gap-1">
           <div className="flex items-center gap-2">
             <label className={` text-gray-700 text-sm font-bold`}>
@@ -152,7 +152,7 @@ function BoxBuySec({ productList }) {
       {productList.length === 0 ? (
         <div className="text-center py-12">
           <svg
-            className="w-16 h-16 text-gray-400 mx-auto mb-4"
+            className="w-16 h-16 text-gray-400 mx-auto !mb-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -164,7 +164,7 @@ function BoxBuySec({ productList }) {
               d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
             />
           </svg>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-900 !mb-2">
             محصولی یافت نشد
           </h3>
           <p className="text-gray-600">

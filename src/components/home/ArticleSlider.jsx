@@ -50,7 +50,7 @@ export default function ArticleSlider({ blogs }) {
 
   return (
     <>
-      <div className="sm:px-16 px-2 min-h-96">
+      <div className="sm:px-0 px-2 min-h-96">
         <Swiper
           slidesPerView={4}
           spaceBetween={10}
@@ -112,7 +112,7 @@ export default function ArticleSlider({ blogs }) {
                   </Link>
 
                   <div className="p-3 bg-white flex-grow flex flex-col">
-                    <h3 className="mb-2">
+                    <h3 className="!mb-2">
                       <Link
                         className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1 text-justify"
                         href={blog.url}

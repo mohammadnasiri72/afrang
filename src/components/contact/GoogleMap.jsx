@@ -13,7 +13,7 @@ function GoogleMap() {
   return (
     <>
       <div className="w-full -mt-14">
-        <div className="mb-[30px]">
+        <div className="!mb-[30px]">
           <div className="google-map">
             <div dangerouslySetInnerHTML={{ __html: map }} />
           </div>
@@ -24,7 +24,7 @@ function GoogleMap() {
             </div>
             <div>
               <span className="text-[#747475]">آدرس ما</span>
-              <p className="mb-0 font-[600]">
+              <p className="!mb-0 font-[600]">
                 {siteAddress || "میدان ونک، تهران"}
               </p>
             </div>

@@ -80,7 +80,10 @@ function ProductCard({ product, startTransition }) {
                     <ShowImgProduct product={product} />
                   </div>
                   <div className="w-full">
-                    <CompareButtonBtn id={product?.productId} />
+                    <CompareButtonBtn
+                      id={product?.productId}
+                      startTransition={startTransition}
+                    />
                   </div>
                 </div>
                 <div
@@ -106,7 +109,7 @@ function ProductCard({ product, startTransition }) {
                 >
                   <h2
                     data-id={product.productId}
-                    className="font-semibold text-sm line-clamp-3 mb-1 text-justify"
+                    className="font-semibold text-sm line-clamp-3 !mb-1 text-justify"
                   >
                     {product.title}
                   </h2>
@@ -200,7 +203,7 @@ function ProductCard({ product, startTransition }) {
                     <img
                       draggable="false"
                       className="w-36"
-                      src="/public/images/soldout.png"
+                      src="/images/soldout.png"
                       alt=""
                     />
                   </div>
@@ -211,7 +214,10 @@ function ProductCard({ product, startTransition }) {
                     <ShowImgProduct product={product} />
                   </div>
                   <div className="w-full">
-                    <CompareButtonBtn id={product?.productId} />
+                    <CompareButtonBtn
+                      id={product?.productId}
+                      startTransition={startTransition}
+                    />
                   </div>
                 </div>
               </div>
@@ -252,7 +258,7 @@ function ProductCard({ product, startTransition }) {
               <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-52 flex flex-col">
                 <div className="flex flex-col w-full h-full flex-1">
                   <PriceProduct product={product} />
-                 
+
                   <div className="flex flex-wrap items-center gap-3">
                     {product.fastShipping && (
                       <div className="flex items-center ">
@@ -270,7 +276,7 @@ function ProductCard({ product, startTransition }) {
                       </div>
                     )}
                     {product.conditionId === 20 && (
-                      <div className="flex items-center text-sm text-[#d1182b] mb-1 px-1">
+                      <div className="flex items-center text-sm text-[#d1182b] !mb-1 px-1">
                         <FaRecycle className="ml-1.5" />
                         <span className="font-semibold px-1">
                           کالای کارکرده

@@ -99,7 +99,7 @@ function ModalDelete({ id }) {
           }}
         >
           <div className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="flex items-center justify-center gap-2 !mb-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 text-[#d1182b]"
@@ -116,7 +116,7 @@ function ModalDelete({ id }) {
               </svg>
               <h3 className="text-lg font-bold text-gray-900">حذف آگهی</h3>
             </div>
-            <p className="text-sm text-gray-600 mb-6">
+            <p className="text-sm text-gray-600 !mb-6">
               آیا از حذف آگهی اطمینان دارید؟
             </p>
           </div>

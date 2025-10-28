@@ -1,3 +1,4 @@
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import BodyProduct from "@/components/Product/BodyProduct";
 import DescProduct from "@/components/Product/DescProduct";
 import TitleProduct from "@/components/Product/TitleProduct";
@@ -5,7 +6,6 @@ import { itemVisit } from "@/services/Item/item";
 import { getProductId } from "@/services/products/productService";
 import { headers } from "next/headers";
 import BasketFixed from "./BasketFixed";
-import BreadcrumbNavProduct from "./BreadcrumbNavProduct";
 import PriceFixed from "./PriceFixed";
 
 export default async function ProductDetails(props) {
@@ -38,20 +38,20 @@ export default async function ProductDetails(props) {
   return (
     <>
       {product?.breadcrumb && (
-        <BreadcrumbNavProduct breadcrumb={product?.breadcrumb} />
+        <BreadcrumbMain breadcrumb={product?.breadcrumb} />
       )}
       {product && (
-        <div className="bg-[#f6f6f6] overflow-hidden">
+        <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
           <div className="xl:px-16">
             <div className="flex">
               <div className="lg:w-3/4 w-full">
                 <TitleProduct product={product} />
-                <BodyProduct product={product} />
+                <BodyProduct id={id} />
               </div>
               <BasketFixed product={product} />
             </div>
             <div className="sm:h-[35rem] h-[40rem] overflow-hidden">
-              <DescProduct product={product} />
+              <DescProduct id={id} />
             </div>
           </div>
         </div>

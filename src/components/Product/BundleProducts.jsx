@@ -22,10 +22,10 @@ async function BundleProducts({ product }) {
     return (
       <div className="flex justify-center p-8">
         <div className="bg-white p-8 rounded-lg shadow-sm text-center max-w-lg">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center !mb-6">
             <FaBoxOpen className="text-8xl text-[#d1182b] opacity-80" />
           </div>
-          <span className="text-2xl font-bold mb-4 text-gray-800">
+          <span className="text-2xl font-bold !mb-4 text-gray-800">
             محصولات مرتبطی یافت نشد!
           </span>
           <p className="text-gray-600">

@@ -269,7 +269,7 @@ function BodyContact() {
                   <span className="text-[#616161] text-[13px] font-bold">
                     ایمیل
                   </span>
-                  <p className="mb-0">{siteEmail}</p>
+                  <p className="!mb-0">{siteEmail}</p>
                 </div>
               </div>
             </div>
@@ -285,7 +285,7 @@ function BodyContact() {
                   <span className="text-[#616161] text-[13px] font-bold">
                     کد پستی
                   </span>
-                  <p className="mb-0">{sitePostalCode}</p>
+                  <p className="!mb-0">{sitePostalCode}</p>
                 </div>
               </div>
             </div>
@@ -305,7 +305,7 @@ function BodyContact() {
                 <span className="text-[#616161] text-[13px] font-bold">
                   ساعات کاری
                 </span>
-                <p className="mb-0">{siteWorkingHours}</p>
+                <p className="!mb-0">{siteWorkingHours}</p>
               </div>
             </div>
           </div>

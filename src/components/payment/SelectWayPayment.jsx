@@ -29,9 +29,9 @@ export default function SelectWayPayment() {
             <div className="container mx-auto px-4">
                 {/* باکس انتخاب روش پرداخت */}
                 <div className="bg-white rounded-xl p-6 shadow-lg">
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 !mb-4">
                         <FaCreditCard className="text-xl text-[#d1182b]" />
-                        <h2 className="text-xl font-bold text-gray-800">انتخاب شیوه پرداخت</h2>
+                        <span className="text-xl font-bold text-gray-800">انتخاب شیوه پرداخت</span>
                     </div>
                     {
                         estimateData.paymentWays?.length > 0 &&
@@ -59,7 +59,7 @@ export default function SelectWayPayment() {
                                                         <div className="w-2.5 h-2.5 rounded-full bg-[#d1182b]" />
                                                     )}
                                                 </div>
-                                                <h3 className="text-base font-medium text-gray-800 mb-1">
+                                                <h3 className="text-base font-medium text-gray-800 !mb-1">
                                                     {payment.title}
                                                 </h3>
 

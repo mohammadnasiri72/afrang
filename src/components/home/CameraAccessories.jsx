@@ -76,7 +76,7 @@ export default function CameraAccessories({ category }) {
                             isLoaded ? "opacity-100" : "opacity-0"
                           }`}
                           src={getImageUrl(item.image)}
-                          alt={"دسته بندی محصولات"}
+                          alt={item.title}
                           fill
                           sizes="(max-width: 768px) 100vw, 300px"
                           unoptimized

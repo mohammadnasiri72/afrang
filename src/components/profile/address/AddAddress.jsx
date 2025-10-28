@@ -152,7 +152,7 @@ const CustomSearch = ({ onLocationSelect }) => {
   };
 
   return (
-    <div className="relative mb-4">
+    <div className="relative !mb-4">
       <div className="relative">
         <input
           type="text"
@@ -638,7 +638,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         {/* Row 1: نام و نام خانوادگی، استان، شهر */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-gray-700 mb-2">
+            <label className="block text-gray-700 !mb-2">
               نام و نام خانوادگی*
             </label>
             <input
@@ -659,7 +659,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-2">استان*</label>
+            <label className="block text-gray-700 !mb-2">استان*</label>
             <Select
               placeholder="انتخاب استان"
               className={`w-full ${
@@ -692,7 +692,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-2">شهر*</label>
+            <label className="block text-gray-700 !mb-2">شهر*</label>
             <Select
               placeholder="انتخاب شهر"
               className={`w-full ${errors.selectedCity ? "select-error" : ""}`}
@@ -725,7 +725,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
         {/* Row 2: شماره موبایل، کد ملی، کد پستی */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-gray-700 mb-2">شماره موبایل*</label>
+            <label className="block text-gray-700 !mb-2">شماره موبایل*</label>
             <input
               type="tel"
               value={mobile}
@@ -748,7 +748,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-2">کد ملی*</label>
+            <label className="block text-gray-700 !mb-2">کد ملی*</label>
             <input
               type="text"
               value={nationalCode}
@@ -771,7 +771,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-2">کد پستی*</label>
+            <label className="block text-gray-700 !mb-2">کد پستی*</label>
             <input
               type="text"
               inputMode="numeric"
@@ -807,7 +807,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
 
         {/* آدرس */}
         <div>
-          <label className="block text-gray-700 mb-2">آدرس*</label>
+          <label className="block text-gray-700 !mb-2">آدرس*</label>
           <textarea
             value={address}
             onChange={(e) => {

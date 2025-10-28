@@ -6,7 +6,7 @@ export default function BodyGallerySkeleton() {
       <div className="space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="h-8 bg-gray-200 rounded animate-pulse w-48 mx-auto mb-4"></div>
+          <div className="h-8 bg-gray-200 rounded animate-pulse w-48 mx-auto !mb-4"></div>
           <div className="h-4 bg-gray-200 rounded animate-pulse w-64 mx-auto"></div>
         </div>
 
@@ -26,7 +26,7 @@ export default function BodyGallerySkeleton() {
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
               </div>
               <div className="mt-3">
-                <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4 !mb-2"></div>
                 <div className="h-3 bg-gray-200 rounded animate-pulse w-1/2"></div>
               </div>
             </div>

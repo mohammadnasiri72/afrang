@@ -1,14 +1,15 @@
 "use client";
 
-import { getUserCookie } from "@/utils/cookieUtils";
-import { useEffect, useState } from "react";
-import { FaHeart } from "react-icons/fa";
 import {
   postLike,
   postLiked,
 } from "@/services/UserActivity/UserActivityService";
+import { getUserCookie } from "@/utils/cookieUtils";
 import { Spin, message } from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import { FaHeart } from "react-icons/fa";
+import Loading from "../Loading";
 
 const LikeComponent = ({ blog }) => {
   const [token, setToken] = useState(null);
@@ -16,6 +17,7 @@ const LikeComponent = ({ blog }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -42,7 +44,10 @@ const LikeComponent = ({ blog }) => {
     if (!token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      router.push("/login");
+      startTransition(() => {
+        router.push("/login");
+      });
+
       return;
     }
 
@@ -98,6 +103,7 @@ const LikeComponent = ({ blog }) => {
             : blog.score}
         </span>
       </div>
+      {isPending && <Loading />}
     </>
   );
 };

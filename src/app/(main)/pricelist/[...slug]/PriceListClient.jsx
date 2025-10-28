@@ -6,7 +6,7 @@ import { useState } from "react";
 const EmptyState = () => {
   return (
     <div className="flex flex-col items-center justify-center py-12">
-      <div className="w-24 h-24 mb-4">
+      <div className="w-24 h-24 !mb-4">
         <svg
           className="w-full h-full text-gray-400"
           fill="none"
@@ -21,7 +21,7 @@ const EmptyState = () => {
           />
         </svg>
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+      <h3 className="text-xl font-semibold text-gray-900 !mb-2">
         محصولی یافت نشد
       </h3>
       <p className="text-gray-500 text-center">
@@ -34,7 +34,7 @@ const EmptyState = () => {
 const NoResults = () => {
   return (
     <div className="flex flex-col items-center justify-center py-8">
-      <div className="w-16 h-16 mb-4">
+      <div className="w-16 h-16 !mb-4">
         <svg
           className="w-full h-full text-gray-400"
           fill="none"
@@ -49,7 +49,7 @@ const NoResults = () => {
           />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <h3 className="text-lg font-semibold text-gray-900 !mb-2">
         نتیجه‌ای یافت نشد
       </h3>
       <p className="text-gray-500 text-center">
@@ -114,7 +114,7 @@ export default function PriceListClient({ pricing }) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
       {Object.entries(groupedProducts).map(
         ([categoryId, { categoryTitle, products }]) => {
           const filteredProducts = filterProducts(products, categoryId);

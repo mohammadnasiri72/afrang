@@ -4,6 +4,7 @@ import BasketBox from "@/components/Product/BasketBox";
 import React, { useRef, useEffect, useState } from "react";
 
 function BasketFixed({ product }) {
+ 
   const containerRef = useRef(null);
   const innerRef = useRef(null);
   const [fixed, setFixed] = useState(false);

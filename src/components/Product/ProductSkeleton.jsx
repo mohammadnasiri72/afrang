@@ -25,7 +25,7 @@ export function TitleProductSkeleton() {
       {/* اسکلتون توضیحات محصول */}
       <div className="lg:w-5/12 w-full p-2">
         <div className="px-3">
-          <Skeleton.Input active block className="!h-8 !w-3/4 mb-4" />
+          <Skeleton.Input active block className="!h-8 !w-3/4 !mb-4" />
           <Skeleton active paragraph={{ rows: 3 }} />
           <div className="mt-6">
             <Skeleton.Input active block className="!h-12 !w-full" />
@@ -39,10 +39,10 @@ export function TitleProductSkeleton() {
       {/* اسکلتون سبد خرید */}
       <div className="lg:w-1/4 w-full p-2">
         <div className="bg-[#f9f9f9] h-full rounded-lg p-7">
-          <Skeleton.Input active block className="!h-6 !w-1/3 mb-4" />
-          <Skeleton.Input active block className="!h-12 !w-full mb-4" />
-          <Skeleton.Input active block className="!h-12 !w-full mb-4" />
-          <Skeleton.Input active block className="!h-12 !w-full mb-4" />
+          <Skeleton.Input active block className="!h-6 !w-1/3 !mb-4" />
+          <Skeleton.Input active block className="!h-12 !w-full !mb-4" />
+          <Skeleton.Input active block className="!h-12 !w-full !mb-4" />
+          <Skeleton.Input active block className="!h-12 !w-full !mb-4" />
           <div className="flex items-center gap-3 mt-6">
             <Skeleton.Button active size="small" shape="circle" className="!w-6 !h-6" />
             <Skeleton.Input active block className="!h-4 !w-1/2" />

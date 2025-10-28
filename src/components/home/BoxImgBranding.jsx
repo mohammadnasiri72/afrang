@@ -2,7 +2,9 @@
 
 import { mainDomainImg } from "@/utils/mainDomain";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { FaCaretLeft } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -12,6 +14,7 @@ import Loading from "../Loading";
 
 export default function BoxImgBranding({ brands }) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <>
@@ -40,52 +43,73 @@ export default function BoxImgBranding({ brands }) {
             unoptimized
           />
         </div>
-        <Swiper
-          spaceBetween={10}
-          loop={true}
-          modules={[Autoplay, Pagination]}
-          className="mySwiper bg-white"
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-          }}
-          speed={5000}
-          grabCursor={true}
-          breakpoints={{
-            1024: {
-              slidesPerView: 7,
-              spaceBetween: 10,
-            },
-            640: {
-              slidesPerView: 5,
-              spaceBetween: 8,
-            },
-            100: {
-              slidesPerView: 3,
-              spaceBetween: 5,
-            },
-          }}
-        >
-          {brands.map((brand) => (
-            <SwiperSlide key={brand.id}>
-              <div className="relative overflow-hidden sm:w-32 w-20 sm:h-32 h-20 aspect-square">
-                <Image
-                  onClick={() => {
-                    startTransition(() => {
-                      router.push(`/products?brandid=${brand.id}`);
-                    });
-                  }}
-                  className={`group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain border-none outline-none`}
-                  src={`${mainDomainImg}${brand.image}`}
-                  alt={brand.title || "تصویر برند"}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 300px"
-                  unoptimized
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="flex justify-between items-center sm:px-3 px-2 z-50 relative -mb-5">
+          <div className="flex items-center title-newProduct relative">
+            <h2 className="font-semibold text-xl ">
+              برندهای <span className="text-[#d1182b]">افرنگ</span>
+            </h2>
+          </div>
+
+          <div
+            onClick={() => {
+               startTransition(() => {
+                 router.push(`/brands`);
+               });
+            }}
+            className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
+          >
+            <span>نمایش همه</span>
+            <FaCaretLeft />
+          </div>
+        </div>
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <Swiper
+            spaceBetween={10}
+            loop={true}
+            modules={[Autoplay, Pagination]}
+            className="mySwiper bg-transparent"
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+            }}
+            speed={5000}
+            grabCursor={true}
+            breakpoints={{
+              1024: {
+                slidesPerView: 7,
+                spaceBetween: 10,
+              },
+              640: {
+                slidesPerView: 5,
+                spaceBetween: 8,
+              },
+              100: {
+                slidesPerView: 3,
+                spaceBetween: 5,
+              },
+            }}
+          >
+            {brands.map((brand) => (
+              <SwiperSlide key={brand.id}>
+                <div className="relative overflow-hidden sm:w-32 w-20 sm:h-32 h-20 aspect-square">
+                  <Image
+                    onClick={() => {
+                      startTransition(() => {
+                        router.push(`/products?brandid=${brand.id}`);
+                      });
+                    }}
+                    className={`group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain border-none outline-none cursor-pointer`}
+                    src={`${mainDomainImg}${brand.image}`}
+                    alt={brand.title || "تصویر برند"}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    unoptimized
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
       {isPending && <Loading />}
     </>

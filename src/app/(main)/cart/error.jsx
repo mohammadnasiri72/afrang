@@ -13,13 +13,13 @@ export default function ErrorCard() {
     <>
       <div className="bg-[#f6f6f6] flex flex-col items-center justify-center px-4 py-10">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center relative z-50">
-          <div className="mb-8">
+          <div className="!mb-8">
             <FaExclamationTriangle className="w-16 h-16 text-red-500 mx-auto" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          <h1 className="text-3xl font-bold text-gray-800 !mb-4">
             خطا در سبد خرید
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 !mb-6">
             متأسفانه مشکلی در نمایش سبد خرید شما رخ داده است. لطفاً دوباره تلاش
             کنید.
           </p>

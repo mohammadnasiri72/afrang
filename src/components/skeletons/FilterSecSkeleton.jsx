@@ -7,13 +7,13 @@ export default function FilterSecSkeleton() {
         
         {/* Search */}
         <div>
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-20 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-20 !mb-2"></div>
           <div className="h-10 bg-gray-200 rounded animate-pulse w-full"></div>
         </div>
 
         {/* Category Filter */}
         <div>
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-24 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-24 !mb-2"></div>
           <div className="space-y-2">
             {[...Array(5)].map((_, index) => (
               <div key={index} className="flex items-center space-x-2">
@@ -26,7 +26,7 @@ export default function FilterSecSkeleton() {
 
         {/* Location Filter */}
         <div>
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-20 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-20 !mb-2"></div>
           <div className="space-y-2">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="flex items-center space-x-2">
@@ -39,7 +39,7 @@ export default function FilterSecSkeleton() {
 
         {/* Price Range */}
         <div>
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-24 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-24 !mb-2"></div>
           <div className="space-y-3">
             <div className="h-10 bg-gray-200 rounded animate-pulse w-full"></div>
             <div className="flex space-x-2">

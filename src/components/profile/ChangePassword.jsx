@@ -114,7 +114,7 @@ export default function ChangeUserPassword() {
     return (
         <>
             <div className="bg-white rounded-xl shadow-sm p-6 z-50 relative">
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 !mb-6">
                     <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
                         <FaKey className="text-[#d1182b]" />
                     </div>
@@ -123,8 +123,8 @@ export default function ChangeUserPassword() {
 
                 <form onSubmit={handleSubmit} className="max-w-md">
                     {/* رمز عبور فعلی */}
-                    <div className="mb-4">
-                        <label className="block text-gray-700 mb-2">
+                    <div className="!mb-4">
+                        <label className="block text-gray-700 !mb-2">
                             رمز عبور فعلی
                         </label>
                         <div className="relative">
@@ -157,8 +157,8 @@ export default function ChangeUserPassword() {
                     </div>
 
                     {/* رمز عبور جدید */}
-                    <div className="mb-4">
-                        <label className="block text-gray-700 mb-2">
+                    <div className="!mb-4">
+                        <label className="block text-gray-700 !mb-2">
                             رمز عبور جدید
                         </label>
                         <div className="relative">
@@ -191,8 +191,8 @@ export default function ChangeUserPassword() {
                     </div>
 
                     {/* تکرار رمز عبور جدید */}
-                    <div className="mb-6">
-                        <label className="block text-gray-700 mb-2">
+                    <div className="!mb-6">
+                        <label className="block text-gray-700 !mb-2">
                             تکرار رمز عبور جدید
                         </label>
                         <div className="relative">

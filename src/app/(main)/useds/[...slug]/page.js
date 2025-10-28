@@ -1,9 +1,8 @@
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import BodyUserAddSkeleton from "@/components/skeletons/BodyUserAddSkeleton";
-import BreadCrumbSkeleton from "@/components/skeletons/BreadCrumbSkeleton";
 import FilterSecSkeleton from "@/components/skeletons/FilterSecSkeleton";
 import BodyUserAdd from "@/components/UserAdd/BodyUserAdd";
-import BreadCrumbUseds from "@/components/UserAdd/BreadCrumbUseds";
 import FilterSec from "@/components/UserAdd/FilterSec";
 import { getUserAdSell } from "@/services/UserAd/UserAdServices";
 import { Suspense } from "react";
@@ -35,14 +34,11 @@ export default async function UserAddDetails(props) {
 
   const productsData = await getUserAdSell(data);
 
-
   return (
     <>
+      <BreadcrumbMain breadcrumb={[{ title: "کالای دسته دوم" }]} />
       <Container>
-        <Suspense fallback={<BreadCrumbSkeleton />}>
-          <BreadCrumbUseds />
-        </Suspense>
-        <div className="flex items-start">
+        <div className="flex items-start overflow-hidden max-w-[2000px] mx-auto">
           <div className="w-1/4 lg:block hidden px-3">
             <Suspense fallback={<FilterSecSkeleton />}>
               <FilterSec />

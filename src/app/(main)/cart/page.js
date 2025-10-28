@@ -13,16 +13,18 @@ export default function Cart() {
     setMounted(true);
   }, []);
   return (
-    <div className="bg-[#f6f6f6] overflow-hidden">
-      {mounted && (
-        <Container>
-          <ToggleCart />
-          <HeaderCard />
-          <div className="pb-10">
-            <BodyCard />
-          </div>
-        </Container>
-      )}
-    </div>
+    <>
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
+        {mounted && (
+          <Container>
+            <ToggleCart />
+            <HeaderCard />
+            <div className="pb-10">
+              <BodyCard />
+            </div>
+          </Container>
+        )}
+      </div>
+    </>
   );
 }

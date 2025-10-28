@@ -83,7 +83,7 @@ function DeleteAddress({ id, getAddressFu, onAddressDelete }) {
         }}
       >
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 !mb-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-[#d1182b]"
@@ -100,7 +100,7 @@ function DeleteAddress({ id, getAddressFu, onAddressDelete }) {
             </svg>
             <h3 className="text-lg font-bold text-gray-900">حذف آدرس</h3>
           </div>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 !mb-6">
             آیا از حذف این آدرس اطمینان دارید؟
           </p>
         </div>

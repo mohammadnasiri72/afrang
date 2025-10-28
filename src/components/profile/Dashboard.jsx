@@ -30,10 +30,10 @@ const DashboardSkeleton = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[...Array(5)].map((_, index) => (
                     <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-                        <div className="flex items-center justify-center mb-4">
+                        <div className="flex items-center justify-center !mb-4">
                             <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-lg" />
                         </div>
-                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24 mx-auto mb-2" />
+                        <div className="h-4 bg-gray-200 animate-pulse rounded w-24 mx-auto !mb-2" />
                         <div className="h-7 bg-gray-200 animate-pulse rounded w-16 mx-auto" />
                     </div>
                 ))}
@@ -52,8 +52,8 @@ const DashboardSkeleton = () => {
                                 <div key={index} className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm">
                                     <div className="aspect-square w-full bg-gray-200 animate-pulse" />
                                     <div className="p-4">
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mb-2" />
-                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2 mb-2" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 !mb-2" />
+                                        <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2 !mb-2" />
                                         <div className="h-4 bg-gray-200 animate-pulse rounded w-1/3" />
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@ const DashboardSkeleton = () => {
                                     <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
                                         <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-lg" />
                                         <div className="flex-1">
-                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 mb-2" />
+                                            <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4 !mb-2" />
                                             <div className="h-3 bg-gray-200 animate-pulse rounded w-1/2" />
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@ const DashboardSkeleton = () => {
 
                     {/* Quick Actions Skeleton */}
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        <div className="h-6 bg-gray-200 animate-pulse rounded w-32 mb-4" />
+                        <div className="h-6 bg-gray-200 animate-pulse rounded w-32 !mb-4" />
                         <div className="grid grid-cols-2 gap-3">
                             {[...Array(2)].map((_, index) => (
                                 <div key={index} className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg">
@@ -263,12 +263,12 @@ export default function Dashboard() {
                             className="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-all duration-300"
                             onClick={() => handleStatClick(stat.statusId)}
                         >
-                            <div className="flex items-center justify-center mb-4">
+                            <div className="flex items-center justify-center !mb-4">
                                 <div className={`p-3 bg-${stat.color}-50 rounded-lg`}>
                                     <Icon className={`text-${stat.color}-500 text-5xl`} />
                                 </div>
                             </div>
-                            <p className="text-gray-500 text-sm mb-1 text-center">{stat.title}</p>
+                            <p className="text-gray-500 text-sm !mb-1 text-center">{stat.title}</p>
                             <p className="text-2xl font-bold text-gray-800 text-center">{stat.value}</p>
                         </div>
                     );
@@ -307,7 +307,7 @@ export default function Dashboard() {
                                         </Link>
                                         <div className="flex-1">
                                             <Link href={item.url} target="_blank" rel="noopener noreferrer">
-                                                <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                                                <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                                     {item.title}
                                                 </p>
                                             </Link>
@@ -382,7 +382,7 @@ export default function Dashboard() {
                                             </Link>
                                             <div className="flex-1">
                                                 <Link href={item.url} target="_blank" rel="noopener noreferrer">
-                                                    <p className="font-medium text-gray-800 mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                                                    <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                                                         {item.title}
                                                     </p>
                                                 </Link>
@@ -412,7 +412,7 @@ export default function Dashboard() {
 
                     {/* Quick Actions */}
                     <div className="bg-white rounded-lg shadow-sm p-6 z-50 relative">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                        <h3 className="text-lg font-semibold text-gray-800 !mb-4">
                             دسترسی سریع
                         </h3>
                         <div className="grid grid-cols-2 gap-3">

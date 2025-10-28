@@ -26,7 +26,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   return (
     <>
       <div className="footer sm:pb-0 pb-16">
-        <div className="lg:px-16 px-2 pt-10 border-b-8 border-[#d1182b] relative">
+        <div className="lg:px-16 px-2 pt-10  relative max-w-[2000px] mx-auto overflow-hidden">
           <div className="flex flex-wrap">
             <div className="lg:w-1/3 sm:w-1/2 w-full px-3 flex flex-col items-center justify-start">
               <div className="w-full flex sm:justify-start justify-center ">
@@ -72,7 +72,11 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                           (item) => item.propertyKey === "site_footer_logo"
                         )?.value
                       }
-                      alt="لوگو"
+                      alt={
+                        settings?.find(
+                          (item) => item.propertyKey === "site_title"
+                        )?.propertyValue
+                      }
                       fill
                       sizes="(max-width: 768px) 100vw, 300px"
                       unoptimized
@@ -317,7 +321,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
             </div>
           </div>
         </div>
-        <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs">
+        <div className="sm:px-16 px-2 flex flex-wrap justify-between items-center text-xs border-t-8 border-[#d1182b]">
           <p className="xl:w-1/2 w-full text-justify py-2">
             {settings?.find((item) => item.propertyKey === "site_copyright")
               ?.value ? (

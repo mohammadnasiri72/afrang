@@ -1,3 +1,4 @@
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import { getItemByUrl } from "@/services/Item/item";
 import dynamic from "next/dynamic";
@@ -14,15 +15,18 @@ export default async function Contact() {
     const data = await getItemByUrl("contect-us");
 
     return (
-      <div>
-        {data.image && <HeaderContact data={data} />}
-        <div className="bg-[#f6f6f6] overflow-hidden">
-          <Container>
-            <BodyContact />
-          </Container>
-          <GoogleMap />
+      <>
+        <BreadcrumbMain breadcrumb={[{ title: "تماس باما" }]} />
+        <div className="overflow-hidden max-w-[2000px] mx-auto">
+          {data.image && <HeaderContact data={data} />}
+          <div className="bg-[#f6f6f6] overflow-hidden">
+            <Container>
+              <BodyContact />
+            </Container>
+            <GoogleMap />
+          </div>
         </div>
-      </div>
+      </>
     );
   } catch (error) {
     console.error("Error fetching page:", error);

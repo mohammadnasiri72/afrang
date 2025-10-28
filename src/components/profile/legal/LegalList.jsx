@@ -205,16 +205,34 @@ export default function LegalList() {
       </div>
 
       {!isLoading && legalList.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg z-50 relative">
-          <p className="text-gray-500">هنوز اطلاعات حقوقی ثبت نشده است</p>
-          <button
-            onClick={() => handleModalOpen('add')}
-            className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] !text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer mx-auto mt-4"
-          >
-            <FaPlus className="text-sm" />
-            <span>افزودن اطلاعات حقوقی جدید</span>
-          </button>
-        </div>
+        // <div className="text-center py-12 bg-white rounded-lg z-50 relative">
+        //   <p className="text-gray-500">هنوز اطلاعات حقوقی ثبت نشده است</p>
+        //   <button
+        //     onClick={() => handleModalOpen('add')}
+        //     className="flex items-center gap-2 px-4 py-2 bg-[#d1182b] !text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer mx-auto mt-4"
+        //   >
+        //     <FaPlus className="text-sm" />
+        //     <span>افزودن اطلاعات حقsadوقی جدید</span>
+        //   </button>
+        // </div>
+        <div className="flex flex-col items-center justify-center py-12 text-center bg-white rounded-lg z-50 relative">
+  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center !mb-4">
+    <FaPlus className="text-3xl text-gray-400" />
+  </div>
+  <h3 className="text-lg font-semibold text-gray-700 !mb-2">
+    هنوز اطلاعات حقوقی ثبت نشده است
+  </h3>
+  <p className="text-gray-500 !mb-4">
+    در حال حاضر هیچ اطلاعات حقوقی برای نمایش وجود ندارد
+  </p>
+  <button
+    onClick={() => handleModalOpen('add')}
+    className="flex items-center gap-2 px-6 py-3 bg-[#d1182b] !text-white rounded-lg hover:bg-[#b91626] transition-colors cursor-pointer font-semibold"
+  >
+    <FaPlus className="text-sm" />
+    <span>افزودن اطلاعات حقوقی جدید</span>
+  </button>
+</div>
       )}
 
       {/* مودال‌ها */}

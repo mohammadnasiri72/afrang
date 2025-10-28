@@ -28,8 +28,8 @@ function ConfirmModal({ isOpen, onClose, onConfirm, title, message, isLoading })
         }}
       >
         <div className="text-center">
-          <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-          <p className="text-sm text-gray-600 mb-6">{message}</p>
+          <h3 className="text-lg font-bold text-gray-900 !mb-2">{title}</h3>
+          <p className="text-sm text-gray-600 !mb-6">{message}</p>
         </div>
         <div className="flex justify-center gap-3">
           <button

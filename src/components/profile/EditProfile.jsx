@@ -179,7 +179,7 @@ export default function EditProfile() {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 z-50 relative">
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-3 !mb-6">
         <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
           <FaUser className="text-[#d1182b]" />
         </div>
@@ -187,10 +187,10 @@ export default function EditProfile() {
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-md">
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-2 gap-4 !mb-4">
           {/* نام */}
           <div>
-            <label className="block text-gray-700 mb-2">
+            <label className="block text-gray-700 !mb-2">
               نام <span className="text-red-500">*</span>
             </label>
             <input
@@ -215,7 +215,7 @@ export default function EditProfile() {
 
           {/* نام خانوادگی */}
           <div>
-            <label className="block text-gray-700 mb-2">
+            <label className="block text-gray-700 !mb-2">
               نام خانوادگی <span className="text-red-500">*</span>
             </label>
             <input
@@ -240,8 +240,8 @@ export default function EditProfile() {
         </div>
 
         {/* تاریخ تولد */}
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">تاریخ تولد</label>
+        <div className="!mb-4">
+          <label className="block text-gray-700 !mb-2">تاریخ تولد</label>
           <div className="relative">
             <DatePicker
               calendar={persian}
@@ -268,8 +268,8 @@ export default function EditProfile() {
         </div>
 
         {/* ایمیل */}
-        <div className="mb-6">
-          <label className="block text-gray-700 mb-2">ایمیل</label>
+        <div className="!mb-6">
+          <label className="block text-gray-700 !mb-2">ایمیل</label>
           <input
             type="email"
             value={email}

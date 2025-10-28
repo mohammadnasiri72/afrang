@@ -50,7 +50,7 @@ function ProductMainPhotoNoLazy({ product , startTransition}) {
             <img
               draggable="false"
               className="w-36"
-              src="/public/images/soldout.png"
+              src="/images/soldout.png"
               alt=""
             />
           </div>

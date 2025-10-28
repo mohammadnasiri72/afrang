@@ -12,6 +12,7 @@ async function FooterSSR({ settings }) {
 
   return (
     <>
+    
       {footerMenu.length > 0 && (
         <Footer
           socialNetworks={socialNetworks}

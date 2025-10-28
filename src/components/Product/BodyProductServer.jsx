@@ -14,7 +14,7 @@ async function BodyProductServer({ product }) {
   if (!product || !product.product || !product.properties) {
     return (
       <div className="bg-white rounded-lg p-6 text-center">
-        <div className="text-gray-500 text-lg mb-4">
+        <div className="text-gray-500 text-lg !mb-4">
           اطلاعات محصول در دسترس نیست
         </div>
         <p className="text-gray-400">
@@ -86,9 +86,9 @@ async function BodyProductServer({ product }) {
     if (!iframeTag) return null;
 
     return (
-      <div key={video.id} className="mb-6">
+      <div key={video.id} className="!mb-6">
         <div className="bg-white rounded-lg p-4">
-          <h3 className="text-lg font-semibold mb-3">{video.title}</h3>
+          <h3 className="text-lg font-semibold !mb-3">{video.title}</h3>
           <div
             className="video-container"
             dangerouslySetInnerHTML={{ __html: iframeTag }}
@@ -105,15 +105,15 @@ async function BodyProductServer({ product }) {
       <div className="bg-white rounded-lg p-6">
         {/* مشخصات فنی */}
         {groupedProperties.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
+          <div className="!mb-8">
+            <div className="flex items-center !mb-4">
               <FaClipboardList className="text-[#d1182b] ml-2" />
               <h2 className="text-xl font-semibold">مشخصات فنی</h2>
             </div>
             <div className="space-y-6">
               {groupedProperties.map((group, index) => (
                 <div key={index} className="border-b border-gray-100 pb-4">
-                  <h3 className="text-lg font-medium text-gray-800 mb-3">
+                  <h3 className="text-lg font-medium text-gray-800 !mb-3">
                     {group.category}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -139,8 +139,8 @@ async function BodyProductServer({ product }) {
 
         {/* ویدئوهای مرتبط */}
         {hasRelatedVideos && listVideo.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
+          <div className="!mb-8">
+            <div className="flex items-center !mb-4">
               <FaPlay className="text-[#d1182b] ml-2" />
               <h2 className="text-xl font-semibold">ویدئوهای مرتبط</h2>
             </div>
@@ -150,8 +150,8 @@ async function BodyProductServer({ product }) {
 
         {/* محصولات مرتبط */}
         {result.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
+          <div className="!mb-8">
+            <div className="flex items-center justify-between !mb-4">
               <div className="flex items-center">
                 <SlBasket className="text-[#d1182b] ml-2" />
                 <h2 className="text-xl font-semibold">محصولات مرتبط</h2>
@@ -171,7 +171,7 @@ async function BodyProductServer({ product }) {
                   className="group"
                 >
                   <div className="bg-gray-50 rounded-lg p-3 hover:shadow-md transition-shadow">
-                    <div className="aspect-square mb-3 overflow-hidden rounded-lg">
+                    <div className="aspect-square !mb-3 overflow-hidden rounded-lg">
                       <img
                         src={getImageUrl(item.image)}
                         alt={item.title || "محصول"}
@@ -198,8 +198,8 @@ async function BodyProductServer({ product }) {
 
         {/* توضیحات محصول */}
         {product.product.body && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">توضیحات محصول</h2>
+          <div className="!mb-8">
+            <h2 className="text-xl font-semibold !mb-4">توضیحات محصول</h2>
             <div
               className="prose prose-gray max-w-none"
               dangerouslySetInnerHTML={{

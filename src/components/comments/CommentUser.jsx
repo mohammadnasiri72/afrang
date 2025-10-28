@@ -33,8 +33,8 @@ const formatPersianDate = (dateString) => {
 const EmptyComments = () => {
   return (
     <div className="flex flex-col items-center justify-center py-10">
-      <FaCommentSlash className="text-6xl text-gray-300 mb-4" />
-      <h3 className="text-xl font-semibold text-gray-700 mb-2">هنوز نظری ثبت نشده است</h3>
+      <FaCommentSlash className="text-6xl text-gray-300 !mb-4" />
+      <h3 className="text-xl font-semibold text-gray-700 !mb-2">هنوز نظری ثبت نشده است</h3>
       <p className="text-gray-500 text-center max-w-md">
         اولین نفری باشید که نظر خود را درباره این مطلب بیان می‌کنید
       </p>

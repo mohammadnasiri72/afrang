@@ -145,7 +145,7 @@ const SecondHand = () => {
         }
       `}</style>
       <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 !mb-6">
           <FaRecycle className="text-gray-800 text-2xl" />
           <h1 className="text-2xl font-bold text-gray-800">کالای دسته دوم</h1>
         </div>

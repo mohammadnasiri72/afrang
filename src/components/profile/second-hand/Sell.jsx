@@ -352,7 +352,7 @@ function Sell({ productsSec, productEdit, id }) {
           pathname.includes("/profile/second-hand/edit")) && (
           <div className="bg-white sm:p-5 p-1 rounded-lg">
             {/* عنوان */}
-            <div className="flex justify-between items-center mb-4 mt-4 sm:mt-0">
+            <div className="flex justify-between items-center !mb-4 mt-4 sm:mt-0">
               <h2 className="sm:text-xl font-semibold text-gray-800 line-clamp-1">
                 فرم فروش کالای دسته دوم
               </h2>
@@ -370,7 +370,7 @@ function Sell({ productsSec, productEdit, id }) {
             </div>
             <div className="max-w-2xl mx-auto">
               {/* راهنما */}
-              <div className="mb-8">
+              <div className="!mb-8">
                 <Alert
                   message={
                     <span className="font-bold">
@@ -389,9 +389,9 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* دسته بندی محصول */}
-              <div className="mb-6 box-category-select">
+              <div className="!mb-6 box-category-select">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2${
+                  className={`block text-gray-700 text-sm font-bold !mb-2${
                     errors.selectedCategory ? " text-red-important" : ""
                   }`}
                 >
@@ -430,8 +430,8 @@ function Sell({ productsSec, productEdit, id }) {
                 </Select>
               </div>
               {/* تاریخ خرید محصول */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   تاریخ خرید محصول
                 </label>
                 <div className="relative">
@@ -465,9 +465,9 @@ function Sell({ productsSec, productEdit, id }) {
                 </div>
               </div>
               {/* عنوان محصول */}
-              <div className="mb-6">
+              <div className="!mb-6">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2${
+                  className={`block text-gray-700 text-sm font-bold !mb-2${
                     errors.productName ? " text-red-important" : ""
                   }`}
                 >
@@ -488,8 +488,8 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* نوع محصول */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   نوع محصول
                 </label>
                 <Input
@@ -500,8 +500,8 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* قیمت پیشنهادی */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   قیمت پیشنهادی
                 </label>
                 <Input
@@ -525,9 +525,9 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* شماره سریال محصول */}
-              <div className="mb-6">
+              <div className="!mb-6">
                 <label
-                  className={`block text-gray-700 text-sm font-bold mb-2${
+                  className={`block text-gray-700 text-sm font-bold !mb-2${
                     errors.serialNumber ? " text-red-important" : ""
                   }`}
                 >
@@ -548,8 +548,8 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* کارکرد شاتر */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   کارکرد شاتر (فقط دوربین SLR)
                 </label>
                 <Input
@@ -560,8 +560,8 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* مدت زمان استفاده */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   مدت زمان استفاده
                 </label>
                 <Input
@@ -572,8 +572,8 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* وضعیت ظاهری */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   وضعیت ظاهری
                 </label>
                 <TextArea
@@ -585,8 +585,8 @@ function Sell({ productsSec, productEdit, id }) {
                 />
               </div>
               {/* اطلاعات تماس */}
-              <div className="mb-6 sm:hidden block">
-                <label className={`block text-gray-700 text-sm font-bold mb-2`}>
+              <div className="!mb-6 sm:hidden block">
+                <label className={`block text-gray-700 text-sm font-bold !mb-2`}>
                   اطلاعات تماس <span className="text-red-500">*</span>
                 </label>
                 <Select
@@ -602,8 +602,8 @@ function Sell({ productsSec, productEdit, id }) {
                   ]}
                 />
               </div>
-              <div className="sm:flex hidden flex-col mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
-                <span className="mb-2 font-bold text-gray-700">
+              <div className="sm:flex hidden flex-col !mb-6 items-start justify-center p-2 rounded-lg border border-[#0003]">
+                <span className="!mb-2 font-bold text-gray-700">
                   اطلاعات تماس
                 </span>
                 <div className="SegmentedBuy  overflow-hidden flex justify-center bg-white z-50 transition-all duration-300 w-full ">
@@ -665,8 +665,8 @@ function Sell({ productsSec, productEdit, id }) {
                 </div>
               </div>
               {/* وضعیت گارانتی */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   وضعیت گارانتی
                 </label>
                 <div className="flex flex-wrap gap-2 items-center">
@@ -706,8 +706,8 @@ function Sell({ productsSec, productEdit, id }) {
                 </div>
               </div>
               {/* وضعیت بیمه */}
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   وضعیت بیمه
                 </label>
                 <div className="flex flex-wrap gap-2 items-center">
@@ -747,8 +747,8 @@ function Sell({ productsSec, productEdit, id }) {
                 </div>
               </div>
               {/* تصاویر محصول  */}
-              <div className="mb-6 border-2 border-[#0001] rounded-lg p-4 duration-300 hover:border-blue-500 shadow-lg hover:shadow-2xl">
-                <label className="block text-gray-700 text-sm font-bold mb-5">
+              <div className="!mb-6 border-2 border-[#0001] rounded-lg p-4 duration-300 hover:border-blue-500 shadow-lg hover:shadow-2xl">
+                <label className="block text-gray-700 text-sm font-bold !mb-5">
                   تصاویر محصول (حداکثر 10 عکس)
                 </label>
                 <Upload
@@ -876,8 +876,8 @@ function Sell({ productsSec, productEdit, id }) {
                 </div>
               </div>
               {/* شرح کامل */}
-              <div className="mb-6 ">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+              <div className="!mb-6 ">
+                <label className="block text-gray-700 text-sm font-bold !mb-2">
                   شرح کامل
                 </label>
                 <TextArea

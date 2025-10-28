@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import Buy from "@/components/profile/second-hand/Buy";
 import Sell from "@/components/profile/second-hand/Sell";
 import { setActiveTab, setIdEdit } from "@/redux/slices/idEditSec";
@@ -10,7 +11,7 @@ import {
 } from "@/services/UserSellAd/UserSellAdServices";
 import { Segmented, Spin } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaRecycle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -29,6 +30,7 @@ const SecondHand = () => {
   const disPatch = useDispatch();
   const router = useRouter();
   const user = useSelector(selectUser);
+  const [isPending, startTransition] = useTransition();
 
   const options = [
     { label: "فروش ", value: 1 },
@@ -119,7 +121,7 @@ const SecondHand = () => {
             }
           `}</style>
           <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 !mb-6">
               <FaRecycle className="text-gray-800 text-2xl" />
               <h1 className="text-2xl font-bold text-gray-800">
                 کالای دسته دوم
@@ -139,7 +141,10 @@ const SecondHand = () => {
                   value={activeTab}
                   onChange={(value) => {
                     disPatch(setIdEdit(0));
-                    router.push("/profile/second-hand");
+                    startTransition(() => {
+                      router.push("/profile/second-hand");
+                    });
+
                     disPatch(setActiveTab(value));
                     setProductsSec([]);
                   }}
@@ -161,6 +166,7 @@ const SecondHand = () => {
           </div>
         </div>
       )}
+      {isPending && <Loading />}
     </>
   );
 };

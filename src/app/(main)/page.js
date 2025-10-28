@@ -56,7 +56,7 @@ export default async function Home() {
 
           {/* اسکلتون بخش موبایل */}
           <div className="lg:hidden w-full">
-            <div className="flex items-center justify-between mb-3 px-2">
+            <div className="flex items-center justify-between !mb-3 px-2">
               <div className="h-6 w-24 bg-gray-200 rounded"></div>
               <div className="h-6 w-20 bg-gray-200 rounded"></div>
             </div>
@@ -92,7 +92,7 @@ export default async function Home() {
         <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5].map((item) => (
             <div key={item} className="bg-white rounded-lg p-4">
-              <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
+              <div className="aspect-square bg-gray-200 rounded-lg !mb-4"></div>
               <div className="space-y-2">
                 <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                 <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -157,7 +157,7 @@ export default async function Home() {
 
           {/* اسکلتون بخش موبایل */}
           <div className="lg:hidden w-full">
-            <div className="flex items-center justify-between mb-3 px-2">
+            <div className="flex items-center justify-between !mb-3 px-2">
               <div className="h-6 w-24 bg-gray-200 rounded"></div>
               <div className="h-6 w-20 bg-gray-200 rounded"></div>
             </div>
@@ -195,7 +195,7 @@ export default async function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {[1, 2, 3, 4, 5].map((item) => (
                 <div key={item} className="bg-white rounded-lg p-4">
-                  <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
+                  <div className="aspect-square bg-gray-200 rounded-lg !mb-4"></div>
                   <div className="space-y-2">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -231,7 +231,7 @@ export default async function Home() {
                   {/* اسکلتون محتوا */}
                   <div className="p-3 bg-white flex-grow flex flex-col">
                     {/* اسکلتون عنوان */}
-                    <div className="mb-2">
+                    <div className="!mb-2">
                       <div className="h-5 bg-gray-200 rounded w-3/4"></div>
                     </div>
 
@@ -283,7 +283,7 @@ export default async function Home() {
                 <div className="w-[85%] h-40 bg-gray-200 rounded" />
               </div>
               <div className="p-3">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3" />
+                <div className="h-4 bg-gray-200 rounded w-3/4 !mb-3" />
                 <div className="h-3 bg-gray-200 rounded w-1/2" />
               </div>
             </div>
@@ -304,7 +304,7 @@ export default async function Home() {
                 <div className="w-[85%] h-40 bg-gray-200 rounded" />
               </div>
               <div className="p-3">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3" />
+                <div className="h-4 bg-gray-200 rounded w-3/4 !mb-3" />
                 <div className="h-3 bg-gray-200 rounded w-1/2" />
               </div>
             </div>
@@ -318,36 +318,44 @@ export default async function Home() {
 
   return (
     <>
-      <h1 className="sr-only">{pageTitleH1}</h1>
-      <div className="bg-[#f6f6f6] overflow-hidden">
-        <Suspense fallback={<SliderHomeSkeleton />}>
-          <SliderHomeSSR />
-        </Suspense>
-
-        <Suspense fallback={<EidDiscountSkeleton />}>
-          <EidDiscountSSR />
-        </Suspense>
-
-        <Suspense fallback={<CameraAccessoriesSkeleton />}>
-          <CameraAccessoriesSSR />
-        </Suspense>
-        {mainBanner.length > 0 && <BoxImgHomeSSR mainBanner={mainBanner} />}
-
-        <div className="sm:px-20 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
-          <Suspense fallback={<NewProductSkeleton />}>
-            <NewProductSSR />
+      <div
+        style={{
+          maxWidth: "2000px",
+          margin: "auto",
+          overflow: "hidden",
+        }}
+      >
+        <h1 className="sr-only">{pageTitleH1}</h1>
+        <div className="bg-[#f6f6f6] overflow-hidden">
+          <Suspense fallback={<SliderHomeSkeleton />}>
+            <SliderHomeSSR />
           </Suspense>
-        </div>
-        <div className="lg:h-[26rem] sm:h-[48rem] h-[54rem] overflow-hidden">
-          <Suspense fallback={<SliderProductSecSkeleton />}>
-            <SliderProductSecSSR mainBanner={mainBanner} />
+
+          <Suspense fallback={<EidDiscountSkeleton />}>
+            <EidDiscountSSR />
           </Suspense>
-        </div>
-        <div className="sm:h-[29rem] h-[31rem] overflow-hidden">
-          <ArticleHeader />
-          <Suspense fallback={<ArticleSliderSkeleton />}>
-            <ArticleSliderSSR />
+
+          <Suspense fallback={<CameraAccessoriesSkeleton />}>
+            <CameraAccessoriesSSR />
           </Suspense>
+          {mainBanner.length > 0 && <BoxImgHomeSSR mainBanner={mainBanner} />}
+
+          <div className="sm:px-0 px-2 lg:h-[29rem] h-[35rem] overflow-hidden">
+            <Suspense fallback={<NewProductSkeleton />}>
+              <NewProductSSR />
+            </Suspense>
+          </div>
+          <div className="lg:h-[26rem] sm:h-[48rem] h-[54rem] overflow-hidden">
+            <Suspense fallback={<SliderProductSecSkeleton />}>
+              <SliderProductSecSSR mainBanner={mainBanner} />
+            </Suspense>
+          </div>
+          <div className="sm:h-[29rem] h-[31rem] overflow-hidden">
+            <ArticleHeader />
+            <Suspense fallback={<ArticleSliderSkeleton />}>
+              <ArticleSliderSSR />
+            </Suspense>
+          </div>
         </div>
       </div>
     </>

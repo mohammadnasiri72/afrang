@@ -18,7 +18,7 @@ export default function DescPaymentFinal({ orderData }) {
         <>
             <div className="lg:w-1/3 w-full lg:pl-5 sm:mt-0 mt-5">
                 <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
-                    <h2 className="text-xl font-bold text-gray-800 mb-6">جزئیات سفارش</h2>
+                    <h2 className="text-xl font-bold text-gray-800 !mb-6">جزئیات سفارش</h2>
                     {
                         orderData &&
                         <div className="space-y-4">
@@ -28,7 +28,7 @@ export default function DescPaymentFinal({ orderData }) {
                                     <MdListAlt className="text-xl" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm text-gray-500 mb-1">شماره سفارش</p>
+                                    <p className="text-sm text-gray-500 !mb-1">شماره سفارش</p>
                                     <p className="font-medium text-gray-800">{orderData?.order?.trackCode}</p>
                                 </div>
                             </div>
@@ -39,7 +39,7 @@ export default function DescPaymentFinal({ orderData }) {
                                     <FaRegCalendarAlt className="text-xl" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm text-gray-500 mb-1">تاریخ صدور</p>
+                                    <p className="text-sm text-gray-500 !mb-1">تاریخ صدور</p>
                                     <p className="font-medium text-gray-800">{new Date(orderData?.order?.createDate).toLocaleDateString('fa-IR')}</p>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@ export default function DescPaymentFinal({ orderData }) {
                                     <FaRegCircleCheck className="text-xl" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm text-gray-500 mb-1">وضعیت پرداخت</p>
+                                    <p className="text-sm text-gray-500 !mb-1">وضعیت پرداخت</p>
                                     <p className="font-medium text-gray-800">{orderData?.order?.paymentStatusTitle}</p>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@ export default function DescPaymentFinal({ orderData }) {
                                     <FaRegMoneyBill1 className="text-xl" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm !text-white/80 mb-1">مبلغ قابل پرداخت</p>
+                                    <p className="text-sm !text-white/80 !mb-1">مبلغ قابل پرداخت</p>
                                     <p className="font-medium !text-white text-lg">
                                         {orderData?.order?.orderTotal.toLocaleString()} تومان
                                     </p>

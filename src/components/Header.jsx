@@ -20,7 +20,6 @@ export default function Header({ onLoaded, settings }) {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isPending, startTransition] = useTransition();
-
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -45,6 +44,7 @@ export default function Header({ onLoaded, settings }) {
       onLoaded();
     }
   }, []);
+
 
   return (
     <>
@@ -71,13 +71,13 @@ export default function Header({ onLoaded, settings }) {
                     className="w-14"
                     src={getImageUrl(
                       settings?.find(
-                        (item) => item.propertyKey === "site_footer_logo"
+                        (item) => item.propertyKey === "site_logo"
                       )?.value
                     )}
                     alt={
                       settings?.find(
-                        (item) => item.propertyKey === "site_footer_logo"
-                      )?.title
+                        (item) => item.propertyKey === "site_title"
+                      )?.propertyValue
                     }
                   />
                 </Link>
@@ -137,6 +137,12 @@ export default function Header({ onLoaded, settings }) {
                   <div className="flex items-center gap-3 font-semibold w-32 ">
                     <Link
                       href={"/login"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        startTransition(() => {
+                          route.push("/login");
+                        });
+                      }}
                       className="flex items-center gap-1 cursor-pointer hover:text-[#d1182b] duration-300"
                     >
                       <FaArrowRightLong />
@@ -144,6 +150,12 @@ export default function Header({ onLoaded, settings }) {
                     </Link>
                     <Link
                       href={"/register"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        startTransition(() => {
+                          route.push("/register");
+                        });
+                      }}
                       className="border-r border-[#0005] pr-3"
                     >
                       <span className="cursor-pointer hover:text-[#d1182b] duration-300">
@@ -163,21 +175,7 @@ export default function Header({ onLoaded, settings }) {
               </div>
             )}
             <div className="relative mt-3">
-              {mounted && <ShoppingDrawer header />}
-              {!mounted && (
-                <Badge
-                  count={0}
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    transform: "translate(-8px, -8px)",
-                  }}
-                >
-                  <FaCartShopping className={`text-4xl  ${"text-[#d1182b]"}`} />
-                </Badge>
-              )}
+              <ShoppingDrawer header startTransition={startTransition} />
             </div>
           </div>
         </div>

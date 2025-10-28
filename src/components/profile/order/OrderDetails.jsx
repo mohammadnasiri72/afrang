@@ -64,7 +64,7 @@ const OrderDetailsSkeleton = () => {
   return (
     <div className="space-y-4">
       {/* Header Skeleton */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between !mb-4">
         <div className="h-7 bg-gray-200 animate-pulse rounded w-32" />
         <div className="h-7 bg-gray-200 animate-pulse rounded w-40" />
       </div>
@@ -88,7 +88,7 @@ const OrderDetailsSkeleton = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Order Items Skeleton */}
         <div className="xl:col-span-2 bg-white rounded-xl p-4 shadow-sm">
-          <div className="h-6 bg-gray-200 animate-pulse rounded w-32 mb-4" />
+          <div className="h-6 bg-gray-200 animate-pulse rounded w-32 !mb-4" />
           <div className="space-y-6">
             {[...Array(3)].map((_, index) => (
               <div
@@ -119,7 +119,7 @@ const OrderDetailsSkeleton = () => {
 
           {/* Payment History Skeleton */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 !mb-3">
               <div className="w-6 h-6 bg-gray-200 animate-pulse rounded-full" />
               <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
             </div>
@@ -152,7 +152,7 @@ const OrderDetailsSkeleton = () => {
         <div className="space-y-4">
           {/* Legal Purchase Information Skeleton */}
           <div className="bg-white rounded-xl px-4 py-2 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 !mb-3">
               <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
               <div className="h-5 bg-gray-200 animate-pulse rounded w-40" />
             </div>
@@ -173,7 +173,7 @@ const OrderDetailsSkeleton = () => {
 
           {/* Shipping Information Skeleton */}
           <div className="bg-white rounded-xl p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 !mb-3">
               <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
               <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
             </div>
@@ -195,7 +195,7 @@ const OrderDetailsSkeleton = () => {
 
           {/* Payment Information Skeleton */}
           <div className="bg-white rounded-xl p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 !mb-3">
               <div className="w-5 h-5 bg-gray-200 animate-pulse rounded-full" />
               <div className="h-5 bg-gray-200 animate-pulse rounded w-32" />
             </div>
@@ -301,7 +301,7 @@ export default function OrderDetails({ trackCode }) {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-6 pt-6">
+      <div className="flex items-center justify-between !mb-4 px-6 pt-6">
         <h2 className="text-xl font-bold text-gray-800">جزئیات سفارش</h2>
         <button
           onClick={handleBack}
@@ -316,7 +316,7 @@ export default function OrderDetails({ trackCode }) {
       <div className="bg-white rounded-xl p-4 shadow-sm">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 !mb-2">
               <FaBox className="text-gray-500 text-xl" />
               <div className="flex items-center gap-2">
                 <p className="text-sm text-gray-500">کد سفارش :</p>
@@ -331,7 +331,7 @@ export default function OrderDetails({ trackCode }) {
             </div>
           </div>
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 !mb-2">
               <FaMoneyBillWave className="text-gray-500 text-xl" />
               <p className="text-sm text-gray-500">مبلغ کل سفارش</p>
             </div>
@@ -340,7 +340,7 @@ export default function OrderDetails({ trackCode }) {
             </p>
           </div>
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 !mb-2">
               <IoIosCard className="text-gray-500 text-xl" />
               <p className="text-sm text-gray-500">وضعیت پرداخت</p>
             </div>
@@ -349,7 +349,7 @@ export default function OrderDetails({ trackCode }) {
             </p>
           </div>
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 !mb-2">
               <FaClipboardList className="text-gray-500 text-xl" />
               <p className="text-sm text-gray-500">وضعیت سفارش</p>
             </div>
@@ -364,7 +364,7 @@ export default function OrderDetails({ trackCode }) {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Order Items */}
         <div className="xl:col-span-2 bg-white rounded-xl sm:p-4 shadow-sm">
-          <h3 className="font-semibold text-gray-800 mb-4">کالاهای سفارش</h3>
+          <h3 className="font-semibold text-gray-800 !mb-4">کالاهای سفارش</h3>
           <div className="space-y-6">
             {buildTree(orderDetails?.products)?.map((item) => (
               <div
@@ -390,7 +390,7 @@ export default function OrderDetails({ trackCode }) {
                   <div className="flex-1 w-full">
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                       <div className="w-full sm:w-auto">
-                        <div className="flex items-center gap-3 mb-2">
+                        <div className="flex items-center gap-3 !mb-2">
                           <a
                             href={item.url}
                             target="_blank"
@@ -431,7 +431,7 @@ export default function OrderDetails({ trackCode }) {
                       </div>
                       <div className="flex flex-col items-end w-full sm:w-auto">
                         {item.hasDiscount && (
-                          <div className="flex items-center gap-3 mb-2">
+                          <div className="flex items-center gap-3 !mb-2">
                             <span className="line-through text-gray-400 text-sm whitespace-nowrap">
                               {item.originalPrice.toLocaleString()} تومان
                             </span>
@@ -516,7 +516,7 @@ export default function OrderDetails({ trackCode }) {
           {/* Payment History */}
           {orderDetails.payments && orderDetails.payments.length > 0 && (
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 !mb-3">
                 {orderDetails.order.paymentStatus === 6 ? (
                   <FaCheckCircle className="text-green-500 text-xl" />
                 ) : (
@@ -544,7 +544,7 @@ export default function OrderDetails({ trackCode }) {
                     {/* محتوای اصلی */}
                     <div className="flex-1">
                       {/* هدر پرداخت */}
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center justify-between !mb-2">
                         <span className="px-2 py-1 bg-white text-blue-700 rounded text-sm font-medium border border-blue-200">
                           {payment.getWay}
                         </span>
@@ -619,7 +619,7 @@ export default function OrderDetails({ trackCode }) {
         <div className="space-y-4">
           {/* Legal Purchase Information */}
           {orderDetails.userLegalInfos && (
-            <div className="bg-white rounded-xl px-4 py-2 shadow-sm mb-4">
+            <div className="bg-white rounded-xl px-4 py-2 shadow-sm !mb-4">
               <Accordion
                 expanded={isExpanded}
                 onChange={(e, expanded) => setIsExpanded(expanded)}
@@ -737,7 +737,7 @@ export default function OrderDetails({ trackCode }) {
 
           {/* Shipping Information */}
           <div className="bg-white rounded-xl p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 !mb-3">
               <FaTruck className="text-[#40768c]" />
               <h4 className="text-gray-800 font-bold">اطلاعات ارسال</h4>
             </div>
@@ -803,7 +803,7 @@ export default function OrderDetails({ trackCode }) {
 
           {/* Payment Information */}
           <div className="bg-white rounded-xl p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 !mb-3">
               <FaMoneyBillWave className="text-[#40768c]" />
               <h4 className="text-gray-800 font-bold">اطلاعات پرداخت</h4>
             </div>

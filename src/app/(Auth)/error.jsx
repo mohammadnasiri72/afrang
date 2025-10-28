@@ -18,13 +18,13 @@ export default function ErrorAuth() {
     <>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-          <div className="mb-8">
+          <div className="!mb-8">
             <FaExclamationTriangle className="w-16 h-16 text-red-500 mx-auto" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          <span className="text-3xl font-bold text-gray-800 !mb-4">
             خطا در احراز هویت
-          </h1>
-          <p className="text-gray-600 mb-6">
+          </span>
+          <p className="text-gray-600 !mb-6">
             متأسفانه مشکلی در فرآیند احراز هویت رخ داده است. لطفاً دوباره تلاش
             کنید.
           </p>

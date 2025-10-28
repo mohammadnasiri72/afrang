@@ -1,7 +1,8 @@
-import { getRelatedProductsByIdString } from "@/services/products/productService";
+import { getProductId, getRelatedProductsByIdString } from "@/services/products/productService";
 import ProductMain from "../home/ProductMain";
 
-async function DescProduct({ product }) {
+async function DescProduct({ id }) {
+  const product = await getProductId(id);
   let similarProducts = [];
   if (product.product?.similarId) {
     similarProducts = await getRelatedProductsByIdString(

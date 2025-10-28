@@ -241,12 +241,12 @@ function Layout({ children, settings }) {
       <ConfigProvider direction="rtl" locale={faIR}>
         <AntdRegistry>
           <Provider store={store}>
-            <div
-              style={{
-                maxWidth: "2000px",
-                margin: "auto",
-                overflow: "hidden",
-              }}
+            <div className="bg-[#f6f6f6]"
+              // style={{
+              //   maxWidth: "2000px",
+              //   margin: "auto",
+              //   overflow: "hidden",
+              // }}
             >
               <>
                 {/* <DynamicTitle /> */}

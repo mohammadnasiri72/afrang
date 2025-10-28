@@ -144,8 +144,8 @@ export default function PayOnline({ orderData }) {
       <div className="lg:w-2/3 w-full lg:pl-5">
         <div className="bg-white rounded-xl p-6 shadow-lg z-50 relative">
           {/* عنوان و توضیحات */}
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">
+          <div className="!mb-6">
+            <h2 className="text-xl font-bold text-gray-800 !mb-2">
               پرداخت آنلاین
             </h2>
             <p className="text-gray-600 text-sm">
@@ -159,7 +159,7 @@ export default function PayOnline({ orderData }) {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d1182b]"></div>
             </div>
           ) : (
-            <div className="flex flex-col gap-2 mb-6">
+            <div className="flex flex-col gap-2 !mb-6">
               {gateways.map((gateway) => (
                 <div
                   key={gateway.id}

@@ -5,8 +5,8 @@ import { FaCheck } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setSelectedColorMode } from "@/redux/slices/productColorSlice";
 
-function SelectColorProduct({ product, onChange }) {
-  const modes = product?.productModes || [];
+function SelectColorProduct({ productModes, onChange }) {
+  const modes = productModes || [];
   
   const [selectedColorId, setSelectedColorId] = useState(modes[0]?.id || null);
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ function SelectColorProduct({ product, onChange }) {
               className={`flex flex-col items-center group focus:outline-none cursor-pointer`}
             >
               <span
-                className={`w-8 h-8 rounded-full border-2 transition-all duration-200 mb-1 relative flex items-center justify-center ${
+                className={`w-8 h-8 rounded-full border-2 transition-all duration-200 !mb-1 relative flex items-center justify-center ${
                   isSelected
                     ? "border-blue-600 shadow-lg scale-110"
                     : "border-gray-300"

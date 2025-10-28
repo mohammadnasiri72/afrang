@@ -15,10 +15,10 @@ const ComparePage = () => {
   return (
     <>
       {mounted && (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center z-50 relative">
+        <div className="py-20 bg-gray-50 flex items-center justify-center z-50 relative">
           <div className="text-center">
-            <div className="text-6xl text-gray-300 mb-4">⚖️</div>
-            <h1 className="text-2xl font-bold text-gray-700 mb-2">
+            <div className="text-6xl text-gray-300 !mb-4">⚖️</div>
+            <h1 className="text-2xl font-bold text-gray-700 !mb-2">
               محصولی برای مقایسه یافت نشد
             </h1>
             <p className="text-gray-500 !mb-6">

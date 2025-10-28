@@ -2,12 +2,13 @@
 
 import { Select } from "antd";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaCaretDown } from "react-icons/fa";
+import Loading from "../Loading";
 
 function SelectCat({ category }) {
-
   const [selectedCategory, setSelectedCategory] = useState(0);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
 
@@ -15,13 +16,17 @@ function SelectCat({ category }) {
     setSelectedCategory(value);
 
     if (value === 0) {
-      router.push("/gallery");
+      startTransition(() => {
+        router.push("/gallery");
+      });
     } else {
       const selectedCategoryData = category?.find(
         (item) => item.categoryKey === value
       );
       if (selectedCategoryData) {
-        router.push(`/gallery/${selectedCategoryData.categoryKey}`);
+        startTransition(() => {
+          router.push(`/gallery/${selectedCategoryData.categoryKey}`);
+        });
       }
     }
   };
@@ -67,6 +72,7 @@ function SelectCat({ category }) {
           options={categoryOptions}
         />
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

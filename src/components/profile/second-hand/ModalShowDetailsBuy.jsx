@@ -155,7 +155,7 @@ function ModalShowDetailsBuy({ id }) {
             {/* توضیحات  */}
             {productDetails.description && (
               <div>
-                <div className="font-medium mb-1">شرح کامل :</div>
+                <div className="font-medium !mb-1">شرح کامل :</div>
                 <div className="bg-gray-50 rounded p-2 text-justify text-gray-700 leading-relaxed">
                   {htmlToText(productDetails.description)}
                 </div>
