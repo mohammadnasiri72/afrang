@@ -82,7 +82,11 @@ const BrandsPage = () => {
     <div
       key={brand.id}
       className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-      onClick={() => router.push(brand.url)}
+      onClick={() => {
+        startTransition(() => {
+          router.push(`/products?brandid=${brand.id}`);
+        });
+      }}
     >
       <div className="p-4 h-32 flex items-center justify-center bg-white rounded-t-lg">
         {brand.image && (
@@ -111,7 +115,7 @@ const BrandsPage = () => {
 
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <p className="text-gray-600 text-sm">
-              نمایش{" "}
+              نمایش
               <span className="font-bold">
                 {(currentPage - 1) * pageSize + 1}
               </span>{" "}
