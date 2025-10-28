@@ -133,7 +133,6 @@ function BoxShowInformationBank({ id }) {
     try {
       const response = await addLinkPaymentInfo(id);
       if (response) {
-        setIsPaying(false);
         window.location.href = response.url;
       }
     } catch (error) {

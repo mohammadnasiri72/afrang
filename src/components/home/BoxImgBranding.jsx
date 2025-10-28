@@ -2,6 +2,7 @@
 
 import { mainDomainImg } from "@/utils/mainDomain";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { FaCaretLeft } from "react-icons/fa";
@@ -52,9 +53,9 @@ export default function BoxImgBranding({ brands }) {
 
           <div
             onClick={() => {
-               startTransition(() => {
-                 router.push(`/brands`);
-               });
+              startTransition(() => {
+                router.push(`/brands`);
+              });
             }}
             className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
           >
@@ -92,19 +93,24 @@ export default function BoxImgBranding({ brands }) {
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
                 <div className="relative overflow-hidden sm:w-32 w-20 sm:h-32 h-20 aspect-square">
-                  <Image
-                    onClick={() => {
+                  <Link
+                    onClick={(ev) => {
+                      ev.preventDefault();
                       startTransition(() => {
                         router.push(`/products?brandid=${brand.id}`);
                       });
                     }}
-                    className={`group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain border-none outline-none cursor-pointer`}
-                    src={`${mainDomainImg}${brand.image}`}
-                    alt={brand.title || "تصویر برند"}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 300px"
-                    unoptimized
-                  />
+                    href={`/products?brandid=${brand.id}`}
+                  >
+                    <Image
+                      className={`group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain border-none outline-none cursor-pointer`}
+                      src={`${mainDomainImg}${brand.image}`}
+                      alt={brand.title || "تصویر برند"}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      unoptimized
+                    />
+                  </Link>
                 </div>
               </SwiperSlide>
             ))}

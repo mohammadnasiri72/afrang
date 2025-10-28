@@ -50,7 +50,7 @@ function NewProduct({ products }) {
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
           <div className="flex items-center justify-between !mb-3 px-2">
-            <h3 className="text-lg font-semibold text-gray-700">
+            <h3 className="text-lg font-semibold !text-gray-700">
               دسته‌بندی‌ها
             </h3>
             <button
@@ -82,8 +82,8 @@ function NewProduct({ products }) {
                     }
                     className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
                       category === selectedCategory
-                        ? "text-[#d1182b] font-bold"
-                        : "text-[#333] hover:text-[#000]"
+                        ? "!text-[#d1182b] font-bold"
+                        : "!text-[#333] hover:!text-[#000]"
                     }`}
                   >
                     {category}
@@ -109,8 +109,8 @@ function NewProduct({ products }) {
                 }
                 className={`text-sm cursor-pointer duration-300 font-medium ${
                   category === selectedCategory
-                    ? "text-[#d1182b] font-bold"
-                    : "text-[#333] hover:text-[#000]"
+                    ? "!text-[#d1182b] font-bold"
+                    : "!text-[#333] hover:!text-[#000]"
                 }`}
               >
                 {category}
@@ -127,7 +127,7 @@ function NewProduct({ products }) {
               router.push(`/products?orderby=2`);
             });
           }}
-          className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
+          className="hidden lg:flex items-center cursor-pointer duration-300 hover:!text-[#d1182b] font-medium"
         >
           <span>نمایش همه</span>
           <FaCaretLeft />
@@ -162,7 +162,7 @@ function NewProduct({ products }) {
               />
               {/* لیبل کالای کارکرده */}
               {product.conditionId === 20 && (
-                <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] !text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
                   {/* <FaRecycle className="ml-1 text-base" /> */}
                   کالای کارکرده
                 </div>
@@ -184,7 +184,7 @@ function NewProduct({ products }) {
               {/* عنوان */}
               <Link
                 href={product.url}
-                className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
+                className="!text-[#333] font-bold px-2 hover:!text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
               >
                 <h3 className="text-justify line-clamp-3 w-full">
                   {product.title}
@@ -196,7 +196,7 @@ function NewProduct({ products }) {
               <div className="h-[4.5rem] px-2 duration-300">
                 {!product.callPriceButton && product.finalPrice !== 0 && (
                   <div className="flex flex-col">
-                    <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300 group-hover:text-lg ">
+                    <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:!text-[#d1182b] duration-300 group-hover:text-lg ">
                       {product.finalPrice.toLocaleString()} تومان
                     </span>
                     {product.discount !== 0 && (
@@ -207,12 +207,12 @@ function NewProduct({ products }) {
                   </div>
                 )}
                 {!product.callPriceButton && product.finalPrice === 0 && (
-                  <span className="font-bold text-base text-[#333]">
+                  <span className="font-bold text-base !text-[#333]">
                     بدون قیمت
                   </span>
                 )}
                 {product.callPriceButton && (
-                  <span className="font-bold text-base text-[#333]">
+                  <span className="font-bold text-base !text-[#333]">
                     تماس بگیرید
                   </span>
                 )}

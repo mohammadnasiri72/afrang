@@ -25,7 +25,7 @@ export const fetchBrandingItemsPage = async (data) => {
     });
 
     if (response.data) {
-      return response.data.sort((a, b) => b.priority - a.priority);
+      return response.data;
     }
     return [];
   } catch (error) {}

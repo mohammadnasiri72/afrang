@@ -5,6 +5,7 @@ import Loading from "@/components/Loading";
 import { fetchBrandingItemsPage } from "@/services/brandingService";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Pagination, Select } from "antd";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
@@ -28,6 +29,7 @@ const BrandsPage = () => {
     setLoading(true);
     const data = {
       TypeId: 1023,
+      OrderBy: 11,
       LangCode: "fa",
       PageSize: size,
       PageIndex: page,
@@ -79,30 +81,35 @@ const BrandsPage = () => {
 
   // رندر کارت هر برند
   const renderBrandCard = (brand) => (
-    <div
-      key={brand.id}
-      className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-      onClick={() => {
+    <Link
+      href={`/products?brandid=${brand.id}`}
+      onClick={(ev) => {
+        ev.preventDefault();
         startTransition(() => {
           router.push(`/products?brandid=${brand.id}`);
         });
       }}
     >
-      <div className="p-4 h-32 flex items-center justify-center bg-white rounded-t-lg">
-        {brand.image && (
-          <img
-            src={getImageUrl(brand.image)}
-            alt={brand.title}
-            className="max-h-20 max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-          />
-        )}
+      <div
+        key={brand.id}
+        className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+      >
+        <div className="p-4 h-32 flex items-center justify-center bg-white rounded-t-lg">
+          {brand.image && (
+            <img
+              src={getImageUrl(brand.image)}
+              alt={brand.title}
+              className="max-h-20 max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+            />
+          )}
+        </div>
+        <div className="p-4 text-center bg-slate-200">
+          <h3 className="font-bold line-clamp-1 text-gray-800 text-sm leading-6 group-hover:text-blue-600 transition-colors duration-300 ">
+            {brand.title}
+          </h3>
+        </div>
       </div>
-      <div className="p-4 text-center bg-slate-200">
-        <h3 className="font-bold text-gray-800 text-sm leading-6 group-hover:text-blue-600 transition-colors duration-300 ">
-          {brand.title}
-        </h3>
-      </div>
-    </div>
+    </Link>
   );
 
   return (
@@ -116,14 +123,14 @@ const BrandsPage = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <p className="text-gray-600 text-sm">
               نمایش
-              <span className="font-bold">
+              <span className="font-bold px-1">
                 {(currentPage - 1) * pageSize + 1}
               </span>{" "}
               -{" "}
-              <span className="font-bold">
+              <span className="font-bold px-1">
                 {Math.min(currentPage * pageSize, totalItems)}
               </span>{" "}
-              از <span className="font-bold">{totalItems}</span> برند
+              از <span className="font-bold px-1">{totalItems}</span> برند
             </p>
 
             <div className="flex items-center gap-2">
@@ -151,7 +158,7 @@ const BrandsPage = () => {
         {!loading && listBrands.length > 0 && (
           <>
             {/* Grid با 5 ستون در دسکتاپ */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
               {listBrands.map(renderBrandCard)}
             </div>
 
