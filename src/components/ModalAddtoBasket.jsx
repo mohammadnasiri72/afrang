@@ -81,7 +81,6 @@ function ModalAddtoBasket({
                 <h4 className="font-semibold text-gray-800 text-sm !mb-2">
                   انتخاب گارانتی
                 </h4>
-
                 <Radio.Group
                   onChange={handleWarrantyChange}
                   value={selectedWarranty}
@@ -97,25 +96,13 @@ function ModalAddtoBasket({
                       value={warranty}
                     >
                       <div className="!w-full">
-                        <div className="flex justify-between items-center w-full">
-                          <span className={`text-xs `}>{warranty.title}</span>
-                        </div>
                         {warranty.finalPrice > 0 && (
                           <div className="flex items-center gap-1">
                             <span>{warranty.finalPrice.toLocaleString()}</span>
                             <span>تومان</span>
                           </div>
                         )}
-                        {warranty.desc && (
-                          <div className="absolute left-2 top-2">
-                            <Tooltip
-                              title={warranty.desc}
-                              classNames={{ root: "custom-tooltip" }}
-                            >
-                              <FaInfoCircle className="text-[#4A90E2]" />
-                            </Tooltip>
-                          </div>
-                        )}
+                          {warranty.title} {warranty.desc}
                       </div>
                     </Radio>
                   ))}

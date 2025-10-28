@@ -40,7 +40,7 @@ function BreadcrumbMain({ breadcrumb }) {
               router.push("/");
             });
           }}
-          className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan]"
+          className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan] whitespace-nowrap text-xs sm:text-sm"
         >
           خانه
         </Link>
@@ -60,35 +60,41 @@ function BreadcrumbMain({ breadcrumb }) {
                 router.push(item.href);
               });
             }}
-            className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan]"
+            className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan] whitespace-nowrap text-xs sm:text-sm"
           >
             {item.title}
           </Link>
         ) : (
-          <span className="!text-[#d1182b] font-[Yekan]">{item.title}</span>
+          <span className="!text-[#d1182b] font-[Yekan] whitespace-nowrap text-xs sm:text-sm">
+            {item.title}
+          </span>
         ),
       })),
 
     {
       // آیتم آخر همیشه آخر است
       title: (
-        <span className="text-[#d1182b] font-[Yekan]">{lastItem.title}</span>
+        <span className="text-[#d1182b] font-[Yekan] whitespace-nowrap text-xs sm:text-sm">
+          {lastItem.title}
+        </span>
       ),
     },
   ];
 
   return (
     <>
-      <div className="bg-white py-2 px-5 rounded-lg xl:px-16">
-        <Breadcrumb
-          items={breadcrumbItems}
-          separator={
-            <span className="!text-gray-700 mx-2 text-xs font-[Yekan]">
-              &gt;
-            </span>
-          }
-          className="font-[Yekan]"
-        />
+      <div className="bg-white px-5 rounded-lg xl:px-16 overflow-hidden">
+        <div className="overflow-x-auto scrollbar-hide py-2">
+          <Breadcrumb
+            items={breadcrumbItems}
+            separator={
+              <span className="!text-gray-700 mx-2 text-xs font-[Yekan] flex-shrink-0">
+                &gt;
+              </span>
+            }
+            className="font-[Yekan] flex flex-nowrap min-w-max"
+          />
+        </div>
       </div>
       {isPending && <Loading />}
     </>

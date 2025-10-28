@@ -42,23 +42,11 @@ export default function EidDiscount({ actionProducts, products }) {
       {products.length > 0 && (
         <div className="sm:px-0 px-2 lg:h-[29rem] h-[35rem] overflow-hidden !mb-10">
           <div className="mt-5">
-            <div className="lg:hidden flex justify-center items-center">
-              <div className="flex items-center title-newProduct relative">
-                <h2 className="font-semibold text-xl ">
-                  {actionProducts?.title || "فروش ویژه"}
-                </h2>
-                {actionProducts?.image && (
-                  <img
-                    src={getImageUrl(actionProducts.image)}
-                    alt={actionProducts.id}
-                  />
-                )}
-              </div>
-            </div>
+            <div className="lg:hidden flex justify-center items-center"></div>
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4 sm:px-3">
               <div className="lg:flex hidden items-center title-newProduct relative">
                 <h2 className="font-semibold text-xl ">
-                  {actionProducts?.title || "محصولات ویژه"}
+                  {actionProducts?.title || "فروش ویژه"}
                 </h2>
                 {actionProducts?.image && (
                   <img
@@ -72,9 +60,17 @@ export default function EidDiscount({ actionProducts, products }) {
               <div className="lg:hidden w-full">
                 {/* هدر دسته‌بندی‌ها */}
                 <div className="flex items-center justify-between !mb-3 px-2">
-                  <h3 className="text-lg font-semibold text-gray-700">
-                    دسته‌بندی‌ها
-                  </h3>
+                  <div className="flex items-center title-newProduct relative">
+                    <h2 className="font-semibold text-xl ">
+                      {actionProducts?.title || "فروش ویژه"}
+                    </h2>
+                    {actionProducts?.image && (
+                      <img
+                        src={getImageUrl(actionProducts.image)}
+                        alt={actionProducts.id}
+                      />
+                    )}
+                  </div>
                   <button
                     onClick={() => {
                       startTransition(() => {
@@ -89,7 +85,7 @@ export default function EidDiscount({ actionProducts, products }) {
                 </div>
 
                 {/* لیست دسته‌بندی‌ها */}
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto pb-2 flex justify-center">
                   <div className="flex items-center gap-0 min-w-max px-2">
                     {categories.map((category, index) => (
                       <div

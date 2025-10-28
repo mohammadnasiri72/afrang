@@ -707,6 +707,8 @@ button:hover .w-10 {
 
 .toast-modal {
   z-index: 9999999999 !important;
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
 }
 
 /* اعمال فونت به تمام المان‌های Ant Design */
@@ -864,8 +866,6 @@ th {
   font-size: 13px;
 }
 
-
-
 .slider-homePage .custom-swiper-pagination {
   bottom: 50% !important;
   /* transform: translateY(50%) !important; */
@@ -928,7 +928,4 @@ th {
 
 p {
   margin-bottom: 0 !important;
- 
 }
-
-

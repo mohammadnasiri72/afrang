@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import {
   addLinkPaymentInfo,
   getLinkPaymentInfo,
@@ -7,7 +8,8 @@ import {
 } from "@/services/payment/paymentLink";
 import { message } from "antd";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import {
   FaCreditCard,
   FaExclamationTriangle,
@@ -55,54 +57,66 @@ const PaymentSkeleton = () => (
 );
 
 // کامپوننت خطا
-const PaymentNotFound = () => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.3 }}
-    className="flex flex-col items-center justify-center p-8 text-center"
-  >
-    <motion.div
-      initial={{ y: -20 }}
-      animate={{ y: 0 }}
-      transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-      className="mb-4"
-    >
-      <div className="relative">
-        <FaReceipt className="text-6xl text-gray-300 mb-2" />
-        <FaExclamationTriangle className="text-2xl text-amber-500 absolute -top-1 -right-1" />
-      </div>
-    </motion.div>
+const PaymentNotFound = () => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-    <motion.h3
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2 }}
-      className="text-xl font-semibold text-gray-700 !mb-2"
-    >
-      اطلاعات پرداخت یافت نشد
-    </motion.h3>
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col items-center justify-center p-8 text-center z-50 relative"
+      >
+        <motion.div
+          initial={{ y: -20 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+          className="mb-4"
+        >
+          <div className="relative">
+            <FaReceipt className="text-6xl text-gray-300 mb-2" />
+            <FaExclamationTriangle className="text-2xl text-amber-500 absolute -top-1 -right-1" />
+          </div>
+        </motion.div>
 
-    <motion.p
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.3 }}
-      className="text-gray-500 text-sm !mb-6 max-w-sm"
-    >
-      ممکن است لینک پرداخت معتبر نباشد یا اطلاعات حذف شده باشد
-    </motion.p>
+        <motion.h3
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-xl font-semibold text-gray-700 !mb-2"
+        >
+          اطلاعات پرداخت یافت نشد
+        </motion.h3>
 
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={() => window.location.reload()}
-      className="flex gap-2 cursor-pointer items-center space-x-2 space-x-reverse bg-blue-500 hover:bg-blue-600 !text-white px-4 py-2 rounded-lg transition-colors duration-200"
-    >
-      <TbRefresh className="text-sm" />
-      <span>تلاش مجدد</span>
-    </motion.button>
-  </motion.div>
-);
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-gray-500 text-sm !mb-6 max-w-sm"
+        >
+          ممکن است لینک پرداخت معتبر نباشد یا اطلاعات حذف شده باشد
+        </motion.p>
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            startTransition(() => {
+              router.push("/payment/link");
+            });
+          }}
+          className="flex gap-2 cursor-pointer items-center space-x-2 space-x-reverse bg-blue-500 hover:bg-blue-600 !text-white px-4 py-2 rounded-lg transition-colors duration-200"
+        >
+          <TbRefresh className="text-sm" />
+          <span>تلاش مجدد</span>
+        </motion.button>
+      </motion.div>
+      {isPending && <Loading />}
+    </>
+  );
+};
 
 function BoxShowInformationBank({ id }) {
   const [isLoading, setIsLoading] = useState(true);

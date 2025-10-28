@@ -41,10 +41,10 @@ function SpecificationsProduct({ product }) {
                 key={property.id}
                 className="flex items-center py-3 px-6 hover:bg-gray-50 transition"
               >
-                <div className="w-1/2 text-gray-700 text-sm">
+                <div className="w-1/3 text-gray-700 text-sm">
                   {property.title}
                 </div>
-                <div className="w-1/2 font-semibold text-gray-900 text-sm text-left">
+                <div className="w-2/3 font-semibold text-gray-900 text-sm text-right">
                   {property.propertyValue}
                 </div>
               </div>

@@ -50,9 +50,7 @@ export default async function ProductDetails(props) {
               </div>
               <BasketFixed product={product} />
             </div>
-            <div className="sm:h-[35rem] h-[40rem] overflow-hidden">
-              <DescProduct id={id} />
-            </div>
+            <DescProduct id={id} />
           </div>
         </div>
       )}

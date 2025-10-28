@@ -19,7 +19,7 @@ export default function BoxImgBranding({ brands }) {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative mt-5 sm:px-3 px-2">
         <div className="absolute left-0 -top-52">
           <Image
             src="/images/bg-shadow-1.png"
@@ -44,8 +44,8 @@ export default function BoxImgBranding({ brands }) {
             unoptimized
           />
         </div>
-        <div className="flex justify-between items-center sm:px-3 px-2 z-50 relative -mb-5">
-          <div className="flex items-center title-newProduct relative">
+        <div className="flex justify-between items-center  z-50 relative -mb-5 border-b border-[#0002]">
+          <div className="flex items-center title-newProduct relative ">
             <h2 className="font-semibold text-xl ">
               برندهای <span className="text-[#d1182b]">افرنگ</span>
             </h2>

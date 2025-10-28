@@ -36,11 +36,6 @@ function NewProduct({ products }) {
 
   return (
     <>
-      <div className="lg:hidden flex justify-center items-center pb-3 ">
-        <div className="flex items-center title-newProduct relative">
-          <h2 className="font-semibold text-xl">جدیدترین ها</h2>
-        </div>
-      </div>
       <div className="flex flex-col lg:flex-row justify-between items-center gap-4 px-3">
         <div className="lg:flex hidden items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
@@ -50,13 +45,10 @@ function NewProduct({ products }) {
         <div className="lg:hidden w-full">
           {/* هدر دسته‌بندی‌ها */}
           <div className="flex items-center justify-between !mb-3 px-2">
-            <h3 className="text-lg font-semibold !text-gray-700">
-              دسته‌بندی‌ها
-            </h3>
+            <div className="flex items-center title-newProduct relative">
+              <h2 className="font-semibold text-xl">جدیدترین ها</h2>
+            </div>
             <button
-              // onClick={() => {
-              //   router.push(`/products?orderby=2`);
-              // }}
               onClick={() => {
                 startTransition(() => {
                   router.push(`/products?orderby=2`);
@@ -70,7 +62,7 @@ function NewProduct({ products }) {
           </div>
 
           {/* لیست دسته‌بندی‌ها */}
-          <div className="overflow-x-auto pb-2">
+          <div className="overflow-x-auto pb-2 flex justify-center">
             <div className="flex items-center gap-0 min-w-max px-2">
               {categories.map((category, index) => (
                 <div key={`${category}-${index}`} className="flex items-center">
@@ -163,7 +155,6 @@ function NewProduct({ products }) {
               {/* لیبل کالای کارکرده */}
               {product.conditionId === 20 && (
                 <div className="absolute top-2 right-2 bg-[#fff] border border-[#d1182b] !text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                  {/* <FaRecycle className="ml-1 text-base" /> */}
                   کالای کارکرده
                 </div>
               )}

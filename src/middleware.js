@@ -35,6 +35,7 @@ export async function middleware(request) {
     pathname !== "/register" &&
     pathname !== "/contect-us" &&
     pathname !== "/payment/result" &&
+    pathname !== "/payment/link" &&
     pathname !== "/gallery" &&
     pathname !== "/news" &&
     pathname !== "/pricelist" &&
@@ -136,7 +137,6 @@ export async function middleware(request) {
       if (numbersFound.length > 1) {
         secondLastId = numbersFound[numbersFound.length - 2];
       }
-
 
       if (productId !== null) {
         const productCategory = await getProductCategory(
