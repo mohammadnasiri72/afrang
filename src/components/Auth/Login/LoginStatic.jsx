@@ -105,20 +105,17 @@ function LoginStatic({ setStateLogin, from }) {
         Toast.fire({
           icon: "success",
           text: "با موفقیت وارد شدید",
-         
         });
       } else {
         Toast.fire({
           icon: "error",
           text: userData.response?.data ? userData.response?.data : "خطای شبکه",
-         
         });
       }
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-       
       });
     } finally {
       setLoading(false);
@@ -131,7 +128,15 @@ function LoginStatic({ setStateLogin, from }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link href="/">
+              <Link
+                href="/"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  startTransition(() => {
+                    router.push("/");
+                  });
+                }}
+              >
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -147,7 +152,15 @@ function LoginStatic({ setStateLogin, from }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link href="/">
+              <Link
+                href="/"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  startTransition(() => {
+                    router.push("/");
+                  });
+                }}
+              >
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>
@@ -226,6 +239,12 @@ function LoginStatic({ setStateLogin, from }) {
               </span>
               <Link
                 href="/forgot-password"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  startTransition(() => {
+                    router.push("/forgot-password");
+                  });
+                }}
                 className="text-[#d1182b] cursor-pointer font-semibold hover:text-[#b91626] transition-colors"
               >
                 فراموشی رمز عبور
@@ -266,7 +285,16 @@ function LoginStatic({ setStateLogin, from }) {
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
                 حساب کاربری ندارید؟
-                <Link className="text-[#d1182b] px-2" href={"/register"}>
+                <Link
+                  className="text-[#d1182b] px-2"
+                  href={"/register"}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    startTransition(() => {
+                      router.push("/register");
+                    });
+                  }}
+                >
                   ساخت حساب کاربری
                 </Link>
               </div>

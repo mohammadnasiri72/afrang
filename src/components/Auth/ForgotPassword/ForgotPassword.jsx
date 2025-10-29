@@ -85,7 +85,6 @@ const ForgotPassword = () => {
       Toast.fire({
         icon: "success",
         text: "لینک بازیابی رمز عبور به ایمیل/شماره تلفن شما ارسال شد",
-      
       });
 
       startTransition(() => {
@@ -95,7 +94,6 @@ const ForgotPassword = () => {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-      
       });
     } finally {
       setLoading(false);
@@ -123,7 +121,15 @@ const ForgotPassword = () => {
             <div className="flex flex-wrap">
               <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
                 <div>
-                  <Link href="/">
+                  <Link
+                    href="/"
+                    onClick={(ev) => {
+                      ev.preventDefault();
+                      startTransition(() => {
+                        router.push("/");
+                      });
+                    }}
+                  >
                     <Image
                       src={getImageUrl(
                         settings?.find(
@@ -139,7 +145,15 @@ const ForgotPassword = () => {
                   </Link>
                 </div>
                 <div className="logo-text hover:text-[#d1182b] duration-300">
-                  <Link href="/">
+                  <Link
+                    href="/"
+                    onClick={(ev) => {
+                      ev.preventDefault();
+                      startTransition(() => {
+                        router.push("/");
+                      });
+                    }}
+                  >
                     <span>خانــه عکاســــان افــــــــــرنـگ</span>
                   </Link>
                 </div>
@@ -217,7 +231,16 @@ const ForgotPassword = () => {
                   </div>
 
                   <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
-                    <Link className="text-[#d1182b]" href={"/login"}>
+                    <Link
+                      className="text-[#d1182b]"
+                      href={"/login"}
+                      onClick={(ev) => {
+                        ev.preventDefault();
+                        startTransition(() => {
+                          router.push("/login");
+                        });
+                      }}
+                    >
                       بازگشت به صفحه ورود
                     </Link>
                   </div>

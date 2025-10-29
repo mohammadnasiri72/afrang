@@ -2,6 +2,7 @@
 
 import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
@@ -11,6 +12,7 @@ import ShoppingDrawer from "./ShoppingDrawer";
 export default function SubFooter() {
   const disPatch = useDispatch();
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   return (
     <>
       <div className="sm:hidden flex justify-around px-2 fixed bottom-0 bg-white left-0 right-0 py-[7px] text-[#666] z-50">
@@ -18,8 +20,15 @@ export default function SubFooter() {
 
         <ShoppingDrawer startTransition={startTransition} />
 
-        <Link href="/profile/dashboard">
-          {/* Custom SVG User Icon */}
+        <Link
+          href="/profile/dashboard"
+          onClick={(ev) => {
+            ev.preventDefault();
+            startTransition(() => {
+              router.push("/profile/dashboard");
+            });
+          }}
+        >
           <span
             className="text-3xl cursor-pointer inline-block align-middle"
             style={{ width: "1em", height: "1em" }}

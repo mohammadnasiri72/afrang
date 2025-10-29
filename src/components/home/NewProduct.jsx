@@ -138,6 +138,12 @@ function NewProduct({ products }) {
             {/* تصویر */}
             <Link
               href={product.url}
+              onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push(product.url);
+                });
+              }}
               className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
             >
               <Image
@@ -175,6 +181,12 @@ function NewProduct({ products }) {
               {/* عنوان */}
               <Link
                 href={product.url}
+                 onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push(product.url);
+                });
+              }}
                 className="!text-[#333] font-bold px-2 hover:!text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
               >
                 <h3 className="text-justify line-clamp-3 w-full">

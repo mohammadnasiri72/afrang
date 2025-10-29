@@ -3,14 +3,18 @@ import { setSelectedColorMode } from "@/redux/slices/productColorSlice";
 import { addToRecentViews } from "@/utils/recentViews";
 import { Alert } from "antd";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useTransition } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../Loading";
 import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
 import SelectedInsurance from "./SelectedInsurance";
 
 function DescProductDetails({ product }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const { settings } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
@@ -22,14 +26,11 @@ function DescProductDetails({ product }) {
     }
   }, [product]);
 
- 
-
   useEffect(() => {
     if (!product?.productModes || product?.productModes.length === 0) {
       dispatch(setSelectedColorMode(null));
     }
   }, [product]);
-
 
   return (
     <>
@@ -71,13 +72,12 @@ function DescProductDetails({ product }) {
                 <span className="text-xs">{brand.title}</span>
               </div>
             )} */}
-            {
-              product?.product?.brandTitle &&
+            {product?.product?.brandTitle && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">برند : </span>
                 <span className="text-xs">{product?.product?.brandTitle}</span>
               </div>
-            }
+            )}
           </div>
           {/* <div className="flex items-center gap-1 font-medium text-[#333] hover:text-[#d1182b] duration-300 cursor-pointer">
             <MdLocalPrintshop />
@@ -124,6 +124,12 @@ function DescProductDetails({ product }) {
                     <Link
                       className="!text-cyan-700 font-semibold hover:!text-cyan-600 duration-300"
                       href="/usedrules"
+                      onClick={(ev) => {
+                        ev.preventDefault();
+                        startTransition(() => {
+                          router.push("/usedrules");
+                        });
+                      }}
                     >
                       مشاهده قوانین خرید و فروش تجهیزات کارکرده و دست دوم.
                     </Link>
@@ -154,6 +160,7 @@ function DescProductDetails({ product }) {
           <SelectProductMokamel product={product} />
         )}
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

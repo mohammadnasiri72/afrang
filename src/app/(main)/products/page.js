@@ -28,6 +28,7 @@ export default async function ProductList({ searchParams }) {
     products = await getItemById(Number(brandid));
   }
 
+
   const categories = await getCategory({
     TypeId: 4,
     LangCode: "fa",
@@ -40,9 +41,15 @@ export default async function ProductList({ searchParams }) {
           products.breadcrumb ? products.breadcrumb : [{ title: "محصولات" }]
         }
       />
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto py-10">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto py-5">
         {params && Object.keys(params).length > 0 ? (
           <div className="xl:px-16">
+            {products?.title && (
+              <h1 className="text-2xl font-bold text-[#d1182b] px-5">
+                {products?.title}
+              </h1>
+            )}
+
             <Suspense fallback={<ProductListSkeleton />}>
               <ProductListWithFilters searchParams={params} />
             </Suspense>

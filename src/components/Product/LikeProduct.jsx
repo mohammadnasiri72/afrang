@@ -8,19 +8,21 @@ import { Button, message } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import Loading from "../Loading";
 
 const LikeProduct = ({ productId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [liked, setLiked] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const checkLikeStatus = async () => {
       try {
-        const user = Cookies.get("user");        
+        const user = Cookies.get("user");
         const token = JSON.parse(user).token;
         if (!token) {
           setIsInitialLoading(false);
@@ -67,6 +69,12 @@ const LikeProduct = ({ productId }) => {
             {!liked && (
               <Link
                 href="/profile/favorites"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  startTransition(() => {
+                    router.push("/profile/favorites");
+                  });
+                }}
                 style={{ color: "#d1182b" }}
                 className="hover:text-red-700"
               >
@@ -97,10 +105,11 @@ const LikeProduct = ({ productId }) => {
   }
 
   return (
-    <div className="w-full">
-      <Button
-        onClick={handleLike}
-        className={`
+    <>
+      <div className="w-full">
+        <Button
+          onClick={handleLike}
+          className={`
                flex w-full items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300
                ${
                  liked
@@ -108,20 +117,22 @@ const LikeProduct = ({ productId }) => {
                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                }
              `}
-        title={!liked ? "افزودن به علاقه‌مندی‌ها" : "حذف از علاقه‌مندی‌ها"}
-      >
-        {isLoading ? (
-          <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-[#d1182b]"></div>
-        ) : liked ? (
-          <FaHeart className=" text-[#d1182b]" />
-        ) : (
-          <FaRegHeart className="" />
-        )}
-        <span className="whitespace-nowrap px-2 text-xs font-medium">
-          {liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-        </span>
-      </Button>
-    </div>
+          title={!liked ? "افزودن به علاقه‌مندی‌ها" : "حذف از علاقه‌مندی‌ها"}
+        >
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-[#d1182b]"></div>
+          ) : liked ? (
+            <FaHeart className=" text-[#d1182b]" />
+          ) : (
+            <FaRegHeart className="" />
+          )}
+          <span className="whitespace-nowrap px-2 text-xs font-medium">
+            {liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+          </span>
+        </Button>
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 };
 

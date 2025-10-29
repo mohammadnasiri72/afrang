@@ -378,6 +378,14 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
                           (item) => item.propertyKey === "site_home_url"
                         )?.value
                       }
+                       onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push( settings?.find(
+                          (item) => item.propertyKey === "site_home_url"
+                        )?.value);
+                });
+              }}
                       aria-label="صفحه اصلی"
                     >
                       <img

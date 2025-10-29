@@ -19,6 +19,12 @@ function BreadcrumbMain({ breadcrumb }) {
         <div className="flex items-center space-x-2 !text-gray-800">
           <Link
             href="/"
+             onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push("/");
+                });
+              }}
             className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan]"
           >
             خانه

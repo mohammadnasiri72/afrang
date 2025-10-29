@@ -444,6 +444,12 @@ export default function DescCompeletePay() {
                 <Link
                   className="text-red-500 hover:text-red-600 duration-300 font-semibold"
                   href={"/cart"}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    startTransition(() => {
+                      router.push("/cart");
+                    });
+                  }}
                 >
                   <FaCartShopping className="inline" />
                   <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -641,17 +647,21 @@ export default function DescCompeletePay() {
                   )}
                 </button>
               </div>
-               <div className="!pt-3 !pb-1">
-
-              <Link
-                className="text-red-500 hover:text-red-600 duration-300 font-semibold"
-                href={"/cart"}
-              >
-                <FaCartShopping className="inline" />
-                <span className="pl-0.5">بازگشت به سبد خرید</span>
-              </Link>
-
-               </div>
+              <div className="!pt-3 !pb-1">
+                <Link
+                  className="text-red-500 hover:text-red-600 duration-300 font-semibold"
+                  href={"/cart"}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    startTransition(() => {
+                      router.push("/cart");
+                    });
+                  }}
+                >
+                  <FaCartShopping className="inline" />
+                  <span className="pl-0.5">بازگشت به سبد خرید</span>
+                </Link>
+              </div>
               <p className="text-[#444]">
                 این سفارش نهایی نشده و افزودن کالاها به سبد خرید به منزله رزرو
                 آنها نمی‌باشد.

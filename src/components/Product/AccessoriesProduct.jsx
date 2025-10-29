@@ -3,7 +3,8 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition } from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa6";
 import { SlBasket } from "react-icons/sl";
@@ -12,6 +13,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 
 // تابع chunkArray را خارج از کامپوننت تعریف کن
@@ -26,6 +28,8 @@ function chunkArray(array, size) {
 function AccessoriesProduct({ product, relatedProducts }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
   const productsSectionRef = useRef(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   // Get unique categories from relatedProducts
   const categories = [
@@ -122,6 +126,12 @@ function AccessoriesProduct({ product, relatedProducts }) {
                           <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
                             <Link
                               href={item.url}
+                              onClick={(ev) => {
+                                ev.preventDefault();
+                                startTransition(() => {
+                                  router.push(item.url);
+                                });
+                              }}
                               className="flex-shrink-0 w-20 h-20 relative overflow-hidden "
                             >
                               <img
@@ -133,6 +143,12 @@ function AccessoriesProduct({ product, relatedProducts }) {
                             <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                               <Link
                                 href={item.url}
+                                onClick={(ev) => {
+                                  ev.preventDefault();
+                                  startTransition(() => {
+                                    router.push(item.url);
+                                  });
+                                }}
                                 className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                               >
                                 {item.title}
@@ -186,7 +202,10 @@ function AccessoriesProduct({ product, relatedProducts }) {
                           </div>
                           {item.canAddCart && (
                             <div className="mt-auto sm:hidden block ">
-                              <AddToCartButtonCard productId={item.productId} accessory/>
+                              <AddToCartButtonCard
+                                productId={item.productId}
+                                accessory
+                              />
                             </div>
                           )}
                         </div>
@@ -242,6 +261,12 @@ function AccessoriesProduct({ product, relatedProducts }) {
                   <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
                     <Link
                       href={item.url}
+                      onClick={(ev) => {
+                        ev.preventDefault();
+                        startTransition(() => {
+                          router.push(item.url);
+                        });
+                      }}
                       className="flex-shrink-0 w-20 h-20 relative overflow-hidden "
                     >
                       <img
@@ -253,6 +278,12 @@ function AccessoriesProduct({ product, relatedProducts }) {
                     <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                       <Link
                         href={item.url}
+                        onClick={(ev) => {
+                          ev.preventDefault();
+                          startTransition(() => {
+                            router.push(item.url);
+                          });
+                        }}
                         className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                       >
                         {item.title}
@@ -286,7 +317,10 @@ function AccessoriesProduct({ product, relatedProducts }) {
                       )}
                       {item.canAddCart && (
                         <div className="mt-auto sm:block hidden ">
-                          <AddToCartButtonCard productId={item.productId} accessory/>
+                          <AddToCartButtonCard
+                            productId={item.productId}
+                            accessory
+                          />
                         </div>
                       )}
                       {!item.canAddCart && (
@@ -299,7 +333,10 @@ function AccessoriesProduct({ product, relatedProducts }) {
                   </div>
                   {item.canAddCart && (
                     <div className="mt-auto sm:hidden block ">
-                      <AddToCartButtonCard productId={item.productId} accessory/>
+                      <AddToCartButtonCard
+                        productId={item.productId}
+                        accessory
+                      />
                     </div>
                   )}
                 </div>
@@ -308,6 +345,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
           )}
         </div>
       </div>
+      {isPending && <Loading />}
     </>
   );
 }

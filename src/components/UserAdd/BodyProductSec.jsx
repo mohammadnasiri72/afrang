@@ -1,8 +1,8 @@
 import { Alert } from "antd";
-import Link from "next/link";
 import { FaCalendarDays } from "react-icons/fa6";
 import { MdTimer } from "react-icons/md";
 import LikeProduct from "../Product/LikeProduct";
+import BoxAlertProduct from "./BoxAlertProduct";
 import BoxTabDetailsProduct from "./BoxTabDetailsProduct";
 
 function BodyProductSec({ product }) {
@@ -172,16 +172,7 @@ function BodyProductSec({ product }) {
           </div>
         </div>
 
-        <Alert
-          message=" لطفا قبل از انجام هرگونه معامله، قوانین خرید و فروش را مطالعه نمایید "
-          description={
-            <Link href="/usedrules">
-              مشاهده قوانین خرید و فروش تجهیزات کارکرده و دست دوم.
-            </Link>
-          }
-          type="warning"
-          className="text-justify"
-        />
+        <BoxAlertProduct />
         <BoxTabDetailsProduct product={product} />
 
         <div className="hidden">

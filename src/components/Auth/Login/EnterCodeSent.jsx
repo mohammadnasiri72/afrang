@@ -69,7 +69,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   }, [isWebOTPSupported, webOTPActive]);
 
   const processReceivedCode = (code) => {
-
     // استخراج کد ۶ رقمی - الگوی ساده‌تر
     const sixDigitMatch = code.match(/\d{6}/);
 
@@ -284,7 +283,15 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link href="/">
+              <Link
+                href="/"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  startTransition(() => {
+                    router.push("/");
+                  });
+                }}
+              >
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -300,7 +307,14 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link href="/">
+              <Link href="/"
+               onClick={(ev) => {
+                  ev.preventDefault();
+                  startTransition(() => {
+                    router.push("/");
+                  });
+                }}
+              >
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>

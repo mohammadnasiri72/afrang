@@ -118,7 +118,7 @@ async function BodyProduct({ id }) {
               key={index}
               className="w-full border border-gray-200 rounded-lg"
             >
-              <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
+              <div className="flex  items-center gap-3 py-3 bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
                 <Link
                   href={item.url}
                   className="flex-shrink-0 w-20 h-20 relative overflow-hidden "

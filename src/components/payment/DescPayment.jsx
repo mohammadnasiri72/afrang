@@ -284,6 +284,12 @@ function DescPayment({ estimateData }) {
             <Link
               className="text-red-500 hover:text-red-600 duration-300 font-semibold"
               href={"/cart"}
+               onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push("/cart");
+                });
+              }}
             >
               <FaCartShopping className="inline" />
               <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -443,6 +449,12 @@ function DescPayment({ estimateData }) {
             <Link
               className="text-red-500 hover:text-red-600 duration-300 font-semibold"
               href={"/cart"}
+               onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push("/cart");
+                });
+              }}
             >
               <FaCartShopping className="inline" />
               <span className="pl-0.5">بازگشت به سبد خرید</span>

@@ -1,13 +1,20 @@
+"use client";
+
+import { getCategory } from "@/services/Category/categoryService";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { FaTelegram } from "react-icons/fa6";
 import Container from "../container";
+import Loading from "../Loading";
 import SelectCat from "./SelectCat";
 import SelectSort from "./SelectSort";
-import { getCategory } from "@/services/Category/categoryService";
 
 async function HeaderGallery() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   let category = [];
-  
+
   try {
     const result = await getCategory({
       TypeId: 9,
@@ -15,7 +22,7 @@ async function HeaderGallery() {
       Page: 1,
       PageSize: 100,
     });
-    
+
     // Check if result is an error object or valid array
     if (result && !result.type && Array.isArray(result)) {
       category = result;
@@ -33,7 +40,15 @@ async function HeaderGallery() {
               <SelectSort />
               <SelectCat category={category} />
             </div>
-            <Link href={"/profile/Send-Photo"}>
+            <Link
+              href={"/profile/Send-Photo"}
+              onClick={(ev) => {
+                ev.preventDefault();
+                startTransition(() => {
+                  router.push("/profile/Send-Photo");
+                });
+              }}
+            >
               <div className="flex items-center rounded-sm bg-[#18d1be] !text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                 <FaTelegram className="text-lg" />
                 <span className="whitespace-nowrap pr-2 font-semibold text-sm">
@@ -44,6 +59,7 @@ async function HeaderGallery() {
           </div>
         </div>
       </Container>
+      {isPending && <Loading />}
     </>
   );
 }

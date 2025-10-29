@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { selectUser } from "@/redux/slices/userSlice";
 import { UploadFile } from "@/services/File/FileServices";
 import {
@@ -33,7 +34,7 @@ import {
 } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { FaPlus, FaSpinner } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -167,6 +168,8 @@ export default function MyArticles() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(12); // تعداد مقالات در هر صفحه
+
+  const [isPending, startTransition] = useTransition();
 
   // افزایش z-index fancybox
   useEffect(() => {
@@ -478,464 +481,498 @@ export default function MyArticles() {
   };
 
   return (
-    <div className="space-y-6">
-      <style jsx global>{`
-        .ant-select {
-          z-index: 110000 !important;
-        }
-        .ant-select-item-option {
-          z-index: 110000 !important;
-        }
-        .ant-select-dropdown {
-          z-index: 110000 !important;
-        }
-        .ant-select-item {
-          z-index: 110000 !important;
-        }
-        
-      `}</style>
-       
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">
-          ارسال اخبار و مقالات
-        </h1>
-        <Button
-          type="primary"
-          icon={<FaPlus />}
-          onClick={() => {
-            setEditingArticle(null);
-            form.resetFields();
-            setIsModalVisible(true);
-          }}
-          className="!bg-[#d1182b] hover:!bg-[#b91626]"
-        >
-          ارسال مقاله جدید
-        </Button>
-      </div>
+    <>
+      <div className="space-y-6">
+        <style jsx global>{`
+          .ant-select {
+            z-index: 110000 !important;
+          }
+          .ant-select-item-option {
+            z-index: 110000 !important;
+          }
+          .ant-select-dropdown {
+            z-index: 110000 !important;
+          }
+          .ant-select-item {
+            z-index: 110000 !important;
+          }
+        `}</style>
 
-      {/* Articles List */}
-      <div className="bg-white rounded-lg shadow-sm p-6 z-50 relative">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100"
-              >
-                <div className="relative aspect-[4/3]">
-                  <div className="w-full h-full bg-gray-200 animate-pulse" />
-                </div>
-                <div className="p-4 space-y-4">
-                  {/* Category Badge Skeleton */}
-                  <div className="w-24 h-6 bg-gray-200 rounded-full animate-pulse" />
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-800">
+            ارسال اخبار و مقالات
+          </h1>
+          <Button
+            type="primary"
+            icon={<FaPlus />}
+            onClick={() => {
+              setEditingArticle(null);
+              form.resetFields();
+              setIsModalVisible(true);
+            }}
+            className="!bg-[#d1182b] hover:!bg-[#b91626]"
+          >
+            ارسال مقاله جدید
+          </Button>
+        </div>
 
-                  {/* Title Skeleton */}
-                  <div className="space-y-2">
-                    <div className="h-5 bg-gray-200 rounded animate-pulse w-3/4" />
-                    <div className="h-5 bg-gray-200 rounded animate-pulse w-1/2" />
-                  </div>
-
-                  {/* Summary Skeleton */}
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                    <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6" />
-                  </div>
-
-                  {/* Date and Stats Skeleton */}
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                    <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
-                    <div className="flex gap-4">
-                      <div className="w-16 h-4 bg-gray-200 rounded animate-pulse" />
-                      <div className="w-16 h-4 bg-gray-200 rounded animate-pulse" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : articles.length > 0 ? (
-          <>
+        {/* Articles List */}
+        <div className="bg-white rounded-lg shadow-sm p-6 z-50 relative">
+          {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getCurrentPageArticles().map((article) => (
+              {[...Array(6)].map((_, index) => (
                 <div
-                  key={article.id}
-                  className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative z-50   
-                                        ${
-                                          article.isActive
-                                            ? "border-2 border-green-500"
-                                            : "border-2 border-orange-500"
-                                        }`}
+                  key={index}
+                  className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100"
                 >
-                  {/* لیبل وضعیت روی عکس */}
-                  <div className="absolute top-2 right-2 z-10">
-                    <div
-                      className={`px-3 py-1 rounded-full text-sm font-medium
-                                            ${
-                                              article.isActive
-                                                ? "bg-green-500 !text-white"
-                                                : "bg-orange-400 text-gray-800"
-                                            }`}
-                    >
-                      {article.isActive ? "تایید شده" : "در انتظار تایید"}
-                    </div>
-                  </div>
-
                   <div className="relative aspect-[4/3]">
-                    <a
-                      data-fancybox="articles-gallery"
-                      data-caption={article.title}
-                      href={getImageUrl(article.image)}
-                      className="block relative w-full h-full"
-                    >
-                      <img
-                        src={getImageUrl(article.image)}
-                        alt={article.title}
-                        className="w-full h-full object-cover cursor-pointer"
-                      />
-                      <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </a>
-                    <div className="absolute bottom-2 left-2 z-10">
-                      <Rate
-                        disabled
-                        defaultValue={Number(article.rate) / 2 || 0}
-                        allowHalf
-                        className="!text-gold-500"
-                        dir="ltr"
-                      />
-                    </div>
+                    <div className="w-full h-full bg-gray-200 animate-pulse" />
                   </div>
-                  <div className="px-4 pt-2">
-                    <div className="flex items-center justify-between !mb-2">
-                      {article?.url ? (
-                        <Link href={article.url}>
-                          <h3 className="text-lg font-semibold text-gray-800 line-clamp-1 hover:text-[#d1182b] duration-300">
-                            {article.title}
-                          </h3>
-                        </Link>
-                      ) : (
-                        <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">
-                          {article.title}
-                        </h3>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <Tooltip title="ویرایش مقاله" placement="bottom">
-                          <button
-                            onClick={() => handleEdit(article)}
-                            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                          >
-                            <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
-                          </button>
-                        </Tooltip>
-                        <Tooltip title="حذف مقاله" placement="bottom">
-                          <button
-                            onClick={() => openDeleteModal(article.id)}
-                            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
-                          >
-                            <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
-                          </button>
-                        </Tooltip>
-                      </div>
+                  <div className="p-4 space-y-4">
+                    {/* Category Badge Skeleton */}
+                    <div className="w-24 h-6 bg-gray-200 rounded-full animate-pulse" />
+
+                    {/* Title Skeleton */}
+                    <div className="space-y-2">
+                      <div className="h-5 bg-gray-200 rounded animate-pulse w-3/4" />
+                      <div className="h-5 bg-gray-200 rounded animate-pulse w-1/2" />
                     </div>
-                    <div className="flex flex-wrap gap-2 text-sm !mb-1">
-                      <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
-                        <span className="text-gray-600">دسته‌بندی :</span>
-                        <span className="text-gray-700">
-                          {article.categoryTitle}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
-                        <span className="text-gray-600">تاریخ :</span>
-                        <span className="text-gray-700">
-                          {new Date(article.created).toLocaleDateString(
-                            "fa-IR"
-                          )}
-                        </span>
-                      </div>
+
+                    {/* Summary Skeleton */}
+                    <div className="space-y-2">
+                      <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6" />
                     </div>
-                  </div>
-                  <div className="bg-white border-t border-gray-100 p-3">
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1">
-                          <EyeOutlined className="text-xs" />
-                          <span>{article.visit || 0} بازدید</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <HeartOutlined className="text-xs" />
-                          <span>{article.like || 0} لایک</span>
-                        </div>
+
+                    {/* Date and Stats Skeleton */}
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                      <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+                      <div className="flex gap-4">
+                        <div className="w-16 h-4 bg-gray-200 rounded animate-pulse" />
+                        <div className="w-16 h-4 bg-gray-200 rounded animate-pulse" />
                       </div>
-                      {article.sourceLink && (
-                        <Link
-                          href={article.sourceLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
-                        >
-                          <span className="text-xs">مشاهده منبع</span>
-                        </Link>
-                      )}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+          ) : articles.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {getCurrentPageArticles().map((article) => (
+                  <div
+                    key={article.id}
+                    className={`bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300 relative z-50   
+                                        ${
+                                          article.isActive
+                                            ? "border-2 border-green-500"
+                                            : "border-2 border-orange-500"
+                                        }`}
+                  >
+                    {/* لیبل وضعیت روی عکس */}
+                    <div className="absolute top-2 right-2 z-10">
+                      <div
+                        className={`px-3 py-1 rounded-full text-sm font-medium
+                                            ${
+                                              article.isActive
+                                                ? "bg-green-500 !text-white"
+                                                : "bg-orange-400 text-gray-800"
+                                            }`}
+                      >
+                        {article.isActive ? "تایید شده" : "در انتظار تایید"}
+                      </div>
+                    </div>
 
-            {/* Pagination */}
-            <div dir="ltr" className="mt-8 flex justify-center">
-              <Pagination
-                current={currentPage}
-                total={articles.length}
-                pageSize={pageSize}
-                onChange={handlePageChange}
-                onShowSizeChange={handlePageSizeChange}
-                showSizeChanger={true}
-                pageSizeOptions={["12", "24", "36", "48"]}
-                className="custom-pagination"
-                showLessItems={true}
-                responsive={true}
-              />
+                    <div className="relative aspect-[4/3]">
+                      <a
+                        data-fancybox="articles-gallery"
+                        data-caption={article.title}
+                        href={getImageUrl(article.image)}
+                        className="block relative w-full h-full"
+                      >
+                        <img
+                          src={getImageUrl(article.image)}
+                          alt={article.title}
+                          className="w-full h-full object-cover cursor-pointer"
+                        />
+                        <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </a>
+                      <div className="absolute bottom-2 left-2 z-10">
+                        <Rate
+                          disabled
+                          defaultValue={Number(article.rate) / 2 || 0}
+                          allowHalf
+                          className="!text-gold-500"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+                    <div className="px-4 pt-2">
+                      <div className="flex items-center justify-between !mb-2">
+                        {article?.url ? (
+                          <Link
+                            href={article.url}
+                            onClick={(ev) => {
+                              ev.preventDefault();
+                              startTransition(() => {
+                                router.push(article.url);
+                              });
+                            }}
+                          >
+                            <h3 className="text-lg font-semibold text-gray-800 line-clamp-1 hover:text-[#d1182b] duration-300">
+                              {article.title}
+                            </h3>
+                          </Link>
+                        ) : (
+                          <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">
+                            {article.title}
+                          </h3>
+                        )}
+                        <div className="flex items-center gap-2">
+                          <Tooltip title="ویرایش مقاله" placement="bottom">
+                            <button
+                              onClick={() => handleEdit(article)}
+                              className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                            >
+                              <EditOutlined className="text-lg !text-teal-500 hover:!text-t" />
+                            </button>
+                          </Tooltip>
+                          <Tooltip title="حذف مقاله" placement="bottom">
+                            <button
+                              onClick={() => openDeleteModal(article.id)}
+                              className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                            >
+                              <DeleteOutlined className="text-lg !text-[#d1182b] hover:!text-[#b91626]" />
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-sm !mb-1">
+                        <div className="flex items-center bg-gray-50/50 gap-1 py-1 rounded text-xs">
+                          <span className="text-gray-600">دسته‌بندی :</span>
+                          <span className="text-gray-700">
+                            {article.categoryTitle}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1 bg-gray-50/50 py-1 rounded text-xs">
+                          <span className="text-gray-600">تاریخ :</span>
+                          <span className="text-gray-700">
+                            {new Date(article.created).toLocaleDateString(
+                              "fa-IR"
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-white border-t border-gray-100 p-3">
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-1">
+                            <EyeOutlined className="text-xs" />
+                            <span>{article.visit || 0} بازدید</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <HeartOutlined className="text-xs" />
+                            <span>{article.like || 0} لایک</span>
+                          </div>
+                        </div>
+                        {article.sourceLink && (
+                          <Link
+                            href={article.sourceLink}
+                            onClick={(ev) => {
+                              ev.preventDefault();
+                              startTransition(() => {
+                                router.push(article.sourceLink);
+                              });
+                            }}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                          >
+                            <span className="text-xs">مشاهده منبع</span>
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div dir="ltr" className="mt-8 flex justify-center">
+                <Pagination
+                  current={currentPage}
+                  total={articles.length}
+                  pageSize={pageSize}
+                  onChange={handlePageChange}
+                  onShowSizeChange={handlePageSizeChange}
+                  showSizeChanger={true}
+                  pageSizeOptions={["12", "24", "36", "48"]}
+                  className="custom-pagination"
+                  showLessItems={true}
+                  responsive={true}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center !mb-4">
+                <UploadOutlined className="text-3xl text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 !mb-2">
+                مقاله‌ای ارسال نشده
+              </h3>
+              <p className="text-gray-500 !mb-4">
+                هنوز هیچ مقاله‌ای ارسال نکرده‌اید
+              </p>
+              <Button
+                type="primary"
+                icon={<FaPlus />}
+                onClick={() => {
+                  setEditingArticle(null);
+                  form.resetFields();
+                  setIsModalVisible(true);
+                }}
+                className="!bg-[#d1182b] hover:!bg-[#b91626]"
+              >
+                ارسال مقاله جدید
+              </Button>
             </div>
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center !mb-4">
-              <UploadOutlined className="text-3xl text-gray-400" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-700 !mb-2">
-              مقاله‌ای ارسال نشده
-            </h3>
-            <p className="text-gray-500 !mb-4">
-              هنوز هیچ مقاله‌ای ارسال نکرده‌اید
-            </p>
+          )}
+        </div>
+
+        {/* Article Form Modal */}
+        <Modal
+          title={editingArticle ? "ویرایش مقاله" : "ارسال مقاله جدید"}
+          open={isModalVisible}
+          onCancel={handleModalCancel}
+          footer={[
             <Button
-              type="primary"
-              icon={<FaPlus />}
-              onClick={() => {
-                setEditingArticle(null);
-                form.resetFields();
-                setIsModalVisible(true);
-              }}
-              className="!bg-[#d1182b] hover:!bg-[#b91626]"
+              key="cancel"
+              onClick={handleModalCancel}
+              disabled={submitting}
+              className="!bg-gray-100 hover:!bg-gray-200 !text-gray-700 !border-0"
             >
-              ارسال مقاله جدید
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {/* Article Form Modal */}
-      <Modal
-        title={editingArticle ? "ویرایش مقاله" : "ارسال مقاله جدید"}
-        open={isModalVisible}
-        onCancel={handleModalCancel}
-        footer={[
-          <Button
-            key="cancel"
-            onClick={handleModalCancel}
-            disabled={submitting}
-            className="!bg-gray-100 hover:!bg-gray-200 !text-gray-700 !border-0"
-          >
-            انصراف
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={handleModalOk}
-            loading={submitting}
-            disabled={submitting}
-            className="!bg-[#d1182b] hover:!bg-[#b91626] !border-0 min-w-[100px]"
-          >
-            {editingArticle ? (
-              submitting ? (
+              انصراف
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              onClick={handleModalOk}
+              loading={submitting}
+              disabled={submitting}
+              className="!bg-[#d1182b] hover:!bg-[#b91626] !border-0 min-w-[100px]"
+            >
+              {editingArticle ? (
+                submitting ? (
+                  <span className="flex items-center gap-2">
+                    <FaSpinner className="animate-spin" />
+                    در حال ویرایش
+                  </span>
+                ) : (
+                  "ویرایش"
+                )
+              ) : submitting ? (
                 <span className="flex items-center gap-2">
                   <FaSpinner className="animate-spin" />
-                  در حال ویرایش
+                  در حال ارسال
                 </span>
               ) : (
-                "ویرایش"
-              )
-            ) : submitting ? (
-              <span className="flex items-center gap-2">
-                <FaSpinner className="animate-spin" />
-                در حال ارسال
-              </span>
-            ) : (
-              "ارسال مقاله"
-            )}
-          </Button>,
-        ]}
-        className="!w-[90%] md:!w-[500px]"
-      >
-        <Alert
-          message="راهنمای ارسال مقاله"
-          description={
-            <div className="text-justify">
-              توضیح : لطفا هر عکس را در سایز 600*800 ارسال نمایید . جهت کم کردن
-              حجم عکس ها از گزینه Save For Web در برنامه photoshop استفاده
-              نمایید
-            </div>
-          }
-          type="info"
-          showIcon
-          style={{ marginBottom: "20px" }}
+                "ارسال مقاله"
+              )}
+            </Button>,
+          ]}
+          className="!w-[90%] md:!w-[500px]"
+        >
+          <Alert
+            message="راهنمای ارسال مقاله"
+            description={
+              <div className="text-justify">
+                توضیح : لطفا هر عکس را در سایز 600*800 ارسال نمایید . جهت کم
+                کردن حجم عکس ها از گزینه Save For Web در برنامه photoshop
+                استفاده نمایید
+              </div>
+            }
+            type="info"
+            showIcon
+            style={{ marginBottom: "20px" }}
+          />
+
+          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            <Form.Item
+              name="title"
+              label="عنوان مقاله"
+              rules={[
+                { required: true, message: "لطفا عنوان مقاله را وارد کنید" },
+              ]}
+            >
+              <Input
+                className="!text-[16px]"
+                placeholder="عنوان مقاله را وارد کنید"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="category"
+              label="دسته‌بندی"
+              rules={[
+                { required: true, message: "لطفا دسته‌بندی را انتخاب کنید" },
+              ]}
+            >
+              <Select
+                style={{ zIndex: "1000000" }}
+                placeholder="دسته‌بندی را انتخاب کنید"
+              >
+                <Option value={3691}>مقالات کاربران</Option>
+                <Option value={3690}>اخبار کاربران</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="summary"
+              label="خلاصه مقاله"
+              rules={[
+                { required: true, message: "لطفا خلاصه مقاله را وارد کنید" },
+              ]}
+            >
+              <TextArea
+                className="!text-[16px]"
+                rows={3}
+                placeholder="خلاصه مقاله را وارد کنید"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="content"
+              label="متن مقاله"
+              rules={[
+                { required: true, message: "لطفا متن مقاله را وارد کنید" },
+              ]}
+            >
+              <TextArea
+                className="!text-[16px]"
+                rows={6}
+                placeholder="متن مقاله را وارد کنید"
+              />
+            </Form.Item>
+
+            <Form.Item name="source" label="منبع">
+              <Input
+                className="!text-[16px]"
+                placeholder="منبع مقاله را وارد کنید (اختیاری)"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="upload"
+              label="تصویر شاخص"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              rules={[{ required: true, message: "لطفا یک تصویر انتخاب کنید" }]}
+            >
+              <Upload
+                name="file"
+                listType="picture"
+                maxCount={1}
+                beforeUpload={beforeUpload}
+                fileList={fileList}
+                onChange={({ fileList }) => setFileList(fileList)}
+              >
+                <Button icon={<UploadOutlined />}>انتخاب تصویر</Button>
+              </Upload>
+            </Form.Item>
+          </Form>
+        </Modal>
+
+        {/* Delete Article Modal */}
+        <DeleteArticleModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleDelete}
+          isLoading={isDeleting}
         />
 
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            name="title"
-            label="عنوان مقاله"
-            rules={[
-              { required: true, message: "لطفا عنوان مقاله را وارد کنید" },
-            ]}
-          >
-            <Input className="!text-[16px]" placeholder="عنوان مقاله را وارد کنید" />
-          </Form.Item>
-
-          <Form.Item
-            name="category"
-            label="دسته‌بندی"
-            rules={[
-              { required: true, message: "لطفا دسته‌بندی را انتخاب کنید" },
-            ]}
-          >
-            <Select style={{zIndex:'1000000'}} placeholder="دسته‌بندی را انتخاب کنید">
-              <Option value={3691}>مقالات کاربران</Option>
-              <Option value={3690}>اخبار کاربران</Option>
-            </Select>
-           
-          </Form.Item>
-
-          <Form.Item
-            name="summary"
-            label="خلاصه مقاله"
-            rules={[
-              { required: true, message: "لطفا خلاصه مقاله را وارد کنید" },
-            ]}
-          >
-            <TextArea className="!text-[16px]" rows={3} placeholder="خلاصه مقاله را وارد کنید" />
-          </Form.Item>
-
-          <Form.Item
-            name="content"
-            label="متن مقاله"
-            rules={[{ required: true, message: "لطفا متن مقاله را وارد کنید" }]}
-          >
-            <TextArea className="!text-[16px]" rows={6} placeholder="متن مقاله را وارد کنید" />
-          </Form.Item>
-
-          <Form.Item name="source" label="منبع">
-            <Input className="!text-[16px]" placeholder="منبع مقاله را وارد کنید (اختیاری)" />
-          </Form.Item>
-
-          <Form.Item
-            name="upload"
-            label="تصویر شاخص"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            rules={[{ required: true, message: "لطفا یک تصویر انتخاب کنید" }]}
-          >
-            <Upload
-              name="file"
-              listType="picture"
-              maxCount={1}
-              beforeUpload={beforeUpload}
-              fileList={fileList}
-              onChange={({ fileList }) => setFileList(fileList)}
-            >
-              <Button icon={<UploadOutlined />}>انتخاب تصویر</Button>
-            </Upload>
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* Delete Article Modal */}
-      <DeleteArticleModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDelete}
-        isLoading={isDeleting}
-      />
-
-      <style jsx global>{`
-        .custom-pagination .ant-pagination-item {
-          border-radius: 8px;
-          margin: 0 4px;
-        }
-        .custom-pagination .ant-pagination-item-active {
-          background-color: #d1182b;
-          border-color: #d1182b;
-        }
-        .custom-pagination .ant-pagination-item-active a {
-          color: white;
-        }
-        .custom-pagination .ant-pagination-item:hover {
-          border-color: #d1182b;
-        }
-        .custom-pagination .ant-pagination-item:hover a {
-          color: #d1182b;
-        }
-        .custom-pagination .ant-pagination-prev .ant-pagination-item-link,
-        .custom-pagination .ant-pagination-next .ant-pagination-item-link {
-          border-radius: 8px;
-        }
-        .custom-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
-        .custom-pagination
-          .ant-pagination-next:hover
-          .ant-pagination-item-link {
-          border-color: #d1182b;
-          color: #d1182b;
-        }
-
-        /* Select styles */
-        .custom-pagination .ant-select-selector {
-          border-radius: 8px !important;
-        }
-        .custom-pagination .ant-select:hover .ant-select-selector {
-          border-color: #d1182b !important;
-        }
-        .custom-pagination .ant-select-focused .ant-select-selector {
-          border-color: #d1182b !important;
-          box-shadow: 0 0 0 2px rgba(209, 24, 43, 0.2) !important;
-        }
-
-        /* Responsive styles - only for mobile */
-        @media (max-width: 640px) {
+        <style jsx global>{`
           .custom-pagination .ant-pagination-item {
-            min-width: 28px;
-            height: 28px;
-            line-height: 28px;
-            margin: 0 2px;
+            border-radius: 8px;
+            margin: 0 4px;
+          }
+          .custom-pagination .ant-pagination-item-active {
+            background-color: #d1182b;
+            border-color: #d1182b;
+          }
+          .custom-pagination .ant-pagination-item-active a {
+            color: white;
+          }
+          .custom-pagination .ant-pagination-item:hover {
+            border-color: #d1182b;
+          }
+          .custom-pagination .ant-pagination-item:hover a {
+            color: #d1182b;
           }
           .custom-pagination .ant-pagination-prev .ant-pagination-item-link,
           .custom-pagination .ant-pagination-next .ant-pagination-item-link {
-            min-width: 28px;
-            height: 28px;
-            line-height: 28px;
+            border-radius: 8px;
           }
-          .custom-pagination .ant-pagination-item a {
-            padding: 0 4px;
-            font-size: 12px;
+          .custom-pagination
+            .ant-pagination-prev:hover
+            .ant-pagination-item-link,
+          .custom-pagination
+            .ant-pagination-next:hover
+            .ant-pagination-item-link {
+            border-color: #d1182b;
+            color: #d1182b;
           }
-          .custom-pagination .ant-pagination-jump-prev,
-          .custom-pagination .ant-pagination-jump-next {
-            margin: 0 2px;
-          }
-          .custom-pagination .ant-pagination-options {
-            margin-right: 8px;
-          }
-          .custom-pagination .ant-select-selector {
-            height: 28px !important;
-            line-height: 28px !important;
-          }
-          .custom-pagination .ant-select-selection-item {
-            line-height: 28px !important;
-            font-size: 12px;
-          }
-        }
-      `}</style>
 
-      
-    </div>
+          /* Select styles */
+          .custom-pagination .ant-select-selector {
+            border-radius: 8px !important;
+          }
+          .custom-pagination .ant-select:hover .ant-select-selector {
+            border-color: #d1182b !important;
+          }
+          .custom-pagination .ant-select-focused .ant-select-selector {
+            border-color: #d1182b !important;
+            box-shadow: 0 0 0 2px rgba(209, 24, 43, 0.2) !important;
+          }
+
+          /* Responsive styles - only for mobile */
+          @media (max-width: 640px) {
+            .custom-pagination .ant-pagination-item {
+              min-width: 28px;
+              height: 28px;
+              line-height: 28px;
+              margin: 0 2px;
+            }
+            .custom-pagination .ant-pagination-prev .ant-pagination-item-link,
+            .custom-pagination .ant-pagination-next .ant-pagination-item-link {
+              min-width: 28px;
+              height: 28px;
+              line-height: 28px;
+            }
+            .custom-pagination .ant-pagination-item a {
+              padding: 0 4px;
+              font-size: 12px;
+            }
+            .custom-pagination .ant-pagination-jump-prev,
+            .custom-pagination .ant-pagination-jump-next {
+              margin: 0 2px;
+            }
+            .custom-pagination .ant-pagination-options {
+              margin-right: 8px;
+            }
+            .custom-pagination .ant-select-selector {
+              height: 28px !important;
+              line-height: 28px !important;
+            }
+            .custom-pagination .ant-select-selection-item {
+              line-height: 28px !important;
+              font-size: 12px;
+            }
+          }
+        `}</style>
+      </div>
+      {isPending && <Loading />}
+    </>
   );
 }

@@ -196,7 +196,6 @@ function ResponsiveMenu({
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
- 
 
   const [headerHeight, setHeaderHeight] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
@@ -209,8 +208,7 @@ function ResponsiveMenu({
     left: 50,
   });
 
-
- // تابع برای محاسبه dropdownOffsets بر اساس عرض صفحه
+  // تابع برای محاسبه dropdownOffsets بر اساس عرض صفحه
   const calculateDropdownOffsets = useCallback(() => {
     const windowWidth = window.innerWidth;
     const maxWidth = 2000; // حداکثر عرض
@@ -220,7 +218,7 @@ function ResponsiveMenu({
       // اگر صفحه از 2000px بیشتر است، offsetها را طوری محاسبه کن که 50px کمتر از 2000px باشد
       const extraWidth = windowWidth - maxWidth;
       const calculatedOffset = baseOffset + Math.floor(extraWidth / 2);
-      
+
       setDropdownOffsets({
         right: calculatedOffset,
         left: calculatedOffset,
@@ -234,7 +232,6 @@ function ResponsiveMenu({
     }
   }, []);
 
-
   useEffect(() => {
     // محاسبه اولیه
     calculateDropdownOffsets();
@@ -244,11 +241,11 @@ function ResponsiveMenu({
       calculateDropdownOffsets();
     };
 
-    window.addEventListener('resize', handleResize);
-    
+    window.addEventListener("resize", handleResize);
+
     // تمیز کردن event listener
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, [calculateDropdownOffsets]);
 
@@ -348,7 +345,16 @@ function ResponsiveMenu({
   const Title = () => (
     <div className="flex justify-end">
       <Link
-        onClick={onClose}
+        onClick={(ev) => {
+          ev.preventDefault();
+          startTransition(() => {
+            router.push(
+              settings?.find((item) => item.propertyKey === "site_home_url")
+                ?.value
+            );
+          });
+          onClose();
+        }}
         href={
           settings?.find((item) => item.propertyKey === "site_home_url")?.value
         }
@@ -991,8 +997,8 @@ function ResponsiveMenu({
 
   return (
     <>
-        <DesktopMenu />
-        <MobileMenu />
+      <DesktopMenu />
+      <MobileMenu />
     </>
   );
 }
