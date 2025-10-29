@@ -90,17 +90,13 @@ export default function FavoritesList() {
             Toast.fire({
                 icon: "success",
                 text: "آیتم با موفقیت از علاقه‌مندی‌ها حذف شد",
-                customClass: {
-                    container: "toast-modal",
-                },
+               
             });
         } catch (error) {
             Toast.fire({
                 icon: "error",
                 text: error.response?.data || "مشکلی در حذف آیتم پیش آمده است",
-                customClass: {
-                    container: "toast-modal",
-                },
+               
             });
         } finally {
             setIsRemoving(false);

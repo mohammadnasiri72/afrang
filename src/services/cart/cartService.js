@@ -37,9 +37,6 @@ export const addToCart = async (
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
     });
   }
 };
@@ -55,9 +52,7 @@ export const addToCartNext = async (id) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+      
     });
   }
 };
@@ -73,9 +68,7 @@ export const moveToCurrentCart = async (id) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -92,9 +85,7 @@ export const updateCart = async (cartId, updateType, userId) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+      
     });
   }
 };
@@ -136,21 +127,13 @@ export const deleteCartItem = async (cartItemId, userId) => {
     const response = await axios.delete(
       `${mainDomain}/api/Cart/${userId}/${cartItemId}`
     );
-    // Toast.fire({
-    //   icon: "success",
-    //   text: "محصول از سبد خرید حذف شد",
-    //   customClass: {
-    //     container: "toast-modal",
-    //   },
-    // });
+   
     return response.data;
   } catch (err) {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+      
     });
   }
 };
@@ -163,9 +146,7 @@ export const deleteCartItemAll = async (userId) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -221,9 +202,7 @@ export const mergeGuestCart = async (guestUserId, currentUserId) => {
     Toast.fire({
       icon: "error",
       text: "خطا در ادغام سبد خرید",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
     return { success: false, error: err.message };
   }

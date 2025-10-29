@@ -55,18 +55,13 @@ function ModalDeleteBuy({ id }) {
         Toast.fire({
           icon: "success",
           text: "آگهی با موفقیت حذف شد",
-          customClass: {
-            container: "toast-modal",
-          },
+          
         });
       }
     } catch (error) {
       Toast.fire({
         icon: "error",
         text: error.response?.data?.message || "مشکلی در حذف آگهی پیش آمده است",
-        customClass: {
-          container: "toast-modal",
-        },
       });
       console.error("Error deleting:", error);
     } finally {

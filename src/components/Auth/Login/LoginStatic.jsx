@@ -105,26 +105,20 @@ function LoginStatic({ setStateLogin, from }) {
         Toast.fire({
           icon: "success",
           text: "با موفقیت وارد شدید",
-          customClass: {
-            container: "toast-modal",
-          },
+         
         });
       } else {
         Toast.fire({
           icon: "error",
           text: userData.response?.data ? userData.response?.data : "خطای شبکه",
-          customClass: {
-            container: "toast-modal",
-          },
+         
         });
       }
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
+       
       });
     } finally {
       setLoading(false);

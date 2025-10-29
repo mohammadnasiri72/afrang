@@ -67,7 +67,6 @@ function DescPayment({ estimateData }) {
       Toast.fire({
         icon: "error",
         text: error.message || "خطا در ثبت سفارش",
-        customClass: { container: "toast-modal" },
       });
     } finally {
       setLoading(false);

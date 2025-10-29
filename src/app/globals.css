@@ -701,14 +701,11 @@ button:hover .w-10 {
   z-index: 99999 !important;
 }
 
-.swal2-popup-custom {
-  z-index: 99999 !important;
-}
 
 .toast-modal {
   z-index: 9999999999 !important;
-  padding-bottom: 0px !important;
-  padding-top: 0px !important;
+  padding-bottom: 10px !important;
+  padding-top: 10px !important;
 }
 
 /* اعمال فونت به تمام المان‌های Ant Design */

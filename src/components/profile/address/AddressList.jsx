@@ -104,9 +104,7 @@ export default function AddressList() {
       Toast.fire({
         icon: "error",
         text: "خطا در دریافت لیست آدرس‌ها",
-        customClass: {
-          container: "toast-modal",
-        },
+     
       });
     } finally {
       setIsLoading(false);

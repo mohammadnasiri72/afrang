@@ -5,7 +5,18 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaCheck, FaHome, FaMapMarkerAlt, FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import DeleteAddress from "./DeleteAddress";
+
+// import sweet alert 2
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const BoxAddressSkeleton = () => {
@@ -78,9 +89,6 @@ function BoxAddress({ onAddressDelete }) {
         Toast.fire({
           icon: "error",
           text: items.message,
-          customClass: {
-            container: "toast-modal",
-          },
         });
         return;
       } else {

@@ -17,7 +17,7 @@ const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
-const AddToCartButton = ({ productId }) => {
+const AddToCartButton = ({ productId , compare}) => {
   const { currentItems } = useSelector((state) => state.cart);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray?.find((item) => item.productId === productId);
@@ -125,13 +125,21 @@ const AddToCartButton = ({ productId }) => {
           className="flex items-center bg-[#d1182b] !text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FaCartShopping className="" />
-          <span className="">
+          {
+            compare ?
+             <span className="whitespace-nowrap">
+            {isLoading ? "در حال بارگذاری..." : "افزودن به سبد "}
+          </span>
+          :
+           <span className="whitespace-nowrap">
             {isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}
           </span>
+          }
+         
         </button>
       )}
       {cartItem && cartItem.quantity > 0 && (
-        <CartCounter quantity={cartItem.quantity} cartId={cartItem.id} ctrl />
+        <CartCounter quantity={cartItem.quantity} cartId={cartItem.id} ctrl compare={compare}/>
       )}
 
       <ModalAddtoBasket

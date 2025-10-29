@@ -68,9 +68,7 @@ export default function PayOffline({ orderData }) {
                 Toast.fire({
                     icon: "error",
                     text: error.response?.data ? error.response?.data : "خطای شبکه",
-                    customClass: {
-                        container: "toast-modal",
-                    },
+                   
                 });
             } finally {
                 setLoading(false);
@@ -143,9 +141,7 @@ export default function PayOffline({ orderData }) {
             Toast.fire({
                 icon: "success",
                 text: "اطلاعات پرداخت با موفقیت ثبت شد",
-                customClass: {
-                    container: "toast-modal",
-                },
+               
             });
 
             router.push(`/profile/orders?statusId=1&page=1`);
@@ -167,9 +163,7 @@ export default function PayOffline({ orderData }) {
             Toast.fire({
                 icon: "error",
                 text: error.response?.data ? error.response?.data : "خطای شبکه",
-                customClass: {
-                    container: "toast-modal",
-                },
+                
             });
         } finally {
             setLoading(false);
@@ -192,9 +186,7 @@ export default function PayOffline({ orderData }) {
                 Toast.fire({
                     icon: "success",
                     text: "روش پرداخت با موفقیت به آنلاین تغییر کرد",
-                    customClass: {
-                        container: "toast-modal",
-                    },
+                   
                 });
 
                 // ریفرش کردن صفحه برای دریافت مجدد اطلاعات از سرور
@@ -204,9 +196,7 @@ export default function PayOffline({ orderData }) {
             Toast.fire({
                 icon: "error",
                 text: error.response?.data ? error.response?.data : "خطای شبکه",
-                customClass: {
-                    container: "toast-modal",
-                },
+               
             });
         } finally {
         }

@@ -172,6 +172,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                                 <div className="mt-auto sm:block hidden ">
                                   <AddToCartButtonCard
                                     productId={item.productId}
+                                    accessory
                                   />
                                 </div>
                               )}
@@ -185,7 +186,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                           </div>
                           {item.canAddCart && (
                             <div className="mt-auto sm:hidden block ">
-                              <AddToCartButtonCard productId={item.productId} />
+                              <AddToCartButtonCard productId={item.productId} accessory/>
                             </div>
                           )}
                         </div>
@@ -285,7 +286,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                       )}
                       {item.canAddCart && (
                         <div className="mt-auto sm:block hidden ">
-                          <AddToCartButtonCard productId={item.productId} />
+                          <AddToCartButtonCard productId={item.productId} accessory/>
                         </div>
                       )}
                       {!item.canAddCart && (
@@ -298,7 +299,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                   </div>
                   {item.canAddCart && (
                     <div className="mt-auto sm:hidden block ">
-                      <AddToCartButtonCard productId={item.productId} />
+                      <AddToCartButtonCard productId={item.productId} accessory/>
                     </div>
                   )}
                 </div>

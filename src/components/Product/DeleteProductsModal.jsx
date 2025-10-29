@@ -43,9 +43,7 @@ function DeleteProductsModal({ isOpen, onClose }) {
       Toast.fire({
         icon: "error",
         text: "خطا در شناسایی کاربر",
-        customClass: {
-          container: "toast-modal",
-        },
+       
       });
       return;
     }
@@ -58,18 +56,13 @@ function DeleteProductsModal({ isOpen, onClose }) {
       Toast.fire({
         icon: "success",
         text: "محصولات با موفقیت از سبد خرید حذف شدند",
-        customClass: {
-          container: "toast-modal",
-        },
+       
       });
       onClose();
     } catch (error) {
       Toast.fire({
         icon: "error",
         text: "مشکلی در حذف محصولات پیش آمده است",
-        customClass: {
-          container: "toast-modal",
-        },
       });
       console.error("Error removing item:", error);
     } finally {

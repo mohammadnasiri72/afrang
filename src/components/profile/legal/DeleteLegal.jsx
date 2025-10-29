@@ -32,9 +32,7 @@ function DeleteLegal({ id, getLegalFu, isOpen, onClose }) {
                 Toast.fire({
                     icon: "success",
                     text: "اطلاعات حقوقی با موفقیت حذف شد",
-                    customClass: {
-                        container: "toast-modal",
-                    },
+                   
                 });
             }
             onClose();
@@ -42,9 +40,7 @@ function DeleteLegal({ id, getLegalFu, isOpen, onClose }) {
             Toast.fire({
                 icon: "error",
                 text: err.response?.data || "مشکلی در حذف اطلاعات حقوقی پیش آمده است",
-                customClass: {
-                    container: "toast-modal",
-                },
+               
             });
         } finally {
             setIsDeleting(false);

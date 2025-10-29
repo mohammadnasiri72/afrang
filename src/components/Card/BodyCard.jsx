@@ -380,7 +380,7 @@ const BodyCard = () => {
                           href={item.url}
                         >
                           <Image
-                            style={{ filter: " brightness(0.8)" }}
+                           
                             className="w-full h-full object-contain"
                             src={getImageUrl(item.image)}
                             alt={item?.title}
@@ -435,7 +435,7 @@ const BodyCard = () => {
                         <div className="sm:block hidden">
                           {item.children?.length > 0 && (
                             <>
-                              <div className="flex flex-wrap justify-start items-center mt-2">
+                              <div className="flex flex-wrap justify-start items-center mt-1">
                                 {item.children.map((e) => (
                                   <div
                                     key={e.id}
@@ -453,9 +453,7 @@ const BodyCard = () => {
                                       >
                                         <div className="relative w-14 h-14">
                                           <Image
-                                            style={{
-                                              filter: " brightness(0.8)",
-                                            }}
+                                           
                                             className="w-full h-full object-contain rounded-lg"
                                             src={getImageUrl(e.image)}
                                             alt={e?.title}
@@ -470,7 +468,7 @@ const BodyCard = () => {
                                           )}
                                         </div>
                                       </Link>
-                                      <div className="flex flex-col items-start justify-between">
+                                      <div className="flex flex-col items-start justify-center">
                                         <Link
                                           onClick={(ev) => {
                                             ev.preventDefault();
@@ -550,7 +548,7 @@ const BodyCard = () => {
                                   >
                                     <div className="relative w-14 h-14">
                                       <Image
-                                        style={{ filter: " brightness(0.8)" }}
+                                       
                                         className="w-full h-full object-contain rounded-lg"
                                         src={getImageUrl(e.image)}
                                         alt={e?.title}
@@ -565,7 +563,7 @@ const BodyCard = () => {
                                       )}
                                     </div>
                                   </Link>
-                                  <div className="flex flex-col items-start justify-between">
+                                  <div className="flex flex-col items-start justify-center">
                                     <Link
                                       onClick={(ev) => {
                                         ev.preventDefault();

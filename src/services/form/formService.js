@@ -29,9 +29,7 @@ export const PostContactForm = async (data) => {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
       return false; // برگرداندن آرایه خالی در صورت خطا
     }

@@ -42,9 +42,7 @@ export const getRecentViews = async (data, token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+      
     });
     return []; // برگرداندن آرایه خالی در صورت خطا
   }
@@ -63,51 +61,10 @@ export const getWalletUser = async (token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
-
-// export const changeUserPassword = async (data, token) => {
-//   try {
-//     // تبدیل داده‌ها به FormData
-//     const formData = new FormData();
-//     formData.append('CurrentPassword', data.currentPassword);
-//     formData.append('NewPassword', data.newPassword);
-//     formData.append('NewPassword2', data.confirmPassword);
-
-//     const response = await axios.post(
-//       `${mainDomain}/api/Account/ChangePassword`,
-//       formData,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     if (error.response?.data?.errors) {
-//       const errors = error.response.data.errors;
-//       const errorMessages = [];
-
-//       if (errors.CurrentPassword) {
-//         errorMessages.push(errors.CurrentPassword[0]);
-//       }
-//       if (errors.NewPassword) {
-//         errorMessages.push(errors.NewPassword[0]);
-//       }
-//       if (errors.NewPassword2) {
-//         errorMessages.push(errors.NewPassword2[0]);
-//       }
-
-//       throw errorMessages.join(' | ') || 'خطا در تغییر رمز عبور';
-//     }
-//     throw error.response?.data || 'خطا در تغییر رمز عبور';
-//   }
-// };
 
 export const updateUserProfile = async (data, token) => {
   try {

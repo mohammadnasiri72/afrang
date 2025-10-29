@@ -6,22 +6,20 @@ import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Badge, Drawer, Tooltip } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaRecycle } from "react-icons/fa";
 import { FaCartShopping, FaTrash } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "./Loading";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
-function ShoppingDrawer({ header , startTransition}) {
+function ShoppingDrawer({ header, startTransition }) {
   const open = useSelector((store) => store.shopping.openShopping);
   const { currentItems } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState(null);
-
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -54,13 +52,11 @@ function ShoppingDrawer({ header , startTransition}) {
   const totalPrice =
     currentItems.length > 0 &&
     currentItems?.filter((e) => e.parentId === -1).length > 0
-      ? currentItems
-          ?.filter((e) => e.parentId === -1)
-          .reduce((sum, item) => {
-            const price = item.finalPrice || 0;
-            const quantity = item.quantity || 0;
-            return sum + price * quantity;
-          }, 0)
+      ? currentItems.reduce((sum, item) => {
+          const price = item.finalPrice || 0;
+          const quantity = item.quantity || 0;
+          return sum + price * quantity;
+        }, 0)
       : 0;
 
   const handleCheckout = () => {
@@ -341,9 +337,21 @@ function ShoppingDrawer({ header , startTransition}) {
                                   قیمت :
                                 </span>
                                 <div className="flex items-center">
-                                  <span className="text-lg font-bold text-[#d1182b]">
-                                    {item.finalPrice.toLocaleString()}
-                                  </span>
+                                  {currentItems?.find(
+                                    (e) => e.parentId === item.productId
+                                  ) ? (
+                                    <span className="text-lg font-bold text-[#d1182b]">
+                                      {(
+                                        currentItems?.find(
+                                          (e) => e.parentId === item.productId
+                                        ).finalPrice + item.finalPrice
+                                      ).toLocaleString()}
+                                    </span>
+                                  ) : (
+                                    <span className="text-lg font-bold text-[#d1182b]">
+                                      {item.finalPrice.toLocaleString()}
+                                    </span>
+                                  )}
                                   <span className="mr-1 text-sm text-[#d1182b]">
                                     تومان
                                   </span>

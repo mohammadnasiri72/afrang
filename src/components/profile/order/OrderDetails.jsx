@@ -471,7 +471,7 @@ export default function OrderDetails({ trackCode }) {
                               <Link href={e.url}>
                                 <div className="relative w-14 h-14">
                                   <Image
-                                    style={{ filter: " brightness(0.8)" }}
+                                    
                                     className="w-full h-full object-contain rounded-lg "
                                     src={getImageUrl(e.image)}
                                     alt={e?.title}

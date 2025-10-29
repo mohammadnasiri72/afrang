@@ -33,9 +33,6 @@ function DeleteAddress({ id, getAddressFu, isOpen, onClose }) {
         Toast.fire({
           icon: "success",
           text: "آدرس مورد نظر با موفقیت حذف شد",
-          customClass: {
-            container: "toast-modal",
-          },
         });
       }
       onClose();
@@ -43,9 +40,6 @@ function DeleteAddress({ id, getAddressFu, isOpen, onClose }) {
       Toast.fire({
         icon: "error",
         text: err.response?.data || "مشکلی در حذف آدرس پیش آمده است",
-        customClass: {
-          container: "toast-modal",
-        },
       });
     } finally {
       setIsDeleting(false);

@@ -85,9 +85,7 @@ const ForgotPassword = () => {
       Toast.fire({
         icon: "success",
         text: "لینک بازیابی رمز عبور به ایمیل/شماره تلفن شما ارسال شد",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
 
       startTransition(() => {
@@ -97,9 +95,7 @@ const ForgotPassword = () => {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
     } finally {
       setLoading(false);

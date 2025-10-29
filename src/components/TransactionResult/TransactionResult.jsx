@@ -18,6 +18,7 @@ const TransactionResult = () => {
   const status = searchParams.get("success");
   const msg = searchParams.get("msg");
   const type = searchParams.get("type");
+  const invoice = searchParams.get("invoice");
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,39 +98,56 @@ const TransactionResult = () => {
               </div>
 
               {/* <ProgressButton /> */}
-              <div className="flex items-center gap-2 w-full">
-                {!type ||
-                  (Number(type) !== 2 && (
-                    <Button
-                      onClick={() => {
-                        startTransition(() => {
-                          router.push(
-                            status === "true"
-                              ? "/profile/orders?statusId=2"
-                              : "/profile/orders"
-                          );
-                        });
-                      }}
-                      sx={{ width: "50%" }}
-                      color="primary"
-                      variant="contained"
-                    >
-                      سفارشات من
-                    </Button>
-                  ))}
-                <Button
-                  onClick={() => {
-                    startTransition(() => {
-                      router.push("/");
-                    });
-                  }}
-                  sx={{ width: type && Number(type) === 2 ? "100%" : "50%" }}
-                  color="inherit"
-                  variant="contained"
-                >
-                  صفحه اصلی
-                </Button>
-              </div>
+              {!type || Number(type) !== 2 ? (
+                <div className="flex items-center gap-2 w-full">
+                  <Button
+                    onClick={() => {
+                      startTransition(() => {
+                        router.push(
+                          status === "true"
+                            ? "/profile/orders?statusId=2"
+                            : "/profile/orders"
+                        );
+                      });
+                    }}
+                    sx={{ width: "50%" }}
+                    color="primary"
+                    variant="contained"
+                  >
+                    سفارشات من
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      startTransition(() => {
+                        router.push("/");
+                      });
+                    }}
+                    sx={{ width: "50%" }}
+                    color="inherit"
+                    variant="contained"
+                  >
+                    صفحه اصلی
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 w-full">
+                  <Button
+                    onClick={() => {
+                      startTransition(() => {
+                        router.push(
+                          invoice ? `/payment/link/${invoice}` : `/payment/link`
+                        );
+                      });
+                    }}
+                    sx={{ width: "100%" }}
+                    color="primary"
+                    variant="contained"
+                  >
+                    لینک پرداخت
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* فوتر */}

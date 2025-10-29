@@ -482,17 +482,13 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
       Toast.fire({
         icon: "success",
         text: id ? "ویرایش آدرس با موفقیت انجام شد" : "آدرس جدید اضافه شد",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
+       
       });
     } finally {
       setLoading(false);

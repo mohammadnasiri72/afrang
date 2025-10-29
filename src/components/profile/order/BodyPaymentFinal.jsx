@@ -21,9 +21,7 @@ export default async function BodyPaymentFinal({ trackCode, token }) {
       Toast.fire({
         icon: "error",
         text: orderDataTrackCode.message,
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
       return null;
     }

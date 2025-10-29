@@ -119,9 +119,7 @@ export default function LegalList() {
       Toast.fire({
         icon: "error",
         text: "خطا در دریافت لیست اطلاعات حقوقی",
-        customClass: {
-          container: "toast-modal",
-        },
+     
       });
     } finally {
       setIsLoading(false);

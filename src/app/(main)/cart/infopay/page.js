@@ -82,7 +82,6 @@ export default function CompletePay() {
           Toast.fire({
             icon: "warning",
             text: "لطفاً ابتدا آدرس و روش ارسال را انتخاب کنید",
-            customClass: { container: "toast-modal" },
           });
           startTransition(() => {
             router.push("/cart/infosend");

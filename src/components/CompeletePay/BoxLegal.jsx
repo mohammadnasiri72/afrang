@@ -8,8 +8,19 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaBuilding, FaCheck, FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import DeleteLegal from "./DeleteLegal";
 import EmptyLegalIcon from "./EmptyLegalIcon";
+
+// import sweet alert 2
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const BoxLegalSkeleton = () => {
@@ -75,9 +86,6 @@ function BoxLegal() {
         Toast.fire({
           icon: "error",
           text: data.message,
-          customClass: {
-            container: "toast-modal",
-          },
         });
         return;
       } else {

@@ -49,9 +49,6 @@ function DeleteLegal({ id, onDelete, getLegalFu }) {
                 Toast.fire({
                     icon: "success",
                     text: "اطلاعات حقوقی با موفقیت حذف شد",
-                    customClass: {
-                        container: "toast-modal",
-                    },
                 });
             }
         } catch (error) {
@@ -59,9 +56,6 @@ function DeleteLegal({ id, onDelete, getLegalFu }) {
             Toast.fire({
                 icon: "error",
                 text: error.response?.data?.message || "مشکلی در حذف اطلاعات پیش آمده است",
-                customClass: {
-                    container: "toast-modal",
-                },
             });
             console.error("Error deleting legal:", error);
         } finally {

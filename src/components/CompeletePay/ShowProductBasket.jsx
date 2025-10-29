@@ -124,7 +124,7 @@ function ShowProductBasket() {
                   <div className="sm:block hidden">
                     {item.children?.length > 0 && (
                       <>
-                        <div className="flex flex-wrap justify-start items-center mt-2">
+                        <div className="flex flex-wrap justify-start items-center mt-1">
                           {item.children.map((e) => (
                             <div
                               key={e.id}
@@ -134,7 +134,7 @@ function ShowProductBasket() {
                                 <Link href={e.url}>
                                   <div className="relative w-14 h-14">
                                     <Image
-                                      style={{ filter: " brightness(0.8)" }}
+                                     
                                       className="w-full h-full object-contain rounded-lg"
                                       src={getImageUrl(e.image)}
                                       alt={e?.title}
@@ -149,7 +149,7 @@ function ShowProductBasket() {
                                     )}
                                   </div>
                                 </Link>
-                                <div className="flex flex-col items-start justify-between">
+                                <div className="flex flex-col items-start justify-center">
                                   <Link
                                     className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                     href={e.url}
@@ -179,7 +179,7 @@ function ShowProductBasket() {
               <div className="sm:hidden block ">
                 {item.children?.length > 0 && (
                   <>
-                    <div className="flex flex-wrap justify-between items-center mt-2">
+                    <div className="flex flex-wrap justify-between items-center mt-1">
                       {item.children.map((e) => (
                         <div
                           key={e.id}
@@ -189,7 +189,7 @@ function ShowProductBasket() {
                             <Link href={e.url}>
                               <div className="relative w-14 h-14">
                                 <Image
-                                  style={{ filter: " brightness(0.8)" }}
+                                 
                                   className="w-full h-full object-contain rounded-lg"
                                   src={getImageUrl(e.image)}
                                   alt={e?.title}
@@ -204,7 +204,7 @@ function ShowProductBasket() {
                                 )}
                               </div>
                             </Link>
-                            <div className="flex flex-col items-start justify-between">
+                            <div className="flex flex-col items-start justify-center">
                               <Link
                                 className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                 href={e.url}

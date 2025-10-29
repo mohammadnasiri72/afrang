@@ -51,9 +51,7 @@ const WarrantyModal = ({ isOpen, onClose, product, onSuccess }) => {
       Toast.fire({
         icon: "error",
         text: error.message || "خطا در افزودن به سبد خرید",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
     }
   };

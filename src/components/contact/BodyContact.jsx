@@ -156,9 +156,6 @@ function BodyContact() {
         Toast.fire({
           icon: "success",
           text: "پیام شما با موفقیت ارسال شد",
-          customClass: {
-            container: "toast-modal",
-          },
         });
 
         // Reset form and errors
@@ -175,9 +172,6 @@ function BodyContact() {
       Toast.fire({
         icon: "error",
         text: error.response?.data || "خطا در ارسال پیام",
-        customClass: {
-          container: "toast-modal",
-        },
       });
     } finally {
       setSubmitting(false);

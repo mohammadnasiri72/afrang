@@ -24,9 +24,7 @@ export const getProvince = async () => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -45,9 +43,7 @@ export const getCity = async (provinceId) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -64,9 +60,7 @@ export const addAddress = async (data , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -86,9 +80,7 @@ export const getAddress = async (token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -110,9 +102,7 @@ export const getWaySend = async (provinceId , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -132,9 +122,7 @@ export const getAddressId = async (id , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -151,9 +139,7 @@ export const deleteAddress = async (id , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -170,9 +156,7 @@ export const addLegal = async (data , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -192,9 +176,7 @@ export const getLegal = async (token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -214,9 +196,7 @@ export const getLegalId = async (id , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -233,9 +213,7 @@ export const deleteLegal = async (id , token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -304,9 +282,7 @@ export const getOrder = async (token, params = {}) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
     throw err;
   }
@@ -346,9 +322,7 @@ export const getWayPayment = async (paymentId) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -367,9 +341,7 @@ export const changePayment = async (data, token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
     throw err;
   }
@@ -383,9 +355,7 @@ export const getInfoPayOffline = async (paymentId) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
   }
 };
@@ -404,9 +374,7 @@ export const PaymentOffline = async (data, token) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      customClass: {
-        container: "toast-modal",
-      },
+     
     });
     throw err;
   }

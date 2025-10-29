@@ -75,26 +75,20 @@ function EnterCodeSent({ setCode, mobile }) {
         Toast.fire({
           icon: "success",
           text: "کد جدید ارسال شد",
-          customClass: {
-            container: "toast-modal",
-          },
+         
         });
       } else {
         Toast.fire({
           icon: "error",
           text: res.response?.data ? res.response?.data : "خطای شبکه",
-          customClass: {
-            container: "toast-modal",
-          },
+         
         });
       }
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
+       
       });
     } finally {
       setResendLoading(false);

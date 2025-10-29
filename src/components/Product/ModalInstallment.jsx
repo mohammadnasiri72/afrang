@@ -63,9 +63,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-        customClass: {
-          container: "toast-modal",
-        },
+       
       });
     } finally {
       setLoading(false);
@@ -299,7 +297,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
               <Typography fontFamily="inherit">
                 لطفا جهت اعتبار سنجی نام و نام خانوادگی، شماره موبایل و کدملی
                 دارنده چک را به شماره
-                <Link
+                <Link className="px-2"
                   href={`https://wa.me/989013450132`}
                   target="_blank"
                   rel="noopener noreferrer"

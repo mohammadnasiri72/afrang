@@ -68,10 +68,7 @@ export default function EditProfile() {
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
-    customClass: {
-      container: "toast-modal",
-      popup: "swal2-popup-custom",
-    },
+    customClass: "toast-modal",
   });
 
   useEffect(() => {
@@ -150,17 +147,13 @@ export default function EditProfile() {
       Toast.fire({
         icon: "success",
         text: "اطلاعات کاربری با موفقیت بروزرسانی شد",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
     } catch (error) {
       Toast.fire({
         icon: "error",
         text: error || "خطا در بروزرسانی اطلاعات",
-        customClass: {
-          container: "toast-modal",
-        },
+      
       });
     } finally {
       setLoading(false);

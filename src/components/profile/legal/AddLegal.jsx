@@ -102,7 +102,6 @@ function AddLegal({
         Toast.fire({
           icon: "error",
           text: response.message,
-          customClass: { container: "toast-modal" },
         });
       } else {
         if (getLegalFu) getLegalFu();
@@ -113,7 +112,7 @@ function AddLegal({
             id || editData
               ? "ویرایش اطلاعات حقوقی با موفقیت انجام شد"
               : "اطلاعات حقوقی جدید اضافه شد",
-          customClass: { container: "toast-modal" },
+         
         });
         handleCancel();
       }

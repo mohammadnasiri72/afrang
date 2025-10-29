@@ -262,8 +262,8 @@ function SelectCategoryFilter({ resultFilter }) {
               style={{ fontFamily: "Yekan" }}
               className="select-none text-sm font-semibold w-full flex items-center justify-between"
             >
-              <span className="w-full">{brand.title}</span>
-              <span>{brand.titleEn}</span>
+              <span className="w-full line-clamp-1">{brand.title}</span>
+              <span className="whitespace-nowrap">{brand.titleEn}</span>
             </div>
           }
         />

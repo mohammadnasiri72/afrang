@@ -18,7 +18,7 @@ const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
-const AddToCartButtonCard = ({ productId }) => {
+const AddToCartButtonCard = ({ productId , accessory}) => {
   const { currentItems } = useSelector((state) => state.cart);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray?.find((item) => item.productId === productId);
@@ -118,14 +118,14 @@ const AddToCartButtonCard = ({ productId }) => {
     setSelectedWarranty(e.target.value);
   };
 
-
+// accessory
   return (
     <>
       {!cartItem || cartItem.quantity === 0 || cartItem.parentId !== -1 ? (
         <button
           onClick={handleAddToCart}
           disabled={isLoading}
-          className="flex items-center px-2 bg-[#d1182b] !text-white duration-300 hover:bg-[#40768c] w-full py-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`flex items-center bg-[#d1182b] !text-white duration-300 hover:bg-[#40768c] w-full justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed ${accessory ? 'p-1 !text-xs':'p-2'}`}
         >
           <FaCartShopping className="" />
           <span className="line-clamp-1">

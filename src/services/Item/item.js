@@ -18,6 +18,7 @@ export const getItem = async (params) => {
 export const getItemById = async (id) => {
   try {
     const response = await axios.get(`${mainDomain}/api/Item/${id}`);
+
     return response.data;
   } catch (err) {
     return {
@@ -46,14 +47,13 @@ export const getItemByUrl = async (url) => {
         responseData.includes("<html") ||
         responseData.includes("Not Found") ||
         responseData.includes("HTTP Error") ||
-        responseData.includes("<!DOCTYPE HTML PUBLIC")); 
-   
+        responseData.includes("<!DOCTYPE HTML PUBLIC"));
 
     return {
       type: "error",
       message: err.response?.data ? err.response?.data : "خطای شبکه",
       status: err.response?.status,
-      isHard404
+      isHard404,
     };
   }
 };
