@@ -5,6 +5,32 @@ import { getItemById } from "@/services/Item/item";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const brandid = await params.brandid;
+  let products = {};
+  if (brandid) {
+    products = await getItemById(Number(brandid));
+  }
+
+  if (!products.title) {
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد",
+    };
+  } else {
+    return {
+      title: products.seoTitle ? products.seoTitle : products.title,
+      description: products.seoDescription,
+      keywords: products.seoKeywords,
+      openGraph: {
+        title: products.seoTitle ? products.seoTitle : products.title,
+        description: products.seoDescription,
+      },
+    };
+  }
+}
+
 // Dynamic imports for components
 const ProductListWithFilters = dynamic(() =>
   import("@/components/ProductList/ProductListWithFilters")
@@ -27,7 +53,6 @@ export default async function ProductList({ searchParams }) {
   if (brandid) {
     products = await getItemById(Number(brandid));
   }
-
 
   const categories = await getCategory({
     TypeId: 4,
