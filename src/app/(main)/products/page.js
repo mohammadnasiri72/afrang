@@ -20,11 +20,15 @@ export async function generateMetadata({ searchParams }) {
     };
   } else {
     return {
-      title: products.seoTitle ? products.seoTitle : products.title,
+      title: ` لیست محصولات ${
+        products.seoTitle ? products.seoTitle : products.title
+      }`,
       description: products.seoDescription,
       keywords: products.seoKeywords,
       openGraph: {
-        title: products.seoTitle ? products.seoTitle : products.title,
+        title: `  لیست محصولات ${
+          products.seoTitle ? products.seoTitle : products.title
+        }`,
         description: products.seoDescription,
       },
     };
