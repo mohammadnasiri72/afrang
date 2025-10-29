@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { FaTimes } from "react-icons/fa";
+import ComparePageSkeleton from "./ComparePageSkeleton";
 
 const DynamicComparePage = () => {
   const [isPending, startTransition] = useTransition();
@@ -19,7 +20,7 @@ const DynamicComparePage = () => {
   const params = useParams();
   const [compareProducts, setCompareProducts] = useState([]);
   const [property, setProperty] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [catIds, setCatIds] = useState(0);
@@ -47,7 +48,7 @@ const DynamicComparePage = () => {
   // تابع برای محاسبه تعداد ستون‌ها بر اساس عرض صفحه
   const updateColumnsCount = () => {
     if (typeof window === "undefined") return;
-    
+
     const width = window.innerWidth;
     if (width < 768) {
       setColumnsCount(2); // موبایل: 2 ستون
@@ -60,10 +61,10 @@ const DynamicComparePage = () => {
 
   useEffect(() => {
     updateColumnsCount();
-    window.addEventListener('resize', updateColumnsCount);
-    
+    window.addEventListener("resize", updateColumnsCount);
+
     return () => {
-      window.removeEventListener('resize', updateColumnsCount);
+      window.removeEventListener("resize", updateColumnsCount);
     };
   }, []);
 
@@ -161,7 +162,7 @@ const DynamicComparePage = () => {
   const showAddButton = visibleProducts.length < columnsCount;
 
   if (loading) {
-    return <Loading />;
+    return <ComparePageSkeleton />;
   }
 
   if (error) {
@@ -248,7 +249,7 @@ const DynamicComparePage = () => {
                     style={{
                       width: columnWidth,
                       minWidth: columnWidth,
-                      flex: `0 0 ${columnWidth}`
+                      flex: `0 0 ${columnWidth}`,
                     }}
                   >
                     {/* دکمه حذف */}
@@ -316,7 +317,10 @@ const DynamicComparePage = () => {
                             {item?.finalPrice?.toLocaleString()} تومان
                           </div>
                           <div className="mt-2 scale-90 transform origin-center h-10 overflow-hidden">
-                            <AddToCartButton productId={item.productId} compare={true}/>
+                            <AddToCartButton
+                              productId={item.productId}
+                              compare={true}
+                            />
                           </div>
                         </div>
                       </div>
@@ -333,7 +337,7 @@ const DynamicComparePage = () => {
                     style={{
                       width: columnWidth,
                       minWidth: columnWidth,
-                      flex: `0 0 ${columnWidth}`
+                      flex: `0 0 ${columnWidth}`,
                     }}
                   >
                     <div className="flex flex-col items-center justify-center h-full py-2">
@@ -373,7 +377,7 @@ const DynamicComparePage = () => {
                     className="flex-shrink-0"
                     style={{
                       width: columnWidth,
-                      minWidth: columnWidth
+                      minWidth: columnWidth,
                     }}
                   >
                     <span className="bg-white min-h-12 shadow-lg border p-2 sm:p-3 flex flex-col items-center justify-center border-gray-200 rounded-lg w-full text-center text-xs sm:text-sm break-words">
@@ -384,18 +388,20 @@ const DynamicComparePage = () => {
                     </span>
                   </div>
                 ))}
-                
+
                 {/* جای خالی برای دکمه اضافه کردن در صورت نیاز */}
                 {showAddButton && (
                   <div
                     className="flex-shrink-0"
                     style={{
                       width: columnWidth,
-                      minWidth: columnWidth
+                      minWidth: columnWidth,
                     }}
                   >
                     <div className="bg-transparent min-h-12 border-2 border-dashed border-gray-300 rounded-lg w-full flex items-center justify-center">
-                      <span className="text-gray-400 text-xs sm:text-sm">---</span>
+                      <span className="text-gray-400 text-xs sm:text-sm">
+                        ---
+                      </span>
                     </div>
                   </div>
                 )}
@@ -410,8 +416,11 @@ const DynamicComparePage = () => {
           <div className="w-full mt-6 max-w-7xl mx-auto px-4">
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
               <p className="text-yellow-700 text-sm">
-                <span className="font-bold">{compareProducts.length - visibleProducts.length} محصول</span> دیگر برای مقایسه وجود دارد. 
-                برای مشاهده همه محصولات از دستگاه با صفحه بزرگتر استفاده کنید.
+                <span className="font-bold">
+                  {compareProducts.length - visibleProducts.length} محصول
+                </span>{" "}
+                دیگر برای مقایسه وجود دارد. برای مشاهده همه محصولات از دستگاه با
+                صفحه بزرگتر استفاده کنید.
               </p>
             </div>
           </div>
