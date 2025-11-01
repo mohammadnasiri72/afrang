@@ -68,7 +68,7 @@ async function ProductContent({ id, searchParams }) {
   return (
     <>
       <div className="bg-white">
-        <div className="overflow-hidden py-5 max-w-[2000px] mx-auto">
+        <div className="overflow-hidden max-w-[2000px] mx-auto">
           <BreadcrumbMain breadcrumb={productCategory?.breadcrumb} />
         </div>
       </div>
