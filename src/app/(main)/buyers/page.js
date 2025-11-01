@@ -31,9 +31,13 @@ export default async function UserAdd(props) {
   const productsData = await getUserAdBuy(data);
   return (
     <>
-      <BreadcrumbMain
-        breadcrumb={[{ title: "کالای دسته دوم", format: "type" }]}
-      />
+      <div className="bg-white">
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <BreadcrumbMain
+            breadcrumb={[{ title: "کالای دسته دوم", format: "type" }]}
+          />
+        </div>
+      </div>
       <div className="max-w-[2000px] mx-auto overflow-hidden">
         <Container>
           <div className="flex items-start">

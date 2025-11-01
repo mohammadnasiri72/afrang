@@ -23,9 +23,11 @@ export default async function PriceList() {
 
   return (
     <>
-      <BreadcrumbMain
-        breadcrumb={[{ title: "لیست قیمت محصولات" }]}
-      />
+      <div className="bg-white">
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <BreadcrumbMain breadcrumb={[{ title: "لیست قیمت محصولات" }]} />
+        </div>
+      </div>
       <Container>
         <BodyPriceList categories={categories} />
       </Container>

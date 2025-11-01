@@ -20,12 +20,16 @@ export default async function UserAddDetails(props) {
 
   return (
     <>
-      <BreadcrumbMain
-        breadcrumb={[
-          { href: "/useds/-1", title: "کالای دسته دوم" },
-          { title: product.title },
-        ]}
-      />
+      <div className="bg-white">
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <BreadcrumbMain
+            breadcrumb={[
+              { href: "/useds/-1", title: "کالای دسته دوم" },
+              { title: product.title },
+            ]}
+          />
+        </div>
+      </div>
       <Container>
         <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative overflow-hidden max-w-[2000px] mx-auto">
           <div className="lg:w-[30%] w-full p-2">

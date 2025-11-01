@@ -114,7 +114,11 @@ const BrandsPage = () => {
 
   return (
     <>
-      <BreadcrumbMain breadcrumb={[{ title: "برندهای افرنگ" }]} />
+      <div className="bg-white">
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <BreadcrumbMain breadcrumb={[{ title: "برندهای افرنگ" }]} />
+        </div>
+      </div>
       <div className="container mx-auto px-4 py-6">
         {/* هدر و کنترل‌ها */}
         <div className="mb-6">

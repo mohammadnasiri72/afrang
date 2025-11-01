@@ -1,7 +1,7 @@
+import BreadcrumbMain from "@/components/BreadcrumbMain";
 import { getItemByUrl } from "@/services/Item/item";
 import dynamic from "next/dynamic";
 import { headers } from "next/headers";
-import BreadcrumbMain from "@/components/BreadcrumbMain";
 const BlogDesc = dynamic(() => import("@/components/blogDetails/BlogDesc.jsx"));
 const RelationBlog = dynamic(() =>
   import("@/components/blogDetails/RelationBlog.jsx")
@@ -29,15 +29,17 @@ export default async function BlogDetails(props) {
 
   return (
     <>
-    <BreadcrumbMain
+      <div className="bg-white">
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <BreadcrumbMain
             breadcrumb={blog.breadcrumb.filter(
               (item) => item.format !== "category"
             )}
           />
+        </div>
+      </div>
       <div className="max-w-[2000px] mx-auto overflow-hidden">
-        <Container>
-          
-        </Container>
+        <Container></Container>
         <div className="bg-[#f6f6f6] overflow-hidden">
           <Container>
             <div className="flex flex-wrap items-start mt-10 lg:flex-row flex-col-reverse">

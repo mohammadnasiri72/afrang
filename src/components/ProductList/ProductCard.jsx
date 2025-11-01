@@ -19,7 +19,7 @@ import ShowImgProduct from "./ShowImgProduct";
 function ProductCard({ product, startTransition }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
-  
+
   return (
     <>
       <div className="bg-white rounded-lg relative z-50">
@@ -259,7 +259,22 @@ function ProductCard({ product, startTransition }) {
               <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-52 flex flex-col">
                 <div className="flex flex-col w-full h-full flex-1">
                   <PriceProduct product={product} />
-
+                  {/* دکمه افزودن به سبد خرید یا وضعیت */}
+                  <div className="w-full mb-2">
+                    {!product.canAddCart && (
+                      <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
+                        <FaCartShopping className="!text-[#000]" />
+                        <span className="!text-[#000]">
+                          {product.statusDesc}
+                        </span>
+                      </button>
+                    )}
+                    {product.canAddCart && (
+                      <div className="flex flex-col gap-2">
+                        <AddToCartButton productId={product.productId} />
+                      </div>
+                    )}
+                  </div>
                   <div className="flex flex-wrap items-center gap-3">
                     {product.fastShipping && (
                       <div className="flex items-center ">
@@ -286,20 +301,6 @@ function ProductCard({ product, startTransition }) {
                     )}
                   </div>
                   <div className="flex-1"></div>
-                </div>
-                {/* دکمه افزودن به سبد خرید یا وضعیت */}
-                <div className="w-full mt-2">
-                  {!product.canAddCart && (
-                    <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
-                      <FaCartShopping className="!text-[#000]" />
-                      <span className="!text-[#000]">{product.statusDesc}</span>
-                    </button>
-                  )}
-                  {product.canAddCart && (
-                    <div className="flex flex-col gap-2">
-                      <AddToCartButton productId={product.productId} />
-                    </div>
-                  )}
                 </div>
               </div>
             </div>

@@ -28,17 +28,14 @@ export default async function DicItemPage({ params }) {
 
   return (
     <>
-      <BreadcrumbMain
-        breadcrumb={[{ title: "واژگان فنی" }, { title: dic.title }]}
-      />
+      <div className="bg-white">
+        <div className="overflow-hidden max-w-[2000px] mx-auto ">
+          <BreadcrumbMain
+            breadcrumb={[{ title: "واژگان فنی" }, { title: dic.title }]}
+          />
+        </div>
+      </div>
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto ">
-        {/* <div className="bg-white rounded-lg shadow-sm py-6 !mb-4 sm:px-16 px-2">
-                <Breadcrumb
-                    items={breadcrumbItems}
-                    separator={<span className="text-gray-400 mx-2 text-xs font-[Yekan]">&gt;</span>}
-                    className="font-[Yekan]"
-                />
-            </div> */}
         <Container>
           <div className="max-w-4xl mx-auto py-8">
             <div className="bg-white rounded-lg shadow-sm p-6">

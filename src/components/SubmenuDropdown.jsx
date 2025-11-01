@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useRef } from "react";
 
 const MAX_COLUMNS = 4;
-const COLUMN_PIXEL_WIDTH = 300;
+const COLUMN_PIXEL_WIDTH = 245;
 
 const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
   const boxRef = useRef(null);
@@ -32,7 +32,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       typeof window !== "undefined"
         ? Math.round(window.innerHeight * 0.7)
         : 500;
-    const ITEM_HEIGHT = 34;
+    const ITEM_HEIGHT = 30;
     const maxRows = Math.floor(MENU_HEIGHT / ITEM_HEIGHT);
 
     // تقسیم آیتم‌ها به ستون‌ها (همیشه حداقل ۴ ستون)
@@ -66,7 +66,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       if (filledColumns === 1 || filledColumns === 2) {
         showImage = true;
         imageColIdx = 2;
-        imageColWidth = "50%";
+        imageColWidth = "25%";
       } else if (filledColumns === 3) {
         showImage = true;
         imageColIdx = 3;
@@ -86,11 +86,11 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
           height: MENU_HEIGHT,
           overflowX: needsHorizontalScroll ? "auto" : "hidden",
           overflowY: "hidden",
-          padding: "0 50px",
+          padding: "0 10px",
         }}
       >
         <div
-          className="flex flex-row gap-0 rtl"
+          className="flex flex-row gap-0 rtl "
           style={{
             width: containerWidth,
             minWidth: "100%",
@@ -115,7 +115,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
             return (
               <div
                 key={colIdx}
-                className="relative flex flex-col h-[68vh]"
+                className={`relative flex flex-col h-[68vh]`}
                 style={{
                   width: columnWidth,
                   flex: `0 0 ${columnWidth}`,
@@ -127,9 +127,9 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                     key={`${item.isParent ? "parent" : "child"}-${
                       item.id
                     }-${idx}`}
-                    className={`line-clamp-1 pb-2 ${
+                    className={`line-clamp-1 pb-0 ${
                       item.isParent
-                        ? "text-[#d1182b] font-bold text-[16px] pt-2"
+                        ? "text-[#d1182b] font-bold text-[16px] pt-0"
                         : "text-[#222] font-medium text-xs"
                     } whitespace-nowrap font-inherit cursor-pointer transition-all duration-200`}
                     style={{

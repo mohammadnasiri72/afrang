@@ -38,12 +38,20 @@ export default async function PriceListLayout({ children, params }) {
 
   return (
     <>
-      <BreadcrumbMain
-        breadcrumb={[
-          { href: "/pricelist", title: "لیست قیمت محصولات", format: "type" },
-          { title: title, format: "type" },
-        ]}
-      />
+      <div className="bg-white">
+        <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <BreadcrumbMain
+            breadcrumb={[
+              {
+                href: "/pricelist",
+                title: "لیست قیمت محصولات",
+                format: "type",
+              },
+              { title: title, format: "type" },
+            ]}
+          />
+        </div>
+      </div>
       <Container>
         <div className="pb-8">
           <div className="!mb-8">

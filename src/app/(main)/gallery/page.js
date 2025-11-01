@@ -21,7 +21,11 @@ export default async function Gallery() {
   const settings = await getSettings();
   return (
     <>
-      <BreadcrumbMain breadcrumb={[{ title: "گالری کاربران" }]} />
+      <div className="bg-white">
+        <div className="overflow-hidden max-w-[2000px] mx-auto">
+          <BreadcrumbMain breadcrumb={[{ title: "گالری کاربران" }]} />
+        </div>
+      </div>
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
         <Suspense fallback={<HeaderGallerySkeleton />}>
           <HeaderGallery />
