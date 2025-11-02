@@ -36,11 +36,11 @@ function HeaderProductList() {
 
 
   const sortOptions = [
+    { label: "گران ترین", value: "5" },
     { label: "جدیدترین", value: "2" },
     { label: "پرفروش ها", value: "3" },
     { label: "پربازدید ترین", value: "1" },
     { label: "ارزان‌ترین", value: "4" },
-    { label: "گران ترین", value: "5" },
   ];
 
   return (
@@ -61,7 +61,7 @@ function HeaderProductList() {
                 key={option.value || "default"}
                 onClick={() => handleSort(option.value)}
                 className={`font-semibold cursor-pointer duration-300 text-[15px] whitespace-nowrap select-none hover:text-[#d1182b] min-w-fit ${
-                  (currentOrderBy === option.value || (!currentOrderBy && option.value === "2"))
+                  (currentOrderBy === option.value || (!currentOrderBy && option.value === "5"))
                     ? "text-[#d1182b] border-[#18d1be]"
                     : "text-[#444] border-[#d5d5d5]"
                 } border lg:border-none rounded-lg lg:rounded-none px-[15px] lg:px-0 py-[5px] lg:py-0 flex lg:inline items-center justify-center gap-1 ${

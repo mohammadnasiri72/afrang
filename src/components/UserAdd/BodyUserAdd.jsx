@@ -98,12 +98,12 @@ function BodyUserAdd({ productList, pathname, archived }) {
 
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
             <Link
-              href={"/products?conditionId=20&orderby=2"}
+              href={"/products?conditionId=20&orderby=5"}
               onClick={(e) => {
                 e.preventDefault();
 
                 startTransition(() => {
-                  router.push("/products?conditionId=20&orderby=2");
+                  router.push("/products?conditionId=20&orderby=5");
                 });
               }}
             >

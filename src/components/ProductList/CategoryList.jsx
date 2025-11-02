@@ -54,11 +54,11 @@ export default function CategoryList({ categories }) {
               onClick={(e) => {
                 e.preventDefault();
                 startTransition(() => {
-                  router.push(category.url + "?OrderBy=2");
+                  router.push(category.url + "?OrderBy=5");
                 });
               }}
               key={category.id}
-              href={category.url + "?OrderBy=2"}
+              href={category.url + "?OrderBy=5"}
               className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300 z-50 relative group"
             >
               <div className="flex flex-col items-center text-center">

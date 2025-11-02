@@ -43,7 +43,6 @@ function CalculationInstallments() {
   const [installmentMonths, setInstallmentMonths] = useState(10);
   const [prepaymentType, setPrepaymentType] = useState("suggested");
   const [customPrepayment, setCustomPrepayment] = useState("");
-  const [calculationResult, setCalculationResult] = useState(null);
   const [installmentsData, setInstallmentsData] = useState({});
 
   // محاسبات اقساط

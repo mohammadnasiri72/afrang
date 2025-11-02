@@ -74,7 +74,7 @@ export default function EidDiscount({ actionProducts, products }) {
                   <button
                     onClick={() => {
                       startTransition(() => {
-                        router.push(`/products?onlyfest=1&orderby=2`);
+                        router.push(`/products?onlyfest=1&orderby=5`);
                       });
                     }}
                     className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
@@ -147,7 +147,7 @@ export default function EidDiscount({ actionProducts, products }) {
               <div
                 onClick={() => {
                   startTransition(() => {
-                    router.push(`/products?onlyfest=1&orderby=2`);
+                    router.push(`/products?onlyfest=1&orderby=5`);
                   });
                 }}
                 className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"

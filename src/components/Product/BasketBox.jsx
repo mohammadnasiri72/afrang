@@ -195,11 +195,13 @@ function BasketBox({ product }) {
             )}
         </div>
       </div>
-      <ModalInstallment
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        product={product}
-      />
+      {product?.product?.finalPrice > 0 && (
+        <ModalInstallment
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          product={product}
+        />
+      )}
     </>
   );
 }

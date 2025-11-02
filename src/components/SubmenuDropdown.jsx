@@ -81,7 +81,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       <div 
         ref={boxRef}
         onWheel={handleWheel}
-        className="rounded-b-xl relative"
+        className="rounded-b-xl relative !pt-1"
         style={{
           height: MENU_HEIGHT,
           overflowX: needsHorizontalScroll ? "auto" : "hidden",

@@ -120,9 +120,9 @@ function SelectCategoryFilter({ resultFilter }) {
     setSelectedBrands([]);
     setValuePrice([0, resultFilter.maxPrice]);
 
-    // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=2
+    // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=5
     const params = new URLSearchParams();
-    params.set("OrderBy", "2");
+    params.set("OrderBy", "5");
     startTransition(() => {
       router.push(`${window.location.pathname}?${params.toString()}`);
     });

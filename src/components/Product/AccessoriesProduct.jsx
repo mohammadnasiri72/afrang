@@ -37,9 +37,21 @@ function AccessoriesProduct({ product, relatedProducts }) {
   ];
 
   // Filter products based on selected category
-  const filteredProducts = relatedProducts.filter(
-    (item) => item.categoryTitle === categories[accessoriesProductId - 1]
-  );
+  const filteredProducts = relatedProducts
+    .filter(
+      (item) => item.categoryTitle === categories[accessoriesProductId - 1]
+    )
+    .sort((a, b) => {
+      // اول بر اساس statusId سورت می‌کنیم (موجود ها اول)
+      if (a.statusId !== b.statusId) {
+        return a.statusId - b.statusId; // statusId کوچکتر (موجود) اول بیاد
+      }
+
+      // اگر statusId یکسان بود، بر اساس finalPrice سورت می‌کنیم
+      const priceA = a.finalPrice || 0;
+      const priceB = b.finalPrice || 0;
+      return priceB - priceA; // قیمت بالاتر اول
+    });
 
   // اسلایدر ستونی: هر اسلاید ۵ محصول زیر هم
   const groupSize = 5;

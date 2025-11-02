@@ -13,7 +13,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import { Select } from "antd";
+import { Button as AntButton, Input, Select, Space } from "antd";
 import { useEffect, useState } from "react";
 import {
   FaCalculator,
@@ -23,6 +23,7 @@ import {
   FaTimes,
   FaWallet,
 } from "react-icons/fa";
+import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
 import Swal from "sweetalert2";
 
 const Toast = Swal.mixin({
@@ -40,13 +41,38 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
   const [loading, setLoading] = useState(false);
   const [installmentsData, setInstallmentsData] = useState({});
   const [selectedMonths, setSelectedMonths] = useState(10);
+  const [prepaymentType, setPrepaymentType] = useState("suggested");
+  const [customPrepayment, setCustomPrepayment] = useState("");
+
+
+  // تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
+  const toEnglishNumber = (number) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
+  };
+
+  const prepaymentSelect = (
+    <Select
+      value={prepaymentType}
+      onChange={(e) => {
+        setPrepaymentType(e);
+        setCustomPrepayment("");
+      }}
+      style={{ width: 120 }}
+    >
+      <Option value="suggested">پیشنهادی</Option>
+      <Option value="custom">انتخابی</Option>
+    </Select>
+  );
 
   const handleAmountes = async () => {
     setLoading(true);
     const data = {
       total: product.product.finalPrice,
       number: selectedMonths,
-      prePayment: 0,
+      prePayment: !customPrepayment
+        ? 0
+        : Number(customPrepayment.replace(/,/g, "")),
     };
     try {
       const csrf = await getCsrf();
@@ -63,7 +89,6 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-       
       });
     } finally {
       setLoading(false);
@@ -142,52 +167,109 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                 zIndex: 9999,
               }}
             >
-              <div className="flex items-center gap-1 sm:flex-nowrap flex-wrap">
-                <Typography
-                  sx={{ mb: 1, fontFamily: "inherit", whiteSpace: "nowrap" }}
-                >
-                  تعداد اقساط را انتخاب کنید
-                </Typography>
-                <Select
-                  value={selectedMonths}
-                  onChange={handleMonthsChange}
-                  size="middle"
-                  style={{
-                    fontFamily: '"Yekan", "Vazir", sans-serif',
-                    zIndex: 10000,
-                  }}
-                  styles={{
-                    popup: {
-                      zIndex: 10001,
-                    },
-                  }}
-                  popupRender={(menu) => (
-                    <div
-                      style={{
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:flex-nowrap flex-wrap">
+                  <Typography
+                    sx={{ fontFamily: "inherit", whiteSpace: "nowrap" }}
+                  >
+                    تعداد اقساط
+                  </Typography>
+                  <Select
+                    value={selectedMonths}
+                    onChange={handleMonthsChange}
+                    size="middle"
+                    style={{
+                      fontFamily: '"Yekan", "Vazir", sans-serif',
+                      zIndex: 10000,
+                    }}
+                    styles={{
+                      popup: {
                         zIndex: 10001,
-                        fontFamily: '"Yekan", "Vazir", sans-serif',
-                        direction: "rtl",
+                      },
+                    }}
+                    popupRender={(menu) => (
+                      <div
+                        style={{
+                          zIndex: 10001,
+                          fontFamily: '"Yekan", "Vazir", sans-serif',
+                          direction: "rtl",
+                        }}
+                      >
+                        {menu}
+                      </div>
+                    )}
+                    getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                  >
+                    {Array.from({ length: 22 }, (_, i) => i + 3).map(
+                      (month) => (
+                        <Option
+                          key={month}
+                          value={month}
+                          style={{
+                            fontFamily: '"Yekan", "Vazir", sans-serif',
+                            direction: "rtl",
+                            textAlign: "right",
+                          }}
+                        >
+                          {month} ماهه
+                        </Option>
+                      )
+                    )}
+                  </Select>
+                </div>
+                <div className="mb-1">
+                  <Space.Compact style={{ width: "100%" }}>
+                    <Input
+                      type="tel"
+                      addonBefore={prepaymentSelect}
+                      value={
+                        prepaymentType === "suggested" ? "" : customPrepayment
+                      }
+                      onChange={(e) => {
+                        const raw = toEnglishNumber(e.target.value).replace(
+                          /,/g,
+                          ""
+                        );
+                        if (/^[1-9][0-9]*$/.test(raw) || raw === "") {
+                          const formatted =
+                            raw === "" ? "" : Number(raw).toLocaleString();
+                          setCustomPrepayment(formatted);
+                        }
                       }}
-                    >
-                      {menu}
-                    </div>
-                  )}
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                >
-                  {Array.from({ length: 22 }, (_, i) => i + 3).map((month) => (
-                    <Option
-                      key={month}
-                      value={month}
-                      style={{
-                        fontFamily: '"Yekan", "Vazir", sans-serif',
-                        direction: "rtl",
-                        textAlign: "right",
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (
+                            prepaymentType !== "suggested" &&
+                            customPrepayment
+                          ) {
+                            handleAmountes();
+                          }
+                        }
                       }}
+                      disabled={prepaymentType === "suggested"}
+                      placeholder={
+                        prepaymentType === "suggested"
+                          ? "پیش پرداخت پیشنهادی"
+                          : "مثال: ۳,۰۰۰,۰۰۰"
+                      }
+                      style={{ marginTop: 4 }}
+                      size="middle"
+                    />
+                    <AntButton
+                      onClick={() => {
+                        handleAmountes();
+                      }}
+                      disabled={
+                        prepaymentType === "suggested" || !customPrepayment
+                      }
+                      className="!mt-1"
+                      type="primary"
                     >
-                      {month} ماهه
-                    </Option>
-                  ))}
-                </Select>
+                      <MdOutlineSubdirectoryArrowRight />
+                    </AntButton>
+                  </Space.Compact>
+                </div>
               </div>
             </Box>
 
@@ -297,7 +379,8 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
               <Typography fontFamily="inherit">
                 لطفا جهت اعتبار سنجی نام و نام خانوادگی، شماره موبایل و کدملی
                 دارنده چک را به شماره
-                <Link className="px-2"
+                <Link
+                  className="px-2"
                   href={`https://wa.me/989013450132`}
                   target="_blank"
                   rel="noopener noreferrer"

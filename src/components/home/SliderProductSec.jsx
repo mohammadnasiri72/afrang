@@ -64,7 +64,7 @@ export default function SliderProductSec({
             <div
               onClick={() => {
                 startTransition(() => {
-                  router.push(`/products?conditionId=20&orderby=2`);
+                  router.push(`/products?conditionId=20&orderby=5`);
                 });
               }}
               className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
