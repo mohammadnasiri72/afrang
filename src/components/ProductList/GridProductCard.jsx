@@ -85,7 +85,10 @@ function GridProductCard({ product, startTransition }) {
                 <ShowImgProduct product={product} />
               </div>
               <div className="w-full">
-                <CompareButtonBtn id={product?.productId} />
+                <CompareButtonBtn
+                  id={product?.productId}
+                  startTransition={startTransition}
+                />
               </div>
             </div>
           </div>
@@ -127,12 +130,11 @@ function GridProductCard({ product, startTransition }) {
                 <span className="text-sm line-through text-[#222]">
                   {product?.price1?.toLocaleString()}
                 </span>
-                {
-                  product.showOffPercent &&
-                <span className="text-white bg-[#d1182b] px-2 py-0.5 rounded-sm text-sm">
-                  {product.discount}%
-                </span>
-                }
+                {product.showOffPercent && (
+                  <span className="text-white bg-[#d1182b] px-2 py-0.5 rounded-sm text-sm">
+                    {product.discount}%
+                  </span>
+                )}
               </div>
             </div>
           )}

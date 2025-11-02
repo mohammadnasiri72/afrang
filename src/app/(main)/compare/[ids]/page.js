@@ -148,10 +148,12 @@ const DynamicComparePage = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      if (scrollY <= parentRef?.current?.clientHeight - 200) {
-        setAffixActive(true);
-      } else {
-        setAffixActive(false);
+      if (parentRef?.current?.clientHeight) {
+        if (scrollY <= parentRef?.current?.clientHeight - 200) {
+          setAffixActive(true);
+        } else {
+          setAffixActive(false);
+        }
       }
     };
     window.addEventListener("scroll", handleScroll);
