@@ -1,4 +1,3 @@
-
 import { FaFileAlt } from "react-icons/fa";
 
 function DetailsProduct({ product }) {

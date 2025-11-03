@@ -75,20 +75,12 @@ export default function SliderProductSec({
           </div>
           <div className="relative w-full ">
             <Swiper
-              modules={[Autoplay, Navigation, EffectCoverflow]}
+              modules={[Autoplay, Navigation]}
               spaceBetween={20}
               slidesPerView={2}
               loop={true}
               grabCursor={true}
-              centeredSlides={true}
-              effect="coverflow"
-              coverflowEffect={{
-                rotate: 20,
-                stretch: 20,
-                depth: 200,
-                modifier: 1,
-                slideShadows: true,
-              }}
+              centeredSlides={false}
               navigation={{
                 nextEl: ".creative-next",
                 prevEl: ".creative-prev",
@@ -327,20 +319,12 @@ export default function SliderProductSec({
           {productsData.length > 0 && (
             <div className="relative w-full ">
               <Swiper
-                modules={[Autoplay, Navigation, EffectCoverflow]}
+                modules={[Autoplay, Navigation]}
                 spaceBetween={20}
                 slidesPerView={2}
                 loop={true}
                 grabCursor={true}
-                centeredSlides={true}
-                effect="coverflow"
-                coverflowEffect={{
-                  rotate: 20,
-                  stretch: 20,
-                  depth: 200,
-                  modifier: 1,
-                  slideShadows: true,
-                }}
+                centeredSlides={false}
                 navigation={{
                   nextEl: ".creative-next",
                   prevEl: ".creative-prev",

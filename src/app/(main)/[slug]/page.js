@@ -1,5 +1,6 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import { getItemByUrl } from "@/services/Item/item";
+import { getImageUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
 import CalculationInstallments from "./CalculationInstallments";
 
@@ -27,6 +28,7 @@ export default async function DynamicPage({ params }) {
             {data.image && (
               <div className="float-right ml-6 !mb-6">
                 <img
+                  src={getImageUrl(data.image)}
                   alt={data.title}
                   className="w-full h-auto rounded-lg shadow-lg"
                 />

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const title = `افرنگ | لیست محصولات ${
+    const title = ` لیست محصولات ${
       resultFilter?.category?.seoTitle
         ? resultFilter?.category?.seoTitle
         : resultFilter?.category?.title

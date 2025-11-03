@@ -18,6 +18,7 @@ import Loading from "../Loading";
 const SliderHome = ({ sliderItems }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
   return (
     <>
       <div className="relative w-full h-64 slider-homePage">
@@ -44,19 +45,38 @@ const SliderHome = ({ sliderItems }) => {
               <SwiperSlide key={item.id}>
                 <div className="block w-full h-full">
                   <div className="relative w-full h-full cursor-pointer group">
-                    <Image
-                      src={getImageUrl(item.image)}
-                      alt={item.title || "تصویر"}
-                      fill
-                      priority
-                      fetchPriority="high"
-                      sizes="100vw"
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                      unoptimized
-                    />
+                    <div className="sm:hidden block">
+                      <Image
+                        src={getImageUrl(
+                          item.imageMobile ? item.imageMobile : item.image
+                        )}
+                        alt={item.title || "تصویر"}
+                        fill
+                        priority
+                        fetchPriority="high"
+                        sizes="100vw"
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                        unoptimized
+                      />
+                    </div>
+                    <div className="sm:block hidden">
+                      <Image
+                        src={getImageUrl(item.image)}
+                        alt={item.title || "تصویر"}
+                        fill
+                        priority
+                        fetchPriority="high"
+                        sizes="100vw"
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                        unoptimized
+                      />
+                    </div>
 
                     {/* دکمه روی عکس */}
                     {item.sourceLink && item.sourceLink !== "/" && (

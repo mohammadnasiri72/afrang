@@ -78,7 +78,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       ? `${columns.length * COLUMN_PIXEL_WIDTH}px`
       : "100%";
     return (
-      <div 
+      <div
         ref={boxRef}
         onWheel={handleWheel}
         className="rounded-b-xl relative !pt-1"
@@ -115,10 +115,9 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
             return (
               <div
                 key={colIdx}
-                className={`relative flex flex-col h-[68vh]`}
+                className={`relative flex flex-col h-[68vh]  w-full`}
                 style={{
-                  width: columnWidth,
-                  flex: `0 0 ${columnWidth}`,
+                  width: containerWidth,
                 }}
               >
                 {col.map((item, idx) => (
@@ -166,7 +165,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                   </Link>
                 ))}
                 {shouldShowImageHere && (
-                  <div className="w-full h-[68vh] flex items-end justify-center flex-col">
+                  <div className="w-full h-[68vh] flex items-center justify-center flex-col">
                     <img
                       src={
                         activeMenu?.image
@@ -174,7 +173,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                           : "/images/best-video-cameras.png"
                       }
                       alt=""
-                      className="w-full object-contain"
+                      className="w-full object-contain max-w-96"
                     />
                   </div>
                 )}
