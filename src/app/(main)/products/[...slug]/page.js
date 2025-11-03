@@ -30,7 +30,7 @@ async function ProductContent({ id, searchParams }) {
   const resultFilter = await getCategoryChild(id);
 
   const page = params?.page ? parseInt(params.page) : 1;
-  const orderBy = params?.orderby ? parseInt(params.orderby) : "";
+  const orderBy = params?.orderby ? parseInt(params.orderby) : 5;
   const layout = params?.layout ? params.layout : "list";
   const price1 = params?.price1 ? parseInt(params.price1) : 0;
   const price2 = params?.price2 ? parseInt(params.price2) : 100000;
