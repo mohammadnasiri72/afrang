@@ -6,6 +6,7 @@ import SocialNetworks from "@/components/SocialNetworks";
 import SubFooter from "@/components/SubFooter";
 import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
+import { getItem } from "@/services/Item/item";
 import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
 import { Suspense } from "react";
@@ -27,6 +28,10 @@ export const metadata = {
 };
 export default async function layoutMain({ children }) {
   const settings = await getSettings();
+   const socialNetworks = await getItem({
+        TypeId: 8,
+        LangCode: "fa",
+      });
 
   const HeaderNavbarSkeleton = () => {
     return (
@@ -121,26 +126,7 @@ export default async function layoutMain({ children }) {
     );
   };
 
-  const LoadingSkeletonBrand = () => {
-    return (
-      <div className="sm:px-16 px-2 bg-[#f6f6f6] relative z-50">
-        <div className="absolute left-0 -top-52">
-          <img src="/images/bg-shadow-1.png" />
-        </div>
-        <div className="absolute right-0 top-0">
-          <img src="/images/bg-shadow-2.png" />
-        </div>
-        <div className="flex gap-2 overflow-hidden justify-between items-center">
-          {[...Array(6)].map((_, index) => (
-            <div
-              key={index}
-              className="w-36 h-36 bg-gray-200 animate-pulse rounded-lg flex-shrink-0"
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
+  
 
   const LoadingSkeletonSupport = () => {
     return (
@@ -285,7 +271,7 @@ export default async function layoutMain({ children }) {
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>
       <main>
-        <SocialNetworks />
+        <SocialNetworks socialNetworks={socialNetworks}/>
         {children}
         {/* <Suspense fallback={<LoadingSkeletonBrand />}>
           <BoxImgBrandingSSR />
@@ -299,7 +285,7 @@ export default async function layoutMain({ children }) {
       </main>
       <footer>
         <Suspense fallback={<FooterSkeleton />}>
-          <FooterSSR settings={settings} />
+          <FooterSSR settings={settings} socialNetworks={socialNetworks}/>
         </Suspense>
         <SubFooter />
       </footer>
