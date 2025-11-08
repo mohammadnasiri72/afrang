@@ -1,7 +1,6 @@
 import { getCsrf } from "@/services/csrf/csrf";
 import { getInstallments } from "@/services/Installments/Installments";
 import {
-  Alert,
   Box,
   Button,
   Dialog,
@@ -24,6 +23,7 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 const Toast = Swal.mixin({
@@ -43,13 +43,24 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
   const [selectedMonths, setSelectedMonths] = useState(10);
   const [prepaymentType, setPrepaymentType] = useState("suggested");
   const [customPrepayment, setCustomPrepayment] = useState("");
+  const [flag, setFlag] = useState(false);
+   const { settings } = useSelector((state) => state.settings);
 
+  const siteMobile = settings?.find(
+    (item) => item.propertyKey === "site_social_tel"
+  )?.value;
 
   // تابع تبدیل اعداد فارسی به انگلیسی (برای پردازش)
   const toEnglishNumber = (number) => {
     const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
     return number.toString().replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d));
   };
+
+  useEffect(() => {
+    if (prepaymentType === "suggested" && flag) {
+      handleAmountes();
+    }
+  }, [prepaymentType]);
 
   const prepaymentSelect = (
     <Select
@@ -58,7 +69,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
         setPrepaymentType(e);
         setCustomPrepayment("");
       }}
-      style={{ width: 120 }}
+      style={{ width: 100 }}
     >
       <Option value="suggested">پیشنهادی</Option>
       <Option value="custom">انتخابی</Option>
@@ -98,6 +109,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
   useEffect(() => {
     if (openModal) {
       handleAmountes();
+      setFlag(true)
     }
   }, [openModal, selectedMonths]);
 
@@ -114,11 +126,13 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
       open={openModal}
       onClose={handleClose}
       maxWidth="sm"
-      fullWidth
       sx={{
         "& .MuiDialog-paper": {
           fontFamily: '"Yekan", "Vazir", sans-serif',
           direction: "rtl",
+          p: 0,
+          m: 1,
+          width: "100%",
         },
       }}
     >
@@ -167,13 +181,9 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                 zIndex: 9999,
               }}
             >
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 sm:flex-nowrap flex-wrap">
-                  <Typography
-                    sx={{ fontFamily: "inherit", whiteSpace: "nowrap" }}
-                  >
-                    تعداد اقساط
-                  </Typography>
+              <div className="flex items-center gap-2 sm:flex-nowrap flex-wrap">
+                <div className="flex items-center gap-1 ">
+                  <span className="whitespace-nowrap"> تعداد اقساط</span>
                   <Select
                     value={selectedMonths}
                     onChange={handleMonthsChange}
@@ -217,7 +227,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                     )}
                   </Select>
                 </div>
-                <div className="mb-1">
+                <div className="mb-1 w-full">
                   <Space.Compact style={{ width: "100%" }}>
                     <Input
                       type="tel"
@@ -253,7 +263,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                           ? "پیش پرداخت پیشنهادی"
                           : "مثال: ۳,۰۰۰,۰۰۰"
                       }
-                      style={{ marginTop: 4 }}
+                      style={{ marginTop: 4, width: "100%" }}
                       size="middle"
                     />
                     <AntButton
@@ -276,13 +286,7 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
             <Divider sx={{ my: 1 }} />
 
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <div className="flex justify-between items-center sm:flex-row flex-col bg-[#2e7d3222] rounded-lg py-1 px-3">
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <FaMoneyBillWave style={{ color: "#2e7d32" }} />
                   <Typography color="text.secondary" fontFamily="inherit">
@@ -296,15 +300,9 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                 >
                   {installmentsData?.prePayment?.toLocaleString()} تومان
                 </Typography>
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <div className="flex justify-between items-center sm:flex-row flex-col bg-[#1976d222] rounded-lg py-1 px-3">
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <FaMoneyBillWave style={{ color: "#1976d2" }} />
                   <Typography color="text.secondary" fontFamily="inherit">
@@ -319,15 +317,9 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                   {installmentsData?.amountEachInstallment?.toLocaleString()}{" "}
                   تومان
                 </Typography>
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <div className="flex justify-between items-center sm:flex-row flex-col bg-[#ed6c0222] rounded-lg py-1 px-3">
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <FaCalculator style={{ color: "#ed6c02" }} />
                   <Typography color="text.secondary" fontFamily="inherit">
@@ -342,15 +334,9 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                   {installmentsData?.sumAmountInstallment?.toLocaleString()}{" "}
                   تومان
                 </Typography>
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <div className="flex justify-between items-center sm:flex-row flex-col bg-[#37415122] rounded-lg py-1 px-3">
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <FaWallet style={{ color: "#374151" }} />
                   <Typography color="text.secondary" fontFamily="inherit">
@@ -365,31 +351,34 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                   {installmentsData?.finalAmountInstallment?.toLocaleString()}{" "}
                   تومان
                 </Typography>
-              </Box>
+              </div>
             </Box>
 
-            <Alert
-              severity="info"
-              icon={<FaInfoCircle />}
-              sx={{ mt: 1, fontFamily: "inherit" }}
+            <div
+              className="rounded-lg bg-blue-100 mt-3 p-2"
+
+              // icon={<FaInfoCircle />}
             >
-              <Typography fontWeight="bold" gutterBottom fontFamily="inherit">
-                شرایط ویژه برای اقساط سه ماهه
-              </Typography>
+              <div className="flex items-center gap-1 !text-teal-800">
+                <FaInfoCircle />
+                <span className="font-bold text-lg">
+                  شرایط ویژه برای اقساط سه ماهه
+                </span>
+              </div>
               <Typography fontFamily="inherit">
                 لطفا جهت اعتبار سنجی نام و نام خانوادگی، شماره موبایل و کدملی
                 دارنده چک را به شماره
                 <Link
                   className="px-2"
-                  href={`https://wa.me/989013450132`}
+                  href={`https://wa.me/${siteMobile}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  09128397329
+                  {siteMobile}
                 </Link>
                 از طریق واتس آپ ارسال بفرمایید
               </Typography>
-            </Alert>
+            </div>
 
             <Box
               sx={{

@@ -100,31 +100,24 @@ function BasketBox({ product }) {
               </div>
             ))}
           {/* قابلیت خرید قسطی */}
-          {product?.product?.isInstallmentSale && (
-            // <div className="flex items-center gap-2 px-1 mt-1 bg-blue-50 rounded-md py-1 pr-2 text-blue-700 border border-blue-200">
-            //   <FaCreditCard className="text-blue-500 text-base" />
-            //   <span
-            //     onClick={() => {
-            //       setOpenModal(true);
-            //     }}
-            //     className="text-xs font-semibold underline cursor-pointer hover:text-blue-900 duration-300"
-            //   >
-            //     امکان خرید قسطی این محصول فعال است
-            //   </span>
-            // </div>
-            <Button
-              onClick={() => {
-                setOpenModal(true);
-              }}
-              className=" flex w-full items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300"
-            >
-              <FaCreditCard className="text-blue-500 text-base" />
+          {product?.product?.isInstallmentSale &&
+            product?.product?.finalPrice > 0 && (
+              <Button
+                size="large"
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+                className=" flex w-full !text-[#d1182b] !border-[#d1182b] hover:!bg-red-100 !overflow-hidden  items-center cursor-pointer py-1 px-1 rounded-lg transition-all duration-300"
+              >
+                <div>
+                  <FaCreditCard className="text-[#d1182b] text-base" />
+                </div>
 
-              <span className="text-xs font-medium px-2">
-                امکان خرید قسطی این محصول فعال است
-              </span>
-            </Button>
-          )}
+                <span className="text-sm font-bold px-2 line-clamp-1">
+                  امکان خرید قسطی این محصول فعال است
+                </span>
+              </Button>
+            )}
           <div className="flex items-center gap-3 px-1 mt-3">
             {product?.product?.fastShipping && (
               <div className="flex items-center gap-2  text-[#d1182b]">

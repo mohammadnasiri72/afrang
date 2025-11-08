@@ -6,6 +6,7 @@ import SocialNetworks from "@/components/SocialNetworks";
 import SubFooter from "@/components/SubFooter";
 import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
+import { getItem } from "@/services/Item/item";
 import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
 import { Suspense } from "react";
@@ -27,6 +28,10 @@ export const metadata = {
 };
 export default async function layoutMain({ children }) {
   const settings = await getSettings();
+   const socialNetworks = await getItem({
+      TypeId: 8,
+      LangCode: "fa",
+    });
 
   const HeaderNavbarSkeleton = () => {
     return (
@@ -285,7 +290,7 @@ export default async function layoutMain({ children }) {
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>
       <main>
-        <SocialNetworks />
+        <SocialNetworks socialNetworks={socialNetworks} settings={settings}/>
         {children}
         <Suspense fallback={<LoadingSkeletonBrand />}>
           <BoxImgBrandingSSR />
@@ -299,7 +304,7 @@ export default async function layoutMain({ children }) {
       </main>
       <footer>
         <Suspense fallback={<FooterSkeleton />}>
-          <FooterSSR settings={settings} />
+          <FooterSSR settings={settings} socialNetworks={socialNetworks}/>
         </Suspense>
         <SubFooter />
       </footer>

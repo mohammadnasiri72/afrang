@@ -121,7 +121,8 @@ export default function PriceListClient({ pricing }) {
       <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
         {Object.entries(groupedProducts).map(
           ([categoryId, { categoryTitle, products }]) => {
-            const filteredProducts = filterProducts(products, categoryId);
+            const filteredProducts = filterProducts(products, categoryId).sort((a,b)=>b.price.replace(/,/g, "") - a.price.replace(/,/g, ""));
+            
             return (
               <div
                 key={categoryId}

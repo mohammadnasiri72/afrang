@@ -23,6 +23,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+
   return (
     <>
       <div className="footer sm:pb-0 pb-16">
@@ -275,21 +276,20 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                     href={item.sourceLink || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-[#434347] p-2 flex items-center justify-center overflow-hidden rounded-lg cursor-pointer duration-300 hover:bg-white hover:!text-[#d1182b] group hover:shadow-lg hover:border-[#0001] border border-transparent"
+                    className="flex items-center justify-center overflow-hidden cursor-pointer duration-300 group"
                   >
-                    {item.itemKey && (
-                      <IconRenderer
-                        className={`text-white group-hover:text-teal-500 duration-300 text-xl ${item.itemKey}`}
-                        iconName={item.itemKey}
-                      />
-                    )}
-                    {!item.itemKey && (
+                    {item.image ? (
                       <img
                         src={mainDomainImg + item.image}
                         alt={item.title || "social network"}
                         className="w-6 h-6 object-contain "
                       />
-                    )}
+                    ) : item.itemKey ? (
+                      <IconRenderer
+                        className={`text-slate-800 group-hover:!text-[#d1182b] duration-300 text-xl ${item.itemKey}`}
+                        iconName={item.itemKey}
+                      />
+                    ) : null}
                   </Link>
                 ))}
               </div>

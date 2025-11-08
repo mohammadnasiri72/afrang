@@ -11,6 +11,7 @@ import {
   FaRegUser,
 } from "react-icons/fa6";
 import { GoMail } from "react-icons/go";
+import { IoLocationOutline } from "react-icons/io5";
 import { LuTag } from "react-icons/lu";
 import {
   TbArrowBadgeLeftFilled,
@@ -149,7 +150,7 @@ function BodyContact() {
         csrf: csrf.csrfToken,
         ...formData,
       };
-      
+
       const response = await PostContactForm(data);
 
       if (response) {
@@ -208,6 +209,9 @@ function BodyContact() {
   )?.value;
   const siteWorkingHours = settings?.find(
     (item) => item.propertyKey === "site_worktime"
+  )?.value;
+  const siteAddress = settings?.find(
+    (item) => item.propertyKey === "site_address1"
   )?.value;
 
   const renderContactCards = () => {
@@ -347,6 +351,26 @@ function BodyContact() {
             </div>
           </>
         );
+      case "آدرس":
+        return (
+          <>
+            <div className="w-full lg:w-1/3 p-3">
+              <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                    <IoLocationOutline />
+                  </div>
+                </div>
+                <div className="py-4 px-2 sm:pl-[50px]">
+                  <span className="text-[#616161] text-[13px] font-bold">
+                    آدرس
+                  </span>
+                  <p className="!mb-0">{siteAddress}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        );
 
       default:
         return null;
@@ -377,8 +401,9 @@ function BodyContact() {
           options={[
             "شماره های تماس",
             "فکس و سایر تلفن ها",
-            "ایمیل و کد پستی",
+            "آدرس",
             "ساعات کار",
+            "ایمیل و کد پستی",
           ]}
         />
       </div>

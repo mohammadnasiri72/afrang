@@ -16,7 +16,7 @@ async function SliderProductSecSSR({ mainBanner }) {
     OrderBy: 1,
     IsArchive: 0,
     IsActive: 1,
-  });
+  });  
 
   return (
     <SliderProductSec

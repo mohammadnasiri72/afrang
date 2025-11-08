@@ -424,7 +424,7 @@ html {
 }
 .SegmentedContact .ant-segmented {
   background-color: #dedede;
-  width: 600px;
+  width: 800px;
 }
 .SegmentedCard .ant-segmented-item:hover {
   color: blue !important;

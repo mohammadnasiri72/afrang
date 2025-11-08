@@ -23,6 +23,7 @@ export default async function ProductDetails(props) {
   const id = Number(slug.slug[0]);
   const product = await getProductId(id);
 
+
   // Record the visit with IP and User Agent
   try {
     await itemVisit(
