@@ -1,6 +1,8 @@
 import { getProductPricing } from "@/services/products/productService";
 import PriceListClient from "./PriceListClient";
 
+const collator = new Intl.Collator("fa", { sensitivity: "base" });
+
 export const revalidate = 60; // Revalidate every minute
 
 export default async function PriceListPage({ params }) {

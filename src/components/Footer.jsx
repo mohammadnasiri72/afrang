@@ -271,18 +271,18 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
               <div className="flex gap-3 mt-4 justify-center sm:justify-start">
                 {socialNetworks?.map((item) => (
                   <Link
-                    aria-label="شبکه های اجتماعی"
+                    aria-label={item.title}
                     key={item.id}
                     href={item.sourceLink || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center overflow-hidden cursor-pointer duration-300 group"
+                    className="flex w-6 h-6 items-center justify-center overflow-hidden cursor-pointer duration-300 group"
                   >
                     {item.image ? (
                       <img
                         src={mainDomainImg + item.image}
                         alt={item.title || "social network"}
-                        className="w-6 h-6 object-contain "
+                        className="object-contain "
                       />
                     ) : item.itemKey ? (
                       <IconRenderer

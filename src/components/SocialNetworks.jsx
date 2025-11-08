@@ -26,11 +26,8 @@ const SocialNetworks = ({ socialNetworks, settings }) => {
         <Tooltip placement="left" title={item.title} key={item.id}>
           <Link
             aria-label={item.title}
-            href={`tel:${
-              settings?.find((item) => item.propertyKey === "site_tel")
-                ?.value || "02177615546"
-            }`}
-            className="relative flex items-center justify-center transition duration-200 group"
+            href={item.sourceLink || "#"}
+            className="relative flex items-center justify-center transition duration-200 group w-10 h-10"
           >
             {/* {item.itemKey && (
               <IconRenderer
@@ -60,7 +57,7 @@ const SocialNetworks = ({ socialNetworks, settings }) => {
             settings?.find((item) => item.propertyKey === "site_tel")?.value ||
             "02177615546"
           }`}
-          className="relative bg-white p-2 rounded-full flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group"
+          className="relative bg-white p-2 rounded-full flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group w-10 h-10"
         >
           <TbPhoneCall className="text-[#d1182b] group-hover:text-teal-500 duration-300 text-xl" />
         </Link>

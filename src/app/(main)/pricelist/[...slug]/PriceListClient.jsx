@@ -66,6 +66,8 @@ export default function PriceListClient({ pricing }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  console.log(pricing);
+
   // Group products by category
   const groupedProducts =
     pricing?.reduce((acc, product) => {
@@ -79,6 +81,17 @@ export default function PriceListClient({ pricing }) {
       acc[categoryId].products.push(product);
       return acc;
     }, {}) || {};
+
+  // const groupedProducts = Object.entries(sortedGroups)
+  // .sort(([, a], [, b]) =>
+  //   a.categoryTitle.localeCompare(b.categoryTitle, "fa")
+  // )
+  // .reduce((acc, [key, value]) => {
+  //   acc[key] = value
+  //   return acc
+  // }, {})
+  // const groupedProducts = Object.values(sortedGroups)
+  // .sort((a, b) => a.categoryTitle.localeCompare(b.categoryTitle, "fa"));
 
   const handleSearch = (categoryId, value) => {
     setSearchTerms((prev) => ({
@@ -121,8 +134,17 @@ export default function PriceListClient({ pricing }) {
       <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
         {Object.entries(groupedProducts).map(
           ([categoryId, { categoryTitle, products }]) => {
-            const filteredProducts = filterProducts(products, categoryId).sort((a,b)=>b.price.replace(/,/g, "") - a.price.replace(/,/g, ""));
-            
+            const filteredProducts = filterProducts(products, categoryId).sort(
+              (a, b) => {
+                // اول بر اساس statusId گروه‌بندی کن
+                if (a.statusId !== b.statusId) {
+                  return a.statusId - b.statusId;
+                }
+                // اگر statusId برابر بود، بر اساس price صعودی مرتب کن
+                return b.price.replace(/,/g, "") - a.price.replace(/,/g, "");
+              }
+            );
+
             return (
               <div
                 key={categoryId}
