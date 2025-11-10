@@ -23,6 +23,27 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  const coordinates = settings?.find(
+    (item) => item.propertyKey === "site_geo_location"
+  )?.value;
+
+  const [lat, lng] = coordinates.split(",").map((coord) => coord.trim());
+
+  const handleNavigation = () => {
+    // استفاده از geo URI استاندارد - مثل واتساپ
+    const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
+
+    // فال‌بک به گوگل مپس
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+    // ابتدا geo URI را امتحان می‌کنیم (باز کردن انتخاب‌گر اپ‌ها)
+    window.location.href = geoUrl;
+
+    // اگر بعد از 1 ثانیه صفحه رفرش نشد (یعنی geo کار نکرد)
+    setTimeout(() => {
+      window.open(mapsUrl, "_blank");
+    }, 1000);
+  };
 
   return (
     <>
@@ -53,16 +74,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                     }
                     className="relative overflow-hidden !w-12 !h-12"
                   >
-                    {/* <img
-                      className="w-20 "
-                      src={
-                        mainDomainImg +
-                        settings?.find(
-                          (item) => item.propertyKey === "site_footer_logo"
-                        )?.value
-                      }
-                      alt=""
-                    /> */}
                     <Image
                       className={`object-contain ${
                         isLoaded ? "opacity-100" : "opacity-0"
@@ -109,8 +120,16 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                       )?.value ?? (
                         <span className="inline-block w-[200px] h-[1em] bg-gray-200 animate-pulse align-middle rounded" />
                       )}
+                      <button
+                        onClick={handleNavigation}
+                        className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 !text-white cursor-pointer px-3 py-1 rounded-xl transition-all duration-300 text-lg font-semibold flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+                      >
+                        <span>📍</span>
+                        <span>مسیریابی</span>
+                      </button>
                     </span>
                   </div>
+
                   <div className="w-full px-3 text-justify flex sm:justify-start justify-center border-b pb-3 border-[#6666] sm:border-none">
                     <span>
                       <span className="text-[#d1182b] whitespace-nowrap pl-1">

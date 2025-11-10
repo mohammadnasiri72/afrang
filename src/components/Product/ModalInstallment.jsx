@@ -184,10 +184,10 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
               <div className="flex items-center gap-2 sm:flex-nowrap flex-wrap">
                 <div className="flex items-center gap-1 ">
                   <span className="whitespace-nowrap"> تعداد اقساط</span>
-                  <Select
+                  <Select 
                     value={selectedMonths}
                     onChange={handleMonthsChange}
-                    size="middle"
+                    size="large"
                     style={{
                       fontFamily: '"Yekan", "Vazir", sans-serif',
                       zIndex: 10000,
@@ -264,9 +264,9 @@ function ModalInstallment({ openModal, setOpenModal, product }) {
                           : "مثال: ۳,۰۰۰,۰۰۰"
                       }
                       style={{ marginTop: 4, width: "100%" }}
-                      size="middle"
+                      size="large"
                     />
-                    <AntButton
+                    <AntButton size="large"
                       onClick={() => {
                         handleAmountes();
                       }}
