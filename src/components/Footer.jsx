@@ -23,13 +23,15 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  
+
   const coordinates = settings?.find(
     (item) => item.propertyKey === "site_geo_location"
   )?.value;
 
   const [lat, lng] = coordinates.split(",").map((coord) => coord.trim());
 
-  const handleNavigation = () => {
+   const handleNavigation = () => {
     // استفاده از geo URI استاندارد - مثل واتساپ
     const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
 
@@ -44,7 +46,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
       window.open(mapsUrl, "_blank");
     }, 1000);
   };
-
   return (
     <>
       <div className="footer sm:pb-0 pb-16">
@@ -120,13 +121,17 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                       )?.value ?? (
                         <span className="inline-block w-[200px] h-[1em] bg-gray-200 animate-pulse align-middle rounded" />
                       )}
-                      <button
-                        onClick={handleNavigation}
-                        className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 !text-white cursor-pointer px-3 py-1 rounded-xl transition-all duration-300 text-lg font-semibold flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+                      <Link
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                         handleNavigation()
+                        }}
+                        className=" w-32 bg-[#d1182b] !text-white cursor-pointer px-3 py-1 rounded-xl duration-300 font-semibold flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
                       >
                         <span>📍</span>
                         <span>مسیریابی</span>
-                      </button>
+                      </Link>
                     </span>
                   </div>
 
