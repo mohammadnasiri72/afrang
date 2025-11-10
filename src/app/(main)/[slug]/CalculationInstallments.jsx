@@ -122,7 +122,7 @@ function CalculationInstallments() {
                     }}
                     placeholder="مثال: ۱۰,۰۰۰,۰۰۰"
                     style={{ marginTop: 4 }}
-                    size="middle"
+                    size="large"
                   />
                 </Col>
                 <Col span={12}>
@@ -131,7 +131,7 @@ function CalculationInstallments() {
                     value={installmentMonths}
                     onChange={setInstallmentMonths}
                     style={{ width: "100%", marginTop: 4 }}
-                    size="middle"
+                    size="large"
                   >
                     {Array.from({ length: 22 }, (_, i) => i + 3).map(
                       (month) => (
@@ -169,7 +169,7 @@ function CalculationInstallments() {
                       : "مثال: ۳,۰۰۰,۰۰۰"
                   }
                   style={{ marginTop: 4 }}
-                  size="middle"
+                  size="large"
                 />
               </div>
 

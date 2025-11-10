@@ -22,7 +22,7 @@ export default async function DynamicPage({ params }) {
           </div>
         </div>
         {params.slug === "afrang-leasing" && <CalculationInstallments />}
-        <div className="container mx-auto px-4 pb-8 z-50 relative">
+        <div className="md:px-16 mx-auto px-4 pb-8 z-50 relative body-content">
           <h1 className="text-3xl font-bold !mb-6">{data.title}</h1>
           <div className="relative">
             {data.image && (

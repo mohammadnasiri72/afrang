@@ -1,5 +1,6 @@
 import { getProductPricing } from "@/services/products/productService";
 import PriceListClient from "./PriceListClient";
+import { getCategory } from "@/services/Category/categoryService";
 
 const collator = new Intl.Collator("fa", { sensitivity: "base" });
 
@@ -8,8 +9,14 @@ export const revalidate = 60; // Revalidate every minute
 export default async function PriceListPage({ params }) {
   try {
     const id = Number(params.slug[0]);
-   
+
     const pricing = await getProductPricing(id);
+     const categoriesChilds = await getCategory({
+        TypeId: 4,
+        LangCode: "fa",
+        IsActive: 1,
+        ParentIdArray: id,
+      });
 
     if (!pricing || pricing.length === 0) {
       return (
@@ -39,7 +46,7 @@ export default async function PriceListPage({ params }) {
       );
     }
 
-    return <PriceListClient pricing={pricing} />;
+    return <PriceListClient pricing={pricing} categoriesChilds={categoriesChilds} id={id}/>;
   } catch (error) {
     console.error("Error in PriceListPage:", error);
     throw error; // Let error.js handle it

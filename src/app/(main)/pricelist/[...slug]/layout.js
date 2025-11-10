@@ -34,8 +34,14 @@ export default async function PriceListLayout({ children, params }) {
     LangCode: "fa",
     IsHome: 1,
   });
-  const selectedCategory = categories?.find((category) => category.id === id);
 
+  const selectedCategory = categories?.find((category) => category.id === id);
+  const categoriesChilds = await getCategory({
+    TypeId: 4,
+    LangCode: "fa",
+    IsActive: 1,
+    ParentIdArray: id,
+  });
   return (
     <>
       <div className="bg-white">
@@ -53,23 +59,27 @@ export default async function PriceListLayout({ children, params }) {
         </div>
       </div>
       <Container>
-        <div className="pb-8">
-          <div className="!mb-8">
-            <CategorySlider categories={categories} currentId={id} />
-          </div>
-          <div className="flex flex-col items-center gap-2 !mb-8">
+        <div className="">
+          {/* <div className="!mb-8">
+            <CategorySlider
+              categories={categories}
+              currentId={id}
+              categoriesChilds={categoriesChilds}
+            />
+          </div> */}
+          <div className="flex flex-col items-center gap-2 !mt-8">
             <div className="flex justify-center items-start gap-4">
               <TbArrowBadgeLeftFilled className="text-[#d1182b] text-2xl" />
               <h4 className="font-bold text-xl text-[#0a1d39]">
-                لیست قیمت محصولات
+                لیست قیمت محصولات  {selectedCategory && (
+              <span className="font-bold text-xl text-[#18d1be] pr-1">
+                {selectedCategory.title}
+              </span>
+            )}
               </h4>
               <TbArrowBadgeRightFilled className="text-[#d1182b] text-2xl" />
             </div>
-            {selectedCategory && (
-              <h5 className="text-lg text-[#18d1be] font-medium">
-                {selectedCategory.title}
-              </h5>
-            )}
+           
           </div>
           {children}
         </div>

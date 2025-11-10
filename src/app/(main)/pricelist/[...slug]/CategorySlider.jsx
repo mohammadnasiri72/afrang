@@ -1,27 +1,38 @@
 "use client";
 
 import { getImageUrl } from "@/utils/mainDomain";
+import { Skeleton } from "antd";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Loading from "../loading";
 
-export default function CategorySlider({ categories, currentId }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const getPriceListUrl = (url) => {
-    return url.replace("/products/", "/priceList/");
+export default function CategorySlider({ currentId, categoriesChilds }) {
+  const handleCategoryClick = (categoryId) => {
+    // پیدا کردن المنت مربوط به دسته‌بندی
+    const categoryElement = document.getElementById(`category-${categoryId}`);
+
+    if (categoryElement) {
+      // محاسبه موقعیت المنت
+      const elementPosition = categoryElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - 150;
+
+      // اسکرول به موقعیت محاسبه شده
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+
+      // اضافه کردن هایلایت موقت
+      categoryElement.classList.add("highlight-category");
+      setTimeout(() => {
+        categoryElement.classList.remove("highlight-category");
+      }, 2000);
+    }
   };
-
-  // پیدا کردن ایندکس دسته‌بندی انتخاب شده
-  const selectedIndex =
-    categories?.findIndex((category) => category.id === currentId) || 0;
+  
 
   return (
     <>
@@ -31,7 +42,11 @@ export default function CategorySlider({ categories, currentId }) {
           spaceBetween={16}
           slidesPerView={2}
           navigation
-          initialSlide={selectedIndex}
+          initialSlide={
+            categoriesChilds?.findIndex(
+              (category) => category.id === currentId
+            ) || 0
+          }
           breakpoints={{
             640: {
               slidesPerView: 3,
@@ -45,18 +60,11 @@ export default function CategorySlider({ categories, currentId }) {
           }}
           className="category-slider"
         >
-          {categories?.map((category) => (
+          {categoriesChilds?.map((category) => (
             <SwiperSlide key={category.id}>
-              <Link
-                href={getPriceListUrl(category.url)}
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push(getPriceListUrl(category.url));
-                  });
-                }}
-                scroll={false}
-                className={`block group ${
+              <div
+                onClick={() => handleCategoryClick(category.id)}
+                className={`block group cursor-pointer ${
                   category.id === currentId ? " rounded-lg" : ""
                 }`}
               >
@@ -66,14 +74,18 @@ export default function CategorySlider({ categories, currentId }) {
                   }`}
                 >
                   <div className="relative h-24 w-full bg-gray-400 flex items-center justify-center p-2">
-                    <Image
-                      src={getImageUrl(category.image)}
-                      alt={category.title}
-                      width={60}
-                      height={60}
-                      className="object-contain group-hover:scale-105 transition-transform duration-300"
-                      unoptimized
-                    />
+                    {category.image ? (
+                      <Image
+                        src={getImageUrl(category.image)}
+                        alt={category.title}
+                        width={60}
+                        height={60}
+                        className="object-contain group-hover:scale-105 transition-transform duration-300"
+                        unoptimized
+                      />
+                    ) : (
+                      <Skeleton.Image />
+                    )}
                   </div>
                   <div className="p-2 text-center">
                     <h3
@@ -87,7 +99,7 @@ export default function CategorySlider({ categories, currentId }) {
                     </h3>
                   </div>
                 </div>
-              </Link>
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -118,9 +130,25 @@ export default function CategorySlider({ categories, currentId }) {
           .category-slider .swiper-slide-active {
             padding: 0;
           }
+
+          /* استایل برای هایلایت دسته‌بندی */
+          .highlight-category {
+            animation: highlight-pulse 2s ease-in-out;
+          }
+
+          @keyframes highlight-pulse {
+            0% {
+              box-shadow: 0 0 0 0 rgba(24, 209, 190, 0.4);
+            }
+            50% {
+              box-shadow: 0 0 0 10px rgba(24, 209, 190, 0);
+            }
+            100% {
+              box-shadow: 0 0 0 0 rgba(24, 209, 190, 0);
+            }
+          }
         `}</style>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

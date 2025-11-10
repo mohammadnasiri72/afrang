@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Loading from "../loading";
+import CategorySlider from "./CategorySlider";
 
 const EmptyState = () => {
   return (
@@ -61,37 +62,42 @@ const NoResults = () => {
   );
 };
 
-export default function PriceListClient({ pricing }) {
+export default function PriceListClient({ pricing, categoriesChilds , id}) {
   const [searchTerms, setSearchTerms] = useState({});
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  console.log(pricing);
 
-  // Group products by category
+
+  // گروه‌بندی محصولات بر اساس categoriesChilds با اولویت priority
   const groupedProducts =
-    pricing?.reduce((acc, product) => {
-      const categoryId = product.categoryId;
-      if (!acc[categoryId]) {
-        acc[categoryId] = {
-          categoryTitle: product.categoryTitle,
-          products: [],
-        };
-      }
-      acc[categoryId].products.push(product);
-      return acc;
-    }, {}) || {};
+    categoriesChilds
+      ?.sort((a, b) => b.priority - a.priority) // مرتب‌سازی دسته‌ها بر اساس priority (بزرگتر اول)
+      .reduce((acc, category) => {
+        // پیدا کردن محصولاتی که routeId آنها شامل آیدی این دسته باشد
+        const categoryProducts =
+          pricing?.filter((product) => {
+            // ساخت pattern برای جستجو در routeId
+            const pattern = new RegExp(`/${category.id}/`);
+            return pattern.test(product.routeId);
+          }) || [];
 
-  // const groupedProducts = Object.entries(sortedGroups)
-  // .sort(([, a], [, b]) =>
-  //   a.categoryTitle.localeCompare(b.categoryTitle, "fa")
-  // )
-  // .reduce((acc, [key, value]) => {
-  //   acc[key] = value
-  //   return acc
-  // }, {})
-  // const groupedProducts = Object.values(sortedGroups)
-  // .sort((a, b) => a.categoryTitle.localeCompare(b.categoryTitle, "fa"));
+        if (categoryProducts.length > 0) {
+          acc[category.id] = {
+            categoryTitle: category.title,
+            categoryId: category.id,
+            priority: category.priority, // اضافه کردن priority برای استفاده احتمالی
+            products: categoryProducts,
+          };
+        }
+
+        return acc;
+      }, {}) || {};
+
+  // تبدیل groupedProducts به آرایه مرتب شده برای نمایش
+  const sortedGroupedProducts = Object.entries(groupedProducts).sort(
+    ([, groupA], [, groupB]) => groupB.priority - groupA.priority
+  );
 
   const handleSearch = (categoryId, value) => {
     setSearchTerms((prev) => ({
@@ -108,46 +114,49 @@ export default function PriceListClient({ pricing }) {
   };
 
   const formatPrice = (price) => {
-    // اگر قیمت خالی بود، همون رو برگردون
     if (!price) return price;
 
-    // حذف کاماها از قیمت
     const cleanPrice = price.toString().replace(/,/g, "");
 
-    // چک کردن اینکه آیا می‌تونه به عدد تبدیل بشه
     if (!isNaN(cleanPrice) && cleanPrice !== "") {
-      // تبدیل به عدد و اضافه کردن کاما به هر سه رقم
       const formattedNumber = Number(cleanPrice).toLocaleString("fa-IR");
       return `${formattedNumber} تومان`;
     }
 
-    // اگر عدد نبود، همون متن رو برگردون
     return price;
   };
 
-  if (!pricing || pricing.length === 0) {
+  // اگر هیچ محصولی در گروه‌ها وجود ندارد
+  const hasProducts = Object.keys(groupedProducts).length > 0;
+
+  if (!pricing || pricing.length === 0 || !hasProducts) {
     return <EmptyState />;
   }
 
   return (
     <>
+      <div className="!mb-8">
+        <CategorySlider
+          currentId={id}
+          categoriesChilds={categoriesChilds}
+        />
+      </div>
       <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
-        {Object.entries(groupedProducts).map(
-          ([categoryId, { categoryTitle, products }]) => {
+        {sortedGroupedProducts.map(
+          ([categoryId, { categoryTitle, products, priority }]) => {
             const filteredProducts = filterProducts(products, categoryId).sort(
               (a, b) => {
-                // اول بر اساس statusId گروه‌بندی کن
                 if (a.statusId !== b.statusId) {
                   return a.statusId - b.statusId;
                 }
-                // اگر statusId برابر بود، بر اساس price صعودی مرتب کن
                 return b.price.replace(/,/g, "") - a.price.replace(/,/g, "");
               }
             );
 
             return (
-              <div
+              <div 
                 key={categoryId}
+                 id={`category-${categoryId}`}
                 className="bg-white rounded-lg shadow-sm z-50 relative"
               >
                 <div className="border-b border-gray-100 p-4">
@@ -176,9 +185,12 @@ export default function PriceListClient({ pricing }) {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-semibold text-[#0a1d39] text-center">
-                      {categoryTitle}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-[#0a1d39] text-center">
+                        {categoryTitle}
+                      </h3>
+                     
+                    </div>
                     <div className="hidden md:block w-64"></div>
                   </div>
                 </div>
