@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import * as FaIcons from "react-icons/fa";
+import { IoLocationSharp } from "react-icons/io5";
 import Loading from "./Loading";
 import Newsletter from "./Newsletter";
 
@@ -23,15 +24,13 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  
-
   const coordinates = settings?.find(
     (item) => item.propertyKey === "site_geo_location"
   )?.value;
 
   const [lat, lng] = coordinates.split(",").map((coord) => coord.trim());
 
-   const handleNavigation = () => {
+  const handleNavigation = () => {
     // استفاده از geo URI استاندارد - مثل واتساپ
     const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
 
@@ -125,11 +124,21 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                         href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
                         onClick={(e) => {
                           e.preventDefault();
-                         handleNavigation()
+                          handleNavigation();
                         }}
-                        className=" w-32 bg-[#d1182b] !text-white cursor-pointer px-3 py-1 rounded-xl duration-300 font-semibold flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+                        className=" w-32 bg-[#d1182b] !text-white cursor-pointer px-3 py-1 rounded-xl duration-300 font-semibold lg:hidden flex  items-center justify-center gap-3 shadow-lg hover:shadow-xl"
                       >
-                        <span>📍</span>
+                        <IoLocationSharp />
+                        <span>مسیریابی</span>
+                      </Link>
+
+                      <Link
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className=" w-28 lg:flex hidden bg-[#d1182b] !text-white cursor-pointer py-0 rounded-xl duration-300 font-semibold items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+                      >
+                        <IoLocationSharp />
                         <span>مسیریابی</span>
                       </Link>
                     </span>
