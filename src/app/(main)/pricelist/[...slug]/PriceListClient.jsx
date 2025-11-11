@@ -62,34 +62,30 @@ const NoResults = () => {
   );
 };
 
-export default function PriceListClient({ pricing, categoriesChilds , id}) {
+export default function PriceListClient({ pricing, categoriesChilds, id }) {
   const [searchTerms, setSearchTerms] = useState({});
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
- 
-  
-
-
-
   // گروه‌بندی محصولات بر اساس categoriesChilds با اولویت priority
   const groupedProducts =
     categoriesChilds
-      ?.sort((a, b) => b.priority - a.priority) // مرتب‌سازی دسته‌ها بر اساس priority (بزرگتر اول)
+      ?.sort((a, b) => b.priority - a.priority)
       .reduce((acc, category) => {
-        // پیدا کردن محصولاتی که routeId آنها شامل آیدی این دسته باشد
+        // پیدا کردن محصولاتی که routeId + categoryId آنها شامل id دسته‌بندی باشد
         const categoryProducts =
           pricing?.filter((product) => {
-            // ساخت pattern برای جستجو در routeId
-            const pattern = new RegExp(`/${category.id}/`);
-            return pattern.test(product.routeId);
+            // ساخت routeId کامل محصول با اضافه کردن categoryId
+            const productFullRoute = `${product.routeId}${product.categoryId}/`;
+            // چک کردن آیا شامل id دسته‌بندی هست
+            return productFullRoute.includes(`/${category.id}/`);
           }) || [];
 
         if (categoryProducts.length > 0) {
           acc[category.id] = {
             categoryTitle: category.title,
             categoryId: category.id,
-            priority: category.priority, // اضافه کردن priority برای استفاده احتمالی
+            priority: category.priority,
             products: categoryProducts,
           };
         }
@@ -138,10 +134,7 @@ export default function PriceListClient({ pricing, categoriesChilds , id}) {
   return (
     <>
       <div className="!mb-8">
-        <CategorySlider
-          currentId={id}
-          categoriesChilds={categoriesChilds}
-        />
+        <CategorySlider currentId={id} categoriesChilds={categoriesChilds} />
       </div>
       <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
         {sortedGroupedProducts.map(
@@ -156,9 +149,9 @@ export default function PriceListClient({ pricing, categoriesChilds , id}) {
             );
 
             return (
-              <div 
+              <div
                 key={categoryId}
-                 id={`category-${categoryId}`}
+                id={`category-${categoryId}`}
                 className="bg-white rounded-lg shadow-sm z-50 relative"
               >
                 <div className="border-b border-gray-100 p-4">
@@ -191,7 +184,6 @@ export default function PriceListClient({ pricing, categoriesChilds , id}) {
                       <h3 className="text-lg font-semibold text-[#0a1d39] text-center">
                         {categoryTitle}
                       </h3>
-                     
                     </div>
                     <div className="hidden md:block w-64"></div>
                   </div>
@@ -206,13 +198,14 @@ export default function PriceListClient({ pricing, categoriesChilds , id}) {
                   {filteredProducts.length === 0 ? (
                     <NoResults />
                   ) : (
-                    filteredProducts.map((product) => (
+                    filteredProducts.map((product, i) => (
                       <div
                         key={product.productId}
                         className="p-4 hover:bg-gray-50 transition-colors duration-200"
                       >
                         <div className="grid grid-cols-12 gap-4 items-center">
                           <div className="col-span-12 sm:col-span-7 text-center sm:text-right">
+                            <span>{i + 1}</span>
                             <Link
                               href={product.url}
                               onClick={(ev) => {
