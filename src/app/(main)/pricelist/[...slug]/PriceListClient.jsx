@@ -138,7 +138,7 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
       </div>
       <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
         {sortedGroupedProducts.map(
-          ([categoryId, { categoryTitle, products, priority }]) => {
+          ([categoryId, { categoryTitle, products }]) => {
             const filteredProducts = filterProducts(products, categoryId).sort(
               (a, b) => {
                 if (a.statusId !== b.statusId) {

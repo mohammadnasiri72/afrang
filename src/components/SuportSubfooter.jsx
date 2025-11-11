@@ -9,7 +9,7 @@ function SuportSubfooter({ socialNetworks, settings }) {
   return (
     <>
       <BiSupport
-        onClick={() => {
+        onTouchEnd={() => {
           setOpen((e) => !e);
         }}
         className="text-[#d1182b] text-2xl cursor-pointer"
