@@ -271,11 +271,9 @@ export default async function layoutMain({ children }) {
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>
       <main>
-        <SocialNetworks socialNetworks={socialNetworks}/>
+       
         {children}
-        {/* <Suspense fallback={<LoadingSkeletonBrand />}>
-          <BoxImgBrandingSSR />
-        </Suspense> */}
+       
         <div className="h-10"></div>
         <Suspense fallback={<LoadingSkeletonSupport />}>
           <div className="max-w-[2000px] mx-auto overflow-hidden">
@@ -287,7 +285,7 @@ export default async function layoutMain({ children }) {
         <Suspense fallback={<FooterSkeleton />}>
           <FooterSSR settings={settings} socialNetworks={socialNetworks}/>
         </Suspense>
-        <SubFooter />
+        <SubFooter socialNetworks={socialNetworks} settings={settings}/>
       </footer>
     </div>
   );

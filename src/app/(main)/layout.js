@@ -290,7 +290,6 @@ export default async function layoutMain({ children }) {
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>
       <main>
-        <SocialNetworks socialNetworks={socialNetworks} settings={settings}/>
         {children}
         <Suspense fallback={<LoadingSkeletonBrand />}>
           <BoxImgBrandingSSR />
@@ -306,7 +305,7 @@ export default async function layoutMain({ children }) {
         <Suspense fallback={<FooterSkeleton />}>
           <FooterSSR settings={settings} socialNetworks={socialNetworks}/>
         </Suspense>
-        <SubFooter />
+        <SubFooter socialNetworks={socialNetworks} settings={settings}/>
       </footer>
     </div>
   );

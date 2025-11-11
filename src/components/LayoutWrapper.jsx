@@ -313,7 +313,7 @@ export default function LayoutWrapper({
             {menuItems && <HeaderNavbarWrapper menuItems={menuItems} />}
             {!menuItems && <HeaderNavbarSkeleton />}
           </Suspense>
-          <SocialNetworks />
+         
           {children}
           <Suspense fallback={<LoadingSkeletonBrand />}>
             {brandItems && <BoxImgBranding brands={brandItems} />}

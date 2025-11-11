@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaRecycle } from "react-icons/fa";
 import { FaCartShopping, FaTrash } from "react-icons/fa6";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCartOutline, IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
@@ -114,39 +114,12 @@ function ShoppingDrawer({ header, startTransition }) {
         </Badge>
       ) : (
         <div className="relative">
-          <span
+          <IoCartOutline
             onClick={() => {
               dispatch(setOpenShopping(true));
             }}
-            className="text-3xl cursor-pointer inline-block align-middle"
-            style={{ width: "1.2em", height: "1.2em" }}
-          >
-            <svg
-              width="1.2em"
-              height="1.2em"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ display: "block" }}
-            >
-              <rect
-                width="32"
-                height="32"
-                rx="16"
-                fill="#d1182b"
-                fillOpacity="0.08"
-              />
-              <path
-                d="M7 9h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6l1.1-5.6H11.1"
-                stroke="#d1182b"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle cx="13.5" cy="25" r="1.5" fill="#d1182b" />
-              <circle cx="21.5" cy="25" r="1.5" fill="#d1182b" />
-            </svg>
-          </span>
+            className="text-[#d1182b] text-2xl cursor-pointer"
+          />
         </div>
       )}
 

@@ -3,7 +3,7 @@ import BodyProduct from "@/components/Product/BodyProduct";
 import DescProduct from "@/components/Product/DescProduct";
 import TitleProduct from "@/components/Product/TitleProduct";
 import { itemVisit } from "@/services/Item/item";
-import { getProductId } from "@/services/products/productService";
+import { getProductId, getRelatedProductsByIdString } from "@/services/products/productService";
 import { headers } from "next/headers";
 import BasketFixed from "./BasketFixed";
 import PriceFixed from "./PriceFixed";
@@ -22,6 +22,13 @@ export default async function ProductDetails(props) {
   const slug = await params;
   const id = Number(slug.slug[0]);
   const product = await getProductId(id);
+
+   let similarProducts = [];
+    if (product.product?.similarId) {
+      similarProducts = await getRelatedProductsByIdString(
+        product.product.similarId
+      );
+    }
 
 
   // Record the visit with IP and User Agent
@@ -50,12 +57,12 @@ export default async function ProductDetails(props) {
           <div className="xl:px-16">
             <div className="flex">
               <div className="lg:w-3/4 w-full">
-                <TitleProduct product={product} />
+                <TitleProduct product={product} similarProducts={similarProducts}/>
                 <BodyProduct id={id} />
               </div>
               <BasketFixed product={product} />
             </div>
-            <DescProduct id={id} />
+            <DescProduct similarProducts={similarProducts} />
           </div>
         </div>
       )}

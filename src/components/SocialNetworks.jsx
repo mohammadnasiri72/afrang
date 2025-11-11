@@ -14,55 +14,61 @@ export function IconRenderer({ iconName, ...props }) {
   return <IconComponent {...props} />;
 }
 
-const SocialNetworks = ({ socialNetworks, settings }) => {
+const SocialNetworks = ({ socialNetworks, settings, open }) => {
   const socialNetworksIsHome = socialNetworks.filter((e) => e.isHome);
 
   return (
-    <div
-      style={{ zIndex: "60" }}
-      className="fixed sm:bottom-[32px] bottom-44 right-1 flex flex-col gap-3"
-    >
-      {socialNetworksIsHome.map((item) => (
-        <Tooltip placement="left" title={item.title} key={item.id}>
-          <Link
-            aria-label={item.title}
-            href={item.sourceLink || "#"}
-            className="relative flex items-center justify-center transition duration-200 group w-10 h-10"
-          >
-            {/* {item.itemKey && (
+    <>
+     
+
+      <div
+        style={{ zIndex: "100000001" }}
+        className={`fixed duration-300 right-1 flex flex-col gap-3 ${
+          open ? "bottom-20 sm:bottom-[32px]" : "-bottom-56 sm:bottom-[32px]"
+        }`}
+      >
+        {socialNetworksIsHome.map((item) => (
+          <Tooltip placement="left" title={item.title} key={item.id}>
+            <Link
+              aria-label={item.title}
+              href={item.sourceLink || "#"}
+              className="relative flex items-center justify-center transition duration-200 group w-10 h-10"
+            >
+              {/* {item.itemKey && (
               <IconRenderer
                 className="text-[#d1182b] group-hover:text-teal-500 duration-300 text-xl"
                 iconName={item.itemKey}
               />
             )} */}
-            {item.image ? (
-                                  <img
-                                    src={mainDomainImg + item.image}
-                                    alt={item.title || "social network"}
-                                    className="w-10 h-10 object-contain "
-                                  />
-                                ) : item.itemKey ? (
-                                  <IconRenderer
-                                    className={`text-slate-800 group-hover:!text-[#d1182b] duration-300 text-xl ${item.itemKey}`}
-                                    iconName={item.itemKey}
-                                  />
-                                ) : null}
+              {item.image ? (
+                <img
+                  src={mainDomainImg + item.image}
+                  alt={item.title || "social network"}
+                  className="w-10 h-10 object-contain "
+                />
+              ) : item.itemKey ? (
+                <IconRenderer
+                  className={`text-slate-800 group-hover:!text-[#d1182b] duration-300 text-xl ${item.itemKey}`}
+                  iconName={item.itemKey}
+                />
+              ) : null}
+            </Link>
+          </Tooltip>
+        ))}
+        <Tooltip placement="left" title="تماس با ما">
+          <Link
+            aria-label="تماس با ما"
+            href={`tel:${
+              settings?.find((item) => item.propertyKey === "site_tel")
+                ?.value || "02177615546"
+            }`}
+            className="relative bg-white p-2 rounded-full flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group w-10 h-10"
+          >
+            <TbPhoneCall className="text-[#d1182b] group-hover:text-teal-500 duration-300 text-xl" />
           </Link>
         </Tooltip>
-      ))}
-      <Tooltip placement="left" title="تماس با ما">
-        <Link
-          aria-label="تماس با ما"
-          href={`tel:${
-            settings?.find((item) => item.propertyKey === "site_tel")?.value ||
-            "02177615546"
-          }`}
-          className="relative bg-white p-2 rounded-full flex items-center justify-center shadow border border-transparent hover:bg-[#f5f5f5] transition duration-200 group w-10 h-10"
-        >
-          <TbPhoneCall className="text-[#d1182b] group-hover:text-teal-500 duration-300 text-xl" />
-        </Link>
-      </Tooltip>
-    </div>
+      </div>
+    </>
   );
 };
 

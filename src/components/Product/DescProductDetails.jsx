@@ -11,8 +11,10 @@ import Loading from "../Loading";
 import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
 import SelectedInsurance from "./SelectedInsurance";
+import TagsSection from "./TagsSection";
 
-function DescProductDetails({ product }) {
+function DescProductDetails({ product , similarProducts}) {
+  
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -31,6 +33,8 @@ function DescProductDetails({ product }) {
       dispatch(setSelectedColorMode(null));
     }
   }, [product]);
+
+  
 
   return (
     <>
@@ -66,12 +70,6 @@ function DescProductDetails({ product }) {
                 </span>
               </div>
             )}
-            {/* {brand?.title && (
-              <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
-                <span className="text-xs">برند : </span>
-                <span className="text-xs">{brand.title}</span>
-              </div>
-            )} */}
             {product?.product?.brandTitle && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">برند : </span>
@@ -84,6 +82,7 @@ function DescProductDetails({ product }) {
             <span className="text-xs">چاپ</span>
           </div> */}
         </div>
+        <TagsSection data={similarProducts}/>
         {product?.product?.conditionId === 20 && (
           <div className="!mb-5 mt-1">
             <div>
