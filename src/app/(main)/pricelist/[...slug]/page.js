@@ -16,7 +16,7 @@ export default async function PriceListPage({ params }) {
         LangCode: "fa",
         IsActive: 1,
         ParentIdArray: id,
-      });
+      });      
 
     if (!pricing || pricing.length === 0) {
       return (

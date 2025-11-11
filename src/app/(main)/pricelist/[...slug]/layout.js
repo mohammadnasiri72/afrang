@@ -1,9 +1,6 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
-import {
-  getCategory,
-  getCategoryById,
-} from "@/services/Category/categoryService";
+import { getCategory } from "@/services/Category/categoryService";
 import {
   TbArrowBadgeLeftFilled,
   TbArrowBadgeRightFilled,
@@ -11,9 +8,16 @@ import {
 
 export async function generateMetadata({ params }) {
   const id = Number(params.slug[0]);
-  const categories = await getCategoryById(id);
+  const selectedCategory = await getCategory({
+    TypeId: 4,
+    LangCode: "fa",
+     IsActive: 1,
+    ParentIdArray: id,
+  });
+ 
+  
 
-  if (!categories) {
+  if (!selectedCategory[0].parentTitle) {
     return {
       title: "محصولی موجود نیست",
       description: "محصولی در صفحه مورد نظر یافت نشد",
@@ -21,7 +25,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `افرنگ | قیمت محصولات ${categories?.title}`,
+    title: `افرنگ | قیمت محصولات ${selectedCategory[0].parentTitle}`,
   };
 }
 
@@ -31,11 +35,9 @@ export default async function PriceListLayout({ children, params }) {
   const selectedCategory = await getCategory({
     TypeId: 4,
     LangCode: "fa",
-    IsHome: 1,
-     ParentIdArray: id,
+     IsActive: 1,
+    ParentIdArray: id,
   });
-
- 
   return (
     <>
       <div className="bg-white">
@@ -58,15 +60,15 @@ export default async function PriceListLayout({ children, params }) {
             <div className="flex justify-center items-start gap-4">
               <TbArrowBadgeLeftFilled className="text-[#d1182b] text-2xl" />
               <h4 className="font-bold text-xl text-[#0a1d39]">
-                لیست قیمت محصولات  {selectedCategory && (
-              <span className="font-bold text-xl text-[#18d1be] pr-1">
-                {selectedCategory.title}
-              </span>
-            )}
+                لیست قیمت محصولات{" "}
+                {selectedCategory[0].parentTitle && (
+                  <span className="font-bold text-xl text-[#18d1be] pr-1">
+                    {selectedCategory[0].parentTitle}
+                  </span>
+                )}
               </h4>
               <TbArrowBadgeRightFilled className="text-[#d1182b] text-2xl" />
             </div>
-           
           </div>
           {children}
         </div>
