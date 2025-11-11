@@ -67,6 +67,9 @@ export default function PriceListClient({ pricing, categoriesChilds , id}) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+ 
+  
+
 
 
   // گروه‌بندی محصولات بر اساس categoriesChilds با اولویت priority
@@ -128,7 +131,6 @@ export default function PriceListClient({ pricing, categoriesChilds , id}) {
 
   // اگر هیچ محصولی در گروه‌ها وجود ندارد
   const hasProducts = Object.keys(groupedProducts).length > 0;
-
   if (!pricing || pricing.length === 0 || !hasProducts) {
     return <EmptyState />;
   }

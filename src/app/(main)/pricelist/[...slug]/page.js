@@ -2,15 +2,15 @@ import { getProductPricing } from "@/services/products/productService";
 import PriceListClient from "./PriceListClient";
 import { getCategory } from "@/services/Category/categoryService";
 
-const collator = new Intl.Collator("fa", { sensitivity: "base" });
 
-export const revalidate = 60; // Revalidate every minute
+export const revalidate = 60; 
 
 export default async function PriceListPage({ params }) {
   try {
     const id = Number(params.slug[0]);
 
     const pricing = await getProductPricing(id);
+    
      const categoriesChilds = await getCategory({
         TypeId: 4,
         LangCode: "fa",

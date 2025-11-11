@@ -4,82 +4,79 @@ import Swal from "sweetalert2";
 
 // import sweet alert 2
 const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: "toast-modal",
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
 });
 
 export const getCategory = async (params) => {
-    try {
-        const response = await axios.get(`${mainDomain}/api/Category`, {
-            params,
-        });
-        return response.data;
-    } catch (error) {
-        return {type:'error',message:error.response?.data ? error.response?.data : "خطای شبکه"}
-    }
+  try {
+    const response = await axios.get(`${mainDomain}/api/Category`, {
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    return {
+      type: "error",
+      message: error.response?.data ? error.response?.data : "خطای شبکه",
+    };
+  }
 };
 
-
 export const getCategoryById = async (id) => {
-    try {
-       
+  try {
+    const response = await axios.get(`${mainDomain}/api/Category/${id}`);
 
-        const response = await axios.get(`${mainDomain}/api/Category/${id}`);
-
-        return response.data;
-    } catch (error) {
-        Toast.fire({
-            icon: "error",
-            text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
-    }
+    return response.data;
+  } catch (error) {
+    Toast.fire({
+      icon: "error",
+      text: error.response?.data ? error.response?.data : "خطای شبکه",
+    });
+  }
 };
 
 export const getBreadcrumb = async (id) => {
-    try {
-        const params = {
-            id,
-            LangCode: "fa",
-        };
+  try {
+    const params = {
+      id,
+      LangCode: "fa",
+    };
 
-        const response = await axios.get(`${mainDomain}/api/Category/Breadcrumb`, {
-            params,
-        });
+    const response = await axios.get(`${mainDomain}/api/Category/Breadcrumb`, {
+      params,
+    });
 
-        return response.data;
-    } catch (error) {
-        Toast.fire({
-            icon: "error",
-            text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
-        return [];
-    }
+    return response.data;
+  } catch (error) {
+    Toast.fire({
+      icon: "error",
+      text: error.response?.data ? error.response?.data : "خطای شبکه",
+    });
+    return [];
+  }
 };
 
 export const getBreadcrumbProduct = async (id) => {
-    try {
-        const params = {
-            id,
-            LangCode: "fa",
-        };
+  try {
+    const params = {
+      id,
+      LangCode: "fa",
+    };
 
-        const response = await axios.get(`${mainDomain}/api/Item/Breadcrumb`, {
-            params,
-        });
+    const response = await axios.get(`${mainDomain}/api/Item/Breadcrumb`, {
+      params,
+    });
 
-        return response.data;
-    } catch (error) {
-        Toast.fire({
-            icon: "error",
-            text: error.response?.data ? error.response?.data : "خطای شبکه",
-        });
-        return [];
-    }
+    return response.data;
+  } catch (error) {
+    Toast.fire({
+      icon: "error",
+      text: error.response?.data ? error.response?.data : "خطای شبکه",
+    });
+    return [];
+  }
 };
-
-
-
