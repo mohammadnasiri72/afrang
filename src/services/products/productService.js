@@ -17,6 +17,7 @@ export const getProducts = async (data) => {
       ...(data.StatusId && { StatusId: data.StatusId }),
       ...(data.OnlyFest && { OnlyFest: data.OnlyFest }),
       ...(data.ConditionId && { ConditionId: data.ConditionId }),
+      ...(data.Filters && { Filters: data.Filters }),
     };
 
     const response = await axios.get(`${mainDomain}/api/Product`, {

@@ -25,6 +25,18 @@ const PaginationProduct = dynamic(() =>
 // کامپوننت اصلی محتوا
 async function ProductContent({ id, searchParams }) {
   const params = await searchParams;
+   const queryParts = [];
+  
+  for (const [key, value] of Object.entries(params)) {
+    // فقط attr ها رو بگیر
+    if (key.startsWith('attr_')) {
+      queryParts.push(`${key}=${value}`);
+    }
+  }
+  
+  const fullQueryString = queryParts.length > 0 ? `${queryParts.join('&')}` : '';
+  
+ 
 
   const productCategory = await getProductCategory(id);
   const resultFilter = await getCategoryChild(id);
@@ -57,6 +69,7 @@ async function ProductContent({ id, searchParams }) {
       StatusId: statusId,
       OnlyFest: onlyfest,
       ConditionId: conditionId,
+     Filters: fullQueryString
     }),
     getListItemBanner(),
   ]);

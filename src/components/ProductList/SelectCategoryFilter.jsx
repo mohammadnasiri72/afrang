@@ -11,6 +11,7 @@ import { FaAngleUp } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading";
+import FilterProperties from "./FilterProperties";
 
 const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
@@ -512,6 +513,9 @@ function SelectCategoryFilter({ resultFilter }) {
         </div>
       </div>
       {isPending && <Loading />}
+      <div className="flex flex-col gap-2 mt-6 border-t pt-6">
+        <FilterProperties filterData={resultFilter.filterProperties} startTransition={startTransition}/>
+      </div>
     </>
   );
 }
