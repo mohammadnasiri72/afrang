@@ -512,10 +512,17 @@ function SelectCategoryFilter({ resultFilter }) {
           />
         </div>
       </div>
+
+      {resultFilter.filterProperties &&
+        resultFilter.filterProperties.length > 0 && (
+          <div className="flex flex-col gap-2 mt-6 border-t pt-6">
+            <FilterProperties
+              filterData={resultFilter.filterProperties}
+              startTransition={startTransition}
+            />
+          </div>
+        )}
       {isPending && <Loading />}
-      <div className="flex flex-col gap-2 mt-6 border-t pt-6">
-        <FilterProperties filterData={resultFilter.filterProperties} startTransition={startTransition}/>
-      </div>
     </>
   );
 }
