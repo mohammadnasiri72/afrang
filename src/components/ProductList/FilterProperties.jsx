@@ -6,6 +6,7 @@ import { Collapse } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaAngleUp, FaSearch } from "react-icons/fa";
+import { GoDotFill } from "react-icons/go";
 import { useDispatch } from "react-redux";
 
 function FilterProperties({ filterData, startTransition }) {
@@ -35,6 +36,19 @@ function FilterProperties({ filterData, startTransition }) {
 
     setSelectedProperties(initialSelectedProperties);
   }, [searchParams, filterData]);
+
+  // تابع برای گرفتن عنوان مقادیر انتخاب شده
+  const getSelectedValuesTitles = (property) => {
+    const selectedIds = selectedProperties[property.id] || [];
+    if (selectedIds.length === 0) return [];
+
+    return selectedIds.map((id) => property.values?.[id] || "").filter(Boolean);
+  };
+
+  // تابع برای بررسی آیا ویژگی‌ای انتخاب شده است
+  const hasSelectedValues = (property) => {
+    return (selectedProperties[property.id] || []).length > 0;
+  };
 
   const handlePropertyChange = (propertyId, valueId) => {
     dispatch(setFilterLoading(true));
@@ -150,38 +164,58 @@ function FilterProperties({ filterData, startTransition }) {
       return [];
     }
 
-    return filterData.map((property) => ({
-      key: property.id.toString(),
-      label: (
-        <div className="text-[16px] font-semibold select-none">
-          {property.title}
-        </div>
-      ),
-      children: (
-        <div>
-          {/* سرچ باکس فقط وقتی نمایش داده شود که آیتم‌ها بیشتر از ۵ تا باشند */}
-          {Object.keys(property.values || {}).length > 4 && (
-            <div className="!mb-3 relative">
-              <input
-                type="text"
-                placeholder={`جستجو در ${property.title}...`}
-                value={propertySearches[property.id] || ""}
-                onChange={(e) =>
-                  handlePropertySearchChange(property.id, e.target.value)
-                }
-                className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent !text-[16px]"
-              />
-              <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            </div>
-          )}
+    return filterData.map((property) => {
+      const selectedTitles = getSelectedValuesTitles(property);
+      const hasSelections = hasSelectedValues(property);
 
-          {/* لیست مقادیر فیلتر شده */}
-          <div className="overflow-y-auto px-2" style={{ maxHeight: "250px" }}>
-            <FormGroup>{renderPropertyValues(property)}</FormGroup>
+      return {
+        key: property.id.toString(),
+        label: (
+          <div className="flex flex-col items-start gap-1 w-full">
+            <div className="flex items-center gap-2">
+              <span className="text-[16px] font-semibold select-none">
+                {property.title}
+              </span>
+              {hasSelections && (
+                <GoDotFill className="text-teal-500 text-sm" />
+              )}
+            </div>
+            {hasSelections && (
+              <div className="text-xs text-gray-500 font-medium line-clamp-1">
+                {selectedTitles.join("، ")}
+              </div>
+            )}
           </div>
-        </div>
-      ),
-    }));
+        ),
+        children: (
+          <div>
+            {/* سرچ باکس فقط وقتی نمایش داده شود که آیتم‌ها بیشتر از ۵ تا باشند */}
+            {Object.keys(property.values || {}).length > 10 && (
+              <div className="!mb-3 relative">
+                <input
+                  type="text"
+                  placeholder={`جستجو در ${property.title}...`}
+                  value={propertySearches[property.id] || ""}
+                  onChange={(e) =>
+                    handlePropertySearchChange(property.id, e.target.value)
+                  }
+                  className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:border-transparent !text-[16px]"
+                />
+                <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              </div>
+            )}
+
+            {/* لیست مقادیر فیلتر شده */}
+            <div
+              className="overflow-y-auto px-2"
+              style={{ maxHeight: "250px" }}
+            >
+              <FormGroup>{renderPropertyValues(property)}</FormGroup>
+            </div>
+          </div>
+        ),
+      };
+    });
   };
 
   const shouldShowCollapse = filterData && filterData.length > 0;

@@ -4,7 +4,7 @@ import HeaderProductList from "./HeaderProductList";
 import Products from "./Products";
 import { useState, useEffect } from "react";
 
-function BodyProductList({ products, layout }) {
+function BodyProductList({ products, layout , resultFilter}) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ function BodyProductList({ products, layout }) {
 
   return (
     <div className="w-full p-3">
-      <HeaderProductList />
+      <HeaderProductList resultFilter={resultFilter}/>
       <Products products={products} layout={layout} loading={loading} />
     </div>
   );

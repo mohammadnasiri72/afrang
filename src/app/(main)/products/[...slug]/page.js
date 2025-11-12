@@ -121,7 +121,7 @@ async function ProductContent({ id, searchParams }) {
                 </div>
               ) : (
                 <div className="w-full">
-                  <BodyProductList products={products} layout={layout} />
+                  <BodyProductList products={products} layout={layout} resultFilter={resultFilter}/>
                   <div className="flex justify-center mt-8">
                     <PaginationProduct total={products[0].total} />
                   </div>

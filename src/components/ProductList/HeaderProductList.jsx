@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { setLayoutProducts } from "@/redux/slices/layoutProducts";
 
-function HeaderProductList() {
+function HeaderProductList({resultFilter}) {
+  //  const resultFilter = await getCategoryChild(id);
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ function HeaderProductList() {
             </div>
 
             <div className="lg:hidden min-w-fit">
-              <FilterResponsive />
+              <FilterResponsive resultFilter={resultFilter}/>
             </div>
             {sortOptions.map((option) => (
               <span

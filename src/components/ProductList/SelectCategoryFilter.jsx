@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { FaSearch } from "react-icons/fa";
 import { FaAngleUp } from "react-icons/fa6";
+import { GoDotFill } from "react-icons/go";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading";
@@ -55,7 +56,7 @@ function SelectCategoryFilter({ resultFilter }) {
     } else {
       setSelectedBrands([]);
     }
-  }, [searchParams, resultFilter.maxPrice]);
+  }, [searchParams, resultFilter?.maxPrice]);
 
   useEffect(() => {
     setSwitchStates({
@@ -70,6 +71,28 @@ function SelectCategoryFilter({ resultFilter }) {
         searchParams.get("conditionId") === "20",
     });
   }, [searchParams]);
+
+  // تابع برای گرفتن عنوان برندهای انتخاب شده
+  const getSelectedBrandsTitles = () => {
+    return selectedBrands
+      .map((brandId) => {
+        const brand = resultFilter.brands.find(
+          (b) => b.id.toString() === brandId
+        );
+        return brand ? brand.title : "";
+      })
+      .filter(Boolean);
+  };
+
+  // تابع برای بررسی آیا برندی انتخاب شده است
+  const hasSelectedBrands = () => {
+    return selectedBrands.length > 0;
+  };
+
+  // تابع برای بررسی آیا قیمت فیلتر شده است
+  const hasPriceFilter = () => {
+    return valuePrice[0] > 0 || valuePrice[1] < resultFilter.maxPrice;
+  };
 
   const handleBrandChange = (brandid) => {
     dispatch(setFilterLoading(true));
@@ -277,7 +300,24 @@ function SelectCategoryFilter({ resultFilter }) {
     {
       key: "1",
       label: (
-        <div className="text-[16px] font-semibold select-none">دسته بندی</div>
+        <div className="flex flex-col items-start gap-1 w-full">
+          <div className="flex items-center gap-2">
+            <span className="text-[16px] font-semibold select-none">
+              دسته بندی
+            </span>
+            {selectedCategory && (
+              <GoDotFill className="text-teal-500 text-sm" />
+            )}
+          </div>
+          {selectedCategory && (
+            <div className="text-xs text-gray-500 font-medium line-clamp-1">
+              {
+                resultFilter.categories.find((c) => c.id === selectedCategory)
+                  ?.title
+              }
+            </div>
+          )}
+        </div>
       ),
       children: (
         <div>
@@ -299,7 +339,21 @@ function SelectCategoryFilter({ resultFilter }) {
     },
     {
       key: "2",
-      label: <div className="text-[16px] font-semibold select-none">برند</div>,
+      label: (
+        <div className="flex flex-col items-start gap-1 w-full">
+          <div className="flex items-center gap-2">
+            <span className="text-[16px] font-semibold select-none">برند</span>
+            {hasSelectedBrands() && (
+              <GoDotFill className="text-teal-500 text-sm" />
+            )}
+          </div>
+          {hasSelectedBrands() && (
+            <div className="text-xs text-gray-500 font-medium line-clamp-1">
+              {getSelectedBrandsTitles().join("، ")}
+            </div>
+          )}
+        </div>
+      ),
       children: (
         <div>
           <div className="!mb-3 relative">
@@ -321,7 +375,22 @@ function SelectCategoryFilter({ resultFilter }) {
     {
       key: "3",
       label: (
-        <div className="text-[16px] font-semibold select-none">محدوده قیمت</div>
+        <div className="flex flex-col items-start gap-1 w-full">
+          <div className="flex items-center gap-2">
+            <span className="text-[16px] font-semibold select-none">
+              محدوده قیمت
+            </span>
+            {hasPriceFilter() && (
+              <GoDotFill className="text-teal-500 text-sm" />
+            )}
+          </div>
+          {hasPriceFilter() && (
+            <div className="text-xs text-gray-500 font-medium line-clamp-1">
+              از {valuePrice[0].toLocaleString()} تا{" "}
+              {valuePrice[1].toLocaleString()} تومان
+            </div>
+          )}
+        </div>
       ),
       children: (
         <div>
@@ -513,8 +582,8 @@ function SelectCategoryFilter({ resultFilter }) {
         </div>
       </div>
 
-      {resultFilter.filterProperties &&
-        resultFilter.filterProperties.length > 0 && (
+      {resultFilter?.filterProperties &&
+        resultFilter?.filterProperties.length > 0 && (
           <div className="flex flex-col gap-2 mt-6 border-t pt-6">
             <FilterProperties
               filterData={resultFilter.filterProperties}

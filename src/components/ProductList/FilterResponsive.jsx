@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FaSortAmountUp } from "react-icons/fa";
 import SelectCategoryFilter from "./SelectCategoryFilter";
 
-function FilterResponsive() {
+function FilterResponsive({resultFilter}) {
   const [visible, setVisible] = useState(false);
 
  
@@ -22,7 +22,7 @@ function FilterResponsive() {
         popupRender={() => (
           <div className="p-3 mt-3 absolute left-0 right-0">
             <div className=" bg-white rounded-lg p-3 shadow-lg">
-              <SelectCategoryFilter />
+              <SelectCategoryFilter resultFilter={resultFilter}/>
             </div>
           </div>
         )}
