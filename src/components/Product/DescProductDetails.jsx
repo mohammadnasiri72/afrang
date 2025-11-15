@@ -13,8 +13,7 @@ import SelectProductMokamel from "./SelectProductMokamel";
 import SelectedInsurance from "./SelectedInsurance";
 import TagsSection from "./TagsSection";
 
-function DescProductDetails({ product , similarProducts}) {
-  
+function DescProductDetails({ product, similarProducts }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -33,8 +32,6 @@ function DescProductDetails({ product , similarProducts}) {
       dispatch(setSelectedColorMode(null));
     }
   }, [product]);
-
-  
 
   return (
     <>
@@ -82,7 +79,7 @@ function DescProductDetails({ product , similarProducts}) {
             <span className="text-xs">چاپ</span>
           </div> */}
         </div>
-        <TagsSection data={similarProducts}/>
+        {similarProducts.length > 0 && <TagsSection data={similarProducts} />}
         {product?.product?.conditionId === 20 && (
           <div className="!mb-5 mt-1">
             <div>

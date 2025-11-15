@@ -1,10 +1,9 @@
-import { mainDomain } from "@/utils/mainDomain";
 import Link from "next/link";
 
 const TagsSection = ({ data }) => {
   return (
     <div className="px-3 pt-3 shadow-lg border border-[#0001] rounded-lg">
-        <span className="font-bold! text-[#d1182b]!">محصولات مشابه</span>
+      <span className="font-bold! text-[#d1182b]!">محصولات مشابه</span>
       {/* تگ‌ها */}
       <div className="flex flex-wrap gap-2 py-2">
         {data.map((item) => (

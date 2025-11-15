@@ -91,7 +91,7 @@ export default function SliderProductSec({
               }}
               speed={1000}
               breakpoints={{
-                100: { slidesPerView: 1 },
+                100: { slidesPerView: 2 },
                 500: { slidesPerView: 2 },
               }}
               className="relative"
@@ -335,7 +335,7 @@ export default function SliderProductSec({
                 }}
                 speed={1000}
                 breakpoints={{
-                  100: { slidesPerView: 1 },
+                  100: { slidesPerView: 2 },
                   500: { slidesPerView: 2 },
                 }}
                 className="relative"

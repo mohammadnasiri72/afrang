@@ -1,9 +1,9 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import Loading from "../loading";
 import CategorySlider from "./CategorySlider";
 
 const EmptyState = () => {
@@ -205,7 +205,6 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                       >
                         <div className="grid grid-cols-12 gap-4 items-center">
                           <div className="col-span-12 sm:col-span-7 text-center sm:text-right">
-                            <span>{i + 1}</span>
                             <Link
                               href={product.url}
                               onClick={(ev) => {
