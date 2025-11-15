@@ -76,8 +76,9 @@
     "production": [
       "last 2 Chrome versions",
       "last 2 Firefox versions",
-      "last 2 Safari versions",
-      "last 2 Edge versions",
+      "last 4 Safari versions",
+       "iOS >= 11",
+      "last 3 Edge versions",
       "not IE 11"
     ],
     "development": [

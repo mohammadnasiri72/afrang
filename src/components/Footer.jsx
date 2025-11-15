@@ -30,21 +30,60 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
 
   const [lat, lng] = coordinates.split(",").map((coord) => coord.trim());
 
+  // const handleNavigation = () => {
+  //   // استفاده از geo URI استاندارد - مثل واتساپ
+  //   const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
+
+  //   // فال‌بک به گوگل مپس
+  //   const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+  //   // ابتدا geo URI را امتحان می‌کنیم (باز کردن انتخاب‌گر اپ‌ها)
+  //   window.location.href = geoUrl;
+
+  //   // اگر بعد از 1 ثانیه صفحه رفرش نشد (یعنی geo کار نکرد)
+  //   setTimeout(() => {
+  //     window.open(mapsUrl, "_blank");
+  //   }, 1000);
+  // };
+  
   const handleNavigation = () => {
-    // استفاده از geo URI استاندارد - مثل واتساپ
-    const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  
+  // تشخیص دستگاه
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isAndroid = /Android/.test(navigator.userAgent);
 
-    // فال‌بک به گوگل مپس
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-
-    // ابتدا geo URI را امتحان می‌کنیم (باز کردن انتخاب‌گر اپ‌ها)
-    window.location.href = geoUrl;
-
-    // اگر بعد از 1 ثانیه صفحه رفرش نشد (یعنی geo کار نکرد)
+  if (isIOS) {
+    // برای iOS از maps خاص استفاده می‌کنیم
+    const iosMapsUrl = `maps://maps.google.com/maps?daddr=${lat},${lng}`;
+    window.location.href = iosMapsUrl;
+    
+    // فال‌بک بعد از 500ms اگر کار نکرد
     setTimeout(() => {
-      window.open(mapsUrl, "_blank");
-    }, 1000);
-  };
+      if (!document.hidden) {
+        window.open(mapsUrl, "_blank");
+      }
+    }, 500);
+    
+  } else if (isAndroid) {
+    // برای اندروید از geo URI استفاده می‌کنیم
+    const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
+    window.location.href = geoUrl;
+    
+    // فال‌بک بعد از 500ms اگر کار نکرد
+    setTimeout(() => {
+      if (!document.hidden) {
+        window.open(mapsUrl, "_blank");
+      }
+    }, 500);
+    
+  } else {
+    // برای سایر دستگاه‌ها مستقیماً به گوگل مپس
+    window.open(mapsUrl, "_blank");
+  }
+};
+
+
   return (
     <>
       <div className="footer sm:pb-0 pb-16">

@@ -1,8 +1,6 @@
-import BoxImgBrandingSSR from "@/components/BoxImgBrandingSSR";
 import FooterSSR from "@/components/FooterSSR";
 import HeaderNavbarWrapperSSR from "@/components/HeaderNavbarWrapperSSR";
 import ServerError from "@/components/ServerError";
-import SocialNetworks from "@/components/SocialNetworks";
 import SubFooter from "@/components/SubFooter";
 import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
@@ -28,10 +26,10 @@ export const metadata = {
 };
 export default async function layoutMain({ children }) {
   const settings = await getSettings();
-   const socialNetworks = await getItem({
-        TypeId: 8,
-        LangCode: "fa",
-      });
+  const socialNetworks = await getItem({
+    TypeId: 8,
+    LangCode: "fa",
+  });
 
   const HeaderNavbarSkeleton = () => {
     return (
@@ -125,8 +123,6 @@ export default async function layoutMain({ children }) {
       </div>
     );
   };
-
-  
 
   const LoadingSkeletonSupport = () => {
     return (
@@ -271,9 +267,8 @@ export default async function layoutMain({ children }) {
         <HeaderNavbarWrapperSSR settings={settings} />
       </Suspense>
       <main>
-       
         {children}
-       
+
         <div className="h-10"></div>
         <Suspense fallback={<LoadingSkeletonSupport />}>
           <div className="max-w-[2000px] mx-auto overflow-hidden">
@@ -283,9 +278,9 @@ export default async function layoutMain({ children }) {
       </main>
       <footer>
         <Suspense fallback={<FooterSkeleton />}>
-          <FooterSSR settings={settings} socialNetworks={socialNetworks}/>
+          <FooterSSR settings={settings} socialNetworks={socialNetworks} />
         </Suspense>
-        <SubFooter socialNetworks={socialNetworks} settings={settings}/>
+        <SubFooter socialNetworks={socialNetworks} settings={settings} />
       </footer>
     </div>
   );
