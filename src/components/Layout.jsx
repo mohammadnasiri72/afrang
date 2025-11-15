@@ -207,7 +207,6 @@ function Layout({ children, settings }) {
   const { store } = makeStore({
     settings: { settings },
   });
-
   // no client-time dispatch here to avoid hydration mismatch
 
   const pathname = usePathname();

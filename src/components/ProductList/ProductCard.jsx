@@ -152,7 +152,7 @@ function ProductCard({ product, startTransition }) {
 
           {/* دسکتاپ: چیدمان اصلی */}
           <div className="hidden lg:flex w-full h-52 overflow-hidden">
-            <div className=" min-w-52 max-w-52 relative flex items-start justify-center pt-5">
+            <div className=" min-w-52 max-w-52 relative flex items-start justify-center ">
               <div className="relative overflow-hidden rounded-lg group ">
                 <Link
                   href={product.url}
@@ -166,15 +166,15 @@ function ProductCard({ product, startTransition }) {
                 >
                   {product.image && (
                     <Image
-                      className={`object-contain rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
+                      className={`object-contain! p-2! rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
                         product?.statusId !== 1 && product?.conditionId === 20
                           ? "blur-xs"
                           : ""
                       } ${isLoaded ? "opacity-100" : "opacity-0"}`}
                       src={getImageUrl(product.image)}
                       alt={product.title}
-                      width={200}
-                      height={200}
+                      width={100}
+                      height={100}
                       priority={false}
                       unoptimized
                       onLoad={() => {

@@ -22,7 +22,7 @@ function FilterResponsive({resultFilter}) {
         popupRender={() => (
           <div className="p-3 mt-3 absolute left-0 right-0">
             <div className=" bg-white rounded-lg p-3 shadow-lg">
-              <SelectCategoryFilter resultFilter={resultFilter}/>
+              <SelectCategoryFilter resultFilter={resultFilter} setVisible={setVisible}/>
             </div>
           </div>
         )}

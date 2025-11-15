@@ -45,44 +45,42 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   //     window.open(mapsUrl, "_blank");
   //   }, 1000);
   // };
-  
+
   const handleNavigation = () => {
-  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-  
-  // تشخیص دستگاه
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  const isAndroid = /Android/.test(navigator.userAgent);
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
-  if (isIOS) {
-    // برای iOS از maps خاص استفاده می‌کنیم
-    const iosMapsUrl = `maps://maps.google.com/maps?daddr=${lat},${lng}`;
-    window.location.href = iosMapsUrl;
-    
-    // فال‌بک بعد از 500ms اگر کار نکرد
-    setTimeout(() => {
-      if (!document.hidden) {
-        window.open(mapsUrl, "_blank");
-      }
-    }, 500);
-    
-  } else if (isAndroid) {
-    // برای اندروید از geo URI استفاده می‌کنیم
-    const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
-    window.location.href = geoUrl;
-    
-    // فال‌بک بعد از 500ms اگر کار نکرد
-    setTimeout(() => {
-      if (!document.hidden) {
-        window.open(mapsUrl, "_blank");
-      }
-    }, 500);
-    
-  } else {
-    // برای سایر دستگاه‌ها مستقیماً به گوگل مپس
-    window.open(mapsUrl, "_blank");
-  }
-};
+    // تشخیص دستگاه
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isAndroid = /Android/.test(navigator.userAgent);
 
+    if (isIOS) {
+      // برای iOS از maps خاص استفاده می‌کنیم
+      const iosMapsUrl = `maps://maps.google.com/maps?daddr=${lat},${lng}`;
+      window.location.href = iosMapsUrl;
+
+      // فال‌بک بعد از 500ms اگر کار نکرد
+      setTimeout(() => {
+        if (!document.hidden) {
+          window.open(mapsUrl, "_blank");
+        }
+      }, 500);
+    } else if (isAndroid) {
+      // برای اندروید از geo URI استفاده می‌کنیم
+      const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}`;
+      window.location.href = geoUrl;
+
+      // فال‌بک بعد از 500ms اگر کار نکرد
+      setTimeout(() => {
+        if (!document.hidden) {
+          window.open(mapsUrl, "_blank");
+        }
+      }, 500);
+    } else {
+      // برای سایر دستگاه‌ها مستقیماً به گوگل مپس
+      window.open(mapsUrl, "_blank");
+    }
+  };
 
   return (
     <>
@@ -159,27 +157,29 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                       )?.value ?? (
                         <span className="inline-block w-[200px] h-[1em] bg-gray-200 animate-pulse align-middle rounded" />
                       )}
-                      <Link
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleNavigation();
-                        }}
-                        className=" w-32 bg-[#d1182b] !text-white cursor-pointer px-3 py-1 rounded-xl duration-300 font-semibold lg:hidden flex  items-center justify-center gap-3 shadow-lg hover:shadow-xl"
-                      >
-                        <IoLocationSharp />
-                        <span>مسیریابی</span>
-                      </Link>
+                      <div className="flex">
+                        <Link
+                          href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleNavigation();
+                          }}
+                          className="bg-[#d1182b] !text-white cursor-pointer py-0 px-2 rounded-xl duration-300 font-semibold lg:hidden flex  items-center justify-center gap-1 shadow-lg hover:shadow-xl"
+                        >
+                          <IoLocationSharp />
+                          <span>مسیریابی</span>
+                        </Link>
 
-                      <Link
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className=" w-28 lg:flex hidden bg-[#d1182b] !text-white cursor-pointer py-0 rounded-xl duration-300 font-semibold items-center justify-center gap-3 shadow-lg hover:shadow-xl"
-                      >
-                        <IoLocationSharp />
-                        <span>مسیریابی</span>
-                      </Link>
+                        <Link
+                          href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="lg:flex hidden bg-[#d1182b] !text-white cursor-pointer py-0 px-2 rounded-xl duration-300 font-semibold items-center justify-center gap-1 shadow-lg hover:shadow-xl"
+                        >
+                          <IoLocationSharp />
+                          <span>مسیریابی</span>
+                        </Link>
+                      </div>
                     </span>
                   </div>
 

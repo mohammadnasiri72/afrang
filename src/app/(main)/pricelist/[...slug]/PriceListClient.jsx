@@ -190,7 +190,7 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                 </div>
                 <div className="divide-y divide-gray-100">
                   {/* Table Header */}
-                  <div className="hidden sm:grid grid-cols-12 gap-4 p-4 bg-gray-50 text-sm font-medium text-gray-600">
+                  <div className="hidden sm:grid grid-cols-12 gap-4 p-4 bg-gray-50 text-sm font-bold! text-gray-600">
                     <div className="col-span-7">عنوان محصول</div>
                     <div className="col-span-2 text-center">وضعیت</div>
                     <div className="col-span-3 text-center">قیمت</div>

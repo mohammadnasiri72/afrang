@@ -9,7 +9,7 @@ import { useEffect, useState, useTransition } from "react";
 import { FaSearch } from "react-icons/fa";
 import { FaAngleUp } from "react-icons/fa6";
 import { GoDotFill } from "react-icons/go";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline, IoCloseSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading";
 import FilterProperties from "./FilterProperties";
@@ -18,7 +18,7 @@ const theme = createTheme({
   direction: "rtl", // فعال کردن RTL برای تم MUI
 });
 
-function SelectCategoryFilter({ resultFilter }) {
+function SelectCategoryFilter({ resultFilter, setVisible }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -498,7 +498,17 @@ function SelectCategoryFilter({ resultFilter }) {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h4 className="font-semibold text-lg">فیلترها</h4>
+        <div className="flex justify-between items-center! w-full">
+          <span className="font-semibold text-lg">فیلترها</span>
+          <IoCloseSharp
+            onClick={() => {
+              if (setVisible) {
+                setVisible(false);
+              }
+            }}
+            className="text-2xl cursor-pointer"
+          />
+        </div>
         {hasActiveFilters() && (
           <button
             onClick={handleResetFilters}
