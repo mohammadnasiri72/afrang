@@ -45,9 +45,7 @@ export async function generateMetadata() {
   };
 }
 export default async function layoutMain({ children }) {
-  const settings = await getSettings();
-  console.log(settings);
-  
+  const settings = await getSettings();  
    const socialNetworks = await getItem({
       TypeId: 8,
       LangCode: "fa",
