@@ -5,6 +5,10 @@ export const getCsrf = async () => {
   try {
     const response = await axios.get(`${mainDomain}/api/Csrf`, {
       withCredentials: true,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     });
     return response.data;
   } catch (error) {

@@ -16,18 +16,38 @@ import { Suspense } from "react";
 // export const revalidate = 0;
 // export const fetchCache = "default-no-store";
 
-export const metadata = {
-  title: {
-    default: "خانه عکاسان افرنگ",
-    template: " افرنگ | %s ",
-  },
-  description: "خانه عکاسان افرنگ",
-  alternates: {
-    canonical: mainUrl,
-  },
-};
+// export const metadata = {
+  
+//   title: {
+//     default: "خانه عکاسان افرنگ",
+//     template: " افرنگ | %s ",
+//   },
+//   description: "خانه عکاسان افرنگ",
+//   alternates: {
+//     canonical: `${mainUrl}/`,
+//   },
+// };
+export async function generateMetadata() {
+  const settings = await getSettings();
+
+  
+
+  const title = settings?.find((e) => e.propertyKey === 'site_title')?.value || 'خانه عکاسان افرنگ'
+  const description = settings?.find((e) => e.propertyKey === 'site_description')?.value || 'خانه عکاسان افرنگ';
+ 
+
+  return {
+    title: title,
+    description: description,
+    alternates: {
+      canonical: `${mainUrl}/`,
+    },
+  };
+}
 export default async function layoutMain({ children }) {
   const settings = await getSettings();
+  console.log(settings);
+  
    const socialNetworks = await getItem({
       TypeId: 8,
       LangCode: "fa",
