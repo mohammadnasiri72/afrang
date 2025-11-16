@@ -100,7 +100,6 @@ const SliderHome = ({ sliderItems }) => {
                       </div>
                     )}
 
-                    <div className="absolute inset-0 bg-[#0002] bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                   </div>
                 </div>
               </SwiperSlide>

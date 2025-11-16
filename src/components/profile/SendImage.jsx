@@ -481,7 +481,7 @@ const SendImage = () => {
                       alt={item.categoryTitle}
                       className="w-full h-full object-cover cursor-pointer"
                     />
-                    <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    {/* <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div> */}
                   </a>
                   <div className="absolute bottom-2 left-2 z-10">
                     <Rate

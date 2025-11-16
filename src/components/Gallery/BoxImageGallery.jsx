@@ -105,7 +105,7 @@ function BoxImageGallery({ imageData }) {
                 className="object-cover"
                 unoptimized
               />
-              <div className="absolute inset-0 bg-white/30 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+              {/* <div className="absolute inset-0 bg-white/30 opacity-0 hover:opacity-100 transition-opacity duration-300"></div> */}
             </a>
           </div>
 
