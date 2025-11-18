@@ -119,7 +119,7 @@ const BrandsPage = () => {
           <BreadcrumbMain breadcrumb={[{ title: "برندهای افرنگ" }]} />
         </div>
       </div>
-      <div className="container mx-auto px-4 py-6">
+      <div className="md:px-16 mx-auto px-4 py-6">
         {/* هدر و کنترل‌ها */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">لیست برندها</h1>

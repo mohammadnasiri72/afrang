@@ -33,6 +33,7 @@ function DescProductDetails({ product, similarProducts }) {
     }
   }, [product]);
 
+
   return (
     <>
       <div className="px-3">
@@ -70,7 +71,21 @@ function DescProductDetails({ product, similarProducts }) {
             {product?.product?.brandTitle && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">برند : </span>
-                <span className="text-xs">{product?.product?.brandTitle}</span>
+                <Link
+                  href={`/products?brandid=${product?.product?.brandId}`}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    startTransition(() => {
+                      router.push(
+                        `/products?brandid=${product?.product?.brandId}`
+                      );
+                    });
+                  }}
+                >
+                  <span className="text-xs">
+                    {product?.product?.brandTitle}
+                  </span>
+                </Link>
               </div>
             )}
           </div>
