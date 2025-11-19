@@ -1,4 +1,6 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
+import { getGallery } from "@/services/gallery/galleryServices";
+import { getSettings } from "@/services/settings/settingsService";
 import dynamic from "next/dynamic";
 
 const HeaderGallery = dynamic(() =>
@@ -6,7 +8,13 @@ const HeaderGallery = dynamic(() =>
 );
 const BodyGallery = dynamic(() => import("@/components/Gallery/BodyGallery"));
 
-export default function GalleryCategory() {
+export default async function GalleryCategory() {
+   const settings = await getSettings();
+    const ImagesData = await getGallery({
+       LangCode: "fa",
+       PageSize: 16,
+       PageIndex: 1,
+     });
   return (
     <>
       <div className="bg-white">
@@ -16,7 +24,7 @@ export default function GalleryCategory() {
       </div>
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
         <HeaderGallery />
-        <BodyGallery />
+        <BodyGallery ImagesDataCurrent={ImagesData} settings={settings}/>
       </div>
     </>
   );

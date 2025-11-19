@@ -51,7 +51,7 @@ Fancybox.bind("[data-fancybox='gallery']", {
 });
 
 function BodyGallery({ ImagesDataCurrent, settings }) {
-  const [ImagesData, setImagesData] = useState(ImagesDataCurrent);
+  const [ImagesData, setImagesData] = useState(ImagesDataCurrent ? ImagesDataCurrent : '');
   const [liked, setLiked] = useState(false);
   const [likedNumber, setLikedNumber] = useState(0);
   const [imgSelected, setImgSelected] = useState(
@@ -82,9 +82,11 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
       setLikedNumber(imgSelected.like);
     }
   }, [imgSelected]);
-
+console.log(listProperty);
   useEffect(() => {
     if (listProperty.length > 0 && imgSelected?.id) {
+      
+      
       setPropertySelected(
         listProperty.filter((item) => item.itemId === imgSelected.id)
       );
@@ -104,7 +106,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
   };
 
   useEffect(() => {
-    if (imageIds) {
+    if (imageIds) {      
       fetchPropertyItem();
     }
   }, [imageIds]);
@@ -250,6 +252,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
 
       const currentPageData = await getGallery(paramsData);
 
+
       if (currentPageData && currentPageData.length > 0) {
         setImagesData(currentPageData);
         setImgSelected(currentPageData[0]);
@@ -270,6 +273,7 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
 
   useEffect(() => {
     if (params?.slug?.[0] || orderByParam) {
+      
       fetchCurrentPage();
     }
   }, [params?.slug?.[0], orderByParam]);
