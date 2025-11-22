@@ -4,17 +4,14 @@ import { itemVisit } from "@/services/Item/item";
 import { postLike } from "@/services/UserActivity/UserActivityService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
-import {
-  Divider,
-  Empty,
-  message,
-  Pagination,
-  Rate,
-  Skeleton,
-  Spin,
-} from "antd";
+import { Empty, message, Pagination, Rate, Spin } from "antd";
 import Image from "next/image";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { FaEye, FaRegUser, FaTelegram } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
@@ -23,8 +20,6 @@ import Container from "../container";
 import BoxImageGallery from "./BoxImageGallery";
 
 // import required modules
-import { getPropertyItem } from "@/services/Property/propertyService";
-import { getGallery } from "@/services/gallery/galleryServices";
 import { Fancybox } from "@fancyapps/ui";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
@@ -50,31 +45,49 @@ Fancybox.bind("[data-fancybox='gallery']", {
   dragToClose: true, // امکان کشیدن تصویر برای بستن
 });
 
-function BodyGallery({ ImagesDataCurrent, settings }) {
-  const [ImagesData, setImagesData] = useState(ImagesDataCurrent ? ImagesDataCurrent : '');
+function BodyGallery({
+  ImagesDataCurent,
+  settings,
+  ImagesData,
+  listProperty,
+  category,
+}) {
   const [liked, setLiked] = useState(false);
   const [likedNumber, setLikedNumber] = useState(0);
-  const [imgSelected, setImgSelected] = useState(
-    ImagesDataCurrent?.length > 0 ? ImagesDataCurrent[0] : ""
-  );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [nextPageImages, setNextPageImages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingMain, setLoadingMain] = useState(false);
-  const [totalItems, setTotalItems] = useState(0);
+  const [imgSelected, setImgSelected] = useState("");
+  useEffect(() => {
+    if (ImagesDataCurent.length > 0) {
+      setImgSelected(ImagesDataCurent[0]);
+    }
+  }, [ImagesDataCurent]);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [imageIds, setImageIds] = useState("");
-  const [listProperty, setListProperty] = useState([]);
   const [propertySelected, setPropertySelected] = useState([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams();
   const [isPending, startTransition] = useTransition();
+  const params = useParams();
+  const pathname = usePathname();
+  const text =
+    searchParams.get("orderBy") === "1"
+      ? "جدیدترین تصاویر"
+      : searchParams.get("orderBy") === "8"
+      ? "پربازدیدترین تصاویر"
+      : searchParams.get("orderBy") === "10"
+      ? "پسندیده‌ترین تصاویر"
+      : searchParams.get("orderBy") === "11"
+      ? "قدیمی‌ترین تصاویر"
+      : "پسندیده‌ترین تصاویر";
+
+  const text2 = params?.slug
+    ? params?.slug[0]
+      ? category.find((e) => e.categoryKey === params.slug[0])?.title
+      : ""
+    : "";
 
   useEffect(() => {
-      import("@fancyapps/ui/dist/fancybox/fancybox.css");
-    }, []);
+    import("@fancyapps/ui/dist/fancybox/fancybox.css");
+  }, []);
 
   useEffect(() => {
     if (imgSelected) {
@@ -82,34 +95,13 @@ function BodyGallery({ ImagesDataCurrent, settings }) {
       setLikedNumber(imgSelected.like);
     }
   }, [imgSelected]);
-console.log(listProperty);
   useEffect(() => {
     if (listProperty.length > 0 && imgSelected?.id) {
-      
-      
       setPropertySelected(
         listProperty.filter((item) => item.itemId === imgSelected.id)
       );
     }
   }, [listProperty, imgSelected]);
-
-  const fetchPropertyItem = async () => {
-    try {
-      const response = await getPropertyItem(imageIds);
-      setListProperty(response);
-    } catch (error) {
-      message.error({
-        content: error.message || "خطای شبکه",
-        duration: 3,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (imageIds) {      
-      fetchPropertyItem();
-    }
-  }, [imageIds]);
 
   const handleImageVisit = async (id) => {
     const url = window.location.href;
@@ -164,148 +156,31 @@ console.log(listProperty);
       setIsLoading(false);
     }
   };
-  const orderByParam = searchParams.get("orderBy");
-
-  useEffect(() => {
-    if (ImagesData?.length > 0) {
-      fetchNextPage(2); // لود کردن صفحه دوم در ابتدا
-    }
-  }, [ImagesData]);
-
-  const fetchNextPage = async (page) => {
-    try {
-      setLoading(true);
-      const paramsData = {
-        LangCode: "fa",
-        PageSize: 16,
-        PageIndex: page,
-      };
-
-      if (params?.slug?.[0]) {
-        paramsData.CategoryIdArray = Number(params.slug[0]);
-      }
-
-      if (!orderByParam || orderByParam === "10") {
-        paramsData.OrderBy = 10;
-      } else {
-        paramsData.OrderBy = Number(orderByParam);
-      }
-
-      const nextPageData = await getGallery(paramsData);
-
-      if (nextPageData && nextPageData.length > 0) {
-        setNextPageImages(nextPageData);
-        if (nextPageData[0]?.total) {
-          setTotalItems(nextPageData[0].total);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching next page:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    setNextPageImages([]);
-
-    // ساخت URL جدید با پارامترهای جستجو
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("page", page);
-
-    // آپدیت URL بدون رفرش صفحه
-    const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-    window.history.pushState({}, "", newUrl);
-
-    fetchNextPage(page + 1);
-  };
-
-  // اضافه کردن useEffect برای خواندن پارامتر page از URL در لود اولیه
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const pageParam = searchParams.get("page");
-    if (pageParam) {
-      setCurrentPage(Number(pageParam));
-      fetchNextPage(Number(pageParam) + 1);
-    }
-  }, []);
-
-  const fetchCurrentPage = async () => {
-    try {
-      setLoadingMain(true);
-      const paramsData = {
-        LangCode: "fa",
-        PageSize: 16,
-        PageIndex: 1,
-      };
-
-      if (params?.slug?.[0]) {
-        paramsData.CategoryIdArray = Number(params.slug[0]);
-      }
-
-      if (!orderByParam || orderByParam === "10") {
-        paramsData.OrderBy = 10;
-      } else {
-        paramsData.OrderBy = Number(orderByParam);
-      }
-
-      const currentPageData = await getGallery(paramsData);
-
-
-      if (currentPageData && currentPageData.length > 0) {
-        setImagesData(currentPageData);
-        setImgSelected(currentPageData[0]);
-        const ids = currentPageData.map((item) => item.id).join(",");
-        setImageIds(ids);
-      } else {
-        setImagesData([]);
-        setImgSelected(null);
-        setTotalItems(0);
-        setImageIds("");
-      }
-    } catch (error) {
-      console.error("Error fetching current page:", error);
-    } finally {
-      setLoadingMain(false);
-    }
-  };
-
-  useEffect(() => {
-    if (params?.slug?.[0] || orderByParam) {
-      
-      fetchCurrentPage();
-    }
-  }, [params?.slug?.[0], orderByParam]);
 
   const handleNext = () => {
-    const currentIndex = ImagesData?.findIndex(
+    const currentIndex = ImagesDataCurent?.findIndex(
       (obj) => obj.id === imgSelected.id
     );
-    const nextIndex = (currentIndex + 1) % ImagesData.length;
-    setImgSelected(ImagesData[nextIndex]);
+    const nextIndex = (currentIndex + 1) % ImagesDataCurent.length;
+    setImgSelected(ImagesDataCurent[nextIndex]);
   };
 
   const handlePrev = () => {
-    const currentIndex = ImagesData?.findIndex(
+    const currentIndex = ImagesDataCurent?.findIndex(
       (obj) => obj.id === imgSelected.id
     );
     const prevIndex =
-      (currentIndex - 1 + ImagesData.length) % ImagesData.length;
-    setImgSelected(ImagesData[prevIndex]);
+      (currentIndex - 1 + ImagesDataCurent.length) % ImagesDataCurent.length;
+    setImgSelected(ImagesDataCurent[prevIndex]);
   };
 
   return (
     <>
       <Container>
         <div className="flex lg:flex-nowrap flex-wrap gap-3">
-          {loadingMain ? (
+          {ImagesDataCurent?.length > 0 ? (
             <div className="rounded-sm bg-white p-4 flex items-center lg:w-5/12 w-full">
-              <Skeleton.Image active className="!w-full !h-[400px]" />
-            </div>
-          ) : ImagesData?.length > 0 ? (
-            <div className="rounded-sm bg-white p-4 flex items-center lg:w-5/12 w-full">
-              {ImagesData?.map((item) => (
+              {ImagesDataCurent?.map((item) => (
                 <a
                   key={item.id}
                   className={item.id === imgSelected?.id ? "w-full" : "hidden"}
@@ -334,23 +209,11 @@ console.log(listProperty);
             </div>
           )}
           <div className="rounded-sm bg-white p-4  lg:w-7/12 w-full relative">
-            {loadingMain ? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Skeleton.Avatar active size="large" />
-                  <Skeleton.Input active size="large" className="w-3/4" />
-                </div>
-                <Skeleton.Input active size="default" className="w-1/2" />
-                <div className="flex items-center gap-2">
-                  <Skeleton.Input active size="small" className="w-1/4" />
-                  <Skeleton.Input active size="small" className="w-1/4" />
-                </div>
-              </div>
-            ) : ImagesData?.length > 0 ? (
+            {ImagesDataCurent?.length > 0 ? (
               <>
                 <div className="flex flex-wrap sm:flex-nowrap justify-between px-2 items-center sm:mt-3 mt-0 sm:flex-row flex-col-reverse">
                   <h3 className="flex font-semibold text-[20px] sm:w-auto w-full sm:justify-start justify-center text-center sm:mt-0 mt-3">
-                    عکس های برتر بر اساس لایک کاربران
+                    {text} {text2}
                   </h3>
                   <div
                     onClick={handleLike}
@@ -382,14 +245,16 @@ console.log(listProperty);
                           (item) => item.propertyKey === "site_home_url"
                         )?.value
                       }
-                       onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push( settings?.find(
-                          (item) => item.propertyKey === "site_home_url"
-                        )?.value);
-                });
-              }}
+                      onClick={(ev) => {
+                        ev.preventDefault();
+                        startTransition(() => {
+                          router.push(
+                            settings?.find(
+                              (item) => item.propertyKey === "site_home_url"
+                            )?.value
+                          );
+                        });
+                      }}
                       aria-label="صفحه اصلی"
                     >
                       <img
@@ -546,19 +411,8 @@ console.log(listProperty);
           </div>
         </div>
         <div className="flex flex-wrap">
-          {loadingMain ? (
-            Array(16)
-              .fill(null)
-              .map((_, index) => (
-                <div
-                  key={index}
-                  className="lg:w-[12.5%] md:w-1/6 sm:w-1/3 w-1/2 p-2"
-                >
-                  <Skeleton.Image active className="!w-full !h-[150px]" />
-                </div>
-              ))
-          ) : ImagesData?.length > 0 ? (
-            ImagesData?.map((item) => (
+          {ImagesDataCurent?.length > 0 ? (
+            ImagesDataCurent?.map((item) => (
               <div
                 key={item.id}
                 className="lg:w-[12.5%] md:w-1/6 sm:w-1/3 w-1/2 p-2"
@@ -594,93 +448,48 @@ console.log(listProperty);
             </div>
           )}
         </div>
-        {totalItems > 0 && (
+        {ImagesData.length > 0 && (
           <div className="sm:px-4 mt-20">
             <div className="sm:hidden flex justify-center items-center pb-10">
               <div className="sm:hidden flex items-center title-newProduct relative">
                 <h2 className="font-semibold text-xl">
-                  تصاویری که بیشترین لایک را داشته اند
+                  {text} {text2}
                 </h2>
               </div>
             </div>
             <div className="flex justify-between items-center">
               <div className="sm:flex hidden items-center title-newProduct relative">
                 <h2 className="font-semibold text-xl">
-                  تصاویری که بیشترین لایک را داشته اند
+                  {text} {text2}
                 </h2>
               </div>
             </div>
           </div>
         )}
-        {totalItems > 0 && (
+        {ImagesData.length > 0 && (
           <div className="flex flex-wrap mt-10">
-            {loading ? (
-              <div className="w-full flex flex-wrap">
-                {Array(8)
-                  .fill(null)
-                  .map((_, index) => (
-                    <div
-                      key={`skeleton-${index}`}
-                      className="lg:w-1/4 sm:w-1/2 w-full p-2"
-                    >
-                      <div className="bg-white p-2 rounded-sm box-circl z-50 relative">
-                        <div className="cursor-pointer relative overflow-hidden">
-                          <div className="block relative w-full h-[200px]">
-                            <Skeleton.Image
-                              active
-                              className="w-full h-full !w-full !h-full"
-                            />
-                          </div>
-                        </div>
-                        <div className="my-3 flex items-center text-xs p-2">
-                          <Skeleton.Input
-                            active
-                            size="small"
-                            style={{ width: 100 }}
-                          />
-                        </div>
-                        <Divider
-                          style={{
-                            margin: 0,
-                            padding: 0,
-                            borderColor: "#d1182b55",
-                          }}
-                        />
-                        <div className="flex justify-between items-center px-1 py-2 mt-2">
-                          <Skeleton.Input
-                            active
-                            size="small"
-                            style={{ width: 60 }}
-                          />
-                          <Skeleton.Input
-                            active
-                            size="small"
-                            style={{ width: 40 }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            ) : (
-              nextPageImages.length > 0 &&
-              nextPageImages.map((item) => (
-                <BoxImageGallery
-                  key={`next-${item.id}`}
-                  imageData={item}
-                  data-image-id={item.id}
-                />
-              ))
-            )}
+            {ImagesData.map((item) => (
+              <BoxImageGallery
+                key={`next-${item.id}`}
+                imageData={item}
+                data-image-id={item.id}
+              />
+            ))}
             <div
               dir="ltr"
               className="w-full flex justify-center mt-8 z-50 relative"
             >
               <Pagination
-                current={currentPage}
-                total={totalItems}
+                current={Number(searchParams.get("page")) || 1}
+                total={ImagesData[0].total}
                 pageSize={16}
-                onChange={handlePageChange}
+                onChange={(page) => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set("page", page.toString());
+                  router.push(`${pathname}?${params.toString()}`, {
+                    scroll: false,
+                  });
+                }}
                 showSizeChanger={false}
                 itemRender={(page, type, originalElement) => {
                   if (type === "page") {

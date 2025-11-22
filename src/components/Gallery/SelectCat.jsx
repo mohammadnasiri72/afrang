@@ -1,7 +1,7 @@
 "use client";
 
 import { Select } from "antd";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import Loading from "../Loading";
@@ -11,13 +11,20 @@ function SelectCat({ category }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
 
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
 
     if (value === 0) {
       startTransition(() => {
-        router.push("/gallery");
+        router.push(
+          `/gallery${
+            searchParams.get("orderBy")
+              ? `?orderBy=${searchParams.get("orderBy")}`
+              : ""
+          }`
+        );
       });
     } else {
       const selectedCategoryData = category?.find(
@@ -25,7 +32,13 @@ function SelectCat({ category }) {
       );
       if (selectedCategoryData) {
         startTransition(() => {
-          router.push(`/gallery/${selectedCategoryData.categoryKey}`);
+          router.push(
+            `/gallery/${selectedCategoryData.categoryKey}${
+              searchParams.get("orderBy")
+                ? `?orderBy=${searchParams.get("orderBy")}`
+                : ""
+            }`
+          );
         });
       }
     }

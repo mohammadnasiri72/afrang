@@ -5,24 +5,8 @@ import Container from "../container";
 import SelectCat from "./SelectCat";
 import SelectSort from "./SelectSort";
 
-async function HeaderGallery() {
-  let category = [];
-
-  try {
-    const result = await getCategory({
-      TypeId: 9,
-      LangCode: "fa",
-      Page: 1,
-      PageSize: 100,
-    });
-
-    // Check if result is an error object or valid array
-    if (result && !result.type && Array.isArray(result)) {
-      category = result;
-    }
-  } catch (error) {
-    console.error("Error fetching category:", error);
-  }
+async function HeaderGallery({ category, searchParam }) {
+  
 
   return (
     <>
@@ -31,11 +15,9 @@ async function HeaderGallery() {
           <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 w-full h-full ">
             <div className="flex items-center w-full gap-4 flex-wrap md:flex-nowrap">
               <SelectSort />
-              <SelectCat category={category} />
+              <SelectCat category={category} searchParam={searchParam}/>
             </div>
-            <Link
-              href={"/profile/Send-Photo"}
-            >
+            <Link href={"/profile/Send-Photo"}>
               <div className="flex items-center rounded-sm bg-[#18d1be] !text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                 <FaTelegram className="text-lg" />
                 <span className="whitespace-nowrap pr-2 font-semibold text-sm">

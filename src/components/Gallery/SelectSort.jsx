@@ -1,8 +1,8 @@
 "use client";
 
 import { Select } from "antd";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import Loading from "../Loading";
 
@@ -10,7 +10,13 @@ function SelectSort() {
   const [selectedSort, setSelectedSort] = useState("10");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
+  useEffect(() => {
+    if (searchParams.get("orderBy")) {
+      setSelectedSort(searchParams.get("orderBy"));
+    }
+  }, [searchParams.get("orderBy")]);
   const handleSortChange = (value) => {
     setSelectedSort(value);
 

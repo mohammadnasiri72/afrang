@@ -1,20 +1,60 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
+import HeaderGallerySkeleton from "@/components/skeletons/HeaderGallerySkeleton";
+import { getCategory } from "@/services/Category/categoryService";
 import { getGallery } from "@/services/gallery/galleryServices";
+import { getPropertyItem } from "@/services/Property/propertyService";
 import { getSettings } from "@/services/settings/settingsService";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 const HeaderGallery = dynamic(() =>
   import("@/components/Gallery/HeaderGallery")
 );
 const BodyGallery = dynamic(() => import("@/components/Gallery/BodyGallery"));
 
-export default async function GalleryCategory() {
-   const settings = await getSettings();
-    const ImagesData = await getGallery({
-       LangCode: "fa",
-       PageSize: 16,
-       PageIndex: 1,
-     });
+export default async function GalleryCategory({ params, searchParams }) {
+  const param = await params;
+  const searchParam = await searchParams;
+  // const page = searchParam.get("page");
+  // const page = searchParam.get("page");
+
+  const id = Number(param.slug[0]);
+  const settings = await getSettings();
+  const ImagesData = await getGallery({
+    LangCode: "fa",
+    ...(searchParam.orderBy && { OrderBy: searchParam.orderBy }),
+    ...(id > 0 && { CategoryIdArray: String(id) }),
+    PageSize: 16,
+    PageIndex: Number(searchParam?.page) + 1 || 2,
+  });
+  const ImagesDataCurent = await getGallery({
+    LangCode: "fa",
+    ...(searchParam.orderBy && { OrderBy: searchParam.orderBy }),
+    ...(id > 0 && { CategoryIdArray: String(id) }),
+    PageSize: 16,
+    PageIndex: 1,
+  });
+  const ids = ImagesDataCurent.map((item) => item.id).join(",");
+  const property = await getPropertyItem(ids);
+
+   let category = [];
+  
+    try {
+      const result = await getCategory({
+        TypeId: 9,
+        LangCode: "fa",
+        Page: 1,
+        PageSize: 100,
+      });
+  
+      // Check if result is an error object or valid array
+      if (result && !result.type && Array.isArray(result)) {
+        category = result;
+      }
+    } catch (error) {
+      console.error("Error fetching category:", error);
+    }
+
   return (
     <>
       <div className="bg-white">
@@ -23,8 +63,18 @@ export default async function GalleryCategory() {
         </div>
       </div>
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
-        <HeaderGallery />
-        <BodyGallery ImagesDataCurrent={ImagesData} settings={settings}/>
+        <Suspense fallback={<HeaderGallerySkeleton />}>
+          <HeaderGallery category={category} searchParam={searchParam}/>
+        </Suspense>
+        <Suspense fallback={<HeaderGallerySkeleton />}>
+          <BodyGallery
+            ImagesDataCurent={ImagesDataCurent}
+            settings={settings}
+            ImagesData={ImagesData}
+            listProperty={property}
+            category={category}
+          />
+        </Suspense>
       </div>
     </>
   );
