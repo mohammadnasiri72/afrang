@@ -38,7 +38,6 @@ export default function EidDiscount({ actionProducts, products }) {
     }
   }, [selectedCategory, products]);
 
-
   return (
     <>
       {products.length > 0 && (
@@ -92,60 +91,64 @@ export default function EidDiscount({ actionProducts, products }) {
                   {/* لیست دسته‌بندی‌ها */}
                   <div className="overflow-x-auto pb-2 flex justify-center">
                     <div className="flex items-center gap-0 min-w-max px-2">
-                      {categories.map((category, index) => (
-                        <div
-                          key={`${category}-${index}`}
-                          className="flex items-center"
-                        >
-                          <span
-                            onClick={() =>
-                              setSelectedCategory(
-                                category === selectedCategory ? null : category
-                              )
-                            }
-                            className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
-                              category === selectedCategory
-                                ? "text-[#d1182b] font-bold"
-                                : "text-[#333] hover:text-[#000]"
-                            }`}
+                      {categories.length > 1 &&
+                        categories.map((category, index) => (
+                          <div
+                            key={`${category}-${index}`}
+                            className="flex items-center"
                           >
-                            {category}
-                          </span>
-                          {index < categories.length - 1 && (
-                            <span className="mx-1">/</span>
-                          )}
-                        </div>
-                      ))}
+                            <span
+                              onClick={() =>
+                                setSelectedCategory(
+                                  category === selectedCategory
+                                    ? null
+                                    : category
+                                )
+                              }
+                              className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
+                                category === selectedCategory
+                                  ? "text-[#d1182b] font-bold"
+                                  : "text-[#333] hover:text-[#000]"
+                              }`}
+                            >
+                              {category}
+                            </span>
+                            {index < categories.length - 1 && (
+                              <span className="mx-1">/</span>
+                            )}
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </div>
 
                 {/* دسته‌بندی‌ها در حالت دسکتاپ */}
                 <div className="hidden lg:flex items-center gap-3">
-                  {categories.map((category, index) => (
-                    <div
-                      key={`${category}-${index}`}
-                      className="flex items-center"
-                    >
-                      <span
-                        onClick={() =>
-                          setSelectedCategory(
-                            category === selectedCategory ? null : category
-                          )
-                        }
-                        className={`text-sm cursor-pointer duration-300 font-medium ${
-                          category === selectedCategory
-                            ? "text-[#d1182b] font-bold"
-                            : "text-[#333] hover:text-[#000]"
-                        }`}
+                  {categories.length > 1 &&
+                    categories.map((category, index) => (
+                      <div
+                        key={`${category}-${index}`}
+                        className="flex items-center"
                       >
-                        {category}
-                      </span>
-                      {index < categories.length - 1 && (
-                        <span className="mx-2">/</span>
-                      )}
-                    </div>
-                  ))}
+                        <span
+                          onClick={() =>
+                            setSelectedCategory(
+                              category === selectedCategory ? null : category
+                            )
+                          }
+                          className={`text-sm cursor-pointer duration-300 font-medium ${
+                            category === selectedCategory
+                              ? "text-[#d1182b] font-bold"
+                              : "text-[#333] hover:text-[#000]"
+                          }`}
+                        >
+                          {category}
+                        </span>
+                        {index < categories.length - 1 && (
+                          <span className="mx-2">/</span>
+                        )}
+                      </div>
+                    ))}
                 </div>
 
                 {/* دکمه نمایش همه در دسکتاپ */}
@@ -165,7 +168,7 @@ export default function EidDiscount({ actionProducts, products }) {
                 style={{
                   backgroundImage: `url(${getImageUrl(actionProducts.banner)})`,
                 }}
-                className="mt-5 flex items-center bg-cover bg-right bg-no-repeat min-h-72 p-2"
+                className="mt-2 flex items-center bg-cover bg-right bg-no-repeat min-h-72 p-2 rounded-[10px]"
               >
                 <div className="sm:w-1/3 w-0"></div>
                 <div className="sm:w-2/3 w-full">
