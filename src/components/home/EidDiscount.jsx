@@ -32,8 +32,8 @@ export default function EidDiscount({ actionProducts, products }) {
   return (
     <>
       {products.length > 0 && (
-        <div className="md:px-16 mx-auto px-4">
-          <div className={`lg:h-[23rem] h-[28rem] overflow-hidden`}>
+        <div className="md:px-16 mx-auto px-4 box-slider-special-sale">
+          <div className={`lg:h-[24rem] h-[26rem] overflow-hidden`}>
             <div className="mt-5">
               <div className="lg:hidden flex justify-center items-center"></div>
               <div className="flex flex-col lg:flex-row justify-between items-center gap-4 sm:px-3">
@@ -97,7 +97,7 @@ export default function EidDiscount({ actionProducts, products }) {
                 style={{
                   backgroundImage: `url(${getImageUrl(actionProducts.banner)})`,
                 }}
-                className="box-slider-special-sale mt-2 bg-[#eee]! flex items-center bg-cover sm:bg-right bg-left bg-no-repeat min-h-72 p-2 rounded-[10px]"
+                className=" mt-2 bg-[#eee]! flex items-center bg-cover sm:bg-right bg-left bg-no-repeat min-h-72 p-2 rounded-[10px]"
               >
                 <div className="sm:w-1/3 w-0"></div>
                 <div className="sm:w-2/3 w-full">
@@ -108,9 +108,9 @@ export default function EidDiscount({ actionProducts, products }) {
                   />
                 </div>
               </div>
- {isMobile && (
-        <div className="custom-pagination mt-4 flex justify-center gap-2"></div>
-      )}
+              {isMobile && (
+                <div className="custom-pagination mt-4 flex justify-center gap-2"></div>
+              )}
               <div className="hidden">
                 {products.map((product) => (
                   <div
@@ -223,7 +223,7 @@ export default function EidDiscount({ actionProducts, products }) {
         </div>
       )}
       {isPending && <Loading />}
-       <style jsx>{`
+      <style jsx>{`
         .slider-special-sale {
           position: relative;
         }
@@ -240,21 +240,10 @@ export default function EidDiscount({ actionProducts, products }) {
           cursor: pointer;
         }
         .custom-pagination :global(.swiper-pagination-bullet-active) {
-           background: #d1182b;
+          background: #d1182b;
           border-radius: 10px;
           width: 20px;
         }
-
-
-
-
-
-
-
-
-
-
-       
       `}</style>
     </>
   );
