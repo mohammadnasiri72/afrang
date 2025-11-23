@@ -36,7 +36,7 @@ function NewProduct({ products }) {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-4 px-3">
+      <div className="flex flex-col lg:flex-row justify-between items-center gap-4 md:px-16 mx-auto px-4">
         <div className="lg:flex hidden items-center title-newProduct relative">
           <h2 className="font-semibold text-xl">جدیدترین ها</h2>
         </div>
@@ -125,7 +125,7 @@ function NewProduct({ products }) {
           <FaCaretLeft />
         </div>
       </div>
-      <div className="mt-5">
+      <div className="mt-5 md:px-16 mx-auto px-4">
         <ProductMain products={filteredProducts} />
       </div>
 

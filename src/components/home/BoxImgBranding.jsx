@@ -19,7 +19,7 @@ export default function BoxImgBranding({ brands }) {
 
   return (
     <>
-      <div className="relative mt-5 sm:px-3 px-2">
+      <div className="relative mt-5  ">
         <div className="absolute left-0 -top-52">
           <Image
             src="/images/bg-shadow-1.png"
@@ -44,26 +44,26 @@ export default function BoxImgBranding({ brands }) {
             unoptimized
           />
         </div>
-        <div className="max-w-[1600px] mx-auto overflow-hidden">
-        <div className="flex justify-between items-center  z-50 relative -mb-5 border-b border-[#0002]">
-          <div className="flex items-center title-newProduct relative ">
-            <h2 className="font-semibold text-xl ">
-              برندهای <span className="text-[#d1182b]">افرنگ</span>
-            </h2>
-          </div>
+        <div className="max-w-[1600px] overflow-hidden md:px-16 mx-auto px-4 ">
+          <div className="flex justify-between items-center  z-50 relative -mb-5 border-b border-[#0002]">
+            <div className="flex items-center title-newProduct relative ">
+              <h2 className="font-semibold text-xl ">
+                برندهای <span className="text-[#d1182b]">افرنگ</span>
+              </h2>
+            </div>
 
-          <div
-            onClick={() => {
-              startTransition(() => {
-                router.push(`/brands`);
-              });
-            }}
-            className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
-          >
-            <span>نمایش همه</span>
-            <FaCaretLeft />
+            <div
+              onClick={() => {
+                startTransition(() => {
+                  router.push(`/brands`);
+                });
+              }}
+              className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
+            >
+              <span>نمایش همه</span>
+              <FaCaretLeft />
+            </div>
           </div>
-        </div>
           <Swiper
             spaceBetween={10}
             loop={true}

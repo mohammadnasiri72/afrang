@@ -14,7 +14,9 @@ async function EidDiscountSSR() {
       ids: actionProducts[0]?.productIds || [],
     });
   }
-  return <EidDiscount actionProducts={actionProducts} products={productList} />;
+ 
+  
+  return <EidDiscount actionProducts={actionProducts[0]} products={productList} />;
 }
 
 export default EidDiscountSSR;
