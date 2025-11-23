@@ -93,7 +93,7 @@ function CalculationInstallments() {
   );
 
   return (
-    <div className="w-full sm:px-10 px-3 py-3 max-w-[2000px] mx-auto overflow-hidden">
+    <div className="w-full sm:px-10 px-3 py-3 max-w-[1600px] mx-auto overflow-hidden">
       <Title level={3} style={{ textAlign: "center", marginBottom: 30 }}>
         <CalculatorOutlined /> محاسبه گر اقساط
       </Title>

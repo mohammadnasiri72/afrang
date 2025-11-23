@@ -33,12 +33,12 @@ export default async function UserAdd(props) {
   return (
     <>
       <div className="bg-white">
-        <div className="max-w-[2000px] mx-auto overflow-hidden">
+        <div className="max-w-[1600px] mx-auto overflow-hidden">
           <BreadcrumbMain breadcrumb={[{ title: "کالای دسته دوم" }]} />
         </div>
       </div>
       <Container>
-        <div className="flex items-start overflow-hidden max-w-[2000px] mx-auto">
+        <div className="flex items-start overflow-hidden max-w-[1600px] mx-auto">
           <div className="w-1/4 lg:block hidden px-3">
             <Suspense fallback={<FilterSecSkeleton />}>
               <FilterSec />

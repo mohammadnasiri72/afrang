@@ -138,7 +138,7 @@ export default function CompletePay() {
 
   return (
     <>
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Container>
           <HeaderCard />
           <BodyPayment />

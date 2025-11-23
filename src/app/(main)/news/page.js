@@ -47,11 +47,11 @@ export default async function Blog(prop) {
   return (
     <>
       <div className="bg-white">
-        <div className="max-w-[2000px] mx-auto overflow-hidden">
+        <div className="max-w-[1600px] mx-auto overflow-hidden">
           <BreadcrumbMain breadcrumb={[{ title: "تازه‌های سایت" }]} />
         </div>
       </div>
-      <div className="bg-[#f6f6f6] max-w-[2000px] mx-auto overflow-hidden">
+      <div className="bg-[#f6f6f6] max-w-[1600px] mx-auto overflow-hidden">
         <Suspense fallback={<HeaderBlogSkeleton />}>
           <HeaderBlog searchParams={searchParams} category={category} />
         </Suspense>

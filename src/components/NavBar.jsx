@@ -9,7 +9,7 @@ const NavBar = ({ activeMenu, setActiveMenu, menuItems, startTransition }) => {
     <>
       <div className="bg-[#d1182b] w-full">
         <div
-          style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
+          style={{ maxWidth: "1600px", margin: "0 auto", width: "100%" }}
           className="px-2 flex justify-between items-center !text-white"
         >
           {menuItems && menuItems.length > 0 && (

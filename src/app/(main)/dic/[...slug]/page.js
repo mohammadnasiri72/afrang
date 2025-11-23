@@ -12,7 +12,7 @@ export default async function DicItemPage({ params }) {
 
   if (!dic) {
     return (
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Container>
           <div className="max-w-4xl mx-auto py-8">
             <div className="bg-white rounded-lg shadow-sm p-6 z-50 relative">
@@ -29,13 +29,13 @@ export default async function DicItemPage({ params }) {
   return (
     <>
       <div className="bg-white">
-        <div className="overflow-hidden max-w-[2000px] mx-auto ">
+        <div className="overflow-hidden max-w-[1600px] mx-auto ">
           <BreadcrumbMain
             breadcrumb={[{ title: "واژگان فنی" }, { title: dic.title }]}
           />
         </div>
       </div>
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto ">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto ">
         <Container>
           <div className="max-w-4xl mx-auto py-8">
             <div className="bg-white rounded-lg shadow-sm p-6">

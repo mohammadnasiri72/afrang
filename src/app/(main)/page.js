@@ -320,7 +320,7 @@ export default async function Home() {
     <>
       <div
         style={{
-          maxWidth: "2000px",
+          maxWidth: "1600px",
           margin: "auto",
           overflow: "hidden",
         }}

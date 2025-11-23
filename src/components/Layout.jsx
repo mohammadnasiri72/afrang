@@ -241,11 +241,7 @@ function Layout({ children, settings }) {
         <AntdRegistry>
           <Provider store={store}>
             <div className="bg-[#f6f6f6]"
-              // style={{
-              //   maxWidth: "2000px",
-              //   margin: "auto",
-              //   overflow: "hidden",
-              // }}
+             
             >
               <>
                 {/* <DynamicTitle /> */}

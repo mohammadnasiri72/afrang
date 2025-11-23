@@ -85,7 +85,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
   return (
     <>
       <div className="footer sm:pb-0 pb-16">
-        <div className="lg:px-16 px-2 pt-10  relative max-w-[2000px] mx-auto overflow-hidden">
+        <div className="lg:px-16 px-2 pt-10  relative max-w-[1600px] mx-auto overflow-hidden">
           <div className="flex flex-wrap">
             <div className="lg:w-1/3 sm:w-1/2 w-full px-3 flex flex-col items-center justify-start">
               <div className="w-full flex sm:justify-start justify-center ">

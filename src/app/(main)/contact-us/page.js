@@ -17,11 +17,11 @@ export default async function Contact() {
     return (
       <>
         <div className="bg-white">
-          <div className="overflow-hidden max-w-[2000px] mx-auto">
+          <div className="overflow-hidden max-w-[1600px] mx-auto">
             <BreadcrumbMain breadcrumb={[{ title: "تماس باما" }]} />
           </div>
         </div>
-        <div className="overflow-hidden max-w-[2000px] mx-auto">
+        <div className="overflow-hidden max-w-[1600px] mx-auto">
           {data.image && <HeaderContact data={data} />}
           <div className="bg-[#f6f6f6] overflow-hidden">
             <Container>

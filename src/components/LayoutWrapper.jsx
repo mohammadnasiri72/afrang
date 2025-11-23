@@ -105,7 +105,7 @@ export default function LayoutWrapper({
       <div className="bg-white w-full">
         {/* Header Skeleton */}
         <div
-          style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
+          style={{ maxWidth: "1600px", margin: "0 auto", width: "100%" }}
           className="flex items-center justify-between lg:px-16 px-4 py-1"
         >
           <div className="flex items-center lg:w-1/2 w-auto">
@@ -155,7 +155,7 @@ export default function LayoutWrapper({
         {/* NavBar Skeleton */}
         <div className="bg-[#d1182b] w-full">
           <div
-            style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
+            style={{ maxWidth: "1600px", margin: "0 auto", width: "100%" }}
             className="px-2 flex justify-between items-center !text-white py-2"
           >
             {/* Menu Items */}

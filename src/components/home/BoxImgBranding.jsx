@@ -44,7 +44,7 @@ export default function BoxImgBranding({ brands }) {
             unoptimized
           />
         </div>
-        <div className="max-w-[2000px] mx-auto overflow-hidden">
+        <div className="max-w-[1600px] mx-auto overflow-hidden">
         <div className="flex justify-between items-center  z-50 relative -mb-5 border-b border-[#0002]">
           <div className="flex items-center title-newProduct relative ">
             <h2 className="font-semibold text-xl ">

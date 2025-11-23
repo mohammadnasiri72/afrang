@@ -169,7 +169,7 @@ const DynamicComparePage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f6f6f6] flex items-center justify-center overflow-hidden max-w-[2000px] mx-auto">
+      <div className="min-h-screen bg-[#f6f6f6] flex items-center justify-center overflow-hidden max-w-[1600px] mx-auto">
         <div className="text-center">
           <div className="text-6xl text-red-300 !mb-4">❌</div>
           <h1 className="text-2xl font-bold text-gray-700 !mb-2">

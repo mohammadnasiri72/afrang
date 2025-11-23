@@ -58,11 +58,11 @@ export default async function GalleryCategory({ params, searchParams }) {
   return (
     <>
       <div className="bg-white">
-        <div className="overflow-hidden max-w-[2000px] mx-auto">
+        <div className="overflow-hidden max-w-[1600px] mx-auto">
           <BreadcrumbMain breadcrumb={[{ title: "گالری کاربران" }]} />
         </div>
       </div>
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Suspense fallback={<HeaderGallerySkeleton />}>
           <HeaderGallery category={category} searchParam={searchParam}/>
         </Suspense>

@@ -21,7 +21,7 @@ export default function CameraAccessories({ category }) {
 
   return (
     <>
-      <div className="box-slider-CameraAccessories bg-no-repeat bg-cover h-80 pt-3">
+      <div className="box-slider-CameraAccessories bg-no-repeat bg-cover h-72 pt-3">
         <div className="sm:px-16 px-2">
           <Swiper
             // loop={true}
@@ -69,10 +69,10 @@ export default function CameraAccessories({ category }) {
                   className="flex flex-col items-center justify-center"
                 >
                   <div className="flex flex-col items-center justify-center select-none cursor-pointer">
-                    <div className="w-[50px] h-[50px] flex items-center justify-center relative">
+                    <div className="w-[40px] h-[40px] flex items-center justify-center relative">
                       {item.image && (
                         <Image
-                          className={`sm:w-[50px] sm:h-[50px] w-[40px] h-[40px] ${
+                          className={`w-[40px] h-[40px] ${
                             isLoaded ? "opacity-100" : "opacity-0"
                           }`}
                           src={getImageUrl(item.image)}

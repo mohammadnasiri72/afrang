@@ -17,7 +17,7 @@ export default async function DynamicPage({ params }) {
     return (
       <>
         <div className="bg-[#fff]">
-          <div className="max-w-[2000px] mx-auto overflow-hidden">
+          <div className="max-w-[1600px] mx-auto overflow-hidden">
             {data.breadcrumb && <BreadcrumbMain breadcrumb={data.breadcrumb} />}
           </div>
         </div>

@@ -20,7 +20,7 @@ export default async function PriceListPage({ params }) {
 
     if (!pricing || pricing.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-12 overflow-hidden max-w-[2000px] mx-auto">
+        <div className="flex flex-col items-center justify-center py-12 overflow-hidden max-w-[1600px] mx-auto">
           <div className="w-24 h-24 !mb-4">
             <svg
               className="w-full h-full text-gray-400"

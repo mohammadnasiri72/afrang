@@ -136,7 +136,7 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
       <div className="!mb-8">
         <CategorySlider currentId={id} categoriesChilds={categoriesChilds} />
       </div>
-      <div className="space-y-8 overflow-hidden max-w-[2000px] mx-auto">
+      <div className="space-y-8 overflow-hidden max-w-[1600px] mx-auto">
         {sortedGroupedProducts.map(
           ([categoryId, { categoryTitle, products }]) => {
             const filteredProducts = filterProducts(products, categoryId).sort(

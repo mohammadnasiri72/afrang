@@ -21,7 +21,7 @@ const SliderHome = ({ sliderItems }) => {
 
   return (
     <>
-      <div className="relative w-full h-64 slider-homePage">
+      <div className="relative w-full h-72 slider-homePage">
         {/* بخش اسلایدها (ماسک فقط اینجا اعمال میشه) */}
         <div className="w-full h-full overflow-hidden">
           <Swiper

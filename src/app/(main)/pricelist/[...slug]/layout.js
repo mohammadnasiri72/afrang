@@ -70,7 +70,7 @@ export default async function PriceListLayout({ children, params }) {
   return (
     <>
       <div className="bg-white">
-        <div className="max-w-[2000px] mx-auto overflow-hidden">
+        <div className="max-w-[1600px] mx-auto overflow-hidden">
           <BreadcrumbMain
             breadcrumb={[
               {

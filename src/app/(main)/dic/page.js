@@ -33,11 +33,11 @@ export default async function Dic() {
   return (
     <>
       <div className="bg-white">
-        <div className="overflow-hidden max-w-[2000px] mx-auto">
+        <div className="overflow-hidden max-w-[1600px] mx-auto">
           <BreadcrumbMain breadcrumb={[{ title: "واژگان فنی" }]} />
         </div>
       </div>
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Container>
           <BodyDic dics={dics} />
         </Container>

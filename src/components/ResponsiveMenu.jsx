@@ -211,11 +211,11 @@ function ResponsiveMenu({
   // تابع برای محاسبه dropdownOffsets بر اساس عرض صفحه
   const calculateDropdownOffsets = useCallback(() => {
     const windowWidth = window.innerWidth;
-    const maxWidth = 2000; // حداکثر عرض
+    const maxWidth = 1600; // حداکثر عرض
     const baseOffset = 50; // offset پایه
 
     if (windowWidth > maxWidth) {
-      // اگر صفحه از 2000px بیشتر است، offsetها را طوری محاسبه کن که 50px کمتر از 2000px باشد
+      // اگر صفحه از 1600px بیشتر است، offsetها را طوری محاسبه کن که 50px کمتر از 1600px باشد
       const extraWidth = windowWidth - maxWidth;
       const calculatedOffset = baseOffset + Math.floor(extraWidth / 2);
 
@@ -224,7 +224,7 @@ function ResponsiveMenu({
         left: calculatedOffset,
       });
     } else {
-      // برای صفحات کوچکتر از 2000px از مقادیر پیش‌فرض استفاده کن
+      // برای صفحات کوچکتر از 1600px از مقادیر پیش‌فرض استفاده کن
       setDropdownOffsets({
         right: baseOffset,
         left: baseOffset,

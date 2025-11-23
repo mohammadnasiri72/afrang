@@ -70,7 +70,7 @@ export default async function ProductList({ searchParams }) {
           products.breadcrumb ? products.breadcrumb : [{ title: "محصولات" }]
         }
       />
-      <div className="bg-[#f6f6f6] overflow-hidden max-w-[2000px] mx-auto py-5">
+      <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto py-5">
         {params && Object.keys(params).length > 0 ? (
           <div className="xl:px-16">
             {products?.title && (

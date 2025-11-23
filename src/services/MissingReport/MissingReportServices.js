@@ -6,7 +6,6 @@ import axios from "axios";
 
 export const reportMissing = async (data , token) => {
   try {
-    // await new Promise(resolve => setTimeout(resolve, 20000));
     
     const response = await axios.post(`${mainDomain}/api/MissingReport`, data, {
       headers: {

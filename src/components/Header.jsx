@@ -50,7 +50,7 @@ export default function Header({ onLoaded, settings }) {
     <>
       <div className="bg-white w-full">
         <div
-          style={{ maxWidth: "2000px", margin: "0 auto", width: "100%" }}
+          style={{ maxWidth: "1600px", margin: "0 auto", width: "100%" }}
           className="flex items-center justify-between lg:px-16 px-4"
         >
           <div className="flex items-center w-auto ">

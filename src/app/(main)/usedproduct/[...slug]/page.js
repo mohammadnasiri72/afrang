@@ -21,7 +21,7 @@ export default async function UserAddDetails(props) {
   return (
     <>
       <div className="bg-white">
-        <div className="max-w-[2000px] mx-auto overflow-hidden">
+        <div className="max-w-[1600px] mx-auto overflow-hidden">
           <BreadcrumbMain
             breadcrumb={[
               { href: "/useds/-1", title: "کالای دسته دوم" },
@@ -31,7 +31,7 @@ export default async function UserAddDetails(props) {
         </div>
       </div>
       <Container>
-        <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative overflow-hidden max-w-[2000px] mx-auto">
+        <div className="flex flex-wrap bg-white rounded-lg p-2 z-50 relative overflow-hidden max-w-[1600px] mx-auto">
           <div className="lg:w-[30%] w-full p-2">
             {product?.imageList?.length > 0 && (
               <SliderProductSecImg
