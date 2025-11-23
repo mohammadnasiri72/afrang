@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
 import Loading from "../Loading";
-import ProductMain from "./ProductMain";
 import ProductMainEyd from "./ProductMainEyd";
 
 export default function EidDiscount({ actionProducts, products }) {
@@ -15,6 +14,7 @@ export default function EidDiscount({ actionProducts, products }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (products) {
@@ -97,20 +97,20 @@ export default function EidDiscount({ actionProducts, products }) {
                 style={{
                   backgroundImage: `url(${getImageUrl(actionProducts.banner)})`,
                 }}
-                className="mt-2 bg-[#eee]! sm:flex hidden items-center bg-cover bg-right bg-no-repeat min-h-72 p-2 rounded-[10px]"
+                className="box-slider-special-sale mt-2 bg-[#eee]! flex items-center bg-cover sm:bg-right bg-left bg-no-repeat min-h-72 p-2 rounded-[10px]"
               >
                 <div className="sm:w-1/3 w-0"></div>
                 <div className="sm:w-2/3 w-full">
-                  <ProductMainEyd products={filteredProducts} noLazy />
+                  <ProductMainEyd
+                    products={filteredProducts}
+                    isMobile={isMobile}
+                    setIsMobile={setIsMobile}
+                  />
                 </div>
               </div>
-              <div className="mt-2 sm:hidden bg-[#eee]! flex items-center bg-cover bg-right bg-no-repeat min-h-72 p-2 rounded-[10px]">
-                <div className="sm:w-1/3 w-0"></div>
-                <div className="sm:w-2/3 w-full">
-                  <ProductMainEyd products={filteredProducts} noLazy />
-                </div>
-              </div>
-
+ {isMobile && (
+        <div className="custom-pagination mt-4 flex justify-center gap-2"></div>
+      )}
               <div className="hidden">
                 {products.map((product) => (
                   <div
@@ -223,6 +223,39 @@ export default function EidDiscount({ actionProducts, products }) {
         </div>
       )}
       {isPending && <Loading />}
+       <style jsx>{`
+        .slider-special-sale {
+          position: relative;
+        }
+        .custom-pagination {
+          position: relative;
+          z-index: 10;
+        }
+        .custom-pagination :global(.swiper-pagination-bullet) {
+          width: 8px;
+          height: 8px;
+          background-color: #555;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .custom-pagination :global(.swiper-pagination-bullet-active) {
+           background: #d1182b;
+          border-radius: 10px;
+          width: 20px;
+        }
+
+
+
+
+
+
+
+
+
+
+       
+      `}</style>
     </>
   );
 }

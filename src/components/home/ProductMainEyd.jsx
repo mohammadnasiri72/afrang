@@ -21,12 +21,10 @@ import Image from "next/image";
 import CountdownTimer from "./CountdownTimer";
 import { getImageUrl } from "@/utils/mainDomain";
 
-export default function ProductMainEyd({ products, noLazy }) {
+export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
-
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkDevice = () => {
@@ -47,16 +45,14 @@ export default function ProductMainEyd({ products, noLazy }) {
         <Swiper
           grabCursor={true}
           modules={[Pagination, Navigation]}
-          className={`${isMobile ? "mySwiperProduct" : ""}`}
-          navigation={{
-            nextEl: ".custom-next",
-            prevEl: ".custom-prev",
-          }}
+          className={`${isMobile ? "slider-special-sale" : ""}`}
+          navigation={false}
           pagination={
             !isMobile
               ? false
               : {
                   clickable: true,
+                  el: ".custom-pagination", // اشاره به المنت جداگانه
                 }
           }
           speed={1000}
@@ -211,14 +207,6 @@ export default function ProductMainEyd({ products, noLazy }) {
                 </div>
               </SwiperSlide>
             ))}
-          <div className="sm:hidden flex  items-center justify-between absolute left-0 right-0 bottom-1">
-            <div className="custom-prev bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
-              <FaCaretRight className="text-2xl cursor-pointer " />
-            </div>
-            <div className=" custom-next bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
-              <FaCaretLeft className="text-2xl cursor-pointer" />
-            </div>
-          </div>
         </Swiper>
       </div>
       {isPending && <Loading />}
