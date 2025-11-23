@@ -97,7 +97,7 @@ export default function CameraAccessories({ category }) {
                         <Skeleton.Image active className={`!w-full !h-full `} />
                       </div>
                     </div>
-                    <span className="text-white sm:text-xl mt-3 font-medium text-center">
+                    <span className="text-white sm:text-xl mt-3 font-medium text-center whitespace-nowrap">
                       {item.title}
                     </span>
                   </div>

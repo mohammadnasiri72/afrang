@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
 import Loading from "../Loading";
@@ -26,34 +26,59 @@ export default function ProductMainEyd({ products, noLazy }) {
 
   const router = useRouter();
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth <= 639); // 768px = md breakpoint
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+
+    return () => {
+      window.removeEventListener("resize", checkDevice);
+    };
+  }, []);
+
   return (
     <>
       <div className="">
         <Swiper
-          // loop={true}
           grabCursor={true}
-          navigation={false}
-          pagination={false}
+          modules={[Pagination, Navigation]}
+          className={`${isMobile ? "mySwiperProduct" : ""}`}
+          navigation={{
+            nextEl: ".custom-next",
+            prevEl: ".custom-prev",
+          }}
+          pagination={
+            !isMobile
+              ? false
+              : {
+                  clickable: true,
+                }
+          }
           speed={1000}
           breakpoints={{
-            1724: {
+            1300: {
               slidesPerView: 4,
               slidesPerGroup: 4,
               spaceBetween: 15,
             },
-            1024: {
-              slidesPerView: 4,
-              slidesPerGroup: 4,
+            1000: {
+              slidesPerView: 3,
+              slidesPerGroup: 3,
               spaceBetween: 10,
             },
-            400: {
+            450: {
               slidesPerView: 2,
               slidesPerGroup: 2,
               spaceBetween: 8,
             },
             100: {
-              slidesPerView: 1,
-              slidesPerGroup: 1,
+              slidesPerView: 2,
+              slidesPerGroup: 2,
               spaceBetween: 5,
             },
           }}
@@ -137,7 +162,7 @@ export default function ProductMainEyd({ products, noLazy }) {
                     {/* قیمت */}
                     <div className="px-2 duration-300">
                       {!product.callPriceButton && product.finalPrice !== 0 && (
-                        <div className="flex sm:flex-col sm:items-stretch items-center sm:gap-0 gap-2 -mt-2 sm:mt-0">
+                        <div className="flex flex-col pb-10 sm:pb-0">
                           <span className="font-bold text-base text-[#333] whitespace-nowrap group-hover:text-[#d1182b] duration-300 group-hover:text-lg ">
                             {product.finalPrice.toLocaleString()} تومان
                           </span>
@@ -186,6 +211,14 @@ export default function ProductMainEyd({ products, noLazy }) {
                 </div>
               </SwiperSlide>
             ))}
+          <div className="sm:hidden flex  items-center justify-between absolute left-0 right-0 bottom-1">
+            <div className="custom-prev bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
+              <FaCaretRight className="text-2xl cursor-pointer " />
+            </div>
+            <div className=" custom-next bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
+              <FaCaretLeft className="text-2xl cursor-pointer" />
+            </div>
+          </div>
         </Swiper>
       </div>
       {isPending && <Loading />}

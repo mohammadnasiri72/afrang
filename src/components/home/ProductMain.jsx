@@ -100,17 +100,7 @@ export default function ProductMain({ products, noLazy }) {
                       </h3>
                     </Link>
                     <Divider style={{ margin: 5, padding: 0 }} />
-                    {/* کالای کارکرده */}
-                    {/* <div className="h-6 flex items-center mt-1 !mb-2 px-2">
-                    {product.conditionId === 20 && (
-                      <div className="flex items-center text-xs text-[#d1182b]">
-                        <FaRecycle className="ml-1.5" />
-                        <span className="font-semibold whitespace-nowrap">
-                          کالای کارکرده
-                        </span>
-                      </div>
-                    )}
-                  </div> */}
+                   
                     {/* قیمت */}
                     <div className="h-[4.5rem] px-2 duration-300">
                       {!product.callPriceButton && product.finalPrice !== 0 && (
