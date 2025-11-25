@@ -44,7 +44,6 @@ function AddLegal({
     cityTitle: editData?.[0]?.cityTitle || "",
   });
 
-
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -112,7 +111,6 @@ function AddLegal({
             id || editData
               ? "ویرایش اطلاعات حقوقی با موفقیت انجام شد"
               : "اطلاعات حقوقی جدید اضافه شد",
-         
         });
         handleCancel();
       }
@@ -339,6 +337,7 @@ function AddLegal({
           <div>
             <label className="block text-gray-700 !mb-2">استان*</label>
             <Select
+              showSearch
               placeholder="انتخاب استان"
               className={`w-full ${
                 errors.selectedProvince ? "select-error" : ""
@@ -376,6 +375,7 @@ function AddLegal({
           <div>
             <label className="block text-gray-700 !mb-2">شهر*</label>
             <Select
+              showSearch
               placeholder="انتخاب شهر"
               className={`w-full ${errors.selectedCity ? "select-error" : ""}`}
               onChange={(value) => {

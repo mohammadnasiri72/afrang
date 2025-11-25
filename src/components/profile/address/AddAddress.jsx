@@ -482,13 +482,11 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
       Toast.fire({
         icon: "success",
         text: id ? "ویرایش آدرس با موفقیت انجام شد" : "آدرس جدید اضافه شد",
-      
       });
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-       
       });
     } finally {
       setLoading(false);
@@ -657,6 +655,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           <div>
             <label className="block text-gray-700 !mb-2">استان*</label>
             <Select
+              showSearch
               placeholder="انتخاب استان"
               className={`w-full ${
                 errors.selectedProvince ? "select-error" : ""
@@ -690,6 +689,7 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
           <div>
             <label className="block text-gray-700 !mb-2">شهر*</label>
             <Select
+              showSearch
               placeholder="انتخاب شهر"
               className={`w-full ${errors.selectedCity ? "select-error" : ""}`}
               onChange={(value) => {

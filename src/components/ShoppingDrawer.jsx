@@ -124,7 +124,7 @@ function ShoppingDrawer({ header, startTransition }) {
       )}
 
       <Drawer
-        zIndex={1000000}
+        zIndex={100000}
         placement={"left"}
         closable={true}
         onClose={onClose}
@@ -279,7 +279,7 @@ function ShoppingDrawer({ header, startTransition }) {
                                 <Tooltip
                                   title="حذف از سبد خرید"
                                   placement="left"
-                                  zIndex={1000001}
+                                  zIndex={100001}
                                 >
                                   <button
                                     onClick={() => handleDeleteClick(item)}
@@ -351,7 +351,7 @@ function ShoppingDrawer({ header, startTransition }) {
                 <div>
                   <button
                     onClick={() => handleNavigation("/cart")}
-                    className={`w-full !text-white duration-300 cursor-pointer py-2 !mb-3 font-semibold rounded-lg relative z-[1000001] ${
+                    className={`w-full !text-white duration-300 cursor-pointer py-2 !mb-3 font-semibold rounded-lg relative z-[100001] ${
                       pathname === "/cart"
                         ? "bg-[#b91626]"
                         : "bg-[#d1182b] hover:bg-[#b91626]"
@@ -361,7 +361,7 @@ function ShoppingDrawer({ header, startTransition }) {
                   </button>
                   <button
                     onClick={handleCheckout}
-                    className={`w-full !text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[1000001] ${
+                    className={`w-full !text-white duration-300 cursor-pointer py-2 font-semibold rounded-lg relative z-[100001] ${
                       pathname === "/cart/infosend"
                         ? "bg-[#b91626]"
                         : "bg-[#d1182b] hover:bg-[#b91626]"
@@ -396,7 +396,7 @@ function ShoppingDrawer({ header, startTransition }) {
         .confirm-modal-wrapper {
           position: fixed;
           inset: 0;
-          z-index: 9999999;
+          z-index: 999999;
         }
       `}</style>
     </>

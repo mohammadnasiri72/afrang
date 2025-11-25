@@ -28,7 +28,8 @@ export default function EidDiscount({ actionProducts, products }) {
       }
     }
   }, [selectedCategory, products]);
-
+  const encodedBanner = encodeURI(actionProducts.banner);
+  const imageUrl = getImageUrl(encodedBanner);
   return (
     <>
       {products.length > 0 && (
@@ -95,7 +96,7 @@ export default function EidDiscount({ actionProducts, products }) {
               </div>
               <div
                 style={{
-                  backgroundImage: `url(${getImageUrl(actionProducts.banner)})`,
+                  backgroundImage: `url('${imageUrl}')`,
                 }}
                 className=" mt-2 bg-[#eee]! flex items-center bg-cover sm:bg-right bg-left bg-no-repeat min-h-72 p-2 rounded-[10px]"
               >

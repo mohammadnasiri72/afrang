@@ -20,7 +20,7 @@ export default function SubFooter({ socialNetworks, settings }) {
   return (
     <>
       <SocialNetworks socialNetworks={socialNetworks} settings={settings} />
-      <div className="sm:hidden flex justify-around px-2 py-3 fixed bottom-0 bg-white left-0 right-0 text-[#666] z-100000 border-red-600 border-t">
+      <div className="sm:hidden flex justify-around px-2 py-3 fixed bottom-0 bg-white left-0 right-0 text-[#666] z-99999 border-red-600 border-t">
         <SuportSubfooter socialNetworks={socialNetworks} settings={settings} />
         <SearchSubfooter />
 
