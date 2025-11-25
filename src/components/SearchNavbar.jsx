@@ -128,7 +128,7 @@ const SearchNavbar = ({ startTransition }) => {
                       });
                     }}
                   >
-                    <div className="w-20 h-20 relative flex-shrink-0">
+                    <div className="sm:w-20 w-12 sm:h-20 h-12 relative flex-shrink-0">
                       <Image
                         src={getImageUrl(product.image)}
                         alt={product.title.slice(0, 20)}

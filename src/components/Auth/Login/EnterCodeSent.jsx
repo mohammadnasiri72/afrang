@@ -26,7 +26,8 @@ const toEnglishNumber = (number) => {
 function EnterCodeSent({ mobile, setStateLogin, from }) {
   const [isWebOTPSupported, setIsWebOTPSupported] = useState(false);
   const [webOTPActive, setWebOTPActive] = useState(false);
-
+  const user = Cookies.get("user");
+  const userId = JSON.parse(user).userId;
   useEffect(() => {
     if ("OTPCredential" in window) {
       setIsWebOTPSupported(true);
@@ -228,6 +229,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         mobile,
         code: englishCode,
         csrf: csrf.csrfToken,
+        userId: userId,
       });
 
       if (userData.token) {
@@ -307,8 +309,9 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link href="/"
-               onClick={(ev) => {
+              <Link
+                href="/"
+                onClick={(ev) => {
                   ev.preventDefault();
                   startTransition(() => {
                     router.push("/");

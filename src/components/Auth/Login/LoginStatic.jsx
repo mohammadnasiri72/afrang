@@ -19,6 +19,8 @@ const toEnglishNumber = (number) => {
 };
 
 function LoginStatic({ setStateLogin, from }) {
+  const user = Cookies.get("user");
+    const userId = JSON.parse(user).userId;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -78,6 +80,7 @@ function LoginStatic({ setStateLogin, from }) {
         password,
         remember: true,
         csrf: csrf.csrfToken,
+        userId:userId
       });
       if (userData.token) {
         Cookies.set("user", JSON.stringify(userData));

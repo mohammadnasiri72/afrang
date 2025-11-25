@@ -114,11 +114,7 @@ const AddToCartButtonCard = ({ productId , accessory}) => {
     }
   };
 
-  const handleWarrantyChange = (e) => {
-    setSelectedWarranty(e.target.value);
-  };
 
-// accessory
   return (
     <>
       {!cartItem || cartItem.quantity === 0 || cartItem.parentId !== -1 ? (
