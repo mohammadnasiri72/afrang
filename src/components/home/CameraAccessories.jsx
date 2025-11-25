@@ -24,7 +24,6 @@ export default function CameraAccessories({ category }) {
       <div className="box-slider-CameraAccessories bg-no-repeat bg-cover h-72 pt-3">
         <div className="sm:px-16 px-2">
           <Swiper
-            // loop={true}
             grabCursor={true}
             modules={[Pagination]}
             className="mySwiperCamera"
