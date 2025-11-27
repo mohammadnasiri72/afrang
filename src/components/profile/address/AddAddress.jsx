@@ -656,6 +656,9 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             <label className="block text-gray-700 !mb-2">استان*</label>
             <Select
               showSearch
+              filterOption={(input, option) =>
+                option.children.toLowerCase().includes(input.toLowerCase())
+              }
               placeholder="انتخاب استان"
               className={`w-full ${
                 errors.selectedProvince ? "select-error" : ""
@@ -690,6 +693,10 @@ function AddAddress({ getAddressFu, id, isOpen, onClose }) {
             <label className="block text-gray-700 !mb-2">شهر*</label>
             <Select
               showSearch
+              // اضافه کردن این ویژگی‌ها
+              filterOption={(input, option) =>
+                option.children.toLowerCase().includes(input.toLowerCase())
+              }
               placeholder="انتخاب شهر"
               className={`w-full ${errors.selectedCity ? "select-error" : ""}`}
               onChange={(value) => {

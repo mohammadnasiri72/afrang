@@ -338,6 +338,9 @@ function AddLegal({
             <label className="block text-gray-700 !mb-2">استان*</label>
             <Select
               showSearch
+              filterOption={(input, option) =>
+                option.children.toLowerCase().includes(input.toLowerCase())
+              }
               placeholder="انتخاب استان"
               className={`w-full ${
                 errors.selectedProvince ? "select-error" : ""
@@ -376,6 +379,9 @@ function AddLegal({
             <label className="block text-gray-700 !mb-2">شهر*</label>
             <Select
               showSearch
+              filterOption={(input, option) =>
+                option.children.toLowerCase().includes(input.toLowerCase())
+              }
               placeholder="انتخاب شهر"
               className={`w-full ${errors.selectedCity ? "select-error" : ""}`}
               onChange={(value) => {
