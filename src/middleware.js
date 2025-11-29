@@ -23,7 +23,7 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
   const userCookie = request.cookies.get("user")?.value;
   
-  let userToken = JSON.parse(userCookie)?.token || null;
+  let userToken = userCookie ?  JSON.parse(userCookie)?.token : null;
 
   const isDainamic =
     pathname !== "/" &&
