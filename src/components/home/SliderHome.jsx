@@ -43,7 +43,16 @@ const SliderHome = ({ sliderItems }) => {
           >
             {sliderItems.map((item) => (
               <SwiperSlide key={item.id}>
-                <div className="block w-full h-full">
+                <Link
+                  href={item.sourceLink ? item.sourceLink : "/"}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    startTransition(() => {
+                      router.push(item.sourceLink ? item.sourceLink : "/");
+                    });
+                  }}
+                  className="block w-full h-full"
+                >
                   <div className="relative w-full h-full cursor-pointer group">
                     <div className="sm:hidden block">
                       <Image
@@ -79,7 +88,7 @@ const SliderHome = ({ sliderItems }) => {
                     </div>
 
                     {/* دکمه روی عکس */}
-                    {item.sourceLink && item.sourceLink !== "/" && (
+                    {/* {item.sourceLink && item.sourceLink !== "/" && (
                       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
                         <Link
                           href={item.sourceLink}
@@ -98,10 +107,9 @@ const SliderHome = ({ sliderItems }) => {
                           </button>
                         </Link>
                       </div>
-                    )}
-
+                    )} */}
                   </div>
-                </div>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>

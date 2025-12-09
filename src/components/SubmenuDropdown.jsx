@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useRef } from "react";
 
 const MAX_COLUMNS = 4;
-const COLUMN_PIXEL_WIDTH = 245;
+const COLUMN_PIXEL_WIDTH = 100;
 
 const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
   const boxRef = useRef(null);
@@ -32,7 +32,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
       typeof window !== "undefined"
         ? Math.round(window.innerHeight * 0.7)
         : 500;
-    const ITEM_HEIGHT = 30;
+    const ITEM_HEIGHT = 35;
     const maxRows = Math.floor(MENU_HEIGHT / ITEM_HEIGHT);
 
     // تقسیم آیتم‌ها به ستون‌ها (همیشه حداقل ۴ ستون)
@@ -126,10 +126,10 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                     key={`${item.isParent ? "parent" : "child"}-${
                       item.id
                     }-${idx}`}
-                    className={`line-clamp-1 pb-0 ${
+                    className={`line-clamp-1 ${
                       item.isParent
-                        ? "text-[#d1182b] font-bold text-[18px] pt-0 hover:text-[19px]"
-                        : "text-[#222] text-[15px] hover:text-[16px] hover:text-[#d1182b] font-semibold"
+                        ? "text-[#d1182b] font-bold text-[18px] 2xl:text-[25px] pt-0 2xl:hover:text-[26px] pl-3"
+                        : "text-[#222] text-[15px] 2xl:text-[20px] 2xl:hover:text-[21px] hover:text-[#d1182b] font-semibold pl-3"
                     } whitespace-nowrap font-inherit cursor-pointer transition-all duration-200`}
                     style={{
                       height: `${ITEM_HEIGHT}px`,
@@ -144,22 +144,6 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                         router.push(item.url || item.pageUrl || "#");
                       });
                     }}
-                    // onMouseOver={(e) => {
-                    //   if (item.isParent) {
-                    //     e.currentTarget.style.fontSize = "18px";
-                    //   } else {
-                    //     e.currentTarget.style.color = "#d1182b";
-                    //     e.currentTarget.style.fontSize = "13px";
-                    //   }
-                    // }}
-                    // onMouseOut={(e) => {
-                    //   if (item.isParent) {
-                    //     e.currentTarget.style.fontSize = "16px";
-                    //   } else {
-                    //     e.currentTarget.style.color = "#222";
-                    //     e.currentTarget.style.fontSize = "12px";
-                    //   }
-                    // }}
                   >
                     {item.title}
                   </Link>
@@ -170,7 +154,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                       src={
                         activeMenu?.image
                           ? getImageUrl(activeMenu.image)
-                          : "/images/best-video-cameras.png"
+                          : "/images/logo.png"
                       }
                       alt=""
                       className="w-full object-contain max-w-96"
