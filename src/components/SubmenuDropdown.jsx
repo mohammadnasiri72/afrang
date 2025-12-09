@@ -39,6 +39,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
     const columns = [];
     let currentColumn = [];
     let currentRow = 0;
+
     flatList.forEach((item) => {
       if (currentRow >= maxRows) {
         columns.push(currentColumn);
@@ -77,6 +78,7 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
     const containerWidth = needsHorizontalScroll
       ? `${columns.length * COLUMN_PIXEL_WIDTH}px`
       : "100%";
+
     return (
       <div
         ref={boxRef}
@@ -115,7 +117,9 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
             return (
               <div
                 key={colIdx}
-                className={`relative flex flex-col h-[68vh]  w-full`}
+                className={`relative flex flex-col h-[68vh]  w-full ${
+                  columns[2].length === 0 ? "pr-20" : ""
+                }`}
                 style={{
                   width: containerWidth,
                 }}
@@ -128,14 +132,18 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                     }-${idx}`}
                     className={`line-clamp-1 ${
                       item.isParent
-                        ? "text-[#d1182b] font-bold text-[18px] 2xl:text-[25px] pt-0 2xl:hover:text-[26px] pl-3"
-                        : "text-[#222] text-[15px] 2xl:text-[20px] 2xl:hover:text-[21px] hover:text-[#d1182b] font-semibold pl-3"
-                    } whitespace-nowrap font-inherit cursor-pointer transition-all duration-200`}
-                    style={{
-                      height: `${ITEM_HEIGHT}px`,
-                      lineHeight: `${ITEM_HEIGHT}px`,
-                      textAlign: item.isParent ? undefined : "right",
-                    }}
+                        ? "text-[#d1182b] font-bold text-[18px] 2xl:text-[20px] pt-0 2xl:hover:text-[21px] pl-3"
+                        : "text-[#222] text-[15px] 2xl:text-[17px] 2xl:hover:text-[18px] hover:text-[#d1182b] font-semibold pl-3"
+                    } whitespace-nowrap font-inherit cursor-pointer transition-all duration-200 ${
+                      columns[2].length === 0
+                        ? "h-[48px]! leading-12!"
+                        : "leading-8!"
+                    }`}
+                    // style={{
+                    //   height: `${ITEM_HEIGHT}px`,
+                    //   lineHeight: `${ITEM_HEIGHT}px`,
+                    //   textAlign: item.isParent ? undefined : "right",
+                    // }}
                     onClick={(e) => {
                       e.preventDefault();
                       document.body.style.overflow = "";
