@@ -1,9 +1,8 @@
-import React from "react";
+import { getSettingsNoCatch } from "@/services/settings/settingsService";
 import PageInfo from "./pageInfo";
-import { getSettings } from "@/services/settings/settingsService";
 
 async function page() {
-  const settings = await getSettings();
+  const settings = await getSettingsNoCatch();
   return (
     <>
       <PageInfo settings={settings} />
