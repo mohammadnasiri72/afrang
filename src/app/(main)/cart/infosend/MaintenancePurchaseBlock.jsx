@@ -35,7 +35,7 @@ const MaintenancePurchaseBlock = ({ email, tel }) => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-[80vh] flex items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-100 relative z-50">
       <Card
         className="max-w-[600px] w-full rounded-2xl border-none shadow-xl"
         styles={{
@@ -77,7 +77,7 @@ const MaintenancePurchaseBlock = ({ email, tel }) => {
         </div>
 
         {/* پیام اصلی */}
-        <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed font-bold">
+        <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed font-bold sm:text-center text-justify">
           با عرض پوزش، سیستم خرید آنلاین در حال حاضر در دسترس نیست. ما در حال
           انجام به‌روزرسانی‌های لازم برای ارائه خدمات بهتر به شما هستیم
         </p>
