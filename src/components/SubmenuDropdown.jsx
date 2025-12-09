@@ -128,8 +128,8 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                     }-${idx}`}
                     className={`line-clamp-1 pb-0 ${
                       item.isParent
-                        ? "text-[#d1182b] font-bold text-[16px] pt-0"
-                        : "text-[#222] font-medium text-xs"
+                        ? "text-[#d1182b] font-bold text-[18px] pt-0 hover:text-[19px]"
+                        : "text-[#222] text-[15px] hover:text-[16px] hover:text-[#d1182b] font-semibold"
                     } whitespace-nowrap font-inherit cursor-pointer transition-all duration-200`}
                     style={{
                       height: `${ITEM_HEIGHT}px`,
@@ -144,22 +144,22 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                         router.push(item.url || item.pageUrl || "#");
                       });
                     }}
-                    onMouseOver={(e) => {
-                      if (item.isParent) {
-                        e.currentTarget.style.fontSize = "18px";
-                      } else {
-                        e.currentTarget.style.color = "#d1182b";
-                        e.currentTarget.style.fontSize = "13px";
-                      }
-                    }}
-                    onMouseOut={(e) => {
-                      if (item.isParent) {
-                        e.currentTarget.style.fontSize = "16px";
-                      } else {
-                        e.currentTarget.style.color = "#222";
-                        e.currentTarget.style.fontSize = "12px";
-                      }
-                    }}
+                    // onMouseOver={(e) => {
+                    //   if (item.isParent) {
+                    //     e.currentTarget.style.fontSize = "18px";
+                    //   } else {
+                    //     e.currentTarget.style.color = "#d1182b";
+                    //     e.currentTarget.style.fontSize = "13px";
+                    //   }
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   if (item.isParent) {
+                    //     e.currentTarget.style.fontSize = "16px";
+                    //   } else {
+                    //     e.currentTarget.style.color = "#222";
+                    //     e.currentTarget.style.fontSize = "12px";
+                    //   }
+                    // }}
                   >
                     {item.title}
                   </Link>
