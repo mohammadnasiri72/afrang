@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import MaintenancePurchaseBlock from "./MaintenancePurchaseBlock";
 
 const HeaderCard = dynamic(() => import("@/components/Card/HeaderCard"));
 const CompeletePayWrapper = dynamic(() =>
@@ -14,14 +15,30 @@ const CompeletePayWrapper = dynamic(() =>
 );
 
 export default function CompletePay() {
+  const { settings } = useSelector((state) => state.settings);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const dispatch = useDispatch();
   const { currentItems } = useSelector((state) => state.cart);
+  const [isBanSale, setIsBanSale] = useState(false);
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (
+      settings.length > 0 &&
+      settings.find((e) => e.propertyKey === "shop_online_sale")
+    ) {
+      setIsBanSale(
+        settings.find((e) => e.propertyKey === "shop_online_sale")?.value ===
+          "0"
+      );
+    }
+  }, [settings]);
+
 
   useEffect(() => {
     const checkAuthAndCart = async () => {
@@ -61,6 +78,14 @@ export default function CompletePay() {
       <>
         <Loading />
       </>
+    );
+  }
+  if (isBanSale) {
+    return (
+      <MaintenancePurchaseBlock
+        email={settings.find((e) => e.propertyKey === "site_email")?.value}
+        tel={settings.find((e) => e.propertyKey === "site_tel")?.value}
+      />
     );
   }
 

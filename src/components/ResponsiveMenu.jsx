@@ -344,7 +344,7 @@ function ResponsiveMenu({
 
   const Title = () => (
     <div className="flex justify-end">
-      <Link
+      <Link className="font-bold!"
         onClick={(ev) => {
           ev.preventDefault();
           startTransition(() => {
@@ -667,12 +667,12 @@ function ResponsiveMenu({
                         });
                       }}
                       href={item.url || item.pageUrl || "#"}
-                      className="py-2 cursor-pointer font-semibold"
+                      className="py-2 cursor-pointer font-bold!"
                     >
                       {item.title}
                     </Link>
                   ) : (
-                    <Link
+                    <Link className="font-bold!"
                       onClick={(e) => {
                         dispatch(setOpenMenuRes(false));
                         setAnchorEl(null);
@@ -686,7 +686,7 @@ function ResponsiveMenu({
                       }}
                       href={item.url || item.pageUrl || "#"}
                     >
-                      <div className="py-2 cursor-pointer font-semibold">
+                      <div className="py-2 cursor-pointer font-bold">
                         {item.title}
                       </div>
                     </Link>
@@ -790,7 +790,7 @@ function ResponsiveMenu({
             key: item.id,
             label: (
               <div
-                className={`text-right py-2 cursor-pointer ${
+                className={`text-right py-2 cursor-pointer font-bold ${
                   isActive ? "text-[#d1182b]" : ""
                 }`}
               >
@@ -816,7 +816,7 @@ function ResponsiveMenu({
                 });
               }}
               href={item.url || item.pageUrl || "#"}
-              className={`w-full text-right py-2 transition-colors cursor-pointer ${
+              className={`w-full text-right py-2 transition-colors cursor-pointer font-bold! ${
                 isActivePath(item.url || item.pageUrl)
                   ? "text-[#d1182b]"
                   : "text-gray-800 hover:text-[#d1182b]"
@@ -848,7 +848,7 @@ function ResponsiveMenu({
             key: "dashboard-group",
             label: (
               <div
-                className={`text-right  py-2 cursor-pointer ${
+                className={`text-right  py-2 cursor-pointer font-bold ${
                   dashboardMenuItems.some((item) => isActivePath(item.path))
                     ? "text-[#d1182b]"
                     : ""
@@ -873,7 +873,7 @@ function ResponsiveMenu({
                     });
                   }}
                   href={item.path}
-                  className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer ${
+                  className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer font-bold! ${
                     isActivePath(item.path)
                       ? "text-[#d1182b]"
                       : "text-gray-800 hover:text-[#d1182b]"
@@ -900,7 +900,7 @@ function ResponsiveMenu({
                   onClick={() => {
                     handleLogout();
                   }}
-                  className="flex items-center gap-3 w-full !text-red-600 bg-transparent py-2 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center font-bold gap-3 w-full !text-red-600 bg-transparent py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   <FaSignOutAlt className="text-lg" />
                   <span>خروج از حساب</span>
@@ -922,7 +922,7 @@ function ResponsiveMenu({
         </div>
 
         <Drawer
-          zIndex={10010}
+          zIndex={10010000}
           width={250}
           title={<Title />}
           onClose={onClose}
