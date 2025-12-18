@@ -110,7 +110,20 @@ export const itemVisit = async (id, url, ip, userAgent) => {
   }
 };
 
+// کش ساده برای بنرها (جلوگیری از درخواست‌های تکراری در بازه کوتاه)
+const bannerCache = {
+  data: null,
+  time: 0,
+  ttl: 60_000, // 60 ثانیه
+};
+
 export const getListItemBanner = async () => {
+  const now = Date.now();
+  if (bannerCache.data && now - bannerCache.time < bannerCache.ttl) {
+    console.log("📦 بنر از کش");
+    return bannerCache.data;
+  }
+
   try {
     const response = await axios.get(`${mainDomain}/api/Item/Banner`, {
       params: {
@@ -118,6 +131,8 @@ export const getListItemBanner = async () => {
         categoryId: -1,
       },
     });
+    bannerCache.data = response.data;
+    bannerCache.time = now;
     return response.data;
   } catch (err) {
     return {

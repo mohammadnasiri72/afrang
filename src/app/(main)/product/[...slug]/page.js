@@ -1,9 +1,12 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
-import BodyProduct from "@/components/Product/BodyProduct";
+import BodyProductServer from "@/components/Product/BodyProductServer";
 import DescProduct from "@/components/Product/DescProduct";
 import TitleProduct from "@/components/Product/TitleProduct";
 import { itemVisit } from "@/services/Item/item";
-import { getProductId, getRelatedProductsByIdString } from "@/services/products/productService";
+import {
+  getProductId,
+  getRelatedProductsByIdString,
+} from "@/services/products/productService";
 import { headers } from "next/headers";
 import BasketFixed from "./BasketFixed";
 import PriceFixed from "./PriceFixed";
@@ -23,25 +26,22 @@ export default async function ProductDetails(props) {
   const id = Number(slug.slug[0]);
   const product = await getProductId(id);
 
-   let similarProducts = [];
-    if (product.product?.similarId) {
-      similarProducts = await getRelatedProductsByIdString(
-        product.product.similarId
-      );
-    }
-
-
-  // Record the visit with IP and User Agent
-  try {
-    await itemVisit(
-      product?.product?.productId,
-      product?.product?.url,
-      ip,
-      userAgent
+  let similarProducts = [];
+  if (product.product?.similarId) {
+    similarProducts = await getRelatedProductsByIdString(
+      product.product.similarId
     );
-  } catch (error) {
-    console.error("Error recording visit:", error);
   }
+
+  // Record the visit with IP and User Agent (non-blocking)
+  itemVisit(
+    product?.product?.productId,
+    product?.product?.url,
+    ip,
+    userAgent
+  ).catch((error) => {
+    console.error("Error recording visit:", error);
+  });
 
   return (
     <>
@@ -57,8 +57,11 @@ export default async function ProductDetails(props) {
           <div className="xl:px-16">
             <div className="flex">
               <div className="lg:w-3/4 w-full">
-                <TitleProduct product={product} similarProducts={similarProducts}/>
-                <BodyProduct id={id} />
+                <TitleProduct
+                  product={product}
+                  similarProducts={similarProducts}
+                />
+                <BodyProductServer product={product} />
               </div>
               <BasketFixed product={product} />
             </div>

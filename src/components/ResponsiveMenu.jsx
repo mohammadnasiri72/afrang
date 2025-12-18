@@ -655,6 +655,7 @@ function ResponsiveMenu({
                 >
                   {item.Children && item.Children.length > 0 ? (
                     <Link
+                      prefetch={false}
                       onClick={(e) => {
                         dispatch(setOpenMenuRes(false));
                         setAnchorEl(null);
@@ -672,7 +673,9 @@ function ResponsiveMenu({
                       {item.title}
                     </Link>
                   ) : (
-                    <Link className="font-bold!"
+                    <Link
+                      prefetch={false}
+                      className="font-bold!"
                       onClick={(e) => {
                         dispatch(setOpenMenuRes(false));
                         setAnchorEl(null);
@@ -804,6 +807,7 @@ function ResponsiveMenu({
           key: item.id,
           label: (
             <Link
+              prefetch={false}
               onClick={(e) => {
                 dispatch(setOpenMenuRes(false));
                 setAnchorEl(null);

@@ -1,7 +1,21 @@
 import { mainDomain } from "@/utils/mainDomain";
 import axios from "axios";
 
+// کش ساده درون‌حافظه‌ای برای منوها تا در همه صفحات و prefetchها
+// فقط هر ۶۰ ثانیه یک بار از API منو خوانده شود
+const menuCache = {
+  data: null,
+  time: 0,
+  ttl: 60_000, // 60 ثانیه
+};
+
 export const fetchMenuItems = async () => {
+  const now = Date.now();
+
+  if (menuCache.data && now - menuCache.time < menuCache.ttl) {
+    return menuCache.data;
+  }
+
   try {
     const response = await axios.get(`${mainDomain}/api/Menu`, {
       params: {
@@ -59,11 +73,14 @@ export const fetchMenuItems = async () => {
         }
       });
 
+      menuCache.data = rootItems;
+      menuCache.time = now;
+
       return rootItems;
     }
     return [];
   } catch (error) {
-    //  console.error("Error fetching menu items:", error);
+    // console.error("Error fetching menu items:", error);
     return [];
   }
 };

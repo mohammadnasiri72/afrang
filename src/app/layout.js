@@ -4,12 +4,13 @@ import { getSettings } from "@/services/settings/settingsService";
 import "@ant-design/v5-patch-for-react-19";
 import "react-circular-progressbar/dist/styles.css";
 import "./globals.css";
-import FooterScripts from "./FooterScripts";
+import RouteLoader from "@/components/RouteLoader";
+// import FooterScripts from "./FooterScripts";
 
 export const revalidate = 60;
 
 const settings = await getSettings();
-const siteScripts = settings?.find((e) => e.propertyKey === 'site_scripts')?.value;
+// const siteScripts = settings?.find((e) => e.propertyKey === 'site_scripts')?.value;
 
 export default async function RootLayout({ children }) {
   return (
@@ -28,8 +29,9 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
+         <RouteLoader />
         <Layout settings={settings}>{children}</Layout>
-        <FooterScripts propertyValue={siteScripts}/>
+        {/* <FooterScripts propertyValue={siteScripts}/> */}
       </body>
     </html>
   );
