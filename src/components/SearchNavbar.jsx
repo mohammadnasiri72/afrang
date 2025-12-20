@@ -116,7 +116,7 @@ const SearchNavbar = () => {
             {results.length > 0 ? (
               <div className="flex flex-col gap-4">
                 {results.map((product) => (
-                  <Link
+                  <Link prefetch={false}
                     key={product.id}
                     href={product.url}
                     className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"

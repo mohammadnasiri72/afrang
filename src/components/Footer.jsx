@@ -24,7 +24,10 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
     (item) => item.propertyKey === "site_geo_location"
   )?.value;
 
-  const [lat, lng] = coordinates?.split(",").map((coord) => coord.trim()) || ["35.6892", "51.3890"]; // Default to Tehran coordinates if not available
+  const [lat, lng] = coordinates?.split(",").map((coord) => coord.trim()) || [
+    "35.6892",
+    "51.3890",
+  ]; // Default to Tehran coordinates if not available
 
   // const handleNavigation = () => {
   //   // استفاده از geo URI استاندارد - مثل واتساپ
@@ -143,29 +146,31 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                       )?.value ?? (
                         <span className="inline-block w-[200px] h-[1em] bg-gray-200 animate-pulse align-middle rounded" />
                       )}
-                      <div className="flex">
-                        <Link
-                          href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleNavigation();
-                          }}
-                          className="bg-[#d1182b] !text-white cursor-pointer py-0 px-2 rounded-xl duration-300 font-semibold lg:hidden flex  items-center justify-center gap-1 shadow-lg hover:shadow-xl"
-                        >
-                          <IoLocationSharp />
-                          <span>مسیریابی</span>
-                        </Link>
+                      {lat && lng && (
+                        <div className="flex">
+                          <Link
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleNavigation();
+                            }}
+                            className="bg-[#d1182b] !text-white cursor-pointer py-0 px-2 rounded-xl duration-300 font-semibold lg:hidden flex  items-center justify-center gap-1 shadow-lg hover:shadow-xl"
+                          >
+                            <IoLocationSharp />
+                            <span>مسیریابی</span>
+                          </Link>
 
-                        <Link
-                          href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="lg:flex hidden bg-[#d1182b] !text-white cursor-pointer py-0 px-2 rounded-xl duration-300 font-semibold items-center justify-center gap-1 shadow-lg hover:shadow-xl"
-                        >
-                          <IoLocationSharp />
-                          <span>مسیریابی</span>
-                        </Link>
-                      </div>
+                          <Link
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="lg:flex hidden bg-[#d1182b] !text-white cursor-pointer py-0 px-2 rounded-xl duration-300 font-semibold items-center justify-center gap-1 shadow-lg hover:shadow-xl"
+                          >
+                            <IoLocationSharp />
+                            <span>مسیریابی</span>
+                          </Link>
+                        </div>
+                      )}
                     </span>
                   </div>
 

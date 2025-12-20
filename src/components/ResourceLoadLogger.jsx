@@ -37,24 +37,20 @@ export default function ResourceLoadLogger() {
       });
 
       if (slowResources.length > 0) {
-        console.group("🐌 منابع کند لود شده:");
         slowResources.forEach((resource) => {
           const cachedLabel = resource.cached ? " (کش شده)" : "";
           const sizeKB = (resource.size / 1024).toFixed(2);
         
         });
-        console.groupEnd();
       }
 
       // لاگ فونت‌ها
       const fonts = resources.filter((r) => r.name.includes("/font/"));
       if (fonts.length > 0) {
-        console.group("🔤 زمان لود فونت‌ها:");
         fonts.forEach((font) => {
           const duration = (font.responseEnd - font.startTime).toFixed(2);
           const fontName = font.name.split("/").pop() || font.name;
         });
-        console.groupEnd();
       }
 
       // لاگ عکس‌ها
@@ -68,14 +64,12 @@ export default function ResourceLoadLogger() {
           (img) => img.responseEnd - img.startTime > 1000
         );
         if (slowImages.length > 0) {
-          console.group("🖼️ عکس‌های کند لود شده (>1s):");
           slowImages.forEach((img) => {
             const duration = (img.responseEnd - img.startTime).toFixed(2);
             const imgName = img.name.split("/").pop() || img.name;
             const sizeKB = ((img.transferSize || 0) / 1024).toFixed(2);
           
           });
-          console.groupEnd();
         }
       }
 
@@ -86,14 +80,12 @@ export default function ResourceLoadLogger() {
           (script) => script.responseEnd - script.startTime > 500
         );
         if (slowScripts.length > 0) {
-          console.group("📜 Script‌های کند لود شده (>500ms):");
           slowScripts.forEach((script) => {
             const duration = (script.responseEnd - script.startTime).toFixed(2);
             const scriptName = script.name.split("/").pop() || script.name;
             const sizeKB = ((script.transferSize || 0) / 1024).toFixed(2);
            
           });
-          console.groupEnd();
         }
       }
 
@@ -106,14 +98,12 @@ export default function ResourceLoadLogger() {
           (css) => css.responseEnd - css.startTime > 500
         );
         if (slowCSS.length > 0) {
-          console.group("🎨 CSS کند لود شده (>500ms):");
           slowCSS.forEach((css) => {
             const duration = (css.responseEnd - css.startTime).toFixed(2);
             const cssName = css.name.split("/").pop() || css.name;
             const sizeKB = ((css.transferSize || 0) / 1024).toFixed(2);
            
           });
-          console.groupEnd();
         }
       }
     };

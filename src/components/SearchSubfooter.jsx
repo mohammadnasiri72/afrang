@@ -4,7 +4,7 @@ import { AiOutlineProduct } from "react-icons/ai";
 function SearchSubfooter() {
   return (
     <>
-      <Link href="/products" aria-label="محصولات">
+      <Link prefetch={false} href="/products" aria-label="محصولات">
         <AiOutlineProduct className="text-[#d1182b] text-2xl" />
       </Link>
     </>

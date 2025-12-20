@@ -160,7 +160,7 @@ const SearchHeader = () => {
                 {results.length > 0 ? (
                   <div className="grid grid-cols-2 gap-4">
                     {results.map((product) => (
-                      <Link
+                      <Link prefetch={false}
                         onClick={() => {
                           setShowResults(false);
                         }}

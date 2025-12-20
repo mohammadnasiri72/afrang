@@ -25,7 +25,6 @@ export default function ScrollToTopButton() {
     
     const loadTime = performance.now() - startTime;
     if (loadTime > 100 && process.env.NODE_ENV === "development") {
-      console.warn(`⚠️ ScrollToTopButton setup took ${loadTime.toFixed(2)}ms`);
     }
     
     return () => window.removeEventListener("scroll", handleScroll);

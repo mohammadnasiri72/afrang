@@ -433,11 +433,7 @@ function Layout({ children, settings }) {
         const resources = performance.getEntriesByType("resource");
         resources.forEach((res) => {
           if (res.duration > 1000) {
-            console.warn(
-              `⚠️ منبع کند: ${res.name
-                .split("/")
-                .pop()} - ${res.duration.toFixed(0)}ms`
-            );
+           
           }
         });
       };

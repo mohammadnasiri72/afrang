@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Divider } from "antd";
+import { Alert, Button, Divider } from "antd";
 import { useEffect, useState } from "react";
 import { FaCreditCard } from "react-icons/fa";
 import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
@@ -15,6 +15,7 @@ import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
+
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
@@ -163,6 +164,14 @@ function BasketBox({ product }) {
           )}
 
           <PriceProduct product={product?.product} />
+          {product?.shipment?.deliveryTime && (
+            <div>
+              <p className="bg-blue-100! border-blue-300 rounded-lg text-blue-700! whitespace-nowrap text-center p-2 text-lg font-bold">
+                {product?.shipment?.deliveryTime}
+              </p>
+            </div>
+          )}
+
           {product?.inventory?.inventorySetting?.showInventory && (
             <div>
               {
@@ -176,7 +185,7 @@ function BasketBox({ product }) {
               }
             </div>
           )}
-          <div className="sm:block hidden">
+          <div className="sm:block hidden mb-2!">
             <CartActions
               product={product}
               warrantySelected={warrantySelected}
