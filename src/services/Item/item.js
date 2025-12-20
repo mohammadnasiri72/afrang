@@ -1,10 +1,22 @@
 import { mainDomain } from "@/utils/mainDomain";
 import axios from "axios";
 
+
+const createQueryString = (params = {}) => {
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.append(key, value);
+    }
+  });
+  return searchParams.toString();
+};
+
 export const getItem = async (params) => {
   try {
     const response = await axios.get(`${mainDomain}/api/Item`, {
       params,
+      timeout: 15000,
     });
     return response.data;
   } catch (err) {
@@ -17,7 +29,9 @@ export const getItem = async (params) => {
 
 export const getItemById = async (id) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Item/${id}`);
+    const response = await axios.get(`${mainDomain}/api/Item/${id}`, {
+      timeout: 15000,
+    });
 
     return response.data;
   } catch (err) {
@@ -28,31 +42,36 @@ export const getItemById = async (id) => {
   }
 };
 
+
 export const getItemByUrl = async (url) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Item/findByUrl`, {
-      params: {
-        url,
-        langCode: "fa",
+    // ساخت URL با پارامترها
+    const params = new URLSearchParams({
+      url,
+      langCode: "fa",
+    });
+    const apiUrl = `${mainDomain}/api/Item/findByUrl?${params}`;
+    
+    // استفاده از fetch با کش (مثلاً 60 ثانیه)
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      headers: { "Cache-Control": "no-cache" },
+      next: { revalidate: 60 }, // کش برای 60 ثانیه
     });
 
-    return response.data;
-  } catch (err) {
-    const responseData = err.response?.data;
-    const isHard404 =
-      typeof responseData === "string" &&
-      (responseData.includes("<!DOCTYPE") ||
-        responseData.includes("<html") ||
-        responseData.includes("Not Found") ||
-        responseData.includes("HTTP Error") ||
-        responseData.includes("<!DOCTYPE HTML PUBLIC"));
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
+    return await response.json();
+  } catch (err) {
+    const isHard404 = err.message.includes("Not Found") || 
+                     err.message.includes("404");
     return {
       type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
-      status: err.response?.status,
+      message: err.message || "خطای شبکه",
       isHard404,
     };
   }
@@ -67,6 +86,7 @@ export const getItemByIds = async (data, token) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        timeout: 15000,
       }
     );
     return response.data;
@@ -80,7 +100,9 @@ export const getItemByIds = async (data, token) => {
 
 export const getListItemByIds = async (ids) => {
   try {
-    const response = await axios.get(`${mainDomain}/api/Item/ByIds/${ids}`);
+    const response = await axios.get(`${mainDomain}/api/Item/ByIds/${ids}`, {
+      timeout: 15000,
+    });
     return response.data;
   } catch (err) {
     return {
@@ -90,17 +112,19 @@ export const getListItemByIds = async (ids) => {
   }
 };
 
-export const itemVisit = async (id, url, ip, userAgent) => {
+export const itemVisit = async (id, url, userAgent) => {
   const data = {
     langCode: "fa",
     id,
     url,
-    ip,
+    ip:'',
     userAgent,
   };
 
   try {
-    const response = await axios.post(`${mainDomain}/api/Item/visit`, data);
+    const response = await axios.post(`${mainDomain}/api/Item/visit`, data, {
+      timeout: 15000,
+    });
     return response.data;
   } catch (error) {
     return {
@@ -110,34 +134,53 @@ export const itemVisit = async (id, url, ip, userAgent) => {
   }
 };
 
-// کش ساده برای بنرها (جلوگیری از درخواست‌های تکراری در بازه کوتاه)
-const bannerCache = {
-  data: null,
-  time: 0,
-  ttl: 60_000, // 60 ثانیه
-};
+// export const getListItemBanner = async () => {
+//   try {
+//     const response = await axios.get(`${mainDomain}/api/Item/Banner`, {
+//       params: {
+//         langCode: "fa",
+//         categoryId: -1,
+//       },
+//       timeout: 15000,
+//     });
+//     return response.data;
+//   } catch (err) {
+//     return {
+//       type: "error",
+//       message: err.response?.data ? err.response?.data : "خطای شبکه",
+//     };
+//   }
+// };
+
 
 export const getListItemBanner = async () => {
-  const now = Date.now();
-  if (bannerCache.data && now - bannerCache.time < bannerCache.ttl) {
-    console.log("📦 بنر از کش");
-    return bannerCache.data;
-  }
-
   try {
-    const response = await axios.get(`${mainDomain}/api/Item/Banner`, {
-      params: {
-        langCode: "fa",
-        categoryId: -1,
+    const params = {
+      langCode: "fa",
+      categoryId: -1,
+    };
+    
+    const queryString = createQueryString(params);
+    const url = `${mainDomain}/api/Item/Banner${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      cache: 'force-cache',
+      next: { revalidate: 60 },
     });
-    bannerCache.data = response.data;
-    bannerCache.time = now;
-    return response.data;
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
   } catch (err) {
     return {
       type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
+      message: "خطای شبکه",
     };
   }
 };

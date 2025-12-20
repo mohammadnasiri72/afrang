@@ -34,7 +34,6 @@ export default function CompletePay() {
 
   const [mounted, setMounted] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
-  const [isPending, startTransition] = useTransition();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -45,18 +44,16 @@ export default function CompletePay() {
         // Check for user token
         const userCookie = Cookies.get("user");
         if (!userCookie) {
-          startTransition(() => {
-            router.push("/cart");
-          });
+          router.push("/cart");
+         
 
           return;
         }
 
         const userData = JSON.parse(userCookie);
         if (!userData?.token) {
-          startTransition(() => {
-            router.push("/cart");
-          });
+          router.push("/cart");
+          
 
           return;
         }
@@ -70,9 +67,8 @@ export default function CompletePay() {
             !currentPath.includes("/profile/orders") ||
             !searchParams.includes("trackCode")
           ) {
-            startTransition(() => {
-              router.push("/cart");
-            });
+            router.push("/cart");
+            
             return;
           }
         }
@@ -83,26 +79,22 @@ export default function CompletePay() {
             icon: "warning",
             text: "لطفاً ابتدا آدرس و روش ارسال را انتخاب کنید",
           });
-          startTransition(() => {
-            router.push("/cart/infosend");
-          });
+          router.push("/cart/infosend");
+          
 
           return;
         }
         if (!estimateData) {
-          startTransition(() => {
-            router.push("/cart");
-          });
+          router.push("/cart");
+         
 
           return;
         }
 
         setIsChecking(false);
       } catch (error) {
-        console.error("Error checking auth:", error);
-        startTransition(() => {
-          router.push("/cart");
-        });
+        router.push("/cart");
+       
       }
     };
 
@@ -144,7 +136,6 @@ export default function CompletePay() {
           <BodyPayment />
         </Container>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

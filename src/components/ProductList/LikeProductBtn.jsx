@@ -17,7 +17,6 @@ const LikeProductBtn = ({ productId }) => {
   const [liked, setLiked] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const checkLikeStatus = async () => {
@@ -69,12 +68,7 @@ const LikeProductBtn = ({ productId }) => {
             {!liked && (
               <Link
                 href="/profile/favorites"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/profile/favorites");
-                  });
-                }}
+                
                 style={{ color: "#d1182b" }}
                 className="hover:text-red-700"
               >
@@ -133,7 +127,6 @@ const LikeProductBtn = ({ productId }) => {
           </button>
         </Tooltip>
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

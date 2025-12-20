@@ -11,8 +11,9 @@ import { SlBasket } from "react-icons/sl";
 import CommentProduct from "./CommentProduct";
 import ProductTabs from "./ProductTabs";
 
-async function BodyProduct({ id }) {
-  const product = await getProductId(id);
+async function BodyProduct({ id, product: productProp }) {
+  // اگر product از props آمده، از آن استفاده می‌کنیم تا درخواست تکراری نزنیم
+  const product = productProp || await getProductId(id);
 
   function groupByCategory(properties) {
     // فقط آیتم‌هایی که isTechnicalProperty=true دارند
@@ -74,7 +75,7 @@ async function BodyProduct({ id }) {
 
   return (
     <>
-      <div className="!hidden">
+      {/* <div className="!hidden">
         <div className="py-9 px-7">
           <div
             className="prose max-w-none"
@@ -177,7 +178,7 @@ async function BodyProduct({ id }) {
 
         <CommentProduct id={product.product.productId} type={0} />
         <CommentProduct id={product.product.productId} type={1} />
-      </div>
+      </div> */}
 
       <ProductTabs
         product={product}

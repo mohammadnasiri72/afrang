@@ -15,7 +15,6 @@ import { FaTimes } from "react-icons/fa";
 import ComparePageSkeleton from "./ComparePageSkeleton";
 
 const DynamicComparePage = () => {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
   const [compareProducts, setCompareProducts] = useState([]);
@@ -99,9 +98,8 @@ const DynamicComparePage = () => {
                   sortedFetchedIds.length > 0
                     ? `/compare/${sortedFetchedIds.join(",")}`
                     : "/compare";
-                startTransition(() => {
-                  router.push(newUrl);
-                });
+                    router.push(newUrl);
+                
               }
             }
           } else {
@@ -136,9 +134,8 @@ const DynamicComparePage = () => {
     const newUrl =
       updatedIds.length > 0 ? `/compare/${updatedIds.join(",")}` : "/compare";
 
-    startTransition(() => {
       router.push(newUrl);
-    });
+   
     message.success("محصول از مقایسه حذف شد");
   };
 
@@ -178,12 +175,7 @@ const DynamicComparePage = () => {
           <p className="text-gray-500 !mb-6">{error}</p>
           <Link
             href="/products"
-            onClick={(ev) => {
-              ev.preventDefault();
-              startTransition(() => {
-                router.push("/products");
-              });
-            }}
+           
             className="bg-blue-500 !text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
           >
             بازگشت به محصولات
@@ -206,12 +198,7 @@ const DynamicComparePage = () => {
           </p>
           <Link
             href="/products"
-            onClick={(ev) => {
-              ev.preventDefault();
-              startTransition(() => {
-                router.push("/products");
-              });
-            }}
+            
             className="bg-blue-500 !text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
           >
             مشاهده محصولات
@@ -270,12 +257,7 @@ const DynamicComparePage = () => {
                       <div className="flex flex-col items-center w-full p-3">
                         <Link
                           href={`/product/${item.productId}`}
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            startTransition(() => {
-                              router.push(`/product/${item.productId}`);
-                            });
-                          }}
+                         
                           className="block w-full "
                         >
                           <div className="relative aspect-square w-full max-w-[100px] mx-auto ">
@@ -304,12 +286,7 @@ const DynamicComparePage = () => {
                         >
                           <Link
                             href={`/product/${item.productId}`}
-                            onClick={(ev) => {
-                              ev.preventDefault();
-                              startTransition(() => {
-                                router.push(`/product/${item.productId}`);
-                              });
-                            }}
+                           
                           >
                             <div className="font-bold text-center text-xs sm:text-sm !line-clamp-2 min-h-[40px] flex items-center justify-center text-black leading-tight">
                               {item.title}
@@ -428,7 +405,6 @@ const DynamicComparePage = () => {
           </div>
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

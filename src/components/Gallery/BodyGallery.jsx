@@ -12,7 +12,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaEye, FaRegUser, FaTelegram } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { LuCalendarRange } from "react-icons/lu";
@@ -23,7 +23,6 @@ import BoxImageGallery from "./BoxImageGallery";
 import { Fancybox } from "@fancyapps/ui";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
-import Loading from "../Loading";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -65,7 +64,6 @@ function BodyGallery({
   const [propertySelected, setPropertySelected] = useState([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
   const params = useParams();
   const pathname = usePathname();
   const text =
@@ -107,14 +105,7 @@ function BodyGallery({
     const url = window.location.href;
     const userAgent = navigator.userAgent;
 
-    try {
-      const response = await fetch("https://api.ipify.org?format=json");
-      const data = await response.json();
-      const ip = data.ip;
-      itemVisit(id, url, ip, userAgent);
-    } catch (error) {
-      console.error("Error fetching IP:", error);
-    }
+    itemVisit(id, url, userAgent);
   };
 
   useEffect(() => {
@@ -245,16 +236,6 @@ function BodyGallery({
                           (item) => item.propertyKey === "site_home_url"
                         )?.value
                       }
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(
-                            settings?.find(
-                              (item) => item.propertyKey === "site_home_url"
-                            )?.value
-                          );
-                        });
-                      }}
                       aria-label="صفحه اصلی"
                     >
                       <img
@@ -366,16 +347,7 @@ function BodyGallery({
                         </>
                       )}
                     </div>
-                    <Link
-                      href={"/profile/Send-Photo"}
-                      onClick={(e) => {
-                        e.preventDefault();
-
-                        startTransition(() => {
-                          router.push("/profile/Send-Photo");
-                        });
-                      }}
-                    >
+                    <Link href={"/profile/Send-Photo"}>
                       <div className="flex items-center rounded-sm bg-[#18d1be] !text-white px-3 py-3 cursor-pointer duration-300 hover:bg-[#40768c]">
                         <FaTelegram className="text-lg" />
                         <span className="whitespace-nowrap pr-2 font-semibold text-sm">
@@ -502,17 +474,6 @@ function BodyGallery({
                         href={`${
                           window.location.pathname
                         }?${searchParams.toString()}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-
-                          startTransition(() => {
-                            router.push(
-                              `${
-                                window.location.pathname
-                              }?${searchParams.toString()}`
-                            );
-                          });
-                        }}
                       >
                         {page}
                       </Link>
@@ -525,8 +486,6 @@ function BodyGallery({
           </div>
         )}
       </Container>
-
-      {isPending && <Loading />}
     </>
   );
 }

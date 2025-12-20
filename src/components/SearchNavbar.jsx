@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { IoClose, IoSearch } from "react-icons/io5";
 
-const SearchNavbar = ({ startTransition }) => {
+const SearchNavbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -123,9 +123,7 @@ const SearchNavbar = ({ startTransition }) => {
                     onClick={(ev) => {
                       ev.preventDefault();
                       setShowResults(false);
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
+                      router.push(product.url);
                     }}
                   >
                     <div className="sm:w-20 w-12 sm:h-20 h-12 relative flex-shrink-0">

@@ -1,20 +1,26 @@
 import { mainDomain } from "@/utils/mainDomain";
 import axios from "axios";
 
-// کش ساده درون‌حافظه‌ای برای منوها تا در همه صفحات و prefetchها
-// فقط هر ۶۰ ثانیه یک بار از API منو خوانده شود
-const menuCache = {
-  data: null,
-  time: 0,
-  ttl: 60_000, // 60 ثانیه
+// لاگ کم‌هزینه برای مانیتورینگ زمان منو
+const logMenuTime = (message, startTime) => {
+  try {
+    const end =
+      typeof performance !== "undefined" && performance.now
+        ? performance.now()
+        : Date.now();
+    const duration = end - startTime;
+    // این لاگ روی سرور چاپ می‌شود (نه مرورگر) و به پیدا کردن کندی منو کمک می‌کند
+   
+  } catch {
+    // اگر performance در محیط فعلی نبود، بی‌صدا رد می‌شویم
+  }
 };
 
 export const fetchMenuItems = async () => {
-  const now = Date.now();
-
-  if (menuCache.data && now - menuCache.time < menuCache.ttl) {
-    return menuCache.data;
-  }
+  const start =
+    typeof performance !== "undefined" && performance.now
+      ? performance.now()
+      : Date.now();
 
   try {
     const response = await axios.get(`${mainDomain}/api/Menu`, {
@@ -26,6 +32,8 @@ export const fetchMenuItems = async () => {
         "Cache-Control": "no-cache",
         Pragma: "no-cache",
       },
+      // جلوگیری از آویزان شدن رندر اگر منو کند باشد
+      timeout: 15000,
     });
 
     if (response.data && response.data.length > 0) {
@@ -73,14 +81,19 @@ export const fetchMenuItems = async () => {
         }
       });
 
-      menuCache.data = rootItems;
-      menuCache.time = now;
+      logMenuTime(
+        `دریافت موفق منو (${rootItems.length} ریشه، ${menuData.length} آیتم خام)`,
+        start
+      );
 
       return rootItems;
     }
+
+    logMenuTime("منو خالی یا بدون داده معتبر برگشت", start);
     return [];
   } catch (error) {
-    // console.error("Error fetching menu items:", error);
+    logMenuTime("خطا در دریافت منو", start);
+    console.error("❌ [Menu] Error fetching menu items:", error?.message);
     return [];
   }
 };

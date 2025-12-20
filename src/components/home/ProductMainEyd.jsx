@@ -7,25 +7,16 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { Divider } from "antd";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
-import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
-import { Navigation, Pagination } from "swiper/modules";
-import Loading from "../Loading";
-import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
-import ProductMainPhotoLazy from "./ProductMainPhotoLazy";
-import ProductMainPhotoNoLazy from "./ProductMainPhotoNoLazy";
-import Image from "next/image";
-import CountdownTimer from "./CountdownTimer";
 import { getImageUrl } from "@/utils/mainDomain";
+import { Divider } from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect } from "react";
+import { Navigation, Pagination } from "swiper/modules";
+import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
+import CountdownTimer from "./CountdownTimer";
 
 export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
-  const [isPending, startTransition] = useTransition();
-
-  const router = useRouter();
-
   useEffect(() => {
     const checkDevice = () => {
       setIsMobile(window.innerWidth <= 639); // 768px = md breakpoint
@@ -87,13 +78,6 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
                 <div className="relative group w-full min-h-[16rem]  overflow-hidden rounded-xl bg-white shadow-md">
                   {/* تصویر */}
                   <Link
-                    onClick={(e) => {
-                      e.preventDefault();
-
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
-                    }}
                     href={product.url}
                     className="w-full min-h-32 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                   >
@@ -141,13 +125,6 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
                   <div className="flex flex-col flex-1 justify-between mt-2 ">
                     {/* عنوان */}
                     <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                      }}
                       href={product.url}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start h-12"
                     >
@@ -209,7 +186,6 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
             ))}
         </Swiper>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

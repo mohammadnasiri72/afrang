@@ -1,4 +1,3 @@
-import Loading from "@/components/Loading";
 import { loginOtp, loginSendOtp } from "@/services/Account/AccountService";
 import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -7,7 +6,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -110,7 +109,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
   const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -242,18 +240,12 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         const redirectPath = localStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
           localStorage.removeItem("redirectAfterLogin");
-          startTransition(() => {
-            router.push(redirectPath);
-          });
+          router.push(redirectPath);
         } else if (!from) {
-          startTransition(() => {
-            router.push("/");
-          });
+          router.push("/");
         } else {
           if (from === "card") {
-            startTransition(() => {
-              router.push("/cart/infosend");
-            });
+            router.push("/cart/infosend");
           }
         }
 
@@ -285,15 +277,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link
-                href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
-              >
+              <Link href="/">
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -309,15 +293,7 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link
-                href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
-              >
+              <Link href="/">
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>
@@ -441,7 +417,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
           </div>
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

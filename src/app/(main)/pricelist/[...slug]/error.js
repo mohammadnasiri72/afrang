@@ -1,13 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
-import Loading from "../loading";
+import { useEffect } from "react";
 
 export default function Error({ error, reset }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   useEffect(() => {
     console.error("Price list error:", error);
   }, [error]);
@@ -57,12 +53,6 @@ export default function Error({ error, reset }) {
             </button>
             <Link
               href="/"
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
               className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             >
               بازگشت به صفحه اصلی
@@ -70,7 +60,6 @@ export default function Error({ error, reset }) {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

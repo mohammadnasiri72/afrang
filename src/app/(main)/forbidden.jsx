@@ -1,13 +1,10 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaArrowRight, FaHome, FaLock } from "react-icons/fa";
 
 export default function Forbidden() {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   return (
@@ -32,12 +29,7 @@ export default function Forbidden() {
               بازگشت
             </button>
             <Link
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
+             
               href="/"
               className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
             >
@@ -47,7 +39,6 @@ export default function Forbidden() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

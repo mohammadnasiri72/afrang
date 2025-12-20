@@ -1,14 +1,9 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaExclamationTriangle, FaHome, FaRedo } from "react-icons/fa";
 
 export default function ErrorContact() {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const handleRefresh = () => {
     window.location.reload();
   };
@@ -30,12 +25,6 @@ export default function ErrorContact() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/"
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
               className="flex items-center justify-center gap-2 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
             >
               <FaHome />
@@ -51,7 +40,6 @@ export default function ErrorContact() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

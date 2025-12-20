@@ -1,3 +1,5 @@
+
+
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import { getItemByUrl } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -7,14 +9,16 @@ import CalculationInstallments from "./CalculationInstallments";
 export const runtime = "edge";
 
 export default async function DynamicPage({ params }) {
+  
   try {
     const data = await getItemByUrl(params.slug);
+    
 
     if (data?.type === "error") {
       notFound();
     }
 
-    return (
+    const result = (
       <>
         <div className="bg-[#fff]">
           <div className="max-w-[1600px] mx-auto overflow-hidden">
@@ -45,8 +49,10 @@ export default async function DynamicPage({ params }) {
         </div>
       </>
     );
+    
+    return result;
+    
   } catch (error) {
-    console.error("Error fetching page:", error);
     notFound();
   }
 }

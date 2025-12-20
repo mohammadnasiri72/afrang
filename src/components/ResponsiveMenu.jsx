@@ -174,12 +174,7 @@ const enableBodyScroll = () => {
   document.body.style.paddingRight = "";
 };
 
-function ResponsiveMenu({
-  activeMenu,
-  setActiveMenu,
-  initialItems,
-  startTransition,
-}) {
+function ResponsiveMenu({ activeMenu, setActiveMenu, initialItems }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -344,15 +339,15 @@ function ResponsiveMenu({
 
   const Title = () => (
     <div className="flex justify-end">
-      <Link className="font-bold!"
+      <Link
+        className="font-bold!"
         onClick={(ev) => {
           ev.preventDefault();
-          startTransition(() => {
-            router.push(
-              settings?.find((item) => item.propertyKey === "site_home_url")
-                ?.value
-            );
-          });
+          router.push(
+            settings?.find((item) => item.propertyKey === "site_home_url")
+              ?.value
+          );
+
           onClose();
         }}
         href={
@@ -663,9 +658,7 @@ function ResponsiveMenu({
                         enableBodyScroll();
 
                         e.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url || item.pageUrl || "#");
-                        });
+                        router.push(item.url || item.pageUrl || "#");
                       }}
                       href={item.url || item.pageUrl || "#"}
                       className="py-2 cursor-pointer font-bold!"
@@ -683,9 +676,7 @@ function ResponsiveMenu({
                         enableBodyScroll();
 
                         e.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url || item.pageUrl || "#");
-                        });
+                        router.push(item.url || item.pageUrl || "#");
                       }}
                       href={item.url || item.pageUrl || "#"}
                     >
@@ -770,11 +761,7 @@ function ResponsiveMenu({
                   borderBottomRightRadius: "20px",
                 }}
               >
-                <SubmenuDropdown
-                  activeMenu={activeMenu}
-                  onClose={onClose}
-                  startTransition={startTransition}
-                />
+                <SubmenuDropdown activeMenu={activeMenu} onClose={onClose} />
               </AnimatedPaper>
             </Fade>
           )}
@@ -815,9 +802,7 @@ function ResponsiveMenu({
                 enableBodyScroll();
 
                 e.preventDefault();
-                startTransition(() => {
-                  router.push(item.url || item.pageUrl || "#");
-                });
+                router.push(item.url || item.pageUrl || "#");
               }}
               href={item.url || item.pageUrl || "#"}
               className={`w-full text-right py-2 transition-colors cursor-pointer font-bold! ${
@@ -838,9 +823,7 @@ function ResponsiveMenu({
         Cookies.remove("user");
         dispatch(setOpenMenuRes(false));
         enableBodyScroll();
-        startTransition(() => {
-          router.push("/");
-        });
+        router.push("/");
       } catch (error) {
         console.error("Logout error:", error);
       }
@@ -865,16 +848,14 @@ function ResponsiveMenu({
               key: item.id,
               label: (
                 <Link
+                  prefetch={false}
                   onClick={(e) => {
                     dispatch(setOpenMenuRes(false));
                     setAnchorEl(null);
                     setActiveMenu(null);
                     enableBodyScroll();
-
                     e.preventDefault();
-                    startTransition(() => {
-                      router.push(item.path);
-                    });
+                    router.push(item.path);
                   }}
                   href={item.path}
                   className={`flex items-center gap-3 w-full py-2 transition-colors cursor-pointer font-bold! ${
@@ -1001,8 +982,12 @@ function ResponsiveMenu({
 
   return (
     <>
-      <DesktopMenu />
-      <MobileMenu />
+      <div className="lg:block hidden">
+        <DesktopMenu />
+      </div>
+      <div className="lg:hidden block">
+        <MobileMenu />
+      </div>
     </>
   );
 }

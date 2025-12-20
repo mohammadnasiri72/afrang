@@ -11,14 +11,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import Loading from "../Loading";
 
 const SliderHome = ({ sliderItems }) => {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
   return (
     <>
       <div className="relative w-full h-72 slider-homePage">
@@ -45,12 +39,6 @@ const SliderHome = ({ sliderItems }) => {
               <SwiperSlide key={item.id}>
                 <Link
                   href={item.sourceLink ? item.sourceLink : "/"}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push(item.sourceLink ? item.sourceLink : "/");
-                    });
-                  }}
                   className="block w-full h-full"
                 >
                   <div className="relative w-full h-full cursor-pointer group">
@@ -86,28 +74,6 @@ const SliderHome = ({ sliderItems }) => {
                         unoptimized
                       />
                     </div>
-
-                    {/* دکمه روی عکس */}
-                    {/* {item.sourceLink && item.sourceLink !== "/" && (
-                      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-                        <Link
-                          href={item.sourceLink}
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            startTransition(() => {
-                              router.push(item.sourceLink);
-                            });
-                          }}
-                        >
-                          <button
-                            tabIndex={-1}
-                            className="bg-[#18d1be] rounded-2xl py-1.5 px-3 duration-300 hover:!bg-white hover:!text-[#d1182b] font-bold !text-[#444] cursor-pointer"
-                          >
-                            نمایش بیشتر
-                          </button>
-                        </Link>
-                      </div>
-                    )} */}
                   </div>
                 </Link>
               </SwiperSlide>
@@ -118,7 +84,6 @@ const SliderHome = ({ sliderItems }) => {
         {/* pagination جدا از ماسک */}
         <div className="custom-swiper-pagination absolute right-5 top-1/2 -translate-y-1/2 z-[9999]" />
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

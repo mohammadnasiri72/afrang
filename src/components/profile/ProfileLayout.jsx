@@ -9,7 +9,7 @@ import { getWalletUser } from "@/services/dashboard/dashboardService";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import {
   FaAddressBook,
   FaBuilding,
@@ -29,7 +29,6 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import Loading from "../Loading";
 
 const menuItems = [
   {
@@ -116,8 +115,6 @@ const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
-
-
 export default function ProfileLayout({ children }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [walletBalance, setWalletBalance] = useState(null);
@@ -125,7 +122,6 @@ export default function ProfileLayout({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const [isPending, startTransition] = useTransition();
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -192,7 +188,6 @@ export default function ProfileLayout({ children }) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-       
       });
     } finally {
       setIsLoggingOut(false);
@@ -239,7 +234,7 @@ export default function ProfileLayout({ children }) {
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-gray-600">کیف پول:</span>
                   <span className="font-bold text-[#d1182b]">
-                    {walletBalance 
+                    {walletBalance
                       ? `${walletBalance.toLocaleString()} تومان`
                       : "در حال بارگذاری..."}
                   </span>
@@ -254,12 +249,6 @@ export default function ProfileLayout({ children }) {
 
                 return (
                   <Link
-                    onClick={(e) => {
-                      e.preventDefault();
-                      startTransition(() => {
-                        router.push(item.path || "#");
-                      });
-                    }}
                     key={item.id}
                     href={item.path}
                     className={`
@@ -314,7 +303,6 @@ export default function ProfileLayout({ children }) {
           </div>
         </main>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

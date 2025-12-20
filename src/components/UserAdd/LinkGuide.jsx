@@ -1,20 +1,13 @@
 "use client";
-import { setActiveTab } from "@/redux/slices/idEditSec";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { Alert } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { BsPatchQuestionFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import Loading from "../Loading";
 
 function LinkGuide() {
   const [href, setHref] = useState("/login");
   const [href2, setHref2] = useState("/login");
-  const disPatch = useDispatch();
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -48,68 +41,26 @@ function LinkGuide() {
           />
         </div>
         <div className="lg:w-3/4 w-full p-3 flex flex-col items-start justify-between gap-4 my-2">
-          <Link
-            className=" flex items-center gap-1 group"
-            href={"/UsedRules"}
-            onClick={(e) => {
-              e.preventDefault();
-
-              startTransition(() => {
-                router.push("/UsedRules");
-              });
-            }}
-          >
+          <Link className=" flex items-center gap-1 group" href={"/UsedRules"}>
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               مشاهده قوانین خرید و فروش تجهیزات عکاسی و دوربین دیجیتال کارکرده و
               دست دوم.
             </span>
           </Link>
-          <Link
-            className=" flex items-center gap-1 group"
-            href={href}
-            onClick={(e) => {
-              disPatch(setActiveTab(2));
-              e.preventDefault();
-
-              startTransition(() => {
-                router.push(href);
-              });
-            }}
-          >
+          <Link className=" flex items-center gap-1 group" href={href}>
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               ثبت آگهی خرید دست دوم
             </span>
           </Link>
-          <Link
-            className=" flex items-center gap-1 group"
-            href={href}
-            onClick={(e) => {
-              disPatch(setActiveTab(1));
-              e.preventDefault();
-
-              startTransition(() => {
-                router.push(href);
-              });
-            }}
-          >
+          <Link className=" flex items-center gap-1 group" href={href}>
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               ثبت آگهی فروش دست دوم
             </span>
           </Link>
-          <Link
-            className=" flex items-center gap-1 group"
-            href={href2}
-            onClick={(e) => {
-              e.preventDefault();
-
-              startTransition(() => {
-                router.push(href2);
-              });
-            }}
-          >
+          <Link className=" flex items-center gap-1 group" href={href2}>
             <BsPatchQuestionFill className="text-[#d1182b] text-xl" />
             <span className="font-semibold text-cyan-700 group-hover:text-[#d1182b] duration-300">
               جهت ثبت سریال محصول مفقود شده خود برروی این لینک کلیک نمایید.
@@ -129,7 +80,6 @@ function LinkGuide() {
           </Link>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

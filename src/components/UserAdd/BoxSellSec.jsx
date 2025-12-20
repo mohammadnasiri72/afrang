@@ -30,7 +30,6 @@ function useIsMobile(breakpoint = 768) {
 }
 
 function BoxSellSec({ productList }) {
-  const [isPending, startTransition] = useTransition();
 
   const [viewMode, setViewMode] = useState("list");
   const pathname = usePathname();
@@ -75,13 +74,7 @@ function BoxSellSec({ productList }) {
           <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
             {product.url ? (
               <Link
-                onClick={(e) => {
-                  e.preventDefault();
-
-                  startTransition(() => {
-                    router.push(product.url);
-                  });
-                }}
+                
                 href={product.url}
                 className="w-full h-full relative flex items-center justify-center"
               >
@@ -134,13 +127,7 @@ function BoxSellSec({ productList }) {
               <h3 className="text-lg font-semibold text-gray-900">
                 <Link
                   href={product.url}
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    startTransition(() => {
-                      router.push(product.url);
-                    });
-                  }}
+                 
                   className="hover:text-[#d1182b] transition-colors"
                 >
                   {product.title}
@@ -201,13 +188,7 @@ function BoxSellSec({ productList }) {
         <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
           {product.image && product.url ? (
             <Link
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push(product.url);
-                });
-              }}
+              
               href={product.url}
               className="w-full h-full relative"
             >
@@ -253,13 +234,7 @@ function BoxSellSec({ productList }) {
           <h3 className="text-base font-semibold text-gray-900 !mb-2 line-clamp-2">
             <Link
               href={product.url}
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push(product.url);
-                });
-              }}
+              
               className="hover:text-[#d1182b] transition-colors"
             >
               {product.title}
@@ -313,9 +288,8 @@ function BoxSellSec({ productList }) {
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(current);
-              startTransition(() => {
-                router.push(createPageURL(current));
-              });
+              router.push(createPageURL(current));
+             
             }}
           >
             {current}
@@ -486,7 +460,6 @@ function BoxSellSec({ productList }) {
           </div>
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

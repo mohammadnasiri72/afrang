@@ -3,20 +3,15 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import {
   TbArrowBadgeLeftFilled,
   TbArrowBadgeRightFilled,
 } from "react-icons/tb";
-import Loading from "../Loading";
 
 export default function BodyPriceList({ categories }) {
   const getPriceListUrl = (url) => {
     return url.replace("/products/", "/priceList/");
   };
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   return (
     <>
@@ -33,13 +28,6 @@ export default function BodyPriceList({ categories }) {
           {categories?.map((category) => (
             <Link
               href={getPriceListUrl(category.url)}
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push(getPriceListUrl(category.url));
-                });
-              }}
               key={category.id}
               className="group"
             >
@@ -64,7 +52,6 @@ export default function BodyPriceList({ categories }) {
           ))}
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

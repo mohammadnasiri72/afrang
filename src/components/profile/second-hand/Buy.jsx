@@ -35,7 +35,6 @@ function Buy({ productsSec, productEdit, id }) {
   const { flag } = useSelector((state) => state.idEdit);
   const pathname = usePathname();
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   const disPatch = useDispatch();
 
@@ -140,9 +139,8 @@ function Buy({ productsSec, productEdit, id }) {
         icon: "success",
         title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
-      startTransition(() => {
-        router.push("/profile/second-hand");
-      });
+      router.push("/profile/second-hand");
+      
       disPatch(setFlag(!flag));
       resetState();
     } catch (error) {
@@ -177,11 +175,8 @@ function Buy({ productsSec, productEdit, id }) {
                 فرم خرید کالای دسته دوم
               </h2>
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  startTransition(() => {
-                    router.back();
-                  });
+                onClick={() => {
+                 router.back();
                 }}
                 className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
               >
@@ -483,7 +478,6 @@ function Buy({ productsSec, productEdit, id }) {
           </div>
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

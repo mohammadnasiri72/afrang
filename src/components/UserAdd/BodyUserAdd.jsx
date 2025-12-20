@@ -1,19 +1,13 @@
 "use client";
 import { Divider } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaRecycle } from "react-icons/fa";
 import BoxBuySec from "./BoxBuySec";
 import BoxSellSec from "./BoxSellSec";
 import LinkGuide from "./LinkGuide";
 import SearchProductSec from "./SearchProductSec";
-import Loading from "../Loading";
 
 function BodyUserAdd({ productList, pathname, archived }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
- 
   return (
     <>
       <div className="bg-white rounded-lg shadow-sm p-3 z-50 relative w-full">
@@ -31,16 +25,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
         <LinkGuide />
         <div className="flex flex-wrap items-center ">
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
-            <Link
-              href={"/useds/-1"}
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push("/useds/-1");
-                });
-              }}
-            >
+            <Link href={"/useds/-1"}>
               <div
                 className={` !text-white rounded-lg  p-3 flex flex-col items-center justify-start gap-2 relative z-50 duration-300 h-44 ${
                   pathname === "useds" ? "bg-amber-500" : "bg-amber-400"
@@ -64,16 +49,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
           </div>
 
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
-            <Link
-              href={"/buyers/-1"}
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push("/buyers/-1");
-                });
-              }}
-            >
+            <Link href={"/buyers/-1"}>
               <div
                 className={` !text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
                   pathname === "buyers" ? "bg-teal-500" : "bg-teal-400"
@@ -97,16 +73,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
           </div>
 
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
-            <Link
-              href={"/products?conditionId=20&orderby=5"}
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push("/products?conditionId=20&orderby=5");
-                });
-              }}
-            >
+            <Link href={"/products?conditionId=20&orderby=5"}>
               <div
                 className={` !text-white rounded-lg bg-[#720807] p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44`}
               >
@@ -121,16 +88,7 @@ function BodyUserAdd({ productList, pathname, archived }) {
           </div>
 
           <div className="sm:px-3 px-1 py-3 sm:w-1/2 lg:w-1/4 w-1/2 relative">
-            <Link
-              href={"/useds/-1?archived=true"}
-              onClick={(e) => {
-                e.preventDefault();
-
-                startTransition(() => {
-                  router.push("/useds/-1?archived=true");
-                });
-              }}
-            >
+            <Link href={"/useds/-1?archived=true"}>
               <div
                 className={` !text-white rounded-lg p-3 flex flex-col items-center justify-start gap-2 relative z-50 h-44 ${
                   pathname === "useds" && archived
@@ -159,9 +117,6 @@ function BodyUserAdd({ productList, pathname, archived }) {
         {pathname === "useds" && <BoxSellSec productList={productList} />}
         {pathname === "buyers" && <BoxBuySec productList={productList} />}
       </div>
-      {
-        isPending && <Loading />
-      }
     </>
   );
 }

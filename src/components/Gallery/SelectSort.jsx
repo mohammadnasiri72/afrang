@@ -2,13 +2,11 @@
 
 import { Select } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
-import Loading from "../Loading";
 
 function SelectSort() {
   const [selectedSort, setSelectedSort] = useState("10");
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -23,9 +21,7 @@ function SelectSort() {
     // ساخت URL با پارامتر مرتب‌سازی
     const currentPath = window.location.pathname;
     const newUrl = `${currentPath}?orderBy=${value}`;
-    startTransition(() => {
-      router.push(newUrl);
-    });
+    router.push(newUrl);
   };
 
   const sortOptions = [
@@ -47,7 +43,6 @@ function SelectSort() {
           options={sortOptions}
         />
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

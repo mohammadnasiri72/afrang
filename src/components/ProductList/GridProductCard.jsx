@@ -10,7 +10,7 @@ import AddToCartButton from "./AddToCartButton";
 import CompareButtonBtn from "./CompareButtonBtn";
 import ShowImgProduct from "./ShowImgProduct";
 
-function GridProductCard({ product, startTransition }) {
+function GridProductCard({ product }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
   return (
@@ -20,11 +20,11 @@ function GridProductCard({ product, startTransition }) {
           <div className="relative w-full flex justify-center items-center group overflow-hidden">
             <Link
               href={product.url}
+              prefetch={false}
               onClick={(e) => {
                 e.preventDefault();
-                startTransition(() => {
-                  router.push(product.url);
-                });
+                router.push(product.url);
+               
               }}
             >
               {product.image && (
@@ -87,18 +87,17 @@ function GridProductCard({ product, startTransition }) {
               <div className="w-full">
                 <CompareButtonBtn
                   id={product?.productId}
-                  startTransition={startTransition}
                 />
               </div>
             </div>
           </div>
           <Link
             href={product.url}
+            prefetch={false}
             onClick={(e) => {
               e.preventDefault();
-              startTransition(() => {
-                router.push(product.url);
-              });
+              router.push(product.url);
+             
             }}
             className="font-semibold text-lg text-center !mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
           >

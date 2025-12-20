@@ -154,13 +154,8 @@ const BodyCard = () => {
 
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
-  const [token, setToken] = useState(null);
-  const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    const userData = getUserCookie();
-    setToken(userData?.token || null);
-  }, []);
+ 
 
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
@@ -184,13 +179,11 @@ const BodyCard = () => {
     if (!userData?.token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      startTransition(() => {
-        router.push("/login");
-      });
+      router.push("/login");
+     
     } else {
-      startTransition(() => {
-        router.push("/cart/infosend");
-      });
+      router.push("/cart/infosend");
+     
     }
   };
 
@@ -371,12 +364,7 @@ const BodyCard = () => {
                     <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
                       <div className="relative rounded-lg overflow-hidden">
                         <Link
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            startTransition(() => {
-                              router.push(item.url);
-                            });
-                          }}
+                          
                           href={item.url}
                         >
                           <Image
@@ -400,12 +388,7 @@ const BodyCard = () => {
                     <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                       <div>
                         <Link
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            startTransition(() => {
-                              router.push(item.url);
-                            });
-                          }}
+                         
                           href={item.url}
                         >
                           <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300">
@@ -443,12 +426,7 @@ const BodyCard = () => {
                                   >
                                     <div className="flex gap-1">
                                       <Link
-                                        onClick={(ev) => {
-                                          ev.preventDefault();
-                                          startTransition(() => {
-                                            router.push(e.url);
-                                          });
-                                        }}
+                                       
                                         href={e.url}
                                       >
                                         <div className="relative w-14 h-14">
@@ -470,12 +448,7 @@ const BodyCard = () => {
                                       </Link>
                                       <div className="flex flex-col items-start justify-center">
                                         <Link
-                                          onClick={(ev) => {
-                                            ev.preventDefault();
-                                            startTransition(() => {
-                                              router.push(e.url);
-                                            });
-                                          }}
+                                          
                                           className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                           href={e.url}
                                         >
@@ -538,12 +511,7 @@ const BodyCard = () => {
                               >
                                 <div className="flex gap-1">
                                   <Link
-                                    onClick={(ev) => {
-                                      ev.preventDefault();
-                                      startTransition(() => {
-                                        router.push(e.url);
-                                      });
-                                    }}
+                                    
                                     href={e.url}
                                   >
                                     <div className="relative w-14 h-14">
@@ -565,12 +533,7 @@ const BodyCard = () => {
                                   </Link>
                                   <div className="flex flex-col items-start justify-center">
                                     <Link
-                                      onClick={(ev) => {
-                                        ev.preventDefault();
-                                        startTransition(() => {
-                                          router.push(e.url);
-                                        });
-                                      }}
+                                      
                                       className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                       href={e.url}
                                     >
@@ -726,7 +689,6 @@ const BodyCard = () => {
           }
         `}</style>
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

@@ -25,11 +25,33 @@ export const metadata = {
   },
 };
 export default async function layoutMain({ children }) {
-  const settings = await getSettings();
-  const socialNetworks = await getItem({
-    TypeId: 8,
-    LangCode: "fa",
-  });
+  // دریافت settings با handle خطا - اگر خطا داشت، با آرایه خالی ادامه می‌دهیم
+  let rawSettings = [];
+  try {
+    rawSettings = await getSettings();
+    // اگر خطا بود، به آرایه خالی تبدیل می‌کنیم
+    if (rawSettings && rawSettings.type === "error") {
+      rawSettings = [];
+    }
+  } catch (error) {
+    console.error("Error fetching settings in brands layout:", error);
+    rawSettings = [];
+  }
+  
+  // دریافت socialNetworks با handle خطا
+  let socialNetworks = [];
+  try {
+    socialNetworks = await getItem({
+      TypeId: 8,
+      LangCode: "fa",
+    });
+    if (!Array.isArray(socialNetworks)) {
+      socialNetworks = [];
+    }
+  } catch (error) {
+    console.error("Error fetching socialNetworks in brands layout:", error);
+    socialNetworks = [];
+  }
 
   const HeaderNavbarSkeleton = () => {
     return (
@@ -255,10 +277,9 @@ export default async function layoutMain({ children }) {
     );
   };
 
-  // اگر settings دریافت نشد یا خطا داشت، ServerError نمایش داده شود
-  if (!settings || settings.type === "error") {
-    return <ServerError />;
-  }
+  // اگر settings خالی باشد، با مقادیر پیش‌فرض ادامه می‌دهیم (نه ServerError)
+  // ServerError فقط برای خطاهای واقعی سرور نمایش داده می‌شود
+  const settings = Array.isArray(rawSettings) ? rawSettings : [];
 
   return (
     <div>

@@ -10,7 +10,6 @@ import ModalShowDetailsBuy from "./ModalShowDetailsBuy";
 
 function ListProductBuy({ productsSec }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   return (
     <>
@@ -19,11 +18,8 @@ function ListProductBuy({ productsSec }) {
           آگهی های خرید شما
         </h3>
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            startTransition(() => {
-              router.push("/profile/second-hand/add");
-            });
+          onClick={() => {
+            router.push("/profile/second-hand/add");
           }}
           className="sm:px-4 px-2 sm:py-2 py-1 whitespace-nowrap text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
@@ -96,7 +92,6 @@ function ListProductBuy({ productsSec }) {
           )}
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

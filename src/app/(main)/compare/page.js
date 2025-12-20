@@ -1,17 +1,14 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 
 const ComparePage = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+
   return (
     <>
       {mounted && (
@@ -26,12 +23,6 @@ const ComparePage = () => {
             </p>
             <Link
               href="/products"
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/products");
-                });
-              }}
               className="bg-blue-500 !text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors !mt-5"
             >
               مشاهده محصولات
@@ -39,7 +30,6 @@ const ComparePage = () => {
           </div>
         </div>
       )}
-      {isPending && <Loading />}
     </>
   );
 };

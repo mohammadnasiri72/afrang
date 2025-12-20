@@ -3,34 +3,37 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
-import Loading from "../Loading";
 import ProductMain from "./ProductMain";
 
 function NewProduct({ products }) {
+  const safeProducts = Array.isArray(products) ? products : [];
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
   // استخراج دسته‌بندی‌های یکتا از محصولات و محدود کردن به 5 تا
-  const categories = products
-    ? [...new Set(products.map((product) => product.categoryTitle))].slice(0, 5)
-    : [];
+  const categories =
+    safeProducts.length > 0
+      ? [
+          ...new Set(
+            safeProducts.map((product) => product.categoryTitle)
+          ),
+        ].slice(0, 5)
+      : [];
 
   useEffect(() => {
-    if (products) {
+    if (safeProducts.length > 0) {
       if (selectedCategory) {
-        const filtered = products.filter(
+        const filtered = safeProducts.filter(
           (product) => product.categoryTitle === selectedCategory
         );
         setFilteredProducts(filtered);
       } else {
-        setFilteredProducts(products);
+        setFilteredProducts(safeProducts);
       }
+    } else {
+      setFilteredProducts([]);
     }
   }, [selectedCategory, products]);
 
@@ -48,17 +51,13 @@ function NewProduct({ products }) {
             <div className="flex items-center title-newProduct relative">
               <h2 className="font-semibold text-xl">جدیدترین ها</h2>
             </div>
-            <button
-              onClick={() => {
-                startTransition(() => {
-                  router.push(`/products?orderby=2`);
-                });
-              }}
+            <Link
+              href={`/products?orderby=2`}
               className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
             >
               <span className="text-sm">نمایش همه</span>
               <FaCaretLeft className="text-sm" />
-            </button>
+            </Link>
           </div>
 
           {/* لیست دسته‌بندی‌ها */}
@@ -113,24 +112,20 @@ function NewProduct({ products }) {
         </div>
 
         {/* دکمه نمایش همه در دسکتاپ */}
-        <div
-          onClick={() => {
-            startTransition(() => {
-              router.push(`/products?orderby=2`);
-            });
-          }}
+        <Link
+          href={`/products?orderby=2`}
           className="hidden lg:flex items-center cursor-pointer duration-300 hover:!text-[#d1182b] font-medium"
         >
           <span>نمایش همه</span>
           <FaCaretLeft />
-        </div>
+        </Link>
       </div>
       <div className="mt-5 md:px-16 mx-auto px-4">
         <ProductMain products={filteredProducts} />
       </div>
 
       <div className="hidden">
-        {products.map((product) => (
+        {safeProducts.map((product) => (
           <div
             key={product.id}
             className=" relative group w-full sm:min-h-[22rem] overflow-hidden rounded-xl bg-white shadow-md"
@@ -138,12 +133,6 @@ function NewProduct({ products }) {
             {/* تصویر */}
             <Link
               href={product.url}
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push(product.url);
-                });
-              }}
               className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
             >
               <Image
@@ -181,12 +170,6 @@ function NewProduct({ products }) {
               {/* عنوان */}
               <Link
                 href={product.url}
-                 onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push(product.url);
-                });
-              }}
                 className="!text-[#333] font-bold px-2 hover:!text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
               >
                 <h3 className="text-justify line-clamp-3 w-full">
@@ -232,7 +215,6 @@ function NewProduct({ products }) {
           </div>
         ))}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

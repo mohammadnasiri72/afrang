@@ -1,14 +1,9 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaArrowRight, FaSearch } from "react-icons/fa";
 
 export default function NotFoundProduct() {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   return (
     <>
       <div className="bg-[#f6f6f6] flex flex-col items-center justify-center px-4 py-10">
@@ -26,12 +21,6 @@ export default function NotFoundProduct() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/products"
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/products");
-                });
-              }}
               className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
             >
               <FaArrowRight className="rotate-180" />
@@ -40,7 +29,6 @@ export default function NotFoundProduct() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -13,7 +13,7 @@ import { IoCartOutline, IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteProductsModal from "./Product/DeleteProductsModal";
 
-function ShoppingDrawer({ header, startTransition }) {
+function ShoppingDrawer({ header }) {
   const open = useSelector((store) => store.shopping.openShopping);
   const { currentItems } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
@@ -41,9 +41,7 @@ function ShoppingDrawer({ header, startTransition }) {
   // تابع برای مدیریت کلیک روی لینک‌ها
   const handleNavigation = (url) => {
     // هدایت به URL مورد نظر
-    startTransition(() => {
-      router.push(url);
-    });
+    router.push(url);
     // بستن دراور
     dispatch(setOpenShopping(false));
   };
@@ -63,9 +61,7 @@ function ShoppingDrawer({ header, startTransition }) {
     if (!token) {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      startTransition(() => {
-        router.push("/login");
-      });
+      router.push("/login");
 
       return;
     }

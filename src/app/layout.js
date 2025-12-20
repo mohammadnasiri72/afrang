@@ -1,37 +1,53 @@
-/* eslint-disable @next/next/no-css-tags */
 import Layout from "@/components/Layout";
 import { getSettings } from "@/services/settings/settingsService";
 import "@ant-design/v5-patch-for-react-19";
-import "react-circular-progressbar/dist/styles.css";
+import CustomRouteLoader from "./CustomRouteLoader";
+import FooterScripts from "./FooterScripts";
 import "./globals.css";
-import RouteLoader from "@/components/RouteLoader";
-// import FooterScripts from "./FooterScripts";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
-const settings = await getSettings();
-// const siteScripts = settings?.find((e) => e.propertyKey === 'site_scripts')?.value;
+// fallback settings برای مواقعی که API جواب نمی‌دهد
+const FALLBACK_SETTINGS = [
+  { propertyKey: "site_scripts", value: "" },
+  // سایر تنظیمات ضروری
+];
 
 export default async function RootLayout({ children }) {
+  let settings = FALLBACK_SETTINGS;
+  
+  try {
+    const rawSettings = await getSettings();
+    
+    // بررسی اینکه آیا خطا برگردانده یا timeout خورده
+    if (rawSettings && !rawSettings.type) {
+      settings = Array.isArray(rawSettings) ? rawSettings : FALLBACK_SETTINGS;
+    } 
+  } catch (error) {
+    
+  }
+  
+  const siteScripts = settings.find(
+    (e) => e.propertyKey === "site_scripts"
+  )?.value;
+
   return (
     <html lang="fa" dir="rtl">
       <head>
+        {/* تگ‌های ضروری meta */}
+        {/* <meta charSet="utf-8" /> */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
+        <link rel="preload" href="/favicon.ico" as="image" type="image/x-icon" />
+        <link rel="preload" href="/style/style.css" as="style" />
         <link rel="stylesheet" href="/style/style.css" />
-         {/* {siteScripts && (
-          <Script
-            id="site-scripts"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: siteScripts
-            }}
-          />
-        )} */}
       </head>
 
       <body>
-         <RouteLoader />
+        <CustomRouteLoader />
         <Layout settings={settings}>{children}</Layout>
-        {/* <FooterScripts propertyValue={siteScripts}/> */}
+        {/* <FooterScripts propertyValue={siteScripts} /> */}
       </body>
     </html>
   );

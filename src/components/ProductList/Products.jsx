@@ -13,7 +13,6 @@ function Products({ products }) {
     (state) => state.layoutProducts.layoutProducts
   );
 
-  const [isPending, startTransition] = useTransition();
 
   const dispatch = useDispatch();
   const isFilterLoading = useSelector(
@@ -106,18 +105,15 @@ function Products({ products }) {
             {layoutProducts === "grid" ? (
               <GridProductCard
                 product={product}
-                startTransition={startTransition}
               />
             ) : (
               <ProductCard
                 product={product}
-                startTransition={startTransition}
               />
             )}
           </div>
         ))}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

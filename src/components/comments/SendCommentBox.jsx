@@ -33,7 +33,6 @@ const SendCommentBox = forwardRef(({ itemId, parentId = -1, type }, ref) => {
     email: "",
     body: "",
   });
-  const [userIP, setUserIP] = useState("");
   const textareaRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
@@ -41,20 +40,6 @@ const SendCommentBox = forwardRef(({ itemId, parentId = -1, type }, ref) => {
       if (textareaRef.current) textareaRef.current.focus();
     },
   }));
-
-  useEffect(() => {
-    const fetchIP = async () => {
-      try {
-        const response = await fetch("https://api.ipify.org?format=json");
-        const data = await response.json();
-        setUserIP(data.ip);
-      } catch (error) {
-        console.error("Error fetching IP:", error);
-      }
-    };
-
-    fetchIP();
-  }, []);
 
   const [errors, setErrors] = useState({
     name: "",
@@ -132,7 +117,7 @@ const SendCommentBox = forwardRef(({ itemId, parentId = -1, type }, ref) => {
         itemId,
         parentId,
         type,
-        userIP,
+        userIP: "",
       };
 
       if (user.token) {

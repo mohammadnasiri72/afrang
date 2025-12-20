@@ -1,11 +1,13 @@
-// این صفحه باید همیشه به‌صورت داینامیک رندر شود (تنظیمات لحظه‌ای)
-export const dynamic = "force-dynamic";
-
 import { getSettingsNoCatch } from "@/services/settings/settingsService";
 import PageInfo from "./pageInfo";
 
-async function page() {
-  const settings = await getSettingsNoCatch();
+// این صفحه به‌صورت داینامیک رندر می‌شود (به‌خاطر fetch بدون کش)
+export const dynamic = "force-dynamic";
+
+async function Page() {
+  const rawSettings = await getSettingsNoCatch();
+  const settings = Array.isArray(rawSettings) ? rawSettings : [];
+
   return (
     <>
       <PageInfo settings={settings} />
@@ -13,4 +15,4 @@ async function page() {
   );
 }
 
-export default page;
+export default Page;

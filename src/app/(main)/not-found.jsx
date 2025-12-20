@@ -2,13 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaHome } from "react-icons/fa";
 
 export default function NotFound() {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  
   return (
     <>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
@@ -31,12 +28,7 @@ export default function NotFound() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
+             
               href="/"
               className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
             >
@@ -46,7 +38,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

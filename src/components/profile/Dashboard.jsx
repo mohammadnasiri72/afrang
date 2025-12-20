@@ -10,7 +10,7 @@ import { getRecentViews } from "@/utils/recentViews";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import {
   FaBox,
   FaClipboardList,
@@ -20,7 +20,6 @@ import {
   FaTimesCircle,
   FaUser,
 } from "react-icons/fa";
-import Loading from "../Loading";
 
 const DashboardSkeleton = () => {
   return (
@@ -119,7 +118,6 @@ const DashboardSkeleton = () => {
 };
 
 export default function Dashboard() {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [dashboardData, setDashboardData] = useState({
     Record: 0,
@@ -311,15 +309,7 @@ export default function Dashboard() {
                       key={item.productId}
                       className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                     >
-                      <Link
-                        href={item.url}
-                        onClick={(ev) => {
-                          ev.preventDefault();
-                          startTransition(() => {
-                            router.push(item.url);
-                          });
-                        }}
-                      >
+                      <Link href={item.url}>
                         <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                           {item.image && (
                             <img
@@ -331,15 +321,7 @@ export default function Dashboard() {
                         </div>
                       </Link>
                       <div className="flex-1">
-                        <Link
-                          href={item.url}
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            startTransition(() => {
-                              router.push(item.url);
-                            });
-                          }}
-                        >
+                        <Link href={item.url}>
                           <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                             {item.title}
                           </p>
@@ -390,12 +372,6 @@ export default function Dashboard() {
                   </h3>
                   <Link
                     href="/profile/favorites"
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push("/profile/favorites");
-                      });
-                    }}
                     className="text-sm text-[#d1182b] hover:text-[#d1182b]/80 transition-colors"
                   >
                     مشاهده همه
@@ -410,15 +386,7 @@ export default function Dashboard() {
                         key={item.id}
                         className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                       >
-                        <Link
-                          href={item.url}
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            startTransition(() => {
-                              router.push(item.url);
-                            });
-                          }}
-                        >
+                        <Link href={item.url}>
                           <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                             {item.image && (
                               <img
@@ -434,15 +402,7 @@ export default function Dashboard() {
                           </div>
                         </Link>
                         <div className="flex-1">
-                          <Link
-                            href={item.url}
-                            onClick={(ev) => {
-                              ev.preventDefault();
-                              startTransition(() => {
-                                router.push(item.url);
-                              });
-                            }}
-                          >
+                          <Link href={item.url}>
                             <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                               {item.title}
                             </p>
@@ -481,12 +441,6 @@ export default function Dashboard() {
               <div className="grid grid-cols-2 gap-3">
                 <Link
                   href="/profile/orders"
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push("/profile/orders");
-                    });
-                  }}
                   className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors whitespace-nowrap"
                 >
                   <FaShoppingBag />
@@ -494,12 +448,6 @@ export default function Dashboard() {
                 </Link>
                 <Link
                   href="/profile/edit-profile"
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push("/profile/edit-profile");
-                    });
-                  }}
                   className="flex items-center justify-center gap-2 p-3 bg-gray-50 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors whitespace-nowrap"
                 >
                   <FaUser />
@@ -510,7 +458,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -9,18 +9,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaRecycle } from "react-icons/fa";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Grid, Navigation, Pagination } from "swiper/modules";
-import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from "../home/CountdownTimer";
 
 function RelatedProductsMobile({ products }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   return (
     <>
       <Swiper
@@ -77,15 +72,7 @@ function RelatedProductsMobile({ products }) {
                       </span>
                     </div>
                   )}
-                  <Link
-                    href={product.url}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
-                    }}
-                  >
+                  <Link href={product.url} prefetch={false}>
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-56 object-contain flex items-center justify-center"
                       // style={{ filter: " brightness(0.95)" }}
@@ -99,12 +86,7 @@ function RelatedProductsMobile({ products }) {
                     )}
                     <Link
                       href={product.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                      }}
+                      prefetch={false}
                       className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer "
                     >
                       <p className="text-justify">{product.title}</p>
@@ -212,7 +194,6 @@ function RelatedProductsMobile({ products }) {
           </div>
         </div>
       </Swiper>
-      {isPending && <Loading />}
     </>
   );
 }

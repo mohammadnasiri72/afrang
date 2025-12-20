@@ -2,13 +2,11 @@
 
 import { Tooltip } from "antd";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { GiScales } from "react-icons/gi";
-import Loading from "../Loading";
 
-const CompareButtonBtn = ({ id , startTransition}) => {
+const CompareButtonBtn = ({ id }) => {
   const router = useRouter();
- 
+
   return (
     <>
       <div className="w-full flex items-center justify-center">
@@ -16,9 +14,7 @@ const CompareButtonBtn = ({ id , startTransition}) => {
           <button
             aria-label="مقایسه محصول"
             onClick={() => {
-              startTransition(() => {
-                router.push(`/compare/${id}`);
-              });
+              router.push(`/compare/${id}`);
             }}
             className="flex w-full justify-center items-center cursor-pointer py-2 px-2 transition-all duration-300 hover:bg-gray-300"
           >
@@ -26,7 +22,6 @@ const CompareButtonBtn = ({ id , startTransition}) => {
           </button>
         </Tooltip>
       </div>
-     
     </>
   );
 };

@@ -13,7 +13,6 @@ const theme = createTheme({
 
 const TransactionResult = () => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const status = searchParams.get("success");
   const msg = searchParams.get("msg");
@@ -102,13 +101,12 @@ const TransactionResult = () => {
                 <div className="flex items-center gap-2 w-full">
                   <Button
                     onClick={() => {
-                      startTransition(() => {
-                        router.push(
-                          status === "true"
-                            ? "/profile/orders?statusId=2"
-                            : "/profile/orders"
-                        );
-                      });
+                      router.push(
+                        status === "true"
+                          ? "/profile/orders?statusId=2"
+                          : "/profile/orders"
+                      );
+                     
                     }}
                     sx={{ width: "50%" }}
                     color="primary"
@@ -119,9 +117,8 @@ const TransactionResult = () => {
 
                   <Button
                     onClick={() => {
-                      startTransition(() => {
-                        router.push("/");
-                      });
+                      router.push("/");
+                     
                     }}
                     sx={{ width: "50%" }}
                     color="inherit"
@@ -134,11 +131,10 @@ const TransactionResult = () => {
                 <div className="flex items-center gap-2 w-full">
                   <Button
                     onClick={() => {
-                      startTransition(() => {
-                        router.push(
-                          invoice ? `/payment/link/${invoice}` : `/payment/link`
-                        );
-                      });
+                      router.push(
+                        invoice ? `/payment/link/${invoice}` : `/payment/link`
+                      );
+                     
                     }}
                     sx={{ width: "100%" }}
                     color="primary"
@@ -157,7 +153,6 @@ const TransactionResult = () => {
           </div>
         </div>
       </motion.div>
-      {isPending && <Loading />}
     </ThemeProvider>
   );
 };

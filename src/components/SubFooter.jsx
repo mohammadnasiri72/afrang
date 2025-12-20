@@ -2,21 +2,17 @@
 
 import { setOpenMenuRes } from "@/redux/slices/menuResSlice";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { HiOutlineMenu } from "react-icons/hi";
 import { IoCartOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { useDispatch } from "react-redux";
-import Loading from "./Loading";
 import SearchSubfooter from "./SearchSubfooter";
 import SocialNetworks from "./SocialNetworks";
 import SuportSubfooter from "./SuportSubfooter";
 
 export default function SubFooter({ socialNetworks, settings }) {
   const disPatch = useDispatch();
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+
   return (
     <>
       <SocialNetworks socialNetworks={socialNetworks} settings={settings} />
@@ -24,28 +20,11 @@ export default function SubFooter({ socialNetworks, settings }) {
         <SuportSubfooter socialNetworks={socialNetworks} settings={settings} />
         <SearchSubfooter />
 
-        {/* <ShoppingDrawer startTransition={startTransition} /> */}
-        <Link
-          href="/cart"
-          onClick={(ev) => {
-            ev.preventDefault();
-            startTransition(() => {
-              router.push("/cart");
-            });
-          }}
-        >
+        <Link href="/cart">
           <IoCartOutline className="text-[#d1182b] text-2xl" />
         </Link>
 
-        <Link
-          href="/profile/dashboard"
-          onClick={(ev) => {
-            ev.preventDefault();
-            startTransition(() => {
-              router.push("/profile/dashboard");
-            });
-          }}
-        >
+        <Link href="/profile/dashboard">
           <LuUserRound className="text-[#d1182b] text-2xl" />
         </Link>
 
@@ -56,7 +35,6 @@ export default function SubFooter({ socialNetworks, settings }) {
           className="text-[#d1182b] text-2xl cursor-pointer"
         />
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

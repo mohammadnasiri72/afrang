@@ -3,17 +3,13 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
-import Loading from "../Loading";
 import ProductMainEyd from "./ProductMainEyd";
 
 export default function EidDiscount({ actionProducts, products }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -67,32 +63,24 @@ export default function EidDiscount({ actionProducts, products }) {
                         />
                       )}
                     </div>
-                    <button
-                      onClick={() => {
-                        startTransition(() => {
-                          router.push(`/products?onlyfest=1&orderby=5`);
-                        });
-                      }}
+                    <Link
+                      href={`/products?onlyfest=1&orderby=5`}
                       className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
                     >
                       <span className="text-sm">نمایش همه</span>
                       <FaCaretLeft className="text-sm" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
 
                 {/* دکمه نمایش همه در دسکتاپ */}
-                <div
-                  onClick={() => {
-                    startTransition(() => {
-                      router.push(`/products?onlyfest=1&orderby=5`);
-                    });
-                  }}
+                <Link
+                  href={`/products?onlyfest=1&orderby=5`}
                   className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
                 >
                   <span>نمایش همه</span>
                   <FaCaretLeft />
-                </div>
+                </Link>
               </div>
               <div
                 style={{
@@ -121,12 +109,6 @@ export default function EidDiscount({ actionProducts, products }) {
                     {/* تصویر */}
                     <Link
                       href={product.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                      }}
                       className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                     >
                       <Image
@@ -166,12 +148,6 @@ export default function EidDiscount({ actionProducts, products }) {
                       {/* عنوان */}
                       <Link
                         href={product.url}
-                        onClick={(ev) => {
-                          ev.preventDefault();
-                          startTransition(() => {
-                            router.push(product.url);
-                          });
-                        }}
                         className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                       >
                         <h3 className="text-justify line-clamp-3 w-full">
@@ -223,7 +199,6 @@ export default function EidDiscount({ actionProducts, products }) {
           </div>
         </div>
       )}
-      {isPending && <Loading />}
       <style jsx>{`
         .slider-special-sale {
           position: relative;

@@ -1,12 +1,9 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { BsArchive } from "react-icons/bs";
 import { FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import Loading from "../Loading";
 
 function buildTree(items) {
   const itemMap = {};
@@ -41,8 +38,7 @@ function buildTree(items) {
 
 function ShowProductBasket() {
   const { currentItems } = useSelector((state) => state.cart);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+
   const defaultImage =
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='14' fill='%239ca3af' text-anchor='middle' dominant-baseline='middle'%3Eتصویر محصول%3C/text%3E%3C/svg%3E";
   return (
@@ -62,15 +58,7 @@ function ShowProductBasket() {
             >
               <div className="w-full p-3 rounded-lg border border-gray-200 hover:bg-[#fff5f5] hover:border-[#d1182b] transition-all duration-200">
                 <div className="flex items-start gap-3 w-full">
-                  <Link
-                    href={item.url}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push(item.url);
-                      });
-                    }}
-                  >
+                  <Link href={item.url}>
                     <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-1 hover:opacity-80 transition-opacity">
                       <img
                         src={getImageUrl(item.image)}
@@ -92,15 +80,7 @@ function ShowProductBasket() {
                     </div>
                   </Link>
                   <div className="flex-1">
-                    <Link
-                      href={item.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url);
-                        });
-                      }}
-                    >
+                    <Link href={item.url}>
                       <div className="block  transition-colors">
                         <h3 className="text-base font-bold text-gray-800 hover:text-[#d1182b] !mb-1 line-clamp-2">
                           {item.title}
@@ -155,15 +135,7 @@ function ShowProductBasket() {
                                 className="lg:w-1/3 w-full lg:mt-0 mt-3"
                               >
                                 <div className="flex gap-1">
-                                  <Link
-                                    href={e.url}
-                                    onClick={(ev) => {
-                                      ev.preventDefault();
-                                      startTransition(() => {
-                                        router.push(e.url);
-                                      });
-                                    }}
-                                  >
+                                  <Link href={e.url}>
                                     <div className="relative w-14 h-14">
                                       <Image
                                         className="w-full h-full object-contain rounded-lg"
@@ -184,12 +156,6 @@ function ShowProductBasket() {
                                     <Link
                                       className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                       href={e.url}
-                                      onClick={(ev) => {
-                                        ev.preventDefault();
-                                        startTransition(() => {
-                                          router.push(e.url);
-                                        });
-                                      }}
                                     >
                                       <span className="text-xs font-bold line-clamp-2 ">
                                         {e?.title}
@@ -223,15 +189,7 @@ function ShowProductBasket() {
                             className="lg:w-1/3 w-full lg:mt-0 mt-3"
                           >
                             <div className="flex gap-1">
-                              <Link
-                                href={e.url}
-                                onClick={(ev) => {
-                                  ev.preventDefault();
-                                  startTransition(() => {
-                                    router.push(e.url);
-                                  });
-                                }}
-                              >
+                              <Link href={e.url}>
                                 <div className="relative w-14 h-14">
                                   <Image
                                     className="w-full h-full object-contain rounded-lg"
@@ -252,12 +210,6 @@ function ShowProductBasket() {
                                 <Link
                                   className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                   href={e.url}
-                                  onClick={(ev) => {
-                                    ev.preventDefault();
-                                    startTransition(() => {
-                                      router.push(e.url);
-                                    });
-                                  }}
                                 >
                                   <span className="text-xs font-bold line-clamp-2 ">
                                     {e?.title}
@@ -282,7 +234,6 @@ function ShowProductBasket() {
           ))}
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

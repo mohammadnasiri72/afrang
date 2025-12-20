@@ -8,7 +8,7 @@ import { useMemo, useRef } from "react";
 const MAX_COLUMNS = 4;
 const COLUMN_PIXEL_WIDTH = 100;
 
-const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
+const SubmenuDropdown = ({ activeMenu, onClose }) => {
   const boxRef = useRef(null);
 
   const handleWheel = (e) => {
@@ -148,9 +148,8 @@ const SubmenuDropdown = ({ activeMenu, onClose, startTransition }) => {
                       e.preventDefault();
                       document.body.style.overflow = "";
                       onClose();
-                      startTransition(() => {
-                        router.push(item.url || item.pageUrl || "#");
-                      });
+                      router.push(item.url || item.pageUrl || "#");
+                     
                     }}
                   >
                     {item.title}

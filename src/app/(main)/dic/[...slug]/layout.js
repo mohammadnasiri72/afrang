@@ -45,7 +45,6 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch (err) {
-    console.error("❌ generateMetadata error:", err);
     return {
       title: "خطا در بارگذاری واژگان فنی",
       description: "مشکلی در دریافت اطلاعات صفحه پیش آمده است.",

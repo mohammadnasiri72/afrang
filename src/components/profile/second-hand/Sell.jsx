@@ -65,7 +65,6 @@ function Sell({ productsSec, productEdit, id }) {
   const [contactInfoType, setContactInfoType] = useState(0);
   const [showPrice, setShowPrice] = useState(1);
   const user = useSelector(selectUser);
-  const [isPending, startTransition] = useTransition();
 
   const pathname = usePathname();
   const router = useRouter();
@@ -236,9 +235,8 @@ function Sell({ productsSec, productEdit, id }) {
         title: `آگهی شما با موفقیت ${id ? "ویرایش" : "ثبت"} شد`,
       });
       disPatch(setFlag((e) => !e));
-      startTransition(() => {
-        router.push("/profile/second-hand");
-      });
+      router.push("/profile/second-hand");
+      
 
       resetState();
     } catch (error) {
@@ -357,11 +355,8 @@ function Sell({ productsSec, productEdit, id }) {
                 فرم فروش کالای دسته دوم
               </h2>
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  startTransition(() => {
-                    router.back();
-                  });
+                onClick={() => {
+                 router.back();
                 }}
                 className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626] whitespace-nowrap"
               >
@@ -959,7 +954,6 @@ function Sell({ productsSec, productEdit, id }) {
           </div>
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

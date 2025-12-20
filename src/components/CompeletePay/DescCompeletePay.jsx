@@ -6,11 +6,10 @@ import { Alert, message } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../Loading";
 
 function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
@@ -85,7 +84,6 @@ export default function DescCompeletePay() {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isPending, startTransition] = useTransition();
 
   const descShipping = useSelector((state) => state.shipping.descShipping);
 
@@ -172,9 +170,8 @@ export default function DescCompeletePay() {
         const action = setEstimateData(estimateData);
         if (action) {
           dispatch(action);
-          startTransition(() => {
-            router.push("/cart/infopay");
-          });
+          router.push("/cart/infopay");
+         
         } else {
           console.error("Action is undefined");
         }
@@ -182,9 +179,8 @@ export default function DescCompeletePay() {
         console.error("Error dispatching estimate data:", error);
       }
     } else {
-      startTransition(() => {
-        router.push("/cart/infopay");
-      });
+      router.push("/cart/infopay");
+     
     }
   };
 
@@ -444,12 +440,7 @@ export default function DescCompeletePay() {
                 <Link
                   className="text-red-500 hover:text-red-600 duration-300 font-semibold"
                   href={"/cart"}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push("/cart");
-                    });
-                  }}
+                  
                 >
                   <FaCartShopping className="inline" />
                   <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -651,12 +642,7 @@ export default function DescCompeletePay() {
                 <Link
                   className="text-red-500 hover:text-red-600 duration-300 font-semibold"
                   href={"/cart"}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push("/cart");
-                    });
-                  }}
+                 
                 >
                   <FaCartShopping className="inline" />
                   <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -714,7 +700,6 @@ export default function DescCompeletePay() {
           </button>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

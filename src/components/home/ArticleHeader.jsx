@@ -1,11 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCaretLeft } from "react-icons/fa6";
-import Loading from "../Loading";
 
 function ArticleHeader() {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   return (
     <>
@@ -18,9 +15,7 @@ function ArticleHeader() {
 
         <div
           onClick={() => {
-            startTransition(() => {
-              router.push(`/news`);
-            });
+            router.push(`/news`);
           }}
           className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
         >
@@ -28,7 +23,6 @@ function ArticleHeader() {
           <FaCaretLeft />
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

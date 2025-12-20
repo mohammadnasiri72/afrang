@@ -1,3 +1,4 @@
+// export const mainDomain = "http://localhost:5000/";
 export const mainDomain = "https://api.afrangdigital.com";
 // export const mainDomain = "https://afrangapi.aitest2.ir";
 export const mainDomainImg = "https://admin.afrangdigital.com";

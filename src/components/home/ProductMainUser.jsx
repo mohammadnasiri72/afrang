@@ -10,16 +10,10 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
-import Loading from "../Loading";
 
 export default function ProductMainUser({ products }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
   return (
     <>
       <div className="min-h-[310px]">
@@ -67,13 +61,6 @@ export default function ProductMainUser({ products }) {
                 <div className="relative  group w-full pb-2 overflow-hidden rounded-xl bg-white shadow-md">
                   <Link
                     href={product.url ? product.url : "#"}
-                    onClick={(e) => {
-                      e.preventDefault();
-
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
-                    }}
                     className="w-full min-h-40 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                   >
                     <Image
@@ -92,14 +79,6 @@ export default function ProductMainUser({ products }) {
                   <div className="flex flex-col flex-1 justify-between mt-2">
                     <Link
                       href={product.url ? product.url : "#"}
-                      onClick={(e) => {
-                        e.preventDefault();
-
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start"
                     >
                       <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px]">
@@ -138,7 +117,6 @@ export default function ProductMainUser({ products }) {
           </div>
         </Swiper>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

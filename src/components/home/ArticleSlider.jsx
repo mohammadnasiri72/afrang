@@ -7,17 +7,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import moment from "moment-jalaali";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight, FaCircleUser } from "react-icons/fa6";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ExpandableText from "../blog/ExpandableText";
-import Loading from "../Loading";
 import ArticleSliderPhoto from "./ArticleSliderPhoto";
 
 export default function ArticleSlider({ blogs }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+ 
 
   const formatPersianDate = (dateString) => {
     try {
@@ -96,13 +92,7 @@ export default function ArticleSlider({ blogs }) {
                     </div> */}
                   <Link
                     href={blog.url}
-                    onClick={(e) => {
-                      e.preventDefault();
-
-                      startTransition(() => {
-                        router.push(blog.url);
-                      });
-                    }}
+                    
                     className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none h-48"
                   >
                     <ArticleSliderPhoto blog={blog} />
@@ -116,13 +106,7 @@ export default function ArticleSlider({ blogs }) {
                       <Link
                         className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1 text-justify"
                         href={blog.url}
-                        onClick={(e) => {
-                          e.preventDefault();
-
-                          startTransition(() => {
-                            router.push(blog.url);
-                          });
-                        }}
+                       
                       >
                         {blog.title}
                       </Link>
@@ -160,7 +144,6 @@ export default function ArticleSlider({ blogs }) {
           </div>
         </Swiper>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

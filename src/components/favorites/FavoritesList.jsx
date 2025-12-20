@@ -8,11 +8,9 @@ import {
 import { getImageUrl } from "@/utils/mainDomain";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaHeart, FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
-import Loading from "../Loading";
 
 const FavoritesSkeleton = () => {
   return (
@@ -38,9 +36,6 @@ export default function FavoritesList() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRemoving, setIsRemoving] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
-
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   // Toast notification setup
   const Toast = Swal.mixin({
@@ -129,15 +124,7 @@ export default function FavoritesList() {
                   key={item.id}
                   className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg z-50 relative"
                 >
-                  <Link
-                    href={item.url}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push(item.url);
-                      });
-                    }}
-                  >
+                  <Link href={item.url}>
                     <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                       <img
                         src={
@@ -151,15 +138,7 @@ export default function FavoritesList() {
                     </div>
                   </Link>
                   <div className="flex-1">
-                    <Link
-                      href={item.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url);
-                        });
-                      }}
-                    >
+                    <Link href={item.url}>
                       <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
                         {item.title}
                       </p>
@@ -192,12 +171,6 @@ export default function FavoritesList() {
               </p>
               <Link
                 href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
                 className="mt-4 px-6 py-2 bg-[#d1182b] !text-white rounded-lg hover:bg-[#d1182b]/90 transition-colors"
               >
                 مشاهده محصولات
@@ -215,7 +188,6 @@ export default function FavoritesList() {
           isLoading={isRemoving}
         />
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

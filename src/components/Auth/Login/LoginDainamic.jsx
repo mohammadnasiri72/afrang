@@ -23,9 +23,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
   const [loading, setLoading] = useState(false);
   const [errorMobile, setErrorMobile] = useState("");
   const { settings } = useSelector((state) => state.settings);
-
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -88,15 +86,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link
-                href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
-              >
+              <Link href="/">
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -112,15 +102,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link
-                href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
-              >
+              <Link href="/">
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>
@@ -174,9 +156,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
                 <div className="sm:w-1/2 w-full !mb-4 sm:pl-3">
                   <div
                     onClick={() => {
-                      startTransition(() => {
-                        router.back();
-                      });
+                      setStateLogin(1);
                     }}
                     className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                   >
@@ -206,16 +186,7 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
                 حساب کاربری ندارید؟
-                <Link
-                  className="text-[#d1182b] px-2"
-                  href={"/register"}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push("/register");
-                    });
-                  }}
-                >
+                <Link className="text-[#d1182b] px-2" href={"/register"}>
                   ساخت حساب کاربری
                 </Link>
               </div>
@@ -223,7 +194,6 @@ function LoginDainamic({ setStateLogin, mobile, setMobile }) {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

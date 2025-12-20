@@ -17,7 +17,6 @@ const CompeletePayWrapper = dynamic(() =>
 
 export default function PageInfo({ settings }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const dispatch = useDispatch();
   const { currentItems } = useSelector((state) => state.cart);
   const [isBanSale, setIsBanSale] = useState(false);
@@ -44,26 +43,22 @@ export default function PageInfo({ settings }) {
         const userCookie = Cookies.get("user");
 
         if (!userCookie) {
-          startTransition(() => {
-            router.push("/cart");
-          });
+          router.push("/cart");
+         
 
           return;
         }
 
         const userData = JSON.parse(userCookie);
         if (!userData?.token) {
-          startTransition(() => {
-            router.push("/cart");
-          });
+          router.push("/cart");
+         
 
           return;
         }
       } catch (error) {
-        console.error("Error checking auth:", error);
-        startTransition(() => {
-          router.push("/cart");
-        });
+        router.push("/cart");
+      
       }
     };
 
@@ -94,7 +89,6 @@ export default function PageInfo({ settings }) {
           <CompeletePayWrapper />
         </Container>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

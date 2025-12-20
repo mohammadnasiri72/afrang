@@ -8,16 +8,14 @@ import { Button, message } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import Loading from "../Loading";
 
 const LikeProduct = ({ productId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [liked, setLiked] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const checkLikeStatus = async () => {
@@ -69,12 +67,6 @@ const LikeProduct = ({ productId }) => {
             {!liked && (
               <Link
                 href="/profile/favorites"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/profile/favorites");
-                  });
-                }}
                 style={{ color: "#d1182b" }}
                 className="hover:text-red-700"
               >
@@ -131,7 +123,6 @@ const LikeProduct = ({ productId }) => {
           </span>
         </Button>
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

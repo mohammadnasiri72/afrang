@@ -1,21 +1,19 @@
 "use client";
 
 import "swiper/css/effect-coverflow";
-import { Autoplay, EffectCoverflow, Navigation } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { setActiveTab } from "@/redux/slices/idEditSec";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Divider, Empty, Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import {
   FaAngleLeft,
   FaAngleRight,
@@ -23,8 +21,6 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { SlBasket } from "react-icons/sl";
-import { useDispatch } from "react-redux";
-import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import SliderProductSecPhoto from "./SliderProductSecPhoto";
 import SliderProductSecPhoto2 from "./SliderProductSecPhoto2";
@@ -34,10 +30,7 @@ export default function SliderProductSec({
   productsData,
   mainBanner,
 }) {
-  const [isPending, startTransition] = useTransition();
   const [isLoaded, setIsLoaded] = useState(false);
-  const router = useRouter();
-  const disPatch = useDispatch();
 
   const [href, setHref] = useState("/login");
 
@@ -61,17 +54,13 @@ export default function SliderProductSec({
                 دست دوم های افــــرنـــــگ
               </h2>
             </div>
-            <div
-              onClick={() => {
-                startTransition(() => {
-                  router.push(`/products?conditionId=20&orderby=5`);
-                });
-              }}
+            <Link
+              href={`/products?conditionId=20&orderby=5`}
               className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
             >
               <span>نمایش همه</span>
               <FaCaretLeft />
-            </div>
+            </Link>
           </div>
           <div className="relative w-full ">
             <Swiper
@@ -101,12 +90,6 @@ export default function SliderProductSec({
                   <div className="relative group w-full sm:min-h-[14rem] min-h-[12rem] overflow-hidden rounded-xl bg-white shadow-md">
                     {/* تصویر */}
                     <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                      }}
                       href={product.url}
                       className="w-full min-h-36 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                     >
@@ -141,13 +124,6 @@ export default function SliderProductSec({
                     <div className="flex flex-col flex-1 justify-between mt-2">
                       {/* عنوان */}
                       <Link
-                        onClick={(e) => {
-                          e.preventDefault();
-
-                          startTransition(() => {
-                            router.push(product.url);
-                          });
-                        }}
                         href={product.url}
                         className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                       >
@@ -229,13 +205,6 @@ export default function SliderProductSec({
             <Link
               className=" flex items-center gap-1 group text-lg"
               href={href}
-              onClick={(e) => {
-                disPatch(setActiveTab(1));
-                e.preventDefault();
-                startTransition(() => {
-                  router.push(href);
-                });
-              }}
             >
               <span className="font-semibold group-hover:text-[#d1182b] duration-300 whitespace-nowrap">
                 ثبت آگهی فروش
@@ -243,32 +212,14 @@ export default function SliderProductSec({
             </Link>
             <div className="border-l-2 border-[#d1182b]"></div>
 
-            <Link
-              className="flex items-center gap-1 group text-lg"
-              href={href}
-              onClick={(e) => {
-                disPatch(setActiveTab(2));
-                e.preventDefault();
-                startTransition(() => {
-                  router.push(href);
-                });
-              }}
-            >
+            <Link className="flex items-center gap-1 group text-lg" href={href}>
               <span className="font-semibold group-hover:text-[#d1182b] duration-300 whitespace-nowrap">
                 ثبت آگهی خرید
               </span>
             </Link>
           </div>
           <div className="relative w-full h-full">
-            <Link
-              onClick={() => {
-                startTransition((ev) => {
-                  ev.preventDefault();
-                  router.push(mainBanner?.link);
-                });
-              }}
-              href={mainBanner?.link || "#"}
-            >
+            <Link href={mainBanner?.link || "#"}>
               <Image
                 className={`object-contain ${
                   isLoaded ? "opacity-100" : "opacity-0"
@@ -304,17 +255,13 @@ export default function SliderProductSec({
                 دست دوم های کاربران
               </span>
             </div>
-            <div
-              onClick={() => {
-                startTransition(() => {
-                  router.push(`/useds/-1`);
-                });
-              }}
+            <Link
+              href={`/useds/-1`}
               className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
             >
               <span>نمایش همه</span>
               <FaCaretLeft />
-            </div>
+            </Link>
           </div>
           {productsData.length > 0 && (
             <div className="relative w-full ">
@@ -347,13 +294,6 @@ export default function SliderProductSec({
                   >
                     <div className="relative group w-full sm:min-h-[14rem] min-h-[12rem] overflow-hidden rounded-xl bg-white shadow-md">
                       <Link
-                        onClick={(e) => {
-                          e.preventDefault();
-
-                          startTransition(() => {
-                            router.push(product.url);
-                          });
-                        }}
                         href={product.url ? product.url : "#"}
                         className="w-full min-h-36 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                       >
@@ -365,13 +305,6 @@ export default function SliderProductSec({
 
                       <div className="flex flex-col flex-1 justify-between mt-2">
                         <Link
-                          onClick={(e) => {
-                            e.preventDefault();
-
-                            startTransition(() => {
-                              router.push(product.url);
-                            });
-                          }}
                           href={product.url ? product.url : "#"}
                           className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                         >
@@ -397,18 +330,13 @@ export default function SliderProductSec({
                             )}
                           </div>
                         </div>
-                        <div
-                          onClick={(e) => {
-                            e.preventDefault();
-                            startTransition(() => {
-                              router.push(product.url);
-                            });
-                          }}
+                        <Link
+                          href={product.url}
                           className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%]"
                         >
                           <FaSearch className="text-xl text-[#333]" />
                           <span className="px-1 text-[#333]">جزئیات</span>
-                        </div>
+                        </Link>
                       </div>
                     </div>
                   </SwiperSlide>
@@ -430,7 +358,6 @@ export default function SliderProductSec({
           )}
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

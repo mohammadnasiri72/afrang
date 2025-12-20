@@ -1,17 +1,16 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
-import BodyProductServer from "@/components/Product/BodyProductServer";
+import BodyProduct from "@/components/Product/BodyProduct";
 import DescProduct from "@/components/Product/DescProduct";
 import TitleProduct from "@/components/Product/TitleProduct";
 import { itemVisit } from "@/services/Item/item";
-import {
-  getProductId,
-  getRelatedProductsByIdString,
-} from "@/services/products/productService";
+import { getProductId, getRelatedProductsByIdString } from "@/services/products/productService";
 import { headers } from "next/headers";
 import BasketFixed from "./BasketFixed";
 import PriceFixed from "./PriceFixed";
 
 export default async function ProductDetails(props) {
+  const startTime = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  
   const params = await props.params;
   const headersList = headers();
 
@@ -24,24 +23,38 @@ export default async function ProductDetails(props) {
 
   const slug = await params;
   const id = Number(slug.slug[0]);
+  
+  const productStart = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
   const product = await getProductId(id);
+  const productEnd = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  
+  
 
-  let similarProducts = [];
-  if (product.product?.similarId) {
-    similarProducts = await getRelatedProductsByIdString(
-      product.product.similarId
+   let similarProducts = [];
+   const similarStart = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+    if (product.product?.similarId) {
+      similarProducts = await getRelatedProductsByIdString(
+        product.product.similarId
+      );
+    }
+   const similarEnd = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+   
+  
+
+  // Record the visit with IP and User Agent
+  try {
+    await itemVisit(
+      product?.product?.productId,
+      product?.product?.url,
+      ip,
+      userAgent
     );
+  } catch (error) {
+    console.error("Error recording visit:", error);
   }
 
-  // Record the visit with IP and User Agent (non-blocking)
-  itemVisit(
-    product?.product?.productId,
-    product?.product?.url,
-    ip,
-    userAgent
-  ).catch((error) => {
-    console.error("Error recording visit:", error);
-  });
+  const endTime = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  
 
   return (
     <>
@@ -57,11 +70,8 @@ export default async function ProductDetails(props) {
           <div className="xl:px-16">
             <div className="flex">
               <div className="lg:w-3/4 w-full">
-                <TitleProduct
-                  product={product}
-                  similarProducts={similarProducts}
-                />
-                <BodyProductServer product={product} />
+                <TitleProduct product={product} similarProducts={similarProducts}/>
+                <BodyProduct id={id} product={product} />
               </div>
               <BasketFixed product={product} />
             </div>

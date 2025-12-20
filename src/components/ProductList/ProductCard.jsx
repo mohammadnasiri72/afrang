@@ -16,7 +16,7 @@ import CompareButtonBtn from "./CompareButtonBtn";
 import PriceProduct from "./PriceProduct";
 import ShowImgProduct from "./ShowImgProduct";
 
-function ProductCard({ product, startTransition }) {
+function ProductCard({ product }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
 
@@ -32,11 +32,11 @@ function ProductCard({ product, startTransition }) {
                 <div className="relative overflow-hidden rounded-lg group">
                   <Link
                     href={product.url}
+                    prefetch={false}
                     onClick={(e) => {
                       e.preventDefault();
-                      startTransition(() => {
-                        router.push(product.url);
-                      });
+                      router.push(product.url);
+                     
                     }}
                     className="relative"
                   >
@@ -83,7 +83,6 @@ function ProductCard({ product, startTransition }) {
                   <div className="w-full">
                     <CompareButtonBtn
                       id={product?.productId}
-                      startTransition={startTransition}
                     />
                   </div>
                 </div>
@@ -100,12 +99,7 @@ function ProductCard({ product, startTransition }) {
               <div className="flex-grow">
                 <Link
                   href={product.url}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    startTransition(() => {
-                      router.push(product.url);
-                    });
-                  }}
+                  prefetch={false}
                   className="hover:text-[#d1182b] duration-300"
                 >
                   <h2
@@ -156,12 +150,7 @@ function ProductCard({ product, startTransition }) {
               <div className="relative overflow-hidden rounded-lg group ">
                 <Link
                   href={product.url}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    startTransition(() => {
-                      router.push(product.url);
-                    });
-                  }}
+                  prefetch={false}
                   className="relative "
                 >
                   {product.image && (
@@ -217,7 +206,6 @@ function ProductCard({ product, startTransition }) {
                   <div className="w-full">
                     <CompareButtonBtn
                       id={product?.productId}
-                      startTransition={startTransition}
                     />
                   </div>
                 </div>
@@ -234,12 +222,7 @@ function ProductCard({ product, startTransition }) {
               <div className="sm:px-5 sm:py-5 px-5 w-7/12 relative flex flex-col h-full">
                 <Link
                   href={product.url}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    startTransition(() => {
-                      router.push(product.url);
-                    });
-                  }}
+                  prefetch={false}
                   className="hover:text-[#d1182b] duration-300"
                 >
                   <h2

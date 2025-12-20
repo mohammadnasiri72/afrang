@@ -1,6 +1,5 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import { ResetPassword } from "@/services/Account/AccountService";
 import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -8,7 +7,7 @@ import { Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -28,7 +27,6 @@ const ForgotPassword = () => {
   const [errors, setErrors] = useState({});
   const { settings } = useSelector((state) => state.settings);
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   const Toast = Swal.mixin({
     toast: true,
@@ -87,9 +85,7 @@ const ForgotPassword = () => {
         text: "لینک بازیابی رمز عبور به ایمیل/شماره تلفن شما ارسال شد",
       });
 
-      startTransition(() => {
-        router.push("/login");
-      });
+      router.push("/login");
     } catch (err) {
       Toast.fire({
         icon: "error",
@@ -121,15 +117,7 @@ const ForgotPassword = () => {
             <div className="flex flex-wrap">
               <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
                 <div>
-                  <Link
-                    href="/"
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push("/");
-                      });
-                    }}
-                  >
+                  <Link href="/">
                     <Image
                       src={getImageUrl(
                         settings?.find(
@@ -145,15 +133,7 @@ const ForgotPassword = () => {
                   </Link>
                 </div>
                 <div className="logo-text hover:text-[#d1182b] duration-300">
-                  <Link
-                    href="/"
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push("/");
-                      });
-                    }}
-                  >
+                  <Link href="/">
                     <span>خانــه عکاســــان افــــــــــرنـگ</span>
                   </Link>
                 </div>
@@ -200,9 +180,7 @@ const ForgotPassword = () => {
                     <div className="sm:w-1/2 w-full !mb-4 sm:pl-3">
                       <div
                         onClick={() => {
-                          startTransition(() => {
-                            router.back();
-                          });
+                          router.back();
                         }}
                         className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                       >
@@ -231,16 +209,7 @@ const ForgotPassword = () => {
                   </div>
 
                   <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
-                    <Link
-                      className="text-[#d1182b]"
-                      href={"/login"}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push("/login");
-                        });
-                      }}
-                    >
+                    <Link className="text-[#d1182b]" href={"/login"}>
                       بازگشت به صفحه ورود
                     </Link>
                   </div>
@@ -250,7 +219,6 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

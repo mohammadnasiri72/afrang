@@ -1,13 +1,8 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 
 export default function NotFound() {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   return (
     <>
       <div className="bg-[#f6f6f6] overflow-hidden py-20">
@@ -34,24 +29,12 @@ export default function NotFound() {
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/products"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/products");
-                  });
-                }}
                 className="bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31414] transition-colors"
               >
                 مشاهده سایر محصولات
               </Link>
               <Link
                 href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
                 className="bg-gray-500 !text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors"
               >
                 بازگشت به صفحه اصلی
@@ -67,7 +50,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -5,12 +5,11 @@ import { Alert, message } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import Loading from "../Loading";
 
 function DescPayment({ estimateData }) {
   const { currentItems, cartType } = useSelector((store) => store.cart);
@@ -28,7 +27,6 @@ function DescPayment({ estimateData }) {
   const token = JSON.parse(user).token;
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isPending, startTransition] = useTransition();
 
   // import sweet alert 2
   const Toast = Swal.mixin({
@@ -59,9 +57,7 @@ function DescPayment({ estimateData }) {
 
       if (response) {
         dispatch(setOrderData(response));
-        startTransition(() => {
-          router.push(`/profile/orders?trackCode=${response}`);
-        });
+        router.push(`/profile/orders?trackCode=${response}`);
       }
     } catch (error) {
       Toast.fire({
@@ -284,12 +280,6 @@ function DescPayment({ estimateData }) {
             <Link
               className="text-red-500 hover:text-red-600 duration-300 font-semibold"
               href={"/cart"}
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/cart");
-                });
-              }}
             >
               <FaCartShopping className="inline" />
               <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -449,12 +439,6 @@ function DescPayment({ estimateData }) {
             <Link
               className="text-red-500 hover:text-red-600 duration-300 font-semibold"
               href={"/cart"}
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/cart");
-                });
-              }}
             >
               <FaCartShopping className="inline" />
               <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -506,7 +490,6 @@ function DescPayment({ estimateData }) {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

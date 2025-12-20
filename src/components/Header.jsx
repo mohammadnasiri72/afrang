@@ -19,13 +19,11 @@ export default function Header({ onLoaded, settings }) {
   const userCookie = Cookies.get("user");
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
   const disPatch = useDispatch();
-  const route = useRouter();
 
   useEffect(() => {
     if (userCookie) {
@@ -45,7 +43,6 @@ export default function Header({ onLoaded, settings }) {
     }
   }, []);
 
-
   return (
     <>
       <div className="bg-white w-full">
@@ -57,22 +54,12 @@ export default function Header({ onLoaded, settings }) {
             <div className="flex items-center ">
               {settings?.find((item) => item.propertyKey === "site_home_url")
                 ?.value && (
-                <Link
-                  href={"/"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    startTransition(() => {
-                      route.push("/");
-                    });
-                  }}
-                  aria-label="صفحه اصلی"
-                >
+                <Link href={"/"} aria-label="صفحه اصلی">
                   <img
                     className="w-14"
                     src={getImageUrl(
-                      settings?.find(
-                        (item) => item.propertyKey === "site_logo"
-                      )?.value
+                      settings?.find((item) => item.propertyKey === "site_logo")
+                        ?.value
                     )}
                     alt={
                       settings?.find(
@@ -83,16 +70,7 @@ export default function Header({ onLoaded, settings }) {
                 </Link>
               )}
 
-              <Link
-                aria-label="صفحه اصلی"
-                href={"/"}
-                onClick={(e) => {
-                  e.preventDefault();
-                  startTransition(() => {
-                    route.push("/");
-                  });
-                }}
-              >
+              <Link aria-label="صفحه اصلی" href={"/"}>
                 <div className="flex-col px-1 lg:flex hidden">
                   <span className="w-28 font-semibold text-lg">
                     خانــه عکاســــان افــــــــــرنـگ
@@ -136,26 +114,16 @@ export default function Header({ onLoaded, settings }) {
                 ) : (
                   <div className="flex items-center gap-3 font-semibold w-32 ">
                     <Link
+                      prefetch={false}
                       href={"/login"}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        startTransition(() => {
-                          route.push("/login");
-                        });
-                      }}
                       className="flex items-center gap-1 cursor-pointer hover:text-[#d1182b] duration-300"
                     >
                       <FaArrowRightLong />
                       <span>ورود</span>
                     </Link>
                     <Link
+                      prefetch={false}
                       href={"/register"}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        startTransition(() => {
-                          route.push("/register");
-                        });
-                      }}
                       className="border-r border-[#0005] pr-3"
                     >
                       <span className="cursor-pointer hover:text-[#d1182b] duration-300">
@@ -175,12 +143,11 @@ export default function Header({ onLoaded, settings }) {
               </div>
             )}
             <div className="relative mt-3">
-              <ShoppingDrawer header startTransition={startTransition} />
+              <ShoppingDrawer header />
             </div>
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

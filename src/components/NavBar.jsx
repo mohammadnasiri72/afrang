@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import SearchNavbar from "./SearchNavbar";
 
-const NavBar = ({ activeMenu, setActiveMenu, menuItems, startTransition }) => {
+const NavBar = ({ activeMenu, setActiveMenu, menuItems }) => {
   return (
     <>
       <div className="bg-[#d1182b] w-full">
@@ -18,11 +18,11 @@ const NavBar = ({ activeMenu, setActiveMenu, menuItems, startTransition }) => {
                 activeMenu={activeMenu}
                 setActiveMenu={setActiveMenu}
                 initialItems={menuItems}
-                startTransition={startTransition}
+               
               />
             </div>
           )}
-          <SearchNavbar startTransition={startTransition}/>
+          <SearchNavbar />
         </div>
       </div>
     </>

@@ -3,15 +3,9 @@
 import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaBoxOpen } from "react-icons/fa6";
-import Loading from "../Loading";
 
 export default function CategoryList({ categories }) {
-  // const [isPending, startTransition] = useTransition();
-  // const router = useRouter();
-
   if (categories.length === 0) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
@@ -27,12 +21,6 @@ export default function CategoryList({ categories }) {
           </p>
           <Link
             href="/"
-            // onClick={(ev) => {
-            //     ev.preventDefault();
-            //     startTransition(() => {
-            //       router.push("/");
-            //     });
-            //   }}
             className="bg-[#d1182b] !text-white px-6 py-2 rounded-md hover:bg-[#b31525] transition-colors duration-300"
           >
             صفحه اصلی
@@ -51,12 +39,7 @@ export default function CategoryList({ categories }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {categories.map((category) => (
             <Link
-              // onClick={(e) => {
-              //   e.preventDefault();
-              //   startTransition(() => {
-              //     router.push(category.url + "?OrderBy=5");
-              //   });
-              // }}
+              prefetch={false}
               key={category.id}
               href={category.url + "?OrderBy=5"}
               className="bg-white rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300 z-50 relative group"
@@ -87,7 +70,6 @@ export default function CategoryList({ categories }) {
           ))}
         </div>
       </div>
-      {/* {isPending && <Loading />} */}
     </>
   );
 }

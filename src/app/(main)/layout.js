@@ -30,26 +30,55 @@ import { Suspense } from "react";
 export async function generateMetadata() {
   const settings = await getSettings();
 
-  
+  // اگر تنظیمات به هر دلیلی دریافت نشد یا فرمت آن صحیح نبود، مقادیر پیش‌فرض برگردان
+  if (!Array.isArray(settings)) {
+    return {
+      title: "خانه عکاسان افرنگ",
+      description: "خانه عکاسان افرنگ",
+      alternates: {
+        canonical: `${mainUrl}/`,
+      },
+    };
+  }
 
-  const title = settings?.find((e) => e.propertyKey === 'site_title')?.value || 'خانه عکاسان افرنگ'
-  const description = settings?.find((e) => e.propertyKey === 'site_description')?.value || 'خانه عکاسان افرنگ';
- 
+  const title =
+    settings.find((e) => e.propertyKey === "site_title")?.value ||
+    "خانه عکاسان افرنگ";
+  const description =
+    settings.find((e) => e.propertyKey === "site_description")?.value ||
+    "خانه عکاسان افرنگ";
 
   return {
-    title: title,
-    description: description,
+    title,
+    description,
     alternates: {
       canonical: `${mainUrl}/`,
     },
   };
 }
 export default async function layoutMain({ children }) {
-  const settings = await getSettings();  
-   const socialNetworks = await getItem({
+  // دریافت settings با handle خطا - اگر خطا داشت، با آرایه خالی ادامه می‌دهیم
+  let settings = [];
+  try {
+    const rawSettings = await getSettings();
+    settings = Array.isArray(rawSettings) ? rawSettings : [];
+  } catch (error) {
+    settings = [];
+  }
+  
+  // دریافت socialNetworks با handle خطا
+  let socialNetworks = [];
+  try {
+    socialNetworks = await getItem({
       TypeId: 8,
       LangCode: "fa",
     });
+    if (!Array.isArray(socialNetworks)) {
+      socialNetworks = [];
+    }
+  } catch (error) {
+    socialNetworks = [];
+  }
 
   const HeaderNavbarSkeleton = () => {
     return (
@@ -296,10 +325,8 @@ export default async function layoutMain({ children }) {
     );
   };
 
-  // اگر settings دریافت نشد یا خطا داشت، ServerError نمایش داده شود
-  if (!settings || settings.type === "error") {
-    return <ServerError />;
-  }
+  // اگر settings خالی باشد، با مقادیر پیش‌فرض ادامه می‌دهیم (نه ServerError)
+  // ServerError فقط برای خطاهای واقعی سرور نمایش داده می‌شود
 
   return (
     <div>

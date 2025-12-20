@@ -1,47 +1,59 @@
-// components/RouteLoader.jsx - نسخه اصلاح شده
+// components/RouteLoader.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export default function RouteLoader() {
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
-    const handleStart = () => {
-      console.log('🏁 Route change started');
+
+    const handleStart = (url) => {
       setLoading(true);
     };
     
-    const handleComplete = () => {
-      console.log('✅ Route change completed');
+    const handleComplete = (url) => {
+      // کمی تاخیر برای اینکه لودینگ دیده شود
       setTimeout(() => {
         setLoading(false);
-      }, 300); // کمی تاخیر برای smoothness
+      }, 100);
     };
 
-    // لودینگ رو برای route فعلی پنهان کن
-    handleComplete();
+    const handleError = (err, url) => {
+      console.error(`❌ Route change error: ${err} for ${url}`);
+      setLoading(false);
+    };
 
-    // این رویدادها در Next.js 13+ کار می‌کنند
-    window.addEventListener('beforeunload', handleStart);
-    window.addEventListener('load', handleComplete);
+    // استفاده از رویدادهای Router در Next.js
+    router.events?.on('routeChangeStart', handleStart);
+    router.events?.on('routeChangeComplete', handleComplete);
+    router.events?.on('routeChangeError', handleError);
 
-    // همچنین برای back/forward
-    window.addEventListener('popstate', handleStart);
+    // همچنین برای back/forward مرورگر
+    window.addEventListener('popstate', () => {
+      setLoading(true);
+    });
 
     return () => {
-      window.removeEventListener('beforeunload', handleStart);
-      window.removeEventListener('load', handleComplete);
-      window.removeEventListener('popstate', handleStart);
+      router.events?.off('routeChangeStart', handleStart);
+      router.events?.off('routeChangeComplete', handleComplete);
+      router.events?.off('routeChangeError', handleError);
+      window.removeEventListener('popstate', () => {});
     };
-  }, []);
+  }, [router]);
 
-  // وقتی route تغییر کرد
+  // وقتی route تغییر کرد، لودینگ را پنهان کن
   useEffect(() => {
-    setLoading(false);
+    if (pathname) {
+      // کمی تاخیر برای اطمینان
+      setTimeout(() => {
+        setLoading(false);
+      }, 150);
+    }
   }, [pathname, searchParams]);
 
   if (!loading) return null;
@@ -60,10 +72,10 @@ export default function RouteLoader() {
       <style jsx>{`
         @keyframes progress {
           0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
+          100% { transform: translateX(400%); }
         }
         .animate-progress {
-          animation: progress 1.5s ease-in-out infinite;
+          animation: progress 0.8s ease-in-out infinite;
         }
       `}</style>
     </div>

@@ -1,4 +1,3 @@
-import { getCategory } from "@/services/Category/categoryService";
 import Link from "next/link";
 import { FaTelegram } from "react-icons/fa6";
 import Container from "../container";

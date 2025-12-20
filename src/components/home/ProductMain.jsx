@@ -9,20 +9,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Divider } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { Navigation, Pagination } from "swiper/modules";
-import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import ProductMainPhotoLazy from "./ProductMainPhotoLazy";
 import ProductMainPhotoNoLazy from "./ProductMainPhotoNoLazy";
 
 export default function ProductMain({ products, noLazy }) {
-  const [isPending, startTransition] = useTransition();
-
-  const router = useRouter();
-
   return (
     <>
       <div className="sm:min-h-[22rem] min-h-[23rem]">
@@ -70,28 +63,15 @@ export default function ProductMain({ products, noLazy }) {
                 <div className="relative group w-full sm:min-h-[22rem] min-h-[23rem] overflow-hidden rounded-xl bg-white shadow-md">
                   {/* تصویر */}
                   {noLazy ? (
-                    <ProductMainPhotoNoLazy
-                      product={product}
-                      startTransition={startTransition}
-                    />
+                    <ProductMainPhotoNoLazy product={product} />
                   ) : (
-                    <ProductMainPhotoLazy
-                      product={product}
-                      startTransition={startTransition}
-                    />
+                    <ProductMainPhotoLazy product={product} />
                   )}
 
                   {/* محتوا */}
                   <div className="flex flex-col flex-1 justify-between mt-2">
                     {/* عنوان */}
                     <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-
-                        startTransition(() => {
-                          router.push(product.url);
-                        });
-                      }}
                       href={product.url}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                     >
@@ -100,7 +80,7 @@ export default function ProductMain({ products, noLazy }) {
                       </h3>
                     </Link>
                     <Divider style={{ margin: 5, padding: 0 }} />
-                   
+
                     {/* قیمت */}
                     <div className="h-[4.5rem] px-2 duration-300">
                       {!product.callPriceButton && product.finalPrice !== 0 && (
@@ -164,7 +144,6 @@ export default function ProductMain({ products, noLazy }) {
           </div>
         </Swiper>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

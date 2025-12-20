@@ -19,7 +19,9 @@ export default async function GalleryCategory({ params, searchParams }) {
   // const page = searchParam.get("page");
 
   const id = Number(param.slug[0]);
-  const settings = await getSettings();
+
+  const rawSettings = await getSettings();
+  const settings = Array.isArray(rawSettings) ? rawSettings : [];
   const ImagesData = await getGallery({
     LangCode: "fa",
     ...(searchParam.orderBy && { OrderBy: searchParam.orderBy }),
@@ -52,7 +54,6 @@ export default async function GalleryCategory({ params, searchParams }) {
         category = result;
       }
     } catch (error) {
-      console.error("Error fetching category:", error);
     }
 
   return (

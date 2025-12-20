@@ -1,4 +1,3 @@
-import Loading from "@/components/Loading";
 import { RegisterSendOtp } from "@/services/Account/AccountService";
 import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -6,7 +5,7 @@ import { Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlinePhoneAndroid } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -25,7 +24,6 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
   const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -64,20 +62,17 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
           Toast.fire({
             icon: "success",
             text: "کد ارسال شد",
-           
           });
         } else {
           Toast.fire({
             icon: "error",
             text: res.response?.data ? res.response?.data : "خطای شبکه",
-           
           });
         }
       } catch (err) {
         Toast.fire({
           icon: "error",
           text: err.response?.data ? err.response?.data : "خطای شبکه",
-         
         });
       } finally {
         setLoading(false);
@@ -91,14 +86,7 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link href="/"
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
-              >
+              <Link href="/">
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -114,14 +102,7 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link href="/"
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
-              >
+              <Link href="/">
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>
@@ -168,9 +149,7 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
                 <div className="sm:w-1/2 w-full !mb-4 sm:pl-3">
                   <div
                     onClick={() => {
-                      startTransition(() => {
-                        router.back();
-                      });
+                      router.back();
                     }}
                     className="text-center text-[#545454] w-full rounded-[5px] bg-[#eceded] block font-[600] px-0 py-[12px] cursor-pointer"
                   >
@@ -200,14 +179,7 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
                 حساب کاربری دارید؟
-                <Link className="text-[#d1182b]" href={"/login"}
-                 onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/login");
-                });
-              }}
-                >
+                <Link className="text-[#d1182b]" href={"/login"}>
                   وارد شوید
                 </Link>
               </div>
@@ -215,7 +187,6 @@ function RegisterOtp({ setStateRegister, mobile, setMobile }) {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

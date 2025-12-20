@@ -2,13 +2,11 @@
 
 import { Select } from "antd";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
-import Loading from "../Loading";
 
 function SelectCat({ category }) {
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -17,29 +15,25 @@ function SelectCat({ category }) {
     setSelectedCategory(value);
 
     if (value === 0) {
-      startTransition(() => {
-        router.push(
-          `/gallery${
-            searchParams.get("orderBy")
-              ? `?orderBy=${searchParams.get("orderBy")}`
-              : ""
-          }`
-        );
-      });
+      router.push(
+        `/gallery${
+          searchParams.get("orderBy")
+            ? `?orderBy=${searchParams.get("orderBy")}`
+            : ""
+        }`
+      );
     } else {
       const selectedCategoryData = category?.find(
         (item) => item.categoryKey === value
       );
       if (selectedCategoryData) {
-        startTransition(() => {
-          router.push(
-            `/gallery/${selectedCategoryData.categoryKey}${
-              searchParams.get("orderBy")
-                ? `?orderBy=${searchParams.get("orderBy")}`
-                : ""
-            }`
-          );
-        });
+        router.push(
+          `/gallery/${selectedCategoryData.categoryKey}${
+            searchParams.get("orderBy")
+              ? `?orderBy=${searchParams.get("orderBy")}`
+              : ""
+          }`
+        );
       }
     }
   };
@@ -85,7 +79,6 @@ function SelectCat({ category }) {
           options={categoryOptions}
         />
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

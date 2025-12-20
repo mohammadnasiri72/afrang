@@ -8,7 +8,7 @@ import { Spin } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   FaAddressBook,
@@ -27,7 +27,6 @@ import {
 } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import Loading from "./Loading";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -54,7 +53,6 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
   const [user, setUser] = useState(null);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
   const [menuAnimate, setMenuAnimate] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const scrollBarWidthRef = useRef(0);
 
   const router = useRouter();
@@ -349,13 +347,6 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
               <div className="py-2 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {dashboardMenuItems.map((item) => (
                   <Link
-                    onClick={(e) => {
-                      setIsOpen(false);
-                      e.preventDefault();
-                      startTransition(() => {
-                        router.push(item.href || "#");
-                      });
-                    }}
                     key={item.id}
                     href={item.href}
                     className={`flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 border-b border-gray-50 last:border-b-0`}
@@ -414,7 +405,6 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
         </div>
         {menuPortal}
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

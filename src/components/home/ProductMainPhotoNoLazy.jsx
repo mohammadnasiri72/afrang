@@ -8,18 +8,12 @@ import { useState } from "react";
 import CountdownTimer from "./CountdownTimer";
 import { useRouter } from "next/navigation";
 
-function ProductMainPhotoNoLazy({ product , startTransition}) {
+function ProductMainPhotoNoLazy({ product }) {
   const router = useRouter();
   return (
     <>
       <Link
-        onClick={(e) => {
-          e.preventDefault();
-
-          startTransition(() => {
-            router.push(product.url);
-          });
-        }}
+        prefetch={false}
         href={product.url}
         className="w-full min-h-40 sm:min-h-56 flex items-center justify-center bg-[#fff] overflow-hidden relative"
       >

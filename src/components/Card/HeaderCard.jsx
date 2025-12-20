@@ -1,14 +1,12 @@
 "use client";
 import { Steps } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import { useTransition } from "react";
 import {
   FaCheckCircle,
   FaCreditCard,
   FaMapMarkerAlt,
   FaShoppingCart,
 } from "react-icons/fa";
-import Loading from "../Loading";
 
 function HeaderCard() {
   const router = useRouter();
@@ -16,7 +14,6 @@ function HeaderCard() {
   const isCompleteinfosend = pathname.includes("infosend");
   const isCompleteinfopay = pathname.includes("infopay");
   const isCompletepayment = pathname.includes("order");
-  const [isPending, startTransition] = useTransition();
 
   const handleStepClick = (step) => {
     // اگر در مرحله پرداخت هستیم، فقط اجازه برگشت به سبد خرید رو میدیم
@@ -26,29 +23,22 @@ function HeaderCard() {
 
     switch (step) {
       case 0:
-        startTransition(() => {
-          router.push("/cart");
-        });
+        router.push("/cart");
+
         break;
       case 1:
         if (isCompleteinfopay || isCompleteinfosend || isCompletepayment) {
-          startTransition(() => {
-            router.push("/cart/infosend");
-          });
+          router.push("/cart/infosend");
         }
         break;
       case 2:
         if (isCompleteinfopay || isCompletepayment) {
-          startTransition(() => {
-            router.push("/cart/infopay");
-          });
+          router.push("/cart/infopay");
         }
         break;
       case 3:
         if (isCompletepayment) {
-          startTransition(() => {
-            router.push("/cart/order");
-          });
+          router.push("/cart/order");
         }
         break;
     }
@@ -177,7 +167,6 @@ function HeaderCard() {
           opacity: 0.8;
         }
       `}</style>
-      {isPending && <Loading />}
     </>
   );
 }

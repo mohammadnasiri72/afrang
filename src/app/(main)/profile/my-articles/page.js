@@ -169,7 +169,6 @@ export default function MyArticles() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(12); // تعداد مقالات در هر صفحه
 
-  const [isPending, startTransition] = useTransition();
 
   // افزایش z-index fancybox
   useEffect(() => {
@@ -611,12 +610,7 @@ export default function MyArticles() {
                         {article?.url ? (
                           <Link
                             href={article.url}
-                            onClick={(ev) => {
-                              ev.preventDefault();
-                              startTransition(() => {
-                                router.push(article.url);
-                              });
-                            }}
+                            
                           >
                             <h3 className="text-lg font-semibold text-gray-800 line-clamp-1 hover:text-[#d1182b] duration-300">
                               {article.title}
@@ -678,12 +672,7 @@ export default function MyArticles() {
                         {article.sourceLink && (
                           <Link
                             href={article.sourceLink}
-                            onClick={(ev) => {
-                              ev.preventDefault();
-                              startTransition(() => {
-                                router.push(article.sourceLink);
-                              });
-                            }}
+                            
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
@@ -971,7 +960,6 @@ export default function MyArticles() {
           }
         `}</style>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

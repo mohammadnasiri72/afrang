@@ -1,9 +1,7 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import CategorySlider from "./CategorySlider";
 
 const EmptyState = () => {
@@ -64,8 +62,6 @@ const NoResults = () => {
 
 export default function PriceListClient({ pricing, categoriesChilds, id }) {
   const [searchTerms, setSearchTerms] = useState({});
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   // گروه‌بندی محصولات بر اساس categoriesChilds با اولویت priority
   const groupedProducts =
@@ -207,12 +203,6 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                           <div className="col-span-12 sm:col-span-7 text-center sm:text-right">
                             <Link
                               href={product.url}
-                              onClick={(ev) => {
-                                ev.preventDefault();
-                                startTransition(() => {
-                                  router.push(product.url);
-                                });
-                              }}
                               className="text-gray-900 hover:text-[#18d1be] transition-colors duration-200"
                             >
                               {product.title}
@@ -252,7 +242,6 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
           }
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

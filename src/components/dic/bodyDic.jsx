@@ -1,15 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaBook } from "react-icons/fa";
-import Loading from "../Loading";
 
 export default function BodyDic({ dics }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
   // Group items by category
   const groupedItems =
     dics?.reduce((acc, item) => {
@@ -72,12 +66,6 @@ export default function BodyDic({ dics }) {
                     <Link
                       key={item.id}
                       href={item.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url);
-                        });
-                      }}
                       className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 group transition-colors duration-200 block"
                     >
                       <div className="w-full text-right flex items-center gap-2 text-gray-900 group-hover:text-[#18d1be] transition-colors duration-200">
@@ -94,7 +82,6 @@ export default function BodyDic({ dics }) {
           )
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

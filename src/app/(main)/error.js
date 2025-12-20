@@ -1,14 +1,9 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaArrowRight, FaExclamationTriangle, FaHome } from "react-icons/fa";
 
 export default function Error({ error, reset }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   return (
     <>
@@ -33,12 +28,7 @@ export default function Error({ error, reset }) {
               تلاش مجدد
             </button>
             <Link
-              onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
+             
               href="/"
               className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
             >
@@ -48,7 +38,6 @@ export default function Error({ error, reset }) {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

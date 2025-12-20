@@ -12,71 +12,11 @@ const Toast = Swal.mixin({
   customClass: "toast-modal",
 });
 
-
-const axiosInstance = axios.create({
-  timeout: 3000, // تایم‌اوت ۳ ثانیه
-  timeoutErrorMessage: "درخواست به سرور زمان‌بر شد"
-});
-
-// کش ساده در حافظه
-const categoryCache = new Map();
-
-export const getCategory = async (params) => {
-  try {
-    // 🔥 ساخت کلید یکتا برای کش
-    const cacheKey = JSON.stringify(params);
-    
-    // 🔥 بررسی کش
-    if (categoryCache.has(cacheKey)) {
-      const cached = categoryCache.get(cacheKey);
-      // اگر کش کمتر از ۵ دقیقه عمر دارد، از آن استفاده کن
-      if (Date.now() - cached.timestamp < 5 * 60 * 1000) {
-        console.log('✅ استفاده از کش getCategory');
-        return cached.data;
-      }
-    }
-    
-    console.time('getCategory-API');
-    const response = await axiosInstance.get(`${mainDomain}/api/Category`, {
-      params,
-    });
-    console.timeEnd('getCategory-API');
-    
-    const data = response.data;
-    
-    // 🔥 ذخیره در کش
-    categoryCache.set(cacheKey, {
-      timestamp: Date.now(),
-      data: data
-    });
-    
-    // پاکسازی کش قدیمی
-    if (categoryCache.size > 50) {
-      const oldestKey = Array.from(categoryCache.keys())[0];
-      categoryCache.delete(oldestKey);
-    }
-    
-    return data;
-  } catch (error) {
-    console.error('Error in getCategory:', error.message);
-    
-    // 🔥 اگر خطا بود، از کش قدیمی استفاده کن (اگر وجود دارد)
-    const cacheKey = JSON.stringify(params);
-    if (categoryCache.has(cacheKey)) {
-      console.log('⚠️ استفاده از کش قدیمی به علت خطای API');
-      return categoryCache.get(cacheKey).data;
-    }
-    
-    return {
-      type: "error",
-      message: error.response?.data ? error.response?.data : "خطای شبکه",
-    };
-  }
-};
 // export const getCategory = async (params) => {
 //   try {
 //     const response = await axios.get(`${mainDomain}/api/Category`, {
 //       params,
+//       timeout: 15000, // جلوگیری از معطل شدن طولانی
 //     });
 //     return response.data;
 //   } catch (error) {
@@ -86,6 +26,41 @@ export const getCategory = async (params) => {
 //     };
 //   }
 // };
+export const getCategory = async (params = {}) => {
+  try {
+    // ایجاد URL با پارامترهای جستجو
+    const url = new URL(`${mainDomain}/api/Category`);
+    
+    // اضافه کردن پارامترها به URL
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        url.searchParams.append(key, value);
+      }
+    });
+    
+    // درخواست fetch با cache و revalidate
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'force-cache', // استفاده از cache
+      next: { revalidate: 60 }, // revalidate هر 60 ثانیه
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching category:', error);
+    return {
+      type: "error",
+      message: "خطای شبکه",
+    };
+  }
+};
 
 export const getCategoryById = async (id) => {
   try {

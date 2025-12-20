@@ -3,20 +3,14 @@
 import { mainDomainImg } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCaretLeft } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Loading from "../Loading";
 
 export default function BoxImgBranding({ brands }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
   return (
     <>
       <div className="relative mt-5  ">
@@ -52,17 +46,13 @@ export default function BoxImgBranding({ brands }) {
               </h2>
             </div>
 
-            <div
-              onClick={() => {
-                startTransition(() => {
-                  router.push(`/brands`);
-                });
-              }}
+            <Link
+              href={`/brands`}
               className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
             >
               <span>نمایش همه</span>
               <FaCaretLeft />
-            </div>
+            </Link>
           </div>
           <Swiper
             spaceBetween={10}
@@ -93,15 +83,7 @@ export default function BoxImgBranding({ brands }) {
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
                 <div className="relative overflow-hidden sm:w-32 w-20 sm:h-32 h-20 aspect-square">
-                  <Link
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push(`/products?brandid=${brand.id}`);
-                      });
-                    }}
-                    href={`/products?brandid=${brand.id}`}
-                  >
+                  <Link href={`/products?brandid=${brand.id}`}>
                     <Image
                       className={`group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain border-none outline-none cursor-pointer`}
                       src={`${mainDomainImg}${brand.image}`}
@@ -117,7 +99,6 @@ export default function BoxImgBranding({ brands }) {
           </Swiper>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

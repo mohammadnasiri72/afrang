@@ -2,15 +2,9 @@
 
 import { Breadcrumb } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import Loading from "./Loading";
 
 function BreadcrumbMain({ breadcrumb }) {
   const lastItem = breadcrumb[breadcrumb.length - 1];
-
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   // Check if breadcrumb exists and has data
   if (!breadcrumb || !Array.isArray(breadcrumb) || breadcrumb.length === 0) {
@@ -19,12 +13,6 @@ function BreadcrumbMain({ breadcrumb }) {
         <div className="flex items-center space-x-2 !text-gray-800">
           <Link
             href="/"
-             onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
             className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan]"
           >
             خانه
@@ -40,12 +28,6 @@ function BreadcrumbMain({ breadcrumb }) {
       title: (
         <Link
           href="/"
-          onClick={(ev) => {
-            ev.preventDefault();
-            startTransition(() => {
-              router.push("/");
-            });
-          }}
           className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan] whitespace-nowrap text-xs sm:text-sm"
         >
           خانه
@@ -60,12 +42,6 @@ function BreadcrumbMain({ breadcrumb }) {
         title: item.href ? (
           <Link
             href={item.href}
-            onClick={(ev) => {
-              ev.preventDefault();
-              startTransition(() => {
-                router.push(item.href);
-              });
-            }}
             className="!text-gray-800 hover:!text-[#d1182b] font-[Yekan] whitespace-nowrap text-xs sm:text-sm"
           >
             {item.title}
@@ -102,7 +78,6 @@ function BreadcrumbMain({ breadcrumb }) {
           />
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -1,4 +1,3 @@
-import Loading from "@/components/Loading";
 import { setUser } from "@/redux/slices/userSlice";
 import { Register } from "@/services/Account/AccountService";
 import { getCsrf } from "@/services/csrf/csrf";
@@ -8,7 +7,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +38,6 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -119,27 +117,22 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
       if (userData.token) {
         Cookies.set("user", JSON.stringify(userData));
         dispatch(setUser(userData));
-        startTransition(() => {
-          router.push("/");
-        });
+        router.push("/");
 
         Toast.fire({
           icon: "success",
           text: "ثبت نام شما با موفقیت انجام شد",
-          
         });
       } else {
         Toast.fire({
           icon: "error",
           text: userData.response?.data ? userData.response?.data : "خطای شبکه",
-          
         });
       }
     } catch (err) {
       Toast.fire({
         icon: "error",
         text: err.response?.data ? err.response?.data : "خطای شبکه",
-      
       });
     } finally {
       setLoading(false);
@@ -152,14 +145,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link href="/"
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
-              >
+              <Link href="/">
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -175,14 +161,7 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link href="/"
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/");
-                });
-              }}
-              >
+              <Link href="/">
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>
@@ -373,21 +352,13 @@ function RegisterStepTwo({ mobile, setStateRegister }) {
 
             <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
               حساب کاربری دارید؟
-              <Link className="text-[#d1182b]" href={"/login"}
-               onClick={(ev) => {
-                ev.preventDefault();
-                startTransition(() => {
-                  router.push("/login");
-                });
-              }}
-              >
+              <Link className="text-[#d1182b]" href={"/login"}>
                 وارد شوید
               </Link>
             </div>
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -81,15 +81,7 @@ const BrandsPage = () => {
 
   // رندر کارت هر برند
   const renderBrandCard = (brand) => (
-    <Link
-      href={`/products?brandid=${brand.id}`}
-      onClick={(ev) => {
-        ev.preventDefault();
-        startTransition(() => {
-          router.push(`/products?brandid=${brand.id}`);
-        });
-      }}
-    >
+    <Link href={`/products?brandid=${brand.id}`}>
       <div
         key={brand.id}
         className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"

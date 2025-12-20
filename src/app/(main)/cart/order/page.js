@@ -1,16 +1,14 @@
 "use client";
 
 import HeaderCard from "@/components/Card/HeaderCard";
-import Loading from "@/components/Loading";
 import BodyPayment from "@/components/payment/BodyPayment";
 import { fetchCartData } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrderPage() {
   const [mounted, setMounted] = useState(false);
-  const [isPending, startTransition] = useTransition();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -23,9 +21,7 @@ export default function OrderPage() {
     const checkCart = async () => {
       dispatch(fetchCartData());
       if (!items || items.length === 0) {
-        startTransition(() => {
-          router.push("/cart");
-        });
+        router.push("/cart");
       }
     };
     checkCart();
@@ -41,7 +37,6 @@ export default function OrderPage() {
           </div>
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

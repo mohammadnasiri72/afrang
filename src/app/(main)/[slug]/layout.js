@@ -1,6 +1,4 @@
-// export const metadata = {
-//   title: "فراموشی رمز عبور",
-// };
+
 
 import { getItemByUrl } from "@/services/Item/item";
 import { mainUrl } from "@/utils/mainDomain";

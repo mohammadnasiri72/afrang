@@ -1,6 +1,5 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import { getOrderTrackCode } from "@/services/order/orderService";
 import { getImageUrl } from "@/utils/mainDomain";
 import {
@@ -15,7 +14,7 @@ import moment from "moment-jalaali";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { BsCreditCard2BackFill } from "react-icons/bs";
 import {
   FaAngleDown,
@@ -223,8 +222,6 @@ export default function OrderDetails({ trackCode }) {
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const [isPending, startTransition] = useTransition();
 
   const formatPersianDate = (dateString) => {
     try {
@@ -476,15 +473,7 @@ export default function OrderDetails({ trackCode }) {
                               className="lg:w-1/3 w-full lg:mt-0 mt-3"
                             >
                               <div className="flex gap-1">
-                                <Link
-                                  href={e.url}
-                                  onClick={(ev) => {
-                                    ev.preventDefault();
-                                    startTransition(() => {
-                                      router.push(e.url);
-                                    });
-                                  }}
-                                >
+                                <Link href={e.url}>
                                   <div className="relative w-14 h-14">
                                     <Image
                                       className="w-full h-full object-contain rounded-lg "
@@ -505,12 +494,6 @@ export default function OrderDetails({ trackCode }) {
                                   <Link
                                     className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                     href={e.url}
-                                    onClick={(ev) => {
-                                      ev.preventDefault();
-                                      startTransition(() => {
-                                        router.push(e.url);
-                                      });
-                                    }}
                                   >
                                     <span className="text-xs font-bold line-clamp-2 ">
                                       {e?.title}
@@ -927,7 +910,6 @@ export default function OrderDetails({ trackCode }) {
           }
         `}</style>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

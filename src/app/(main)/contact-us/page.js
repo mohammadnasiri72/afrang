@@ -33,7 +33,6 @@ export default async function Contact() {
       </>
     );
   } catch (error) {
-    console.error("Error fetching page:", error);
     notFound();
   }
 }

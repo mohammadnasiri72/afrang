@@ -9,7 +9,18 @@ const BodyProductList = dynamic(() => import("./BodyProductList"));
 const PaginationProduct = dynamic(() => import("./PaginationProduct"));
 
 export default async function ProductListWithFilters({ searchParams }) {
-  const resultFilter = await getCategoryChild(-1);
+  // دریافت resultFilter با handle خطا و timeout
+  let resultFilter = null;
+  try {
+    resultFilter = await getCategoryChild(-1);
+    if (resultFilter && resultFilter.type === "error") {
+      resultFilter = null;
+    }
+  } catch (error) {
+    console.error("Error fetching resultFilter:", error);
+    resultFilter = null;
+  }
+  
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
   const layout = searchParams?.layout ? searchParams.layout : "list";

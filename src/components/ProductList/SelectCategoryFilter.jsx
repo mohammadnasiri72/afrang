@@ -22,7 +22,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
   const [valuePrice, setValuePrice] = useState([0, resultFilter?.maxPrice]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [activeKeys, setActiveKeys] = useState(["1"]);
@@ -112,9 +111,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     } else {
       params.delete("brandid");
     }
-    startTransition(() => {
-      router.push(`${window.location.pathname}?${params.toString()}`);
-    });
+    router.push(`${window.location.pathname}?${params.toString()}`);
+    
   };
 
   const handleFilterChange = () => {
@@ -133,9 +131,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     } else {
       params.delete("price2");
     }
-    startTransition(() => {
-      router.push(`${window.location.pathname}?${params.toString()}`);
-    });
+    router.push(`${window.location.pathname}?${params.toString()}`);
+    
   };
 
   const handleResetFilters = () => {
@@ -147,9 +144,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=5
     const params = new URLSearchParams();
     params.set("OrderBy", "5");
-    startTransition(() => {
-      router.push(`${window.location.pathname}?${params.toString()}`);
-    });
+    router.push(`${window.location.pathname}?${params.toString()}`);
+   
   };
 
   const handleChange = (event, newValue) => {
@@ -166,9 +162,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("page");
 
-    startTransition(() => {
-      router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
-    });
+    router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
+   
   };
 
   const handleSwitchChange = (type) => {
@@ -208,9 +203,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     } else {
       params.delete("conditionId");
     }
-    startTransition(() => {
-      router.push(`${window.location.pathname}?${params.toString()}`);
-    });
+    router.push(`${window.location.pathname}?${params.toString()}`);
+    
   };
 
   const filteredCategories = Array.isArray(resultFilter.categories)
@@ -597,11 +591,9 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
           <div className="flex flex-col gap-2 mt-6 border-t pt-6">
             <FilterProperties
               filterData={resultFilter.filterProperties}
-              startTransition={startTransition}
             />
           </div>
         )}
-      {isPending && <Loading />}
     </>
   );
 }

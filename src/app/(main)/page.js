@@ -13,11 +13,15 @@ import SliderHomeSSR from "../../components/home/SliderHomeSSR";
 export const revalidate = 60;
 
 export default async function Home() {
-  const mainBanner = await getListItemBanner();
-  const settings = await getSettings();
-  const pageTitleH1 = settings?.find(
-    (item) => item.propertyKey === "site_title"
-  )?.propertyValue;
+  const rawMainBanner = await getListItemBanner();
+
+  const mainBanner = Array.isArray(rawMainBanner) ? rawMainBanner : [];
+  const rawSettings = await getSettings();
+  const settings = Array.isArray(rawSettings) ? rawSettings : [];
+
+  const titleItem = settings.find((item) => item.propertyKey === "site_title");
+  const pageTitleH1 =
+    titleItem?.propertyValue || titleItem?.value || "خانه عکاسان افرنگ";
 
   const SliderHomeSkeleton = () => {
     return (

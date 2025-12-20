@@ -5,15 +5,13 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Input, Modal, Spin } from "antd";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
-import Loading from "../Loading";
+import { useEffect, useRef, useState } from "react";
 
 const AddProductToCompareModal = ({ visible, onClose, catIds }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const timeoutRef = useRef(null);
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
 
@@ -52,9 +50,7 @@ const AddProductToCompareModal = ({ visible, onClose, catIds }) => {
       : [];
     const newIds = [...currentIds, product.productId];
     const newUrl = `/compare/${newIds.join(",")}`;
-    startTransition(() => {
-      router.push(newUrl);
-    });
+    router.push(newUrl);
 
     onClose();
   };
@@ -145,7 +141,6 @@ const AddProductToCompareModal = ({ visible, onClose, catIds }) => {
           </div>
         </div>
       </Modal>
-      {isPending && <Loading />}
     </>
   );
 };

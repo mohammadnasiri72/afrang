@@ -29,7 +29,8 @@ export default async function Gallery({ searchParams }) {
     PageIndex: 1,
   });
 
-  const settings = await getSettings();
+  const rawSettings = await getSettings();
+  const settings = Array.isArray(rawSettings) ? rawSettings : [];
 
   const ids = ImagesDataCurent.map((item) => item.id).join(",");
   const property = await getPropertyItem(ids);
@@ -49,7 +50,6 @@ export default async function Gallery({ searchParams }) {
       category = result;
     }
   } catch (error) {
-    console.error("Error fetching category:", error);
   }
 
   return (

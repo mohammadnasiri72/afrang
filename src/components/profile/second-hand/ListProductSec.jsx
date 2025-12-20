@@ -1,8 +1,6 @@
-import Loading from "@/components/Loading";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Empty, Popover, Skeleton } from "antd";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDone, MdOutlineTimer } from "react-icons/md";
 import EditeProductSec from "./EditeProductSec";
@@ -11,9 +9,6 @@ import ModalShowDetails from "./ModalShowDetails";
 
 function ListProductSec({ productsSec }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
- 
 
   return (
     <>
@@ -22,11 +17,8 @@ function ListProductSec({ productsSec }) {
           آگهی های فروش شما
         </h3>
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            startTransition(() => {
-              router.push("/profile/second-hand/add");
-            });
+          onClick={() => {
+            router.push("/profile/second-hand/add");
           }}
           className="sm:px-4 px-2 sm:py-2 py-1 text-sm bg-[#d1182b] !text-white rounded-md transition-colors min-w-[90px] cursor-pointer hover:bg-[#b91626]"
         >
@@ -115,9 +107,6 @@ function ListProductSec({ productsSec }) {
           )}
         </div>
       </div>
-      {
-        isPending && <Loading />
-      }
     </>
   );
 }

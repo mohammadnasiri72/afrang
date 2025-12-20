@@ -4,11 +4,9 @@ import { mainDomainImg } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import * as FaIcons from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
-import Loading from "./Loading";
 import Newsletter from "./Newsletter";
 
 export function IconRenderer({ iconName, ...props }) {
@@ -21,14 +19,12 @@ export function IconRenderer({ iconName, ...props }) {
 
 const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   const coordinates = settings?.find(
     (item) => item.propertyKey === "site_geo_location"
   )?.value;
 
-  const [lat, lng] = coordinates.split(",").map((coord) => coord.trim());
+  const [lat, lng] = coordinates?.split(",").map((coord) => coord.trim()) || ["35.6892", "51.3890"]; // Default to Tehran coordinates if not available
 
   // const handleNavigation = () => {
   //   // استفاده از geo URI استاندارد - مثل واتساپ
@@ -94,16 +90,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                 ) && (
                   <Link
                     aria-label="صفحه اصلی"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      startTransition(() => {
-                        router.push(
-                          settings?.find(
-                            (item) => item.propertyKey === "site_home_url"
-                          )?.value || "/"
-                        );
-                      });
-                    }}
                     href={
                       settings?.find(
                         (item) => item.propertyKey === "site_home_url"
@@ -208,12 +194,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                   {footerMenu[0]?.menuItems?.map((menuItem) => (
                     <li key={menuItem.id} className="w-full list-none p-1">
                       <Link
-                        onClick={(e) => {
-                          e.preventDefault();
-                          startTransition(() => {
-                            router.push(menuItem.url || "#");
-                          });
-                        }}
                         href={menuItem.url || "#"}
                         className="block w-full bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
                       >
@@ -374,12 +354,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                     {footerMenu[0]?.menuItems?.map((menuItem) => (
                       <li key={menuItem.id} className="list-none p-1">
                         <Link
-                          onClick={(e) => {
-                            e.preventDefault();
-                            startTransition(() => {
-                              router.push(menuItem.url || "#");
-                            });
-                          }}
                           href={menuItem.url || "#"}
                           className="block bg-white/90 rounded-xl shadow-sm border border-gray-200 px-3 py-2 text-center text-sm font-medium text-gray-700 hover:bg-[#d1182b] hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1182b] focus:ring-offset-2"
                         >
@@ -423,7 +397,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
           </p>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 };

@@ -28,8 +28,7 @@ function chunkArray(array, size) {
 function AccessoriesProduct({ product, relatedProducts }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
   const productsSectionRef = useRef(null);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+ 
 
   // Get unique categories from relatedProducts
   const categories = [
@@ -138,12 +137,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                           <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
                             <Link
                               href={item.url}
-                              onClick={(ev) => {
-                                ev.preventDefault();
-                                startTransition(() => {
-                                  router.push(item.url);
-                                });
-                              }}
+                              
                               className="flex-shrink-0 w-20 h-20 relative overflow-hidden "
                             >
                               <img
@@ -155,12 +149,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                             <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                               <Link
                                 href={item.url}
-                                onClick={(ev) => {
-                                  ev.preventDefault();
-                                  startTransition(() => {
-                                    router.push(item.url);
-                                  });
-                                }}
+                                
                                 className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                               >
                                 {item.title}
@@ -273,12 +262,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                   <div className="flex  items-center gap-3 py-3   bg-white rounded-lg relative h-[120px] min-h-[96px] hover:bg-gray-50 transition-all">
                     <Link
                       href={item.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url);
-                        });
-                      }}
+                      
                       className="flex-shrink-0 w-20 h-20 relative overflow-hidden "
                     >
                       <img
@@ -290,12 +274,7 @@ function AccessoriesProduct({ product, relatedProducts }) {
                     <div className="flex-1  min-w-0 flex flex-col justify-between h-full">
                       <Link
                         href={item.url}
-                        onClick={(ev) => {
-                          ev.preventDefault();
-                          startTransition(() => {
-                            router.push(item.url);
-                          });
-                        }}
+                       
                         className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
                       >
                         {item.title}
@@ -357,7 +336,6 @@ function AccessoriesProduct({ product, relatedProducts }) {
           )}
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

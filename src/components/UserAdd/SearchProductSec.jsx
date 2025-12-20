@@ -4,11 +4,10 @@ import { getUserAdBuy, getUserAdSell } from "@/services/UserAd/UserAdServices";
 import { getImageUrl } from "@/utils/mainDomain";
 import { Input, Spin } from "antd";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import Swal from "sweetalert2";
-import Loading from "../Loading";
 import ShowInfoContact from "./ShowInfoContact";
 
 // تنظیمات Toast
@@ -38,8 +37,6 @@ function SearchProductSec() {
   const price1 = searchParams.get("price1") || undefined;
   const price2 = searchParams.get("price2") || undefined;
   const categoryParams = searchParams.getAll("category");
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const pathname = usePathname();
   // تابع تبدیل قیمت به فرمت قابل خواندن
   const formatPrice = (price) => {
@@ -115,18 +112,7 @@ function SearchProductSec() {
     setLoading(true);
     setShow(true);
     timeoutRef.current = setTimeout(async () => {
-      // try {
-      //   const response = await getProductTerm(e.target.value);
-      //   if (response.type === "error") {
-      //     setResults([]);
-      //     return;
-      //   }
-      //   setResults(response);
-      // } catch (error) {
-      //   console.error("search error : ", error);
-      // } finally {
-      //   setLoading(false);
-      // }
+     
       fetchProductsSec({ ...orginalData, Term: e.target.value });
     }, 500);
   };
@@ -137,16 +123,7 @@ function SearchProductSec() {
         <div className="flex-shrink-0 px-3">
           <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
             {product.image && product.url ? (
-              <Link
-                className="w-full h-full"
-                href={product.url}
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push(product.url);
-                  });
-                }}
-              >
+              <Link className="w-full h-full" href={product.url}>
                 <img
                   src={getImageUrl(product.image)}
                   alt={product.title}
@@ -175,12 +152,6 @@ function SearchProductSec() {
             <h3 className="text-lg font-semibold text-gray-900 !mb-1">
               <Link
                 href={product.url}
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push(product.url);
-                  });
-                }}
                 className="hover:text-[#d1182b] transition-colors line-clamp-1"
               >
                 {product.title}
@@ -281,7 +252,6 @@ function SearchProductSec() {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

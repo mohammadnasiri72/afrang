@@ -18,11 +18,16 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [headerLoaded, setHeaderLoaded] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
-  const [isPending, startTransition] = useTransition();
 
   const disPatch = useDispatch();
 
   const open = useSelector((store) => store.shopping.openShopping);
+  
+  // استفاده از menuItems از Redux اگر props خالی باشد
+  const menuItemsFromRedux = useSelector((state) => state.menuRes.items);
+  const finalMenuItems = (menuItems && Array.isArray(menuItems) && menuItems.length > 0) 
+    ? menuItems 
+    : (menuItemsFromRedux && menuItemsFromRedux.length > 0 ? menuItemsFromRedux : []);
 
   useEffect(() => {
     if (open) {
@@ -31,18 +36,13 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
   }, [open]);
 
   useEffect(() => {
-    if (menuItems && menuItems.length > 0) {
-      disPatch(
-        setMenuItems((prev) => ({
-          ...prev,
-          items: menuItems,
-          openMenuRes: false,
-          loading: false,
-          error: null,
-        }))
-      );
+    if (menuItems && Array.isArray(menuItems) && menuItems.length > 0) {
+      // منوی دریافت‌شده از سرور را فقط یک‌بار در ریداکس ذخیره می‌کنیم
+      disPatch(setMenuItems(menuItems));
     }
-  }, [menuItems]);
+  }, [menuItems, disPatch]);
+  
+ 
 
   useEffect(() => {
     if (settings && settings.length > 0) {
@@ -182,8 +182,7 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
             <NavBar
               activeMenu={activeMenu}
               setActiveMenu={setActiveMenu}
-              menuItems={menuItems}
-              startTransition={startTransition}
+              menuItems={finalMenuItems}
             />
           </div>
         </div>
@@ -211,7 +210,6 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
             activeMenu={activeMenu}
             setActiveMenu={setActiveMenu}
             menuItems={menuItems}
-            startTransition={startTransition}
           />
         </div>
       </nav>
@@ -221,7 +219,6 @@ const HeaderNavbarWrapper = ({ menuItems, settings }) => {
           style={{ zIndex: 999 }}
         />
       )}
-      {isPending && <Loading />}
     </>
   );
 };

@@ -1,4 +1,3 @@
-import Loading from "@/components/Loading";
 import { login } from "@/services/Account/AccountService";
 import { getCsrf } from "@/services/csrf/csrf";
 import { getImageUrl } from "@/utils/mainDomain";
@@ -7,7 +6,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -20,7 +19,7 @@ const toEnglishNumber = (number) => {
 
 function LoginStatic({ setStateLogin, from }) {
   const user = Cookies.get("user");
-    const userId = JSON.parse(user).userId;
+  const userId = JSON.parse(user).userId;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +27,6 @@ function LoginStatic({ setStateLogin, from }) {
   const { settings } = useSelector((state) => state.settings);
 
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   // import sweet alert 2
   const Toast = Swal.mixin({
     toast: true,
@@ -80,7 +78,7 @@ function LoginStatic({ setStateLogin, from }) {
         password,
         remember: true,
         csrf: csrf.csrfToken,
-        userId:userId
+        userId: userId,
       });
       if (userData.token) {
         Cookies.set("user", JSON.stringify(userData));
@@ -90,18 +88,12 @@ function LoginStatic({ setStateLogin, from }) {
         if (redirectPath) {
           localStorage.removeItem("redirectAfterLogin"); // پاک کردن مسیر از localStorage
 
-          startTransition(() => {
-            router.push(redirectPath);
-          });
+          router.push(redirectPath);
         } else if (!from) {
-          startTransition(() => {
-            router.push("/");
-          });
+          router.push("/");
         } else {
           if (from === "card") {
-            startTransition(() => {
-              router.push("/card/compeletePay");
-            });
+            router.push("/card/compeletePay");
           }
         }
 
@@ -131,15 +123,7 @@ function LoginStatic({ setStateLogin, from }) {
         <div className="flex flex-wrap">
           <div className="sm:w-1/2 w-full !mb-[40px] sm:border-l align-middle flex items-center">
             <div>
-              <Link
-                href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
-              >
+              <Link href="/">
                 <Image
                   src={getImageUrl(
                     settings?.find(
@@ -155,15 +139,7 @@ function LoginStatic({ setStateLogin, from }) {
               </Link>
             </div>
             <div className="logo-text hover:text-[#d1182b] duration-300">
-              <Link
-                href="/"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/");
-                  });
-                }}
-              >
+              <Link href="/">
                 <span>خانــه عکاســــان افــــــــــرنـگ</span>
               </Link>
             </div>
@@ -242,12 +218,6 @@ function LoginStatic({ setStateLogin, from }) {
               </span>
               <Link
                 href="/forgot-password"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  startTransition(() => {
-                    router.push("/forgot-password");
-                  });
-                }}
                 className="text-[#d1182b] cursor-pointer font-semibold hover:text-[#b91626] transition-colors"
               >
                 فراموشی رمز عبور
@@ -288,16 +258,7 @@ function LoginStatic({ setStateLogin, from }) {
 
               <div className="w-full flex justify-center text-center text-[#656565] font-[600]">
                 حساب کاربری ندارید؟
-                <Link
-                  className="text-[#d1182b] px-2"
-                  href={"/register"}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push("/register");
-                    });
-                  }}
-                >
+                <Link className="text-[#d1182b] px-2" href={"/register"}>
                   ساخت حساب کاربری
                 </Link>
               </div>
@@ -305,7 +266,6 @@ function LoginStatic({ setStateLogin, from }) {
           </div>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

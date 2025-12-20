@@ -2,9 +2,7 @@
 
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCaretDown } from "react-icons/fa";
-import Loading from "../Loading";
 
 function SelectCategoryClient({
   category,
@@ -12,7 +10,6 @@ function SelectCategoryClient({
   currentSearchParams,
 }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   const handleChange = (value) => {
     // dispatch(setLoadingBlog(true));
@@ -23,9 +20,7 @@ function SelectCategoryClient({
       params.set("category", value);
       params.delete("page");
     }
-    startTransition(() => {
-      router.push(`?${params.toString()}`);
-    });
+    router.push(`?${params.toString()}`);
   };
 
   const options = [
@@ -53,21 +48,17 @@ function SelectCategoryClient({
           options={options}
         />
       </div>
-      {isPending && <Loading />}
     </>
   );
 }
 
 function SelectCategory({ category, activeCategory, currentSearchParams }) {
   return (
-   
-      <SelectCategoryClient
-        category={category}
-        activeCategory={activeCategory}
-        currentSearchParams={currentSearchParams}
-      />
-      
-   
+    <SelectCategoryClient
+      category={category}
+      activeCategory={activeCategory}
+      currentSearchParams={currentSearchParams}
+    />
   );
 }
 

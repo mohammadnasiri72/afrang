@@ -9,7 +9,6 @@ import Loading from "../Loading";
 const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   const createPageURL = (page) => {
     const params = new URLSearchParams(initialSearchParams);
@@ -25,9 +24,8 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
 
   const handlePageChange = (page) => {
     const url = createPageURL(page);
-    startTransition(() => {
-      router.push(url);
-    });
+    router.push(url);
+    
   };
 
   const handlePageSizeChange = (size) => {
@@ -40,9 +38,8 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
     }
 
     params.delete("page");
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
+    router.push(`${pathname}?${params.toString()}`);
+    
   };
 
   // تابع برای رندر کردن لینک‌های واقعی
@@ -122,7 +119,6 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
           </div>
         </div>
       )}
-      {isPending && <Loading />}
     </>
   );
 };

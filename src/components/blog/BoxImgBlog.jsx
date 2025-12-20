@@ -3,11 +3,8 @@ import { getImageUrl } from "@/utils/mainDomain";
 import moment from "moment-jalaali";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import Container from "../container";
-import Loading from "../Loading";
 import BlogPagination from "./BlogPagination";
 import EmptyBlogs from "./EmptyBlogs";
 import ExpandableText from "./ExpandableText";
@@ -42,9 +39,6 @@ function BoxImgBlog({ blogs = [], searchParams }) {
     }
   };
 
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
   return (
     <>
       <Container>
@@ -58,12 +52,6 @@ function BoxImgBlog({ blogs = [], searchParams }) {
                 <div className="overflow-hidden relative cursor-pointer flex items-center justify-center">
                   <Link
                     href={blog.url}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      startTransition(() => {
-                        router.push(blog.url);
-                      });
-                    }}
                     className="flex items-center justify-center"
                   >
                     <div className="relative h-[200px] w-full">
@@ -88,12 +76,6 @@ function BoxImgBlog({ blogs = [], searchParams }) {
                 <div className="p-3">
                   <h2 className="h-12 line-clamp-2">
                     <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        startTransition(() => {
-                          router.push(blog.url);
-                        });
-                      }}
                       className="font-bold hover:text-[#d1182b] duration-300 text-justify"
                       href={blog.url}
                     >
@@ -127,7 +109,6 @@ function BoxImgBlog({ blogs = [], searchParams }) {
         <BlogPagination blogs={blogs} searchParams={searchParams} />
         {blogs.length === 0 && <EmptyBlogs />}
       </Container>
-      {isPending && <Loading />}
     </>
   );
 }

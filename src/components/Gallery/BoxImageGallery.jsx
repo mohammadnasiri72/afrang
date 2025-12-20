@@ -1,14 +1,15 @@
 "use client";
 import { Divider, message, Spin } from "antd";
-import React, { useEffect, useState } from "react";
-import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 
 // import required modules
-import { Fancybox } from "@fancyapps/ui";
-import { getImageUrl } from "@/utils/mainDomain";
-import { getUserCookie } from "@/utils/cookieUtils";
 import { postLike } from "@/services/UserActivity/UserActivityService";
+import { getUserCookie } from "@/utils/cookieUtils";
+import { getImageUrl } from "@/utils/mainDomain";
+import { Fancybox } from "@fancyapps/ui";
+import { useRouter } from "next/navigation";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -31,13 +32,14 @@ Fancybox.bind("[data-fancybox='gallery2']", {
 });
 
 function BoxImageGallery({ imageData }) {
+  const router = useRouter();
   const [liked, setLiked] = useState(false);
   const [likedNumber, setLikedNumber] = useState(0);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-   // افزایش z-index fancybox
-   useEffect(() => {
+  // افزایش z-index fancybox
+  useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `.fancybox__container { z-index: 999999 !important; }`;
     document.head.appendChild(style);
@@ -46,14 +48,12 @@ function BoxImageGallery({ imageData }) {
     };
   }, []);
 
-
   useEffect(() => {
     if (imageData) {
-      setLiked(imageData.isLiked)
-      setLikedNumber(imageData.like)
+      setLiked(imageData.isLiked);
+      setLikedNumber(imageData.like);
     }
-  }, [imageData])
-
+  }, [imageData]);
 
   useEffect(() => {
     const userData = getUserCookie();
@@ -62,8 +62,8 @@ function BoxImageGallery({ imageData }) {
 
   const handleLike = async () => {
     if (!token) {
-      localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      router.push('/login');
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      router.push("/login");
       return;
     }
 
@@ -71,11 +71,13 @@ function BoxImageGallery({ imageData }) {
     try {
       await postLike(imageData.id, token);
       setLiked((e) => !e);
-      setLikedNumber((e) => liked ? e - 1 : e + 1)
+      setLikedNumber((e) => (liked ? e - 1 : e + 1));
       message.success({
-        content: liked ? "تصویر از علاقه‌مندی‌ها حذف شد" : "تصویر به علاقه‌مندی‌ها اضافه شد",
+        content: liked
+          ? "تصویر از علاقه‌مندی‌ها حذف شد"
+          : "تصویر به علاقه‌مندی‌ها اضافه شد",
         duration: 3,
-        className: 'custom-success-message'
+        className: "custom-success-message",
       });
     } catch (error) {
       message.error({
@@ -105,13 +107,14 @@ function BoxImageGallery({ imageData }) {
                 className="object-cover"
                 unoptimized
               />
-              {/* <div className="absolute inset-0 bg-white/30 opacity-0 hover:opacity-100 transition-opacity duration-300"></div> */}
             </a>
           </div>
 
           <div className="my-3 flex items-center text-xs p-2">
             <span>فرستنده : </span>
-            <span className="font-semibold px-1">{imageData.senderTitle || 'نامشخص'}</span>
+            <span className="font-semibold px-1">
+              {imageData.senderTitle || "نامشخص"}
+            </span>
           </div>
           <Divider
             style={{ margin: 0, padding: 0, borderColor: "#d1182b55" }}
@@ -121,22 +124,23 @@ function BoxImageGallery({ imageData }) {
               <span className="font-bold">{imageData.visit || 0}</span>
               <span className="px-1">بازدید</span>
             </div>
-            {
-              isLoading ? <Spin size="small" /> :
-                <div
-                  onClick={() => {
-                    handleLike()
-                  }}
-                  className="flex items-center text-xs cursor-pointer"
-                >
-                  {liked ? (
-                    <IoMdHeart className="text-lg text-[#d1182b]" />
-                  ) : (
-                    <IoMdHeartEmpty className="text-lg" />
-                  )}
-                  <span className="px-1 font-bold">{likedNumber}</span>
-                </div>
-            }
+            {isLoading ? (
+              <Spin size="small" />
+            ) : (
+              <div
+                onClick={() => {
+                  handleLike();
+                }}
+                className="flex items-center text-xs cursor-pointer"
+              >
+                {liked ? (
+                  <IoMdHeart className="text-lg text-[#d1182b]" />
+                ) : (
+                  <IoMdHeartEmpty className="text-lg" />
+                )}
+                <span className="px-1 font-bold">{likedNumber}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

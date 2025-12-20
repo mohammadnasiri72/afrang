@@ -30,7 +30,6 @@ const SecondHand = () => {
   const disPatch = useDispatch();
   const router = useRouter();
   const user = useSelector(selectUser);
-  const [isPending, startTransition] = useTransition();
 
   const options = [
     { label: "فروش ", value: 1 },
@@ -141,9 +140,8 @@ const SecondHand = () => {
                   value={activeTab}
                   onChange={(value) => {
                     disPatch(setIdEdit(0));
-                    startTransition(() => {
-                      router.push("/profile/second-hand");
-                    });
+                    router.push("/profile/second-hand");
+                    
 
                     disPatch(setActiveTab(value));
                     setProductsSec([]);
@@ -166,7 +164,6 @@ const SecondHand = () => {
           </div>
         </div>
       )}
-      {isPending && <Loading />}
     </>
   );
 };

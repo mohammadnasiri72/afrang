@@ -13,7 +13,7 @@ function GoogleMap() {
     (item) => item.propertyKey === "site_geo_location"
   )?.value;
 
-  const [lat, lng] = coordinates.split(",").map((coord) => coord.trim());
+  const [lat, lng] = coordinates?.split(",").map((coord) => coord.trim()) || ["35.6892", "51.3890"]; // Default to Tehran coordinates if not available
 
  const handleNavigation = () => {
     const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;

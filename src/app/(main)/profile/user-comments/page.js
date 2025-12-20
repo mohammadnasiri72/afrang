@@ -1,6 +1,5 @@
 "use client";
 
-import Loading from "@/components/Loading";
 import { selectUser } from "@/redux/slices/userSlice";
 import {
   deleteComment,
@@ -23,8 +22,7 @@ import {
   Tooltip,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { FaSpinner } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -221,9 +219,6 @@ const UserCommentsPage = () => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [deletingIds, setDeletingIds] = useState(new Set());
 
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
   // تنظیمات Toast
   const Toast = Swal.mixin({
     toast: true,
@@ -384,12 +379,6 @@ const UserCommentsPage = () => {
                   </div>
                   <Link
                     href={item.url}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push(item.url);
-                      });
-                    }}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:!text-[#d1182b] !text-[#4B5563] transition-colors duration-200 text-decoration-none"
@@ -726,7 +715,6 @@ const UserCommentsPage = () => {
           </div>
         </div>
       )}
-      {isPending && <Loading />}
     </>
   );
 };

@@ -59,7 +59,6 @@ const PaymentSkeleton = () => (
 // کامپوننت خطا
 const PaymentNotFound = () => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   return (
     <>
@@ -103,9 +102,8 @@ const PaymentNotFound = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
-            startTransition(() => {
-              router.push("/payment/link");
-            });
+            router.push("/payment/link");
+           
           }}
           className="flex gap-2 cursor-pointer items-center space-x-2 space-x-reverse bg-blue-500 hover:bg-blue-600 !text-white px-4 py-2 rounded-lg transition-colors duration-200"
         >
@@ -113,7 +111,6 @@ const PaymentNotFound = () => {
           <span>تلاش مجدد</span>
         </motion.button>
       </motion.div>
-      {isPending && <Loading />}
     </>
   );
 };

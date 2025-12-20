@@ -3,20 +3,15 @@ import { setSelectedColorMode } from "@/redux/slices/productColorSlice";
 import { addToRecentViews } from "@/utils/recentViews";
 import { Alert } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../Loading";
 import SelectColorProduct from "./SelectColorProduct";
 import SelectProductMokamel from "./SelectProductMokamel";
 import SelectedInsurance from "./SelectedInsurance";
 import TagsSection from "./TagsSection";
 
 function DescProductDetails({ product, similarProducts }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
   const { settings } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
 
@@ -32,7 +27,6 @@ function DescProductDetails({ product, similarProducts }) {
       dispatch(setSelectedColorMode(null));
     }
   }, [product]);
-
 
   return (
     <>
@@ -71,17 +65,7 @@ function DescProductDetails({ product, similarProducts }) {
             {product?.product?.brandTitle && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
                 <span className="text-xs">برند : </span>
-                <Link
-                  href={`/products?brandid=${product?.product?.brandId}`}
-                  onClick={(ev) => {
-                    ev.preventDefault();
-                    startTransition(() => {
-                      router.push(
-                        `/products?brandid=${product?.product?.brandId}`
-                      );
-                    });
-                  }}
-                >
+                <Link href={`/products?brandid=${product?.product?.brandId}`}>
                   <span className="text-xs">
                     {product?.product?.brandTitle}
                   </span>
@@ -135,12 +119,6 @@ function DescProductDetails({ product, similarProducts }) {
                     <Link
                       className="!text-cyan-700 font-semibold hover:!text-cyan-600 duration-300"
                       href="/usedrules"
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push("/usedrules");
-                        });
-                      }}
                     >
                       مشاهده قوانین خرید و فروش تجهیزات کارکرده و دست دوم.
                     </Link>
@@ -171,7 +149,6 @@ function DescProductDetails({ product, similarProducts }) {
           <SelectProductMokamel product={product} />
         )}
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

@@ -3,19 +3,13 @@
 import { getRelatedProductsByIdString } from "@/services/products/productService";
 import { getImageUrl } from "@/utils/mainDomain";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { FaBoxOpen } from "react-icons/fa";
-import Loading from "../Loading";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 
 async function BundleProducts({ product }) {
   const bundleProducts = await getRelatedProductsByIdString(
     product.bundle.products
   );
-
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   if (!bundleProducts.length) {
     return (
@@ -50,16 +44,7 @@ async function BundleProducts({ product }) {
                   </div>
                 )}
                 <div className="relative group overflow-hidden shadow-lg border border-[#0001] rounded-lg h-full flex flex-col">
-                  <Link
-                    href={item.url}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      startTransition(() => {
-                        router.push(item.url);
-                      });
-                    }}
-                    className="flex-grow-0"
-                  >
+                  <Link href={item.url} className="flex-grow-0">
                     <img
                       className="group-hover:scale-110 scale-100 duration-1000 w-full h-48 object-contain"
                       style={{ filter: "brightness(0.95)" }}
@@ -72,12 +57,6 @@ async function BundleProducts({ product }) {
                   <div className="flex-grow flex flex-col justify-between p-3">
                     <Link
                       href={item.url}
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        startTransition(() => {
-                          router.push(item.url);
-                        });
-                      }}
                       className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2"
                     >
                       {item.title}
@@ -119,7 +98,6 @@ async function BundleProducts({ product }) {
           ))}
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

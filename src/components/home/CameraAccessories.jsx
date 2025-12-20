@@ -9,15 +9,11 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Pagination } from "swiper/modules";
-import Loading from "../Loading";
 
 export default function CameraAccessories({ category }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   return (
     <>
@@ -57,13 +53,6 @@ export default function CameraAccessories({ category }) {
             {category.map((item) => (
               <SwiperSlide key={item.id}>
                 <Link
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    startTransition(() => {
-                      router.push(item.url);
-                    });
-                  }}
                   href={item.url}
                   className="flex flex-col items-center justify-center"
                 >
@@ -106,7 +95,6 @@ export default function CameraAccessories({ category }) {
           </Swiper>
         </div>
       </div>
-      {isPending && <Loading />}
     </>
   );
 }

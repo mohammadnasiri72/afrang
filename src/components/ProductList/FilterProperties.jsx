@@ -9,7 +9,7 @@ import { FaAngleUp, FaSearch } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { useDispatch } from "react-redux";
 
-function FilterProperties({ filterData, startTransition }) {
+function FilterProperties({ filterData }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -86,9 +86,8 @@ function FilterProperties({ filterData, startTransition }) {
     const queryString = params.toString().replace(/%2C/g, ",");
     const newUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
-    startTransition(() => {
-      router.push(newUrl);
-    });
+    router.push(newUrl);
+   
   };
 
   const handleCollapseChange = (keys) => {

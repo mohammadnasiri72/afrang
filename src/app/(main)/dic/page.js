@@ -27,7 +27,6 @@ export default async function Dic() {
       dics = result;
     }
   } catch (error) {
-    console.error("Error fetching dics:", error);
   }
 
   return (
