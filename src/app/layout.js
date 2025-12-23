@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import { getSettings } from "@/services/settings/settingsService";
 import "@ant-design/v5-patch-for-react-19";
 import CustomRouteLoader from "./CustomRouteLoader";
-import FooterScripts from "./FooterScripts";
 import "./globals.css";
 
 export const revalidate = 3600;
@@ -27,9 +26,6 @@ export default async function RootLayout({ children }) {
     
   }
   
-  const siteScripts = settings.find(
-    (e) => e.propertyKey === "site_scripts"
-  )?.value;
 
   return (
     <html lang="fa" dir="rtl">
