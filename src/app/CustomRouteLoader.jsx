@@ -25,25 +25,62 @@ function CustomRouteLoaderContent() {
   };
 
   // تابع برای چک کردن اینکه آیا URL تغییر کرده یا نه
-  const hasUrlChanged = (href, currentPathname, currentSearchParams) => {
-    const normalizedHref = normalizeUrl(href);
-    const normalizedCurrent = normalizeUrl(currentPathname);
+ // تابع برای چک کردن اینکه آیا URL تغییر کرده یا نه - نسخه نهایی
+const hasUrlChanged = (href, currentPathname, currentSearchParams) => {
+  try {
+    // 1. ساخت URL کامل از href
+    let hrefUrl;
+    try {
+      hrefUrl = new URL(href, window.location.origin);
+    } catch (error) {
+      // اگر href مسیر نسبی بدون / است
+      if (href && !href.startsWith('/') && !href.startsWith('http')) {
+        hrefUrl = new URL('/' + href, window.location.origin);
+      } else {
+        throw error;
+      }
+    }
+
+    // 2. استخراج بخش‌های مختلف
+    const hrefPathname = hrefUrl.pathname;
     
-    // اگر pathname متفاوت باشد
-    if (normalizedHref !== normalizedCurrent) {
+    // تبدیل search params به شیء URLSearchParams
+    const hrefSearchParams = new URLSearchParams(hrefUrl.search);
+    const currentSearchParamsObj = new URLSearchParams(currentSearchParams.toString());
+
+    // 3. مقایسه pathname
+    if (hrefPathname !== currentPathname) {
       return true;
     }
 
-    // اگر pathname یکسان باشد، search params را چک کن
-    const hrefSearchParams = href.includes("?") 
-      ? new URLSearchParams(href.split("?")[1].split("#")[0])
-      : new URLSearchParams();
-    
-    const currentSearchParamsStr = currentSearchParams.toString();
-    const hrefSearchParamsStr = hrefSearchParams.toString();
+    // 4. مقایسه search params
+    // الف: مقایسه تعداد پارامترها
+    if (hrefSearchParams.toString().split('&').filter(p => p).length !== 
+        currentSearchParamsObj.toString().split('&').filter(p => p).length) {
+      return true;
+    }
 
-    return currentSearchParamsStr !== hrefSearchParamsStr;
-  };
+    // ب: مقایسه تک‌تک پارامترها
+    for (const [key, value] of currentSearchParamsObj.entries()) {
+      if (hrefSearchParams.get(key) !== value) {
+        return true;
+      }
+    }
+
+    // ج: بررسی پارامترهایی که در href هستند اما در current نیستند
+    for (const [key, value] of hrefSearchParams.entries()) {
+      if (currentSearchParamsObj.get(key) !== value) {
+        return true;
+      }
+    }
+
+    return false;
+    
+  } catch (error) {
+    console.error('Error in hasUrlChanged:', error, 'href:', href);
+    return false; // در صورت خطا، فرض کن تغییر نکرده
+  }
+};
 
   // تشخیص رندر کامل صفحه
   useEffect(() => {
@@ -73,8 +110,10 @@ function CustomRouteLoaderContent() {
         if (timeSinceLastMutation >= 200 && isNavigatingRef.current) {
           // چک می‌کنیم که آیا pathname یا searchParams تغییر کرده
           const currentSearchParamsStr = searchParams.toString();
-          if (pathname !== lastPathname.current || 
-              currentSearchParamsStr !== lastSearchParams.current) {
+          if (
+            pathname !== lastPathname.current ||
+            currentSearchParamsStr !== lastSearchParams.current
+          ) {
             setLoading(false);
             isNavigatingRef.current = false;
             lastPathname.current = pathname;
@@ -111,11 +150,10 @@ function CustomRouteLoaderContent() {
   useEffect(() => {
     const currentSearchParamsStr = searchParams.toString();
     const pathnameChanged = pathname !== lastPathname.current;
-    const searchParamsChanged = currentSearchParamsStr !== lastSearchParams.current;
+    const searchParamsChanged =
+      currentSearchParamsStr !== lastSearchParams.current;
 
     if (pathnameChanged || searchParamsChanged) {
-     
-
       // اگر navigation در حال انجام است، لودینگ را خاموش کن
       if (isNavigatingRef.current) {
         // کمی delay برای اطمینان از رندر کامل
@@ -148,14 +186,19 @@ function CustomRouteLoaderContent() {
         href.startsWith("mailto:") ||
         href.startsWith("tel:") ||
         href.startsWith("javascript:") ||
-        (!href.startsWith("/") && typeof window !== "undefined" && !href.startsWith(window.location.origin))
+        (!href.startsWith("/") &&
+          typeof window !== "undefined" &&
+          !href.startsWith(window.location.origin))
       ) {
         return;
       }
 
       // استخراج pathname و search params از href
       let hrefPathname = href;
-      if (typeof window !== "undefined" && href.startsWith(window.location.origin)) {
+      if (
+        typeof window !== "undefined" &&
+        href.startsWith(window.location.origin)
+      ) {
         hrefPathname = href.replace(window.location.origin, "");
       }
 
@@ -174,8 +217,11 @@ function CustomRouteLoaderContent() {
     const originalReplace = router.replace;
 
     router.push = async (...args) => {
-      const url = typeof args[0] === "string" ? args[0] : args[0].pathname + (args[0].search || "");
-      
+      const url =
+        typeof args[0] === "string"
+          ? args[0]
+          : args[0].pathname + (args[0].search || "");
+
       // چک کردن اینکه آیا URL واقعاً تغییر کرده یا نه
       if (!hasUrlChanged(url, pathname, searchParams)) {
         return originalPush.apply(router, args);
@@ -196,8 +242,11 @@ function CustomRouteLoaderContent() {
     };
 
     router.replace = async (...args) => {
-      const url = typeof args[0] === "string" ? args[0] : args[0].pathname + (args[0].search || "");
-      
+      const url =
+        typeof args[0] === "string"
+          ? args[0]
+          : args[0].pathname + (args[0].search || "");
+
       // چک کردن اینکه آیا URL واقعاً تغییر کرده یا نه
       if (!hasUrlChanged(url, pathname, searchParams)) {
         return originalReplace.apply(router, args);
