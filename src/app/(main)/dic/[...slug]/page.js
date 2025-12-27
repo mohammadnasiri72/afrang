@@ -31,7 +31,14 @@ export default async function DicItemPage({ params }) {
       <div className="bg-white">
         <div className="overflow-hidden max-w-[1600px] mx-auto ">
           <BreadcrumbMain
-            breadcrumb={[{ title: "واژگان فنی" }, { title: dic.title }]}
+            breadcrumb={[
+              {
+                href: "/dic",
+                title: "واژگان فنی",
+                format: "type",
+              },
+              { title: dic.title, format: "type" },
+            ]}
           />
         </div>
       </div>

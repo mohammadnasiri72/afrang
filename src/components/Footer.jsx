@@ -5,17 +5,8 @@ import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import * as FaIcons from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import Newsletter from "./Newsletter";
-
-export function IconRenderer({ iconName, ...props }) {
-  const IconComponent = FaIcons[iconName];
-
-  if (!IconComponent) return null; // یا یه آیکون پیشفرض
-
-  return <IconComponent {...props} />;
-}
 
 const Footer = ({ socialNetworks, footerMenu, settings }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -340,11 +331,6 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                         src={mainDomainImg + item.image}
                         alt={item.title || "social network"}
                         className="object-contain "
-                      />
-                    ) : item.itemKey ? (
-                      <IconRenderer
-                        className={`text-slate-800 group-hover:!text-[#d1182b] duration-300 text-xl ${item.itemKey}`}
-                        iconName={item.itemKey}
                       />
                     ) : null}
                   </Link>

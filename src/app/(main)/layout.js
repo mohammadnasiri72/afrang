@@ -11,22 +11,7 @@ import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
 import { Suspense } from "react";
 
-// Force dynamic rendering for this segment to avoid serving cached/static output
-// export const dynamic = "force-dynamic";
-// export const revalidate = 0;
-// export const fetchCache = "default-no-store";
 
-// export const metadata = {
-  
-//   title: {
-//     default: "خانه عکاسان افرنگ",
-//     template: " افرنگ | %s ",
-//   },
-//   description: "خانه عکاسان افرنگ",
-//   alternates: {
-//     canonical: `${mainUrl}/`,
-//   },
-// };
 export async function generateMetadata() {
   const settings = await getSettings();
 

@@ -587,7 +587,7 @@ html {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .slider-productDetails .swiper {
@@ -627,7 +627,7 @@ html {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 @keyframes circleAnimate {

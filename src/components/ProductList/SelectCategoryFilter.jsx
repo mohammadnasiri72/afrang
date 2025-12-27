@@ -143,7 +143,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
 
     // پاک کردن همه پارامترهای URL و اضافه کردن OrderBy=5
     const params = new URLSearchParams();
-    params.set("OrderBy", "5");
+    params.set("orderby", "5");
     router.push(`${window.location.pathname}?${params.toString()}`);
    
   };
@@ -471,8 +471,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
 
   // تابع برای بررسی وجود فیلترهای فعال
   const hasActiveFilters = () => {
-    const orderBy = searchParams.get("OrderBy");
-    const hasOnlyOrderBy2 = orderBy === "2" && searchParams.size === 1;
+    const orderBy = searchParams.get("orderby");
+    const hasOnlyOrderBy2 = orderBy === "5" && searchParams.size === 1;
 
     return (
       !hasOnlyOrderBy2 &&
@@ -485,7 +485,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
         switchStates.price ||
         switchStates.secondHand ||
         searchParams.get("category") ||
-        (orderBy && orderBy !== "2"))
+        (orderBy && orderBy !== "5"))
     );
   };
 
@@ -500,13 +500,13 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
                 setVisible(false);
               }
             }}
-            className="text-2xl cursor-pointer"
+            className="text-2xl cursor-pointer lg:hidden"
           />
         </div>
         {hasActiveFilters() && (
           <button
             onClick={handleResetFilters}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 group cursor-pointer"
+            className="flex items-center whitespace-nowrap gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 group cursor-pointer"
           >
             <IoCloseOutline className="!text-red-600 text-xl group-hover:rotate-90 transition-transform duration-300" />
             <span className="!text-red-600 text-sm font-semibold">

@@ -14,26 +14,19 @@ const FALLBACK_SETTINGS = [
 
 export default async function RootLayout({ children }) {
   let settings = FALLBACK_SETTINGS;
-  
+
   try {
     const rawSettings = await getSettings();
-    
+
     // بررسی اینکه آیا خطا برگردانده یا timeout خورده
     if (rawSettings && !rawSettings.type) {
       settings = Array.isArray(rawSettings) ? rawSettings : FALLBACK_SETTINGS;
-    } 
-  } catch (error) {
-    
-  }
-  
+    }
+  } catch (error) {}
 
   return (
     <html lang="fa" dir="rtl">
       <head>
-       
-        
-        {/* <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
-        <link rel="preload" href="/favicon.ico" as="image" type="image/x-icon" /> */}
         <link rel="preload" href="/style/style.css" as="style" />
         <link rel="stylesheet" href="/style/style.css" />
       </head>

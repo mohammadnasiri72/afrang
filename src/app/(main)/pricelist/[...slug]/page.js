@@ -2,23 +2,22 @@ import { getProductPricing } from "@/services/products/productService";
 import PriceListClient from "./PriceListClient";
 import { getCategory } from "@/services/Category/categoryService";
 
-
-export const revalidate = 3600; 
+export const revalidate = 3600;
 
 export default async function PriceListPage({ params }) {
   try {
     const id = Number(params.slug[0]);
 
     const pricing = await getProductPricing(id);
-    
-     const categoriesChilds = await getCategory({
-        TypeId: 4,
-        LangCode: "fa",
-        IsActive: 1,
-        ParentIdArray: id,
-      });      
 
-    if (!pricing || pricing.length === 0) {
+    const categoriesChilds = await getCategory({
+      TypeId: 4,
+      LangCode: "fa",
+      IsActive: 1,
+      ParentIdArray: id,
+    });
+
+    if (!pricing || pricing.length === 0 || pricing.type === "error") {
       return (
         <div className="flex flex-col items-center justify-center py-12 overflow-hidden max-w-[1600px] mx-auto">
           <div className="w-24 h-24 !mb-4">
@@ -46,7 +45,13 @@ export default async function PriceListPage({ params }) {
       );
     }
 
-    return <PriceListClient pricing={pricing} categoriesChilds={categoriesChilds} id={id}/>;
+    return (
+      <PriceListClient
+        pricing={pricing}
+        categoriesChilds={categoriesChilds}
+        id={id}
+      />
+    );
   } catch (error) {
     console.error("Error in PriceListPage:", error);
     throw error; // Let error.js handle it
