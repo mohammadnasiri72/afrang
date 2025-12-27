@@ -1,19 +1,27 @@
 // services/menuService.js
 import { mainDomain } from "@/utils/mainDomain";
 
-export const fetchMenuItems = async () => {
+export const fetchMenuItems = async (opts = {}) => {
+  const { force = false } = opts;
   try {
-     console.log(">>> fetchMenuItems CALLED at", new Date().toISOString());
+     console.log(">>> fetchMenuItems CALLED at", new Date().toISOString(), 'force=', force);
+    const fetchOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 3600, tags: ["main-menu", "global-cache"] },
+    };
+
+    if (force) {
+      // when prewarming we want a fresh fetch and to bypass any cached data
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["main-menu", "global-cache"] };
+    }
+
     const response = await fetch(
       `${mainDomain}/api/Menu?langCode=fa&menuKey=primary`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "force-cache",
-        next: { revalidate: 3600, tags: ["main-menu", "global-cache"] },
-      }
+      fetchOptions
     );
 
     if (!response.ok) {

@@ -1,7 +1,6 @@
 // import { mainDomain } from "@/utils/mainDomain";
 // import axios from "axios";
 
-
 // const createQueryString = (params = {}) => {
 //   const searchParams = new URLSearchParams();
 //   Object.entries(params).forEach(([key, value]) => {
@@ -42,7 +41,6 @@
 //   }
 // };
 
-
 // export const getItemByUrl = async (url) => {
 //   try {
 //     // ساخت URL با پارامترها
@@ -51,7 +49,7 @@
 //       langCode: "fa",
 //     });
 //     const apiUrl = `${mainDomain}/api/Item/findByUrl?${params}`;
-    
+
 //     // استفاده از fetch با کش (مثلاً 60 ثانیه)
 //     const response = await fetch(apiUrl, {
 //       method: 'GET',
@@ -67,7 +65,7 @@
 
 //     return await response.json();
 //   } catch (err) {
-//     const isHard404 = err.message.includes("Not Found") || 
+//     const isHard404 = err.message.includes("Not Found") ||
 //                      err.message.includes("404");
 //     return {
 //       type: "error",
@@ -134,19 +132,16 @@
 //   }
 // };
 
-
-
-
 // export const getListItemBanner = async () => {
 //   try {
 //     const params = {
 //       langCode: "fa",
 //       categoryId: -1,
 //     };
-    
+
 //     const queryString = createQueryString(params);
 //     const url = `${mainDomain}/api/Item/Banner${queryString ? `?${queryString}` : ''}`;
-    
+
 //     const response = await fetch(url, {
 //       method: 'GET',
 //       headers: {
@@ -169,10 +164,6 @@
 //   }
 // };
 
-
-
-
-
 import { mainDomain } from "@/utils/mainDomain";
 
 // کش داخلی برای آیتم‌ها
@@ -181,7 +172,7 @@ const itemCache = {
   banners: null,
   bannerTimestamp: null,
   byUrl: new Map(),
-  byIds: new Map()
+  byIds: new Map(),
 };
 
 // تابع کمکی برای بررسی اعتبار کش
@@ -195,9 +186,9 @@ const isCacheValid = (timestamp) => {
 const createQueryString = (params = {}) => {
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       if (Array.isArray(value)) {
-        value.forEach(v => searchParams.append(key, v));
+        value.forEach((v) => searchParams.append(key, v));
       } else {
         searchParams.append(key, value);
       }
@@ -210,11 +201,11 @@ const createQueryString = (params = {}) => {
 const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
+
   try {
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal
+      signal: controller.signal,
     });
     clearTimeout(timeoutId);
     return response;
@@ -229,7 +220,7 @@ export const getItem = async (params) => {
   try {
     // ایجاد کلید کش بر اساس پارامترها
     const cacheKey = JSON.stringify(params);
-    
+
     // بررسی کش
     const cached = itemCache.items.get(cacheKey);
     if (cached && isCacheValid(cached.timestamp)) {
@@ -237,14 +228,14 @@ export const getItem = async (params) => {
     }
 
     const queryString = createQueryString(params);
-    const url = `${mainDomain}/api/Item${queryString ? `?${queryString}` : ''}`;
-    
+    const url = `${mainDomain}/api/Item${queryString ? `?${queryString}` : ""}`;
+
     const response = await fetchWithTimeout(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      next: { revalidate: 3600, tags: ['items'] } // کش 1 ساعته
+      next: { revalidate: 3600, tags: ["items"] }, // کش 1 ساعته
     });
 
     if (!response.ok) {
@@ -252,19 +243,19 @@ export const getItem = async (params) => {
     }
 
     const data = await response.json();
-    
+
     // ذخیره در کش
     itemCache.items.set(cacheKey, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     // محدود کردن حجم کش
     if (itemCache.items.size > 100) {
       const firstKey = itemCache.items.keys().next().value;
       itemCache.items.delete(firstKey);
     }
-    
+
     return data;
   } catch (err) {
     console.error("❌ [Item] Error fetching items:", err.message);
@@ -286,13 +277,13 @@ export const getItemById = async (id) => {
     }
 
     const url = `${mainDomain}/api/Item/${id}`;
-    
+
     const response = await fetchWithTimeout(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -300,13 +291,13 @@ export const getItemById = async (id) => {
     }
 
     const data = await response.json();
-    
+
     // ذخیره در کش
     itemCache.items.set(cacheKey, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     return data;
   } catch (err) {
     console.error("❌ [Item] Error fetching item by ID:", err.message);
@@ -332,13 +323,13 @@ export const getItemByUrl = async (urlParam) => {
       langCode: "fa",
     });
     const url = `${mainDomain}/api/Item/findByUrl?${params}`;
-    
+
     const response = await fetchWithTimeout(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      next: { revalidate: 3600, tags: ['items-by-url'] }
+      next: { revalidate: 3600, tags: ["items-by-url", "global-cache"] },
     });
 
     if (!response.ok) {
@@ -353,24 +344,24 @@ export const getItemByUrl = async (urlParam) => {
     }
 
     const data = await response.json();
-    
+
     // ذخیره در کش
     itemCache.byUrl.set(cacheKey, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     // محدود کردن حجم کش
     if (itemCache.byUrl.size > 50) {
       const firstKey = itemCache.byUrl.keys().next().value;
       itemCache.byUrl.delete(firstKey);
     }
-    
+
     return data;
   } catch (err) {
     console.error("❌ [Item] Error fetching item by URL:", err.message);
-    const isHard404 = err.message.includes("Not Found") || 
-                     err.message.includes("404");
+    const isHard404 =
+      err.message.includes("Not Found") || err.message.includes("404");
     return {
       type: "error",
       message: err.message || "خطای شبکه",
@@ -383,22 +374,22 @@ export const getItemByUrl = async (urlParam) => {
 export const getItemByIds = async (data, token) => {
   try {
     // ایجاد کلید کش بر اساس داده‌ها
-    const cacheKey = `ids_${JSON.stringify(data)}_${token || 'no-token'}`;
+    const cacheKey = `ids_${JSON.stringify(data)}_${token || "no-token"}`;
     const cached = itemCache.byIds.get(cacheKey);
     if (cached && isCacheValid(cached.timestamp)) {
       return cached.data;
     }
 
     const url = `${mainDomain}/api/Item/GetListByIds`;
-    
+
     const response = await fetchWithTimeout(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` })
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
       body: JSON.stringify(data),
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -406,13 +397,13 @@ export const getItemByIds = async (data, token) => {
     }
 
     const result = await response.json();
-    
+
     // ذخیره در کش
     itemCache.byIds.set(cacheKey, {
       data: result,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     return result;
   } catch (err) {
     console.error("❌ [Item] Error fetching items by IDs:", err.message);
@@ -434,13 +425,13 @@ export const getListItemByIds = async (ids) => {
     }
 
     const url = `${mainDomain}/api/Item/ByIds/${ids}`;
-    
+
     const response = await fetchWithTimeout(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -448,13 +439,13 @@ export const getListItemByIds = async (ids) => {
     }
 
     const data = await response.json();
-    
+
     // ذخیره در کش
     itemCache.byIds.set(cacheKey, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     return data;
   } catch (err) {
     console.error("❌ [Item] Error fetching list items by IDs:", err.message);
@@ -471,15 +462,15 @@ export const itemVisit = async (id, url, userAgent) => {
     langCode: "fa",
     id,
     url,
-    ip: '',
+    ip: "",
     userAgent,
   };
 
   try {
     const response = await fetchWithTimeout(`${mainDomain}/api/Item/visit`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
       // برای POST معمولاً کش نمی‌کنیم
@@ -511,16 +502,18 @@ export const getListItemBanner = async () => {
       langCode: "fa",
       categoryId: -1,
     };
-    
+
     const queryString = createQueryString(params);
-    const url = `${mainDomain}/api/Item/Banner${queryString ? `?${queryString}` : ''}`;
-    
+    const url = `${mainDomain}/api/Item/Banner${
+      queryString ? `?${queryString}` : ""
+    }`;
+
     const response = await fetchWithTimeout(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      next: { revalidate: 3600, tags: ['banners'] }
+      next: { revalidate: 3600, tags: ["banners"] },
     });
 
     if (!response.ok) {
@@ -528,11 +521,11 @@ export const getListItemBanner = async () => {
     }
 
     const data = await response.json();
-    
+
     // ذخیره در کش
     itemCache.banners = data;
     itemCache.bannerTimestamp = Date.now();
-    
+
     return data;
   } catch (err) {
     console.error("❌ [Item] Error fetching banners:", err.message);
