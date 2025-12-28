@@ -166,22 +166,6 @@
 
 import { mainDomain } from "@/utils/mainDomain";
 
-// کش داخلی برای آیتم‌ها
-const itemCache = {
-  items: new Map(),
-  banners: null,
-  bannerTimestamp: null,
-  byUrl: new Map(),
-  byIds: new Map(),
-};
-
-// تابع کمکی برای بررسی اعتبار کش
-const isCacheValid = (timestamp) => {
-  if (!timestamp) return false;
-  const ONE_HOUR_IN_MS = 60 * 60 * 1000;
-  return Date.now() - timestamp < ONE_HOUR_IN_MS;
-};
-
 // تابع کمکی برای ساخت URL با پارامترها
 const createQueryString = (params = {}) => {
   const searchParams = new URLSearchParams();
@@ -216,243 +200,126 @@ const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
 };
 
 // تابع اصلی دریافت آیتم‌ها
-export const getItem = async (params) => {
+export const getItem = async (params = {}, opts = {}) => {
   try {
-    // ایجاد کلید کش بر اساس پارامترها
-    const cacheKey = JSON.stringify(params);
-
-    // بررسی کش
-    const cached = itemCache.items.get(cacheKey);
-    if (cached && isCacheValid(cached.timestamp)) {
-      return cached.data;
-    }
-
+    const { force = false } = opts;
     const queryString = createQueryString(params);
     const url = `${mainDomain}/api/Item${queryString ? `?${queryString}` : ""}`;
 
-    const response = await fetchWithTimeout(url, {
+    const fetchOptions = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 3600, tags: ["items"] }, // کش 1 ساعته
-    });
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+    };
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (force) {
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["items", "global-cache"] };
     }
 
-    const data = await response.json();
-
-    // ذخیره در کش
-    itemCache.items.set(cacheKey, {
-      data,
-      timestamp: Date.now(),
-    });
-
-    // محدود کردن حجم کش
-    if (itemCache.items.size > 100) {
-      const firstKey = itemCache.items.keys().next().value;
-      itemCache.items.delete(firstKey);
-    }
-
-    return data;
+    const response = await fetchWithTimeout(url, fetchOptions);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching items:", err.message);
-    return {
-      type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
-    };
+    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
   }
 };
 
 // دریافت آیتم بر اساس ID
-export const getItemById = async (id) => {
+export const getItemById = async (id, opts = {}) => {
   try {
-    // بررسی کش
-    const cacheKey = `id_${id}`;
-    const cached = itemCache.items.get(cacheKey);
-    if (cached && isCacheValid(cached.timestamp)) {
-      return cached.data;
-    }
-
     const url = `${mainDomain}/api/Item/${id}`;
-
-    const response = await fetchWithTimeout(url, {
+    const fetchOptions = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 3600 },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+    };
+    if (opts.force) {
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["items", "global-cache"] };
     }
-
-    const data = await response.json();
-
-    // ذخیره در کش
-    itemCache.items.set(cacheKey, {
-      data,
-      timestamp: Date.now(),
-    });
-
-    return data;
+    const response = await fetchWithTimeout(url, fetchOptions);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching item by ID:", err.message);
-    return {
-      type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
-    };
+    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
   }
 };
 
 // دریافت آیتم بر اساس URL
-export const getItemByUrl = async (urlParam) => {
+export const getItemByUrl = async (urlParam, opts = {}) => {
   try {
-    // بررسی کش
-    const cacheKey = `url_${urlParam}`;
-    const cached = itemCache.byUrl.get(cacheKey);
-    if (cached && isCacheValid(cached.timestamp)) {
-      return cached.data;
-    }
-
-    const params = new URLSearchParams({
-      url: urlParam,
-      langCode: "fa",
-    });
+    const params = new URLSearchParams({ url: urlParam, langCode: "fa" });
     const url = `${mainDomain}/api/Item/findByUrl?${params}`;
 
-    const response = await fetchWithTimeout(url, {
+    const fetchOptions = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       next: { revalidate: 3600, tags: ["items-by-url", "global-cache"] },
-    });
+    };
+    if (opts.force) {
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["items-by-url", "global-cache"] };
+    }
 
+    const response = await fetchWithTimeout(url, fetchOptions);
     if (!response.ok) {
-      if (response.status === 404) {
-        return {
-          type: "error",
-          message: "یافت نشد",
-          isHard404: true,
-        };
-      }
+      if (response.status === 404) return { type: "error", message: "یافت نشد", isHard404: true };
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
-
-    // ذخیره در کش
-    itemCache.byUrl.set(cacheKey, {
-      data,
-      timestamp: Date.now(),
-    });
-
-    // محدود کردن حجم کش
-    if (itemCache.byUrl.size > 50) {
-      const firstKey = itemCache.byUrl.keys().next().value;
-      itemCache.byUrl.delete(firstKey);
-    }
-
-    return data;
+    return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching item by URL:", err.message);
-    const isHard404 =
-      err.message.includes("Not Found") || err.message.includes("404");
-    return {
-      type: "error",
-      message: err.message || "خطای شبکه",
-      isHard404,
-    };
+    const isHard404 = err.message?.includes("Not Found") || err.message?.includes("404");
+    return { type: "error", message: err.message || "خطای شبکه", isHard404 };
   }
 };
 
 // دریافت آیتم‌ها بر اساس IDها (POST)
-export const getItemByIds = async (data, token) => {
+export const getItemByIds = async (data, token, opts = {}) => {
   try {
-    // ایجاد کلید کش بر اساس داده‌ها
-    const cacheKey = `ids_${JSON.stringify(data)}_${token || "no-token"}`;
-    const cached = itemCache.byIds.get(cacheKey);
-    if (cached && isCacheValid(cached.timestamp)) {
-      return cached.data;
-    }
-
     const url = `${mainDomain}/api/Item/GetListByIds`;
-
-    const response = await fetchWithTimeout(url, {
+    const fetchOptions = {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
       body: JSON.stringify(data),
-      next: { revalidate: 3600 },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+    };
+    if (opts.force) {
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["items", "global-cache"] };
     }
-
-    const result = await response.json();
-
-    // ذخیره در کش
-    itemCache.byIds.set(cacheKey, {
-      data: result,
-      timestamp: Date.now(),
-    });
-
-    return result;
+    const response = await fetchWithTimeout(url, fetchOptions);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching items by IDs:", err.message);
-    return {
-      type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
-    };
+    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
   }
 };
 
 // دریافت لیست آیتم‌ها بر اساس IDها (GET)
-export const getListItemByIds = async (ids) => {
+export const getListItemByIds = async (ids, opts = {}) => {
   try {
-    // بررسی کش
-    const cacheKey = `listids_${ids}`;
-    const cached = itemCache.byIds.get(cacheKey);
-    if (cached && isCacheValid(cached.timestamp)) {
-      return cached.data;
-    }
-
     const url = `${mainDomain}/api/Item/ByIds/${ids}`;
-
-    const response = await fetchWithTimeout(url, {
+    const fetchOptions = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 3600 },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+    };
+    if (opts.force) {
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["items", "global-cache"] };
     }
-
-    const data = await response.json();
-
-    // ذخیره در کش
-    itemCache.byIds.set(cacheKey, {
-      data,
-      timestamp: Date.now(),
-    });
-
-    return data;
+    const response = await fetchWithTimeout(url, fetchOptions);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching list items by IDs:", err.message);
-    return {
-      type: "error",
-      message: err.response?.data ? err.response?.data : "خطای شبکه",
-    };
+    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
   }
 };
 
@@ -491,48 +358,28 @@ export const itemVisit = async (id, url, userAgent) => {
 };
 
 // دریافت بنرها
-export const getListItemBanner = async () => {
+export const getListItemBanner = async (opts = {}) => {
   try {
-    // بررسی کش
-    if (itemCache.banners && isCacheValid(itemCache.bannerTimestamp)) {
-      return itemCache.banners;
-    }
-
-    const params = {
-      langCode: "fa",
-      categoryId: -1,
-    };
-
+    const params = { langCode: "fa", categoryId: -1 };
     const queryString = createQueryString(params);
-    const url = `${mainDomain}/api/Item/Banner${
-      queryString ? `?${queryString}` : ""
-    }`;
+    const url = `${mainDomain}/api/Item/Banner${queryString ? `?${queryString}` : ""}`;
 
-    const response = await fetchWithTimeout(url, {
+    const fetchOptions = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 3600, tags: ["banners"] },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 3600, tags: ["banners", "global-cache"] },
+    };
+    if (opts.force) {
+      fetchOptions.cache = "no-store";
+      fetchOptions.next = { revalidate: 0, tags: ["banners", "global-cache"] };
     }
 
-    const data = await response.json();
-
-    // ذخیره در کش
-    itemCache.banners = data;
-    itemCache.bannerTimestamp = Date.now();
-
-    return data;
+    const response = await fetchWithTimeout(url, fetchOptions);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching banners:", err.message);
-    return {
-      type: "error",
-      message: "خطای شبکه",
-    };
+    return { type: "error", message: "خطای شبکه" };
   }
 };
 
@@ -540,40 +387,30 @@ export const getListItemBanner = async () => {
 
 // پاک کردن کش آیتم‌ها
 export const clearItemCache = (params = null) => {
-  if (params) {
-    const cacheKey = JSON.stringify(params);
-    itemCache.items.delete(cacheKey);
-  } else {
-    itemCache.items.clear();
-  }
+  // no-op: Next.js tag-based cache is the source of truth
 };
 
 // پاک کردن کش آیتم بر اساس ID
 export const clearItemByIdCache = (id) => {
-  const cacheKey = `id_${id}`;
-  itemCache.items.delete(cacheKey);
+  // no-op
 };
 
 // پاک کردن کش آیتم بر اساس URL
 export const clearItemByUrlCache = (url) => {
-  const cacheKey = `url_${url}`;
-  itemCache.byUrl.delete(cacheKey);
+  // no-op
 };
 
 // پاک کردن کش بنرها
 export const clearBannerCache = () => {
-  itemCache.banners = null;
-  itemCache.bannerTimestamp = null;
+  // no-op
 };
 
 // دریافت اجباری آیتم‌ها (نادیده گرفتن کش)
 export const getItemForce = async (params) => {
-  clearItemCache(params);
-  return await getItem(params);
+  return await getItem(params, { force: true });
 };
 
 // دریافت اجباری بنرها
 export const getListItemBannerForce = async () => {
-  clearBannerCache();
-  return await getListItemBanner();
+  return await getListItemBanner({ force: true });
 };

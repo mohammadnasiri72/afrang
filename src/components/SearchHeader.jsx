@@ -163,6 +163,7 @@ const SearchHeader = () => {
                       <Link prefetch={false}
                         onClick={() => {
                           setShowResults(false);
+                          setSearchTerm("");
                         }}
                         key={product.productId}
                         href={product.url}
