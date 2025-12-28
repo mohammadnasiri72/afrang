@@ -18,22 +18,18 @@ export async function GET(request) {
     );
   }
 
-  console.log(">>> CLEAR CACHE CALLED at", new Date().toISOString());
 
   // 1) پاک کردن Data Cache همه fetch هایی که این تگ رو دارن
   const tagRevalidated = await revalidateTag("global-cache");
-  console.log('>>> revalidateTag global-cache ->', tagRevalidated);
   // اگر خواستی، می‌تونی به شکل دقیق‌تر فقط "main-menu" رو بزنی:
   // revalidateTag("main-menu");
 
   // 2) پاک کردن Route Cache صفحه / و layoutش (که منو رو رندر می‌کنن)
   const pathRevalidated = await revalidatePath("/");
-  console.log('>>> revalidatePath / ->', pathRevalidated);
 
   // 3) اختیاری: یک بار همین‌جا منو رو دوباره بخون (برای اطمینان)
   // prewarm with a fresh fetch to ensure updated data (bypass local fetch cache)
   const menu = await fetchMenuItems({ force: true });
-  console.log(">>> MENU PREWARMED, length =", menu.length);
 
   return NextResponse.json({
     ok: true,

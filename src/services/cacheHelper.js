@@ -19,7 +19,6 @@ export const isCacheValid = (timestamp, maxAgeMs = 3600000) => {
 export const getLocalCache = (cacheKey) => {
   const cached = globalCaches.get(cacheKey);
   if (cached && isCacheValid(cached.timestamp, cached.maxAge)) {
-    console.log(`[Cache HIT] ${cacheKey}`);
     return cached.data;
   }
   return null;
@@ -48,7 +47,6 @@ export const setLocalCache = (cacheKey, data, maxAgeMs = 3600000) => {
 export const clearLocalCache = (pattern = null) => {
   if (!pattern) {
     globalCaches.clear();
-    console.log('>>> All local caches cleared');
     return;
   }
 
@@ -58,7 +56,6 @@ export const clearLocalCache = (pattern = null) => {
       globalCaches.delete(key);
     }
   }
-  console.log(`>>> Local caches cleared for pattern: ${pattern}`);
 };
 
 /**
@@ -89,7 +86,6 @@ export const cachedFetch = async (
       return cached;
     }
   } else {
-    console.log(`[Force Fetch] ${finalCacheKey}`);
     clearLocalCache(finalCacheKey);
   }
 

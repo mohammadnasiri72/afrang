@@ -4,7 +4,6 @@ import { mainDomain } from "@/utils/mainDomain";
 export const fetchMenuItems = async (opts = {}) => {
   const { force = false } = opts;
   try {
-     console.log(">>> fetchMenuItems CALLED at", new Date().toISOString(), 'force=', force);
     const fetchOptions = {
       method: "GET",
       headers: {
