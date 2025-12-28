@@ -4,7 +4,7 @@ import "@ant-design/v5-patch-for-react-19";
 import CustomRouteLoader from "./CustomRouteLoader";
 import "./globals.css";
 
-export const revalidate = 3600;
+export const revalidate = 900;
 
 // fallback settings برای مواقعی که API جواب نمی‌دهد
 const FALLBACK_SETTINGS = [

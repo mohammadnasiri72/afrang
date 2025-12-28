@@ -8,7 +8,7 @@ const globalCaches = new Map();
 /**
  * بررسی اعتبار کش بر اساس تایم‌استمپ
  */
-export const isCacheValid = (timestamp, maxAgeMs = 3600000) => {
+export const isCacheValid = (timestamp, maxAgeMs = 900000) => {
   if (!timestamp) return false;
   return Date.now() - timestamp < maxAgeMs;
 };
@@ -27,7 +27,7 @@ export const getLocalCache = (cacheKey) => {
 /**
  * ذخیره در کش محلی
  */
-export const setLocalCache = (cacheKey, data, maxAgeMs = 3600000) => {
+export const setLocalCache = (cacheKey, data, maxAgeMs = 900000) => {
   globalCaches.set(cacheKey, {
     data,
     timestamp: Date.now(),
@@ -65,7 +65,7 @@ export const cachedFetch = async (
   url,
   options = {},
   cacheKey = null,
-  maxAgeMs = 3600000
+  maxAgeMs = 900000
 ) => {
   const {
     method = 'GET',
@@ -145,7 +145,7 @@ export const cachedGet = async (
   url,
   options = {},
   cacheKey = null,
-  maxAgeMs = 3600000
+  maxAgeMs = 900000
 ) => {
   return cachedFetch(url, { ...options, method: 'GET' }, cacheKey, maxAgeMs);
 };
@@ -158,7 +158,7 @@ export const cachedPost = async (
   body,
   options = {},
   cacheKey = null,
-  maxAgeMs = 3600000
+  maxAgeMs = 900000
 ) => {
   return cachedFetch(
     url,

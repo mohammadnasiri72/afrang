@@ -82,12 +82,12 @@ export const fetchBrandingItems = async () => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'max-age=3600', // کش مرورگر 1 ساعت
+        'Cache-Control': 'max-age=900', // کش مرورگر 1 ساعت
         'Pragma': 'cache',
       },
       // استفاده از کش Next.js برای SSG/SSR
       next: { 
-        revalidate: 3600,
+        revalidate: 900,
         tags: ['branding-home']
       }
     });
@@ -147,12 +147,12 @@ export const fetchBrandingItemsPage = async (params) => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Cache-Control': 'max-age=3600',
+        'Cache-Control': 'max-age=900',
         'Pragma': 'cache',
       },
       // کش با توجه به پارامترهای داینامیک
       next: { 
-        revalidate: 3600,
+        revalidate: 900,
         tags: ['branding-page']
       }
     });

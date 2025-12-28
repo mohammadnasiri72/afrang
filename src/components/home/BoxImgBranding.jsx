@@ -39,7 +39,7 @@ export default function BoxImgBranding({ brands }) {
           />
         </div>
         <div className="max-w-[1600px] overflow-hidden md:px-16 mx-auto px-4 ">
-          <div className="flex justify-between items-center  z-50 relative -mb-5 border-b border-[#0002]">
+          <div className="flex justify-between items-center z-10 relative -mb-5 border-b border-[#0002]">
             <div className="flex items-center title-newProduct relative ">
               <h2 className="font-semibold text-xl ">
                 برندهای <span className="text-[#d1182b]">افرنگ</span>
@@ -83,7 +83,14 @@ export default function BoxImgBranding({ brands }) {
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
                 <div className="relative overflow-hidden sm:w-32 w-20 sm:h-32 h-20 aspect-square">
-                  <Link href={`/products?brandid=${brand.id}`}>
+                  <Link
+                    href={`/products?brandid=${brand.id}`}
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }
+                    }}
+                  >
                     <Image
                       className={`group-hover:scale-120 scale-100 duration-500 ease-out group-hover:grayscale-[0.7] filter brightness-[0.95] object-contain border-none outline-none cursor-pointer`}
                       src={`${mainDomainImg}${brand.image}`}

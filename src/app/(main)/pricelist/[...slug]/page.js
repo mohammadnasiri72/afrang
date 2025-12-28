@@ -2,7 +2,7 @@ import { getProductPricing } from "@/services/products/productService";
 import PriceListClient from "./PriceListClient";
 import { getCategory } from "@/services/Category/categoryService";
 
-export const revalidate = 3600;
+export const revalidate = 900;
 
 export default async function PriceListPage({ params }) {
   try {

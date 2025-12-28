@@ -209,7 +209,7 @@ export const getItem = async (params = {}, opts = {}) => {
     const fetchOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+      next: { revalidate: 900, tags: ["items", "global-cache"] },
     };
 
     if (force) {
@@ -233,7 +233,7 @@ export const getItemById = async (id, opts = {}) => {
     const fetchOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+      next: { revalidate: 900, tags: ["items", "global-cache"] },
     };
     if (opts.force) {
       fetchOptions.cache = "no-store";
@@ -257,7 +257,7 @@ export const getItemByUrl = async (urlParam, opts = {}) => {
     const fetchOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 3600, tags: ["items-by-url", "global-cache"] },
+      next: { revalidate: 900, tags: ["items-by-url", "global-cache"] },
     };
     if (opts.force) {
       fetchOptions.cache = "no-store";
@@ -286,7 +286,7 @@ export const getItemByIds = async (data, token, opts = {}) => {
       method: "POST",
       headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
       body: JSON.stringify(data),
-      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+      next: { revalidate: 900, tags: ["items", "global-cache"] },
     };
     if (opts.force) {
       fetchOptions.cache = "no-store";
@@ -308,7 +308,7 @@ export const getListItemByIds = async (ids, opts = {}) => {
     const fetchOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 3600, tags: ["items", "global-cache"] },
+      next: { revalidate: 900, tags: ["items", "global-cache"] },
     };
     if (opts.force) {
       fetchOptions.cache = "no-store";
@@ -333,7 +333,7 @@ export const itemVisit = async (id, url, userAgent) => {
     userAgent,
   };
 
-  try {
+  try {    
     const response = await fetchWithTimeout(`${mainDomain}/api/Item/visit`, {
       method: "POST",
       headers: {
@@ -367,7 +367,7 @@ export const getListItemBanner = async (opts = {}) => {
     const fetchOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 3600, tags: ["banners", "global-cache"] },
+      next: { revalidate: 900, tags: ["banners", "global-cache"] },
     };
     if (opts.force) {
       fetchOptions.cache = "no-store";

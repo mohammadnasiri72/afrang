@@ -9,7 +9,7 @@ export const getPopUpsData = async () => {
       `${mainDomain}/api/Item/Popup?langCode=fa`,
       {
         next: {
-          revalidate: 3600, // کش به مدت 1 ساعت (3600 ثانیه)
+          revalidate: 900, // کش به مدت 1 ساعت (900 ثانیه)
         }
       }
     );

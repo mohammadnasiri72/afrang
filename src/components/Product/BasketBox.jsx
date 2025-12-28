@@ -15,7 +15,6 @@ import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
-
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
@@ -81,25 +80,7 @@ function BasketBox({ product }) {
               <LikeProduct productId={product?.product?.productId} />
             </div>
           </div>
-          {/* افزودن بیمه */}
-          {insuranceSelected?.length > 0 &&
-            insuranceSelected.map((insurance) => (
-              <div
-                key={insurance.id}
-                className="flex justify-between px-1 mt-1 items-center bg-blue-50 rounded-md py-2 text-blue-700 border border-blue-200"
-              >
-                <div className="flex items-center gap-1  ">
-                  <IoIosUmbrella className="text-blue-500 text-base" />
-                  <span className="text-xs font-semibold">
-                    {insurance.title}
-                  </span>
-                </div>
-                <div className="font-semibold text-xs flex items-center gap-1">
-                  <span>{insurance.finalPrice.toLocaleString()}</span>
-                  <span>تومان</span>
-                </div>
-              </div>
-            ))}
+
           {/* قابلیت خرید قسطی */}
           {product?.product?.isInstallmentSale &&
             product?.product?.finalPrice > 0 && (
@@ -114,7 +95,7 @@ function BasketBox({ product }) {
                   <FaCreditCard className="text-[#d1182b] text-base" />
                 </div>
 
-                <span className="text-sm font-bold px-2 line-clamp-1">
+                <span className="text-[13px] font-bold px-2 line-clamp-1">
                   امکان خرید قسطی این محصول فعال است
                 </span>
               </Button>
@@ -162,7 +143,25 @@ function BasketBox({ product }) {
               </span>
             </div>
           )}
-
+          {/* افزودن بیمه */}
+          {insuranceSelected?.length > 0 &&
+            insuranceSelected.map((insurance) => (
+              <div
+                key={insurance.id}
+                className="flex justify-between px-1 mt-1 items-center bg-blue-50 rounded-md py-2 text-blue-700 border border-blue-200"
+              >
+                <div className="flex items-center gap-1  ">
+                  <IoIosUmbrella className="text-blue-500 text-base" />
+                  <span className="text-xs font-semibold">
+                    {insurance.title}
+                  </span>
+                </div>
+                <div className="font-semibold text-xs flex items-center gap-1">
+                  <span>{insurance.finalPrice.toLocaleString()}</span>
+                  <span>تومان</span>
+                </div>
+              </div>
+            ))}
           <PriceProduct product={product?.product} />
           {product?.shipment?.deliveryTime && (
             <div>

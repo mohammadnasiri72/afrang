@@ -92,7 +92,7 @@ export const getMenuFooter = async () => {
         'Content-Type': 'application/json',
       },
       next: { 
-        revalidate: 3600, // کش 1 ساعته
+        revalidate: 900, // کش 1 ساعته
         tags: ['menu-footer'] // برای revalidateTag
       }
     });

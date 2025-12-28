@@ -9,7 +9,7 @@ const BodyDic = dynamic(() => import("@/components/dic/bodyDic"), {
 });
 
 // تنظیمات کش برای بهبود عملکرد
-export const revalidate = 3600; // کش برای یک ساعت
+export const revalidate = 900; // کش برای یک ساعت
 
 export default async function Dic() {
   let dics = [];

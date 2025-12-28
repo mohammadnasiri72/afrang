@@ -28,7 +28,7 @@ export const getMyData = async (opts = {}) => {
         force,  // برای prewarming
       },
       cacheKey,
-      3600000  // 1 ساعت in milliseconds
+      900000  // 1 ساعت in milliseconds
     );
 
     return data;
@@ -66,7 +66,7 @@ export const postMyData = async (body, opts = {}) => {
         force,
       },
       cacheKey,
-      3600000
+      900000
     );
 
     return data;
@@ -170,7 +170,7 @@ export const getBlogs = async (page = 1, pageSize = 12, category = null, opts = 
         force,
       },
       cacheKey,
-      3600000
+      900000
     );
 
     if (Array.isArray(response) && response.length > 0) {

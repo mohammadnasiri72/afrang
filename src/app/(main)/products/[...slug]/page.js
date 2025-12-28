@@ -338,4 +338,4 @@ export default async function ProductList(props) {
 }
 
 // این خط را اضافه کنید برای revalidate کل صفحه
-export const revalidate = 3600;
+export const revalidate = 900;

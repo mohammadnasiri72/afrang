@@ -9,7 +9,7 @@ export const fetchMenuItems = async (opts = {}) => {
       headers: {
         "Content-Type": "application/json",
       },
-      next: { revalidate: 3600, tags: ["main-menu", "global-cache"] },
+      next: { revalidate: 900, tags: ["main-menu", "global-cache"] },
     };
 
     if (force) {
