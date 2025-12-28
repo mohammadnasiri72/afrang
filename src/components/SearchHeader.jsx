@@ -12,6 +12,7 @@ const SearchHeader = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -68,7 +69,7 @@ const SearchHeader = () => {
       clearTimeout(timeoutRef.current);
     }
 
-    if (value.length < 2) {
+    if (value.length < 3) {
       setResults([]);
       setShowResults(false);
       return;
@@ -76,9 +77,10 @@ const SearchHeader = () => {
 
     // باکس نتایج را بلافاصله باز کن و لودینگ را فعال کن
     setShowResults(true);
-    setLoading(true);
+    setLoadingSearch(true);
     timeoutRef.current = setTimeout(async () => {
       try {
+        setLoading(true);
         const data = await getProductTerm(value);
         // سورت: اول آنهایی که finalPrice != 0، بعد آنهایی که 0 هستند
         const sorted = (data || []).slice().sort((a, b) => {
@@ -102,8 +104,9 @@ const SearchHeader = () => {
         setResults([]);
       } finally {
         setLoading(false);
+        setLoadingSearch(false);
       }
-    }, 500);
+    }, 300);
   };
 
   return (
@@ -134,7 +137,7 @@ const SearchHeader = () => {
 
       {/* Results Dropdown با پورتال */}
       {showResults &&
-        searchTerm.length >= 2 &&
+        searchTerm.length >= 3 &&
         typeof window !== "undefined" &&
         ReactDOM.createPortal(
           <div
@@ -160,7 +163,8 @@ const SearchHeader = () => {
                 {results.length > 0 ? (
                   <div className="grid grid-cols-2 gap-4">
                     {results.map((product) => (
-                      <Link prefetch={false}
+                      <Link
+                        prefetch={false}
                         onClick={() => {
                           setShowResults(false);
                           setSearchTerm("");
@@ -204,11 +208,17 @@ const SearchHeader = () => {
                       </Link>
                     ))}
                   </div>
-                ) : !loading && searchTerm.length >= 2 ? (
+                ) : !loading && searchTerm.length >= 3 ? (
                   <div className="h-full flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      نتیجه‌ای یافت نشد
-                    </div>
+                    {loadingSearch ? (
+                      <div className="text-center text-gray-500">
+                        درحال جستجو...
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-500">
+                        نتیجه‌ای یافت نشد
+                      </div>
+                    )}
                   </div>
                 ) : null}
               </div>
