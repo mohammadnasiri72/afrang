@@ -12,6 +12,7 @@ const SearchNavbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -36,7 +37,7 @@ const SearchNavbar = () => {
       clearTimeout(timeoutRef.current);
     }
 
-    if (value.length < 2) {
+    if (value.length < 3) {
       setResults([]);
       setShowResults(false);
       return;
@@ -44,9 +45,10 @@ const SearchNavbar = () => {
 
     // باکس نتایج را بلافاصله باز کن و لودینگ را فعال کن
     setShowResults(true);
-    setLoading(true);
+    setLoadingSearch(true);
     timeoutRef.current = setTimeout(async () => {
       try {
+        setLoading(true);
         const data = await getProductTerm(value);
         // سورت: اول آنهایی که finalPrice != 0، بعد آنهایی که 0 هستند
         const sorted = (data || []).slice().sort((a, b) => {
@@ -70,8 +72,9 @@ const SearchNavbar = () => {
         setResults([]);
       } finally {
         setLoading(false);
+        setLoadingSearch(false);
       }
-    }, 500);
+    }, 300);
   };
 
   return (
@@ -83,7 +86,7 @@ const SearchNavbar = () => {
           placeholder="جستجو..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
-          onFocus={() => searchTerm.length >= 2 && setShowResults(true)}
+          onFocus={() => searchTerm.length >= 3 && setShowResults(true)}
         />
         {searchTerm && (
           <button
@@ -102,7 +105,7 @@ const SearchNavbar = () => {
       </div>
 
       {/* Results Dropdown */}
-      {showResults && searchTerm.length >= 2 && (
+      {showResults && searchTerm.length >= 3 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] h-[400px] overflow-y-auto z-[9999] w-full">
           <div className="p-4 bg-white relative">
             {loading && (
@@ -116,7 +119,8 @@ const SearchNavbar = () => {
             {results.length > 0 ? (
               <div className="flex flex-col gap-4">
                 {results.map((product) => (
-                  <Link prefetch={false}
+                  <Link
+                    prefetch={false}
                     key={product.id}
                     href={product.url}
                     className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"
@@ -158,8 +162,15 @@ const SearchNavbar = () => {
                   </Link>
                 ))}
               </div>
-            ) : !loading && searchTerm.length >= 2 ? (
-              <div className="text-center text-gray-500">نتیجه‌ای یافت نشد</div>
+            ) : !loading && searchTerm.length >= 3 ? (
+              // loadingSearch
+              <div className="text-center text-gray-500">
+                {loadingSearch ? (
+                  <span>درحال جستجو...</span>
+                ) : (
+                  <span>نتیجه‌ای یافت نشد</span>
+                )}
+              </div>
             ) : null}
           </div>
         </div>

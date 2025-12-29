@@ -32,7 +32,7 @@ export default async function RootLayout({ children }) {
       </head>
 
       <body>
-        <CustomRouteLoader />
+        {/* <CustomRouteLoader /> */}
         <Layout settings={settings}>{children}</Layout>
         {/* <FooterScripts propertyValue={siteScripts} /> */}
       </body>
