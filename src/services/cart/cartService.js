@@ -52,7 +52,6 @@ export const addToCartNext = async (id) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      
     });
   }
 };
@@ -68,7 +67,6 @@ export const moveToCurrentCart = async (id) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-     
     });
   }
 };
@@ -85,7 +83,6 @@ export const updateCart = async (cartId, updateType, userId) => {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      
     });
   }
 };
@@ -127,26 +124,24 @@ export const deleteCartItem = async (cartItemId, userId) => {
     const response = await axios.delete(
       `${mainDomain}/api/Cart/${userId}/${cartItemId}`
     );
-   
+
     return response.data;
   } catch (err) {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-      
     });
   }
 };
 export const deleteCartItemAll = async (userId) => {
   try {
     const response = await axios.post(`${mainDomain}/api/Cart/Clear/${userId}`);
-   
+
     return response.data;
   } catch (err) {
     Toast.fire({
       icon: "error",
       text: err.response?.data ? err.response?.data : "خطای شبکه",
-     
     });
   }
 };
@@ -154,16 +149,16 @@ export const deleteCartItemAll = async (userId) => {
 // تابع برای ادغام سبد خرید مهمان با سبد خرید کاربر
 export const mergeGuestCart = async (guestUserId, currentUserId) => {
   try {
-    
     // ابتدا cart مهمان را دریافت کن
-    const guestCartResponse = await axios.get(`${mainDomain}/api/Cart/${guestUserId}`);
+    const guestCartResponse = await axios.get(
+      `${mainDomain}/api/Cart/${guestUserId}`
+    );
     const guestCart = guestCartResponse.data;
-    
+
     if (!guestCart || !guestCart.length) {
-      return { success: true, message: 'سبد خرید مهمان خالی است' };
+      return { success: true, message: "سبد خرید مهمان خالی است" };
     }
-    
-    
+
     // محصولات مهمان را به cart کاربر اضافه کن - فقط همین!
     for (const item of guestCart) {
       try {
@@ -177,32 +172,27 @@ export const mergeGuestCart = async (guestUserId, currentUserId) => {
           item.amount
         );
       } catch (error) {
-        console.error('Error adding item to user cart:', error);
+        console.error("Error adding item to user cart:", error);
       }
     }
-    
-    
+
     // پاک کردن cart مهمان
     try {
       await deleteCartItemAll(guestUserId);
     } catch (clearError) {
-      console.error('Error clearing guest cart:', clearError);
+      console.error("Error clearing guest cart:", clearError);
     }
-    
-   
-    
-    return { 
-      success: true, 
+
+    return {
+      success: true,
       mergedItems: guestCart.length,
-      message: `${guestCart.length} محصول با موفقیت ادغام شد`
+      message: `${guestCart.length} محصول با موفقیت ادغام شد`,
     };
-    
   } catch (err) {
     console.error("Error merging cart:", err);
     Toast.fire({
       icon: "error",
       text: "خطا در ادغام سبد خرید",
-     
     });
     return { success: false, error: err.message };
   }

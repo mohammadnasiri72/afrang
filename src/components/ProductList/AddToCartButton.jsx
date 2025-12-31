@@ -17,7 +17,7 @@ const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
-const AddToCartButton = ({ productId , compare}) => {
+const AddToCartButton = ({ productId, compare }) => {
   const { currentItems } = useSelector((state) => state.cart);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray?.find((item) => item.productId === productId);
@@ -90,23 +90,25 @@ const AddToCartButton = ({ productId , compare}) => {
       } else {
         userId = userData.userId;
       }
-      await addToCart(
+      const response = await addToCart(
         productId,
         selectedWarranty?.id || -1,
         userId,
         1,
         selectedColorId ?? -1
       );
-
-      setIsModalOpen(false);
-      dispatch(fetchCurrentCart());
-      dispatch(fetchNextCart());
-      Toast.fire({
-        icon: "success",
-        text: "محصول با موفقیت به سبد خرید اضافه شد",
-      });
+       setIsModalOpen(false);
+      if (response) {
+        dispatch(fetchCurrentCart());
+        dispatch(fetchNextCart());
+        Toast.fire({
+          icon: "success",
+          text: "محصول با موفقیت به سبد خرید اضافه شد",
+        });
+      }
+     
     } catch (error) {
-      message.error("خطا در افزودن به سبد خرید");
+      // message.error("خطا در افزودن به سبد خرید");
     } finally {
       setIsLoading(false);
     }
@@ -125,21 +127,24 @@ const AddToCartButton = ({ productId , compare}) => {
           className="flex items-center bg-[#d1182b] !text-white duration-300 hover:bg-[#40768c] w-full p-2 justify-center gap-2 cursor-pointer rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FaCartShopping className="" />
-          {
-            compare ?
-             <span className="whitespace-nowrap">
-            {isLoading ? "در حال بارگذاری..." : "افزودن به سبد "}
-          </span>
-          :
-           <span className="whitespace-nowrap">
-            {isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}
-          </span>
-          }
-         
+          {compare ? (
+            <span className="whitespace-nowrap">
+              {isLoading ? "در حال بارگذاری..." : "افزودن به سبد "}
+            </span>
+          ) : (
+            <span className="whitespace-nowrap">
+              {isLoading ? "در حال بارگذاری..." : "افزودن به سبد خرید"}
+            </span>
+          )}
         </button>
       )}
       {cartItem && cartItem.quantity > 0 && (
-        <CartCounter quantity={cartItem.quantity} cartId={cartItem.id} ctrl compare={compare}/>
+        <CartCounter
+          quantity={cartItem.quantity}
+          cartId={cartItem.id}
+          ctrl
+          compare={compare}
+        />
       )}
 
       <ModalAddtoBasket

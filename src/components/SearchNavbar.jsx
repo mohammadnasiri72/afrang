@@ -127,6 +127,7 @@ const SearchNavbar = () => {
                     onClick={(ev) => {
                       ev.preventDefault();
                       setShowResults(false);
+                      setSearchTerm("");
                       router.push(product.url);
                     }}
                   >
