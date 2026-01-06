@@ -190,18 +190,18 @@ export default function SliderProductSec({
                 </SwiperSlide>
               ))}
 
-              <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
-                <FaAngleLeft size={24} className="pointer-events-none" />
+              <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+                <FaAngleLeft size={16} className="pointer-events-none" />
               </div>
-              <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
-                <FaAngleRight size={24} className="pointer-events-none" />
+              <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+                <FaAngleRight size={16} className="pointer-events-none" />
               </div>
             </Swiper>
           </div>
         </div>
 
         <div className="lg:w-[25%] w-full relative lg:flex hidden flex-col">
-          <div className="flex justify-center gap-3 px-5 w-full py-3">
+          <div className="flex justify-center gap-3 px-5 w-full py-0">
             <Link
               className=" flex items-center gap-1 group text-lg"
               href={href}
@@ -218,7 +218,7 @@ export default function SliderProductSec({
               </span>
             </Link>
           </div>
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full mt-10">
             <Link href={mainBanner?.link || "#"}>
               <Image
                 className={`object-contain ${
@@ -251,9 +251,12 @@ export default function SliderProductSec({
         <div className="lg:w-[37.5%] w-full lg:mt-0 mt-5">
           <div className="flex justify-between items-center pb-5 px-2">
             <div className="flex-wrap gap-4 items-center">
-              <span className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
+              {/* <span className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های کاربران
-              </span>
+              </span> */}
+               <h2 className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
+                دست دوم های کاربران
+              </h2>
             </div>
             <Link
               href={`/useds/-1`}
@@ -342,11 +345,11 @@ export default function SliderProductSec({
                   </SwiperSlide>
                 ))}
 
-                <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
-                  <FaAngleLeft size={24} className="pointer-events-none" />
+                <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+                  <FaAngleLeft size={16} className="pointer-events-none" />
                 </div>
-                <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-[#d1182b] hover:text-white">
-                  <FaAngleRight size={24} className="pointer-events-none" />
+                <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+                  <FaAngleRight size={16} className="pointer-events-none" />
                 </div>
               </Swiper>
             </div>
