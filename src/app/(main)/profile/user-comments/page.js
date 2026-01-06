@@ -259,7 +259,11 @@ const UserCommentsPage = () => {
         // commentsResponse.type !== "error" &&
         questionsResponse.type !== "error"
       ) {
-        setCounts((prev) => ({ ...prev, questions: questionsResponse[0]?.total }));
+        setCounts((prev) => ({
+          ...prev,
+          questions:
+            questionsResponse.length > 0 ? questionsResponse[0]?.total : 0,
+        }));
         // setCounts({
         //   comments: commentsResponse[0]?.total || 0,
         //   questions: questionsResponse[0]?.total || 0,
@@ -341,7 +345,7 @@ const UserCommentsPage = () => {
       setLoading(true);
       fetchCounts();
       fetchData(1, activeTab);
-      setFlagFetch(false)
+      setFlagFetch(false);
     }
   }, [user?.token]);
 
