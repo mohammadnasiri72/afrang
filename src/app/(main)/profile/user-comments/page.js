@@ -219,6 +219,8 @@ const UserCommentsPage = () => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [deletingIds, setDeletingIds] = useState(new Set());
 
+  const [flagFetch, setFlagFetch] = useState(true);
+
   // تنظیمات Toast
   const Toast = Swal.mixin({
     toast: true,
@@ -232,15 +234,15 @@ const UserCommentsPage = () => {
   const fetchCounts = async () => {
     try {
       // Fetch comments count
-      const commentsResponse = await getUserComments(
-        {
-          langCode: "fa",
-          type: 0,
-          pageSize: 1,
-          pageIndex: 1,
-        },
-        user.token
-      );
+      // const commentsResponse = await getUserComments(
+      //   {
+      //     langCode: "fa",
+      //     type: 0,
+      //     pageSize: 1,
+      //     pageIndex: 1,
+      //   },
+      //   user.token
+      // );
 
       // Fetch questions count
       const questionsResponse = await getUserComments(
@@ -254,13 +256,14 @@ const UserCommentsPage = () => {
       );
 
       if (
-        commentsResponse.type !== "error" &&
+        // commentsResponse.type !== "error" &&
         questionsResponse.type !== "error"
       ) {
-        setCounts({
-          comments: commentsResponse[0]?.total || 0,
-          questions: questionsResponse[0]?.total || 0,
-        });
+        setCounts((prev) => ({ ...prev, questions: questionsResponse[0]?.total }));
+        // setCounts({
+        //   comments: commentsResponse[0]?.total || 0,
+        //   questions: questionsResponse[0]?.total || 0,
+        // });
       }
     } catch (error) {
       console.error("Error fetching counts:", error);
@@ -334,16 +337,17 @@ const UserCommentsPage = () => {
 
   // Initial load - fetch counts and first page data
   useEffect(() => {
-    if (user?.token) {
+    if (user?.token && flagFetch) {
       setLoading(true);
       fetchCounts();
       fetchData(1, activeTab);
+      setFlagFetch(false)
     }
   }, [user?.token]);
 
   // Handle tab change
   useEffect(() => {
-    if (user?.token) {
+    if (user?.token && !flagFetch) {
       setPage(1);
       setHasMore(true);
       setLoading(true);

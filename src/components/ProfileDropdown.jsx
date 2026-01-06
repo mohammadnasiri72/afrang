@@ -349,6 +349,9 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
                   <Link
                     key={item.id}
                     href={item.href}
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
                     className={`flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 border-b border-gray-50 last:border-b-0`}
                   >
                     <span className="ml-3 text-gray-500">{item.icon}</span>

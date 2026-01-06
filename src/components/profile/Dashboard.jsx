@@ -386,27 +386,31 @@ export default function Dashboard() {
                         key={item.id}
                         className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                       >
-                        <Link href={item.url}>
-                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
-                            {item.image && (
-                              <img
-                                src={
-                                  item.url.includes("product")
-                                    ? getImageUrl(item.image)
-                                    : getImageUrl(item.image)
-                                }
-                                alt={item.title}
-                                className="w-full h-full object-cover"
-                              />
-                            )}
-                          </div>
-                        </Link>
-                        <div className="flex-1">
+                        {item.url && (
                           <Link href={item.url}>
-                            <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
-                              {item.title}
-                            </p>
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+                              {item.image && (
+                                <img
+                                  src={
+                                    item.url.includes("product")
+                                      ? getImageUrl(item.image)
+                                      : getImageUrl(item.image)
+                                  }
+                                  alt={item.title}
+                                  className="w-full h-full object-cover"
+                                />
+                              )}
+                            </div>
                           </Link>
+                        )}
+                        <div className="flex-1">
+                          {item.url && (
+                            <Link href={item.url}>
+                              <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                                {item.title}
+                              </p>
+                            </Link>
+                          )}
 
                           <div className="flex flex-col items-start justify-between gap-2">
                             <div className="text-xs text-gray-400">
