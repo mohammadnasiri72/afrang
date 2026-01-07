@@ -53,7 +53,7 @@ function CommentSection({ id, type, comments }) {
         <span className="text-xl font-semibold text-gray-700 !mb-2">
           {type === 0 ? "هنوز نظری ثبت نشده است" : "هنوز پرسشی ثبت نشده است"}
         </span>
-        <p className="text-gray-800 text-center max-w-md">
+        <p className="text-gray-800 text-center max-w-md text-lg">
           {type === 0
             ? "اولین نفری باشید که نظر خود را درباره این مطلب بیان می‌کنید"
             : "اولین نفری باشید که پرسش خود را درباره این مطلب مطرح می‌کنید"}

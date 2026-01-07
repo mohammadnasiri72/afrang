@@ -112,7 +112,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
       params.delete("brandid");
     }
     router.push(`${window.location.pathname}?${params.toString()}`);
-    
   };
 
   const handleFilterChange = () => {
@@ -132,7 +131,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
       params.delete("price2");
     }
     router.push(`${window.location.pathname}?${params.toString()}`);
-    
   };
 
   const handleResetFilters = () => {
@@ -145,7 +143,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     const params = new URLSearchParams();
     params.set("orderby", "5");
     router.push(`${window.location.pathname}?${params.toString()}`);
-   
   };
 
   const handleChange = (event, newValue) => {
@@ -163,7 +160,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     params.delete("page");
 
     router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
-   
   };
 
   const handleSwitchChange = (type) => {
@@ -204,7 +200,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
       params.delete("conditionId");
     }
     router.push(`${window.location.pathname}?${params.toString()}`);
-    
   };
 
   const filteredCategories = Array.isArray(resultFilter.categories)
@@ -280,8 +275,8 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
               style={{ fontFamily: "Yekan" }}
               className="select-none text-sm font-semibold w-full flex items-center justify-between"
             >
-              <span className="w-full line-clamp-1">{brand.title}</span>
-              <span className="whitespace-nowrap">{brand.titleEn}</span>
+              <span className=" whitespace-nowrap">{brand.title}</span>
+              <span className="line-clamp-1 pl-2 text-end">{brand.titleEn}</span>
             </div>
           }
         />
@@ -360,7 +355,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
             />
             <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
-          <div className="overflow-y-auto px-2" style={{ maxHeight: "250px" }}>
+          <div className="overflow-x-hidden" style={{ maxHeight: "250px" }}>
             <FormGroup>{renderBrands()}</FormGroup>
           </div>
         </div>
@@ -589,9 +584,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
       {resultFilter?.filterProperties &&
         resultFilter?.filterProperties.length > 0 && (
           <div className="flex flex-col gap-2 mt-6 border-t pt-6">
-            <FilterProperties
-              filterData={resultFilter.filterProperties}
-            />
+            <FilterProperties filterData={resultFilter.filterProperties} />
           </div>
         )}
     </>

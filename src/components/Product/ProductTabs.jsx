@@ -154,9 +154,14 @@ function ProductTabs({
           },
         ]
       : []),
-    { label: "توضیحات محصول", value: 2 },
-    { label: "مشخصات فنی", value: 3 },
-    { label: "محصولات مرتبط", value: 4 },
+    ...(relatedProducts.length > 0
+      ? [{ label: "محصولات مرتبط", value: 4 }]
+      : []),
+    ...(!(!product.properties || product.properties.length === 0)
+      ? [{ label: "مشخصات فنی", value: 3 }]
+      : []),
+    ...(product?.product?.body ? [{ label: "توضیحات محصول", value: 2 }] : []),
+
     ...(hasRelatedVideos
       ? [
           {
@@ -469,33 +474,37 @@ function ProductTabs({
           )}
           <Divider style={{ margin: 0, padding: 0 }} />
 
-          <div ref={detailsRef} className="tab-section-scroll-anchor pt-2">
-            <span className="px-7 text-2xl font-bold text-[#d1182b]">
-              توضیحات محصول
-            </span>
-            <DetailsProduct product={product} />
-          </div>
-          <Divider />
-
-          <div ref={specsRef} className="tab-section-scroll-anchor">
-            <span className="px-7 text-2xl font-bold text-[#d1182b]">
-              مشخصات فنی
-            </span>
-            <SpecificationsProduct product={product} />
-          </div>
-          <Divider />
-          <div>
-            <span className="px-7 text-2xl font-bold text-[#d1182b]">
-              محصولات مرتبط
-            </span>
-            <div ref={accessoriesRef} className="tab-section-scroll-anchor">
-              <AccessoriesProduct
-                product={product}
-                relatedProducts={relatedProducts}
-              />
+          {product?.product?.body && (
+            <div ref={detailsRef} className="tab-section-scroll-anchor pt-2">
+              <span className="px-7 text-2xl font-bold text-[#d1182b]">
+                توضیحات محصول
+              </span>
+              <DetailsProduct product={product} />
             </div>
-          </div>
-          <Divider />
+          )}
+          {product?.product?.body && <Divider />}
+          {!(!product.properties || product.properties.length === 0) && (
+            <div ref={specsRef} className="tab-section-scroll-anchor">
+              <span className="px-7 text-2xl font-bold text-[#d1182b]">
+                مشخصات فنی
+              </span>
+              <SpecificationsProduct product={product} />
+            </div>
+          )}
+          {!(!product.properties || product.properties.length === 0) && (
+            <Divider />
+          )}
+          {relatedProducts.length > 0 && (
+            <div>
+              <span className="px-7 text-2xl font-bold text-[#d1182b]">
+                محصولات مرتبط
+              </span>
+              <div ref={accessoriesRef} className="tab-section-scroll-anchor">
+                <AccessoriesProduct relatedProducts={relatedProducts} />
+              </div>
+            </div>
+          )}
+          {relatedProducts.length > 0 && <Divider />}
           {hasRelatedVideos && (
             <div>
               <span className="px-7 text-2xl font-bold text-[#d1182b]">
@@ -513,14 +522,22 @@ function ProductTabs({
                 <span className="px-7 text-2xl font-bold text-[#d1182b]">
                   نظرات کاربران
                 </span>
-                <CommentProduct comments={comments} type={0}  id={product.product.productId}/>
+                <CommentProduct
+                  comments={comments}
+                  type={0}
+                  id={product.product.productId}
+                />
               </div>
               <Divider />
               <div ref={qaRef} className="tab-section-scroll-anchor">
                 <span className="px-7 text-2xl font-bold text-[#d1182b]">
                   پرسش و پاسخ
                 </span>
-                <CommentProduct comments={commentsQuestion} type={1}  id={product.product.productId}/>
+                <CommentProduct
+                  comments={commentsQuestion}
+                  type={1}
+                  id={product.product.productId}
+                />
               </div>
             </div>
           )}

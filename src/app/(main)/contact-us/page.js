@@ -27,7 +27,7 @@ export default async function Contact() {
             <Container>
               <BodyContact />
             </Container>
-            <GoogleMap />
+            {/* <GoogleMap /> */}
           </div>
         </div>
       </>

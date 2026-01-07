@@ -19,9 +19,10 @@ import {
 } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import GoogleMap from "./GoogleMap";
 
 function BodyContact() {
-  const [typeArticle, setTypeArticle] = useState("شماره های تماس");
+  const [typeArticle, setTypeArticle] = useState("آدرس");
   const { settings } = useSelector((state) => state.settings);
 
   // Form states
@@ -354,19 +355,24 @@ function BodyContact() {
       case "آدرس":
         return (
           <>
-            <div className="w-full lg:w-1/3 p-3">
-              <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                    <IoLocationOutline />
+            <div className="flex items-start">
+              <div className="w-full lg:w-1/3 p-3">
+                <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
+                    <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                      <IoLocationOutline />
+                    </div>
+                  </div>
+                  <div className="py-4 px-2 sm:pl-[50px]">
+                    <span className="text-[#616161] text-[13px] font-bold">
+                      آدرس
+                    </span>
+                    <p className="!mb-0">{siteAddress}</p>
                   </div>
                 </div>
-                <div className="py-4 px-2 sm:pl-[50px]">
-                  <span className="text-[#616161] text-[13px] font-bold">
-                    آدرس
-                  </span>
-                  <p className="!mb-0">{siteAddress}</p>
-                </div>
+              </div>
+              <div className="w-full lg:w-2/3 p-3 mt-10">
+                <GoogleMap />
               </div>
             </div>
           </>
@@ -399,9 +405,9 @@ function BodyContact() {
             setTypeArticle(e);
           }}
           options={[
-            "شماره های تماس",
-            "فکس و سایر تلفن ها",
             "آدرس",
+            "فکس و سایر تلفن ها",
+            "شماره های تماس",
             "ساعات کار",
             "ایمیل و کد پستی",
           ]}

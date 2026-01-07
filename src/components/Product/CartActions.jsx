@@ -96,11 +96,11 @@ function CartActions({ product, warrantySelected }) {
             selectedColor ? e.colorId === selectedColor?.id : e
           )[0].id
                 }
-                ctrl={
-                  product?.inventory?.inventorySetting?.showQtyControl
-                    ? false
-                    : true
-                }
+                // ctrl={
+                //   product?.inventory?.inventorySetting?.showQtyControl
+                //     ? false
+                //     : true
+                // }
               />
             </div>
           ) : (

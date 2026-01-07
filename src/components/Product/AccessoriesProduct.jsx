@@ -25,7 +25,7 @@ function chunkArray(array, size) {
   return result;
 }
 
-function AccessoriesProduct({ product, relatedProducts }) {
+function AccessoriesProduct({ relatedProducts }) {
   const [accessoriesProductId, setAccessoriesProductId] = useState(1);
   const productsSectionRef = useRef(null);
  

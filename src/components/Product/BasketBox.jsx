@@ -30,7 +30,9 @@ function BasketBox({ product }) {
   let filteredArray = [];
 
   useEffect(() => {
-    filteredArray = currentItems.filter((item1) =>
+    filteredArray = currentItems.filter(
+      (e) => e.parentId === product?.product?.productId
+    ).filter((item1) =>
       product.insurance.insuranceWays.some(
         (item2) => item2.id === item1.productId
       )

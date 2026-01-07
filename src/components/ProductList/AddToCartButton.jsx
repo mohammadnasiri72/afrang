@@ -142,7 +142,7 @@ const AddToCartButton = ({ productId, compare }) => {
         <CartCounter
           quantity={cartItem.quantity}
           cartId={cartItem.id}
-          ctrl
+          // ctrl
           compare={compare}
         />
       )}

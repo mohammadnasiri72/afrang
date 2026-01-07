@@ -123,8 +123,9 @@ const BodyCard = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const dispatch = useDispatch();
-  const { currentItems, nextItems, cartType, loading } =
-    useSelector((state) => state.cart);
+  const { currentItems, nextItems, cartType, loading } = useSelector(
+    (state) => state.cart
+  );
 
   // فقط یک بار در mount شدن کامپوننت
   useEffect(() => {
@@ -155,8 +156,6 @@ const BodyCard = () => {
   const router = useRouter();
   const [loadingItemId, setLoadingItemId] = useState(null);
 
- 
-
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
     items?.reduce((sum, item) => {
@@ -180,10 +179,8 @@ const BodyCard = () => {
       // ذخیره مسیر فعلی در localStorage
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
       router.push("/login");
-     
     } else {
       router.push("/cart/infosend");
-     
     }
   };
 
@@ -363,12 +360,8 @@ const BodyCard = () => {
                   >
                     <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
                       <div className="relative rounded-lg overflow-hidden">
-                        <Link
-                          
-                          href={item.url}
-                        >
+                        <Link href={item.url}>
                           <Image
-                           
                             className="w-full h-full object-contain"
                             src={getImageUrl(item.image)}
                             alt={item?.title}
@@ -383,14 +376,10 @@ const BodyCard = () => {
                           </span>
                         )}
                       </div>
-                      <div className="mt-5">{renderCartCounter(item)}</div>
                     </div>
                     <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                       <div>
-                        <Link
-                         
-                          href={item.url}
-                        >
+                        <Link href={item.url}>
                           <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300">
                             {item.title}
                           </h3>
@@ -415,7 +404,7 @@ const BodyCard = () => {
                             <span className="font-semibold">کالای کارکرده</span>
                           </div>
                         )}
-                        <div className="sm:block hidden">
+                        {/* <div className="sm:block hidden">
                           {item.children?.length > 0 && (
                             <>
                               <div className="flex flex-wrap justify-start items-center mt-1">
@@ -425,13 +414,9 @@ const BodyCard = () => {
                                     className="lg:w-1/3 w-full lg:mt-0 mt-3"
                                   >
                                     <div className="flex gap-1">
-                                      <Link
-                                       
-                                        href={e.url}
-                                      >
+                                      <Link href={e.url}>
                                         <div className="relative w-14 h-14">
                                           <Image
-                                           
                                             className="w-full h-full object-contain rounded-lg"
                                             src={getImageUrl(e.image)}
                                             alt={e?.title}
@@ -448,7 +433,106 @@ const BodyCard = () => {
                                       </Link>
                                       <div className="flex flex-col items-start justify-center">
                                         <Link
-                                          
+                                          className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                          href={e.url}
+                                        >
+                                          <span className="text-xs font-bold line-clamp-2 ">
+                                            {e?.title}
+                                          </span>
+                                        </Link>
+                                        {e.showPrice && (
+                                          <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                            {e?.finalPrice.toLocaleString()}
+                                            <span className="text-xs px-1">
+                                              تومان
+                                            </span>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div> */}
+                        <div className="flex items-center gap-3">
+                          <div className="mt-5">{renderCartCounter(item)}</div>
+
+                          <div className="flex flex-col mt-5">
+                            {item.discount !== 0 && (
+                              <div className="flex items-center">
+                                <span className="font-semibold text-[#666] text-lg line-through">
+                                  {item.price1.toLocaleString()}
+                                </span>
+                                <span className="px-2 text-xs text-[#666]">
+                                  قیمت قبل ازتخفیف
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex items-center text-[#d1182b]">
+                              <span className="font-bold text-2xl">
+                                {item.finalPrice.toLocaleString()}
+                              </span>
+                              <span className="px-2 text-xs font-bold">
+                                تومان{" "}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <Divider style={{ margin: 5, padding: 0 }} />
+                      <div>
+                        <div className="flex justify-between items-center flex-wrap">
+                          {/* <div className="flex flex-col py-3">
+                            {item.discount !== 0 && (
+                              <div className="flex items-center">
+                                <span className="font-semibold text-[#666] text-lg line-through">
+                                  {item.price1.toLocaleString()}
+                                </span>
+                                <span className="px-2 text-xs text-[#666]">
+                                  قیمت قبل ازتخفیف
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex items-center text-[#d1182b]">
+                              <span className="font-bold text-2xl">
+                                {item.finalPrice.toLocaleString()}
+                              </span>
+                              <span className="px-2 text-xs font-bold">
+                                تومان{" "}
+                              </span>
+                            </div>
+                          </div> */}
+                          <div className="sm:block hidden">
+                          {item.children?.length > 0 && (
+                            <>
+                              <div className="flex flex-wrap justify-start items-center mt-1">
+                                {item.children.map((e) => (
+                                  <div
+                                    key={e.id}
+                                    className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                                  >
+                                    <div className="flex gap-1">
+                                      <Link href={e.url}>
+                                        <div className="relative w-14 h-14">
+                                          <Image
+                                            className="w-full h-full object-contain rounded-lg"
+                                            src={getImageUrl(e.image)}
+                                            alt={e?.title}
+                                            width={20}
+                                            height={20}
+                                            unoptimized
+                                          />
+                                          {e.discount !== 0 && (
+                                            <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
+                                              {e.discount}٪
+                                            </span>
+                                          )}
+                                        </div>
+                                      </Link>
+                                      <div className="flex flex-col items-start justify-center">
+                                        <Link
                                           className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                           href={e.url}
                                         >
@@ -472,30 +556,6 @@ const BodyCard = () => {
                             </>
                           )}
                         </div>
-                      </div>
-                      <Divider style={{ margin: 5, padding: 0 }} />
-                      <div>
-                        <div className="flex justify-between items-center flex-wrap">
-                          <div className="flex flex-col py-3">
-                            {item.discount !== 0 && (
-                              <div className="flex items-center">
-                                <span className="font-semibold text-[#666] text-lg line-through">
-                                  {item.price1.toLocaleString()}
-                                </span>
-                                <span className="px-2 text-xs text-[#666]">
-                                  قیمت قبل ازتخفیف
-                                </span>
-                              </div>
-                            )}
-                            <div className="flex items-center text-[#d1182b]">
-                              <span className="font-bold text-2xl">
-                                {item.finalPrice.toLocaleString()}
-                              </span>
-                              <span className="px-2 text-xs font-bold">
-                                تومان{" "}
-                              </span>
-                            </div>
-                          </div>
                           {renderActionButton(item)}
                         </div>
                       </div>
@@ -510,13 +570,9 @@ const BodyCard = () => {
                                 className="lg:w-1/3 w-full lg:mt-0 mt-3"
                               >
                                 <div className="flex gap-1">
-                                  <Link
-                                    
-                                    href={e.url}
-                                  >
+                                  <Link href={e.url}>
                                     <div className="relative w-14 h-14">
                                       <Image
-                                       
                                         className="w-full h-full object-contain rounded-lg"
                                         src={getImageUrl(e.image)}
                                         alt={e?.title}
@@ -533,7 +589,6 @@ const BodyCard = () => {
                                   </Link>
                                   <div className="flex flex-col items-start justify-center">
                                     <Link
-                                      
                                       className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
                                       href={e.url}
                                     >
