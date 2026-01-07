@@ -40,8 +40,9 @@ export const getProducts = async (data) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-cache, max-age=0", // اضافه کردن این خط
       },
-      cache: "force-cache", // استفاده از cache
+      cache: "no-store", // استفاده از cache
       next: { revalidate: 60 }, // revalidate هر 60 ثانیه
     });
 
