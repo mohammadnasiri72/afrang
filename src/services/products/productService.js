@@ -40,9 +40,8 @@ export const getProducts = async (data) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "no-cache, max-age=0", // اضافه کردن این خط
       },
-      cache: "no-store", // استفاده از cache
+      // cache: "force-cache", // استفاده از cache
       next: { revalidate: 60 }, // revalidate هر 60 ثانیه
     });
 
@@ -68,7 +67,7 @@ export const getProductId = async (id) => {
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
@@ -95,7 +94,7 @@ export const getProductListId = async (data) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
@@ -134,7 +133,7 @@ export const getProductAction = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
@@ -171,7 +170,7 @@ export const getProductTerm = async (term, catIds) => {
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
@@ -194,7 +193,7 @@ export const getProductPricing = async (categoryId) => {
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
@@ -224,7 +223,7 @@ export const getProductCategory = async (categoryId, id2) => {
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
@@ -251,7 +250,7 @@ export const fetchNotifyAvailable = async (id, token) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 60 },
     });
 
