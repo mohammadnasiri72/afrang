@@ -23,50 +23,9 @@ const toEnglishNumber = (number) => {
 };
 
 function EnterCodeSent({ mobile, setStateLogin, from }) {
-  const [isWebOTPSupported, setIsWebOTPSupported] = useState(false);
   const [webOTPActive, setWebOTPActive] = useState(false);
   const user = Cookies.get("user");
   const userId = JSON.parse(user).userId;
-  useEffect(() => {
-    if ("OTPCredential" in window) {
-      setIsWebOTPSupported(true);
-    }
-  }, []);
-
-  // فعال‌سازی WebOTP
-  useEffect(() => {
-    if (!isWebOTPSupported || webOTPActive) return;
-
-    const startWebOTP = async () => {
-      setWebOTPActive(true);
-      try {
-        const otp = await navigator.credentials.get({
-          otp: { transport: ["sms"] },
-        });
-
-        if (otp && otp.code) {
-          processReceivedCode(otp.code);
-        }
-      } catch (err) {
-        setWebOTPActive(false);
-      }
-    };
-
-    // شروع WebOTP وقتی کاربر با صفحه تعامل دارد
-    const handleUserInteraction = () => {
-      startWebOTP();
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("touchstart", handleUserInteraction);
-    };
-
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("touchstart", handleUserInteraction);
-
-    return () => {
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("touchstart", handleUserInteraction);
-    };
-  }, [isWebOTPSupported, webOTPActive]);
 
   const processReceivedCode = (code) => {
     // استخراج کد ۶ رقمی - الگوی ساده‌تر
@@ -404,18 +363,6 @@ function EnterCodeSent({ mobile, setStateLogin, from }) {
             </div>
           </div>
         </div>
-
-        {isWebOTPSupported && (
-          <div className="text-center text-xs text-green-600 !mb-4 bg-green-50 p-2 rounded-lg">
-            ✓ سیستم دریافت خودکار کد فعال است - منتظر دریافت پیامک باشید
-          </div>
-        )}
-
-        {!isWebOTPSupported && (
-          <div className="text-center text-xs text-orange-600 !mb-4 bg-orange-50 p-2 rounded-lg">
-            ⚠️ مرورگر شما از دریافت خودکار کد پشتیبانی نمی‌کند
-          </div>
-        )}
       </div>
     </>
   );
