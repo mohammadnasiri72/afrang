@@ -355,25 +355,8 @@ function BodyContact() {
       case "آدرس":
         return (
           <>
-            <div className="flex items-start">
-              <div className="w-full lg:w-1/3 p-3">
-                <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                  <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                    <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                      <IoLocationOutline />
-                    </div>
-                  </div>
-                  <div className="py-4 px-2 sm:pl-[50px]">
-                    <span className="text-[#616161] text-[13px] font-bold">
-                      آدرس
-                    </span>
-                    <p className="!mb-0">{siteAddress}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full lg:w-2/3 p-3 mt-10">
-                <GoogleMap />
-              </div>
+            <div className="w-full p-3 mt-10">
+              <GoogleMap />
             </div>
           </>
         );
@@ -430,7 +413,7 @@ function BodyContact() {
             </h4>
             <TbArrowBadgeRightFilled className="text-[#d1182b] text-xl" />
           </div>
-          <div className="lg:px-10">
+          <div className="lg:px-10 relative z-40">
             <div className="flex items-start flex-wrap">
               <div className="sm:w-1/3 w-full p-2">
                 <p className="font-semibold text-sm">نام و نام خانوادگی</p>

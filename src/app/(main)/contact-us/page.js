@@ -8,7 +8,6 @@ const HeaderContact = dynamic(() =>
   import("@/components/contact/HeaderContact")
 );
 const BodyContact = dynamic(() => import("@/components/contact/BodyContact"));
-const GoogleMap = dynamic(() => import("@/components/contact/GoogleMap"));
 
 export default async function Contact() {
   try {
@@ -27,7 +26,6 @@ export default async function Contact() {
             <Container>
               <BodyContact />
             </Container>
-            {/* <GoogleMap /> */}
           </div>
         </div>
       </>
