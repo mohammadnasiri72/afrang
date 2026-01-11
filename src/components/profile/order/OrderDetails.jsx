@@ -36,29 +36,7 @@ import {
 } from "react-icons/fa";
 import { IoIosCard } from "react-icons/io";
 
-function buildTree(items) {
-  // 1. ایجاد یک مپ برای دسترسی سریع به آیتم‌ها با استفاده از id
-  const itemMap = {};
-  items.forEach((item) => {
-    itemMap[item.productId] = { ...item, children: [] };
-  });
 
-  // 2. ساختار درختی ایجاد می‌کنیم
-  const tree = [];
-  items.forEach((item) => {
-    if (item.parentId === -1) {
-      // آیتم اصلی را به درخت اضافه می‌کنیم
-      tree.push(itemMap[item.productId]);
-    } else {
-      // آیتم فرزند را به والدش اضافه می‌کنیم
-      if (itemMap[item.parentId]) {
-        itemMap[item.parentId].children.push(itemMap[item.productId]);
-      }
-    }
-  });
-
-  return tree;
-}
 
 const OrderDetailsSkeleton = () => {
   return (
@@ -369,154 +347,163 @@ export default function OrderDetails({ trackCode }) {
           <div className="xl:col-span-2 bg-white rounded-xl sm:p-4 shadow-sm">
             <h3 className="font-semibold text-gray-800 !mb-4">کالاهای سفارش</h3>
             <div className="space-y-6">
-              {buildTree(orderDetails?.products)?.map((item) => (
-                <div
-                  className="bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors p-3 sm:p-6"
-                  key={item.id}
-                >
-                  <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6  ">
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-24 h-24 bg-white rounded-xl relative flex-shrink-0 block hover:opacity-90 transition-opacity border border-gray-100"
-                    >
-                      <img
-                        src={getImageUrl(item.image)}
-                        alt={item.id}
-                        className="w-full h-full object-contain rounded-xl p-2"
-                      />
-                      <span className="absolute top-1 right-1 bg-[#40768c] !text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] h-5 flex items-center justify-center">
-                        {item.qty} عدد
-                      </span>
-                    </a>
-                    <div className="flex-1 w-full">
-                      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                        <div className="w-full sm:w-auto">
-                          <div className="flex items-center gap-3 !mb-2">
-                            <a
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors line-clamp-2"
-                            >
-                              {item.title && item.title.includes("|")
-                                ? (() => {
-                                    const [main, color] = item.title.split("|");
-                                    return (
-                                      <>
-                                        <span>{main.trim()}</span>
-                                        <span className="mx-1 text-[#aaa]">
-                                          |
-                                        </span>
-                                        <span className="font-bold">
-                                          {color.trim()}
-                                        </span>
-                                      </>
-                                    );
-                                  })()
-                                : item.title}
-                            </a>
-                          </div>
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                            {item.warranty && (
-                              <span className="text-green-600 line-clamp-1">
-                                {item.warranty}
-                              </span>
+              {orderDetails?.products
+                ?.filter((e) => e.parentId === -1)
+                ?.map((item) => (
+                  <div
+                    className="bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors p-3 sm:p-6"
+                    key={item.id}
+                  >
+                    <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6  ">
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-24 h-24 bg-white rounded-xl relative flex-shrink-0 block hover:opacity-90 transition-opacity border border-gray-100"
+                      >
+                        <img
+                          src={getImageUrl(item.image)}
+                          alt={item.id}
+                          className="w-full h-full object-contain rounded-xl p-2"
+                        />
+                        <span className="absolute top-1 right-1 bg-[#40768c] !text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] h-5 flex items-center justify-center">
+                          {item.qty} عدد
+                        </span>
+                      </a>
+                      <div className="flex-1 w-full">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                          <div className="w-full sm:w-auto">
+                            <div className="flex items-center gap-3 !mb-2">
+                              <a
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors line-clamp-2"
+                              >
+                                {item.title && item.title.includes("|")
+                                  ? (() => {
+                                      const [main, color] =
+                                        item.title.split("|");
+                                      return (
+                                        <>
+                                          <span>{main.trim()}</span>
+                                          <span className="mx-1 text-[#aaa]">
+                                            |
+                                          </span>
+                                          <span className="font-bold">
+                                            {color.trim()}
+                                          </span>
+                                        </>
+                                      );
+                                    })()
+                                  : item.title}
+                              </a>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                              {item.warranty && (
+                                <span className="text-green-600 line-clamp-1">
+                                  {item.warranty}
+                                </span>
+                              )}
+                            </div>
+                            {item.conditionId === 20 && (
+                              <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                                <FaRecycle className="ml-1.5" />
+                                <span className="font-semibold">
+                                  کالای کارکرده
+                                </span>
+                              </div>
                             )}
                           </div>
-                          {item.conditionId === 20 && (
-                            <div className="flex items-center text-sm text-[#d1182b] mt-2">
-                              <FaRecycle className="ml-1.5" />
-                              <span className="font-semibold">
-                                کالای کارکرده
+                          <div className="flex flex-col items-end w-full sm:w-auto">
+                            {item.hasDiscount && (
+                              <div className="flex items-center gap-3 !mb-2">
+                                <span className="line-through text-gray-400 text-sm whitespace-nowrap">
+                                  {item.originalPrice.toLocaleString()} تومان
+                                </span>
+                                <span className="bg-red-100 text-red-600 text-xs px-3 py-1.5 rounded-lg whitespace-nowrap">
+                                  {Math.round(
+                                    (item.discount / item.originalPrice) * 100
+                                  )}
+                                  % تخفیف
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex flex-col items-end">
+                              <span className="text-[#40768c] font-semibold text-lg whitespace-nowrap">
+                                {item.salesPrice.toLocaleString()} تومان
+                              </span>
+                              <span className="text-sm text-gray-500 mt-1 whitespace-nowrap">
+                                مالیات: {item.tax.toLocaleString()} تومان
+                              </span>
+                              <span className="text-xs text-gray-400 mt-0.5 whitespace-nowrap">
+                                کد محصول: {item.productId}
                               </span>
                             </div>
-                          )}
-                        </div>
-                        <div className="flex flex-col items-end w-full sm:w-auto">
-                          {item.hasDiscount && (
-                            <div className="flex items-center gap-3 !mb-2">
-                              <span className="line-through text-gray-400 text-sm whitespace-nowrap">
-                                {item.originalPrice.toLocaleString()} تومان
-                              </span>
-                              <span className="bg-red-100 text-red-600 text-xs px-3 py-1.5 rounded-lg whitespace-nowrap">
-                                {Math.round(
-                                  (item.discount / item.originalPrice) * 100
-                                )}
-                                % تخفیف
-                              </span>
-                            </div>
-                          )}
-                          <div className="flex flex-col items-end">
-                            <span className="text-[#40768c] font-semibold text-lg whitespace-nowrap">
-                              {item.salesPrice.toLocaleString()} تومان
-                            </span>
-                            <span className="text-sm text-gray-500 mt-1 whitespace-nowrap">
-                              مالیات: {item.tax.toLocaleString()} تومان
-                            </span>
-                            <span className="text-xs text-gray-400 mt-0.5 whitespace-nowrap">
-                              کد محصول: {item.productId}
-                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="">
-                    {item.children?.length > 0 && (
-                      <>
-                        <div className="flex flex-wrap justify-start items-center mt-2">
-                          {item.children.map((e) => (
-                            <div
-                              key={e.id}
-                              className="lg:w-1/3 w-full lg:mt-0 mt-3"
-                            >
-                              <div className="flex gap-1">
-                                <Link href={e.url}>
-                                  <div className="relative w-14 h-14">
-                                    <Image
-                                      className="w-full h-full object-contain rounded-lg "
-                                      src={getImageUrl(e.image)}
-                                      alt={e?.title}
-                                      width={20}
-                                      height={20}
-                                      unoptimized
-                                    />
-                                    {e.discount !== 0 && (
-                                      <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
-                                        {(e.discount / e.originalPrice) * 100}٪
-                                      </span>
-                                    )}
+                    <div className="">
+                      {orderDetails?.products?.filter(
+                        (e) => e.parentId === item.productId
+                      )?.length > 0 && (
+                        <>
+                          <div className="flex flex-wrap justify-start items-center mt-2">
+                            {orderDetails?.products
+                              .filter((e) => e.parentId === item.productId)
+                              ?.map((e) => (
+                                <div
+                                  key={e.id}
+                                  className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                                >
+                                  <div className="flex gap-1">
+                                    <Link href={e.url}>
+                                      <div className="relative w-14 h-14">
+                                        <Image
+                                          className="w-full h-full object-contain rounded-lg "
+                                          src={getImageUrl(e.image)}
+                                          alt={e?.title}
+                                          width={20}
+                                          height={20}
+                                          unoptimized
+                                        />
+                                        {e.discount !== 0 && (
+                                          <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
+                                            {(e.discount / e.originalPrice) *
+                                              100}
+                                            ٪
+                                          </span>
+                                        )}
+                                      </div>
+                                    </Link>
+                                    <div className="flex flex-col items-start justify-between">
+                                      <Link
+                                        className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                        href={e.url}
+                                      >
+                                        <span className="text-xs font-bold line-clamp-2 ">
+                                          {e?.title}
+                                        </span>
+                                      </Link>
+                                      {e.showPrice && (
+                                        <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                          {e?.salesPrice.toLocaleString()}
+                                          <span className="text-xs px-1">
+                                            تومان
+                                          </span>
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
-                                </Link>
-                                <div className="flex flex-col items-start justify-between">
-                                  <Link
-                                    className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
-                                    href={e.url}
-                                  >
-                                    <span className="text-xs font-bold line-clamp-2 ">
-                                      {e?.title}
-                                    </span>
-                                  </Link>
-                                  {e.showPrice && (
-                                    <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
-                                      {e?.salesPrice.toLocaleString()}
-                                      <span className="text-xs px-1">
-                                        تومان
-                                      </span>
-                                    </span>
-                                  )}
                                 </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
+                              ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             {/* Payment History */}

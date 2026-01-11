@@ -30,10 +30,11 @@ function Warranties({
       setWarrantySelected(selectedWarranty);
     }
   };
+  
 
   return (
     <>
-      <FormControl sx={{ width: "90%" }}>
+      <FormControl sx={{ width: "100%" }}>
         <div className="space-y-2">
           {warrantiesArray.map((warranty) => {
             const isSelected = warrantySelected?.id === warranty.id;
@@ -42,8 +43,8 @@ function Warranties({
               <div
                 key={warranty.id}
                 onClick={() => handleWarrantyToggle(warranty.id)}
-                className={`border border-[#0003] rounded-2xl px-3 py-1 relative transition-all duration-200 ${
-                  isSelected ? "!bg-[#4A90E255] border-[#1976d2]" : ""
+                className={`border border-[#0003] rounded-lg py-1 relative transition-all duration-200 ${
+                  isSelected ? "bg-blue-50! border-blue-200 text-blue-700" : ""
                 } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-50"}`}
               >
                 <div className="flex items-center gap-1.5 justify-between w-full">

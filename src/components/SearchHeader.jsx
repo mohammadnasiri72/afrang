@@ -82,6 +82,7 @@ const SearchHeader = () => {
       try {
         setLoading(true);
         const data = await getProductTerm(value);
+
         // سورت: اول آنهایی که finalPrice != 0، بعد آنهایی که 0 هستند
         const sorted = (data || []).slice().sort((a, b) => {
           if (
@@ -161,52 +162,65 @@ const SearchHeader = () => {
               )}
               <div className={loading ? "opacity-50 pointer-events-none" : ""}>
                 {results.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-4">
-                    {results.map((product) => (
-                      <Link
-                        prefetch={false}
-                        onClick={() => {
-                          setShowResults(false);
-                          setSearchTerm("");
-                        }}
-                        key={product.productId}
-                        href={product.url}
-                        className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"
-                      >
-                        <div className="w-20 h-20 relative flex-shrink-0 overflow-hidden">
-                          <Image
-                            src={getImageUrl(product.image)}
-                            alt={product.title.slice(0, 20)}
-                            width={80}
-                            height={80}
-                            className="object-contain"
-                            unoptimized
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-gray-900 line-clamp-3">
-                            {product.title}
-                          </h3>
-                          {!product.priceDesc && (
-                            <div className="mt-1 flex items-center gap-2">
-                              <span className="text-sm font-bold text-[#d1182b]">
-                                {product.finalPrice.toLocaleString()}
-                              </span>
-                              <span className="text-xs text-gray-500">
-                                تومان
-                              </span>
+                  <div>
+                    {results.length > 0 && (
+                      <div className="grid grid-cols-2 gap-4">
+                        {results.map((product) => (
+                          <Link
+                            prefetch={false}
+                            onClick={() => {
+                              setShowResults(false);
+                              setSearchTerm("");
+                            }}
+                            key={product.productId}
+                            href={product.url}
+                            className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"
+                          >
+                            <div className="w-20 h-20 relative flex-shrink-0 overflow-hidden">
+                              <Image
+                                src={getImageUrl(product.image)}
+                                alt={product.title.slice(0, 20)}
+                                width={80}
+                                height={80}
+                                className="object-contain"
+                                unoptimized
+                              />
                             </div>
-                          )}
-                          {product.priceDesc && (
-                            <div className="mt-1 flex items-center gap-2">
-                              <span className="text-sm font-bold text-[#d1182b]">
-                                {product.priceDesc}
-                              </span>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-sm font-medium text-gray-900 line-clamp-3">
+                                {product.title}
+                              </h3>
+                              {product.priceDesc ? (
+                                <span className="text-sm font-bold text-[#d1182b]">
+                                  {product.priceDesc}
+                                </span>
+                              ) : (
+                                <div className="flex justify-between flex-wrap items-center">
+                                  {product.finalPrice !== "0" && (
+                                    <div className="mt-1 flex items-center gap-2">
+                                      <span className="text-sm font-bold text-[#d1182b]">
+                                        {product.finalPrice.toLocaleString()}
+                                      </span>
+                                      <span className="text-xs text-gray-500">
+                                        تومان
+                                      </span>
+                                    </div>
+                                  )}
+                                  {product.statusDesc &&
+                                    product.statusDesc !== "موجود" && (
+                                      <div className="mt-1 flex items-center gap-2 justify-center">
+                                        <span className="text-xs font-bold text-[#d1182b]">
+                                          {product.statusDesc}
+                                        </span>
+                                      </div>
+                                    )}
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </Link>
-                    ))}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ) : !loading && searchTerm.length >= 3 ? (
                   <div className="h-full flex items-center justify-center">

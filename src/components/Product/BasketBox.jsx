@@ -15,28 +15,25 @@ import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
+
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
   );
   const [openModal, setOpenModal] = useState(false);
   const [insuranceSelected, setInsuranceSelected] = useState([]);
-  const [warrantySelected, setWarrantySelected] = useState(
-    product?.warranty?.warrantyWays?.length > 0
-      ? product.warranty.warrantyWays[0]
-      : {}
-  );
+  const [warrantySelected, setWarrantySelected] = useState(null);
 
   let filteredArray = [];
 
   useEffect(() => {
-    filteredArray = currentItems.filter(
-      (e) => e.parentId === product?.product?.productId
-    ).filter((item1) =>
-      product.insurance.insuranceWays.some(
-        (item2) => item2.id === item1.productId
-      )
-    );
+    filteredArray = currentItems
+      .filter((e) => e.parentId === product?.product?.productId)
+      .filter((item1) =>
+        product.insurance.insuranceWays.some(
+          (item2) => item2.id === item1.productId
+        )
+      );
   }, [currentItems, product]);
 
   useEffect(() => {

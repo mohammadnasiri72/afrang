@@ -32,6 +32,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     vip: false, // محصولات فروش ویژه
     price: false, // محصولات قیمت‌دار
     secondHand: false, // کالای دست دوم
+    archived: false, // کالای دست دوم
   });
 
   const [categorySearch, setCategorySearch] = useState("");
@@ -62,6 +63,9 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
       available:
         searchParams.get("statusid") === "1" ||
         searchParams.get("StatusId") === "1",
+      archived:
+        searchParams.get("statusid") === "7" ||
+        searchParams.get("StatusId") === "7",
       discount: searchParams.get("onlydiscount") === "1",
       vip: searchParams.get("onlyfest") === "1",
       price: searchParams.get("onlyprice") === "1",
@@ -70,6 +74,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
         searchParams.get("conditionId") === "20",
     });
   }, [searchParams]);
+
 
   // تابع برای گرفتن عنوان برندهای انتخاب شده
   const getSelectedBrandsTitles = () => {
@@ -152,7 +157,6 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
   const handleCollapseChange = (keys) => {
     setActiveKeys(keys);
   };
-
   const handleCategoryClick = (id, title, url) => {
     setSelectedCategory(id);
 
@@ -170,7 +174,21 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("page");
 
-    if (newStates.available) {
+    if (!newStates.available && newStates.archived) {
+      params.set("statusid", "7");
+    } else if (newStates.available && !newStates.archived) {
+      params.set("statusid", "1");
+    } else if (
+      newStates.available &&
+      newStates.archived &&
+      type === "archived"
+    ) {
+      params.set("statusid", "7");
+    } else if (
+      newStates.available &&
+      newStates.archived &&
+      type === "available"
+    ) {
       params.set("statusid", "1");
     } else {
       params.delete("statusid");
@@ -276,7 +294,9 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
               className="select-none text-sm font-semibold w-full flex items-center justify-between"
             >
               <span className=" whitespace-nowrap">{brand.title}</span>
-              <span className="line-clamp-1 pl-2 text-end">{brand.titleEn}</span>
+              <span className="line-clamp-1 pl-2 text-end">
+                {brand.titleEn}
+              </span>
             </div>
           }
         />
@@ -475,6 +495,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
         valuePrice[0] > 0 ||
         valuePrice[1] < resultFilter.maxPrice ||
         switchStates.available ||
+        switchStates.archived ||
         switchStates.discount ||
         switchStates.vip ||
         switchStates.price ||
@@ -571,11 +592,21 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
         </div>
         <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
           <span className="font-semibold text-base text-gray-700">
-            کالای دست دوم
+            محصولات دست دوم
           </span>
           <Switch
             checked={switchStates.secondHand}
             onChange={() => handleSwitchChange("secondHand")}
+            style={{ color: "#d1182b" }}
+          />
+        </div>
+        <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+          <span className="font-semibold text-base text-gray-700">
+            محصولات آرشیو شده
+          </span>
+          <Switch
+            checked={switchStates.archived}
+            onChange={() => handleSwitchChange("archived")}
             style={{ color: "#d1182b" }}
           />
         </div>

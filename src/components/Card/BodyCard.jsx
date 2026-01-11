@@ -14,43 +14,13 @@ import { FaAngleLeft, FaRecycle, FaShoppingCart } from "react-icons/fa";
 import { GoShieldCheck } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import Loading from "../Loading";
 import CartCounter from "../Product/CartCounter";
 
 function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
 }
 
-function buildTree(items) {
-  const itemMap = {};
 
-  // ایجاد یک مپ برای دسترسی سریع با کلید منحصر به فرد
-  items.forEach((item) => {
-    const uniqueKey = `${item.productId}_${item.colorId}`;
-    itemMap[uniqueKey] = { ...item, children: [] };
-  });
-
-  const tree = [];
-  items.forEach((item) => {
-    const uniqueKey = `${item.productId}_${item.colorId}`;
-
-    if (item.parentId === -1) {
-      tree.push(itemMap[uniqueKey]);
-    } else {
-      // پیدا کردن والد بر اساس productId بدون در نظر گرفتن colorId
-      const parentEntries = Object.entries(itemMap)?.find(
-        ([key, value]) => value.productId === item.parentId
-      );
-
-      if (parentEntries) {
-        const parentKey = parentEntries[0];
-        itemMap[parentKey].children.push(itemMap[uniqueKey]);
-      }
-    }
-  });
-
-  return tree;
-}
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const BodyCardSkeleton = () => {
@@ -133,8 +103,7 @@ const BodyCard = () => {
     // حذف dispatch از اینجا چون در Layout انجام می‌شود
   }, []);
 
-  const items =
-    cartType === "current" ? buildTree(currentItems) : buildTree(nextItems);
+ 
 
   useEffect(() => {
     if (mounted && currentItems.length > 0) {
@@ -158,14 +127,16 @@ const BodyCard = () => {
 
   // محاسبه قیمت‌ها با چک کردن وجود فیلدها
   const totalPrice =
-    items?.reduce((sum, item) => {
+    currentItems?.reduce((sum, item) => {
       const price = item.price1 || 0;
       const quantity = item.quantity || 0;
       return sum + price * quantity;
     }, 0) || 0;
 
+    
+
   const totalDiscount =
-    items?.reduce((sum, item) => {
+    currentItems?.reduce((sum, item) => {
       const oldPrice = item.price1 || 0;
       const price = item.finalPrice || 0;
       const quantity = item.quantity || 0;
@@ -337,7 +308,7 @@ const BodyCard = () => {
   return (
     <>
       <div className="flex flex-wrap z-[50] relative">
-        {items?.length === 0 ? (
+        {(cartType === "next" ? nextItems : currentItems)?.length === 0 ? (
           <div className="w-full flex flex-col items-center justify-center py-10">
             <div className="text-4xl text-[#d1182b] !mb-4">
               <FaShoppingCart />
@@ -353,216 +324,157 @@ const BodyCard = () => {
           <>
             <div className="lg:w-3/4 w-full">
               <div className="flex flex-col gap-5">
-                {items?.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
-                  >
-                    <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
-                      <div className="relative rounded-lg overflow-hidden">
-                        <Link href={item.url}>
-                          <Image
-                            className="w-full h-full object-contain"
-                            src={getImageUrl(item.image)}
-                            alt={item?.title}
-                            width={150}
-                            height={150}
-                            unoptimized
-                          />
-                        </Link>
-                        {item.discount !== 0 && (
-                          <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
-                            {item.discount}٪
-                          </span>
-                        )}
+                {(cartType === "next" ? nextItems : currentItems)
+                  .filter((e) => e.parentId === -1)
+                  ?.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-sm p-3 flex flex-wrap border-b-4 border-[#d1182b] relative z-50"
+                    >
+                      <div className="sm:w-1/5 w-2/5 flex flex-col justify-between">
+                        <div className="relative rounded-lg overflow-hidden">
+                          <Link href={item.url}>
+                            <Image
+                              className="w-full h-full object-contain"
+                              src={getImageUrl(item.image)}
+                              alt={item?.title}
+                              width={150}
+                              height={150}
+                              unoptimized
+                            />
+                          </Link>
+                          {item.discount !== 0 && (
+                            <span className="absolute top-2 right-2 bg-[#d1182b] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
+                              {item.discount}٪
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
-                      <div>
-                        <Link href={item.url}>
-                          <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300">
-                            {item.title}
-                          </h3>
-                        </Link>
-                        {item.warranty && (
+                      <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
+                        <div>
+                          <Link href={item.url}>
+                            <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300">
+                              {item.title}
+                            </h3>
+                          </Link>
+                          {item.warranty && (
+                            <div className="flex items-center mt-2">
+                              <BsArchive className="text-[#666]" />
+                              <span className="px-2 sm:text-[13px] text-xs">
+                                {item.warranty}
+                              </span>
+                            </div>
+                          )}
                           <div className="flex items-center mt-2">
-                            <BsArchive className="text-[#666]" />
+                            <GoShieldCheck className="text-[#666]" />
                             <span className="px-2 sm:text-[13px] text-xs">
-                              {item.warranty}
+                              ضمانت اصل بودن کالا
                             </span>
                           </div>
-                        )}
-                        <div className="flex items-center mt-2">
-                          <GoShieldCheck className="text-[#666]" />
-                          <span className="px-2 sm:text-[13px] text-xs">
-                            ضمانت اصل بودن کالا
-                          </span>
-                        </div>
-                        {item.conditionId === 20 && (
-                          <div className="flex items-center text-sm text-[#d1182b] mt-2">
-                            <FaRecycle className="ml-1.5" />
-                            <span className="font-semibold">کالای کارکرده</span>
-                          </div>
-                        )}
-                        {/* <div className="sm:block hidden">
-                          {item.children?.length > 0 && (
-                            <>
-                              <div className="flex flex-wrap justify-start items-center mt-1">
-                                {item.children.map((e) => (
-                                  <div
-                                    key={e.id}
-                                    className="lg:w-1/3 w-full lg:mt-0 mt-3"
-                                  >
-                                    <div className="flex gap-1">
-                                      <Link href={e.url}>
-                                        <div className="relative w-14 h-14">
-                                          <Image
-                                            className="w-full h-full object-contain rounded-lg"
-                                            src={getImageUrl(e.image)}
-                                            alt={e?.title}
-                                            width={20}
-                                            height={20}
-                                            unoptimized
-                                          />
-                                          {e.discount !== 0 && (
-                                            <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
-                                              {e.discount}٪
-                                            </span>
-                                          )}
-                                        </div>
-                                      </Link>
-                                      <div className="flex flex-col items-start justify-center">
-                                        <Link
-                                          className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
-                                          href={e.url}
-                                        >
-                                          <span className="text-xs font-bold line-clamp-2 ">
-                                            {e?.title}
-                                          </span>
-                                        </Link>
-                                        {e.showPrice && (
-                                          <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
-                                            {e?.finalPrice.toLocaleString()}
-                                            <span className="text-xs px-1">
-                                              تومان
-                                            </span>
-                                          </span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </>
+                          {item.conditionId === 20 && (
+                            <div className="flex items-center text-sm text-[#d1182b] mt-2">
+                              <FaRecycle className="ml-1.5" />
+                              <span className="font-semibold">
+                                کالای کارکرده
+                              </span>
+                            </div>
                           )}
-                        </div> */}
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <div className="mt-5">{renderCartCounter(item)}</div>
 
-                          <div className="flex flex-col mt-5">
-                            {item.discount !== 0 && (
-                              <div className="flex items-center">
-                                <span className="font-semibold text-[#666] text-lg line-through">
-                                  {item.price1.toLocaleString()}
+                          <div className="flex items-center gap-3 flex-wrap">
+                            <div className="mt-5">
+                              {renderCartCounter(item)}
+                            </div>
+
+                            <div className="flex flex-col mt-5">
+                              {item.discount !== 0 && (
+                                <div className="flex items-center">
+                                  <span className="font-semibold text-[#666] text-lg line-through">
+                                    {item.price1.toLocaleString()}
+                                  </span>
+                                  <span className="px-2 text-xs text-[#666]">
+                                    قیمت قبل ازتخفیف
+                                  </span>
+                                </div>
+                              )}
+                              <div className="flex items-center text-[#d1182b]">
+                                <span className="font-bold text-2xl">
+                                  {item.finalPrice.toLocaleString()}
                                 </span>
-                                <span className="px-2 text-xs text-[#666]">
-                                  قیمت قبل ازتخفیف
+                                <span className="px-2 text-xs font-bold">
+                                  تومان{" "}
                                 </span>
                               </div>
-                            )}
-                            <div className="flex items-center text-[#d1182b]">
-                              <span className="font-bold text-2xl">
-                                {item.finalPrice.toLocaleString()}
-                              </span>
-                              <span className="px-2 text-xs font-bold">
-                                تومان{" "}
-                              </span>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <Divider style={{ margin: 5, padding: 0 }} />
-                      <div>
-                        <div className="flex justify-between items-center flex-wrap">
-                          {/* <div className="flex flex-col py-3">
-                            {item.discount !== 0 && (
-                              <div className="flex items-center">
-                                <span className="font-semibold text-[#666] text-lg line-through">
-                                  {item.price1.toLocaleString()}
-                                </span>
-                                <span className="px-2 text-xs text-[#666]">
-                                  قیمت قبل ازتخفیف
-                                </span>
-                              </div>
-                            )}
-                            <div className="flex items-center text-[#d1182b]">
-                              <span className="font-bold text-2xl">
-                                {item.finalPrice.toLocaleString()}
-                              </span>
-                              <span className="px-2 text-xs font-bold">
-                                تومان{" "}
-                              </span>
-                            </div>
-                          </div> */}
-                          <div className="">
-                            {item.children?.length > 0 && (
-                              <>
-                                <div className="flex flex-wrap justify-start items-center mt-1">
-                                  {item.children.map((e) => (
-                                    <div
-                                      key={e.id}
-                                      className="lg:w-1/3 w-full lg:mt-0 mt-3"
-                                    >
-                                      <div className="flex gap-1">
-                                        <Link href={e.url}>
-                                          <div className="relative w-14 h-14">
-                                            <Image
-                                              className="w-full h-full object-contain rounded-lg"
-                                              src={getImageUrl(e.image)}
-                                              alt={e?.title}
-                                              width={20}
-                                              height={20}
-                                              unoptimized
-                                            />
-                                            {e.discount !== 0 && (
-                                              <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
-                                                {e.discount}٪
-                                              </span>
-                                            )}
+                        <Divider style={{ margin: 5, padding: 0 }} />
+                        <div>
+                          <div className="flex justify-between items-center flex-wrap">
+                            <div className="">
+                              {currentItems.filter(
+                                (e) => e.parentId === item.productId
+                              ).length > 0 && (
+                                <>
+                                  <div className="flex flex-wrap justify-start items-center mt-1">
+                                    {currentItems
+                                      .filter(
+                                        (e) => e.parentId === item.productId
+                                      )
+                                      .map((e) => (
+                                        <div
+                                          key={e.id}
+                                          className="lg:w-1/3 w-full lg:mt-0 mt-3"
+                                        >
+                                          <div className="flex gap-1">
+                                            <Link href={e.url}>
+                                              <div className="relative w-14 h-14">
+                                                <Image
+                                                  className="w-full h-full object-contain rounded-lg"
+                                                  src={getImageUrl(e.image)}
+                                                  alt={e?.title}
+                                                  width={20}
+                                                  height={20}
+                                                  unoptimized
+                                                />
+                                                {e.discount !== 0 && (
+                                                  <span className="absolute top-2 right-0 bg-[#d1182baa] px-2 py-0.5 rounded-sm !text-white text-xs font-bold">
+                                                    {e.discount}٪
+                                                  </span>
+                                                )}
+                                              </div>
+                                            </Link>
+                                            <div className="flex flex-col items-start justify-center">
+                                              <Link
+                                                className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
+                                                href={e.url}
+                                              >
+                                                <span className="text-xs font-bold line-clamp-2 ">
+                                                  {e?.title}
+                                                </span>
+                                              </Link>
+                                              {e.showPrice && (
+                                                <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
+                                                  {e?.finalPrice.toLocaleString()}
+                                                  <span className="text-xs px-1">
+                                                    تومان
+                                                  </span>
+                                                </span>
+                                              )}
+                                            </div>
                                           </div>
-                                        </Link>
-                                        <div className="flex flex-col items-start justify-center">
-                                          <Link
-                                            className="hover:text-[#d1182b] text-[#0009] duration-300 px-2 !text-justify"
-                                            href={e.url}
-                                          >
-                                            <span className="text-xs font-bold line-clamp-2 ">
-                                              {e?.title}
-                                            </span>
-                                          </Link>
-                                          {e.showPrice && (
-                                            <span className=" font-bold line-clamp-2 text-[#d1182b] whitespace-nowrap px-2">
-                                              {e?.finalPrice.toLocaleString()}
-                                              <span className="text-xs px-1">
-                                                تومان
-                                              </span>
-                                            </span>
-                                          )}
                                         </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </>
-                            )}
+                                      ))}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+
+                            {renderActionButton(item)}
                           </div>
-                          
-                          {renderActionButton(item)}
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
             {/* نمایش جمع و سود خرید برای موبایل و تبلت (بین sm و lg) */}
@@ -570,8 +482,13 @@ const BodyCard = () => {
               <div className="w-full mt-3 lg:hidden">
                 <div className="bg-[#ececec] p-3 rounded-lg">
                   <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
-                    <span>قیمت کالاها ({items?.length || 0})</span>
-                    <span>{(totalPrice + amount).toLocaleString()}</span>
+                    <span>
+                      قیمت کالاها (
+                      {currentItems.filter((e) => e.parentId === -1)?.length ||
+                        0}
+                      )
+                    </span>
+                    <span>{(totalPrice).toLocaleString()}</span>
                   </div>
                   {totalDiscount > 0 && (
                     <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
@@ -588,8 +505,8 @@ const BodyCard = () => {
                           <span className="font-bold text-2xl text-[#d1182b]">
                             {(
                               totalPrice -
-                              totalDiscount +
-                              amount
+                              totalDiscount
+                              
                             ).toLocaleString()}
                           </span>
                           <span className="mr-1">تومان</span>
@@ -624,8 +541,8 @@ const BodyCard = () => {
                 >
                   <div className="bg-[#ececec] p-3 rounded-lg">
                     <div className="flex justify-between text-[#444] py-1 font-bold">
-                      <span>قیمت کالاها ({items?.length || 0})</span>
-                      <span>{(totalPrice + amount).toLocaleString()}</span>
+                      <span>قیمت کالاها ({currentItems.filter((e)=>e.parentId===-1)?.length || 0})</span>
+                      <span>{(totalPrice).toLocaleString()}</span>
                     </div>
                     {totalDiscount > 0 && (
                       <div className="flex justify-between text-[#444] py-1 font-bold">
@@ -641,8 +558,8 @@ const BodyCard = () => {
                           <span className="font-bold text-2xl text-[#d1182b]">
                             {(
                               totalPrice -
-                              totalDiscount +
-                              amount
+                              totalDiscount
+                              
                             ).toLocaleString()}
                           </span>
                           <span className="mr-1">تومان</span>

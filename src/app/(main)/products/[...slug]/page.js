@@ -218,7 +218,7 @@ async function ProductContent({ id, searchParams }) {
 
   const onlyPrice = params?.onlyprice === "1" ? "1" : undefined;
   const onlyDiscount = params?.onlydiscount === "1" ? "1" : undefined;
-  const statusId = params?.statusid === "1" ? "1" : undefined;
+  const statusId = params?.statusid ? params?.statusid : undefined;
   const onlyfest = params?.onlyfest === "1" ? "1" : undefined;
   const conditionId = params?.conditionId === "20" ? "20" : undefined;
 

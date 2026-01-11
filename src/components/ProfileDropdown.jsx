@@ -50,6 +50,7 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
   const profileBtnRef = useRef(null);
+  
   const [user, setUser] = useState(null);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
   const [menuAnimate, setMenuAnimate] = useState(false);
@@ -292,7 +293,7 @@ const ProfileDropdown = ({ setIsLoggedIn }) => {
             {/* منو */}
             <div
               ref={dropdownRef}
-              className={`fixed w-64 bg-white/95 shadow-xl rounded-lg z-[99999] transition-all duration-300 ease-out border border-gray-200
+              className={`fixed w-52 sm:w-64 bg-white/95 shadow-xl rounded-lg z-[99999] transition-all duration-300 ease-out border border-gray-200
           ${
             menuAnimate
               ? "opacity-100 scale-100 translate-y-0"

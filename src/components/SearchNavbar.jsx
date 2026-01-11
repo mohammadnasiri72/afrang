@@ -79,7 +79,7 @@ const SearchNavbar = () => {
 
   return (
     <div className="relative w-full lg:hidden flex justify-end" ref={searchRef}>
-      <div className="flex justify-center items-center gap-2 w-full bg-white/10 sm:w-96 rounded-lg px-3 py-1 ">
+      <div className="flex justify-center items-center gap-2 w-full bg-white/20 sm:w-96 rounded-lg px-3 py-1 ">
         <input
           className="outline-none placeholder-white/70 text-sm w-full !text-[16px]"
           type="text"
