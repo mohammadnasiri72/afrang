@@ -1,4 +1,5 @@
 import { mainDomain } from "@/utils/mainDomain";
+import axios from "axios";
 
 // Helper برای ایجاد query string
 const createQueryString = (params) => {
@@ -242,27 +243,27 @@ export const getProductCategory = async (categoryId, id2) => {
 
 export const fetchNotifyAvailable = async (id, token) => {
   try {
-    const url = `${mainDomain}/api/Product/NotifyAvailable/${id}`;
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      // cache: "force-cache",
-      next: { revalidate: 60 },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    return {
-      type: "error",
-      message: "خطای شبکه",
-    };
+    const response = axios
+      .post(
+        `${mainDomain}/api/Product/NotifyAvailable/${id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        return res;
+       
+      })
+      .catch((err) => {
+        return err;
+       
+      });
+      return response
+  } catch (err) {
+    return err
   }
 };

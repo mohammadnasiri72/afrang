@@ -104,6 +104,7 @@ function PaginationProduct({ total }) {
     dispatch(setFilterLoading(true));
     const url = createPageURL(page);
     router.push(url);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handlePageSizeChange = (size) => {

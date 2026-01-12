@@ -20,8 +20,6 @@ function sumAmount(array) {
   return array.reduce((total, current) => total + current.amount, 0);
 }
 
-
-
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const BodyCardSkeleton = () => {
   return (
@@ -103,8 +101,6 @@ const BodyCard = () => {
     // حذف dispatch از اینجا چون در Layout انجام می‌شود
   }, []);
 
- 
-
   useEffect(() => {
     if (mounted && currentItems.length > 0) {
       setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
@@ -132,8 +128,6 @@ const BodyCard = () => {
       const quantity = item.quantity || 0;
       return sum + price * quantity;
     }, 0) || 0;
-
-    
 
   const totalDiscount =
     currentItems?.reduce((sum, item) => {
@@ -202,8 +196,12 @@ const BodyCard = () => {
   const renderCartCounter = (item) => {
     if (cartType === "next") {
       return (
-        <div className="flex items-center justify-center mt-2 text-gray-600">
-          <span className="text-sm">تعداد: {item.quantity}</span>
+        <div className="flex items-center justify-center text-gray-600">
+          {item.quantity > 1 && (
+            <span className="text-sm bg-slate-300 rounded-lg px-3 py-1 font-bold">
+              {item.quantity} عدد
+            </span>
+          )}
         </div>
       );
     }
@@ -368,7 +366,7 @@ const BodyCard = () => {
                           <div className="flex items-center mt-2">
                             <GoShieldCheck className="text-[#666]" />
                             <span className="px-2 sm:text-[13px] text-xs">
-                              ضمانت اصل بودن کالا
+                              ضمانت اsadasdصل بودن کالا
                             </span>
                           </div>
                           {item.conditionId === 20 && (
@@ -411,12 +409,17 @@ const BodyCard = () => {
                         <div>
                           <div className="flex justify-between items-center flex-wrap">
                             <div className="">
-                              {currentItems.filter(
-                                (e) => e.parentId === item.productId
-                              ).length > 0 && (
+                              {(cartType === "next"
+                                ? nextItems
+                                : currentItems
+                              ).filter((e) => e.parentId === item.productId)
+                                .length > 0 && (
                                 <>
                                   <div className="flex flex-wrap justify-start items-center mt-1">
-                                    {currentItems
+                                    {(cartType === "next"
+                                      ? nextItems
+                                      : currentItems
+                                    )
                                       .filter(
                                         (e) => e.parentId === item.productId
                                       )
@@ -488,7 +491,7 @@ const BodyCard = () => {
                         0}
                       )
                     </span>
-                    <span>{(totalPrice).toLocaleString()}</span>
+                    <span>{totalPrice.toLocaleString()}</span>
                   </div>
                   {totalDiscount > 0 && (
                     <div className="flex justify-between text-[#444] py-1 font-bold text-sm">
@@ -503,11 +506,7 @@ const BodyCard = () => {
                         <span className="font-bold text-lg">جمع سبد خرید:</span>
                         <div className="flex items-center">
                           <span className="font-bold text-2xl text-[#d1182b]">
-                            {(
-                              totalPrice -
-                              totalDiscount
-                              
-                            ).toLocaleString()}
+                            {(totalPrice - totalDiscount).toLocaleString()}
                           </span>
                           <span className="mr-1">تومان</span>
                         </div>
@@ -541,8 +540,13 @@ const BodyCard = () => {
                 >
                   <div className="bg-[#ececec] p-3 rounded-lg">
                     <div className="flex justify-between text-[#444] py-1 font-bold">
-                      <span>قیمت کالاها ({currentItems.filter((e)=>e.parentId===-1)?.length || 0})</span>
-                      <span>{(totalPrice).toLocaleString()}</span>
+                      <span>
+                        قیمت کالاها (
+                        {currentItems.filter((e) => e.parentId === -1)
+                          ?.length || 0}
+                        )
+                      </span>
+                      <span>{totalPrice.toLocaleString()}</span>
                     </div>
                     {totalDiscount > 0 && (
                       <div className="flex justify-between text-[#444] py-1 font-bold">
@@ -556,11 +560,7 @@ const BodyCard = () => {
                         <span className="font-bold text-lg">جمع سبد خرید:</span>
                         <div className="flex items-center">
                           <span className="font-bold text-2xl text-[#d1182b]">
-                            {(
-                              totalPrice -
-                              totalDiscount
-                              
-                            ).toLocaleString()}
+                            {(totalPrice - totalDiscount).toLocaleString()}
                           </span>
                           <span className="mr-1">تومان</span>
                         </div>

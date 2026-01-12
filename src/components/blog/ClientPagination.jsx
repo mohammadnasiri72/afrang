@@ -26,6 +26,7 @@ const ClientPagination = ({ current, total, pageSize }) => {
       const newUrl = `${pathname}?${params.toString()}`;
       router.replace(newUrl, { scroll: false });
     }, 300); // 300ms debounce
+    // window.scrollTo({ top: 1000, behavior: "smooth" });
   }, [router, pathname, pageSize]);
 
   return (

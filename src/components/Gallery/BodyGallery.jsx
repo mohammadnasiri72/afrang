@@ -12,7 +12,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaEye, FaRegUser, FaTelegram } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { LuCalendarRange } from "react-icons/lu";
@@ -23,6 +23,7 @@ import BoxImageGallery from "./BoxImageGallery";
 import { Fancybox } from "@fancyapps/ui";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
+import BodyGallerySkeleton from "../skeletons/BodyGallerySkeleton";
 
 Fancybox.defaults.Keyboard = {
   Escape: "close", // کلید ESC گالری را ببندد
@@ -63,6 +64,7 @@ function BodyGallery({
   const [isLoading, setIsLoading] = useState(false);
   const [propertySelected, setPropertySelected] = useState([]);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const params = useParams();
   const pathname = usePathname();
@@ -438,52 +440,70 @@ function BodyGallery({
             </div>
           </div>
         )}
-        {ImagesData.length > 0 && (
-          <div className="flex flex-wrap mt-10">
-            {ImagesData.map((item) => (
-              <BoxImageGallery
-                key={`next-${item.id}`}
-                imageData={item}
-                data-image-id={item.id}
-              />
-            ))}
-            <div
-              dir="ltr"
-              className="w-full flex justify-center mt-8 z-50 relative"
-            >
-              <Pagination
-                current={Number(searchParams.get("page")) || 1}
-                total={ImagesData[0].total}
-                pageSize={16}
-                onChange={(page) => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set("page", page.toString());
-                  router.push(`${pathname}?${params.toString()}`, {
-                    scroll: false,
-                  });
-                }}
-                showSizeChanger={false}
-                itemRender={(page, type, originalElement) => {
-                  if (type === "page") {
-                    const searchParams = new URLSearchParams(
-                      window.location.search
-                    );
-                    searchParams.set("page", page);
-                    return (
-                      <Link
-                        href={`${
-                          window.location.pathname
-                        }?${searchParams.toString()}`}
-                      >
-                        {page}
-                      </Link>
-                    );
-                  }
-                  return originalElement;
-                }}
-              />
-            </div>
-          </div>
+        {isPending ? (
+          <BodyGallerySkeleton />
+        ) : (
+          <>
+            {ImagesData.length > 0 && (
+              <div className="flex flex-wrap mt-10">
+                {ImagesData.map((item) => (
+                  <BoxImageGallery
+                    key={`next-${item.id}`}
+                    imageData={item}
+                    data-image-id={item.id}
+                  />
+                ))}
+                <div
+                  dir="ltr"
+                  className="w-full flex justify-center mt-8 z-50 relative"
+                >
+                  <Pagination
+                    current={Number(searchParams.get("page")) || 1}
+                    total={ImagesData[0].total}
+                    pageSize={16}
+                    onChange={(page) => {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      const params = new URLSearchParams(
+                        searchParams.toString()
+                      );
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      params.set("page", page.toString());
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      startTransition(() => {
+                        router.push(`${pathname}?${params.toString()}`, {
+                          scroll: false,
+                        });
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    showSizeChanger={false}
+                    itemRender={(page, type, originalElement) => {
+                      if (type === "page") {
+                        const searchParams = new URLSearchParams(
+                          window.location.search
+                        );
+                        searchParams.set("page", page);
+                        return (
+                          <Link
+                            href={`${
+                              window.location.pathname
+                            }?${searchParams.toString()}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                          >
+                            {page}
+                          </Link>
+                        );
+                      }
+                      return originalElement;
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         )}
       </Container>
     </>

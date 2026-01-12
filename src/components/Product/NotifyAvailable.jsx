@@ -4,7 +4,7 @@ import { fetchNotifyAvailable } from "@/services/products/productService";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { useRouter } from "next/navigation";
 
-function NotifyAvailable({id}) {
+function NotifyAvailable({ id }) {
   // SweetAlert2 Toast instance
   const Toast = Swal.mixin({
     toast: true,
@@ -17,8 +17,6 @@ function NotifyAvailable({id}) {
 
   const userData = getUserCookie();
   const router = useRouter();
-
-  
 
   return (
     <>
@@ -35,29 +33,32 @@ function NotifyAvailable({id}) {
         data-bs-html="true"
         onClick={async () => {
           if (!userData?.token) {
-            if (typeof window !== 'undefined') {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+            if (typeof window !== "undefined") {
+              localStorage.setItem(
+                "redirectAfterLogin",
+                window.location.pathname
+              );
             }
             router.push("/login");
             return;
           }
           try {
             const res = await fetchNotifyAvailable(id, userData.token);
-            if (res.type === 'error') {
-              Toast.fire({
-                icon: "error",
-                text: res.message || "خطای شبکه",
-              });
-            } else {                
+            if (res.status === 200) {
               Toast.fire({
                 icon: "success",
-                text: res || "درخواست با موفقیت ثبت شد",
+                text: res.data || "درخواست با موفقیت ثبت شد",
+              });
+            } else {
+              Toast.fire({
+                icon: "error",
+                text: res?.response?.data || "خطای شبکه",
               });
             }
           } catch (error) {
             Toast.fire({
               icon: "error",
-              text: error?.message || "خطای شبکه",
+              text: "خطای شبکه",
             });
           }
         }}

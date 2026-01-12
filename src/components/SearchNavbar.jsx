@@ -144,21 +144,32 @@ const SearchNavbar = () => {
                       <h3 className="text-sm font-medium text-gray-900 line-clamp-3">
                         {product.title}
                       </h3>
-                      {!product.priceDesc && (
-                        <div className="mt-1 flex items-center gap-2">
-                          <span className="text-sm font-bold text-[#d1182b]">
-                            {product.finalPrice.toLocaleString()}
-                          </span>
-                          <span className="text-xs text-gray-500">تومان</span>
-                        </div>
-                      )}
-                      {product.priceDesc && (
-                        <div className="mt-1 flex items-center gap-2">
-                          <span className="text-sm font-bold text-[#d1182b]">
-                            {product.priceDesc}
-                          </span>
-                        </div>
-                      )}
+                       {product.priceDesc ? (
+                                <span className="text-sm font-bold text-[#d1182b]">
+                                  {product.priceDesc}
+                                </span>
+                              ) : (
+                                <div className="flex justify-between flex-wrap items-center">
+                                  {product.finalPrice !== "0" && (
+                                    <div className="mt-1 flex items-center gap-2">
+                                      <span className="text-sm font-bold text-[#d1182b]">
+                                        {product.finalPrice.toLocaleString()}
+                                      </span>
+                                      <span className="text-xs text-gray-500">
+                                        تومان
+                                      </span>
+                                    </div>
+                                  )}
+                                  {product.statusDesc &&
+                                    product.statusDesc !== "موجود" && (
+                                      <div className="mt-1 flex items-center gap-2 justify-center">
+                                        <span className="text-xs font-bold text-[#d1182b]">
+                                          {product.statusDesc}
+                                        </span>
+                                      </div>
+                                    )}
+                                </div>
+                              )}
                     </div>
                   </Link>
                 ))}

@@ -1,6 +1,7 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import BodyGallerySkeleton from "@/components/skeletons/BodyGallerySkeleton";
 import HeaderGallerySkeleton from "@/components/skeletons/HeaderGallerySkeleton";
+import MainGallerySkeleton from "@/components/skeletons/MainGallerySkeleton";
 import { getCategory } from "@/services/Category/categoryService";
 import { getGallery } from "@/services/gallery/galleryServices";
 import { getPropertyItem } from "@/services/Property/propertyService";
@@ -49,8 +50,7 @@ export default async function Gallery({ searchParams }) {
     if (result && !result.type && Array.isArray(result)) {
       category = result;
     }
-  } catch (error) {
-  }
+  } catch (error) {}
 
   return (
     <>
@@ -61,9 +61,10 @@ export default async function Gallery({ searchParams }) {
       </div>
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Suspense fallback={<HeaderGallerySkeleton />}>
-          <HeaderGallery category={category} searchParam={searchParam}/>
+          <HeaderGallery category={category} searchParam={searchParam} />
         </Suspense>
-        <Suspense fallback={<HeaderGallerySkeleton />}>
+        <Suspense fallback={<MainGallerySkeleton />}>
+        
           <BodyGallery
             ImagesDataCurent={ImagesDataCurent}
             settings={settings}

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 import Loading from "../Loading";
 
-const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
+const BlogPagination = ({ blogs, searchParams: initialSearchParams , startTransition}) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -24,8 +24,11 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
 
   const handlePageChange = (page) => {
     const url = createPageURL(page);
-    router.push(url);
+     startTransition(() => {
+       router.push(url, { scroll: false });
+      });
     
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handlePageSizeChange = (size) => {
@@ -39,6 +42,7 @@ const BlogPagination = ({ blogs, searchParams: initialSearchParams }) => {
 
     params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
+    
     
   };
 

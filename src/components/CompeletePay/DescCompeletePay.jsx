@@ -70,7 +70,6 @@ export default function DescCompeletePay() {
     (state) => state.shipping.selectedShipping
   );
   const selectedLegal = useSelector((state) => state.legalId.selectedLegal);
-  const [amount, setAmount] = useState(0);
   const [needInvoice, setNeedInvoice] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(true);
   const [estimateData, setEstimateDataLocal] = useState(null);
@@ -87,13 +86,9 @@ export default function DescCompeletePay() {
 
   const descShipping = useSelector((state) => state.shipping.descShipping);
 
-  useEffect(() => {
-    setAmount(sumAmount(currentItems.filter((e) => e.parentId !== -1)));
-  }, [currentItems]);
-
   const totalPrice =
     currentItems
-      ?.filter((e) => e.parentId === -1)
+      // ?.filter((e) => e.parentId === -1)
       ?.reduce((sum, item) => {
         const price = item.price1 || 0;
         const quantity = item.quantity || 0;
@@ -102,7 +97,7 @@ export default function DescCompeletePay() {
 
   const totalDiscount =
     currentItems
-      ?.filter((e) => e.parentId === -1)
+      // ?.filter((e) => e.parentId === -1)
       ?.reduce((sum, item) => {
         const oldPrice = item.price1 || 0;
         const price = item.finalPrice || 0;
@@ -139,6 +134,7 @@ export default function DescCompeletePay() {
           setEstimateDataLocal(null);
           return;
         }
+
         setEstimateDataLocal(response);
       } catch (error) {
         message.error(
@@ -171,7 +167,6 @@ export default function DescCompeletePay() {
         if (action) {
           dispatch(action);
           router.push("/cart/infopay");
-         
         } else {
           console.error("Action is undefined");
         }
@@ -180,7 +175,6 @@ export default function DescCompeletePay() {
       }
     } else {
       router.push("/cart/infopay");
-     
     }
   };
 
@@ -259,7 +253,7 @@ export default function DescCompeletePay() {
                   <span>
                     {estimateData?.productAmount
                       ? estimateData.productAmount.toLocaleString()
-                      : (totalPrice + amount).toLocaleString()}{" "}
+                      : totalPrice.toLocaleString()}{" "}
                     تومان
                   </span>
                 </div>
@@ -358,7 +352,7 @@ export default function DescCompeletePay() {
                       <span className="font-bold text-2xl text-[#d1182b]">
                         {estimateData?.finalAmount
                           ? estimateData.finalAmount.toLocaleString()
-                          : (finalPrice + amount).toLocaleString()}
+                          : finalPrice.toLocaleString()}
                       </span>
                       <span className="mr-1">تومان</span>
                     </div>
@@ -440,7 +434,6 @@ export default function DescCompeletePay() {
                 <Link
                   className="text-red-500 hover:text-red-600 duration-300 font-semibold"
                   href={"/cart"}
-                  
                 >
                   <FaCartShopping className="inline" />
                   <span className="pl-0.5">بازگشت به سبد خرید</span>
@@ -465,7 +458,7 @@ export default function DescCompeletePay() {
                   <span>
                     {estimateData?.productAmount
                       ? estimateData.productAmount.toLocaleString()
-                      : (totalPrice + amount).toLocaleString()}{" "}
+                      : totalPrice.toLocaleString()}{" "}
                     تومان
                   </span>
                 </div>
@@ -560,7 +553,7 @@ export default function DescCompeletePay() {
                       <span className="font-bold text-2xl text-[#d1182b]">
                         {estimateData?.finalAmount
                           ? estimateData.finalAmount.toLocaleString()
-                          : (finalPrice + amount).toLocaleString()}
+                          : finalPrice.toLocaleString()}
                       </span>
                       <span className="mr-1">تومان</span>
                     </div>
@@ -642,7 +635,6 @@ export default function DescCompeletePay() {
                 <Link
                   className="text-red-500 hover:text-red-600 duration-300 font-semibold"
                   href={"/cart"}
-                 
                 >
                   <FaCartShopping className="inline" />
                   <span className="pl-0.5">بازگشت به سبد خرید</span>

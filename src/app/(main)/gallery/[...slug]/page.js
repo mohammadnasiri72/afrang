@@ -1,5 +1,6 @@
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import HeaderGallerySkeleton from "@/components/skeletons/HeaderGallerySkeleton";
+import MainGallerySkeleton from "@/components/skeletons/MainGallerySkeleton";
 import { getCategory } from "@/services/Category/categoryService";
 import { getGallery } from "@/services/gallery/galleryServices";
 import { getPropertyItem } from "@/services/Property/propertyService";
@@ -39,22 +40,21 @@ export default async function GalleryCategory({ params, searchParams }) {
   const ids = ImagesDataCurent.map((item) => item.id).join(",");
   const property = await getPropertyItem(ids);
 
-   let category = [];
-  
-    try {
-      const result = await getCategory({
-        TypeId: 9,
-        LangCode: "fa",
-        Page: 1,
-        PageSize: 100,
-      });
-  
-      // Check if result is an error object or valid array
-      if (result && !result.type && Array.isArray(result)) {
-        category = result;
-      }
-    } catch (error) {
+  let category = [];
+
+  try {
+    const result = await getCategory({
+      TypeId: 9,
+      LangCode: "fa",
+      Page: 1,
+      PageSize: 100,
+    });
+
+    // Check if result is an error object or valid array
+    if (result && !result.type && Array.isArray(result)) {
+      category = result;
     }
+  } catch (error) {}
 
   return (
     <>
@@ -65,9 +65,9 @@ export default async function GalleryCategory({ params, searchParams }) {
       </div>
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Suspense fallback={<HeaderGallerySkeleton />}>
-          <HeaderGallery category={category} searchParam={searchParam}/>
+          <HeaderGallery category={category} searchParam={searchParam} />
         </Suspense>
-        <Suspense fallback={<HeaderGallerySkeleton />}>
+        <Suspense fallback={<MainGallerySkeleton />}>
           <BodyGallery
             ImagesDataCurent={ImagesDataCurent}
             settings={settings}
