@@ -26,17 +26,15 @@
 // async function ProductContent({ id, searchParams }) {
 //   const params = await searchParams;
 //    const queryParts = [];
-  
+
 //   for (const [key, value] of Object.entries(params)) {
 //     // فقط attr ها رو بگیر
 //     if (key.startsWith('attr_')) {
 //       queryParts.push(`${key}=${value}`);
 //     }
 //   }
-  
+
 //   const fullQueryString = queryParts.length > 0 ? `${queryParts.join('&')}` : '';
-  
- 
 
 //   const page = params?.page ? parseInt(params.page) : 1;
 //   const orderBy = params?.orderby ? parseInt(params.orderby) : 5;
@@ -167,13 +165,12 @@
 //   );
 // }
 
-
-
 // app/(main)/product/[...slug]/page.jsx
 import NotFound from "@/app/(main)/not-found";
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
+import SliderCategoryProducts from "@/components/ProductList/SliderCategoryProducts";
 import { getListItemBanner } from "@/services/Item/item";
 import {
   getProductCategory,
@@ -197,17 +194,18 @@ const PaginationProduct = dynamic(() =>
 // کامپوننت اصلی محتوا
 async function ProductContent({ id, searchParams }) {
   const params = await searchParams;
-  
+
   // استخراج پارامترها
   const queryParts = [];
   for (const [key, value] of Object.entries(params)) {
-    if (key.startsWith('attr_')) {
+    if (key.startsWith("attr_")) {
       queryParts.push(`${key}=${value}`);
     }
   }
-  
-  const fullQueryString = queryParts.length > 0 ? `${queryParts.join('&')}` : '';
-  
+
+  const fullQueryString =
+    queryParts.length > 0 ? `${queryParts.join("&")}` : "";
+
   const page = params?.page ? parseInt(params.page) : 1;
   const orderBy = params?.orderby ? parseInt(params.orderby) : 5;
   const layout = params?.layout ? params.layout : "list";
@@ -268,6 +266,7 @@ async function ProductContent({ id, searchParams }) {
               }
             </h1>
           )}
+          <SliderCategoryProducts categories={resultFilter?.categories} />
           <div className="flex flex-col lg:flex-row w-full">
             <FilterProduct
               BannerProduct={BannerProduct}
@@ -292,7 +291,11 @@ async function ProductContent({ id, searchParams }) {
                 </div>
               ) : (
                 <div className="w-full">
-                  <BodyProductList products={products} layout={layout} resultFilter={resultFilter}/>
+                  <BodyProductList
+                    products={products}
+                    layout={layout}
+                    resultFilter={resultFilter}
+                  />
                   <div className="flex justify-center mt-8">
                     <PaginationProduct total={products[0].total} />
                   </div>

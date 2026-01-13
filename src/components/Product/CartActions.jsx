@@ -7,9 +7,19 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../services/cart/cartService";
+import { addToCart, deleteCartItem } from "../../services/cart/cartService";
 import CartCounter from "./CartCounter";
 import SuccessModal from "./SuccessModal";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 function CartActions({ product, warrantySelected }) {
   const dispatch = useDispatch();
@@ -19,51 +29,129 @@ function CartActions({ product, warrantySelected }) {
   );
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const userCookie = Cookies.get("user");
+  if (!userCookie) {
+    const initialData = {
+      token: "",
+      refreshToken: "",
+      expiration: "",
+      userId,
+      displayName: "",
+      roles: [],
+    };
+    Cookies.set("user", JSON.stringify(initialData), {
+      expires: 7,
+      path: "/",
+    });
+  }
+
+  const userId = JSON.parse(Cookies.get("user"))?.userId;
+
+  const selectedInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedInsurance
+  );
+  const selectedIdInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedIdInsurance
+  );
+
+
+  useEffect(() => {
+    if (
+      currentItems.find((e) => e.productId === product.product.productId) &&
+      selectedIdInsurance?.id
+    ) {
+      if (currentItems.find((e) => e.productId === selectedIdInsurance.id)) {
+        handleRemoveInsurance(
+          currentItems.find((e) => e.productId === selectedIdInsurance.id)?.id
+        );
+      } else {
+        handleAddInsurance();
+      }
+    }
+  }, [selectedInsurance]);
 
   // Ensure currentItems is always an array
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray.filter(
     (item) => item.productId === product?.product?.productId
-    // &&
-    //   (item.colorId === selectedColor?.id || !selectedColor)
   );
 
-  useEffect(() => {
-    const userData = getUserCookie();
-    setUserId(userData?.userId || null);
-  }, []);
+  const handleRemoveInsurance = async (id) => {
+    try {
+      await deleteCartItem(id, userId);
+      dispatch(fetchCurrentCart());
+      Toast.fire({
+        icon: "success",
+        text: "بیمه با موفقیت حذف شد",
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        text: "مشکلی در حذف بیمه پیش آمده است",
+      });
+      console.error("Error removing item:", error);
+    } finally {
+    }
+  };
 
-  const handleAddToCart = async () => {
-    const userCookie = Cookies.get("user");
-    if (!userCookie) {
-      const initialData = {
-        token: "",
-        refreshToken: "",
-        expiration: "",
-        userId,
-        displayName: "",
-        roles: [],
-      };
-      Cookies.set("user", JSON.stringify(initialData), {
-        expires: 7,
-        path: "/",
+  const handleAddInsurance = async () => {
+    const response = await addToCart(
+      selectedIdInsurance.id || -1,
+      -1,
+      userId,
+      1,
+      -1,
+      product?.product?.productId,
+      selectedIdInsurance.finalPrice
+    );
+    if (response) {
+      dispatch(fetchCurrentCart());
+      Toast.fire({
+        icon: "success",
+        text: "بیمه با موفقیت اضافه شد",
       });
     }
+  };
 
-    const userId = JSON.parse(Cookies.get("user"))?.userId;
-
+  const handleAddToCart = async () => {
     try {
       setIsLoading(true);
-      const response = await addToCart(
-        product?.product?.productId,
-        warrantySelected?.id ? warrantySelected?.id : -1,
-        userId,
-        1,
-        selectedColor?.id
-      );
-      if (response) {
+      // const response = await addToCart(
+      //   product?.product?.productId,
+      //   warrantySelected?.id ? warrantySelected?.id : -1,
+      //   userId,
+      //   1,
+      //   selectedColor?.id
+      // );
+      // if (response) {
+      //   dispatch(fetchCurrentCart());
+      //   setShowSuccessModal(true);
+      // }
+
+      const response = await Promise.all([
+        addToCart(
+          product?.product?.productId,
+          warrantySelected?.id ? warrantySelected?.id : -1,
+          userId,
+          1,
+          selectedColor?.id || -1
+        ),
+        selectedInsurance.length > 0 &&
+          selectedInsurance.map((selected) => {
+            addToCart(
+              selected?.id || -1,
+              -1,
+              userId,
+              1,
+              -1,
+              product?.product?.productId,
+              selected.finalPrice
+            );
+          }),
+      ]);
+      if (response[0]) {
         dispatch(fetchCurrentCart());
         setShowSuccessModal(true);
       }
@@ -76,7 +164,7 @@ function CartActions({ product, warrantySelected }) {
 
   return (
     <>
-      <div className="mt-5 flex flex-col gap-2">
+      <div className="mt-5 flex flex-col gap-2 ">
         {product.canAddCart ? (
           cartItem &&
           cartItem.length > 0 &&
@@ -86,21 +174,16 @@ function CartActions({ product, warrantySelected }) {
             <div className="flex flex-col justify-center items-center">
               <CartCounter
                 quantity={
-                 cartItem.filter((e) =>
-            selectedColor ? e.colorId === selectedColor?.id : e
-          )[0]
-                    .quantity
+                  cartItem.filter((e) =>
+                    selectedColor ? e.colorId === selectedColor?.id : e
+                  )[0].quantity
                 }
                 cartId={
-                 cartItem.filter((e) =>
-            selectedColor ? e.colorId === selectedColor?.id : e
-          )[0].id
+                  cartItem.filter((e) =>
+                    selectedColor ? e.colorId === selectedColor?.id : e
+                  )[0].id
                 }
-                // ctrl={
-                //   product?.inventory?.inventorySetting?.showQtyControl
-                //     ? false
-                //     : true
-                // }
+               
               />
             </div>
           ) : (
@@ -125,7 +208,9 @@ function CartActions({ product, warrantySelected }) {
         ) : (
           <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
             <FaCartShopping className="text-[#333]" />
-            <span className="!text-[#333]">{product?.product?.statusDesc}</span>
+            <span className="!text-[#333]">
+              {product?.product?.statusTitle}
+            </span>
           </button>
         )}
       </div>

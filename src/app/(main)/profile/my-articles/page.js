@@ -317,7 +317,6 @@ export default function MyArticles() {
       setEditingLoading((prev) => ({ ...prev, [article.id]: false }));
     }
   };
-
   const handleDelete = async () => {
     if (!selectedArticleId) return;
 
@@ -330,6 +329,9 @@ export default function MyArticles() {
         });
         return;
       }
+
+     
+      
 
       const response = await deleteUserNews(selectedArticleId, user.token);
 

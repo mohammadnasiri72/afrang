@@ -366,7 +366,7 @@ const BodyCard = () => {
                           <div className="flex items-center mt-2">
                             <GoShieldCheck className="text-[#666]" />
                             <span className="px-2 sm:text-[13px] text-xs">
-                              ضمانت اsadasdصل بودن کالا
+                              ضمانت اصل بودن کالا
                             </span>
                           </div>
                           {item.conditionId === 20 && (

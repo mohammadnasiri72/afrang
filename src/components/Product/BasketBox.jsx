@@ -14,15 +14,19 @@ import ModalInstallment from "./ModalInstallment";
 import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
-function BasketBox({ product }) {
-
+function BasketBox({ product}) {
+   const selectedInsurance = useSelector(
+      (state) => state.selectedInsurance.selectedInsurance
+    );
+    
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
   );
   const [openModal, setOpenModal] = useState(false);
-  const [insuranceSelected, setInsuranceSelected] = useState([]);
   const [warrantySelected, setWarrantySelected] = useState(null);
+
+  
 
   let filteredArray = [];
 
@@ -36,20 +40,9 @@ function BasketBox({ product }) {
       );
   }, [currentItems, product]);
 
-  useEffect(() => {
-    const childCurrentItems = currentItems.filter(
-      (e) => e.parentId === product?.product?.productId
-    );
-    if (childCurrentItems.length > 0) {
-      setInsuranceSelected(filteredArray);
-    } else {
-      setInsuranceSelected([]);
-    }
-  }, [product, currentItems]);
+ 
 
-  const insur = currentItems?.find(
-    (e) => e.parentId === product?.product?.productId
-  );
+ 
 
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode
@@ -143,8 +136,8 @@ function BasketBox({ product }) {
             </div>
           )}
           {/* افزودن بیمه */}
-          {insuranceSelected?.length > 0 &&
-            insuranceSelected.map((insurance) => (
+          {selectedInsurance?.length > 0 &&
+            selectedInsurance.map((insurance) => (
               <div
                 key={insurance.id}
                 className="flex justify-between px-1 mt-1 items-center bg-blue-50 rounded-md py-2 text-blue-700 border border-blue-200"
@@ -183,7 +176,12 @@ function BasketBox({ product }) {
               }
             </div>
           )}
-          <div className="sm:block hidden mb-2!">
+          {product?.product?.statusDesc && (
+            <div className="bg-blue-100 text-blue-700 flex justify-center rounded-sm py-1 mt-2! sm:mb-0! mb-2! font-bold">
+              {product?.product?.statusDesc}
+            </div>
+          )}
+          <div className=" mb-2!">
             <CartActions
               product={product}
               warrantySelected={warrantySelected}

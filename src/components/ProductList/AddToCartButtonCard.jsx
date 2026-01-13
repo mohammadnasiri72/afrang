@@ -4,7 +4,7 @@ import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { message } from "antd";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import { addToCart } from "../../services/cart/cartService";
 import { getProductId } from "../../services/products/productService";
 import ModalAddtoBasket from "../ModalAddtoBasket";
 import DeleteProductModal from "../Product/DeleteProductModal";
+import { setSelectedInsurance } from "@/redux/slices/selectedInsurance";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -29,6 +30,11 @@ const AddToCartButtonCard = ({ productId, accessory }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const selectedInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedInsurance
+  );
+
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top-start",
@@ -39,6 +45,10 @@ const AddToCartButtonCard = ({ productId, accessory }) => {
   });
 
   const dispatch = useDispatch();
+
+   useEffect(() => {
+      dispatch(setSelectedInsurance([]));
+    }, [isModalOpen]);
 
   const handleAddToCart = async () => {
     try {
@@ -92,16 +102,46 @@ const AddToCartButtonCard = ({ productId, accessory }) => {
       } else {
         userId = userData.userId;
       }
-      const response = await addToCart(
-        productId,
-        selectedWarranty?.id || -1,
-        userId,
-        1,
-        selectedColorId ?? -1
-      );
+      // const response = await addToCart(
+      //   productId,
+      //   selectedWarranty?.id || -1,
+      //   userId,
+      //   1,
+      //   selectedColorId ?? -1
+      // );
 
+      // setIsModalOpen(false);
+      // if (response) {
+      //   dispatch(fetchCurrentCart());
+      //   dispatch(fetchNextCart());
+      //   Toast.fire({
+      //     icon: "success",
+      //     text: "محصول با موفقیت به سبد خرید اضافه شد",
+      //   });
+      // }
+      const response = await Promise.all([
+        addToCart(
+          productId,
+          selectedWarranty?.id || -1,
+          userId,
+          1,
+          selectedColorId ?? -1
+        ),
+        selectedInsurance.length > 0 &&
+          selectedInsurance.map((selected) => {
+            addToCart(
+              selected?.id || -1,
+              -1,
+              userId,
+              1,
+              -1,
+              productId,
+              selected.finalPrice
+            );
+          }),
+      ]);
       setIsModalOpen(false);
-      if (response) {
+      if (response[0]) {
         dispatch(fetchCurrentCart());
         dispatch(fetchNextCart());
         Toast.fire({

@@ -14,6 +14,7 @@ import cartReducer from "./slices/cartSlice";
 import discountReducer from "./slices/discountSlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import idEditReducer from "./slices/idEditSec";
+import selectedInsuranceReducer from "./slices/selectedInsurance";
 import layoutProductsReducer from "./slices/layoutProducts";
 import legalIdReducer from "./slices/legalIdSlice";
 import menuResReducer from "./slices/menuResSlice";
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   activeTab: activeTabReducer,
   popups: popupsReducer,
   idEdit: idEditReducer,
+  selectedInsurance: selectedInsuranceReducer,
 });
 
 const persistConfig = {

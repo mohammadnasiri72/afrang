@@ -64,9 +64,9 @@ setLoading(true)
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3  w-full">
       <div className="flex items-center gap-2">
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full">
           {
             <div className="flex items-center border border-[#d1182b] w-28 rounded-lg">
               <div className="w-1/3">

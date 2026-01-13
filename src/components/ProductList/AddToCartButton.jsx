@@ -4,7 +4,7 @@ import { fetchCurrentCart, fetchNextCart } from "@/redux/slices/cartSlice";
 import { getUserCookie } from "@/utils/cookieUtils";
 import { message } from "antd";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -12,6 +12,7 @@ import { addToCart } from "../../services/cart/cartService";
 import { getProductId } from "../../services/products/productService";
 import ModalAddtoBasket from "../ModalAddtoBasket";
 import CartCounter from "../Product/CartCounter";
+import { setSelectedInsurance } from "@/redux/slices/selectedInsurance";
 
 const generateRandomUserId = () => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -23,9 +24,14 @@ const AddToCartButton = ({ productId, compare }) => {
   const cartItem = itemsArray?.find((item) => item.productId === productId);
   const [product, setProduct] = useState(null);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
+
   const [selectedColorId, setSelectedColorId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const selectedInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedInsurance
+  );
 
   const Toast = Swal.mixin({
     toast: true,
@@ -37,6 +43,9 @@ const AddToCartButton = ({ productId, compare }) => {
   });
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setSelectedInsurance([]));
+  }, [isModalOpen]);
 
   const handleAddToCart = async () => {
     try {
@@ -90,15 +99,45 @@ const AddToCartButton = ({ productId, compare }) => {
       } else {
         userId = userData.userId;
       }
-      const response = await addToCart(
-        productId,
-        selectedWarranty?.id || -1,
-        userId,
-        1,
-        selectedColorId ?? -1
-      );
-       setIsModalOpen(false);
-      if (response) {
+      // const response = await addToCart(
+      //   productId,
+      //   selectedWarranty?.id || -1,
+      //   userId,
+      //   1,
+      //   selectedColorId ?? -1
+      // );
+      // setIsModalOpen(false);
+      // if (response) {
+      //   dispatch(fetchCurrentCart());
+      //   dispatch(fetchNextCart());
+      //   Toast.fire({
+      //     icon: "success",
+      //     text: "محصول با موفقیت به سبد خرید اضافه شد",
+      //   });
+      // }
+      const response = await Promise.all([
+        addToCart(
+          productId,
+          selectedWarranty?.id || -1,
+          userId,
+          1,
+          selectedColorId ?? -1
+        ),
+        selectedInsurance.length > 0 &&
+          selectedInsurance.map((selected) => {
+            addToCart(
+              selected?.id || -1,
+              -1,
+              userId,
+              1,
+              -1,
+              productId,
+              selected.finalPrice
+            );
+          }),
+      ]);
+      setIsModalOpen(false);
+      if (response[0]) {
         dispatch(fetchCurrentCart());
         dispatch(fetchNextCart());
         Toast.fire({
@@ -106,16 +145,11 @@ const AddToCartButton = ({ productId, compare }) => {
           text: "محصول با موفقیت به سبد خرید اضافه شد",
         });
       }
-     
     } catch (error) {
-      // message.error("خطا در افزودن به سبد خرید");
+      message.error("خطا در افزودن به سبد خرید");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleWarrantyChange = (e) => {
-    setSelectedWarranty(e.target.value);
   };
 
   return (

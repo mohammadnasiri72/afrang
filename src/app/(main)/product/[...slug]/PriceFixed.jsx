@@ -16,6 +16,49 @@ export default function PriceFixed({ product }) {
   }
 
   const { currentItems } = useSelector((state) => state.cart);
+  const selectedColor = useSelector(
+    (state) => state.productColor.selectedColorMode
+  );
+
+   const userCookie = Cookies.get("user");
+    if (!userCookie) {
+      const initialData = {
+        token: "",
+        refreshToken: "",
+        expiration: "",
+        userId: null,
+        displayName: "",
+        roles: [],
+      };
+      Cookies.set("user", JSON.stringify(initialData), {
+        expires: 7,
+        path: "/",
+      });
+    }
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
+   const selectedInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedInsurance
+  );
+
+   const selectedIdInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedIdInsurance
+  );
+
+
+  useEffect(() => {
+    if (
+      currentItems.find((e) => e.productId === product.product.productId) &&
+      selectedIdInsurance?.id
+    ) {
+      if (currentItems.find((e) => e.productId === selectedIdInsurance.id)) {
+        handleRemoveInsurance(
+          currentItems.find((e) => e.productId === selectedIdInsurance.id)?.id
+        );
+      } else {
+        handleAddInsurance();
+      }
+    }
+  }, [selectedInsurance]);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray?.find(
     (item) => item.productId === product?.product?.productId
@@ -39,33 +82,85 @@ export default function PriceFixed({ product }) {
   }, []);
 
   const handleAddToCartMobile = async () => {
-    const userCookie = Cookies.get("user");
-    if (!userCookie) {
-      const initialData = {
-        token: "",
-        refreshToken: "",
-        expiration: "",
-        userId: null,
-        displayName: "",
-        roles: [],
-      };
-      Cookies.set("user", JSON.stringify(initialData), {
-        expires: 7,
-        path: "/",
-      });
-    }
-    const userId = JSON.parse(Cookies.get("user"))?.userId;
+   
     try {
       setIsLoading(true);
-      await addToCart(product?.product?.productId, selectedWarranty, userId);
-      dispatch(fetchCurrentCart());
-      setShowSuccessModal(true);
+      // await addToCart(product?.product?.productId, selectedWarranty, userId);
+      // dispatch(fetchCurrentCart());
+      // setShowSuccessModal(true);
+
+
+      const response = await Promise.all([
+        addToCart(
+          product?.product?.productId,
+          selectedWarranty ? selectedWarranty : -1,
+          userId,
+          1,
+          selectedColor?.id || -1
+        ),
+        selectedInsurance.length > 0 &&
+          selectedInsurance.map((selected) => {
+            addToCart(
+              selected?.id || -1,
+              -1,
+              userId,
+              1,
+              -1,
+              product?.product?.productId,
+              selected.finalPrice
+            );
+          }),
+      ]);
+      if (response[0]) {
+        dispatch(fetchCurrentCart());
+        setShowSuccessModal(true);
+      }
+
+
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
+
+   const handleRemoveInsurance = async (id) => {
+      try {
+        await deleteCartItem(id, userId);
+        dispatch(fetchCurrentCart());
+        Toast.fire({
+          icon: "success",
+          text: "بیمه با موفقیت حذف شد",
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          text: "مشکلی در حذف بیمه پیش آمده است",
+        });
+        console.error("Error removing item:", error);
+      } finally {
+      }
+    };
+  
+    const handleAddInsurance = async () => {
+      const response = await addToCart(
+        selectedIdInsurance.id || -1,
+        -1,
+        userId,
+        1,
+        -1,
+        product?.product?.productId,
+        selectedIdInsurance.finalPrice
+      );
+      if (response) {
+        dispatch(fetchCurrentCart());
+        Toast.fire({
+          icon: "success",
+          text: "بیمه با موفقیت اضافه شد",
+        });
+      }
+    };
 
   return (
     <>
@@ -112,7 +207,7 @@ export default function PriceFixed({ product }) {
             ) : (
               <button className="flex items-center bg-[#e1e1e1] !text-[#666] px-5 py-2 rounded-lg font-semibold cursor-not-allowed">
                 <FaCartShopping className="ml-2" />
-                {product?.product?.statusDesc}
+                {product?.product?.statusTitle}
               </button>
             )}
           </div>

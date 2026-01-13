@@ -24,7 +24,6 @@ function GridProductCard({ product }) {
               onClick={(e) => {
                 e.preventDefault();
                 router.push(product.url);
-               
               }}
             >
               {product.image && (
@@ -85,9 +84,7 @@ function GridProductCard({ product }) {
                 <ShowImgProduct product={product} />
               </div>
               <div className="w-full">
-                <CompareButtonBtn
-                  id={product?.productId}
-                />
+                <CompareButtonBtn id={product?.productId} />
               </div>
             </div>
           </div>
@@ -97,7 +94,6 @@ function GridProductCard({ product }) {
             onClick={(e) => {
               e.preventDefault();
               router.push(product.url);
-             
             }}
             className="font-semibold text-lg text-center !mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
           >
@@ -155,6 +151,11 @@ function GridProductCard({ product }) {
                 )}
               </div>
             )}
+            {product.statusDesc && (
+              <div className="bg-blue-100 text-blue-700 flex justify-center rounded-sm py-1 my-2 font-bold w-full">
+                {product.statusDesc}
+              </div>
+            )}
             {product.canAddCart ? (
               <>
                 <AddToCartButton productId={product.productId} />
@@ -163,7 +164,7 @@ function GridProductCard({ product }) {
             ) : (
               <button className="w-full flex items-center justify-center gap-2 bg-[#e1e1e1] !text-[#000] py-2 rounded-sm">
                 <FaCartShopping />
-                <span>{product.statusDesc}</span>
+                <span>{product.statusTitle}</span>
               </button>
             )}
           </div>

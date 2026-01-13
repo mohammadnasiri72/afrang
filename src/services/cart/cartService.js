@@ -72,8 +72,6 @@ export const moveToCurrentCart = async (id) => {
 };
 
 export const updateCart = async (cartId, updateType, userId) => {
- 
-  
   try {
     const response = await axios.put(`${mainDomain}/api/Cart/${cartId}`, {
       langCode: "fa",

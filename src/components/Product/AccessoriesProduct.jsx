@@ -196,7 +196,7 @@ function AccessoriesProduct({ relatedProducts }) {
                               {!item.canAddCart && (
                                 <div className="mt-auto flex items-center gap-1 text-xs text-[#666] bg-[#e1e1e1] px-2 py-1 rounded">
                                   <SlBasket className="text-base text-[#333]" />
-                                  <span>{item.statusDesc}</span>
+                                  <span>{item.statusTitle}</span>
                                 </div>
                               )}
                             </div>
@@ -317,7 +317,7 @@ function AccessoriesProduct({ relatedProducts }) {
                       {!item.canAddCart && (
                         <div className="mt-auto flex items-center gap-1 text-xs text-[#333] bg-[#e1e1e1] px-2 py-1 rounded">
                           <SlBasket className="text-base text-[#333]" />
-                          <span>{item.statusDesc}</span>
+                          <span>{item.statusTitle}</span>
                         </div>
                       )}
                     </div>

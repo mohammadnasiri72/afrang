@@ -36,7 +36,6 @@ function ProductCard({ product }) {
                     onClick={(e) => {
                       e.preventDefault();
                       router.push(product.url);
-                     
                     }}
                     className="relative"
                   >
@@ -81,9 +80,7 @@ function ProductCard({ product }) {
                     <ShowImgProduct product={product} />
                   </div>
                   <div className="w-full">
-                    <CompareButtonBtn
-                      id={product?.productId}
-                    />
+                    <CompareButtonBtn id={product?.productId} />
                   </div>
                 </div>
                 <div
@@ -126,13 +123,19 @@ function ProductCard({ product }) {
                 </div>
               </div>
             </div>
-
+            <div className="px-3">
+              {product.statusDesc && (
+                <div className="bg-blue-100 text-blue-700 flex justify-center rounded-sm py-1 my-2 font-bold">
+                  {product.statusDesc}
+                </div>
+              )}
+            </div>
             {/* دکمه‌های عملیات */}
             <div className="px-3 pb-3">
               {!product.canAddCart ? (
                 <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm text-sm">
                   <FaCartShopping className="!text-[#000]" />
-                  <span className="!text-[#000]">{product.statusDesc}</span>
+                  <span className="!text-[#000]">{product.statusTitle}</span>
                 </button>
               ) : (
                 <div className="flex flex-col gap-2">
@@ -148,11 +151,7 @@ function ProductCard({ product }) {
           <div className="hidden lg:flex w-full h-52 overflow-hidden">
             <div className=" min-w-52 max-w-52 relative flex items-start justify-center ">
               <div className="relative overflow-hidden rounded-lg group ">
-                <Link
-                  href={product.url}
-                  prefetch={false}
-                  className="relative "
-                >
+                <Link href={product.url} prefetch={false} className="relative ">
                   {product.image && (
                     <Image
                       className={`object-contain! p-2! rounded-lg w-full h-full transition-all duration-300 group-hover:scale-105 group-hover:brightness-110  ${
@@ -204,9 +203,7 @@ function ProductCard({ product }) {
                     <ShowImgProduct product={product} />
                   </div>
                   <div className="w-full">
-                    <CompareButtonBtn
-                      id={product?.productId}
-                    />
+                    <CompareButtonBtn id={product?.productId} />
                   </div>
                 </div>
               </div>
@@ -242,13 +239,18 @@ function ProductCard({ product }) {
               <div className=" w-5/12 bg-[#f9f9f9] lg:px-8 h-52 flex flex-col">
                 <div className="flex flex-col w-full h-full flex-1">
                   <PriceProduct product={product} />
+                  {product.statusDesc && (
+                    <div className="bg-blue-100 text-blue-700 flex justify-center rounded-sm py-1 my-2 font-bold">
+                      {product.statusDesc}
+                    </div>
+                  )}
                   {/* دکمه افزودن به سبد خرید یا وضعیت */}
                   <div className="w-full mb-2">
                     {!product.canAddCart && (
                       <button className="flex items-center bg-[#e1e1e1] w-full p-2 justify-center gap-2 rounded-sm">
                         <FaCartShopping className="!text-[#000]" />
                         <span className="!text-[#000]">
-                          {product.statusDesc}
+                          {product.statusTitle}
                         </span>
                       </button>
                     )}

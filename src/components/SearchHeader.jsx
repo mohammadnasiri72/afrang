@@ -206,11 +206,11 @@ const SearchHeader = () => {
                                       </span>
                                     </div>
                                   )}
-                                  {product.statusDesc &&
-                                    product.statusDesc !== "موجود" && (
+                                  {product.statusTitle &&
+                                    product.statusTitle !== "موجود" && (
                                       <div className="mt-1 flex items-center gap-2 justify-center">
                                         <span className="text-xs font-bold text-[#d1182b]">
-                                          {product.statusDesc}
+                                          {product.statusTitle}
                                         </span>
                                       </div>
                                     )}

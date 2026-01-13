@@ -5,6 +5,7 @@ import { FaCheck } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import SelectedInsurance from "./Product/SelectedInsurance";
 import WarrantiesModal from "./WarrantiesModal";
+import { useEffect } from "react";
 
 function ModalAddtoBasket({
   isModalOpen,
@@ -17,13 +18,16 @@ function ModalAddtoBasket({
   setSelectedColorId,
   handleConfirm,
 }) {
-  const handleWarrantyChange = (e) => {
-    setSelectedWarranty(e.target.value);
-  };
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
   );
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setSelectedWarranty(null);
+    }
+  }, [isModalOpen]);
 
   return (
     <>
@@ -78,51 +82,24 @@ function ModalAddtoBasket({
                 </div>
               </div>
             </div>
-            {product?.insurance?.insuranceWays?.length > 0 && (
-              <SelectedInsurance product={product} />
-            )}
             {/* گارانتی‌ها */}
             {product?.warranty?.warrantyWays.length > 0 && (
-              // <div className="mt-3">
-              //   <h4 className="font-semibold text-gray-800 text-sm !mb-2">
-              //     انتخاب گارانتی
-              //   </h4>
-              //   <Radio.Group
-              //     onChange={handleWarrantyChange}
-              //     value={selectedWarranty}
-              //   >
-              //     {product?.warranty?.warrantyWays.map((warranty) => (
-              //       <Radio
-              //         className={`border border-[#0003] !p-2 rounded-2xl !mt-1 w-full relative ${
-              //           warranty.id === selectedWarranty?.id
-              //             ? "!bg-[#4A90E255]"
-              //             : ""
-              //         }`}
-              //         key={warranty.id}
-              //         value={warranty}
-              //       >
-              //         <div className="!w-full">
-              //           {warranty.finalPrice > 0 && (
-              //             <div className="flex items-center gap-1">
-              //               <span>{warranty.finalPrice.toLocaleString()}</span>
-              //               <span>تومان</span>
-              //             </div>
-              //           )}
-              //             {warranty.title} {warranty.desc}
-              //         </div>
-              //       </Radio>
-              //     ))}
-              //   </Radio.Group>
-              // </div>
               <div className="w-auto flex">
                 <WarrantiesModal
                   warrantiesArray={product.warranty.warrantyWays}
                   disabled={isInCart}
                   warrantySelected={selectedWarranty}
                   setWarrantySelected={setSelectedWarranty}
+                  isModalOpen={isModalOpen}
                 />
               </div>
             )}
+            {product?.insurance?.insuranceWays?.length > 0 && (
+              <SelectedInsurance
+                product={product}
+              />
+            )}
+
             {/* رنگ‌ها */}
             {product?.productModes && product.productModes.length > 0 && (
               <div className="mt-3">

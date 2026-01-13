@@ -187,9 +187,9 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                 <div className="divide-y divide-gray-100">
                   {/* Table Header */}
                   <div className="hidden sm:grid grid-cols-12 gap-4 p-4 bg-gray-50 text-sm font-bold! text-gray-600">
-                    <div className="col-span-7">عنوان محصول</div>
-                    <div className="col-span-2 text-center">وضعیت</div>
-                    <div className="col-span-3 text-center">قیمت</div>
+                    <div className="col-span-5">عنوان محصول</div>
+                    <div className="col-span-3 text-center">وضعیت</div>
+                    <div className="col-span-4 text-center">قیمت</div>
                   </div>
                   {filteredProducts.length === 0 ? (
                     <NoResults />
@@ -200,7 +200,7 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                         className="p-4 hover:bg-gray-50 transition-colors duration-200"
                       >
                         <div className="grid grid-cols-12 gap-4 items-center">
-                          <div className="col-span-12 sm:col-span-7 text-center sm:text-right">
+                          <div className="col-span-12 sm:col-span-5 text-center sm:text-right">
                             <Link
                               href={product.url}
                               className="text-gray-900 hover:text-[#18d1be] transition-colors duration-200"
@@ -208,7 +208,7 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                               {product.title}
                             </Link>
                           </div>
-                          <div className="col-span-6 sm:col-span-2 flex justify-center">
+                          <div className="col-span-6 sm:col-span-3 flex justify-center flex-col items-center">
                             <span
                               className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${
                                 product.statusId === 1
@@ -216,10 +216,13 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                                   : "bg-red-100 text-red-800"
                               }`}
                             >
+                              {product.statusTitle}
+                            </span>
+                            <span className="px-1 text-xs">
                               {product.statusDesc}
                             </span>
                           </div>
-                          <div className="col-span-6 sm:col-span-3 flex flex-col sm:flex-row items-center justify-center gap-2">
+                          <div className="col-span-6 sm:col-span-4 flex flex-col sm:flex-row items-center justify-center gap-2">
                             {product.discount > 0 &&
                               product.showOffPercent &&
                               !isNaN(product.price) &&

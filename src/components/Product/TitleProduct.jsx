@@ -1,8 +1,9 @@
+
 import BasketBox from "./BasketBox";
 import DescProductDetails from "./DescProductDetails";
 import SliderProductDetails from "./SliderProductDetails";
 
-function TitleProduct({ product , similarProducts}) {
+function TitleProduct({ product, similarProducts }) {
   // ساخت آبجکت جدید برای تصویر اصلی با همان ساختار attachments
   const mainImageAttachment = product?.product?.image
     ? {
@@ -63,13 +64,15 @@ function TitleProduct({ product , similarProducts}) {
         )}
 
         <div className="lg:w-[60%] w-full p-2">
-          <DescProductDetails product={product} similarProducts={similarProducts}/>
+          <DescProductDetails
+            product={product}
+            similarProducts={similarProducts}
+          />
         </div>
         <div className="lg:hidden w-full p-2 ">
           <BasketBox product={product} />
         </div>
       </div>
-      
     </>
   );
 }

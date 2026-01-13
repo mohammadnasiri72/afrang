@@ -167,7 +167,7 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
                         <div className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 absolute bottom-0 sm:translate-y-full group-hover:translate-y-[0%] cursor-not-allowed">
                           <SlBasket className="text-xl text-[#333]" />
                           <span className="px-1 text-[#333]">
-                            {product.statusDesc}
+                            {product.statusTitle}
                           </span>
                         </div>
                       )}

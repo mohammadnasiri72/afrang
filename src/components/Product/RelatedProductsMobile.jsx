@@ -168,13 +168,13 @@ function RelatedProductsMobile({ products }) {
                         <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:flex hidden justify-center items-center py-2 !text-white rounded-b-lg translate-y-[90%] group-hover:translate-y-0 duration-300 absolute font-bold">
                           <SlBasket className="text-xl text-[#333]" />
                           <span className="px-1 text-[#666]">
-                            {product.statusDesc}
+                            {product.statusTitle}
                           </span>
                         </div>
                         <div className="bg-[#e1e1e1] bottom-0 left-0 right-0 overflow-hidden sm:hidden flex  justify-center items-center py-2 !text-white rounded-b-lg  duration-300 font-bold absolute">
                           <SlBasket className="text-xl text-[#333]" />
                           <span className="px-1 text-[#666]">
-                            {product.statusDesc}
+                            {product.statusTitle}
                           </span>
                         </div>
                       </div>
