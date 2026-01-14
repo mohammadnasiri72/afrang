@@ -214,7 +214,7 @@ function BoxShowInformationBank({ id }) {
               <FaMobile className="text-blue-500 text-sm" />
               <span className="text-gray-600 text-sm">شماره موبایل</span>
               <span
-                onClick={handleSMS}
+                // onClick={handleSMS}
                 className="font-semibold text-gray-800 text-sm mr-auto"
               >
                 {paymentInfo.mobile}

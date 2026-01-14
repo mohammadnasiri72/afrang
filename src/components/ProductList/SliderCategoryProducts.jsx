@@ -18,6 +18,7 @@ function SliderCategoryProducts({ categories }) {
           modules={[Autoplay, Navigation]}
           spaceBetween={16}
           slidesPerView={1.5}
+          loop={true}
           navigation
           autoplay={{
             delay: 2000,
@@ -88,7 +89,6 @@ function SliderCategoryProducts({ categories }) {
             font-size: 16px;
           }
           .category-slider .swiper-button-disabled {
-            opacity: 0.5;
           }
         `}</style>
       </div>

@@ -83,7 +83,7 @@ const SearchNavbar = () => {
         <input
           className="outline-none placeholder-white/70 text-sm w-full !text-[16px]"
           type="text"
-          placeholder="جستجو..."
+          placeholder="جستجو...(حداقل سه حرف)"
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => searchTerm.length >= 3 && setShowResults(true)}

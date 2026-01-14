@@ -256,16 +256,20 @@ async function ProductContent({ id, searchParams }) {
       </div>
       <div className="bg-[#f6f6f6] overflow-hidden py-5 max-w-[1600px] mx-auto">
         <div className="xl:px-16">
-          {productCategory?.breadcrumb[productCategory?.breadcrumb?.length - 1]
-            ?.title && (
-            <h1 className="text-2xl font-bold text-[#d1182b] px-5">
-              {
-                productCategory?.breadcrumb[
-                  productCategory?.breadcrumb?.length - 1
-                ]?.title
-              }
-            </h1>
-          )}
+          <div className="flex items-center justify-between">
+            {productCategory?.breadcrumb[
+              productCategory?.breadcrumb?.length - 1
+            ]?.title && (
+              <h1 className="text-2xl! font-bold! text-[#d1182b] px-5">
+                {
+                  productCategory?.breadcrumb[
+                    productCategory?.breadcrumb?.length - 1
+                  ]?.title
+                }
+              </h1>
+            )}
+            <span className="text-2xl font-bold text-[#d1182b] px-5">{products[0].total} محصول</span>
+          </div>
           <SliderCategoryProducts categories={resultFilter?.categories} />
           <div className="flex flex-col lg:flex-row w-full">
             <FilterProduct

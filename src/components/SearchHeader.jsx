@@ -117,7 +117,7 @@ const SearchHeader = () => {
         <input
           className="bg-transparent border-none outline-none p-2 w-full !text-[16px]"
           type="text"
-          placeholder="جستجو..."
+          placeholder="جستجو...(حداقل سه حرف)"
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => searchTerm.length >= 2 && setShowResults(true)}

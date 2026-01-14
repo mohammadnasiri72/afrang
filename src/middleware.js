@@ -22,51 +22,59 @@ const staticPaths = ["/_next", "/static", "/images", "/public", "/assets"];
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  
+
   // خواندن صحیح cookie با روش پیشرفته
   let userToken = null;
   let isAuthenticated = false;
-  
+
   try {
     // روش اول: استفاده از request.cookies API جدید
-    const userCookieValue = request.cookies.get('user')?.value;
-    
+    const userCookieValue = request.cookies.get("user")?.value;
+
     if (userCookieValue) {
       try {
         // decode کردن مقدار cookie (ممکن است URL encoded باشد)
         const decodedCookie = decodeURIComponent(userCookieValue);
         const userData = JSON.parse(decodedCookie);
         userToken = userData?.token;
-        
+
         // اعتبارسنجی اولیه توکن
-        if (userToken && typeof userToken === 'string' && userToken.trim().length > 10) {
+        if (
+          userToken &&
+          typeof userToken === "string" &&
+          userToken.trim().length > 10
+        ) {
           isAuthenticated = true;
         }
       } catch (parseError) {
         // console.error("Error parsing user cookie (method 1):", parseError);
       }
     }
-    
+
     // روش دوم: خواندن از headers برای backward compatibility
     if (!isAuthenticated) {
-      const cookieHeader = request.headers.get('cookie');
+      const cookieHeader = request.headers.get("cookie");
       if (cookieHeader) {
         // تبدیل string cookies به object
         const cookies = Object.fromEntries(
-          cookieHeader.split(';').map(cookie => {
-            const [key, ...values] = cookie.trim().split('=');
-            return [key, values.join('=')];
+          cookieHeader.split(";").map((cookie) => {
+            const [key, ...values] = cookie.trim().split("=");
+            return [key, values.join("=")];
           })
         );
-        
-        const altUserCookie = cookies['user'];
+
+        const altUserCookie = cookies["user"];
         if (altUserCookie) {
           try {
             const decodedCookie = decodeURIComponent(altUserCookie);
             const userData = JSON.parse(decodedCookie);
             userToken = userData?.token;
-            
-            if (userToken && typeof userToken === 'string' && userToken.trim().length > 10) {
+
+            if (
+              userToken &&
+              typeof userToken === "string" &&
+              userToken.trim().length > 10
+            ) {
               isAuthenticated = true;
             }
           } catch (error) {
@@ -75,26 +83,21 @@ export async function middleware(request) {
         }
       }
     }
-    
-   
-    
   } catch (error) {
     // console.error("Middleware - General authentication error:", error);
   }
 
   // بررسی مسیرهای محافظت شده
-  const isProtectedRoute = protectedRoutes.some((route) => 
-    pathname === route || pathname.startsWith(route + '/')
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/")
   );
-  
+
   if (isProtectedRoute) {
-    
     if (!isAuthenticated) {
-      
       // ایجاد URL login با return_url برای بازگشت به صفحه اصلی
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('return_url', pathname);
-      
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("return_url", pathname);
+
       return NextResponse.redirect(loginUrl, {
         status: 302, // استفاده از 302 به جای 301 برای login redirect
       });
@@ -303,8 +306,11 @@ export async function middleware(request) {
           break;
         }
       }
-
-      if (productId !== null) {
+      if (productId <= 0) {
+        return NextResponse.redirect(new URL("/useds/-1", request.url), {
+          status: 301,
+        });
+      } else if (productId !== null) {
         const productCategory = await getProductSecId(productId);
         const decodedPathname = decodeURIComponent(pathname);
 
@@ -452,8 +458,11 @@ export async function middleware(request) {
 
   // اضافه کردن header برای دیباگ
   const response = NextResponse.next();
-  response.headers.set('X-Middleware-Auth-Status', isAuthenticated ? 'authenticated' : 'guest');
-  
+  response.headers.set(
+    "X-Middleware-Auth-Status",
+    isAuthenticated ? "authenticated" : "guest"
+  );
+
   return response;
 }
 

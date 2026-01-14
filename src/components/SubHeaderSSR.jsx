@@ -3,6 +3,7 @@ import SubHeader from "./SubHeader";
 
 async function SubHeaderSSR() {
   const popupsList = await getPopUpsData();
+  
   return <SubHeader popupsList={popupsList} />;
 }
 

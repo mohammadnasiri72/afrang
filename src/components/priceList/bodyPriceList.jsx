@@ -43,7 +43,7 @@ export default function BodyPriceList({ categories }) {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[#0a1d39] !mb-2 group-hover:text-[#18d1be] transition-colors duration-300">
+                  <h3 className="text-lg text-center font-semibold text-[#0a1d39] !mb-2 group-hover:text-[#18d1be] transition-colors duration-300">
                     {category.title}
                   </h3>
                 </div>
