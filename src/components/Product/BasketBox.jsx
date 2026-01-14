@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Divider } from "antd";
+import { Button, Divider } from "antd";
 import { useEffect, useState } from "react";
 import { FaCreditCard } from "react-icons/fa";
 import { FaRecycle, FaTruck, FaTruckFast } from "react-icons/fa6";
@@ -14,19 +14,17 @@ import ModalInstallment from "./ModalInstallment";
 import NotifyAvailable from "./NotifyAvailable";
 import Warranties from "./Warranties";
 
-function BasketBox({ product}) {
-   const selectedInsurance = useSelector(
-      (state) => state.selectedInsurance.selectedInsurance
-    );
-    
+function BasketBox({ product }) {
+  const selectedInsurance = useSelector(
+    (state) => state.selectedInsurance.selectedInsurance
+  );
+
   const { currentItems } = useSelector((state) => state.cart);
   const isInCart = currentItems?.some(
     (item) => item.productId === product?.product?.productId
   );
   const [openModal, setOpenModal] = useState(false);
   const [warrantySelected, setWarrantySelected] = useState(null);
-
-  
 
   let filteredArray = [];
 
@@ -39,10 +37,6 @@ function BasketBox({ product}) {
         )
       );
   }, [currentItems, product]);
-
- 
-
- 
 
   const selectedColor = useSelector(
     (state) => state.productColor.selectedColorMode

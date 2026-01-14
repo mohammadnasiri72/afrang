@@ -11,7 +11,7 @@ function SelectedInsurance({
             <CheckboxInsurance
               key={e.id}
               insurance={e}
-             
+             product={product}
              
             />
           ))}

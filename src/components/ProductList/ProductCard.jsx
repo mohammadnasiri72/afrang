@@ -139,8 +139,6 @@ function ProductCard({ product }) {
                 </button>
               ) : (
                 <div className="flex flex-col gap-2">
-                  {/* <CompareButton id={product?.productId} /> */}
-                  {/* <LikeProduct productId={product?.productId} /> */}
                   <AddToCartButton productId={product.productId} />
                 </div>
               )}

@@ -52,25 +52,9 @@ function CartActions({ product, warrantySelected }) {
   const selectedInsurance = useSelector(
     (state) => state.selectedInsurance.selectedInsurance
   );
-  const selectedIdInsurance = useSelector(
-    (state) => state.selectedInsurance.selectedIdInsurance
-  );
+ 
 
-
-  useEffect(() => {
-    if (
-      currentItems.find((e) => e.productId === product.product.productId) &&
-      selectedIdInsurance?.id
-    ) {
-      if (currentItems.find((e) => e.productId === selectedIdInsurance.id)) {
-        handleRemoveInsurance(
-          currentItems.find((e) => e.productId === selectedIdInsurance.id)?.id
-        );
-      } else {
-        handleAddInsurance();
-      }
-    }
-  }, [selectedInsurance]);
+ 
 
   // Ensure currentItems is always an array
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
@@ -78,57 +62,11 @@ function CartActions({ product, warrantySelected }) {
     (item) => item.productId === product?.product?.productId
   );
 
-  const handleRemoveInsurance = async (id) => {
-    try {
-      await deleteCartItem(id, userId);
-      dispatch(fetchCurrentCart());
-      Toast.fire({
-        icon: "success",
-        text: "بیمه با موفقیت حذف شد",
-      });
-    } catch (error) {
-      Toast.fire({
-        icon: "error",
-        text: "مشکلی در حذف بیمه پیش آمده است",
-      });
-      console.error("Error removing item:", error);
-    } finally {
-    }
-  };
-
-  const handleAddInsurance = async () => {
-    const response = await addToCart(
-      selectedIdInsurance.id || -1,
-      -1,
-      userId,
-      1,
-      -1,
-      product?.product?.productId,
-      selectedIdInsurance.finalPrice
-    );
-    if (response) {
-      dispatch(fetchCurrentCart());
-      Toast.fire({
-        icon: "success",
-        text: "بیمه با موفقیت اضافه شد",
-      });
-    }
-  };
+ 
 
   const handleAddToCart = async () => {
     try {
       setIsLoading(true);
-      // const response = await addToCart(
-      //   product?.product?.productId,
-      //   warrantySelected?.id ? warrantySelected?.id : -1,
-      //   userId,
-      //   1,
-      //   selectedColor?.id
-      // );
-      // if (response) {
-      //   dispatch(fetchCurrentCart());
-      //   setShowSuccessModal(true);
-      // }
 
       const response = await Promise.all([
         addToCart(
@@ -183,7 +121,6 @@ function CartActions({ product, warrantySelected }) {
                     selectedColor ? e.colorId === selectedColor?.id : e
                   )[0].id
                 }
-               
               />
             </div>
           ) : (

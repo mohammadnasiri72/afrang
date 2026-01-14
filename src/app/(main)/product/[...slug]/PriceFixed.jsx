@@ -1,13 +1,23 @@
 "use client";
 import SuccessModal from "@/components/Product/SuccessModal";
 import { fetchCurrentCart } from "@/redux/slices/cartSlice";
-import { addToCart } from "@/services/cart/cartService";
+import { addToCart, deleteCartItem } from "@/services/cart/cartService";
 import { Spin } from "antd";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import PriceProduct from "./PriceProduct";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-start",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: "toast-modal",
+});
 
 export default function PriceFixed({ product }) {
   // Check if product exists and has required data
@@ -20,45 +30,31 @@ export default function PriceFixed({ product }) {
     (state) => state.productColor.selectedColorMode
   );
 
-   const userCookie = Cookies.get("user");
-    if (!userCookie) {
-      const initialData = {
-        token: "",
-        refreshToken: "",
-        expiration: "",
-        userId: null,
-        displayName: "",
-        roles: [],
-      };
-      Cookies.set("user", JSON.stringify(initialData), {
-        expires: 7,
-        path: "/",
-      });
-    }
-    const userId = JSON.parse(Cookies.get("user"))?.userId;
-   const selectedInsurance = useSelector(
+  const userCookie = Cookies.get("user");
+  if (!userCookie) {
+    const initialData = {
+      token: "",
+      refreshToken: "",
+      expiration: "",
+      userId: null,
+      displayName: "",
+      roles: [],
+    };
+    Cookies.set("user", JSON.stringify(initialData), {
+      expires: 7,
+      path: "/",
+    });
+  }
+  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  const selectedInsurance = useSelector(
     (state) => state.selectedInsurance.selectedInsurance
   );
 
-   const selectedIdInsurance = useSelector(
-    (state) => state.selectedInsurance.selectedIdInsurance
-  );
+ 
+
+ 
 
 
-  useEffect(() => {
-    if (
-      currentItems.find((e) => e.productId === product.product.productId) &&
-      selectedIdInsurance?.id
-    ) {
-      if (currentItems.find((e) => e.productId === selectedIdInsurance.id)) {
-        handleRemoveInsurance(
-          currentItems.find((e) => e.productId === selectedIdInsurance.id)?.id
-        );
-      } else {
-        handleAddInsurance();
-      }
-    }
-  }, [selectedInsurance]);
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
   const cartItem = itemsArray?.find(
     (item) => item.productId === product?.product?.productId
@@ -76,19 +72,19 @@ export default function PriceFixed({ product }) {
   );
   const dispatch = useDispatch();
 
+   
+
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const handleAddToCartMobile = async () => {
-   
     try {
       setIsLoading(true);
       // await addToCart(product?.product?.productId, selectedWarranty, userId);
       // dispatch(fetchCurrentCart());
       // setShowSuccessModal(true);
-
 
       const response = await Promise.all([
         addToCart(
@@ -115,8 +111,6 @@ export default function PriceFixed({ product }) {
         dispatch(fetchCurrentCart());
         setShowSuccessModal(true);
       }
-
-
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -124,43 +118,25 @@ export default function PriceFixed({ product }) {
     }
   };
 
+  const handleRemoveInsurance = async (id) => {
+    try {
+      await deleteCartItem(id, userId);
+      dispatch(fetchCurrentCart());
+      Toast.fire({
+        icon: "success",
+        text: "بیمه با موفقیت حذف شد",
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        text: "مشکلی در حذف بیمه پیش آمده است",
+      });
+      console.error("Error removing item:", error);
+    } finally {
+    }
+  };
 
-   const handleRemoveInsurance = async (id) => {
-      try {
-        await deleteCartItem(id, userId);
-        dispatch(fetchCurrentCart());
-        Toast.fire({
-          icon: "success",
-          text: "بیمه با موفقیت حذف شد",
-        });
-      } catch (error) {
-        Toast.fire({
-          icon: "error",
-          text: "مشکلی در حذف بیمه پیش آمده است",
-        });
-        console.error("Error removing item:", error);
-      } finally {
-      }
-    };
-  
-    const handleAddInsurance = async () => {
-      const response = await addToCart(
-        selectedIdInsurance.id || -1,
-        -1,
-        userId,
-        1,
-        -1,
-        product?.product?.productId,
-        selectedIdInsurance.finalPrice
-      );
-      if (response) {
-        dispatch(fetchCurrentCart());
-        Toast.fire({
-          icon: "success",
-          text: "بیمه با موفقیت اضافه شد",
-        });
-      }
-    };
+ 
 
   return (
     <>
@@ -192,7 +168,9 @@ export default function PriceFixed({ product }) {
                   {isLoading ? (
                     <>
                       <Spin className="custom-spin" size="small" />
-                      <span className="whitespace-nowrap">در حال افزودن...</span>
+                      <span className="whitespace-nowrap">
+                        در حال افزودن...
+                      </span>
                     </>
                   ) : (
                     <>

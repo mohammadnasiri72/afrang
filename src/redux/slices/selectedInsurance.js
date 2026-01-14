@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   selectedInsurance: [],
-  selectedIdInsurance: null,
 };
 
 const selectedInsuranceSlice = createSlice({
@@ -12,11 +11,10 @@ const selectedInsuranceSlice = createSlice({
     setSelectedInsurance: (state, action) => {
       state.selectedInsurance = action.payload;
     },
-    setSelectedIdInsurance: (state, action) => {
-      state.selectedIdInsurance = action.payload;
-    },
+   
+   
   },
 });
 
-export const { setSelectedInsurance , setSelectedIdInsurance} = selectedInsuranceSlice.actions;
+export const { setSelectedInsurance  } = selectedInsuranceSlice.actions;
 export default selectedInsuranceSlice.reducer;
