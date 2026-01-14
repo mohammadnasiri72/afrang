@@ -90,7 +90,6 @@ export default async function ProductList({ searchParams }) {
     categories = [];
   }
 
-
   return (
     <>
       {/* 4. بررسی Breadcrumb */}
@@ -112,7 +111,9 @@ export default async function ProductList({ searchParams }) {
                 {products?.title}
               </h1>
             )}
-            <SliderCategoryProducts categories={categories}/>
+            {categories.length > 1 && (
+              <SliderCategoryProducts categories={categories} />
+            )}
             {/* 5. بررسی کامپوننت ProductListWithFilters */}
             <Suspense fallback={<ProductListSkeleton />}>
               <ProductListWithFilters searchParams={params} />

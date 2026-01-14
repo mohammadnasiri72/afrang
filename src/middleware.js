@@ -306,8 +306,8 @@ export async function middleware(request) {
           break;
         }
       }
-      if (productId <= 0) {
-        return NextResponse.redirect(new URL("/useds/-1", request.url), {
+      if (productId === -1) {
+        return NextResponse.redirect(new URL("/buyers/-1", request.url), {
           status: 301,
         });
       } else if (productId !== null) {

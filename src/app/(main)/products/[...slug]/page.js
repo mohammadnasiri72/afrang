@@ -268,9 +268,13 @@ async function ProductContent({ id, searchParams }) {
                 }
               </h1>
             )}
-            <span className="text-2xl font-bold text-[#d1182b] px-5">{products[0].total} محصول</span>
+            <span className="text-2xl font-bold text-[#d1182b] px-5">
+              {products[0]?.total || 0} محصول
+            </span>
           </div>
-          <SliderCategoryProducts categories={resultFilter?.categories} />
+          {resultFilter?.categories.length > 1 && (
+            <SliderCategoryProducts categories={resultFilter?.categories} />
+          )}
           <div className="flex flex-col lg:flex-row w-full">
             <FilterProduct
               BannerProduct={BannerProduct}

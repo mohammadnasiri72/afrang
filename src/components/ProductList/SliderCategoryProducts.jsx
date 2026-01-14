@@ -18,13 +18,13 @@ function SliderCategoryProducts({ categories }) {
           modules={[Autoplay, Navigation]}
           spaceBetween={16}
           slidesPerView={1.5}
-          loop={true}
           navigation
-          autoplay={{
-            delay: 2000,
-            disableOnInteraction: false,
-          }}
-          speed={1000}
+          // loop={true}
+          // autoplay={{
+          //   delay: 2000,
+          //   disableOnInteraction: false,
+          // }}
+          // speed={1000}
           breakpoints={{
             640: {
               slidesPerView: 1.5,
@@ -89,6 +89,7 @@ function SliderCategoryProducts({ categories }) {
             font-size: 16px;
           }
           .category-slider .swiper-button-disabled {
+            pointer-events: visible !important;
           }
         `}</style>
       </div>

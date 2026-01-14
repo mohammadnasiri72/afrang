@@ -12,7 +12,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 export default function SubHeader({ popupsList }) {
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [dataPopup, setDataPopup] = useState({});
   const pathname = usePathname();
 
