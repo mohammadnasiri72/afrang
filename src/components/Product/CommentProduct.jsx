@@ -85,7 +85,9 @@ function CommentItem({ comment, onReply, replyTo, onReplySent, depth = 0 }) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <span className="font-bold">{comment.name}</span>
+            <span className="font-bold">
+              {comment.userName ? comment.fullName : comment.name}
+            </span>
             <span className="text-xs text-gray-500">
               {formatPersianDate(comment.created)}
             </span>

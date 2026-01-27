@@ -81,7 +81,7 @@ export default function ProductMainUser({ products }) {
                       href={product.url ? product.url : "#"}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start"
                     >
-                      <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px]">
+                      <h3 className="text-justify line-clamp-1 w-full font-bold text-[16px] font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                         {product.title}
                       </h3>
                     </Link>

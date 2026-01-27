@@ -132,7 +132,7 @@ const TransactionResult = () => {
                   <Button
                     onClick={() => {
                       router.push(
-                        invoice ? `/payment/link/${invoice}` : `/payment/link`
+                        invoice ? `/plid/${invoice}` : `/plid`
                       );
                      
                     }}

@@ -128,7 +128,7 @@ function BoxSellSec({ productList }) {
                 <Link
                   href={product.url}
                  
-                  className="hover:text-[#d1182b] transition-colors"
+                  className="hover:text-[#d1182b] transition-colors font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                 >
                   {product.title}
                 </Link>
@@ -235,7 +235,7 @@ function BoxSellSec({ productList }) {
             <Link
               href={product.url}
               
-              className="hover:text-[#d1182b] transition-colors"
+              className="hover:text-[#d1182b] transition-colors font-[YekanEn,sans-serif]! line-height-font-yekanEn"
             >
               {product.title}
             </Link>

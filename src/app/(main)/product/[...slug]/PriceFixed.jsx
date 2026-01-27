@@ -30,22 +30,25 @@ export default function PriceFixed({ product }) {
     (state) => state.productColor.selectedColorMode
   );
 
-  const userCookie = Cookies.get("user");
-  if (!userCookie) {
-    const initialData = {
-      token: "",
-      refreshToken: "",
-      expiration: "",
-      userId: null,
-      displayName: "",
-      roles: [],
-    };
-    Cookies.set("user", JSON.stringify(initialData), {
-      expires: 7,
-      path: "/",
-    });
-  }
-  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  useEffect(()=>{
+    const userCookie = Cookies.get("user");
+    if (!userCookie) {
+      const initialData = {
+        token: "",
+        refreshToken: "",
+        expiration: "",
+        userId: null,
+        displayName: "",
+        roles: [],
+      };
+      Cookies.set("user", JSON.stringify(initialData), {
+        expires: 7,
+        path: "/",
+      });
+    }
+
+  },[])
+  
   const selectedInsurance = useSelector(
     (state) => state.selectedInsurance.selectedInsurance
   );
@@ -80,11 +83,10 @@ export default function PriceFixed({ product }) {
   }, []);
 
   const handleAddToCartMobile = async () => {
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
     try {
       setIsLoading(true);
-      // await addToCart(product?.product?.productId, selectedWarranty, userId);
-      // dispatch(fetchCurrentCart());
-      // setShowSuccessModal(true);
+     
 
       const response = await Promise.all([
         addToCart(
@@ -118,23 +120,7 @@ export default function PriceFixed({ product }) {
     }
   };
 
-  const handleRemoveInsurance = async (id) => {
-    try {
-      await deleteCartItem(id, userId);
-      dispatch(fetchCurrentCart());
-      Toast.fire({
-        icon: "success",
-        text: "بیمه با موفقیت حذف شد",
-      });
-    } catch (error) {
-      Toast.fire({
-        icon: "error",
-        text: "مشکلی در حذف بیمه پیش آمده است",
-      });
-      console.error("Error removing item:", error);
-    } finally {
-    }
-  };
+  
 
  
 

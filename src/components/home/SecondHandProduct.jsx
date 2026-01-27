@@ -179,7 +179,7 @@ function SecondHandProduct({ oldProducts }) {
                   href={product.url}
                   className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
                 >
-                  <h3 className="text-justify line-clamp-3 w-full">
+                  <h3 className="text-justify line-clamp-3 w-full font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                     {product.title}
                   </h3>
                 </Link>

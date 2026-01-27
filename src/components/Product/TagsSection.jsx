@@ -10,7 +10,7 @@ const TagsSection = ({ data }) => {
           <Link
             key={item.id}
             href={item.url}
-            className="inline-flex items-center px-2 py-1 bg-white text-[#555] text-xs font-medium rounded-lg border border-gray-200 hover:bg-[#d1182b] hover:text-white hover:border-[#d1182b] transition-all duration-300 shadow-sm hover:shadow-md"
+            className="inline-flex items-center px-2 py-1 bg-white text-[#555] text-xs font-medium rounded-lg border border-gray-200 hover:bg-[#d1182b] hover:text-white hover:border-[#d1182b] transition-all duration-300 shadow-sm hover:shadow-md font-[YekanEn,sans-serif]! line-height-font-yekanEn"
           >
             {item.title}
           </Link>

@@ -166,7 +166,6 @@
 // }
 
 // app/(main)/product/[...slug]/page.jsx
-import NotFound from "@/app/(main)/not-found";
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import ProductListSkeleton from "@/components/ProductList/ProductListSkeleton";
@@ -178,7 +177,10 @@ import {
 } from "@/services/products/productService";
 import { getCategoryChild } from "@/services/Property/propertyService";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
+import { FaArrowRight, FaHome, FaSearch } from "react-icons/fa";
 import { FaBoxOpen } from "react-icons/fa6";
 
 const BodyProductList = dynamic(() =>
@@ -243,8 +245,38 @@ async function ProductContent({ id, searchParams }) {
       getListItemBanner(),
     ]);
 
-  if (products.type === "error") {
-    return NotFound();
+  if (!productCategory.ok && !productCategory?.breadcrumb) {
+    return (
+     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center relative z-50">
+          <div className="!mb-8">
+            <Image
+              src="/images/404.png"
+              alt="404 Illustration"
+              width={256}
+              height={256}
+              className="mx-auto"
+              priority
+            />
+          </div>
+          <span className="text-4xl font-bold text-gray-800 !mb-4">
+            صفحه مورد نظر یافت نشد
+          </span>
+          <p className="text-gray-600 !mb-8">
+            متأسفانه صفحه ای که به دنبال آن هستید وجود ندارد یا حذف شده است.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/"
+              className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
+            >
+              <FaHome />
+              صفحه اصلی
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -260,7 +292,7 @@ async function ProductContent({ id, searchParams }) {
             {productCategory?.breadcrumb[
               productCategory?.breadcrumb?.length - 1
             ]?.title && (
-              <h1 className="text-2xl! font-bold! text-[#d1182b] px-5">
+              <h1 className="sm:text-2xl! font-bold! text-[#d1182b] px-5">
                 {
                   productCategory?.breadcrumb[
                     productCategory?.breadcrumb?.length - 1
@@ -268,8 +300,13 @@ async function ProductContent({ id, searchParams }) {
                 }
               </h1>
             )}
-            <span className="text-2xl font-bold text-[#d1182b] px-5">
-              {products[0]?.total || 0} محصول
+            <span className="sm:text-2xl font-bold text-[#d1182b] px-5">
+              {products[0]?.total || 0} محصول{" "}
+              {conditionId === "20"
+                ? "کارکرده"
+                : statusId === "7"
+                ? "آرشیو شده"
+                : ""}
             </span>
           </div>
           {resultFilter?.categories.length > 1 && (

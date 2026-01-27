@@ -187,18 +187,18 @@ const SearchHeader = () => {
                               />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-sm font-medium text-gray-900 line-clamp-3">
+                              <h3 className="text-[13px] font-medium text-gray-900 line-clamp-3 font-[YekanEn,sans-serif]!">
                                 {product.title}
                               </h3>
                               {product.priceDesc ? (
-                                <span className="text-sm font-bold text-[#d1182b]">
+                                <span className="text-[13px] font-bold text-[#d1182b]">
                                   {product.priceDesc}
                                 </span>
                               ) : (
                                 <div className="flex justify-between flex-wrap items-center">
                                   {product.finalPrice !== "0" && (
                                     <div className="mt-1 flex items-center gap-2">
-                                      <span className="text-sm font-bold text-[#d1182b]">
+                                      <span className="text-[13px] font-bold text-[#d1182b]">
                                         {product.finalPrice.toLocaleString()}
                                       </span>
                                       <span className="text-xs text-gray-500">

@@ -10,6 +10,13 @@ function CustomRouteLoaderContent() {
   const pathname = usePathname();
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
+
+  useEffect(() => {
     // Monkey patch کردن router.push و router.replace
     const originalPush = router.push;
     const originalReplace = router.replace;
@@ -35,10 +42,9 @@ function CustomRouteLoaderContent() {
       if (!href) return;
 
       // فقط لینک‌های داخلی
-      const isInternalLink = 
-        href.startsWith("/") || 
-        href.startsWith(window.location.origin);
-      
+      const isInternalLink =
+        href.startsWith("/") || href.startsWith(window.location.origin);
+
       if (!isInternalLink) return;
 
       // ignore موارد خاص
@@ -55,7 +61,7 @@ function CustomRouteLoaderContent() {
       }
 
       e.preventDefault();
-      
+
       startTransition(() => {
         router.push(href);
       });
@@ -71,7 +77,8 @@ function CustomRouteLoaderContent() {
   }, [router, startTransition]);
 
   if (!isPending) return null;
-  return <Loading />;
+  // return <Loading />;
+  return null;
 }
 
 export default function CustomRouteLoader() {

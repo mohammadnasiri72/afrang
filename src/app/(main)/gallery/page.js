@@ -54,17 +54,20 @@ export default async function Gallery({ searchParams }) {
 
   return (
     <>
+    
       <div className="bg-white">
         <div className="overflow-hidden max-w-[1600px] mx-auto">
           <BreadcrumbMain breadcrumb={[{ title: "گالری کاربران" }]} />
         </div>
       </div>
+      
       <div className="bg-[#f6f6f6] overflow-hidden max-w-[1600px] mx-auto">
         <Suspense fallback={<HeaderGallerySkeleton />}>
           <HeaderGallery category={category} searchParam={searchParam} />
         </Suspense>
+       
         <Suspense fallback={<MainGallerySkeleton />}>
-        
+       
           <BodyGallery
             ImagesDataCurent={ImagesDataCurent}
             settings={settings}

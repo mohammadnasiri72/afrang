@@ -198,6 +198,16 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                     </li>
                   ))}
                 </ul>
+                <div className=" flex justify-center">
+                  <Link
+                    target="_blank"
+                    href={
+                      "https://trustseal.enamad.ir/?id=308830&Code=9d6pzy1Mr4leQbMigsJs"
+                    }
+                  >
+                    <img src="/public/images/enamad.jpeg" alt="enamad" />
+                  </Link>
+                </div>
               </div>
               <div className="sm:hidden flex justify-center gap-2 items-center mt-3 border-b w-full pb-3 border-[#6666] sm:border-none">
                 {/* Social networks section */}
@@ -338,9 +348,9 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
               </div>
             </div>
 
-            <div className="lg:w-1/3 sm:w-1/2 w-full p-3 sm:text-start text-center">
+            <div className="lg:w-1/3 w-full p-3 sm:text-start text-center">
               <div className="sm:flex hidden flex-wrap  items-center w-full justify-end">
-                <div className="">
+                <div className="flex ">
                   <ul className="flex flex-wrap items-start w-full px-2">
                     {footerMenu[0]?.menuItems?.map((menuItem) => (
                       <li key={menuItem.id} className="list-none p-1">
@@ -353,6 +363,14 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                       </li>
                     ))}
                   </ul>
+                  <Link
+                   target="_blank"
+                    href={
+                      "https://trustseal.enamad.ir/?id=308830&Code=9d6pzy1Mr4leQbMigsJs"
+                    }
+                  >
+                    <img src="/public/images/enamad.jpeg" alt="enamad" />
+                  </Link>
                 </div>
               </div>
             </div>

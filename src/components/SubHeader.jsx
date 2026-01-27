@@ -29,7 +29,9 @@ export default function SubHeader({ popupsList }) {
 
   const handleClose = () => {
     setOpenModal(false);
-    localStorage.setItem("showPopups", true);
+    if (popupSite?.showNumber === "once") {
+      localStorage.setItem("seenPopupSite", true);
+    }
   };
 
   useEffect(() => {
@@ -41,168 +43,131 @@ export default function SubHeader({ popupsList }) {
     }
   }, [popupsList]);
 
+  const popupHeader = popupsList?.find((e) => e.category === "popup_header");
+  const popupSite = popupsList?.find((e) => e.category === "popup_site");
+
+  const isShowPopupSite =
+    (popupSite?.showInPage === "all" ||
+      (popupSite?.showInPage === "main" && pathname === "/")) &&
+    !localStorage.getItem("seenPopupSite");
+
   return (
     <>
-      {
-        <>
-          {popupsList?.find((e) => e.category === "popup_header") && (
-            <>
-              {popupsList.length > 0 ? (
-                <div className="h-10  !overflow-hidden">
-                  <div className="hidden">
-                    <h4>
-                      {
-                        popupsList?.find((e) => e.category === "popup_header")
-                          ?.title
-                      }
-                    </h4>
+      {popupHeader && (
+        <div className="h-10  !overflow-hidden">
+          <div className="hidden">
+            <h4>{popupHeader?.title}</h4>
+            <div
+              style={{
+                color: popupHeader?.color,
+              }}
+              className="sm:block hidden"
+              dangerouslySetInnerHTML={renderHTML(popupHeader?.desktopBody)}
+            />
+            <div
+              style={{
+                color: popupHeader?.color,
+              }}
+              className="sm:hidden block"
+              dangerouslySetInnerHTML={renderHTML(popupHeader?.mobileBody)}
+            />
+          </div>
+          {(popupHeader?.showInPage === "all" ||
+            (popupHeader?.showInPage === "main" && pathname === "/")) && (
+            <div className="z-[1200] relative !overflow-hidden">
+              {popupHeader?.id && (
+                <div
+                  className={`marquee flex items-center py-3 w-full !overflow-hidden h-10 !text-white text-sm`}
+                  style={{
+                    direction: "ltr",
+                    backgroundColor: popupHeader?.backgroundColor,
+                  }}
+                >
+                  <Marquee
+                    speed={50}
+                    gradient={false}
+                    direction="right"
+                    className="!overflow-hidden"
+                  >
                     <div
                       style={{
-                        color: popupsList?.find(
-                          (e) => e.category === "popup_header"
-                        )?.color,
+                        color: popupHeader?.color,
                       }}
-                      className="sm:block hidden"
+                      className="sm:block hidden mt-2"
                       dangerouslySetInnerHTML={renderHTML(
-                        popupsList?.find((e) => e.category === "popup_header")
-                          ?.desktopBody
+                        popupHeader?.desktopBody
                       )}
                     />
                     <div
                       style={{
-                        color: popupsList?.find(
-                          (e) => e.category === "popup_header"
-                        )?.color,
+                        color: popupHeader?.color,
                       }}
-                      className="sm:hidden block"
+                      className="sm:hidden block mt-2"
                       dangerouslySetInnerHTML={renderHTML(
-                        popupsList?.find((e) => e.category === "popup_header")
-                          .mobileBody
+                        popupHeader?.mobileBody
                       )}
                     />
-                  </div>
-                  {(popupsList?.find((e) => e.category === "popup_header")
-                    ?.showInPage === "all" ||
-                    (popupsList?.find((e) => e.category === "popup_header")
-                      ?.showInPage === "main" &&
-                      pathname === "/")) && (
-                    <div className="z-[1200] relative !overflow-hidden">
-                      {popupsList?.find((e) => e.category === "popup_header")
-                        ?.id && (
-                        <div
-                          className={`marquee flex items-center py-3 w-full !overflow-hidden h-10 !text-white text-sm`}
-                          style={{
-                            direction: "ltr",
-                            backgroundColor: popupsList?.find(
-                              (e) => e.category === "popup_header"
-                            ).backgroundColor,
-                          }}
-                        >
-                          <Marquee
-                            speed={50}
-                            gradient={false}
-                            direction="right"
-                            className="!overflow-hidden"
-                          >
-                            <div
-                              style={{
-                                color: popupsList?.find(
-                                  (e) => e.category === "popup_header"
-                                ).color,
-                              }}
-                              className="sm:block hidden mt-2"
-                              dangerouslySetInnerHTML={renderHTML(
-                                popupsList?.find(
-                                  (e) => e.category === "popup_header"
-                                )?.desktopBody
-                              )}
-                            />
-                            <div
-                              style={{
-                                color: popupsList?.find(
-                                  (e) => e.category === "popup_header"
-                                ).color,
-                              }}
-                              className="sm:hidden block mt-2"
-                              dangerouslySetInnerHTML={renderHTML(
-                                popupsList?.find(
-                                  (e) => e.category === "popup_header"
-                                )?.mobileBody
-                              )}
-                            />
-                          </Marquee>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  </Marquee>
                 </div>
-              ) : (
-                <div className="h-10 bg-slate-400"></div>
               )}
-            </>
+            </div>
           )}
+        </div>
+      )}
 
-          {(dataPopup?.showInPage === "all" ||
-            (dataPopup?.showInPage === "main" && pathname === "/")) &&
-            (dataPopup?.showNumber === "all" || isShowPopups !== "true") && (
-              <Dialog
-                fullWidth={500}
-                slots={{
-                  transition: Transition,
-                }}
-                keepMounted
+      {isShowPopupSite && (
+        <Dialog
+          fullWidth={500}
+          slots={{
+            transition: Transition,
+          }}
+          keepMounted
+          sx={{
+            zIndex: 15000,
+            "& .MuiPaper-root": {
+              backgroundColor: dataPopup?.backgroundColor,
+              color: dataPopup?.color,
+            },
+          }}
+          open={openModal}
+          // onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="توضیحات popup"
+        >
+          <DialogContent>
+            {!dataPopup?.image && (
+              <div
                 sx={{
-                  zIndex: 15000,
-                  "& .MuiPaper-root": {
-                    backgroundColor: dataPopup?.backgroundColor,
-                    color: dataPopup?.color,
-                  },
+                  color: dataPopup?.color,
                 }}
-                open={openModal}
-                // onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="توضیحات popup"
               >
-                <DialogContent>
-                  {!dataPopup?.image && (
-                    <div
-                      sx={{
-                        color: dataPopup?.color,
-                      }}
-                    >
-                      <div
-                        className="sm:block hidden "
-                        dangerouslySetInnerHTML={renderHTML(
-                          dataPopup?.desktopBody
-                        )}
-                      />
-                      <div
-                        className="sm:hidden block  "
-                        dangerouslySetInnerHTML={renderHTML(
-                          dataPopup?.mobileBody
-                        )}
-                      />
-                    </div>
-                  )}
-                  {dataPopup?.image && (
-                    <div className="flex justify-center items-center">
-                      <img
-                        className="w-full"
-                        src={getImageUrl(dataPopup?.image)}
-                        alt={dataPopup?.title}
-                      />
-                    </div>
-                  )}
-                </DialogContent>
-                <DialogActions sx={{ borderTop: "1px solid #0002" }}>
-                  <Button type="primary" onClick={handleClose}>
-                    بستن
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                <div
+                  className="sm:block hidden "
+                  dangerouslySetInnerHTML={renderHTML(dataPopup?.desktopBody)}
+                />
+                <div
+                  className="sm:hidden block  "
+                  dangerouslySetInnerHTML={renderHTML(dataPopup?.mobileBody)}
+                />
+              </div>
             )}
-        </>
-      }
+            {dataPopup?.image && (
+              <div className="flex justify-center items-center">
+                <img
+                  className="w-full"
+                  src={getImageUrl(dataPopup?.image)}
+                  alt={dataPopup?.title}
+                />
+              </div>
+            )}
+          </DialogContent>
+          <DialogActions sx={{ borderTop: "1px solid #0002" }}>
+            <Button type="primary" onClick={handleClose}>
+              بستن
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 }

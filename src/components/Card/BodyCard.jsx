@@ -351,7 +351,7 @@ const BodyCard = () => {
                       <div className="sm:w-4/5 w-3/5 px-4 py-2 relative flex flex-col justify-between">
                         <div>
                           <Link href={item.url}>
-                            <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300">
+                            <h3 className="sm:font-semibold font-bold sm:text-lg text-sm text-[#333] !mb-3 hover:text-[#d1182b] transition-colors duration-300 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                               {item.title}
                             </h3>
                           </Link>

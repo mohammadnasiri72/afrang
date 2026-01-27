@@ -39,7 +39,6 @@ export default async function BlogDetails(props) {
         </div>
       </div>
       <div className="max-w-[1600px] mx-auto overflow-hidden">
-        <Container></Container>
         <div className="bg-[#f6f6f6] overflow-hidden">
           <Container>
             <div className="flex flex-wrap items-start mt-10 lg:flex-row flex-col-reverse">

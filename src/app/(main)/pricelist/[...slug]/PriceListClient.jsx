@@ -203,7 +203,7 @@ export default function PriceListClient({ pricing, categoriesChilds, id }) {
                           <div className="col-span-12 sm:col-span-5 text-center sm:text-right">
                             <Link
                               href={product.url}
-                              className="text-gray-900 hover:text-[#18d1be] transition-colors duration-200"
+                              className="text-gray-900 hover:text-[#18d1be] transition-colors duration-200 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                             >
                               {product.title}
                             </Link>

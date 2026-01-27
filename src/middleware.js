@@ -116,7 +116,7 @@ export async function middleware(request) {
     pathname !== "/register" &&
     pathname !== "/contect-us" &&
     pathname !== "/payment/result" &&
-    pathname !== "/payment/link" &&
+    pathname !== "/plid" &&
     pathname !== "/gallery" &&
     pathname !== "/news" &&
     pathname !== "/pricelist" &&
@@ -130,7 +130,7 @@ export async function middleware(request) {
     pathname !== "/useds" &&
     pathname !== "/brands" &&
     !pathname.startsWith("/gallery/") &&
-    !pathname.startsWith("/payment/link/") &&
+    !pathname.startsWith("/plid/") &&
     !pathname.includes(".") &&
     !pathname.startsWith("/_next") &&
     !pathname.startsWith("/api") &&
@@ -163,7 +163,9 @@ export async function middleware(request) {
   }
 
   // بررسی ریدایرکت محصولات
-  if (pathname === "/index" || pathname === "/home") {
+  if (pathname === "/404") {
+    return NextResponse.next();
+  } else if (pathname === "/index" || pathname === "/home") {
     return NextResponse.redirect(new URL("/", request.url), { status: 301 });
   } else if (
     pathname.startsWith("/products/") ||
@@ -189,7 +191,12 @@ export async function middleware(request) {
       if (numbersFound.length > 1) {
         secondLastId = numbersFound[numbersFound.length - 2];
       }
-
+      if (productId <= 0) {
+        return NextResponse.redirect(
+          new URL("/products?orderby=2", request.url),
+          { status: 301 }
+        );
+      }
       if (productId !== null) {
         const productCategory = await getProductCategory(
           productId,
@@ -197,21 +204,10 @@ export async function middleware(request) {
         );
         const decodedPathname = decodeURIComponent(pathname);
 
-        if (
-          productCategory?.type === "error" &&
-          productCategory?.status === 404 &&
-          !productCategory?.isHard404
-        ) {
-          return NextResponse.rewrite(new URL("/404", request.url));
-        } else if (
-          productCategory?.type === "error" &&
-          productCategory?.status === 404 &&
-          productCategory?.isHard404
-        ) {
-          return NextResponse.rewrite(new URL(request.url), { status: 503 });
-        } else if (productCategory?.type === "error") {
+      
+        if (!productCategory?.breadcrumb && !productCategory.ok) {
           return NextResponse.rewrite(new URL(request.url), {
-            status: productCategory?.status,
+            status: productCategory.status,
           });
         }
 
@@ -252,21 +248,9 @@ export async function middleware(request) {
         const productData = await getProductId(productId);
         const decodedPathname = decodeURIComponent(pathname);
 
-        if (
-          productData?.type === "error" &&
-          productData?.status === 404 &&
-          !productData?.isHard404
-        ) {
-          return NextResponse.rewrite(new URL("/404", request.url));
-        } else if (
-          productData?.type === "error" &&
-          productData?.status === 404 &&
-          productData?.isHard404
-        ) {
-          return NextResponse.rewrite(new URL(request.url), { status: 503 });
-        } else if (productData?.type === "error") {
+        if (!productData?.product && !productData.ok) {
           return NextResponse.rewrite(new URL(request.url), {
-            status: productData?.status,
+            status: productData.status,
           });
         }
 
@@ -439,7 +423,7 @@ export async function middleware(request) {
         settings?.status === 404 &&
         !settings?.isHard404
       ) {
-        return NextResponse.rewrite(new URL("/404", request.url));
+        // return NextResponse.rewrite(new URL("/404", request.url));
       } else if (
         settings?.type === "error" &&
         settings?.status === 404 &&

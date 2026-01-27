@@ -50,7 +50,7 @@ function ModalAddtoBasket({
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-gray-800 !mb-1 line-clamp-2 pl-2">
+                <h3 className="text-base font-bold text-gray-800 !mb-1 line-clamp-2 pl-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                   {product.product.title}
                 </h3>
                 <p className="text-gray-600 text-xs !mb-2 line-clamp-2">

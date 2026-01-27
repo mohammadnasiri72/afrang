@@ -8,7 +8,11 @@ const FilterProduct = dynamic(() => import("./FilterProduct"));
 const BodyProductList = dynamic(() => import("./BodyProductList"));
 const PaginationProduct = dynamic(() => import("./PaginationProduct"));
 
-export default async function ProductListWithFilters({ searchParams }) {
+export default async function ProductListWithFilters({
+  searchParams,
+  products,
+  bannerProduct,
+}) {
   // دریافت resultFilter با handle خطا و timeout
   let resultFilter = null;
   try {
@@ -20,43 +24,9 @@ export default async function ProductListWithFilters({ searchParams }) {
     console.error("Error fetching resultFilter:", error);
     resultFilter = null;
   }
-  
-  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
-  const orderBy = searchParams?.orderby ? parseInt(searchParams.orderby) : "";
-  const layout = searchParams?.layout ? searchParams.layout : "list";
-  const price1 = searchParams?.price1 ? parseInt(searchParams.price1) : 0;
-  const price2 = searchParams?.price2 ? parseInt(searchParams.price2) : 100000;
-  const pageSize = searchParams?.pageSize
-    ? parseInt(searchParams.pageSize)
-    : 20;
-  const brandId = searchParams?.brandid || "";
-  const onlyPrice = searchParams?.onlyprice === "1" ? "1" : undefined;
-  const onlyDiscount = searchParams?.onlydiscount === "1" ? "1" : undefined;
-  const statusId = searchParams?.statusid === "1" ? "1" : undefined;
-  const onlyfest = searchParams?.onlyfest === "1" ? "1" : undefined;
-  const conditionId = searchParams?.conditionId === "20" ? "20" : undefined;
 
-  const [products, bannerProduct] = await Promise.all([
-    getProducts({
-      page,
-      pageSize,
-      orderBy,
-      price1,
-      price2,
-      CategoryId: "",
-      BrandId: brandId,
-      OnlyPrice: onlyPrice,
-      OnlyDiscount: onlyDiscount,
-      StatusId: statusId,
-      OnlyFest: onlyfest,
-      ConditionId: conditionId,
-    }),
-    getItem({
-      TypeId: 1015,
-      LangCode: "fa",
-      CategoryIdArray: "4693",
-    }),
-  ]);
+  const layout = searchParams?.layout ? searchParams.layout : "list";
+ 
 
   return (
     <div className="flex flex-col lg:flex-row w-full">
@@ -85,7 +55,11 @@ export default async function ProductListWithFilters({ searchParams }) {
         </div>
       ) : (
         <div className="w-full">
-          <BodyProductList products={products} layout={layout} resultFilter={resultFilter}/>
+          <BodyProductList
+            products={products}
+            layout={layout}
+            resultFilter={resultFilter}
+          />
           <div className="flex justify-center mt-8">
             <PaginationProduct total={products[0].total} />
           </div>

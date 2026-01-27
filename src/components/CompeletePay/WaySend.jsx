@@ -116,7 +116,7 @@ function WaySend({ waySendList, selectedShipping, setSelectedShipping }) {
               </div>
               <div className="flex-grow text-justify">
                 <div className="flex flex-col gap-1">
-                  <div className="text-base font-medium text-gray-800">
+                  <div className="text-base font-medium text-gray-800 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                     {item.title}
                   </div>
                   {item.desc && (

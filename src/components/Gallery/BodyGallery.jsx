@@ -167,6 +167,26 @@ function BodyGallery({
     setImgSelected(ImagesDataCurent[prevIndex]);
   };
 
+  
+ // تابع برای رندر کردن لینک‌های واقعی
+const itemRender = (page, type, originalElement) => {
+  if (type === "page") {
+    const currentSearchParams = new URLSearchParams(searchParams.toString());
+    currentSearchParams.set("page", page);
+    
+    return (
+      <Link
+        href={`${pathname}?${currentSearchParams.toString()}`}
+        scroll={false}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        {page}
+      </Link>
+    );
+  }
+  return originalElement;
+};
+
   return (
     <>
       <Container>
@@ -466,39 +486,15 @@ function BodyGallery({
                       const params = new URLSearchParams(
                         searchParams.toString()
                       );
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                       params.set("page", page.toString());
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                       startTransition(() => {
                         router.push(`${pathname}?${params.toString()}`, {
                           scroll: false,
                         });
                       });
-                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     showSizeChanger={false}
-                    itemRender={(page, type, originalElement) => {
-                      if (type === "page") {
-                        const searchParams = new URLSearchParams(
-                          window.location.search
-                        );
-                        searchParams.set("page", page);
-                        return (
-                          <Link
-                            href={`${
-                              window.location.pathname
-                            }?${searchParams.toString()}`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              window.scrollTo({ top: 0, behavior: "smooth" });
-                            }}
-                          >
-                            {page}
-                          </Link>
-                        );
-                      }
-                      return originalElement;
-                    }}
+                    itemRender={itemRender}
                   />
                 </div>
               </div>

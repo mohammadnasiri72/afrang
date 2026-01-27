@@ -62,7 +62,7 @@ export default function ProductMainSecondHand({ oldProducts }) {
                     />
                   </div>
 
-                  <p className="mt-10 text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer">
+                  <p className="mt-10 text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                     {oldProduct.title}
                   </p>
                   <div className="flex justify-between items-center p-2 mt-3 opacity-100 sm:group-hover:opacity-0 duration-300">

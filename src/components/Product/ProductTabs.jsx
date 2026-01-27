@@ -154,13 +154,13 @@ function ProductTabs({
           },
         ]
       : []),
-    ...(relatedProducts.length > 0
-      ? [{ label: "محصولات مرتبط", value: 4 }]
-      : []),
+    ...(product?.product?.body ? [{ label: "توضیحات محصول", value: 2 }] : []),
     ...(!(!product.properties || product.properties.length === 0)
       ? [{ label: "مشخصات فنی", value: 3 }]
       : []),
-    ...(product?.product?.body ? [{ label: "توضیحات محصول", value: 2 }] : []),
+    ...(relatedProducts.length > 0
+      ? [{ label: "محصولات مرتبط", value: 4 }]
+      : []),
 
     ...(hasRelatedVideos
       ? [

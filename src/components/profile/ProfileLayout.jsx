@@ -234,8 +234,8 @@ export default function ProfileLayout({ children }) {
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-gray-600">کیف پول:</span>
                   <span className="font-bold text-[#d1182b]">
-                    {walletBalance !== null
-                      ? `${walletBalance.toLocaleString()} تومان`
+                    {walletBalance
+                      ? `${walletBalance?.toLocaleString()} تومان`
                       : "در حال بارگذاری..."}
                   </span>
                 </div>

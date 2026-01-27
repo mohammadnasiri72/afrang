@@ -43,7 +43,7 @@ function BodyProductSec({ product }) {
               <div className="flex flex-wrap w-full justify-between items-center">
                 <h1
                   data-id={product.id}
-                  className="sm:text-2xl text-lg font-bold text-gray-900"
+                  className="sm:text-2xl text-lg font-bold text-gray-900 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                 >
                   {product.title}
                 </h1>

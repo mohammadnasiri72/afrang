@@ -31,30 +31,27 @@ function CartActions({ product, warrantySelected }) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const userCookie = Cookies.get("user");
-  if (!userCookie) {
-    const initialData = {
-      token: "",
-      refreshToken: "",
-      expiration: "",
-      userId,
-      displayName: "",
-      roles: [],
-    };
-    Cookies.set("user", JSON.stringify(initialData), {
-      expires: 7,
-      path: "/",
-    });
-  }
-
-  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
+    if (!userCookie) {
+      const initialData = {
+        token: "",
+        refreshToken: "",
+        expiration: "",
+        userId: JSON.parse(Cookies.get("user"))?.userId,
+        displayName: "",
+        roles: [],
+      };
+      Cookies.set("user", JSON.stringify(initialData), {
+        expires: 7,
+        path: "/",
+      });
+    }
+  }, []);
 
   const selectedInsurance = useSelector(
     (state) => state.selectedInsurance.selectedInsurance
   );
- 
-
- 
 
   // Ensure currentItems is always an array
   const itemsArray = Array.isArray(currentItems) ? currentItems : [];
@@ -62,9 +59,8 @@ function CartActions({ product, warrantySelected }) {
     (item) => item.productId === product?.product?.productId
   );
 
- 
-
   const handleAddToCart = async () => {
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
     try {
       setIsLoading(true);
 

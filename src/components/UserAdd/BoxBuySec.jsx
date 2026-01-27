@@ -59,7 +59,7 @@ function BoxBuySec({ productList }) {
       <div className="flex items-center space-x-4 space-x-reverse">
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-gray-900 !mb-1">
-            <span>{product.title}</span>
+            <span className="font-[YekanEn,sans-serif]! line-height-font-yekanEn">{product.title}</span>
           </h3>
           <p className="text-sm text-gray-600 !mb-2">{product.categoryTitle}</p>
         </div>
@@ -85,7 +85,7 @@ function BoxBuySec({ productList }) {
         {product.nickname}
       </h3>
       <h3 className="text-base font-semibold text-gray-900 !mb-2 line-clamp-2">
-        <span>{product.title}</span>
+        <span className="font-[YekanEn,sans-serif]! line-height-font-yekanEn">{product.title}</span>
       </h3>
       <p className="text-sm text-gray-600 !mb-2">{product.categoryTitle}</p>
       <div className="flex flex-col items-start py-2 text-xs text-gray-600 gap-1">

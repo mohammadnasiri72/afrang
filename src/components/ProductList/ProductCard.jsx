@@ -101,7 +101,7 @@ function ProductCard({ product }) {
                 >
                   <h2
                     data-id={product.productId}
-                    className="font-semibold text-sm line-clamp-3 !mb-1 text-justify"
+                    className="font-semibold text-sm line-clamp-3 !mb-1 text-justify font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                   >
                     {product.title}
                   </h2>
@@ -222,14 +222,14 @@ function ProductCard({ product }) {
                 >
                   <h2
                     data-id={product.productId}
-                    className="font-semibold sm:text-lg text-sm text-justify"
+                    className="font-semibold sm:text-lg text-sm text-justify font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                   >
                     {product.title}
                   </h2>
                 </Link>
                 {/* {product.summary && <ExpandableText text={product.summary} />} */}
                 {product.summary && (
-                  <p className="text-justify flex-1 overflow-hidden text-ellipsis summary-clamp">
+                  <p className="text-justify line-clamp-4 text-ellipsis font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                     {product.summary}
                   </p>
                 )}

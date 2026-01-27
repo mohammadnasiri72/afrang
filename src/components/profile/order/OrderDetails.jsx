@@ -378,7 +378,7 @@ export default function OrderDetails({ trackCode }) {
                                 href={item.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors line-clamp-2"
+                                className="font-medium text-gray-800 text-lg hover:text-[#40768c] transition-colors line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                               >
                                 {item.title && item.title.includes("|")
                                   ? (() => {

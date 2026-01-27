@@ -55,7 +55,7 @@ function ShowProductBasket() {
                     <div className="flex-1">
                       <Link href={item.url}>
                         <div className="block  transition-colors">
-                          <h3 className="text-base font-bold text-gray-800 hover:text-[#d1182b] !mb-1 line-clamp-2">
+                          <h3 className="text-base font-bold text-gray-800 hover:text-[#d1182b] !mb-1 line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                             {item.title}
                           </h3>
                         </div>

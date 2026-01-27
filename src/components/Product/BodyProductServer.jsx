@@ -181,7 +181,7 @@ async function BodyProductServer({ product }) {
                         }}
                       />
                     </div>
-                    <h3 className="text-sm font-medium text-gray-800 line-clamp-2">
+                    <h3 className="text-sm font-medium text-gray-800 line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                       {item.title || "محصول"}
                     </h3>
                     <div className="flex items-center justify-between mt-2">

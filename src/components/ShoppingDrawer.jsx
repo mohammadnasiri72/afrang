@@ -211,7 +211,7 @@ function ShoppingDrawer({ header }) {
                                   alt={item.title}
                                 />
                               ) : (
-                                <span className="text-xs text-gray-500 text-center p-1 line-clamp-1">
+                                <span className="text-xs text-gray-500 text-center p-1 line-clamp-1 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                                   {item.title}
                                 </span>
                               )}
@@ -229,7 +229,7 @@ function ShoppingDrawer({ header }) {
                             <div className="flex-1 min-w-0 flex flex-col">
                               <div
                                 onClick={() => handleNavigation(item.url)}
-                                className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer"
+                                className="text-sm text-right transition-colors duration-300 font-bold text-gray-800 hover:text-[#d1182b] cursor-pointer font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                                 style={{
                                   display: "-webkit-box",
                                   WebkitLineClamp: 3,

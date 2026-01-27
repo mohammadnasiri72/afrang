@@ -139,7 +139,7 @@ export default function FavoritesList() {
                   </Link>
                   <div className="flex-1">
                     <Link href={item.url}>
-                      <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                      <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                         {item.title}
                       </p>
                     </Link>

@@ -89,7 +89,7 @@ function RelatedProductsMobile({ products }) {
                       prefetch={false}
                       className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer "
                     >
-                      <p className="text-justify">{product.title}</p>
+                      <p className="text-justify font-[YekanEn,sans-serif]! line-height-font-yekanEn">{product.title}</p>
                     </Link>
                     {product.conditionId === 20 && (
                       <div className="flex items-center text-sm text-[#d1182b] py-2 px-1">

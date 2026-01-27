@@ -1,80 +1,3 @@
-// "use client";
-// import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
-// import { Pagination, Select } from "antd";
-// import { useRouter, useSearchParams } from "next/navigation";
-// import { useDispatch } from "react-redux";
-
-// function PaginationProduct({ total }) {
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
-//   const currentPage = Number(searchParams.get("page")) || 1;
-//   const currentPageSize = Number(searchParams.get("pageSize")) || 20;
-//   const dispatch = useDispatch();
-
-//   const handlePageChange = (page) => {
-//     const params = new URLSearchParams(searchParams);
-//     dispatch(setFilterLoading(true));
-//     if (page === 1) {
-//       params.delete("page");
-//     } else {
-//       params.set("page", page);
-//     }
-//     router.push(`?${params.toString()}`);
-//     // window.scrollTo({ top: 0, behavior: 'smooth' });
-//   };
-
-//   const handlePageSizeChange = (size) => {
-//     const params = new URLSearchParams(searchParams);
-//     dispatch(setFilterLoading(true));
-//     if (size === 20) {
-//       params.delete("pageSize");
-//     } else {
-//       params.set("pageSize", size);
-//     }
-//     // Reset to first page when changing page size
-//     params.delete("page");
-//     router.push(`?${params.toString()}`);
-//   };
-
-//   return (
-//     <div
-//       dir="ltr"
-//       className="flex md:flex-row flex-col-reverse justify-center items-center mt-8 relative z-50"
-//     >
-//       <span className="font-semibold md:mt-0 mt-3">
-//         مجموع <span className="text-lg">{total}</span> محصول
-//       </span>
-//       <div className="md:mt-0 mt-3">
-//         <Pagination
-//           current={currentPage}
-//           total={total}
-//           pageSize={currentPageSize}
-//           onChange={handlePageChange}
-//           showSizeChanger={false}
-//           className="rtl"
-//           showLessItems
-//         />
-//       </div>
-//       <div className="flex items-center gap-2 pl-2">
-//         <Select
-//           value={currentPageSize}
-//           onChange={handlePageSizeChange}
-//           options={[
-//             { value: 10, label: "10" },
-//             { value: 20, label: "20" },
-//             { value: 30, label: "30" },
-//             { value: 50, label: "50" },
-//           ]}
-//           className="w-16"
-//         />
-//         <span>: تعداد در هر صفحه </span>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default PaginationProduct;
-
 "use client";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { Pagination, Select } from "antd";
@@ -141,44 +64,66 @@ function PaginationProduct({ total }) {
   };
 
   return (
-    <div
-      dir="ltr"
-      className="flex md:flex-row flex-col-reverse justify-center items-center mt-8 relative z-50"
-    >
-      <span className="font-semibold md:mt-0 mt-3">
-        مجموع <span className="text-lg">{total}</span> محصول
-      </span>
-      <div className="md:mt-0 mt-3">
-        <Pagination
-          current={currentPage}
-          total={total}
-          pageSize={currentPageSize}
-          onChange={handlePageChange}
-          itemRender={itemRender}
-          showSizeChanger={false}
-          className="rtl"
-          showLessItems
-        />
+    <>
+      <div
+        dir="ltr"
+        className="flex md:flex-row flex-col-reverse justify-center items-center mt-8 relative z-50"
+      >
+        <span className="font-semibold md:mt-0 mt-3">
+          مجموع <span className="text-lg">{total}</span> محصول
+        </span>
+        <div className="md:mt-0 mt-3">
+          <Pagination
+            current={currentPage}
+            total={total}
+            pageSize={currentPageSize}
+            onChange={handlePageChange}
+            itemRender={itemRender}
+            showSizeChanger={false}
+            className="rtl"
+            // showPrevNextJumpers={false}
+            // showQuickJumper={false}
+            // showLessItems
+            // responsive={true}
+          />
+        </div>
+        <div className="flex items-center gap-2 pl-2">
+          <label htmlFor="page-size-select" className="sr-only">
+            تعداد در هر صفحه
+          </label>
+          <Select
+            id="page-size-select"
+            value={currentPageSize}
+            onChange={handlePageSizeChange}
+            options={[
+              { value: 10, label: "10" },
+              { value: 20, label: "20" },
+              { value: 30, label: "30" },
+              { value: 50, label: "50" },
+            ]}
+            className="w-16"
+          />
+          <span>: تعداد در هر صفحه </span>
+        </div>
       </div>
-      <div className="flex items-center gap-2 pl-2">
-        <label htmlFor="page-size-select" className="sr-only">
-          تعداد در هر صفحه
-        </label>
-        <Select
-          id="page-size-select"
-          value={currentPageSize}
-          onChange={handlePageSizeChange}
-          options={[
-            { value: 10, label: "10" },
-            { value: 20, label: "20" },
-            { value: 30, label: "30" },
-            { value: 50, label: "50" },
-          ]}
-          className="w-16"
-        />
-        <span>: تعداد در هر صفحه </span>
-      </div>
-    </div>
+      <style jsx global>{`
+        .ant-pagination-item {
+          padding: 0 !important;
+          margin-left: 2px !important;
+          margin-right: 2px !important;
+        }
+        .ant-pagination-jump-prev {
+          padding: 0 !important;
+          margin-left: 2px !important;
+          margin-right: 2px !important;
+        }
+        .ant-pagination-jump-next {
+          padding: 0 !important;
+          margin-left: 2px !important;
+          margin-right: 2px !important;
+        }
+      `}</style>
+    </>
   );
 }
 

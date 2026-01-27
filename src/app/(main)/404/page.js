@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 
-export default function NotFound() {
+export default function Page404() {
   return (
     <>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">

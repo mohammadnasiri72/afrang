@@ -3,12 +3,16 @@ import { getImageUrl, mainUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }) {
-  const startTime = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  const startTime =
+    typeof performance !== "undefined" && performance.now
+      ? performance.now()
+      : Date.now();
   const id = await params.slug[0];
   const product = await getProductId(id);
-  const endTime = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
-  
- 
+  const endTime =
+    typeof performance !== "undefined" && performance.now
+      ? performance.now()
+      : Date.now();
 
   if (product.type === "error") {
     return {
@@ -62,16 +66,22 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function LayoutProductDetails({ children, params }) {
-  const startTime = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  const startTime =
+    typeof performance !== "undefined" && performance.now
+      ? performance.now()
+      : Date.now();
   const id = await params.slug[0];
   const product = await getProductId(id);
-  const endTime = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
-  
- 
+  const endTime =
+    typeof performance !== "undefined" && performance.now
+      ? performance.now()
+      : Date.now();
 
   if (product.type === "error") {
     return notFound();
   }
+
+ 
 
   return <main>{children}</main>;
 }

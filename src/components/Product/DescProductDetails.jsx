@@ -34,7 +34,7 @@ function DescProductDetails({ product, similarProducts }) {
         <div className="flex items-center justify-between flex-wrap ">
           <h1
             data-id={product.product.productId}
-            className="py-[15px] font-semibold text-lg"
+            className="py-[15px] font-semibold text-lg font-[YekanEn,sans-serif]! line-height-font-yekanEn"
           >
             {product.product.title}
           </h1>
@@ -47,8 +47,9 @@ function DescProductDetails({ product, similarProducts }) {
         </div>
         {product?.product?.summary && (
           <div className="!mb-4">
-            {/* <ExpandableText text={product.product.summary} /> */}
-            <p className="text-justify">{product.product.summary}</p>
+            <p className="text-justify font-[YekanEn,sans-serif]! line-height-font-yekanEn text-sm">
+              {product.product.summary}
+            </p>
           </div>
         )}
 
@@ -56,17 +57,17 @@ function DescProductDetails({ product, similarProducts }) {
           <div className="flex items-center gap-1 flex-wrap ">
             {product?.product?.categoryTitle && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
-                <span className="text-xs">دسته بندی : </span>
-                <span className="text-xs">
+                <span className="text-xs font-[YekanEn,sans-serif]! line-height-font-yekanEn">دسته بندی : </span>
+                <span className="text-xs font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                   {product?.product?.categoryTitle}
                 </span>
               </div>
             )}
             {product?.product?.brandTitle && (
               <div className="flex items-center gap-2 my-2 px-1 font-medium text-[#333]">
-                <span className="text-xs">برند : </span>
+                <span className="text-xs font-[YekanEn,sans-serif]! line-height-font-yekanEn">برند : </span>
                 <Link href={`/products?brandid=${product?.product?.brandId}`}>
-                  <span className="text-xs">
+                  <span className="text-xs font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                     {product?.product?.brandTitle}
                   </span>
                 </Link>

@@ -112,7 +112,7 @@ const AddProductToCompareModal = ({ visible, onClose, catIds }) => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
+                      <h3 className="text-sm font-medium text-gray-900 line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                         {product.title}
                       </h3>
                       {!product.priceDesc && product.finalPrice > 0 && (

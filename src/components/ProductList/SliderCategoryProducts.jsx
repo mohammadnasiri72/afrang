@@ -4,6 +4,7 @@ import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -11,20 +12,16 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 function SliderCategoryProducts({ categories }) {
+  const searchParams = useSearchParams();
+
   return (
     <>
-      <div className="relative px-3">
+      <div className="relative px-3 pb-3">
         <Swiper
           modules={[Autoplay, Navigation]}
           spaceBetween={16}
           slidesPerView={1.5}
           navigation
-          // loop={true}
-          // autoplay={{
-          //   delay: 2000,
-          //   disableOnInteraction: false,
-          // }}
-          // speed={1000}
           breakpoints={{
             640: {
               slidesPerView: 1.5,
@@ -41,7 +38,7 @@ function SliderCategoryProducts({ categories }) {
           {categories?.map((category) => (
             <SwiperSlide key={category.id}>
               <Link
-                href={category.url}
+                href={category.url + "?" + searchParams.toString()}
                 className={`block group cursor-pointer rounded-lg `}
               >
                 <div

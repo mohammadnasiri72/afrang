@@ -26,7 +26,6 @@ function CheckboxInsurance({ insurance, product }) {
   const { currentItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-
   const productId = currentItems.find(
     (e) => e.productId === product?.product?.productId
   )?.productId;
@@ -78,25 +77,28 @@ function CheckboxInsurance({ insurance, product }) {
     setValCheckbox(e.target.checked);
   };
 
-  const userCookie = Cookies.get("user");
-  if (!userCookie) {
-    const initialData = {
-      token: "",
-      refreshToken: "",
-      expiration: "",
-      userId,
-      displayName: "",
-      roles: [],
-    };
-    Cookies.set("user", JSON.stringify(initialData), {
-      expires: 7,
-      path: "/",
-    });
-  }
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
+    if (!userCookie) {
+      const initialData = {
+        token: "",
+        refreshToken: "",
+        expiration: "",
+        userId:JSON.parse(Cookies.get("user"))?.userId,
+        displayName: "",
+        roles: [],
+      };
+      Cookies.set("user", JSON.stringify(initialData), {
+        expires: 7,
+        path: "/",
+      });
+    }
+  }, []);
 
-  const userId = JSON.parse(Cookies.get("user"))?.userId;
+  
 
   const handleRemoveInsurance = async (id) => {
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
     try {
       await deleteCartItem(id, userId);
       dispatch(fetchCurrentCart());
@@ -115,6 +117,7 @@ function CheckboxInsurance({ insurance, product }) {
   };
 
   const handleAddInsurance = async (id, parentId, finalPrice) => {
+    const userId = JSON.parse(Cookies.get("user"))?.userId;
     const response = await addToCart(
       id,
       -1,

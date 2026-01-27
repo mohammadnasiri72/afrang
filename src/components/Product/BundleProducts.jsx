@@ -57,7 +57,7 @@ async function BundleProducts({ product }) {
                   <div className="flex-grow flex flex-col justify-between p-3">
                     <Link
                       href={item.url}
-                      className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2"
+                      className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                     >
                       {item.title}
                     </Link>

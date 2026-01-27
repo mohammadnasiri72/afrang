@@ -288,7 +288,7 @@ const DynamicComparePage = () => {
                             href={`/product/${item.productId}`}
                            
                           >
-                            <div className="font-bold text-center text-xs sm:text-sm !line-clamp-2 min-h-[40px] flex items-center justify-center text-black leading-tight">
+                            <div className="font-bold text-center text-xs sm:text-sm !line-clamp-2 min-h-[40px] flex items-center justify-center text-black leading-tight font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                               {item.title}
                             </div>
                           </Link>

@@ -322,13 +322,13 @@ export default function Dashboard() {
                       </Link>
                       <div className="flex-1">
                         <Link href={item.url}>
-                          <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                          <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                             {item.title}
                           </p>
                         </Link>
 
                         <div className="flex flex-col items-start justify-between gap-2">
-                          <div className="text-xs text-gray-400">
+                          <div className="text-xs text-gray-400 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                             {item.categoryTitle}
                           </div>
                           {item.conditionId === 20 && (
@@ -406,14 +406,14 @@ export default function Dashboard() {
                         <div className="flex-1">
                           {item.url && (
                             <Link href={item.url}>
-                              <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3">
+                              <p className="font-medium text-gray-800 !mb-1 hover:text-[#d1182b] transition-colors duration-300 line-clamp-3 font-[YekanEn,sans-serif]! line-height-font-yekanEn" >
                                 {item.title}
                               </p>
                             </Link>
                           )}
 
                           <div className="flex flex-col items-start justify-between gap-2">
-                            <div className="text-xs text-gray-400">
+                            <div className="text-xs text-gray-400 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                               {item.categoryTitle}
                             </div>
                           </div>

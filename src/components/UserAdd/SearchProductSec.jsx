@@ -112,7 +112,6 @@ function SearchProductSec() {
     setLoading(true);
     setShow(true);
     timeoutRef.current = setTimeout(async () => {
-     
       fetchProductsSec({ ...orginalData, Term: e.target.value });
     }, 500);
   };
@@ -152,7 +151,7 @@ function SearchProductSec() {
             <h3 className="text-lg font-semibold text-gray-900 !mb-1">
               <Link
                 href={product.url}
-                className="hover:text-[#d1182b] transition-colors line-clamp-1"
+                className="hover:text-[#d1182b] transition-colors line-clamp-1 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
               >
                 {product.title}
               </Link>
@@ -186,7 +185,7 @@ function SearchProductSec() {
       <div className="flex items-center space-x-4 space-x-reverse">
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-gray-900 !mb-1">
-            <span>{product.title}</span>
+            <span className="font-[YekanEn,sans-serif]! line-height-font-yekanEn">{product.title}</span>
           </h3>
           <p className="text-sm text-gray-600 !mb-2">{product.categoryTitle}</p>
         </div>

@@ -4,7 +4,7 @@ export const mainDomainImg = "https://admin.afrangdigital.com";
 export const mainUrl = "https://www.afrangdigital.com";
 
 export const getImageUrl = (image) => {
-  if (!image) return null;
+  if (!image || image === "NULL") return null;
   try {
     if (image.startsWith("http")) {
       return image;
@@ -15,13 +15,3 @@ export const getImageUrl = (image) => {
     return null;
   }
 };
-
-
-
-
-
-
-
-
-
-

@@ -150,7 +150,7 @@ function AccessoriesProduct({ relatedProducts }) {
                               <Link
                                 href={item.url}
                                 
-                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
+                                className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                               >
                                 {item.title}
                               </Link>
@@ -275,7 +275,7 @@ function AccessoriesProduct({ relatedProducts }) {
                       <Link
                         href={item.url}
                        
-                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1"
+                        className="text-[#333] font-bold hover:text-[#d1182b] duration-300 cursor-pointer line-clamp-3 text-sm !mb-1 font-[YekanEn,sans-serif]! line-height-font-yekanEn"
                       >
                         {item.title}
                       </Link>

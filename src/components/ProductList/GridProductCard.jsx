@@ -97,7 +97,7 @@ function GridProductCard({ product }) {
             }}
             className="font-semibold text-lg text-center !mb-2 line-clamp-3 hover:text-[#d1182b] duration-300"
           >
-            <h2 data-id={product.productId} className="text-justify">
+            <h2 data-id={product.productId} className="text-justify font-[YekanEn,sans-serif]! line-height-font-yekanEn">
               {product.title}
             </h2>
           </Link>

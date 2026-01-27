@@ -73,7 +73,8 @@ export const getProductId = async (id) => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      return response;
+      // throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
@@ -229,7 +230,8 @@ export const getProductCategory = async (categoryId, id2) => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+       return response;
+      // throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
@@ -256,14 +258,12 @@ export const fetchNotifyAvailable = async (id, token) => {
       )
       .then((res) => {
         return res;
-       
       })
       .catch((err) => {
         return err;
-       
       });
-      return response
+    return response;
   } catch (err) {
-    return err
+    return err;
   }
 };

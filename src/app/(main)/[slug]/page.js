@@ -1,18 +1,16 @@
-
-
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import { getItemByUrl } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
 import CalculationInstallments from "./CalculationInstallments";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 export default async function DynamicPage({ params }) {
-  
+  const param = await params;
+
   try {
     const data = await getItemByUrl(params.slug);
-    
 
     if (data?.type === "error") {
       notFound();
@@ -49,9 +47,8 @@ export default async function DynamicPage({ params }) {
         </div>
       </>
     );
-    
+
     return result;
-    
   } catch (error) {
     notFound();
   }

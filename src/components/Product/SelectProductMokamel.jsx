@@ -346,7 +346,7 @@ function SelectProductMokamel({ product }) {
                               />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
+                              <h3 className="text-sm font-medium text-gray-900 line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                                 {product.title}
                               </h3>
                               <div className="mt-1 flex items-center gap-2">
@@ -420,7 +420,7 @@ function SelectProductMokamel({ product }) {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
+                <h3 className="text-sm font-medium text-gray-900 line-clamp-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                   {product.title}
                 </h3>
                 <div className="mt-1 flex items-center gap-2">
