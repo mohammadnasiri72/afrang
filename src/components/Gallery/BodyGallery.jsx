@@ -506,4 +506,6 @@ const itemRender = (page, type, originalElement) => {
   );
 }
 
-export default BodyGallery;
+export default BodyGallery; 
+
+
