@@ -16,7 +16,12 @@ import { Navigation, Pagination } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from "./CountdownTimer";
 
-export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
+export default function ProductMainEyd({
+  products,
+  isMobile,
+  setIsMobile,
+  isShowTimer,
+}) {
   useEffect(() => {
     const checkDevice = () => {
       setIsMobile(window.innerWidth <= 639); // 768px = md breakpoint
@@ -29,6 +34,7 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
       window.removeEventListener("resize", checkDevice);
     };
   }, []);
+
 
   return (
     <>
@@ -114,7 +120,7 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
                       </div>
                     )}
                     {/* تایمر */}
-                    {product.salePlanTimer && (
+                    {product.salePlanTimer && isShowTimer && (
                       <div className="absolute bottom-0 ">
                         <CountdownTimer targetDate={product.salePlanTimer} />
                       </div>
@@ -128,7 +134,9 @@ export default function ProductMainEyd({ products, isMobile, setIsMobile }) {
                       href={product.url}
                       className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer flex items-start h-12"
                     >
-                      <h3 className=" line-clamp-2 w-full font-[YekanEn,sans-serif]! line-height-font-yekanEn">{product.title}</h3>
+                      <h3 className=" line-clamp-2 w-full font-[YekanEn,sans-serif]! line-height-font-yekanEn">
+                        {product.title}
+                      </h3>
                     </Link>
                     <Divider style={{ margin: 5, padding: 0 }} />
 

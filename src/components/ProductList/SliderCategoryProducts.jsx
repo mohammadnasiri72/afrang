@@ -20,17 +20,17 @@ function SliderCategoryProducts({ categories }) {
         <Swiper
           modules={[Autoplay, Navigation]}
           spaceBetween={16}
-          slidesPerView={1.5}
+          slidesPerView={2.5}
           navigation
           breakpoints={{
             640: {
-              slidesPerView: 1.5,
-            },
-            768: {
               slidesPerView: 2.5,
             },
+            768: {
+              slidesPerView: 4.5,
+            },
             1024: {
-              slidesPerView: 3.5,
+              slidesPerView: 5.5,
             },
           }}
           className="category-slider"
@@ -44,7 +44,7 @@ function SliderCategoryProducts({ categories }) {
                 <div
                   className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md border-2 border-transparent group-hover:border-[#ce1a2a] `}
                 >
-                  <div className="relative h-24 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <div className="relative h-24 w-full bg-white flex items-center justify-center overflow-hidden">
                     {category.image ? (
                       <img
                         src={getImageUrl(category.image)}
@@ -57,7 +57,7 @@ function SliderCategoryProducts({ categories }) {
                   </div>
                   <div className="p-2 text-center">
                     <h3
-                      className={`text-lg font-bold! truncate text-[#0a1d39] group-hover:text-[#ce1a2a] transition-colors duration-300`}
+                      className={` font-bold! truncate text-[#0a1d39] group-hover:text-[#ce1a2a] transition-colors duration-300`}
                     >
                       {category.title}
                     </h3>

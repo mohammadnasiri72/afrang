@@ -12,6 +12,8 @@ export default function EidDiscount({ actionProducts, products }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
+  
+
   useEffect(() => {
     if (products) {
       if (selectedCategory) {
@@ -94,6 +96,7 @@ export default function EidDiscount({ actionProducts, products }) {
                     products={filteredProducts}
                     isMobile={isMobile}
                     setIsMobile={setIsMobile}
+                    isShowTimer={actionProducts.remainingTimer}
                   />
                 </div>
               </div>
