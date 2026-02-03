@@ -58,9 +58,10 @@ async function BlogDesc({ blog }) {
     headersList.get("x-real-ip") ||
     "unknown";
   const userAgent = headersList.get("user-agent") || "unknown";
+  const urlReferer = headersList.get("x-url") || headersList.get("referer") || "";
 
   try {
-    await itemVisit(blog?.id, blog?.url, ip, userAgent);
+    await itemVisit(blog?.id, blog?.url ,urlReferer, userAgent , ip);
   } catch (error) {
     console.error("Error recording visit:", error);
   }

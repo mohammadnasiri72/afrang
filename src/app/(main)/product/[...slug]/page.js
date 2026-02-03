@@ -26,7 +26,8 @@ export default async function ProductDetails(props) {
     headersList.get("x-real-ip") ||
     "unknown";
   const userAgent = headersList.get("user-agent") || "unknown";
-
+  const urlReferer =
+    headersList.get("x-url") || headersList.get("referer") || "";
   const slug = await params;
   const id = Number(slug.slug[0]);
 
@@ -69,7 +70,7 @@ export default async function ProductDetails(props) {
   let similarProducts = [];
   if (product.product?.similarId) {
     similarProducts = await getRelatedProductsByIdString(
-      product.product.similarId
+      product.product.similarId,
     );
   }
 
@@ -78,8 +79,9 @@ export default async function ProductDetails(props) {
     await itemVisit(
       product?.product?.productId,
       product?.product?.url,
+      urlReferer,
+      userAgent,
       ip,
-      userAgent
     );
   } catch (error) {
     console.error("Error recording visit:", error);

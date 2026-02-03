@@ -72,12 +72,12 @@ function BodyGallery({
     searchParams.get("orderBy") === "1"
       ? "جدیدترین تصاویر"
       : searchParams.get("orderBy") === "8"
-      ? "پربازدیدترین تصاویر"
-      : searchParams.get("orderBy") === "10"
-      ? "پسندیده‌ترین تصاویر"
-      : searchParams.get("orderBy") === "11"
-      ? "قدیمی‌ترین تصاویر"
-      : "پسندیده‌ترین تصاویر";
+        ? "پربازدیدترین تصاویر"
+        : searchParams.get("orderBy") === "10"
+          ? "پسندیده‌ترین تصاویر"
+          : searchParams.get("orderBy") === "11"
+            ? "قدیمی‌ترین تصاویر"
+            : "پسندیده‌ترین تصاویر";
 
   const text2 = params?.slug
     ? params?.slug[0]
@@ -98,7 +98,7 @@ function BodyGallery({
   useEffect(() => {
     if (listProperty.length > 0 && imgSelected?.id) {
       setPropertySelected(
-        listProperty.filter((item) => item.itemId === imgSelected.id)
+        listProperty.filter((item) => item.itemId === imgSelected.id),
       );
     }
   }, [listProperty, imgSelected]);
@@ -107,7 +107,7 @@ function BodyGallery({
     const url = window.location.href;
     const userAgent = navigator.userAgent;
 
-    itemVisit(id, url, userAgent);
+    itemVisit(id, url, "", userAgent, "");
   };
 
   useEffect(() => {
@@ -152,7 +152,7 @@ function BodyGallery({
 
   const handleNext = () => {
     const currentIndex = ImagesDataCurent?.findIndex(
-      (obj) => obj.id === imgSelected.id
+      (obj) => obj.id === imgSelected.id,
     );
     const nextIndex = (currentIndex + 1) % ImagesDataCurent.length;
     setImgSelected(ImagesDataCurent[nextIndex]);
@@ -160,32 +160,31 @@ function BodyGallery({
 
   const handlePrev = () => {
     const currentIndex = ImagesDataCurent?.findIndex(
-      (obj) => obj.id === imgSelected.id
+      (obj) => obj.id === imgSelected.id,
     );
     const prevIndex =
       (currentIndex - 1 + ImagesDataCurent.length) % ImagesDataCurent.length;
     setImgSelected(ImagesDataCurent[prevIndex]);
   };
 
-  
- // تابع برای رندر کردن لینک‌های واقعی
-const itemRender = (page, type, originalElement) => {
-  if (type === "page") {
-    const currentSearchParams = new URLSearchParams(searchParams.toString());
-    currentSearchParams.set("page", page);
-    
-    return (
-      <Link
-        href={`${pathname}?${currentSearchParams.toString()}`}
-        scroll={false}
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        {page}
-      </Link>
-    );
-  }
-  return originalElement;
-};
+  // تابع برای رندر کردن لینک‌های واقعی
+  const itemRender = (page, type, originalElement) => {
+    if (type === "page") {
+      const currentSearchParams = new URLSearchParams(searchParams.toString());
+      currentSearchParams.set("page", page);
+
+      return (
+        <Link
+          href={`${pathname}?${currentSearchParams.toString()}`}
+          scroll={false}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          {page}
+        </Link>
+      );
+    }
+    return originalElement;
+  };
 
   return (
     <>
@@ -250,12 +249,12 @@ const itemRender = (page, type, originalElement) => {
                 </div>
                 <div className="flex sm:flex-row flex-col justify-center sm:justify-start sm:gap-3 gap-0 items-center sm:flex-nowrap flex-wrap mt-5">
                   {settings?.find(
-                    (item) => item.propertyKey === "site_home_url"
+                    (item) => item.propertyKey === "site_home_url",
                   )?.value && (
                     <Link
                       href={
                         settings?.find(
-                          (item) => item.propertyKey === "site_home_url"
+                          (item) => item.propertyKey === "site_home_url",
                         )?.value
                       }
                       aria-label="صفحه اصلی"
@@ -264,12 +263,12 @@ const itemRender = (page, type, originalElement) => {
                         className="w-10"
                         src={getImageUrl(
                           settings?.find(
-                            (item) => item.propertyKey === "site_footer_logo"
-                          )?.value
+                            (item) => item.propertyKey === "site_footer_logo",
+                          )?.value,
                         )}
                         alt={
                           settings?.find(
-                            (item) => item.propertyKey === "site_footer_logo"
+                            (item) => item.propertyKey === "site_footer_logo",
                           )?.title
                         }
                       />
@@ -285,8 +284,8 @@ const itemRender = (page, type, originalElement) => {
                     value={
                       (Number(
                         propertySelected?.find(
-                          (item) => item.propertyKey === "gal_afrangscore"
-                        )?.value
+                          (item) => item.propertyKey === "gal_afrangscore",
+                        )?.value,
                       ) || 0) / 2
                     }
                   />
@@ -313,7 +312,7 @@ const itemRender = (page, type, originalElement) => {
                     <span className="text-[#444]">زمان عکاسی :</span>
                     <span className="font-semibold text-[16px]">
                       {propertySelected?.find(
-                        (item) => item.propertyKey === "gal_time"
+                        (item) => item.propertyKey === "gal_time",
                       )?.value || "نامشخص"}
                     </span>
                   </div>
@@ -333,7 +332,7 @@ const itemRender = (page, type, originalElement) => {
                     </span>
                     <span className="font-bold">
                       {propertySelected?.find(
-                        (item) => item.propertyKey === "gal_camera"
+                        (item) => item.propertyKey === "gal_camera",
                       )?.value || "نامشخص"}
                     </span>
                   </div>
@@ -343,7 +342,7 @@ const itemRender = (page, type, originalElement) => {
                     </span>
                     <span className="font-bold">
                       {propertySelected?.find(
-                        (item) => item.propertyKey === "gal_lenz"
+                        (item) => item.propertyKey === "gal_lenz",
                       )?.value || "نامشخص"}
                     </span>
                   </div>
@@ -484,7 +483,7 @@ const itemRender = (page, type, originalElement) => {
                     onChange={(page) => {
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       const params = new URLSearchParams(
-                        searchParams.toString()
+                        searchParams.toString(),
                       );
                       params.set("page", page.toString());
                       startTransition(() => {
@@ -506,6 +505,4 @@ const itemRender = (page, type, originalElement) => {
   );
 }
 
-export default BodyGallery; 
-
-
+export default BodyGallery;

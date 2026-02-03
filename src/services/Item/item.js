@@ -324,11 +324,12 @@ export const getListItemByIds = async (ids, opts = {}) => {
 };
 
 // ثبت بازدید آیتم
-export const itemVisit = async (id, url, userAgent) => {
+export const itemVisit = async (id, url,Referer, userAgent , ip) => {
   const data = {
     langCode: "fa",
     id,
     url,
+    Referer,
     ip: "",
     userAgent,
   };
@@ -340,14 +341,13 @@ export const itemVisit = async (id, url, userAgent) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-      // برای POST معمولاً کش نمی‌کنیم
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return await response.json();
+    // return await response.json();
   } catch (error) {
     console.error("❌ [Item] Error posting visit:", error.message);
     return {

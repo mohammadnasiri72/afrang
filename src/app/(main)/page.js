@@ -3,12 +3,13 @@ import ArticleSliderSSR from "@/components/home/ArticleSliderSSR";
 import BoxImgHomeSSR from "@/components/home/BoxImgHomeSSR";
 import NewProductSSR from "@/components/home/NewProductSSR";
 import SliderProductSecSSR from "@/components/home/SliderProductSecSSR";
-import { getListItemBanner } from "@/services/Item/item";
+import { getListItemBanner, itemVisit } from "@/services/Item/item";
 import { getSettings } from "@/services/settings/settingsService";
 import { Suspense } from "react";
 import CameraAccessoriesSSR from "../../components/home/CameraAccessoriesSSR";
 import EidDiscountSSR from "../../components/home/EidDiscountSSR";
 import SliderHomeSSR from "../../components/home/SliderHomeSSR";
+import { headers } from "next/headers";
 
 export const revalidate = 60;
 
@@ -319,6 +320,23 @@ export default async function Home() {
       </div>
     );
   };
+
+  const headersList = headers();
+
+  // Get IP and User Agent from headers
+  const ip =
+    headersList.get("x-forwarded-for") ||
+    headersList.get("x-real-ip") ||
+    "unknown";
+  const userAgent = headersList.get("user-agent") || "unknown";
+  const urlReferer =
+    headersList.get("x-url") || headersList.get("referer") || "";
+
+  try {
+    await itemVisit(3147, "/", urlReferer, userAgent, ip);
+  } catch (error) {
+    console.error("Error recording visit:", error);
+  }
 
   return (
     <>
