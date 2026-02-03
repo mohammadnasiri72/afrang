@@ -22,6 +22,11 @@ function SliderCategoryProducts({ categories }) {
           spaceBetween={16}
           slidesPerView={2.5}
           navigation
+           autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
+          speed={2000}
           breakpoints={{
             640: {
               slidesPerView: 2.5,
