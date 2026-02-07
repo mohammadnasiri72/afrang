@@ -20,7 +20,7 @@ export default function NotFoundBlogPost() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/blogs"
+              href="/news"
               className="flex items-center justify-center gap-2 bg-[#d1182b] !text-white px-6 py-3 rounded-lg hover:bg-[#b31524] transition-colors"
             >
               <FaArrowRight className="rotate-180" />

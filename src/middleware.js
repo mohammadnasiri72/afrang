@@ -21,7 +21,7 @@ const protectedRoutes = [
 const staticPaths = ["/_next", "/static", "/images", "/public", "/assets"];
 
 export async function middleware(request) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
 
   // خواندن صحیح cookie با روش پیشرفته
   let userToken = null;
@@ -60,7 +60,7 @@ export async function middleware(request) {
           cookieHeader.split(";").map((cookie) => {
             const [key, ...values] = cookie.trim().split("=");
             return [key, values.join("=")];
-          })
+          }),
         );
 
         const altUserCookie = cookies["user"];
@@ -89,7 +89,7 @@ export async function middleware(request) {
 
   // بررسی مسیرهای محافظت شده
   const isProtectedRoute = protectedRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
+    (route) => pathname === route || pathname.startsWith(route + "/"),
   );
 
   if (isProtectedRoute) {
@@ -194,17 +194,16 @@ export async function middleware(request) {
       if (productId <= 0) {
         return NextResponse.redirect(
           new URL("/products?orderby=2", request.url),
-          { status: 301 }
+          { status: 301 },
         );
       }
       if (productId !== null) {
         const productCategory = await getProductCategory(
           productId,
-          secondLastId
+          secondLastId,
         );
         const decodedPathname = decodeURIComponent(pathname);
 
-      
         if (!productCategory?.breadcrumb && !productCategory.ok) {
           return NextResponse.rewrite(new URL(request.url), {
             status: productCategory.status,
@@ -214,7 +213,7 @@ export async function middleware(request) {
         if (productCategory?.url && productCategory.url !== decodedPathname) {
           return NextResponse.redirect(
             new URL(productCategory.url, request.url),
-            { status: 301 }
+            { status: 301 },
           );
         } else if (!staticPaths.some((path) => pathname.startsWith(path))) {
           const lowerCasePath = decodedPathname.toLowerCase();
@@ -260,7 +259,7 @@ export async function middleware(request) {
         ) {
           return NextResponse.redirect(
             new URL(productData.product.url, request.url),
-            { status: 301 }
+            { status: 301 },
           );
         } else if (!staticPaths.some((path) => pathname.startsWith(path))) {
           const lowerCasePath = decodedPathname.toLowerCase();
@@ -319,7 +318,7 @@ export async function middleware(request) {
         if (productCategory?.url && productCategory.url !== decodedPathname) {
           return NextResponse.redirect(
             new URL(productCategory.url, request.url),
-            { status: 301 }
+            { status: 301 },
           );
         } else if (!staticPaths.some((path) => pathname.startsWith(path))) {
           const lowerCasePath = decodedPathname.toLowerCase();
@@ -335,20 +334,35 @@ export async function middleware(request) {
       // console.error("Error in product redirect:", error);
     }
   } else if (pathname.startsWith("/news/") || pathname.startsWith("/News/")) {
-    const slug = decodeURIComponent(pathname).slice(1);
-    const blog = await getItemByUrl(slug);
-    if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
-      return NextResponse.rewrite(new URL("/404", request.url));
-    } else if (
-      blog?.type === "error" &&
-      blog?.status === 404 &&
-      blog?.isHard404
-    ) {
-      return NextResponse.rewrite(new URL(request.url), { status: 503 });
-    } else if (blog?.type === "error") {
-      return NextResponse.rewrite(new URL(request.url), {
-        status: blog?.status,
+    const page = searchParams.get("page");
+    if (page) {
+      return NextResponse.redirect(new URL(`/news?page=${page}`, request.url), {
+        status: 301,
       });
+    } else {
+      const slug = decodeURIComponent(pathname).slice(1);
+      const blog = await getItemByUrl(slug);
+      // if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
+      //  if (!blog?.id && !blog.ok) {
+      //     return NextResponse.rewrite(new URL(request.url), {
+      //       status: blog.status,
+      //     });
+      //   }
+      if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
+        return NextResponse.rewrite(new URL("/404", request.url), {
+          status: 404,
+        });
+      } else if (
+        blog?.type === "error" &&
+        blog?.status === 404 &&
+        blog?.isHard404
+      ) {
+        return NextResponse.rewrite(new URL(request.url), { status: 503 });
+      } else if (blog?.type === "error") {
+        return NextResponse.rewrite(new URL(request.url), {
+          status: blog?.status,
+        });
+      }
     }
   } else if (pathname.startsWith("/dic/") || pathname.startsWith("/Dic/")) {
     const slug = decodeURIComponent(pathname).slice(1);
@@ -444,7 +458,7 @@ export async function middleware(request) {
   const response = NextResponse.next();
   response.headers.set(
     "X-Middleware-Auth-Status",
-    isAuthenticated ? "authenticated" : "guest"
+    isAuthenticated ? "authenticated" : "guest",
   );
 
   return response;

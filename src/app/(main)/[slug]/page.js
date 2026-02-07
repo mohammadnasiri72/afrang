@@ -12,8 +12,12 @@ export default async function DynamicPage({ params }) {
   try {
     const data = await getItemByUrl(params.slug);
 
+    
+
     if (data?.type === "error") {
-      notFound();
+       const error = new Error("Page not found");
+      (error).status = 404;
+      throw error;
     }
 
     const result = (

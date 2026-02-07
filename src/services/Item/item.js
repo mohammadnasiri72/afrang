@@ -222,7 +222,10 @@ export const getItem = async (params = {}, opts = {}) => {
     return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching items:", err.message);
-    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+    };
   }
 };
 
@@ -244,7 +247,10 @@ export const getItemById = async (id, opts = {}) => {
     return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching item by ID:", err.message);
-    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+    };
   }
 };
 
@@ -261,20 +267,30 @@ export const getItemByUrl = async (urlParam, opts = {}) => {
     };
     if (opts.force) {
       fetchOptions.cache = "no-store";
-      fetchOptions.next = { revalidate: 0, tags: ["items-by-url", "global-cache"] };
+      fetchOptions.next = {
+        revalidate: 0,
+        tags: ["items-by-url", "global-cache"],
+      };
     }
 
     const response = await fetchWithTimeout(url, fetchOptions);
     if (!response.ok) {
-      if (response.status === 404) return { type: "error", message: "یافت نشد", isHard404: true };
+      if (response.status === 404)
+        return { type: "error", message: "یافت نشد", isHard404: true , status: response.status,};
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching item by URL:", err.message);
-    const isHard404 = err.message?.includes("Not Found") || err.message?.includes("404");
-    return { type: "error", message: err.message || "خطای شبکه", isHard404 };
+    const isHard404 =
+      err.message?.includes("Not Found") || err.message?.includes("404");
+    return {
+      type: "error",
+      message: err.message || "خطای شبکه",
+      isHard404,
+      status: response.status,
+    };
   }
 };
 
@@ -284,7 +300,10 @@ export const getItemByIds = async (data, token, opts = {}) => {
     const url = `${mainDomain}/api/Item/GetListByIds`;
     const fetchOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
       body: JSON.stringify(data),
       next: { revalidate: 900, tags: ["items", "global-cache"] },
     };
@@ -297,7 +316,10 @@ export const getItemByIds = async (data, token, opts = {}) => {
     return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching items by IDs:", err.message);
-    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+    };
   }
 };
 
@@ -319,12 +341,15 @@ export const getListItemByIds = async (ids, opts = {}) => {
     return await response.json();
   } catch (err) {
     console.error("❌ [Item] Error fetching list items by IDs:", err.message);
-    return { type: "error", message: err.response?.data ? err.response?.data : "خطای شبکه" };
+    return {
+      type: "error",
+      message: err.response?.data ? err.response?.data : "خطای شبکه",
+    };
   }
 };
 
 // ثبت بازدید آیتم
-export const itemVisit = async (id, url,Referer, userAgent , ip) => {
+export const itemVisit = async (id, url, Referer, userAgent, ip) => {
   const data = {
     langCode: "fa",
     id,
@@ -334,7 +359,7 @@ export const itemVisit = async (id, url,Referer, userAgent , ip) => {
     userAgent,
   };
 
-  try {    
+  try {
     const response = await fetchWithTimeout(`${mainDomain}/api/Item/visit`, {
       method: "POST",
       headers: {

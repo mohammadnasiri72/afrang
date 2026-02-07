@@ -1,4 +1,5 @@
 import { getCategoryChild } from "@/services/Property/propertyService";
+import { mainUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
 
 // ساخت متادیتا پویا برای لیست محصولات
@@ -23,6 +24,8 @@ export async function generateMetadata({ params }) {
     const description = resultFilter?.category?.seoDescription;
     const keywords = resultFilter?.category?.seoKeywords;
 
+    const url = `${mainUrl}${resultFilter?.category?.url}`;
+
     return {
       title,
       description,
@@ -30,6 +33,10 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title,
         description,
+      },
+
+      alternates: {
+        canonical: url,
       },
 
       other: {
