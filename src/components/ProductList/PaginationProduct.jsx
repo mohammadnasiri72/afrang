@@ -30,18 +30,6 @@ function PaginationProduct({ total }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handlePageSizeChange = (size) => {
-    const params = new URLSearchParams(searchParams);
-    dispatch(setFilterLoading(true));
-    if (size === 20) {
-      params.delete("pageSize");
-    } else {
-      params.set("pageSize", size.toString());
-    }
-    params.delete("page");
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
   // تابع برای رندر کردن لینک‌های واقعی
   const itemRender = (current, type, originalElement) => {
     if (type === "page") {
@@ -86,24 +74,6 @@ function PaginationProduct({ total }) {
             // showLessItems
             // responsive={true}
           />
-        </div>
-        <div className="flex items-center gap-2 pl-2">
-          <label htmlFor="page-size-select" className="sr-only">
-            تعداد در هر صفحه
-          </label>
-          <Select
-            id="page-size-select"
-            value={currentPageSize}
-            onChange={handlePageSizeChange}
-            options={[
-              { value: 10, label: "10" },
-              { value: 20, label: "20" },
-              { value: 30, label: "30" },
-              { value: 50, label: "50" },
-            ]}
-            className="w-16"
-          />
-          <span>: تعداد در هر صفحه </span>
         </div>
       </div>
       <style jsx global>{`

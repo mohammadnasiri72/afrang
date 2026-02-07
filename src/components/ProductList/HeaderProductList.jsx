@@ -2,20 +2,24 @@
 import { FaSortAmountUp } from "react-icons/fa";
 import { FaList, FaTableCells } from "react-icons/fa6";
 import FilterResponsive from "./FilterResponsive";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterLoading } from "@/redux/features/filterLoadingSlice";
 import { setLayoutProducts } from "@/redux/slices/layoutProducts";
+import { Select } from "antd";
 
-function HeaderProductList({resultFilter}) {
+function HeaderProductList({ resultFilter }) {
   //  const resultFilter = await getCategoryChild(id);
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const currentOrderBy = searchParams.get("orderby");
-  const layoutProducts = useSelector((state) => state.layoutProducts.layoutProducts);
+  const layoutProducts = useSelector(
+    (state) => state.layoutProducts.layoutProducts,
+  );
 
-   const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams);
+  const pathname = usePathname();
 
   const handleSort = (orderBy) => {
     dispatch(setFilterLoading(true));
@@ -34,7 +38,7 @@ function HeaderProductList({resultFilter}) {
     dispatch(setLayoutProducts(layout));
   };
 
-
+  const currentPageSize = Number(searchParams.get("pageSize")) || 20;
 
   const sortOptions = [
     { label: "گران ترین", value: "5" },
@@ -43,6 +47,18 @@ function HeaderProductList({resultFilter}) {
     { label: "پربازدید ترین", value: "1" },
     { label: "ارزان‌ترین", value: "4" },
   ];
+
+  const handlePageSizeChange = (size) => {
+    const params = new URLSearchParams(searchParams);
+    dispatch(setFilterLoading(true));
+    if (size === 20) {
+      params.delete("pageSize");
+    } else {
+      params.set("pageSize", size.toString());
+    }
+    params.delete("page");
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <>
@@ -55,14 +71,15 @@ function HeaderProductList({resultFilter}) {
             </div>
 
             <div className="lg:hidden min-w-fit">
-              <FilterResponsive resultFilter={resultFilter}/>
+              <FilterResponsive resultFilter={resultFilter} />
             </div>
             {sortOptions.map((option) => (
               <span
                 key={option.value || "default"}
                 onClick={() => handleSort(option.value)}
                 className={`font-semibold cursor-pointer duration-300 text-[15px] whitespace-nowrap select-none hover:text-[#d1182b] min-w-fit ${
-                  (currentOrderBy === option.value || (!currentOrderBy && option.value === "5"))
+                  currentOrderBy === option.value ||
+                  (!currentOrderBy && option.value === "5")
                     ? "text-[#d1182b] border-[#18d1be]"
                     : "text-[#444] border-[#d5d5d5]"
                 } border lg:border-none rounded-lg lg:rounded-none px-[15px] lg:px-0 py-[5px] lg:py-0 flex lg:inline items-center justify-center gap-1 ${
@@ -75,6 +92,26 @@ function HeaderProductList({resultFilter}) {
             ))}
           </div>
           <div className="lg:flex hidden items-center gap-4 pr-10 pl-2">
+             <div className="flex items-center gap-2 pl-2">
+              <label htmlFor="page-size-select" className="sr-only">
+                تعداد در هر صفحه
+              </label>
+              <span>تعداد در صفحه :</span>
+              <Select
+                id="page-size-select"
+                value={currentPageSize}
+                onChange={handlePageSizeChange}
+                options={[
+                  { value: 10, label: "10" },
+                  { value: 20, label: "20" },
+                  { value: 30, label: "30" },
+                  { value: 50, label: "50" },
+                  { value: 100, label: "100" },
+                ]}
+                className="w-16"
+              />
+              
+            </div>
             <FaList
               onClick={() => handleLayoutChange("list")}
               className={`text-2xl cursor-pointer ${
@@ -87,6 +124,7 @@ function HeaderProductList({resultFilter}) {
                 layoutProducts === "grid" ? "text-[#d1182b]" : "text-gray-400"
               }`}
             />
+           
           </div>
         </div>
       </div>

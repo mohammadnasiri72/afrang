@@ -196,25 +196,7 @@ export default async function ProductList({ searchParams }) {
         )}
       </div>
 
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-           
-            
-            // اندازه‌گیری زمان paint
-            window.addEventListener('load', () => {
-              setTimeout(() => {
-                const paintTime = performance.getEntriesByType('paint');
-                
-                const navigation = performance.getEntriesByType('navigation')[0];
-                if (navigation) {
-                 
-                }
-              }, 0);
-            });
-          `,
-        }}
-      />
+     
     </>
   );
 }

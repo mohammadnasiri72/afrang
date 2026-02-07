@@ -5,6 +5,7 @@ import Link from "next/link";
 import SelectCategoryFilter from "./SelectCategoryFilter";
 
 function FilterProduct({ BannerProduct, id, resultFilter }) {
+
   return (
     <div className="lg:w-1/4 w-full lg:min-w-[300px]">
       <div className="lg:block hidden p-3">
@@ -38,7 +39,7 @@ function FilterProduct({ BannerProduct, id, resultFilter }) {
                   </div>
                 )}
               </div>
-            )
+            ),
           )}
       </div>
     </div>
