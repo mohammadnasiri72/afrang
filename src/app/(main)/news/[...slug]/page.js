@@ -28,7 +28,6 @@ export default async function BlogDetails(props) {
 
   const blog = await getItemByUrl(url);
 
-
   if (blog.type === "error") {
     return notFound();
   }

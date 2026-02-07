@@ -43,6 +43,11 @@ export default function Header({ onLoaded, settings }) {
     }
   }, []);
 
+  const numbers = settings
+    ?.find((item) => item.propertyKey === "site_tel")
+    ?.propertyValue.split(/[\s\-,\/]+/)
+    .filter((num) => num.trim() !== "")
+    .map((num) => num.trim());
   return (
     <>
       <div className="bg-white w-full">
@@ -59,11 +64,11 @@ export default function Header({ onLoaded, settings }) {
                     className="w-14"
                     src={getImageUrl(
                       settings?.find((item) => item.propertyKey === "site_logo")
-                        ?.value
+                        ?.value,
                     )}
                     alt={
                       settings?.find(
-                        (item) => item.propertyKey === "site_title"
+                        (item) => item.propertyKey === "site_title",
                       )?.propertyValue
                     }
                   />
@@ -89,20 +94,22 @@ export default function Header({ onLoaded, settings }) {
               </div>
               <div className="flex flex-col pr-2 text-xs">
                 <span className="text-[#0008]"> آیا سوالی دارید </span>
-                {
-                  <span className="text-red-700 font-semibold text-sm">
-                    <a
-                      href={`tel:${
-                        settings?.find(
-                          (item) => item.propertyKey === "site_tel"
-                        )?.value || "02177615546"
-                      }`}
-                    >
-                      {settings?.find((item) => item.propertyKey === "site_tel")
-                        ?.value || "77615546"}
-                    </a>
-                  </span>
-                }
+                <div className="flex items-center">
+                  {numbers.length > 0 &&
+                    numbers.map((e, i) => (
+                      <span
+                        key={e}
+                        className="text-red-700 font-semibold text-sm"
+                      >
+                        <a href={`tel:${e}`}>{e}</a>
+                        <span
+                          className={`px-1 ${i === numbers.length - 1 ? "hidden" : ""}`}
+                        >
+                          -
+                        </span>
+                      </span>
+                    ))}
+                </div>
               </div>
             </div>
             {mounted && (

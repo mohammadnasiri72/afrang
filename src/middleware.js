@@ -340,14 +340,9 @@ export async function middleware(request) {
         status: 301,
       });
     } else {
+      const decodedPathname = decodeURIComponent(pathname);
       const slug = decodeURIComponent(pathname).slice(1);
       const blog = await getItemByUrl(slug);
-      // if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
-      //  if (!blog?.id && !blog.ok) {
-      //     return NextResponse.rewrite(new URL(request.url), {
-      //       status: blog.status,
-      //     });
-      //   }
       if (blog?.type === "error" && blog?.status === 404 && !blog?.isHard404) {
         return NextResponse.rewrite(new URL("/404", request.url), {
           status: 404,
@@ -361,6 +356,12 @@ export async function middleware(request) {
       } else if (blog?.type === "error") {
         return NextResponse.rewrite(new URL(request.url), {
           status: blog?.status,
+        });
+      }
+
+      if (blog?.url && blog.url !== decodedPathname) {
+        return NextResponse.redirect(new URL(blog.url, request.url), {
+          status: 301,
         });
       }
     }

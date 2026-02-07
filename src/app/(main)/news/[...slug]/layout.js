@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
     let url = "";
 
     // استخراج مسیر از پارامترها
-    if (params?.slug?.length) {
+    if (params?.slug?.length>0) {
       url = `/news/${params.slug.map(decodeURIComponent).join("/")}`;
     } else {
       const headersList = headers();
