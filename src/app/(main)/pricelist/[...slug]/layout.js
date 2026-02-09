@@ -6,28 +6,7 @@ import {
   TbArrowBadgeRightFilled,
 } from "react-icons/tb";
 
-export async function generateMetadata({ params }) {
-  const id = Number(params.slug[0]);
-  const selectedCategory = await getCategory({
-    TypeId: 4,
-    LangCode: "fa",
-     IsActive: 1,
-    ParentIdArray: id,
-  });
- 
-  
 
-  if (!selectedCategory[0]?.parentTitle) {
-    return {
-      title: "محصولی موجود نیست",
-      description: "محصولی در صفحه مورد نظر یافت نشد",
-    };
-  }
-
-  return {
-    title: `افرنگ | قیمت محصولات ${selectedCategory[0]?.parentTitle}`,
-  };
-}
 
 export default async function PriceListLayout({ children, params }) {
   const id = Number(params.slug[0]);

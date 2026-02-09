@@ -2,13 +2,18 @@ import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import SliderCategoryProducts from "@/components/ProductList/SliderCategoryProducts";
 import { getCategory } from "@/services/Category/categoryService";
-import { getItem, getItemById } from "@/services/Item/item";
+import { getItem, getItemById, getItemByUrl } from "@/services/Item/item";
 import { getProducts } from "@/services/products/productService";
+import { mainUrl } from "@/utils/mainDomain";
 import dynamic from "next/dynamic";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 
 export async function generateMetadata({ searchParams }) {
   const params = await searchParams;
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+  const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
 
   const brandid = await params.brandid;
   let products = {};
@@ -18,9 +23,34 @@ export async function generateMetadata({ searchParams }) {
   }
 
   if (!products.title) {
+    const data = await getItemByUrl(decodedPathname);
+    if (data.type === "error") {
+      return {
+        title: "صفحه پیدا نشد",
+        description: "صفحه مورد نظر یافت نشد",
+      };
+    }
+
     return {
-      title: "لیست محصولات",
-      description: "صفحه لیست محصولات",
+      title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+      description: data?.seoInfo?.seoDescription,
+      keywords: data?.seoInfo?.seoKeywords,
+      url: data.seoUrl,
+      alternates: {
+        canonical: data.seoUrl
+          ? mainUrl + data.seoUrl
+          : data.url
+            ? mainUrl + data.url
+            : mainUrl,
+      },
+      openGraph: {
+        title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+        description: data?.seoInfo?.seoDescription,
+        url: data.seoUrl,
+      },
+      other: {
+        seoHeadTags: data?.seoInfo?.seoHeadTags,
+      },
     };
   } else {
     return {
@@ -35,6 +65,13 @@ export async function generateMetadata({ searchParams }) {
         }`,
         description: products.seoDescription,
       },
+      alternates: {
+        canonical: products.seoUrl
+          ? mainUrl + products.seoUrl
+          : products.url
+            ? mainUrl + products.url
+            : mainUrl,
+      },
     };
   }
 }
@@ -45,7 +82,7 @@ const ProductListWithFilters = dynamic(
   {
     loading: () => <div>در حال بارگذاری فیلترها...</div>,
     ssr: true,
-  }
+  },
 );
 
 const CategoryList = dynamic(
@@ -53,15 +90,15 @@ const CategoryList = dynamic(
   {
     loading: () => <div>در حال بارگذاری دسته‌بندی‌ها...</div>,
     ssr: true,
-  }
+  },
 );
 
-const ProductListSkeleton = dynamic(() =>
-  import("@/components/ProductList/ProductListSkeleton")
+const ProductListSkeleton = dynamic(
+  () => import("@/components/ProductList/ProductListSkeleton"),
 );
 
-const CategoryListSkeleton = dynamic(() =>
-  import("@/components/ProductList/CategoryListSkeleton")
+const CategoryListSkeleton = dynamic(
+  () => import("@/components/ProductList/CategoryListSkeleton"),
 );
 
 // Main Page Component
@@ -132,18 +169,18 @@ export default async function ProductList({ searchParams }) {
     conditionId === "20"
       ? "محصولات دسته دوم افرنگ"
       : statusid === "7"
-      ? "محصولات آرشیو شده افرنگ"
-      : orderby === "5"
-      ? "گران‌ترین محصولات افرنگ"
-      : orderby === "2"
-      ? "جدیدترین محصولات افرنگ"
-      : orderby === "3"
-      ? "پرفروش‌ترین محصولات افرنگ"
-      : orderby === "1"
-      ? "پربازدیدترین محصولات افرنگ"
-      : orderby === "4"
-      ? "ارزان‌ترین محصولات افرنگ"
-      : "";
+        ? "محصولات آرشیو شده افرنگ"
+        : orderby === "5"
+          ? "گران‌ترین محصولات افرنگ"
+          : orderby === "2"
+            ? "جدیدترین محصولات افرنگ"
+            : orderby === "3"
+              ? "پرفروش‌ترین محصولات افرنگ"
+              : orderby === "1"
+                ? "پربازدیدترین محصولات افرنگ"
+                : orderby === "4"
+                  ? "ارزان‌ترین محصولات افرنگ"
+                  : "";
   return (
     <>
       {/* 4. بررسی Breadcrumb */}
@@ -195,8 +232,6 @@ export default async function ProductList({ searchParams }) {
           </Container>
         )}
       </div>
-
-     
     </>
   );
 }

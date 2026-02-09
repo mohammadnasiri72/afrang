@@ -62,13 +62,7 @@ function FilterSec() {
           : pathname.includes("buyers")
           ? await getUserAdFilter2()
           : [];
-        if (filtersData?.type === "error") {
-          Toast.fire({
-            icon: "error",
-            title: productsData.message,
-          });
-          return;
-        }
+       
         setFilterList(filtersData);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -51,32 +51,32 @@ function ModalAddtoBasket({
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-base font-bold text-gray-800 !mb-1 line-clamp-2 pl-2 font-[YekanEn,sans-serif]! line-height-font-yekanEn">
-                  {product.product.title}
+                  {product?.product?.title}
                 </h3>
                 <p className="text-gray-600 text-xs !mb-2 line-clamp-2">
-                  {product.product.description}
+                  {product?.product?.description}
                 </p>
                 {/* قیمت */}
                 <div>
-                  {product.product.discount > 0 ? (
+                  {product?.product?.discount > 0 ? (
                     <div className="flex flex-col">
                       <span className="text-gray-400 line-through text-xs">
-                        {product.product.price1?.toLocaleString()} تومان
+                        {product?.product?.price1?.toLocaleString()} تومان
                       </span>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-[#d1182b] text-lg font-bold">
-                          {product.product.finalPrice?.toLocaleString()} تومان
+                          {product?.product?.finalPrice?.toLocaleString()} تومان
                         </span>
-                        {product.product.showOffPercent && (
+                        {product?.product?.showOffPercent && (
                           <span className="text-xs bg-red-100 text-[#d1182b] px-1.5 py-0.5 rounded">
-                            {product.product.discount}% تخفیف
+                            {product?.product?.discount}% تخفیف
                           </span>
                         )}
                       </div>
                     </div>
                   ) : (
                     <span className="text-[#d1182b] text-lg font-bold">
-                      {product.product.finalPrice?.toLocaleString()} تومان
+                      {product?.product?.finalPrice?.toLocaleString()} تومان
                     </span>
                   )}
                 </div>
@@ -86,7 +86,7 @@ function ModalAddtoBasket({
             {product?.warranty?.warrantyWays.length > 0 && (
               <div className="w-auto flex">
                 <WarrantiesModal
-                  warrantiesArray={product.warranty.warrantyWays}
+                  warrantiesArray={product?.warranty.warrantyWays}
                   disabled={isInCart}
                   warrantySelected={selectedWarranty}
                   setWarrantySelected={setSelectedWarranty}
@@ -101,13 +101,13 @@ function ModalAddtoBasket({
             )}
 
             {/* رنگ‌ها */}
-            {product?.productModes && product.productModes.length > 0 && (
+            {product?.productModes && product?.productModes?.length > 0 && (
               <div className="mt-3">
                 <h4 className="font-semibold text-gray-800 text-sm !mb-2">
                   انتخاب رنگ
                 </h4>
                 <div className="flex gap-4 flex-wrap">
-                  {product.productModes.map((mode) => {
+                  {product?.productModes.map((mode) => {
                     let color = "#eee";
                     try {
                       const filesObj = JSON.parse(mode.files || "{}");
@@ -149,10 +149,10 @@ function ModalAddtoBasket({
 
             {/* دکمه تایید و مشاهده جزئیات */}
             <div className="mt-2 flex sm:flex-nowrap flex-wrap justify-end gap-2">
-              {product && product.product && product.product.url && (
+              {product && product?.product && product?.product?.url && (
                 <Link
                   className="sm:w-auto w-full"
-                  href={product.product.url}
+                  href={product?.product?.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -166,7 +166,7 @@ function ModalAddtoBasket({
               )}
               <button
                 onClick={handleConfirm}
-                disabled={isLoading || !product.canAddCart}
+                disabled={isLoading || !product?.canAddCart}
                 className="bg-[#d1182b] sm:w-auto w-full !text-white px-5 py-1.5 rounded-lg hover:bg-[#b31525] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
               >
                 {isLoading ? "در حال پردازش..." : "تایید و افزودن به سبد خرید"}

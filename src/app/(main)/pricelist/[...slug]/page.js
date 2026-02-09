@@ -1,6 +1,37 @@
 import { getProductPricing } from "@/services/products/productService";
 import PriceListClient from "./PriceListClient";
 import { getCategory } from "@/services/Category/categoryService";
+import { headers } from "next/headers";
+import { mainUrl } from "@/utils/mainDomain";
+
+export async function generateMetadata({ params }) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+  const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
+
+  const id = Number(params.slug[0]);
+  const selectedCategory = await getCategory({
+    TypeId: 4,
+    LangCode: "fa",
+    IsActive: 1,
+    ParentIdArray: id,
+  });
+
+  if (!selectedCategory[0]?.parentTitle) {
+    return {
+      title: "محصولی موجود نیست",
+      description: "محصولی در صفحه مورد نظر یافت نشد",
+    };
+  }
+
+  return {
+    title: `افرنگ | قیمت محصولات ${selectedCategory[0]?.parentTitle}`,
+    description: `افرنگ | قیمت محصولات ${selectedCategory[0]?.parentTitle}`,
+    alternates: {
+      canonical: decodedPathname ? mainUrl + decodedPathname : mainUrl,
+    },
+  };
+}
 
 export const revalidate = 900;
 

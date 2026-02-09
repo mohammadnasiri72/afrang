@@ -359,7 +359,7 @@ const DynamicComparePage = () => {
                       minWidth: columnWidth,
                     }}
                   >
-                    <span className="bg-white min-h-12 shadow-lg border p-2 sm:p-3 flex flex-col items-center justify-center border-gray-200 rounded-lg w-full text-center text-xs sm:text-sm break-words">
+                    <span className="bg-white text-gray-800 font-bold min-h-12 shadow-lg border p-2 sm:p-3 flex flex-col items-center justify-center border-gray-200 rounded-lg w-full text-center text-xs sm:text-sm break-words">
                       {property?.find(
                         (ev) =>
                           ev.title === title && ev.itemId === item.productId

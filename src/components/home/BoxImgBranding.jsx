@@ -41,9 +41,9 @@ export default function BoxImgBranding({ brands }) {
         <div className="max-w-[1600px] overflow-hidden md:px-16 mx-auto px-4 ">
           <div className="flex justify-between items-center z-10 relative -mb-5 border-b border-[#0002]">
             <div className="flex items-center title-newProduct relative ">
-              <h2 className="font-semibold text-xl ">
+              <h4 className="font-semibold text-xl ">
                 برندهای <span className="text-[#d1182b]">افرنگ</span>
-              </h2>
+              </h4>
             </div>
 
             <Link

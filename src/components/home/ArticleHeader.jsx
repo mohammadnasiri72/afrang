@@ -8,9 +8,9 @@ function ArticleHeader() {
     <>
       <div className="flex justify-between items-center !mb-5 md:px-16 mx-auto px-4 mt-5">
         <div className="flex items-center title-newProduct relative">
-          <h2 className="font-semibold text-xl ">
+          <h4 className="font-semibold text-xl ">
             اخبار و مقالات <span className="text-[#d1182b]">افرنگ</span>
-          </h2>
+          </h4>
         </div>
 
         <div

@@ -2,7 +2,45 @@ import BreadcrumbMain from "@/components/BreadcrumbMain";
 import Container from "@/components/container";
 import BodyUserAdd from "@/components/UserAdd/BodyUserAdd";
 import FilterSec from "@/components/UserAdd/FilterSec";
+import { getItemByUrl } from "@/services/Item/item";
 import { getUserAdBuy } from "@/services/UserAd/UserAdServices";
+import { mainUrl } from "@/utils/mainDomain";
+import { headers } from "next/headers";
+
+export async function generateMetadata() {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+  const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
+  const data = await getItemByUrl("/" + decodedPathname.split("/")[1]);
+  if (data.type === "error") {
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد",
+    };
+  }
+
+  return {
+    title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+    description: data?.seoInfo?.seoDescription,
+    keywords: data?.seoInfo?.seoKeywords,
+    url: data.seoUrl,
+    alternates: {
+      canonical: data.seoUrl
+        ? mainUrl + data.seoUrl
+        : data.url
+          ? mainUrl + data.url
+          : mainUrl,
+    },
+    openGraph: {
+      title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+      description: data?.seoInfo?.seoDescription,
+      url: data.seoUrl,
+    },
+    other: {
+      seoHeadTags: data?.seoInfo?.seoHeadTags,
+    },
+  };
+}
 
 export default async function UserAddDetails(props) {
   const prop = await props;
@@ -17,8 +55,8 @@ export default async function UserAddDetails(props) {
       typeof searchParams.category === "object"
         ? searchParams.category.join(",")
         : typeof searchParams.category === "string"
-        ? searchParams.category
-        : undefined,
+          ? searchParams.category
+          : undefined,
     ...(searchParams.price1 && { Amount1: searchParams.price1 }),
     ...(searchParams.price2 && { Amount2: searchParams.price2 }),
     // IsActive: 1,

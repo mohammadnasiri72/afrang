@@ -1,29 +1,53 @@
 import FooterSSR from "@/components/FooterSSR";
 import HeaderNavbarWrapperSSR from "@/components/HeaderNavbarWrapperSSR";
-import ServerError from "@/components/ServerError";
 import SubFooter from "@/components/SubFooter";
 import SubHeaderSSR from "@/components/SubHeaderSSR";
 import SupportBoxSSR from "@/components/SupportBoxSSR";
-import { getItem } from "@/services/Item/item";
+import { getItem, getItemByUrl } from "@/services/Item/item";
 import { getSettings } from "@/services/settings/settingsService";
 import { mainUrl } from "@/utils/mainDomain";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 
 // Force dynamic rendering for this segment to avoid serving cached/static output
 // export const dynamic = "force-dynamic";
 // export const revalidate = 0;
 // export const fetchCache = "default-no-store";
+export async function generateMetadata() {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+  const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
+  const data = await getItemByUrl(decodedPathname);
+  if (data.type === "error") {
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد",
+    };
+  }
 
-export const metadata = {
-  title: {
-    default: "خانه عکاسان افرنگ",
-    template: " افرنگ | %s ",
-  },
-  description: "خانه عکاسان افرنگ",
-  alternates: {
-    canonical: mainUrl,
-  },
-};
+  return {
+    title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+    description: data?.seoInfo?.seoDescription,
+    keywords: data?.seoInfo?.seoKeywords,
+    url: data.seoUrl,
+    alternates: {
+      canonical: data.seoUrl
+        ? mainUrl + data.seoUrl
+        : data.url
+          ? mainUrl + data.url
+          : mainUrl,
+    },
+    openGraph: {
+      title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+      description: data?.seoInfo?.seoDescription,
+      url: data.seoUrl,
+    },
+    other: {
+      seoHeadTags: data?.seoInfo?.seoHeadTags,
+    },
+  };
+}
+
 export default async function layoutMain({ children }) {
   // دریافت settings با handle خطا - اگر خطا داشت، با آرایه خالی ادامه می‌دهیم
   let rawSettings = [];
@@ -37,7 +61,7 @@ export default async function layoutMain({ children }) {
     console.error("Error fetching settings in brands layout:", error);
     rawSettings = [];
   }
-  
+
   // دریافت socialNetworks با handle خطا
   let socialNetworks = [];
   try {

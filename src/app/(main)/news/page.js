@@ -1,5 +1,5 @@
 import { getCategory } from "@/services/Category/categoryService";
-import { getItem } from "@/services/Item/item";
+import { getItem, getItemByUrl } from "@/services/Item/item";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
@@ -14,6 +14,44 @@ import BoxImgBlogSkeleton from "@/components/skeletons/BoxImgBlogSkeleton";
 import CategoryBlogSkeleton from "@/components/skeletons/CategoryBlogSkeleton";
 import FeaturedBlogSkeleton from "@/components/skeletons/FeaturedBlogSkeleton";
 import HeaderBlogSkeleton from "@/components/skeletons/HeaderBlogSkeleton";
+import { mainUrl } from "@/utils/mainDomain";
+import { headers } from "next/headers";
+
+export async function generateMetadata() {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+  const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
+  const data = await getItemByUrl(decodedPathname);
+
+  if (data.type === "error") {
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد",
+    };
+  }
+
+  return {
+    title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+    description: data?.seoInfo?.seoDescription,
+    keywords: data?.seoInfo?.seoKeywords,
+    url: data.seoUrl,
+    alternates: {
+      canonical: data.seoUrl
+        ? mainUrl + data.seoUrl
+        : data.url
+          ? mainUrl + data.url
+          : mainUrl,
+    },
+    openGraph: {
+      title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+      description: data?.seoInfo?.seoDescription,
+      url: data.seoUrl,
+    },
+    other: {
+      seoHeadTags: data?.seoInfo?.seoHeadTags,
+    },
+  };
+}
 
 export default async function Blog(prop) {
   const searchParams = await prop.searchParams;

@@ -3,8 +3,40 @@ import Container from "@/components/container";
 import BodyProductSec from "@/components/UserAdd/BodyProductSec";
 import SliderProductSecImg from "@/components/UserAdd/SliderProductSecImg";
 import { getProductSecId } from "@/services/UserAd/UserAdServices";
+import { mainUrl } from "@/utils/mainDomain";
 import { Empty } from "antd";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({ params }) {
+  try {
+    const id = await params.slug[0];
+    const resultFilter = await getProductSecId(id);
+
+    if (!resultFilter || resultFilter.type === "error") {
+      return {
+        title: "صفحه پیدا نشد",
+        description: "صفحه مورد نظر یافت نشد",
+      };
+    }
+
+    const title = ` دست دوم کاربران ${
+      resultFilter?.title ? `- ${resultFilter?.title}` : ""
+    }`;
+
+    return {
+      title,
+      alternates: {
+        canonical: resultFilter.url ? mainUrl + resultFilter.url : mainUrl,
+      },
+    };
+  } catch (err) {
+    console.error("❌ generateMetadata error:", err);
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد",
+    };
+  }
+}
 
 export default async function UserAddDetails(props) {
   const prop = await props;

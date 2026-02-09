@@ -17,6 +17,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[0]?.image)}
                       alt={mainBanner[0]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[0]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -28,6 +29,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[1]?.image)}
                       alt={mainBanner[1]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[1]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -39,6 +41,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[2]?.image)}
                       alt={mainBanner[2]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[2]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -50,6 +53,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[1]?.image)}
                       alt={mainBanner[1]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[1]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -63,6 +67,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[3]?.image)}
                       alt={mainBanner[3]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[3]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -74,6 +79,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[4]?.image)}
                       alt={mainBanner[4]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[4]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -85,6 +91,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[5]?.image)}
                       alt={mainBanner[5]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[5]?.title}</h2>
                   </Link>
                 </div>
               </div>
@@ -96,6 +103,7 @@ export default function BoxImgHome({ mainBanner }) {
                       src={getImageUrl(mainBanner[6]?.image)}
                       alt={mainBanner[6]?.title}
                     />
+                    <h2 className="hidden">{mainBanner[6]?.title}</h2>
                   </Link>
                 </div>
               </div>

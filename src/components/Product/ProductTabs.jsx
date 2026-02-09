@@ -18,7 +18,7 @@ function ProductTabs({
   commentsQuestion,
 }) {
   const [tabProDetails, setTabProDetails] = useState(
-    product.product.typeId === 3 ? 1 : 2
+    product.product.typeId === 3 ? 1 : 2,
   );
   const [isSticky, setIsSticky] = useState(false);
   const elementRef = useRef(null);
@@ -133,7 +133,7 @@ function ProductTabs({
       segmentedRef.current
     ) {
       const activeTab = segmentedRef.current.querySelector(
-        ".ant-segmented-item-selected"
+        ".ant-segmented-item-selected",
       );
       if (activeTab) {
         activeTab.scrollIntoView({
@@ -288,7 +288,7 @@ function ProductTabs({
 
         // اضافه کردن aria-selected بر اساس کلاس selected
         const isSelected = item.classList.contains(
-          "ant-segmented-item-selected"
+          "ant-segmented-item-selected",
         );
         item.setAttribute("aria-selected", isSelected.toString());
 
@@ -321,7 +321,7 @@ function ProductTabs({
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       const currentIndex = options?.findIndex(
-        (opt) => opt.value === tabProDetails
+        (opt) => opt.value === tabProDetails,
       );
       const targetIndex = e.currentTarget.getAttribute("data-index");
       if (targetIndex !== null) {
@@ -476,9 +476,9 @@ function ProductTabs({
 
           {product?.product?.body && (
             <div ref={detailsRef} className="tab-section-scroll-anchor pt-2">
-              <span className="px-7 text-2xl font-bold text-[#d1182b]">
-                توضیحات محصول
-              </span>
+              <h2 className="px-7 text-2xl font-bold text-[#d1182b]">
+                بررسی {product.product.title}
+              </h2>
               <DetailsProduct product={product} />
             </div>
           )}

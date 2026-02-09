@@ -34,29 +34,15 @@ export default function EidDiscount({ actionProducts, products }) {
         <div className="md:px-16 mx-auto px-4 box-slider-special-sale">
           <div className={`lg:h-[24rem] h-[26rem] overflow-hidden`}>
             <div className="mt-5">
-              <div className="lg:hidden flex justify-center items-center"></div>
               <div className="flex flex-col lg:flex-row justify-between items-center gap-4 sm:px-3">
-                <div className="lg:flex hidden items-center title-newProduct relative">
-                  <h2 className="font-semibold text-xl ">
-                    {actionProducts?.title || "فروش ویژه"}
-                  </h2>
-                  {actionProducts?.image && (
-                    <img
-                      className="w-6"
-                      src={getImageUrl(actionProducts.image)}
-                      alt={actionProducts.title}
-                    />
-                  )}
-                </div>
-
                 {/* بخش موبایل */}
-                <div className="lg:hidden w-full">
+                <div className=" w-full">
                   {/* هدر دسته‌بندی‌ها */}
                   <div className="flex items-center justify-between !mb-3 px-2">
                     <div className="flex items-center title-newProduct relative">
-                      <h2 className="font-semibold text-xl ">
+                      <h4 className="font-semibold text-xl ">
                         {actionProducts?.title || "فروش ویژه"}
-                      </h2>
+                      </h4>
                       {actionProducts?.image && (
                         <img
                           className="w-6"
@@ -75,14 +61,7 @@ export default function EidDiscount({ actionProducts, products }) {
                   </div>
                 </div>
 
-                {/* دکمه نمایش همه در دسکتاپ */}
-                <Link
-                  href={`/products?onlyfest=1&orderby=5`}
-                  className="hidden lg:flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
-                >
-                  <span>نمایش همه</span>
-                  <FaCaretLeft />
-                </Link>
+              
               </div>
               <div
                 style={{

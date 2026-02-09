@@ -32,7 +32,9 @@ export default function PaymentLinkPage() {
   return (
     <>
       <div className="container mx-auto p-4 max-w-md z-50 relative">
-        <h1 className="text-2xl font-bold text-center mb-6">استعلام لینک پرداخت</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">
+          استعلام لینک پرداخت
+        </h1>
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

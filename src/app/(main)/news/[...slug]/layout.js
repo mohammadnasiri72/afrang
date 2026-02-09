@@ -1,6 +1,6 @@
 import ServerError from "@/components/ServerError";
 import { getItemByUrl } from "@/services/Item/item";
-import { mainUrl } from "@/utils/mainDomain";
+import { getImageUrl, mainUrl } from "@/utils/mainDomain";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
     let url = "";
 
     // استخراج مسیر از پارامترها
-    if (params?.slug?.length>0) {
+    if (params?.slug?.length > 0) {
       url = `/news/${params.slug.map(decodeURIComponent).join("/")}`;
     } else {
       const headersList = headers();
@@ -22,6 +22,7 @@ export async function generateMetadata({ params }) {
     }
 
     const blog = await getItemByUrl(url);
+
     if (!blog || blog.type === "error") {
       return {
         title: "صفحه پیدا نشد",
@@ -34,10 +35,12 @@ export async function generateMetadata({ params }) {
       : blog?.title;
     const description = blog?.seoInfo?.seoDescription;
     const keywords = blog?.seoInfo?.seoKeywords;
+    const imageUrl = getImageUrl(blog?.image);
 
     return {
       title,
       description,
+      metadataBase: new URL(mainUrl),
       keywords: keywords.split(",").map((k) => k.trim()),
       alternates: {
         canonical: mainUrl + url,
@@ -46,10 +49,22 @@ export async function generateMetadata({ params }) {
         title,
         description,
         url: mainUrl + url,
+        siteName: "افرنگ دیجیتال",
+        images: [
+          {
+            url: imageUrl,
+            width: 300,
+            height: 200,
+            alt: title,
+          },
+        ],
+        locale: "fa_IR",
+        type: "website",
       },
 
       other: {
         seoHeadTags: blog?.seoInfo?.seoHeadTags,
+        "og:type": "article",
       },
     };
   } catch (err) {

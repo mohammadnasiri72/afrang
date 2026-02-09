@@ -3,13 +3,48 @@ import HeaderGallerySkeleton from "@/components/skeletons/HeaderGallerySkeleton"
 import MainGallerySkeleton from "@/components/skeletons/MainGallerySkeleton";
 import { getCategory } from "@/services/Category/categoryService";
 import { getGallery } from "@/services/gallery/galleryServices";
+import { getItemByUrl } from "@/services/Item/item";
 import { getPropertyItem } from "@/services/Property/propertyService";
 import { getSettings } from "@/services/settings/settingsService";
+import { mainUrl } from "@/utils/mainDomain";
 import dynamic from "next/dynamic";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 
-const HeaderGallery = dynamic(() =>
-  import("@/components/Gallery/HeaderGallery")
+export async function generateMetadata() {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+  const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
+  const data = await getItemByUrl("/" + decodedPathname.split("/")[1]);
+
+  if (data.type === "error") {
+    return {
+      title: "صفحه پیدا نشد",
+      description: "صفحه مورد نظر یافت نشد",
+    };
+  }
+
+  return {
+    title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+    description: data?.seoInfo?.seoDescription,
+    keywords: data?.seoInfo?.seoKeywords,
+    url: data.seoUrl,
+    alternates: {
+      canonical: decodedPathname ? mainUrl + decodedPathname : mainUrl,
+    },
+    openGraph: {
+      title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
+      description: data?.seoInfo?.seoDescription,
+      url: data.seoUrl,
+    },
+    other: {
+      seoHeadTags: data?.seoInfo?.seoHeadTags,
+    },
+  };
+}
+
+const HeaderGallery = dynamic(
+  () => import("@/components/Gallery/HeaderGallery"),
 );
 const BodyGallery = dynamic(() => import("@/components/Gallery/BodyGallery"));
 

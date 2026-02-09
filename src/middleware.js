@@ -114,7 +114,7 @@ export async function middleware(request) {
     pathname !== "/login" &&
     pathname !== "/forgot-password" &&
     pathname !== "/register" &&
-    pathname !== "/contect-us" &&
+    pathname !== "/contact-us" &&
     pathname !== "/payment/result" &&
     pathname !== "/plid" &&
     pathname !== "/gallery" &&
@@ -412,6 +412,14 @@ export async function middleware(request) {
       return NextResponse.rewrite(new URL(request.url), {
         status: pricing?.status,
       });
+    } else {
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-pathname", pathname); // فقط مسیر
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
     }
   } else if (isDainamic) {
     const slug = pathname.slice(1);
@@ -430,6 +438,14 @@ export async function middleware(request) {
         status: data?.status,
       });
     }
+  } else if (!isDainamic) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-pathname", pathname); // فقط مسیر
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   } else {
     try {
       const settings = await getSettings();

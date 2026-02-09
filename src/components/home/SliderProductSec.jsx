@@ -50,9 +50,9 @@ export default function SliderProductSec({
         <div className="lg:w-[37.5%] w-full">
           <div className="flex justify-between items-center pb-5 px-2">
             <div className="flex-wrap gap-4 items-center">
-              <h2 className="title-newProduct relative pb-2 text-[#222] duration-300 text-lg font-semibold">
+              <h4 className="title-newProduct relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های افــــرنـــــگ
-              </h2>
+              </h4>
             </div>
             <Link
               href={`/products?conditionId=20&orderby=5`}
@@ -254,9 +254,9 @@ export default function SliderProductSec({
               {/* <span className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های کاربران
               </span> */}
-               <h2 className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
+               <h4 className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های کاربران
-              </h2>
+              </h4>
             </div>
             <Link
               href={`/useds/-1`}

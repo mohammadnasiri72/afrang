@@ -1,8 +1,11 @@
+
 import BreadcrumbMain from "@/components/BreadcrumbMain";
 import { getItemByUrl } from "@/services/Item/item";
 import { getImageUrl } from "@/utils/mainDomain";
 import { notFound } from "next/navigation";
-import CalculationInstallments from "./CalculationInstallments";
+import CalculationInstallmentsWrapper from "./CalculationInstallmentsWrapper";
+
+
 
 // export const runtime = "edge";
 
@@ -27,7 +30,8 @@ export default async function DynamicPage({ params }) {
             {data.breadcrumb && <BreadcrumbMain breadcrumb={data.breadcrumb} />}
           </div>
         </div>
-        {params.slug === "afrang-leasing" && <CalculationInstallments />}
+        {/* {params.slug === "afrang-leasing" && <CalculationInstallmentsWrapper />} */}
+        <CalculationInstallmentsWrapper slug={params.slug} />
         <div className="md:px-16 mx-auto px-4 pb-8 z-50 relative body-content mt-5">
           <h1 className="sm:text-2xl text-lg font-bold! !mb-6">{data.title}</h1>
           <div className="relative">

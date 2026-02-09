@@ -16,9 +16,7 @@ function NewProduct({ products }) {
   const categories =
     safeProducts.length > 0
       ? [
-          ...new Set(
-            safeProducts.map((product) => product.categoryTitle)
-          ),
+          ...new Set(safeProducts.map((product) => product.categoryTitle)),
         ].slice(0, 5)
       : [];
 
@@ -26,7 +24,7 @@ function NewProduct({ products }) {
     if (safeProducts.length > 0) {
       if (selectedCategory) {
         const filtered = safeProducts.filter(
-          (product) => product.categoryTitle === selectedCategory
+          (product) => product.categoryTitle === selectedCategory,
         );
         setFilteredProducts(filtered);
       } else {
@@ -39,14 +37,13 @@ function NewProduct({ products }) {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-4 md:px-16 mx-auto px-4">
-        <div className="lg:flex hidden items-center title-newProduct relative">
-          <h2 className="font-semibold text-xl">جدیدترین ها</h2>
+      <div className="flex flex-row justify-between items-center gap-4 md:px-16 mx-auto px-4">
+        <div className="flex items-center title-newProduct relative">
+          <h4 className="font-semibold text-xl">جدیدترین ها</h4>
         </div>
 
         {/* بخش موبایل */}
-        <div className="lg:hidden w-full">
-          {/* هدر دسته‌بندی‌ها */}
+        {/* <div className="lg:hidden w-full">
           <div className="flex items-center justify-between !mb-3 px-2">
             <div className="flex items-center title-newProduct relative">
               <h2 className="font-semibold text-xl">جدیدترین ها</h2>
@@ -60,7 +57,6 @@ function NewProduct({ products }) {
             </Link>
           </div>
 
-          {/* لیست دسته‌بندی‌ها */}
           <div className="overflow-x-auto pb-2 flex justify-center">
             <div className="flex items-center gap-0 min-w-max px-2">
               {categories.map((category, index) => (
@@ -86,7 +82,7 @@ function NewProduct({ products }) {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* دسته‌بندی‌ها در حالت دسکتاپ */}
         <div className="hidden lg:flex items-center gap-3">
@@ -95,7 +91,7 @@ function NewProduct({ products }) {
               <span
                 onClick={() =>
                   setSelectedCategory(
-                    category === selectedCategory ? null : category
+                    category === selectedCategory ? null : category,
                   )
                 }
                 className={`text-sm cursor-pointer duration-300 font-medium ${
@@ -114,12 +110,13 @@ function NewProduct({ products }) {
         {/* دکمه نمایش همه در دسکتاپ */}
         <Link
           href={`/products?orderby=2`}
-          className="hidden lg:flex items-center cursor-pointer duration-300 hover:!text-[#d1182b] font-medium"
+          className="flex items-center cursor-pointer duration-300 hover:!text-[#d1182b] font-medium"
         >
           <span>نمایش همه</span>
           <FaCaretLeft />
         </Link>
       </div>
+      
       <div className="mt-5 md:px-16 mx-auto px-4">
         <ProductMain products={filteredProducts} />
       </div>
