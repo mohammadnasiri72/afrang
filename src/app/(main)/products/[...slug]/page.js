@@ -310,7 +310,7 @@ async function ProductContent({ id, searchParams }) {
             </span>
           </div>
           {resultFilter?.categories.length > 1 && (
-            <SliderCategoryProducts categories={resultFilter?.categories} class={'multi-category'}/>
+            <SliderCategoryProducts categories={resultFilter?.categories} className={'multi-category'}/>
           )}
           <div className="flex flex-col lg:flex-row w-full">
             <FilterProduct
