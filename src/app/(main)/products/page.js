@@ -211,7 +211,7 @@ export default async function ProductList({ searchParams }) {
               </span>
             </div>
             {categories.length > 1 && (
-              <SliderCategoryProducts categories={categories} />
+              <SliderCategoryProducts categories={categories} className={'first-category'}/>
             )}
             {/* 5. بررسی کامپوننت ProductListWithFilters */}
             <Suspense fallback={<ProductListSkeleton />}>

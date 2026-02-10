@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-function SliderCategoryProducts({ categories }) {
+function SliderCategoryProducts({ categories, className }) {
   const searchParams = useSearchParams();
 
   return (
@@ -22,7 +22,7 @@ function SliderCategoryProducts({ categories }) {
           spaceBetween={16}
           slidesPerView={2.5}
           navigation
-           autoplay={{
+          autoplay={{
             delay: 2500,
             disableOnInteraction: false,
           }}
@@ -47,7 +47,7 @@ function SliderCategoryProducts({ categories }) {
                 className={`block group cursor-pointer rounded-lg `}
               >
                 <div
-                  className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md border-2 border-transparent group-hover:border-[#ce1a2a] `}
+                  className={`bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md border-2 border-transparent group-hover:border-[#ce1a2a] ${className}`}
                 >
                   <div className="relative h-24 w-full bg-white flex items-center justify-center overflow-hidden">
                     {category.image ? (
