@@ -6,6 +6,8 @@ import { useState } from "react";
 function SliderProductSecPhoto2({ product }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const newPath = product.image.replace(/\/ad\/([^\/]+)$/, "/ad/[200x200]/$1");
+
   return (
     <>
       {product.image && (
@@ -13,7 +15,7 @@ function SliderProductSecPhoto2({ product }) {
           className={`w-full object-contain ${
             isLoaded ? "opacity-100" : "opacity-0"
           }`}
-          src={getImageUrl(product.image)}
+          src={getImageUrl(newPath)}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 100vw, 300px"

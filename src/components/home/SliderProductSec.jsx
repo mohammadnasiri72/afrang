@@ -93,7 +93,7 @@ export default function SliderProductSec({
                       href={product.url}
                       className="w-full min-h-36 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                     >
-                      <SliderProductSecPhoto product={product} />
+                      {/* <SliderProductSecPhoto product={product} /> */}
 
                       {/* لیبل کالای کارکرده */}
                       {product.conditionId === 20 && (
@@ -109,7 +109,7 @@ export default function SliderProductSec({
                               draggable="false"
                               className="w-36"
                               src="/images/soldout.png"
-                              alt=""
+                              alt="soldout"
                             />
                           </div>
                         )}

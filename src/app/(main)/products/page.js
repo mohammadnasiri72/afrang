@@ -14,6 +14,7 @@ export async function generateMetadata({ searchParams }) {
   const headersList = await headers();
   const pathname = headersList.get("x-pathname");
   const decodedPathname = pathname ? decodeURIComponent(pathname) : "";
+  const data = await getItemByUrl(decodedPathname);
 
   const brandid = await params.brandid;
   let products = {};
@@ -23,14 +24,12 @@ export async function generateMetadata({ searchParams }) {
   }
 
   if (!products.title) {
-    const data = await getItemByUrl(decodedPathname);
     if (data.type === "error") {
       return {
         title: "صفحه پیدا نشد",
         description: "صفحه مورد نظر یافت نشد",
       };
     }
-
     return {
       title: data?.seoInfo?.seoTitle ? data.seoInfo.seoTitle : data.title,
       description: data?.seoInfo?.seoDescription,
@@ -66,10 +65,10 @@ export async function generateMetadata({ searchParams }) {
         description: products.seoDescription,
       },
       alternates: {
-        canonical: products.seoUrl
-          ? mainUrl + products.seoUrl
-          : products.url
-            ? mainUrl + products.url
+        canonical: data.seoUrl
+          ? mainUrl + data.seoUrl
+          : data.url
+            ? mainUrl + data.url
             : mainUrl,
       },
     };

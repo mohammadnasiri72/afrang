@@ -8,7 +8,7 @@ import Loading from "../Loading";
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.innerWidth < breakpoint
+    () => typeof window !== "undefined" && window.innerWidth < breakpoint,
   );
 
   useEffect(() => {
@@ -30,7 +30,6 @@ function useIsMobile(breakpoint = 768) {
 }
 
 function BoxSellSec({ productList }) {
-
   const [viewMode, setViewMode] = useState("list");
   const pathname = usePathname();
   const router = useRouter();
@@ -67,46 +66,159 @@ function BoxSellSec({ productList }) {
   };
 
   // کامپوننت محصول برای حالت لیست
-  const ProductListItem = ({ product }) => (
-    <div className="border border-gray-200 rounded-lg p-1 !mb-4 hover:shadow-md transition-shadow">
-      <div className="flex items-center space-x-reverse">
-        <div className="flex-shrink-0 pl-3">
-          <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
-            {product.url ? (
-              <Link
-                
-                href={product.url}
-                className="w-full h-full relative flex items-center justify-center"
-              >
-                {product.image ? (
-                  <img
-                    src={getImageUrl(product.image)}
-                    alt={product.title}
-                    className="w-full h-full object-cover rounded-lg overflow-hidden"
-                  />
-                ) : (
-                  <svg
-                    className="w-8 h-8 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+  const ProductListItem = ({ product }) => {
+    const newPath = product.image.replace(
+      /\/ad\/([^\/]+)$/,
+      "/ad/[200x200]/$1",
+    );
+    return (
+      <div className="border border-gray-200 rounded-lg p-1 !mb-4 hover:shadow-md transition-shadow">
+        <div className="flex items-center space-x-reverse">
+          <div className="flex-shrink-0 pl-3">
+            <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
+              {product.url ? (
+                <Link
+                  href={product.url}
+                  className="w-full h-full relative flex items-center justify-center"
+                >
+                  {newPath ? (
+                    <img
+                      src={getImageUrl(newPath)}
+                      alt={product.title}
+                      className="w-full h-full object-cover rounded-lg overflow-hidden"
                     />
-                  </svg>
-                )}
-                {/* کالای کارکرده */}
-                <div className="absolute bottom-0 right-0 left-0 bg-[#fffa] text-[#40768c] justify-center py-1 shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                  دست دوم کاربران
+                  ) : (
+                    <svg
+                      className="w-8 h-8 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  )}
+                  {/* کالای کارکرده */}
+                  <div className="absolute bottom-0 right-0 left-0 bg-[#fffa] text-[#40768c] justify-center py-1 shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    دست دوم کاربران
+                  </div>
+                </Link>
+              ) : (
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              )}
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            {product.url && (
+              <div className="flex items-center justify-between !mb-1">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  <Link
+                    href={product.url}
+                    className="hover:text-[#d1182b] transition-colors font-[YekanEn,sans-serif]! line-height-font-yekanEn"
+                  >
+                    {product.title}
+                  </Link>
+                </h3>
+                <div className="flex flex-col items-center justify-center gap-1">
+                  {product.isAfrangOffer ? (
+                    <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full !text-white px-2 py-1">
+                      پیشنهاد افرنگ
+                    </span>
+                  ) : (
+                    <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full !text-white px-2 py-1">
+                      پیشنهاد کاربران
+                    </span>
+                  )}
+
+                  {product.isArchive && (
+                    <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full !text-white px-2 py-1">
+                      آرشیو شده
+                    </span>
+                  )}
                 </div>
+              </div>
+            )}
+            {product.categoryTitle && (
+              <p className="text-sm text-gray-600 !mb-2">
+                {product.categoryTitle}
+              </p>
+            )}
+            {
+              <div className="flex items-center justify-between">
+                {product.price !== 0 && (
+                  <span className="text-lg font-bold text-[#d1182b]">
+                    {formatPrice(product.price)} تومان
+                  </span>
+                )}
+                {(!product.price || product.price === 0) && (
+                  <span className="text-lg font-bold text-[#d1182b]">
+                    توافقی (تماس بگیرید)
+                  </span>
+                )}
+                {product.appearance && (
+                  <span className="text-sm text-gray-500">
+                    {product.appearance}
+                  </span>
+                )}
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // کامپوننت محصول برای حالت گرید
+  const ProductGridItem = ({ product }) => {
+     const newPath = product.image.replace(
+      /\/ad\/([^\/]+)$/,
+      "/ad/[200x200]/$1",
+    );
+    return (
+      <div className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+        <div className="!mb-3">
+          <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+            {product.image && product.url ? (
+              <Link href={product.url} className="w-full h-full relative">
+                <img
+                  src={getImageUrl(newPath)}
+                  alt={product.title}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                {/* کالای کارکرده */}
+                <div className="absolute top-2 right-1 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                  کالای کارکرده
+                </div>
+                {/* پیشنهاد کاربران */}
+                {product.isAfrangOffer ? (
+                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    پیشنهاد افرنگ
+                  </div>
+                ) : (
+                  <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
+                    پیشنهاد کاربران
+                  </div>
+                )}
               </Link>
             ) : (
               <svg
-                className="w-8 h-8 text-gray-400"
+                className="w-12 h-12 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -121,157 +233,51 @@ function BoxSellSec({ productList }) {
             )}
           </div>
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="px-3">
           {product.url && (
-            <div className="flex items-center justify-between !mb-1">
-              <h3 className="text-lg font-semibold text-gray-900">
-                <Link
-                  href={product.url}
-                 
-                  className="hover:text-[#d1182b] transition-colors font-[YekanEn,sans-serif]! line-height-font-yekanEn"
-                >
-                  {product.title}
-                </Link>
-              </h3>
-              <div className="flex flex-col items-center justify-center gap-1">
-                {product.isAfrangOffer ? (
-                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full !text-white px-2 py-1">
-                    پیشنهاد افرنگ
-                  </span>
-                ) : (
-                  <span className="text-xs whitespace-nowrap font-bold select-none bg-slate-500 rounded-full !text-white px-2 py-1">
-                    پیشنهاد کاربران
-                  </span>
-                )}
-
-                {product.isArchive && (
-                  <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full !text-white px-2 py-1">
-                    آرشیو شده
-                  </span>
-                )}
-              </div>
-            </div>
+            <h3 className="text-base font-semibold text-gray-900 !mb-2 line-clamp-2">
+              <Link
+                href={product.url}
+                className="hover:text-[#d1182b] transition-colors font-[YekanEn,sans-serif]! line-height-font-yekanEn"
+              >
+                {product.title}
+              </Link>
+            </h3>
           )}
           {product.categoryTitle && (
-            <p className="text-sm text-gray-600 !mb-2">
-              {product.categoryTitle}
-            </p>
-          )}
-          {
-            <div className="flex items-center justify-between">
-              {product.price !== 0 && (
-                <span className="text-lg font-bold text-[#d1182b]">
-                  {formatPrice(product.price)} تومان
-                </span>
-              )}
-              {(!product.price || product.price === 0) && (
-                <span className="text-lg font-bold text-[#d1182b]">
-                  توافقی (تماس بگیرید)
-                </span>
-              )}
-              {product.appearance && (
-                <span className="text-sm text-gray-500">
-                  {product.appearance}
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-gray-600 !mb-2">
+                {product.categoryTitle}
+              </p>
+              {product.isArchive && (
+                <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full !text-white px-2 py-1">
+                  آرشیو شده
                 </span>
               )}
             </div>
-          }
-        </div>
-      </div>
-    </div>
-  );
-
-  // کامپوننت محصول برای حالت گرید
-  const ProductGridItem = ({ product }) => (
-    <div className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-      <div className="!mb-3">
-        <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          {product.image && product.url ? (
-            <Link
-              
-              href={product.url}
-              className="w-full h-full relative"
-            >
-              <img
-                src={getImageUrl(product.image)}
-                alt={product.title}
-                className="w-full h-full object-cover rounded-lg"
-              />
-              {/* کالای کارکرده */}
-              <div className="absolute top-2 right-1 bg-[#fff] border border-[#d1182b] text-[#d1182b] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                کالای کارکرده
-              </div>
-              {/* پیشنهاد کاربران */}
-              {product.isAfrangOffer ? (
-                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                  پیشنهاد افرنگ
-                </div>
-              ) : (
-                <div className="absolute top-2 left-1 border bg-slate-500 border-[#fff] !text-[#fff] px-3 py-1 rounded-full shadow-md flex items-center gap-1 text-xs font-bold z-10 animate-fade-in">
-                  پیشنهاد کاربران
-                </div>
-              )}
-            </Link>
-          ) : (
-            <svg
-              className="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
           )}
-        </div>
-      </div>
-      <div className="px-3">
-        {product.url && (
-          <h3 className="text-base font-semibold text-gray-900 !mb-2 line-clamp-2">
-            <Link
-              href={product.url}
-              
-              className="hover:text-[#d1182b] transition-colors font-[YekanEn,sans-serif]! line-height-font-yekanEn"
-            >
-              {product.title}
-            </Link>
-          </h3>
-        )}
-        {product.categoryTitle && (
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600 !mb-2">
-              {product.categoryTitle}
-            </p>
-            {product.isArchive && (
-              <span className="text-xs whitespace-nowrap font-bold select-none bg-yellow-500 rounded-full !text-white px-2 py-1">
-                آرشیو شده
+          <div className="flex items-center justify-between">
+            {(!product.price || product.price === 0) && (
+              <span className="text-lg font-bold text-[#d1182b]">
+                توافقی (تماس بگیرید)
+              </span>
+            )}
+            {product.price !== 0 && (
+              <span className="text-lg font-bold text-[#d1182b]">
+                {formatPrice(product.price)} تومان
+              </span>
+            )}
+
+            {product.appearance && (
+              <span className="text-xs text-gray-500">
+                {product.appearance}
               </span>
             )}
           </div>
-        )}
-        <div className="flex items-center justify-between">
-          {(!product.price || product.price === 0) && (
-            <span className="text-lg font-bold text-[#d1182b]">
-              توافقی (تماس بگیرید)
-            </span>
-          )}
-          {product.price !== 0 && (
-            <span className="text-lg font-bold text-[#d1182b]">
-              {formatPrice(product.price)} تومان
-            </span>
-          )}
-
-          {product.appearance && (
-            <span className="text-xs text-gray-500">{product.appearance}</span>
-          )}
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const handlePageChange = (value) => {
     params.set("page", value);
@@ -289,7 +295,6 @@ function BoxSellSec({ productList }) {
               e.preventDefault();
               handlePageChange(current);
               router.push(createPageURL(current));
-             
             }}
           >
             {current}
@@ -316,7 +321,7 @@ function BoxSellSec({ productList }) {
                   params.set("orderby", value);
                   params.delete("page");
                   router.push(
-                    `${window.location.pathname}?${params.toString()}`
+                    `${window.location.pathname}?${params.toString()}`,
                   );
                 }}
                 className="sm:w-36 w-28"
@@ -338,7 +343,7 @@ function BoxSellSec({ productList }) {
                   params.set("pageSize", value);
                   params.delete("page");
                   router.push(
-                    `${window.location.pathname}?${params.toString()}`
+                    `${window.location.pathname}?${params.toString()}`,
                   );
                 }}
                 className="sm:w-20 w-14"
