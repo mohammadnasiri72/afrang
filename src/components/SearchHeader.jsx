@@ -4,11 +4,14 @@ import { getProductTerm } from "@/services/products/productService";
 import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
 import ReactDOM from "react-dom";
 import { IoClose, IoSearchSharp } from "react-icons/io5";
+import Loading from "./Loading";
 
 const SearchHeader = () => {
+  const [isPending, startTransition] = useTransition();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,6 +23,7 @@ const SearchHeader = () => {
   const MIN_WIDTH = 600;
   const MAX_WIDTH = 900;
   const dropdownRef = useRef(null); // اضافه کردن رفرنس برای دراپ‌داون
+  const router = useRouter();
 
   useEffect(() => {
     if (showResults) {
@@ -110,7 +114,6 @@ const SearchHeader = () => {
     }, 300);
   };
 
-
   return (
     <div className="relative w-full" ref={searchRef}>
       <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 w-full">
@@ -168,13 +171,17 @@ const SearchHeader = () => {
                       <div className="grid grid-cols-2 gap-4">
                         {results.map((product) => (
                           <Link
+                            href={product.url}
                             prefetch={false}
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
                               setShowResults(false);
                               setSearchTerm("");
+                              startTransition(() => {
+                                router.push(product.url);
+                              });
                             }}
                             key={product.productId}
-                            href={product.url}
                             className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors rounded-lg border border-gray-100 bg-white"
                           >
                             <div className="w-20 h-20 relative flex-shrink-0 overflow-hidden">
@@ -205,9 +212,6 @@ const SearchHeader = () => {
                                           <div>
                                             <span className="text-[13px] text-gray-500 line-through">
                                               {product.price.toLocaleString()}
-                                            </span>
-                                            <span className="text-xs text-gray-500 px-1">
-                                              تومان
                                             </span>
                                           </div>
                                         )}
@@ -256,6 +260,7 @@ const SearchHeader = () => {
           </div>,
           document.body,
         )}
+      {isPending && <Loading />}
     </div>
   );
 };
