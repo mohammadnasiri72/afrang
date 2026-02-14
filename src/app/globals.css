@@ -985,3 +985,10 @@ p {
 .ant-select-selection-item {
   font-size: 16px !important;
 }
+.prose * {
+    font-family: Yekan !important;
+	line-height:24px !important;
+}
+.prose p {
+min-height:22px !important;
+}

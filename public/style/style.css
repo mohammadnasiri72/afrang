@@ -1,0 +1,7 @@
+.prose * {
+  font-family: Yekan !important;
+  line-height: 24px !important;
+}
+.prose p {
+  min-height: 22px !important;
+}
