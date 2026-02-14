@@ -5,10 +5,12 @@ import { getImageUrl } from "@/utils/mainDomain";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { IoClose, IoSearch } from "react-icons/io5";
+import Loading from "./Loading";
 
 const SearchNavbar = () => {
+  const [isPending, startTransition] = useTransition();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -128,7 +130,9 @@ const SearchNavbar = () => {
                       ev.preventDefault();
                       setShowResults(false);
                       setSearchTerm("");
-                      router.push(product.url);
+                      startTransition(() => {
+                        router.push(product.url);
+                      });
                     }}
                   >
                     <div className="sm:w-20 w-12 sm:h-20 h-12 relative flex-shrink-0">
@@ -144,32 +148,43 @@ const SearchNavbar = () => {
                       <h3 className="text-[13px] font-medium text-gray-900 line-clamp-3 font-[YekanEn,sans-serif]!">
                         {product.title}
                       </h3>
-                       {product.priceDesc ? (
-                                <span className="text-[13px] font-bold text-[#d1182b]">
-                                  {product.priceDesc}
-                                </span>
-                              ) : (
-                                <div className="flex justify-between flex-wrap items-center">
-                                  {product.finalPrice !== "0" && (
-                                    <div className="mt-1 flex items-center gap-2">
-                                      <span className="text-[13px] font-bold text-[#d1182b]">
-                                        {product.finalPrice.toLocaleString()}
-                                      </span>
-                                      <span className="text-xs text-gray-500">
-                                        تومان
-                                      </span>
-                                    </div>
-                                  )}
-                                  {product.statusTitle &&
-                                    product.statusTitle !== "موجود" && (
-                                      <div className="mt-1 flex items-center gap-2 justify-center">
-                                        <span className="text-xs font-bold text-[#d1182b]">
-                                          {product.statusTitle}
-                                        </span>
-                                      </div>
-                                    )}
+                      {product.priceDesc ? (
+                        <span className="text-[13px] font-bold text-[#d1182b]">
+                          {product.priceDesc}
+                        </span>
+                      ) : (
+                        <div className="flex justify-between flex-wrap items-center">
+                          {product.finalPrice !== "0" && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col">
+                                {product.price !== product.finalPrice && (
+                                  <div>
+                                    <span className="text-[13px] text-gray-500 line-through">
+                                      {product.price.toLocaleString()}
+                                    </span>
+                                  </div>
+                                )}
+                                <div>
+                                  <span className="text-[13px] font-bold text-[#d1182b] ">
+                                    {product.finalPrice.toLocaleString()}
+                                  </span>
+                                  <span className="text-xs text-gray-500 px-1">
+                                    تومان
+                                  </span>
                                 </div>
-                              )}
+                              </div>
+                            </div>
+                          )}
+                          {product.statusTitle &&
+                            product.statusTitle !== "موجود" && (
+                              <div className="mt-1 flex items-center gap-2 justify-center">
+                                <span className="text-xs font-bold text-[#d1182b]">
+                                  {product.statusTitle}
+                                </span>
+                              </div>
+                            )}
+                        </div>
+                      )}
                     </div>
                   </Link>
                 ))}
@@ -187,6 +202,7 @@ const SearchNavbar = () => {
           </div>
         </div>
       )}
+      {isPending && <Loading />}
     </div>
   );
 };
