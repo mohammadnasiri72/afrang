@@ -110,6 +110,7 @@ const SearchHeader = () => {
     }, 300);
   };
 
+
   return (
     <div className="relative w-full" ref={searchRef}>
       <div className="px-3 lg:flex hidden items-center justify-start rounded-lg bg-slate-200 w-full">
@@ -195,15 +196,30 @@ const SearchHeader = () => {
                                   {product.priceDesc}
                                 </span>
                               ) : (
-                                <div className="flex justify-between flex-wrap items-center">
+                                <div className="flex justify-between flex-wrap items-start">
                                   {product.finalPrice !== "0" && (
-                                    <div className="mt-1 flex items-center gap-2">
-                                      <span className="text-[13px] font-bold text-[#d1182b]">
-                                        {product.finalPrice.toLocaleString()}
-                                      </span>
-                                      <span className="text-xs text-gray-500">
-                                        تومان
-                                      </span>
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex flex-col">
+                                        {product.price !==
+                                          product.finalPrice && (
+                                          <div>
+                                            <span className="text-[13px] text-gray-500 line-through">
+                                              {product.price.toLocaleString()}
+                                            </span>
+                                            <span className="text-xs text-gray-500 px-1">
+                                              تومان
+                                            </span>
+                                          </div>
+                                        )}
+                                        <div>
+                                          <span className="text-[13px] font-bold text-[#d1182b] ">
+                                            {product.finalPrice.toLocaleString()}
+                                          </span>
+                                          <span className="text-xs text-gray-500 px-1">
+                                            تومان
+                                          </span>
+                                        </div>
+                                      </div>
                                     </div>
                                   )}
                                   {product.statusTitle &&
@@ -238,7 +254,7 @@ const SearchHeader = () => {
               </div>
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

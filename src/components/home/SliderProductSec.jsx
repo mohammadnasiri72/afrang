@@ -44,6 +44,7 @@ export default function SliderProductSec({
     }
   }, []);
 
+
   return (
     <>
       <div className="flex flex-wrap py-8 md:px-16 mx-auto px-4">
@@ -93,7 +94,7 @@ export default function SliderProductSec({
                       href={product.url}
                       className="w-full min-h-36 flex items-center justify-center bg-[#fff] overflow-hidden relative"
                     >
-                      {/* <SliderProductSecPhoto product={product} /> */}
+                      <SliderProductSecPhoto product={product} />
 
                       {/* لیبل کالای کارکرده */}
                       {product.conditionId === 20 && (
@@ -190,10 +191,10 @@ export default function SliderProductSec({
                 </SwiperSlide>
               ))}
 
-              <div className="creative-prev absolute left-2 top-1/2 -translate-y-1/2 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <div className="creative-prev absolute left-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
                 <FaAngleLeft size={16} className="pointer-events-none" />
               </div>
-              <div className="creative-next absolute right-2 top-1/2 -translate-y-1/2 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <div className="creative-next absolute right-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
                 <FaAngleRight size={16} className="pointer-events-none" />
               </div>
             </Swiper>
@@ -254,7 +255,7 @@ export default function SliderProductSec({
               {/* <span className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های کاربران
               </span> */}
-               <h4 className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
+              <h4 className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های کاربران
               </h4>
             </div>
