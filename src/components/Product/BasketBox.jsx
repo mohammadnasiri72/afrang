@@ -16,15 +16,25 @@ import Warranties from "./Warranties";
 
 function BasketBox({ product }) {
   const selectedInsurance = useSelector(
-    (state) => state.selectedInsurance.selectedInsurance
+    (state) => state.selectedInsurance.selectedInsurance,
   );
 
   const { currentItems } = useSelector((state) => state.cart);
+
+  const productInCart = currentItems.find(
+    (e) => e.productId === product?.product?.productId,
+  );
+  const warrantySelectedInCart = product.warranty.warrantyWays.find(
+    (e) => e.id === productInCart?.warrantyId,
+  );
+
   const isInCart = currentItems?.some(
-    (item) => item.productId === product?.product?.productId
+    (item) => item.productId === product?.product?.productId,
   );
   const [openModal, setOpenModal] = useState(false);
-  const [warrantySelected, setWarrantySelected] = useState(null);
+  const [warrantySelected, setWarrantySelected] = useState(
+    warrantySelectedInCart ? warrantySelectedInCart : null,
+  );
 
   let filteredArray = [];
 
@@ -33,31 +43,22 @@ function BasketBox({ product }) {
       .filter((e) => e.parentId === product?.product?.productId)
       .filter((item1) =>
         product.insurance.insuranceWays.some(
-          (item2) => item2.id === item1.productId
-        )
+          (item2) => item2.id === item1.productId,
+        ),
       );
   }, [currentItems, product]);
 
   const selectedColor = useSelector(
-    (state) => state.productColor.selectedColorMode
+    (state) => state.productColor.selectedColorMode,
   );
 
   return (
     <>
       <div className="px-2 h-full">
         <div className="bg-[#f6f6f6] h-full rounded-lg p-2">
-          <h2 className="font-bold text-[#333]">اطلاعات محصول</h2>
-          {product.warranty.warrantyWays &&
-            product.warranty.warrantyWays.length > 0 && (
-              <Warranties
-                warrantiesArray={product.warranty.warrantyWays}
-                disabled={isInCart}
-                warrantySelected={warrantySelected}
-                setWarrantySelected={setWarrantySelected}
-              />
-            )}
+          
 
-          <Divider style={{ padding: 0, margin: "10px" }} />
+         
           <div className="flex items-center gap-1 flex-wrap w-full">
             <div className="w-full">
               <CompareButton id={product?.product?.productId} />
@@ -86,7 +87,19 @@ function BasketBox({ product }) {
                 </span>
               </Button>
             )}
-          <div className="flex items-center gap-3 px-1 mt-3">
+
+
+             
+            {product.warranty.warrantyWays &&
+            product.warranty.warrantyWays.length > 0 && (
+              <Warranties
+                warrantiesArray={product.warranty.warrantyWays}
+                disabled={isInCart}
+                warrantySelected={warrantySelected}
+                setWarrantySelected={setWarrantySelected}
+              />
+            )}
+          <div className="flex items-center gap-3 px-1 mt-1">
             {product?.product?.fastShipping && (
               <div className="flex items-center gap-2  text-[#d1182b]">
                 <FaTruckFast className="" />

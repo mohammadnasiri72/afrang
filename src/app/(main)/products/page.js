@@ -4,6 +4,7 @@ import SliderCategoryProducts from "@/components/ProductList/SliderCategoryProdu
 import { getCategory } from "@/services/Category/categoryService";
 import { getItem, getItemById, getItemByUrl } from "@/services/Item/item";
 import { getProducts } from "@/services/products/productService";
+import { getCategoryProperty } from "@/services/Property/propertyService";
 import { mainUrl } from "@/utils/mainDomain";
 import dynamic from "next/dynamic";
 import { headers } from "next/headers";
@@ -129,6 +130,49 @@ export default async function ProductList({ searchParams }) {
     categories = [];
   }
 
+  const ids = categories.map((item) => item.id).join(",");
+
+  const propertyCat = await getCategoryProperty(ids);
+
+  const categories2 = categories.map((item1) => {
+    // پیدا کردن آیتم متناظر در آرایه دوم
+    const matchingItem = propertyCat.find(
+      (item2) =>
+        item2.itemCategoryId === item1.id &&
+        item2.propertyKey === "procat_image2",
+    );
+
+    // اگر matchingItem وجود داشت، image را با newImage جایگزین کن
+    if (matchingItem) {
+      return {
+        ...item1, // تمام فیلدهای قبلی را کپی کن
+        image: matchingItem.value ? matchingItem.value : item1.image, // فقط image را بروزرسانی کن
+      };
+    }
+
+    // در غیر اینصورت، آبجکت را بدون تغییر برگردان
+    return item1;
+  });
+  const categories3 = categories.map((item1) => {
+    // پیدا کردن آیتم متناظر در آرایه دوم
+    const matchingItem = propertyCat.find(
+      (item2) =>
+        item2.itemCategoryId === item1.id &&
+        item2.propertyKey === "procat_image3",
+    );
+
+    // اگر matchingItem وجود داشت، image را با newImage جایگزین کن
+    if (matchingItem) {
+      return {
+        ...item1, // تمام فیلدهای قبلی را کپی کن
+        image: matchingItem.value ? matchingItem.value : item1.image, // فقط image را بروزرسانی کن
+      };
+    }
+
+    // در غیر اینصورت، آبجکت را بدون تغییر برگردان
+    return item1;
+  });
+
   const page = params?.page ? parseInt(params.page) : 1;
   const orderBy = params?.orderby ? parseInt(params.orderby) : "";
   const price1 = params?.price1 ? parseInt(params.price1) : 0;
@@ -210,8 +254,11 @@ export default async function ProductList({ searchParams }) {
                 {productsFilter[0]?.total || 0} محصول
               </span>
             </div>
-            {categories.length > 1 && (
-              <SliderCategoryProducts categories={categories} className={'first-category'}/>
+            {categories3.length > 1 && (
+              <SliderCategoryProducts
+                categories={categories3}
+                className={"first-category"}
+              />
             )}
             {/* 5. بررسی کامپوننت ProductListWithFilters */}
             <Suspense fallback={<ProductListSkeleton />}>
@@ -226,7 +273,7 @@ export default async function ProductList({ searchParams }) {
           <Container>
             {/* 6. بررسی کامپوننت CategoryList */}
             <Suspense fallback={<CategoryListSkeleton />}>
-              <CategoryList categories={categories} />
+              <CategoryList categories={categories2} />
             </Suspense>
           </Container>
         )}

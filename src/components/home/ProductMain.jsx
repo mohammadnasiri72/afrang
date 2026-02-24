@@ -10,19 +10,20 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "antd";
 import Link from "next/link";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import ProductMainPhotoLazy from "./ProductMainPhotoLazy";
 import ProductMainPhotoNoLazy from "./ProductMainPhotoNoLazy";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 export default function ProductMain({ products, noLazy }) {
   return (
     <>
       <div className="sm:min-h-[22rem] min-h-[23rem]">
         <Swiper
-          // loop={true}
+          loop={true}
           grabCursor={true}
-          modules={[Pagination, Navigation]}
+          modules={[Pagination, Autoplay, Navigation]}
           className="mySwiperProduct"
           navigation={{
             nextEl: ".custom-next",
@@ -31,26 +32,30 @@ export default function ProductMain({ products, noLazy }) {
           pagination={{
             clickable: true,
           }}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
           speed={1000}
           breakpoints={{
             1724: {
               slidesPerView: 7,
-              slidesPerGroup: 7,
+              // slidesPerGroup: 7,
               spaceBetween: 15,
             },
             1024: {
               slidesPerView: 5,
-              slidesPerGroup: 5,
+              // slidesPerGroup: 5,
               spaceBetween: 10,
             },
             850: {
               slidesPerView: 3,
-              slidesPerGroup: 3,
+              // slidesPerGroup: 3,
               spaceBetween: 8,
             },
             100: {
               slidesPerView: 2,
-              slidesPerGroup: 2,
+              // slidesPerGroup: 2,
               spaceBetween: 5,
             },
           }}
@@ -140,6 +145,14 @@ export default function ProductMain({ products, noLazy }) {
             </div>
             <div className=" custom-next bg-[#ddd] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
               <FaCaretLeft className="text-2xl cursor-pointer" />
+            </div>
+          </div>
+          <div className="sm:block hidden">
+            <div className="custom-prev creative-prev absolute left-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <FaAngleLeft size={25} className="pointer-events-none" />
+            </div>
+            <div className="custom-next creative-next absolute right-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <FaAngleRight size={25} className="pointer-events-none" />
             </div>
           </div>
         </Swiper>

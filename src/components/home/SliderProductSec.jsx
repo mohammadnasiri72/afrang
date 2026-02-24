@@ -310,7 +310,7 @@ export default function SliderProductSec({
                       <div className="flex flex-col flex-1 justify-between mt-2">
                         <Link
                           href={product.url ? product.url : "#"}
-                          className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[70px] flex items-start"
+                          className="text-[#333] font-bold px-2 hover:text-[#d1182b] duration-300 cursor-pointer min-h-[80px] flex items-start"
                         >
                           <h3 className="text-center line-clamp-3 w-full font-[YekanEn,sans-serif]! line-height-font-yekanEn">
                             {product.title}
@@ -328,7 +328,7 @@ export default function SliderProductSec({
                               </div>
                             )}
                             {product.price === 0 && (
-                              <span className="font-bold text-base text-[#333]">
+                              <span className="font-bold text-base text-[#333] line-clamp-2">
                                 توافقی (تماس بگیرید)
                               </span>
                             )}
@@ -336,7 +336,7 @@ export default function SliderProductSec({
                         </div>
                         <Link
                           href={product.url}
-                          className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative bottom-0 sm:translate-y-full group-hover:translate-y-[0%]"
+                          className="bg-[#e1e1e1] w-full flex justify-center items-center py-2 font-bold duration-300 sm:absolute relative sm:bottom-0 bottom-5 sm:translate-y-full group-hover:translate-y-[0%]"
                         >
                           <FaSearch className="text-xl text-[#333]" />
                           <span className="px-1 text-[#333]">جزئیات</span>

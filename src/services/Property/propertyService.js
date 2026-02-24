@@ -48,6 +48,35 @@ export const getPropertyItem = async (ids) => {
 // };
 
 
+export const getCategoryProperty = async (Ids) => {
+  try {
+    const url = `${mainDomain}/api/Property/value/category/${Ids}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'force-cache',
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    // توجه: SweetAlert2 در Server Components کار نمی‌کند
+    // در صورت نیاز به نمایش پیام خطا، باید در Client Component استفاده شود
+    return {
+      type: "error",
+      message: "خطای شبکه",
+    };
+  }
+};
+
+
 export const getCategoryChild = async (categoryId) => {
   try {
     const url = `${mainDomain}/api/Property/value/productfilter/${categoryId}`;

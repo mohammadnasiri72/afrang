@@ -6,7 +6,7 @@ async function CameraAccessoriesSSR() {
     TypeId: 4,
     LangCode: "fa",
     IsHome: 1,
-  });
+  });  
   return <CameraAccessories category={category} />;
 }
 

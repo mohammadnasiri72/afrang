@@ -79,7 +79,7 @@ async function BlogDesc({ blog }) {
             <div className="flex items-center">
               <FaCalendarAlt className="text-[#40768c]" />
               <span className="px-1 text-[#40768c]">
-                {blog?.created ? formatPersianDate(blog.created) : ""}
+                {blog?.modified ? formatPersianDate(blog.modified) : ""}
               </span>
             </div>
             <div className="flex items-center">

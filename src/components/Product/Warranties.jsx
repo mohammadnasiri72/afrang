@@ -12,7 +12,7 @@ import { MdRadioButtonUnchecked } from "react-icons/md";
 
 function Warranties({
   warrantiesArray,
-  disabled,
+  disabled, 
   warrantySelected,
   setWarrantySelected,
 }) {
@@ -35,7 +35,7 @@ function Warranties({
   return (
     <>
       <FormControl sx={{ width: "100%" }}>
-        <div className="space-y-2">
+        <div className="mt-3">
           {warrantiesArray.map((warranty) => {
             const isSelected = warrantySelected?.id === warranty.id;
             

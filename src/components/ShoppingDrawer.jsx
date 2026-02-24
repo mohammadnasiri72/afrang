@@ -77,6 +77,9 @@ function ShoppingDrawer({ header }) {
     },
   };
 
+  console.log(currentItems);
+  
+
   return (
     <>
       {header ? (
@@ -303,16 +306,16 @@ function ShoppingDrawer({ header }) {
                             <div className="flex items-center justify-between bg-[#d1182b]/5 px-4 py-2 rounded-lg border border-[#d1182b]/10">
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-gray-700">
-                                  قیمت :
+                                  قیمت : 
                                 </span>
                                 <div className="flex items-center">
                                   {currentItems?.find(
-                                    (e) => e.parentId === item.productId
+                                    (e) => e.parentId === item.productId,
                                   ) ? (
                                     <span className="text-lg font-bold text-[#d1182b]">
                                       {(
                                         currentItems?.find(
-                                          (e) => e.parentId === item.productId
+                                          (e) => e.parentId === item.productId,
                                         ).finalPrice + item.finalPrice
                                       ).toLocaleString()}
                                     </span>

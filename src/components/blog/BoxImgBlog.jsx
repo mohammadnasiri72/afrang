@@ -105,7 +105,7 @@ function BoxImgBlog({ blogs = [], searchParams }) {
                         </span>
                       </div>
                       <div className="text-xs font-semibold">
-                        {formatPersianDate(blog.created)}
+                        {formatPersianDate(blog.modified)}
                       </div>
                     </div>
                   </div>

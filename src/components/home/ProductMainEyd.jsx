@@ -6,13 +6,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { getImageUrl } from "@/utils/mainDomain";
 import { Divider } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
-import { Navigation, Pagination } from "swiper/modules";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import AddToCartButtonCard from "../ProductList/AddToCartButtonCard";
 import CountdownTimer from "./CountdownTimer";
 
@@ -35,15 +35,17 @@ export default function ProductMainEyd({
     };
   }, []);
 
-
   return (
     <>
       <div className="">
         <Swiper
           grabCursor={true}
-          modules={[Pagination, Navigation]}
+          modules={[Pagination, Autoplay, Navigation]}
           className={`${isMobile ? "slider-special-sale" : ""}`}
-          navigation={false}
+          navigation={{
+            nextEl: ".custom-next",
+            prevEl: ".custom-prev",
+          }}
           pagination={
             !isMobile
               ? false
@@ -52,6 +54,10 @@ export default function ProductMainEyd({
                   el: ".custom-pagination", // اشاره به المنت جداگانه
                 }
           }
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
           speed={1000}
           breakpoints={{
             1300: {
@@ -192,6 +198,15 @@ export default function ProductMainEyd({
                 </div>
               </SwiperSlide>
             ))}
+
+          <div className="sm:block hidden">
+            <div className="custom-prev creative-prev absolute left-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <FaAngleLeft size={25} className="pointer-events-none" />
+            </div>
+            <div className="custom-next creative-next absolute right-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <FaAngleRight size={25} className="pointer-events-none" />
+            </div>
+          </div>
         </Swiper>
       </div>
     </>

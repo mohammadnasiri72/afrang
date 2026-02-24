@@ -11,10 +11,9 @@ import { FaCaretLeft, FaCaretRight, FaCircleUser } from "react-icons/fa6";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ExpandableText from "../blog/ExpandableText";
 import ArticleSliderPhoto from "./ArticleSliderPhoto";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 export default function ArticleSlider({ blogs }) {
- 
-
   const formatPersianDate = (dateString) => {
     try {
       const persianMonths = [
@@ -92,7 +91,6 @@ export default function ArticleSlider({ blogs }) {
                     </div> */}
                   <Link
                     href={blog.url}
-                    
                     className="overflow-hidden relative cursor-pointer bg-gray-100 border-none outline-none h-48"
                   >
                     <ArticleSliderPhoto blog={blog} />
@@ -106,7 +104,6 @@ export default function ArticleSlider({ blogs }) {
                       <Link
                         className="font-bold hover:text-[#d1182b] duration-300 line-clamp-1 text-justify"
                         href={blog.url}
-                       
                       >
                         {blog.title}
                       </Link>
@@ -125,7 +122,7 @@ export default function ArticleSlider({ blogs }) {
                         </span>
                       </div>
                       <div className="text-xs font-semibold">
-                        {formatPersianDate(blog.created)}
+                        {formatPersianDate(blog.modified)}
                       </div>
                     </div>
                   </div>
@@ -140,6 +137,14 @@ export default function ArticleSlider({ blogs }) {
             </div>
             <div className=" custom-next bg-[#3331] p-1 cursor-pointer z-50 hover:bg-[#d1182b] text-[#666] hover:text-[#fff] duration-300">
               <FaCaretLeft className="text-2xl cursor-pointer" />
+            </div>
+          </div>
+          <div className="sm:block hidden">
+            <div className="custom-prev creative-prev absolute left-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <FaAngleLeft size={25} className="pointer-events-none" />
+            </div>
+            <div className="custom-next creative-next absolute right-2 top-1/3 z-50 p-1 bg-white/30 backdrop-blur-md rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:text-[#d1182b]">
+              <FaAngleRight size={25} className="pointer-events-none" />
             </div>
           </div>
         </Swiper>
