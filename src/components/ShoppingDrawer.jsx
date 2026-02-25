@@ -77,7 +77,6 @@ function ShoppingDrawer({ header }) {
     },
   };
 
-  console.log(currentItems);
   
 
   return (
