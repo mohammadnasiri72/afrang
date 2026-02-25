@@ -42,47 +42,7 @@ function NewProduct({ products }) {
           <h4 className="font-semibold text-xl">جدیدترین ها</h4>
         </div>
 
-        {/* بخش موبایل */}
-        {/* <div className="lg:hidden w-full">
-          <div className="flex items-center justify-between !mb-3 px-2">
-            <div className="flex items-center title-newProduct relative">
-              <h2 className="font-semibold text-xl">جدیدترین ها</h2>
-            </div>
-            <Link
-              href={`/products?orderby=2`}
-              className="flex items-center gap-1 !text-[#d1182b] hover:!text-[#d1182b]/80 transition-colors cursor-pointer"
-            >
-              <span className="text-sm">نمایش همه</span>
-              <FaCaretLeft className="text-sm" />
-            </Link>
-          </div>
-
-          <div className="overflow-x-auto pb-2 flex justify-center">
-            <div className="flex items-center gap-0 min-w-max px-2">
-              {categories.map((category, index) => (
-                <div key={`${category}-${index}`} className="flex items-center">
-                  <span
-                    onClick={() =>
-                      setSelectedCategory(
-                        category === selectedCategory ? null : category
-                      )
-                    }
-                    className={`text-xs cursor-pointer duration-300 font-medium whitespace-nowrap ${
-                      category === selectedCategory
-                        ? "!text-[#d1182b] font-bold"
-                        : "!text-[#333] hover:!text-[#000]"
-                    }`}
-                  >
-                    {category}
-                  </span>
-                  {index < categories.length - 1 && (
-                    <span className="mx-1">/</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div> */}
+       
 
         {/* دسته‌بندی‌ها در حالت دسکتاپ */}
         <div className="hidden lg:flex items-center gap-3">
@@ -110,14 +70,14 @@ function NewProduct({ products }) {
         {/* دکمه نمایش همه در دسکتاپ */}
         <Link
           href={`/products?orderby=2`}
-          className="flex items-center cursor-pointer duration-300 hover:!text-[#d1182b] font-medium"
+          className="flex items-center cursor-pointer duration-300 hover:!text-[#d1182b] font-medium -mb-5"
         >
           <span>نمایش همه</span>
           <FaCaretLeft />
         </Link>
       </div>
       
-      <div className="mt-5 md:px-16 mx-auto px-4">
+      <div className="mt-2 md:px-16 mx-auto px-4">
         <ProductMain products={filteredProducts} />
       </div>
 

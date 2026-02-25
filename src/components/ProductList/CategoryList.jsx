@@ -7,7 +7,7 @@ import { FaBoxOpen } from "react-icons/fa6";
 
 export default function CategoryList({ categories }) {
   if (categories.length === 0) {
-    return (
+    return ( 
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-sm text-center max-w-lg mx-4 relative z-50">
           <div className="flex justify-center !mb-6">

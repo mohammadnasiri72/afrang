@@ -49,7 +49,7 @@ export default function SliderProductSec({
     <>
       <div className="flex flex-wrap py-8 md:px-16 mx-auto px-4">
         <div className="lg:w-[37.5%] w-full">
-          <div className="flex justify-between items-center pb-5 px-2">
+          <div className="flex justify-between items-center px-2">
             <div className="flex-wrap gap-4 items-center">
               <h4 className="title-newProduct relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های افــــرنـــــگ
@@ -219,7 +219,7 @@ export default function SliderProductSec({
               </span>
             </Link>
           </div>
-          <div className="relative w-full h-full mt-10">
+          <div className="relative w-full h-full">
             <Link href={mainBanner?.link || "#"}>
               <Image
                 className={`object-contain ${
@@ -250,7 +250,7 @@ export default function SliderProductSec({
         </div>
 
         <div className="lg:w-[37.5%] w-full lg:mt-0 mt-5">
-          <div className="flex justify-between items-center pb-5 px-2">
+          <div className="flex justify-between items-center px-2">
             <div className="flex-wrap gap-4 items-center">
               {/* <span className="title-SecondHand relative pb-2 text-[#222] duration-300 text-lg font-semibold">
                 دست دوم های کاربران

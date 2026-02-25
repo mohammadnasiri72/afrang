@@ -2,6 +2,7 @@
 
 import { getImageUrl } from "@/utils/mainDomain";
 import { Skeleton } from "antd";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import "swiper/css";
@@ -50,10 +51,18 @@ function SliderCategoryProducts({ categories, className }) {
                 >
                   <div className="relative h-24 w-full bg-white flex items-center justify-center overflow-hidden">
                     {category.image ? (
-                      <img
+                      // <img
+                      //   src={getImageUrl(category.image)}
+                      //   alt={category.title}
+                      //   className="object-contain group-hover:scale-105 transition-transform duration-300 h-full"
+                      // />
+                      <Image
                         src={getImageUrl(category.image)}
                         alt={category.title}
-                        className="object-contain group-hover:scale-105 transition-transform duration-300 h-full"
+                        width={128}
+                        height={128}
+                        unoptimized
+                        className="object-contain group-hover:scale-105 transition-transform duration-300 filter drop-shadow-sm"
                       />
                     ) : (
                       <Skeleton.Image />

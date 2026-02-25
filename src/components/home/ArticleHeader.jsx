@@ -6,7 +6,7 @@ function ArticleHeader() {
   const router = useRouter();
   return (
     <>
-      <div className="flex justify-between items-center !mb-5 md:px-16 mx-auto px-4 mt-5">
+      <div className="flex justify-between items-center md:px-16 mx-auto px-4 mt-5">
         <div className="flex items-center title-newProduct relative">
           <h4 className="font-semibold text-xl ">
             اخبار و مقالات <span className="text-[#d1182b]">افرنگ</span>
@@ -17,7 +17,7 @@ function ArticleHeader() {
           onClick={() => {
             router.push(`/news`);
           }}
-          className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium"
+          className="flex items-center cursor-pointer duration-300 hover:text-[#d1182b] font-medium -mb-5"
         >
           <span>نمایش همه</span>
           <FaCaretLeft />
