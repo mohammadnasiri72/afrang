@@ -46,14 +46,14 @@ export default function CategoryList({ categories }) {
             >
               <div className="flex flex-col items-center text-center">
                 {category.image && (
-                  <div className="bg-gray-600 p-10 rounded-full !mb-4 group-hover:bg-[#d1182b] transition-colors duration-300 shadow-sm flex items-center justify-center">
+                  <div className=" rounded-full !mb-4 duration-300  flex items-center justify-center">
                     <Image
                       src={getImageUrl(category.image)}
                       alt={category.title}
-                      width={64}
-                      height={64}
+                      width={128}
+                      height={128}
                       unoptimized
-                      className="object-contain group-hover:scale-110 transition-transform duration-300 filter drop-shadow-sm"
+                      className="object-contain group-hover:scale-105 transition-transform duration-300 filter drop-shadow-sm"
                     />
                   </div>
                 )}
