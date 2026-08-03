@@ -6,11 +6,11 @@ import { useState } from "react";
 function SliderProductSecPhoto2({ product }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const newPath = product.image.replace(/\/ad\/([^\/]+)$/, "/ad/[200x200]/$1");
+  const newPath = product.image? product.image.replace(/\/ad\/([^\/]+)$/, "/ad/[200x200]/$1"):'';
 
   return (
     <>
-      {product.image && (
+      {product.image && newPath && (
         <Image
           className={`w-full object-contain ${
             isLoaded ? "opacity-100" : "opacity-0"

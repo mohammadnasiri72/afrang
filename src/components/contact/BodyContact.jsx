@@ -2,8 +2,8 @@
 
 import { getCsrf } from "@/services/csrf/csrf";
 import { PostContactForm } from "@/services/form/formService";
-import { Segmented, Select } from "antd";
-import { useState } from "react";
+import { Select } from "antd";
+import { useState, useEffect } from "react";
 import {
   FaCaretDown,
   FaMobileScreen,
@@ -23,6 +23,7 @@ import GoogleMap from "./GoogleMap";
 
 function BodyContact() {
   const [typeArticle, setTypeArticle] = useState("آدرس");
+  const [isMobile, setIsMobile] = useState(false);
   const { settings } = useSelector((state) => state.settings);
 
   // Form states
@@ -36,6 +37,18 @@ function BodyContact() {
 
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+
+  // Check if mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Toast configuration
   const Toast = Swal.mixin({
@@ -51,17 +64,24 @@ function BodyContact() {
   const renderPhoneNumbers = (phoneString) => {
     if (!phoneString) return null;
 
-    const numbers = phoneString.split("|").map((num) => num.trim());
+    const numbers = phoneString
+      .split(/[|\-,،\/\s]+/)
+      .map((num) => num.trim())
+      .filter((num) => num.length > 0);
 
     return (
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap justify-between! w-full!">
         {numbers.map((number, index) => (
           <a
             key={index}
             href={`tel:${number}`}
-            className="text-[#424242] hover:text-[#18d1be] transition-colors duration-300"
+            className="text-[#424242] w-1/2 inline hover:text-[#18d1be] transition-all duration-300 flex! items-center! gap-1!  mb-4!"
+            title={`تماس با ${number}`}
           >
-            {number}
+            <FaPhoneVolume className="text-[12px] text-[#18d1be]" />
+            <span className="border-b border-dashed border-[#424242] hover:border-[#18d1be]">
+              {number}
+            </span>
           </a>
         ))}
       </div>
@@ -185,34 +205,34 @@ function BodyContact() {
   }
 
   const sitePostalCode = settings?.find(
-    (item) => item.propertyKey === "site_postalcode"
+    (item) => item.propertyKey === "site_postalcode",
   )?.value;
   const sitePhone = settings?.find(
-    (item) => item.propertyKey === "site_tel"
+    (item) => item.propertyKey === "site_landline_tel",
   )?.value;
   const siteMobile = settings?.find(
-    (item) => item.propertyKey === "site_social_tel"
+    (item) => item.propertyKey === "site_social_tel",
   )?.value;
   const siteManagerName = settings?.find(
-    (item) => item.propertyKey === "site_admin_tel"
+    (item) => item.propertyKey === "site_admin_tel",
   )?.title;
   const siteManagerMobile = settings?.find(
-    (item) => item.propertyKey === "site_admin_tel"
+    (item) => item.propertyKey === "site_admin_tel",
   )?.value;
   const siteSalesManagerName = settings?.find(
-    (item) => item.propertyKey === "site_adminsale_tel"
+    (item) => item.propertyKey === "site_adminsale_tel",
   )?.title;
   const siteSalesManagerMobile = settings?.find(
-    (item) => item.propertyKey === "site_adminsale_tel"
+    (item) => item.propertyKey === "site_adminsale_tel",
   )?.value;
   const siteEmail = settings?.find(
-    (item) => item.propertyKey === "site_email"
+    (item) => item.propertyKey === "site_email",
   )?.value;
   const siteWorkingHours = settings?.find(
-    (item) => item.propertyKey === "site_worktime"
+    (item) => item.propertyKey === "site_worktime",
   )?.value;
   const siteAddress = settings?.find(
-    (item) => item.propertyKey === "site_address1"
+    (item) => item.propertyKey === "site_address1",
   )?.value;
 
   const renderContactCards = () => {
@@ -220,40 +240,69 @@ function BodyContact() {
       case "شماره های تماس":
         return (
           <>
-            <div className="w-full lg:w-1/3 p-3">
+            <div className="w-full lg:w-1/3 sm:px-3 py-3 ">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                <div className="bg-white  rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] !text-white sm:w-[40px] w-[30px] text-[16px] flex items-center justify-center sm:h-[40px] h-[30px] rounded-sm">
                     <FaPhoneVolume />
                   </div>
                 </div>
-                <div className="py-4 px-2 pl-[50px]">
-                  <span className="text-[#616161] text-[13px] font-bold">
-                    تلفن
+                <div className="py-4 px-2 w-full">
+                  <span className="text-[#616161] text-[18px] font-bold block mb-2!">
+                    تلفن ثابت
                   </span>
                   {renderPhoneNumbers(sitePhone)}
                 </div>
               </div>
             </div>
 
-            <div className="w-full lg:w-1/3 p-3">
+            <div className="w-full lg:w-1/3 sm:px-3 py-3">
               <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
+                <div className="bg-white rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] !text-white sm:w-[40px] w-[30px] text-[16px] flex items-center justify-center sm:h-[40px] h-[30px] rounded-sm">
                     <FaMobileScreen />
                   </div>
                 </div>
-                <div className="py-4 px-2 pl-[50px]">
-                  <span className="text-[#616161] text-[13px] font-bold">
+
+                <div className="py-4 px-2 w-full">
+                  <span className="text-[#616161] text-[18px] font-bold block mb-2!">
                     موبایل
                   </span>
                   {renderPhoneNumbers(siteMobile)}
                 </div>
               </div>
             </div>
+
+            <div className="w-full lg:w-1/3 sm:px-3 py-3">
+              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
+                <div className="bg-white rounded-lg p-[10px]">
+                  <div className="bg-[#18d1be] !text-white sm:w-[40px] w-[30px] text-[16px] flex items-center justify-center sm:h-[40px] h-[30px] rounded-sm">
+                    <FaRegUser />
+                  </div>
+                </div>
+                <div className="py-4 px-2 pl-[50px]">
+                  <span className="text-[#616161] text-[18px] font-bold block mb-2!">
+                    مدیریت
+                  </span>
+                  <div className="space-y-2">
+                    <div>
+                      <span className="text-[#616161] text-[13px] font-bold block">
+                        {siteManagerName}
+                      </span>
+                      {renderPhoneNumbers(siteManagerMobile)}
+                    </div>
+                    <div>
+                      <span className="text-[#616161] text-[13px] font-bold block">
+                        {siteSalesManagerName}
+                      </span>
+                      {renderPhoneNumbers(siteSalesManagerMobile)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </>
         );
-
       case "ایمیل و کد پستی":
         return (
           <>
@@ -291,67 +340,6 @@ function BodyContact() {
           </>
         );
 
-      case "ساعات کار":
-        return (
-          <div className="w-full lg:w-1/3 p-3">
-            <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-              <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                  <LuTag />
-                </div>
-              </div>
-              <div className="py-4 px-2 sm:pl-[50px]">
-                <span className="text-[#616161] text-[13px] font-bold">
-                  ساعات کاری
-                </span>
-                <p className="!mb-0">{siteWorkingHours}</p>
-              </div>
-            </div>
-          </div>
-        );
-
-      case "فکس و سایر تلفن ها":
-        return (
-          <>
-            <div className="w-full lg:w-1/3 p-3">
-              <div className="bg-[#fafafa] text-[#424242] flex rounded-lg relative z-10 text-[17px] font-[600] items-start ">
-                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                    <FaPhoneVolume />
-                  </div>
-                </div>
-                <div className="py-4 px-2 pl-[50px]">
-                  <span className="text-[#616161] text-[13px] font-bold">
-                    فکس
-                  </span>
-                  {renderPhoneNumbers(siteManagerMobile)}
-                </div>
-              </div>
-            </div>
-            <div className="w-full lg:w-2/3 p-3">
-              <div className="bg-[#fafafa] text-[#424242] flex flex-wrap rounded-lg relative z-10 text-[17px] font-[600] items-start  mltp_col_info">
-                <div className="bg-white ml-[15px] rounded-lg p-[10px]">
-                  <div className="bg-[#18d1be] !text-white w-[40px] text-[16px] flex items-center justify-center h-[40px] rounded-sm">
-                    <FaRegUser />
-                  </div>
-                </div>
-                <div className="py-4 px-2 pl-[50px]">
-                  <span className="text-[#616161] text-[13px] font-bold">
-                    {siteManagerName}
-                  </span>
-                  {renderPhoneNumbers(siteManagerMobile)}
-                </div>
-
-                <div className="py-4 px-2 pl-[50px]">
-                  <span className="text-[#616161] text-[13px] font-bold">
-                    {siteSalesManagerName}
-                  </span>
-                  {renderPhoneNumbers(siteSalesManagerMobile)}
-                </div>
-              </div>
-            </div>
-          </>
-        );
       case "آدرس":
         return (
           <>
@@ -366,6 +354,52 @@ function BodyContact() {
     }
   };
 
+  // Mobile tabs component
+  const MobileTabs = () => (
+    <div className="w-full px-4 py-3">
+      <div className="flex flex-col gap-3 w-full">
+        {[
+          { id: "آدرس", icon: <IoLocationOutline />, label: "آدرس" },
+          { id: "شماره های تماس", icon: <FaPhoneVolume />, label: "شماره های تماس" },
+          { id: "ایمیل و کد پستی", icon: <GoMail />, label: "ایمیل و کد پستی" }
+        ].map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setTypeArticle(item.id)}
+            className={`
+              w-full relative overflow-hidden group transition-all duration-300
+              ${typeArticle === item.id 
+                ? "bg-gradient-to-r from-[#d1182b] to-[#e8414f] text-white shadow-xl shadow-red-500/30 scale-[1.02]" 
+                : "bg-white border-2 border-gray-200 text-gray-700 hover:border-[#d1182b] hover:shadow-xl hover:shadow-red-500/10 hover:scale-[1.01]"
+              }
+              rounded-2xl py-4 px-6 font-bold text-base
+            `}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`
+                  w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300
+                  ${typeArticle === item.id 
+                    ? "bg-white/20! text-white!" 
+                    : "bg-[#d1182b]/10 text-[#d1182b] group-hover:bg-[#d1182b]/20"
+                  }
+                `}>
+                  {item.icon}
+                </div>
+                {/* typeArticle === item.id */}
+                <span className={`text-right  ${typeArticle === item.id ? 'text-white!':'text-black!'}`}>{item.label}</span>
+              </div>
+             
+            </div>
+            {typeArticle === item.id && (
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/40" />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <div className="flex justify-center items-start gap-4 mt-10 py-5">
@@ -374,36 +408,39 @@ function BodyContact() {
         <TbArrowBadgeRightFilled className="text-[#d1182b] text-2xl" />
       </div>
 
-      <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
-        <Segmented
-          className="font-semibold text-3xl w-full overflow-auto"
-          dir="rtl"
-          style={{
-            paddingTop: "8px",
-            paddingBottom: "8px",
-            fontFamily: "yekan",
-          }}
-          value={typeArticle}
-          onChange={(e) => {
-            setTypeArticle(e);
-          }}
-          options={[
-            "آدرس",
-            "فکس و سایر تلفن ها",
-            "شماره های تماس",
-            "ساعات کار",
-            "ایمیل و کد پستی",
-          ]}
-        />
-      </div>
+      {/* Tabs Section */}
+      {isMobile ? (
+        <MobileTabs />
+      ) : (
+        <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
+          <div className="flex gap-2 bg-gray-100 p-1 rounded-xl w-full max-w-2xl">
+            {["آدرس", "شماره های تماس", "ایمیل و کد پستی"].map((item) => (
+              <button
+                key={item}
+                onClick={() => setTypeArticle(item)}
+                className={`
+                  flex-1 py-3 px-4 rounded-lg font-bold text-base transition-all duration-300
+                  ${typeArticle === item 
+                    ? "bg-[#d1182b] text-white! shadow-lg shadow-red-500/30" 
+                    : "text-gray-600 hover:text-[#d1182b] hover:bg-white/50"
+                  }
+                `}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-8">
-        <div className="rounded-lg bg-white p-5">
+        <div className="rounded-lg bg-white sm:p-5 p-2">
           <div id="tab-1" className="tab-item">
             <div className="flex flex-wrap">{renderContactCards()}</div>
           </div>
         </div>
       </div>
+
       <div className="mt-8">
         <div className="rounded-lg bg-white p-5 relative">
           <div className="flex justify-center items-start gap-4 py-5">

@@ -201,6 +201,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                 <div className=" flex justify-center">
                   <Link
                     target="_blank"
+                    rel="noopener noreferrer"
                     href={
                       "https://trustseal.enamad.ir/?id=308830&Code=9d6pzy1Mr4leQbMigsJs"
                     }
@@ -365,6 +366,7 @@ const Footer = ({ socialNetworks, footerMenu, settings }) => {
                   </ul>
                   <Link
                    target="_blank"
+                   rel="noopener noreferrer"
                     href={
                       "https://trustseal.enamad.ir/?id=308830&Code=9d6pzy1Mr4leQbMigsJs"
                     }

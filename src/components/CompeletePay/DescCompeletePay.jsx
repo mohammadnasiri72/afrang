@@ -6,14 +6,10 @@ import { Alert, message } from "antd";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-
-function sumAmount(array) {
-  return array.reduce((total, current) => total + current.amount, 0);
-}
 
 // کامپوننت اسکلتون برای نمایش در زمان لودینگ
 const DescCompeletePaySkeleton = () => {
@@ -88,7 +84,6 @@ export default function DescCompeletePay() {
 
   const totalPrice =
     currentItems
-      // ?.filter((e) => e.parentId === -1)
       ?.reduce((sum, item) => {
         const price = item.price1 || 0;
         const quantity = item.quantity || 0;
@@ -97,7 +92,6 @@ export default function DescCompeletePay() {
 
   const totalDiscount =
     currentItems
-      // ?.filter((e) => e.parentId === -1)
       ?.reduce((sum, item) => {
         const oldPrice = item.price1 || 0;
         const price = item.finalPrice || 0;
@@ -110,44 +104,89 @@ export default function DescCompeletePay() {
     : 0;
   const finalPrice = totalPrice - totalDiscount + shippingCost;
 
-  useEffect(() => {
-    const fetchEstimate = async () => {
-      if (!selectedAddress && !selectedShipping && !selectedLegal) {
+  // Refs برای کنترل درخواست‌ها
+  const isFetchingRef = useRef(false);
+  const abortControllerRef = useRef(null);
+
+  // تابع fetch با مدیریت بهتر
+  const fetchEstimate = useCallback(async () => {
+    // اگر هر سه مقدار نال هستند، درخواست نزن و داده را پاک کن
+    if (!selectedAddress && !selectedShipping && !selectedLegal) {
+      setEstimateDataLocal(null);
+      setLoading(false);
+      return;
+    }
+
+    // جلوگیری از درخواست‌های همزمان
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+
+    // کنسل کردن درخواست قبلی
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    setLoading(true);
+
+    try {
+      const data = {
+        langCode: "fa",
+        addressId: selectedAddress?.id || 0,
+        legalInfoId: selectedLegal?.id || 0,
+        shipmentId: selectedShipping?.id || 0,
+        discountCode: "",
+        paymentId: 0,
+      };
+
+      const response = await estimateOrder(data, token);
+
+      // اگر درخواست کنسل شده، داده را نادیده بگیر
+      if (abortController.signal.aborted) {
+        return;
+      }
+
+      if (response.type === "error") {
+        message.error(response.message);
         setEstimateDataLocal(null);
         return;
       }
 
-      setLoading(true);
-      try {
-        const data = {
-          langCode: "fa",
-          addressId: selectedAddress?.id || 0,
-          legalInfoId: selectedLegal?.id || 0,
-          shipmentId: selectedShipping?.id || 0,
-          discountCode: "",
-          paymentId: 0,
-        };
-
-        const response = await estimateOrder(data, token);
-        if (response.type === "error") {
-          message.error(response.message);
-          setEstimateDataLocal(null);
-          return;
-        }
-
-        setEstimateDataLocal(response);
-      } catch (error) {
-        message.error(
-          error.response?.data ? error.response?.data : "خطای شبکه"
-        );
+      setEstimateDataLocal(response);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        message.error(error.response?.data || "خطای شبکه");
         setEstimateDataLocal(null);
-      } finally {
+      }
+    } finally {
+      if (!abortController.signal.aborted) {
         setLoading(false);
       }
-    };
-
-    fetchEstimate();
+      isFetchingRef.current = false;
+    }
   }, [selectedAddress, selectedShipping, selectedLegal, token]);
+
+  // useEffect اصلی - هر تغییری در هرکدوم از مقادیر باعث اجرا میشه
+  useEffect(() => {
+    // اگر هر سه نال هستند، داده رو پاک کن
+    if (!selectedAddress && !selectedShipping && !selectedLegal) {
+      setEstimateDataLocal(null);
+      setLoading(false);
+      return;
+    }
+
+    // حداقل یکی از مقادیر وجود داره، پس درخواست بزن
+    fetchEstimate();
+
+    // Cleanup: کنسل کردن درخواست هنگام unmount
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [selectedAddress, selectedShipping, selectedLegal, token, fetchEstimate]);
 
   const handlePayment = () => {
     // چک کردن آدرس و روش ارسال قبل از رفتن به صفحه پرداخت
@@ -188,7 +227,7 @@ export default function DescCompeletePay() {
       if (!containerRef.current || !innerRef.current) return;
       const containerRect = containerRef.current.getBoundingClientRect();
       const innerRect = innerRef.current.getBoundingClientRect();
-      const stickyTop = 130; // مثل offsetTop قبلی Affix
+      const stickyTop = 130;
       if (containerRect.bottom <= stickyTop) {
         setFixed(false);
         setStuckToBottom(false);
@@ -211,7 +250,6 @@ export default function DescCompeletePay() {
           position: "fixed",
           top: stickyTop,
           left: containerRect.left,
-
           width: containerRect.width,
           zIndex: 100,
         });
