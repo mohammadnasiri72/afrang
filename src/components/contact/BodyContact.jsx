@@ -235,7 +235,7 @@ function BodyContact() {
       case "شماره های تماس":
         return (
           <>
-           <div className="flex gap-3 w-full">
+           <div className="flex gap-3 lg:flex-nowrap flex-wrap w-full ">
              <div className="w-full lg:w-1/3 bg-gray-200 rounded-lg ">
               <div className=" text-[#424242] flex relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white  rounded-lg p-[10px]">
