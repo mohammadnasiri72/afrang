@@ -2,7 +2,7 @@
 
 import { getCsrf } from "@/services/csrf/csrf";
 import { PostContactForm } from "@/services/form/formService";
-import { Select } from "antd";
+import { Segmented, Select } from "antd";
 import { useState, useEffect } from "react";
 import {
   FaCaretDown,
@@ -38,16 +38,14 @@ function BodyContact() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Check if mobile
+  // تشخیص موبایل
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
     handleResize();
-    window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Toast configuration
@@ -126,7 +124,6 @@ function BodyContact() {
       [name]: toEnglishNumber(value),
     }));
 
-    // Validate field on change
     const error = validateField(name, value);
     setErrors((prev) => ({
       ...prev,
@@ -145,7 +142,6 @@ function BodyContact() {
     const newErrors = {};
     let isValid = true;
 
-    // Validate all required fields
     Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) {
@@ -180,7 +176,6 @@ function BodyContact() {
           text: "پیام شما با موفقیت ارسال شد",
         });
 
-        // Reset form and errors
         setFormData({
           nameFamily: "",
           part: "فروش",
@@ -354,7 +349,7 @@ function BodyContact() {
     }
   };
 
-  // Mobile tabs component
+  // کامپوننت دکمه‌های عمودی برای موبایل
   const MobileTabs = () => (
     <div className="w-full px-4 py-3">
       <div className="flex flex-col gap-3 w-full">
@@ -369,10 +364,10 @@ function BodyContact() {
             className={`
               w-full relative overflow-hidden group transition-all duration-300
               ${typeArticle === item.id 
-                ? "bg-gradient-to-r from-[#d1182b] to-[#e8414f] text-white shadow-xl shadow-red-500/30 scale-[1.02]" 
-                : "bg-white border-2 border-gray-200 text-gray-700 hover:border-[#d1182b] hover:shadow-xl hover:shadow-red-500/10 hover:scale-[1.01]"
+                ? "bg-[#d1182b] text-white!" 
+                : "bg-white border-2 border-gray-200 text-gray-700"
               }
-              rounded-2xl py-4 px-6 font-bold text-base
+              rounded-2xl py-2 px-3 font-bold text-base text-right
             `}
           >
             <div className="flex items-center justify-between">
@@ -380,20 +375,17 @@ function BodyContact() {
                 <div className={`
                   w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300
                   ${typeArticle === item.id 
-                    ? "bg-white/20! text-white!" 
-                    : "bg-[#d1182b]/10 text-[#d1182b] group-hover:bg-[#d1182b]/20"
+                    ? "bg-white/20 text-white" 
+                    : "bg-[#d1182b]/10 text-[#d1182b]"
                   }
                 `}>
                   {item.icon}
                 </div>
-                {/* typeArticle === item.id */}
-                <span className={`text-right  ${typeArticle === item.id ? 'text-white!':'text-black!'}`}>{item.label}</span>
+                <span className={`${typeArticle === item.id ? 'text-white!':''}`}>{item.label}</span>
               </div>
-             
+              
             </div>
-            {typeArticle === item.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/40" />
-            )}
+           
           </button>
         ))}
       </div>
@@ -408,28 +400,25 @@ function BodyContact() {
         <TbArrowBadgeRightFilled className="text-[#d1182b] text-2xl" />
       </div>
 
-      {/* Tabs Section */}
+      {/* انتخاب تب: در موبایل دکمه‌های عمودی، در دسکتاپ Segmented */}
       {isMobile ? (
         <MobileTabs />
       ) : (
         <div className="w-full SegmentedContact overflow-hidden mx-auto flex justify-center p-5">
-          <div className="flex gap-2 bg-gray-100 p-1 rounded-xl w-full max-w-2xl">
-            {["آدرس", "شماره های تماس", "ایمیل و کد پستی"].map((item) => (
-              <button
-                key={item}
-                onClick={() => setTypeArticle(item)}
-                className={`
-                  flex-1 py-3 px-4 rounded-lg font-bold text-base transition-all duration-300
-                  ${typeArticle === item 
-                    ? "bg-[#d1182b] text-white! shadow-lg shadow-red-500/30" 
-                    : "text-gray-600 hover:text-[#d1182b] hover:bg-white/50"
-                  }
-                `}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+          <Segmented
+            className="font-semibold text-3xl w-full overflow-auto"
+            dir="rtl"
+            style={{
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              fontFamily: "yekan",
+            }}
+            value={typeArticle}
+            onChange={(e) => {
+              setTypeArticle(e);
+            }}
+            options={["آدرس", "شماره های تماس", "ایمیل و کد پستی"]}
+          />
         </div>
       )}
 
