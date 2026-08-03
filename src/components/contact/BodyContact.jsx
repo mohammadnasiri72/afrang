@@ -236,7 +236,7 @@ function BodyContact() {
         return (
           <>
            <div className="flex gap-3 lg:flex-nowrap flex-wrap w-full ">
-             <div className="w-full lg:w-1/3 bg-gray-200 rounded-lg ">
+             <div className="w-full lg:w-1/3 bg-[#fafafa] rounded-lg ">
               <div className=" text-[#424242] flex relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white  rounded-lg p-[10px]">
                   <div className="bg-[#18d1be] !text-white sm:w-[40px] w-[30px] text-[16px] flex items-center justify-center sm:h-[40px] h-[30px] rounded-sm">
@@ -252,7 +252,7 @@ function BodyContact() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/3 bg-gray-200 rounded-lg">
+            <div className="w-full lg:w-1/3 bg-[#fafafa] rounded-lg">
               <div className=" text-[#424242] flex  relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white rounded-lg p-[10px]">
                   <div className="bg-[#18d1be] !text-white sm:w-[40px] w-[30px] text-[16px] flex items-center justify-center sm:h-[40px] h-[30px] rounded-sm">
@@ -269,7 +269,7 @@ function BodyContact() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/3 bg-gray-200 rounded-lg">
+            <div className="w-full lg:w-1/3 bg-[#fafafa] rounded-lg">
               <div className="text-[#424242] flex  relative z-10 text-[17px] font-[600] items-start ">
                 <div className="bg-white rounded-lg p-[10px]">
                   <div className="bg-[#18d1be] !text-white sm:w-[40px] w-[30px] text-[16px] flex items-center justify-center sm:h-[40px] h-[30px] rounded-sm">
