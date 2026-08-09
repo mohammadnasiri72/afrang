@@ -162,6 +162,7 @@ function SelectCategoryFilter({ resultFilter, setVisible }) {
 
     const params = new URLSearchParams(searchParams.toString());
     params.delete("page");
+    params.delete("brandid");
 
     router.push(`${url}${params.toString() ? `?${params.toString()}` : ""}`);
   };

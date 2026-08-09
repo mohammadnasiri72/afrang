@@ -43,7 +43,7 @@ function SliderCategoryProducts({ categories, className }) {
           {categories?.map((category) => (
             <SwiperSlide key={category.id}>
               <Link
-                href={category.url + "?" + searchParams.toString()}
+                href={category.url}
                 className={`block group cursor-pointer rounded-lg `}
               >
                 <div
